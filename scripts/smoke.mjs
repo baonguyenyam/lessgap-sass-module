@@ -109,31 +109,10 @@ await check("home page renders", async () => {
   return "200"
 })
 
-await check("blog index renders", async () => {
-  const response = await get("/blog")
+await check("changelog renders", async () => {
+  const response = await get("/changelog")
   expect(response.status === 200, `expected 200, got ${response.status}`)
   return "200"
-})
-
-await check("blog feed is valid XML with at least one item", async () => {
-  const response = await get("/blog/rss.xml")
-  expect(response.status === 200, `expected 200, got ${response.status}`)
-  const body = await response.text()
-  expect(body.includes("<rss"), "body is not an RSS document")
-  expect(body.includes("<item>"), "feed has no items")
-  return `${body.split("<item>").length - 1} item(s)`
-})
-
-// Reads the first post out of the feed instead of hardcoding a slug, so the
-// check survives the example posts being replaced.
-await check("a single blog post renders", async () => {
-  const feed = await (await get("/blog/rss.xml")).text()
-  const link = /<link>([^<]*\/blog\/[^<]+)<\/link>/.exec(feed)?.[1]
-  expect(link, "could not find a post link in the feed")
-  const path = new URL(link).pathname
-  const response = await get(path)
-  expect(response.status === 200, `${path} returned ${response.status}`)
-  return path
 })
 
 // --- SEO surfaces ---------------------------------------------------------

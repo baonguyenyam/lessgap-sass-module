@@ -67,7 +67,7 @@ export default async function BillingPage() {
   ])
 
   // Metered plans are excluded from the grid: they exist for the usage-based
-  // example (docs/billing.md) and would be confusing as a self-serve card.
+  // example and would be confusing as a self-serve card.
   // In demo mode the one-time plan is excluded too: the grid mirrors the
   // Starter / Pro / Enterprise triad of the demo landing.
   const isDemo = process.env.DEMO_MODE === "true"

@@ -1,7 +1,7 @@
 /**
  * Brand theme colors, resolved from NEXT_PUBLIC_BRAND_* env with neutral
  * fallbacks. The kit ships neutral; set these on your deployment to apply
- * your brand from config, with no code edits (see docs/configuration.md).
+ * your brand from config, with no code edits.
  * Consumed by the CSS token override (src/app/layout.tsx) and the Open Graph
  * images. Colors should be hex (e.g. "#2563eb").
  */

@@ -131,7 +131,7 @@ export function SetupVideo() {
 
         <Reveal className="mt-8 text-center">
           <Link
-            href="/docs/getting-started"
+            href="https://docs.lessgap.app/getting-started"
             className="group inline-flex items-center gap-2 text-sm font-medium text-primary underline-offset-4 hover:underline"
           >
             {t("guide")}

@@ -50,17 +50,6 @@ fact drift, and the copy nobody looks at drifts first.
 **Do not reformat.** There is no formatter here on purpose. Match the style of
 the file you are in.
 
-**Every `docs/x.md` has a `docs/x.it.md`.** A guide added in one language only
-is a guide half the readers cannot use.
-
-**Images and videos in the docs live in `public/media/`**, written as Markdown
-images relative to the guide: `![What it shows](../public/media/file.webp "Caption")`
-from `docs/`, `../../public/media/...` from `content/docs/`.
-That one path works on GitHub, on the site and in every clone. A clip that
-loops goes in as an animated WebP; an `.mp4` gets player controls on the site
-and shows broken on GitHub. Add `file.dark.webp` next to an image for dark
-mode. See `src/components/docs/doc-media.tsx`.
-
 # How to work
 
 The four principles below are copied verbatim from
@@ -143,7 +132,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 | Path | What lives there |
 | --- | --- |
-| `src/app/` | App Router. `(auth)`, `(dashboard)`, `(admin)` are route groups; `[locale]` holds the translated public pages and docs |
+| `src/app/` | App Router. `(auth)`, `(dashboard)`, `(admin)` are route groups; `[locale]` holds the public pages |
 | `src/app/actions/` | Server actions, one file per domain, tests beside them |
 | `src/app/api/` | Route handlers: auth, billing, checkout, webhooks, cron, health |
 | `src/components/ui/` | Base primitives (Radix + Tailwind). Reuse before writing one |
@@ -154,7 +143,6 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 | `src/config/` | Site, brand and kit configuration |
 | `src/i18n/`, `src/locales/` | next-intl setup; `en.json` is the source of every message |
 | `prisma/` | Schema, migrations, seeds |
-| `docs/`, `content/docs/` | Guides, each in English and Italian |
 | `e2e/` | Playwright end-to-end and accessibility specs |
 | `spec/` | The platform plan: architecture, tenancy, modules, phases, ADRs |
 | `src/platform/` | Platform core: tenancy, entitlements, switches, domains, audit, jobs (from phase 0) |
@@ -214,7 +202,6 @@ pnpm typecheck              # type-check
 pnpm lint                   # ESLint
 pnpm test                   # Vitest unit tests
 pnpm test:e2e               # Playwright
-pnpm check:translations     # translated docs in step with their source
 pnpm prisma migrate dev --name <change>  # after editing schema.prisma
 ```
 
@@ -226,9 +213,7 @@ Run these, do not assume them:
 
 - `pnpm typecheck`, `pnpm lint` and `pnpm test` pass.
 - New logic and every bug fix come with a test.
-- `pnpm check:translations` passes if you touched `docs/` or `content/docs/`.
-- User-visible changes have a `CHANGELOG.md` entry; changes an adopter must act
-  on are also in `docs/upgrading.md` and its translation.
+- User-visible changes have a `CHANGELOG.md` entry.
 - The diff holds only what the task needed: no secrets, no `.env`, no debug logs.
 - Platform work: `pnpm test:integration`, `pnpm modules:check` and
   `pnpm audit:tenancy` pass once they exist (phase 0), the brief task is

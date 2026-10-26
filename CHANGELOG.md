@@ -14,12 +14,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 ### Added
 
 - **A real credential admin in the demo seed**: `pnpm db:seed:demo` now creates `baonguyenyam@gmail.com` (password `adminadmin`, `ADMIN` role) next to the shared one-click demo accounts, so email + password sign-in works on the demo too
-- **`shiki` as a direct dependency**: `src/lib/shiki.ts` imported it but it only ever arrived transitively through `@shikijs/rehype`, which pnpm does not hoist to `node_modules`
 
 ### Changed
 
-- **Rebranded to lessGAP Starter Kit**: `NEXT_PUBLIC_BRAND_NAME`, wordmark accent and contact email set in `.env`, the "Built with" badge disabled via `NEXT_PUBLIC_REMOVE_BRANDING`, `package.json` renamed to `lessgap-starter-kit`, and the developer-docs links in the sidebar and setup guide now point at this deployment's own `/docs` instead of openstarterkit.dev
+- **Rebranded to lessGAP Starter Kit**: `NEXT_PUBLIC_BRAND_NAME`, wordmark accent and contact email set in `.env`, the "Built with" badge disabled via `NEXT_PUBLIC_REMOVE_BRANDING`, `package.json` renamed to `lessgap-starter-kit`, and the developer-docs link in the setup guide now points at docs.lessgap.app
 - **Package manager is pnpm**: `packageManager` in `package.json`, the allowed build scripts in `pnpm-workspace.yaml`, and the commands in the README updated to match
+- **Latest compatible dependencies**: `@hookform/resolvers` 6, `@stripe/stripe-js` 10, `stripe` 23 (API version `2026-09-30.endive`), ESLint 10. Prisma stays on 7.10.1: `8.0.0` is only a release candidate and `@better-auth/prisma-adapter` supports Prisma `^5 || ^6 || ^7` — the upgrade lands when both are stable and compatible
+
+### Removed
+
+- **The blog and the docs**: both move to dedicated Astro sites at blog.lessgap.app and docs.lessgap.app, so the routes, components, `content/`, `docs/` and the MDX/Shiki/markdown pipeline that only they used are gone. The changelog stays, rendered from `CHANGELOG.md` (or `content/changelog.md` in a clone)
+- **The `it` locale**: it existed to translate the docs; with the docs gone it is removed from `routing.locales`
 
 ### Fixed
 

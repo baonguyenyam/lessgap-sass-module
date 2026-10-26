@@ -1,11 +1,8 @@
 import { describe, it, expect } from "vitest"
 
-// Both siteConfig and the docs manifest read the environment when they are
-// first imported, so it has to be in place before the module under test pulls
-// them in. KIT_SITE picks the setup manual in docs/ as the published set,
-// which is the case these links are written for.
+// siteConfig reads the environment when it is first imported, so it has to be
+// in place before the module under test pulls it in.
 process.env.NEXT_PUBLIC_GITHUB_URL = "https://github.com/acme/kit"
-process.env.KIT_SITE = "true"
 const { mapRepoHref, mapRepoMedia, isVideoPath } = await import("./markdown-links")
 
 const BLOB = "https://github.com/acme/kit/blob/main"
@@ -24,37 +21,18 @@ describe("mapRepoHref", () => {
   })
 
   // The case the changelog page was getting wrong: these render as-is and ask
-  // the browser for /docs/blog.md, which is a 404.
-  it("points a repo link to the published guide, from the repository root", () => {
-    expect(mapRepoHref("./docs/blog.md")).toBe("/docs/blog")
-    expect(mapRepoHref("docs/billing.md")).toBe("/docs/billing")
+  // the browser for ./docs/blog.md on the site, which is a 404.
+  it("points a repo link at the file on GitHub", () => {
+    expect(mapRepoHref("./docs/blog.md")).toBe(`${BLOB}/docs/blog.md`)
+    expect(mapRepoHref("docs/billing.md")).toBe(`${BLOB}/docs/billing.md`)
   })
 
-  // GitHub writes "Branding & theming" as branding--theming, this site as
-  // branding-theming: without the translation the link lands on the page and
-  // not on the section, which is the kind of half-broken link nobody reports.
-  it("translates a GitHub anchor into the one the site generates", () => {
-    expect(mapRepoHref("./docs/configuration.md#branding--theming")).toBe(
-      "/docs/configuration#branding-theming",
-    )
-    expect(mapRepoHref("./docs/billing.md#usage-based")).toBe("/docs/billing#usage-based")
-  })
-
-  // On files that stay on GitHub the anchor must not be touched: there the
-  // repository form is the correct one.
-  it("leaves the anchor alone on links that stay on GitHub", () => {
-    expect(mapRepoHref("./README.md#-a--b")).toBe(`${BLOB}/README.md#-a--b`)
-  })
-
-  // Same href, two meanings: from docs/ it is the docs index, from the root it
-  // is the project README, which has no page on the site.
   it("resolves relative to the directory the file lives in", () => {
-    expect(mapRepoHref("./configuration.md", "docs")).toBe("/docs/configuration")
-    expect(mapRepoHref("./README.md", "docs")).toBe("/docs")
+    expect(mapRepoHref("./README.md", "docs")).toBe(`${BLOB}/docs/README.md`)
     expect(mapRepoHref("./README.md#-tests")).toBe(`${BLOB}/README.md#-tests`)
   })
 
-  it("sends files with no page on the site to the repository", () => {
+  it("sends files outside the rendered set to the repository", () => {
     expect(mapRepoHref("../ROADMAP.md", "docs")).toBe(`${BLOB}/ROADMAP.md`)
     expect(mapRepoHref("./LICENSE")).toBe(`${BLOB}/LICENSE`)
   })
@@ -73,10 +51,8 @@ describe("mapRepoMedia", () => {
     expect(mapRepoMedia("public/media/clip.mp4")).toBe("/media/clip.mp4")
   })
 
-  // In a clone /docs renders content/docs/, two levels down: the same file is
-  // reached with one more "..", and has to land on the same URL.
-  it("resolves from the folder the guide lives in", () => {
-    expect(mapRepoMedia("../../public/media/shot.png", "content/docs")).toBe("/media/shot.png")
+  it("resolves from the folder the file lives in", () => {
+    expect(mapRepoMedia("../../public/media/shot.png", "content/changelog")).toBe("/media/shot.png")
   })
 
   it("loads a file the site does not serve from the repository", () => {

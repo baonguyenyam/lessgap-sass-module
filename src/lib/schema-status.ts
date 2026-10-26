@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma"
  * Whether the database this deployment talks to has every migration the code
  * was built with.
  *
- * Builds do not run migrations (docs/deployment.md), and a database that is
+ * Builds do not run migrations, and a database that is
  * behind does not fail on its own. Every query that does not name the missing
  * column keeps working, until one does. That is how a deployment can answer
  * every public page correctly and then fail the first sign-in.

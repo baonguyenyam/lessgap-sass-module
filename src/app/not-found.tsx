@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
-import { Home, HelpCircle } from "lucide-react"
+import { Home } from "lucide-react"
 import { siteConfig } from "@/config/site"
 
 export default function NotFound() {
@@ -54,13 +54,6 @@ export default function NotFound() {
           >
             <Home className="h-4 w-4" />
             {t("home")}
-          </Link>
-          <Link
-            href="/docs"
-            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground shadow-soft hover:bg-accent hover:text-foreground transition-all hover:-translate-y-0.5"
-          >
-            <HelpCircle className="h-4 w-4 text-muted-foreground" />
-            {t("docs")}
           </Link>
         </div>
 

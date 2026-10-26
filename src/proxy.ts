@@ -51,8 +51,8 @@ const UNLOCALIZED = [
  * to the router, so a URL that does not exist renders your 404 page.
  *
  * This is a denylist on purpose. With the allowlist it replaced, every path
- * the list did not know about looked private: a typo like `/doc` instead of
- * `/docs` was bounced to `/login`, and an anonymous visitor never saw the 404
+ * the list did not know about looked private: a typo like `/dashboar` instead
+ * of `/dashboard` was bounced to `/login`, and an anonymous visitor never saw the 404
  * page at all. Loosening the proxy opens nothing, because each private area
  * already gates itself server-side: `(dashboard)/layout.tsx` and
  * `(admin)/layout.tsx` call `auth()` and redirect, and the private API routes
@@ -78,7 +78,7 @@ const AUTH_ROUTES = ["/login", "/signup", "/2fa"]
 //
 // The session is read only on the routes in the three lists above. Nothing
 // else here depends on it, and reading it on every request (the home, the
-// blog, the docs, link prefetches, crawlers) cost a round trip and function
+// changelog, link prefetches, crawlers) cost a round trip and function
 // time on each one: on Vercel that was most of a small site's CPU.
 export default async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl

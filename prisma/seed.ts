@@ -16,7 +16,7 @@ const prisma = new PrismaClient({ adapter })
 // with YOUR product's plans, and set real Stripe price IDs via the env vars below
 // (or hard-code your own). The six plans demonstrate every billing pattern the
 // kit supports: monthly, yearly, one-time (lifetime) and metered (usage-based,
-// seeded inactive: see docs/billing.md to enable it).
+// seeded inactive: remove `active: false` to enable it).
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
@@ -65,8 +65,8 @@ const examplePlans: {
     price: 1900,
     interval: "MONTH",
     stripePriceId: priceId(process.env.STRIPE_PRO_PRICE_ID, "price_pro_placeholder"),
-    // A free trial, to show the pattern: offered once per customer at checkout
-    // (docs/billing.md). Remove the line and the plan has none.
+    // A free trial, to show the pattern: offered once per customer at checkout.
+    // Remove the line and the plan has none.
     trialDays: 14,
     features: [
       "Everything in Starter",
@@ -95,7 +95,7 @@ const examplePlans: {
   },
   {
     // Usage-based example, seeded INACTIVE so it never shows up in the UI until
-    // you have created a Billing Meter + metered price in Stripe (docs/billing.md).
+    // you have created a Billing Meter + metered price in Stripe.
     slug: "metered-example",
     name: "Pay as you go",
     description: "Example usage-based plan billed per API request",

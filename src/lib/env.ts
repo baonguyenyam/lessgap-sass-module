@@ -159,7 +159,7 @@ export function validateEnv(source: EnvSource = process.env): void {
     // Checked with a placeholder in its place, so every other rule still runs.
     parseEnv({ ...source, DATABASE_URL: "postgresql://unset" })
     console.warn(
-      "[env] DATABASE_URL is not set. Starting anyway: open the app and the page lists the steps left (docs/getting-started.md).",
+      "[env] DATABASE_URL is not set. Starting anyway: open the app and the page lists the steps left.",
     )
     return
   }

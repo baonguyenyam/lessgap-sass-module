@@ -15,7 +15,7 @@
       },
       "$product": {
         "demoNoticeExtra": "Everything else works as it would in production.",
-        "noEmailService": "Password reset needs an email service. Set <code>RESEND_API_KEY</code> to enable it (see <code>docs/configuration.md</code>)."
+        "noEmailService": "Password reset needs an email service. Set <code>RESEND_API_KEY</code> to enable it."
       },
       "sent": "If an account exists for that email, a reset link is on its way. It's valid for 30 minutes.",
       "emailPlaceholder": "you@example.com",
@@ -41,7 +41,7 @@
       },
       "$product": {
         "demoNoticeExtra": "Everything else works as it would in production.",
-        "noEmailService": "No email service is configured, so accounts are created without email verification. Set <code>RESEND_API_KEY</code> to enable it (see <code>docs/configuration.md</code>)."
+        "noEmailService": "No email service is configured, so accounts are created without email verification. Set <code>RESEND_API_KEY</code> to enable it."
       },
       "namePlaceholder": "Name (optional)",
       "emailPlaceholder": "you@example.com",
@@ -383,8 +383,6 @@
       "settings": "Settings",
       "overview": "Overview",
       "adminPanel": "Admin Panel",
-      "devDocs": "Developer docs",
-      "newTab": "(opens in a new tab)",
       "more": "More",
       "backToDashboard": "Back to Dashboard",
       "openNavigation": "Open navigation"
@@ -659,8 +657,6 @@
     "product": "Product",
     "features": "Features",
     "pricing": "Pricing",
-    "docs": "Docs",
-    "blog": "Blog",
     "changelog": "Changelog",
     "about": "About",
     "aboutLink": "About",
@@ -698,7 +694,7 @@
       "maintainerBody": ". One person, working in the open: the roadmap says what is coming, the changelog says what already shipped, and every release is a tag you can read. Issues and questions are answered by the person who wrote the code.",
       "noteTitle": "This is a placeholder.",
       "noteBody": "Tell your story here: what you are building, who it is for, and why it exists. Edit this page in <path>src/app/[locale]/(public)/about/page.tsx</path>.",
-      "what": "A complete starting point for a SaaS, not a demo of one. Authentication with OAuth, magic links and passwords. Stripe subscriptions, one-time payments and webhooks whose signature is verified before anything reaches the database. An admin panel with real revenue figures, transactional email, a file-based blog and the marketing site around it. It is the plumbing every product needs and nobody enjoys writing twice, in a codebase small enough to read in an afternoon and yours to change.",
+      "what": "A complete starting point for a SaaS, not a demo of one. Authentication with OAuth, magic links and passwords. Stripe subscriptions, one-time payments and webhooks whose signature is verified before anything reaches the database. An admin panel with real revenue figures, transactional email and the marketing site around it. It is the plumbing every product needs and nobody enjoys writing twice, in a codebase small enough to read in an afternoon and yours to change.",
       "who": "People shipping on their own or in a small team, who would rather spend the weekend on the part that makes their product different than on wiring a checkout for the tenth time. It assumes you know Next.js, and that you would rather own the code than rent a platform.",
       "principles": [
         "Plain Next.js: no compiler, no config layer, nothing to learn before you own it.",
@@ -730,8 +726,6 @@
     "features": "Features",
     "pricing": "Pricing",
     "faq": "FAQ",
-    "docs": "Docs",
-    "blog": "Blog",
     "changelog": "Changelog",
     "signIn": "Sign in",
     "demo": "Demo",
@@ -848,7 +842,7 @@
     "step2Body": "The first creates the tables, the second adds the example plans.",
     "step2Note": "Seeing an SSL warning in the terminal? The string Neon gives you ends with sslmode=require: change it to sslmode=verify-full in .env.local.",
     "step3Title": "Restart",
-    "step3Body": "Stop the dev server and start it again. The landing page comes back, and Sign in has a Dev Login (Admin) button that needs no OAuth app. The Google and GitHub buttons appear once their keys are in .env.local (docs/configuration.md).",
+    "step3Body": "Stop the dev server and start it again. The landing page comes back, and Sign in has a Dev Login (Admin) button that needs no OAuth app. The Google and GitHub buttons appear once their keys are in .env.local.",
     "guideCta": "Read the full guide",
     "devOnly": "This page only appears in development, while the database is not ready."
   },
@@ -891,68 +885,14 @@
     "intro": "Questions, feedback, ideas: we read everything and reply fast. Prefer email? Write to",
     "formsDisabled": "Forms are disabled in the live demo."
   },
-  "blog": {
-    "title": "Blog",
-    "intro": "Guides, product updates and build notes. Follow along via",
-    "publishedOn": "Published: {date}",
-    "updatedOn": "Updated: {date}",
-    "empty": "No posts yet. Add an <code>.mdx</code> file to <code>content/blog/</code> to publish the first one.",
-    "figureOpen": "Enlarge the diagram",
-    "figureTitle": "Diagram",
-    "signup": {
-      "$kit": {
-        "title": "Teams are the part we are building next",
-        "body": "The billing, the auth and the admin panel are free and MIT licensed today. Multi-tenancy, roles and team billing are what the Pro adds, and it is being shaped now. Tell us what you would need from it.",
-        "cta": "Join the Pro waitlist",
-        "note": "One short email when there is real news, and the launch price as soon as you confirm. Unsubscribe anytime, one click."
-      },
-      "$product": {
-        "title": "Get the next one",
-        "body": "New posts land every few weeks. Leave your address and we will send you the next one.",
-        "cta": "Subscribe",
-        "note": "One email per post, no more. Unsubscribe anytime, one click."
-      },
-      "disabledNote": "Forms are disabled in the live demo."
-    },
-    "readingTime": "{minutes} min read",
-    "inCategory": "{count, plural, =0 {No posts} one {# post} other {# posts}} in this category.",
-    "categoryMeta": "All {site} blog posts in the {category} category.",
-    "breadcrumbHome": "Home",
-    "breadcrumbBlog": "Blog",
-    "previous": "Previous",
-    "next": "Next",
-    "pagination": "Blog pages",
-    "page": "Page",
-    "code": {
-      "copy": "Copy",
-      "copied": "Copied"
-    }
-  },
-  "docs": {
-    "title": "Documentation",
-    "sectionLabel": "Documentation",
-    "overview": "Overview",
-    "contents": "Contents",
-    "needHelp": "Need help?",
-    "contactSupport": "Contact Support",
-    "starNote": "Bookmark it with a <star></star>",
-    "$kit": {
-      "intro": "Everything you need to go from <code>git clone</code> to production. The same guides live in the repo's <repo>docs/ folder</repo>, so they version with the code.",
-      "metaDescription": "Setup guides for {site}: getting started, configuration, authentication, billing and deployment."
-    },
-    "$product": {
-      "intro": "Guides for getting the most out of <site></site>. Each one is a Markdown file in <code>content/docs/</code>, so your documentation ships and versions with your app.",
-      "metaDescription": "Guides for {site}, written as Markdown files that ship and version with the app."
-    }
-  },
-  "language": {
-    "label": "Change language",
-    "notTranslated": "This page has not been translated into {language} yet, so you are reading the original."
-  },
   "loading": {
     "default": "Loading",
     "admin": "Loading admin…",
     "workspace": "Loading your workspace…"
+  },
+  "code": {
+    "copy": "Copy",
+    "copied": "Copied"
   },
   "common": {
     "close": "Close",
@@ -972,7 +912,6 @@
     "title": "Page not found",
     "body": "Sorry, we couldn't find the page you're looking for. Perhaps you've mistyped the URL or the page has been moved.",
     "home": "Back to Home",
-    "docs": "Check Documentation",
     "redirecting": "Redirecting to homepage in <strong>{seconds}s</strong>..."
   },
   "newsletter": {

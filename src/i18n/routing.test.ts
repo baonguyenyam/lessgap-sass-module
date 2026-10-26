@@ -27,7 +27,7 @@ describe("locale routing", () => {
   it("declares exactly the locales that have a message file", async () => {
     const { existsSync } = await import("node:fs")
     const { join } = await import("node:path")
-    expect([...routing.locales]).toEqual(["en", "it"])
+    expect([...routing.locales]).toEqual(["en"])
     // The list and the folder have to agree in both directions. A locale with
     // no file is a 500 the first time somebody opens its URL, and the array on
     // its own cannot tell you that: it was green for a day while `it.json` did
@@ -63,26 +63,14 @@ describe("private areas stay outside the locale prefix", () => {
 })
 
 /**
- * The other half of the same rule, and it cost every image on the blog.
- *
  * `proxy.ts` skips requests ending in an image extension, so nothing rewrites
- * `/blog/covers/x.svg` to a locale. While that route lived under `[locale]`
- * the only address that answered was `/en/blog/covers/x.svg`, which no post
- * links to: **every cover 404'd for two days with a green build**, because
- * nothing type checks a URL.
- *
- * The rule this pins: a route the proxy does not rewrite cannot live under the
- * locale prefix, or it is unreachable at the address people actually use.
+ * them to a locale. A route the proxy does not rewrite cannot live under the
+ * locale prefix, or it is unreachable at the address people actually use:
+ * every cover image on the blog 404'd for two days with a green build while
+ * the route that served them sat under `[locale]`, because nothing type
+ * checks a URL.
  */
 describe("routes the proxy skips stay outside the locale prefix", () => {
-  it("serves blog covers from a path no rewrite is needed to reach", async () => {
-    const { existsSync } = await import("node:fs")
-    const { join } = await import("node:path")
-    const app = join(process.cwd(), "src", "app")
-    expect(existsSync(join(app, "blog", "covers", "[file]", "route.ts"))).toBe(true)
-    expect(existsSync(join(app, "[locale]", "(public)", "blog", "covers"))).toBe(false)
-  })
-
   /**
    * The same defect a third time, so this one is a check rather than a comment.
    *
@@ -90,17 +78,14 @@ describe("routes the proxy skips stay outside the locale prefix", () => {
    * highlight a link or hide a header, is asking "which page is this". Read
    * from `next/navigation` the answer carries the locale, so every comparison
    * quietly stops matching in every language but the default: the navbar kept
-   * showing on the Italian docs, the nav links never highlighted, and the
+   * showing on the Italian pages, the nav links never highlighted, and the
    * landing scroll spy switched itself off. Nothing threw, and the English
    * site was fine, which is why it took someone opening the Italian one.
    */
   it("no client component under the localized surface reads the raw pathname", async () => {
     const { readdirSync, readFileSync } = await import("node:fs")
     const { join, relative } = await import("node:path")
-    const roots = [
-      join(process.cwd(), "src", "components", "landing"),
-      join(process.cwd(), "src", "components", "docs"),
-    ]
+    const roots = [join(process.cwd(), "src", "components", "landing")]
     const offenders: string[] = []
     for (const root of roots) {
       for (const name of readdirSync(root)) {

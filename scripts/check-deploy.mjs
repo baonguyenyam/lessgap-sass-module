@@ -12,7 +12,7 @@
  *
  * WHY THIS EXISTS
  *
- * Builds do not run migrations, on purpose (docs/deployment.md), so a deploy
+ * Builds do not run migrations, on purpose, so a deploy
  * can put new code in front of a database that is still behind it. Nothing
  * fails when that happens. Every query that does not name what is missing keeps
  * working, public pages render, and the first sign-in or checkout that touches
@@ -173,7 +173,7 @@ try {
       line("account table", "still the shape it had before 2.0:")
       more("provider / providerAccountId, and no providerId. The 2.0")
       more("migration converts it, and moves every password while it")
-      more("does (docs/upgrading.md, 2.0.0). Nothing else about this")
+      more("does. Nothing else about this")
       more("table can be checked until then")
       // Only when the migration list did not already say so, which it does on
       // every database that simply has not been migrated yet.
@@ -186,7 +186,7 @@ try {
       if (issuer && issuer.is_nullable === "NO" && issuer.column_default === null) {
         line("account table", 'the "issuer" column is still required, and nothing writes it:')
         more("every sign-up and every account link fails until the 2.1.0")
-        more("migration is applied (docs/upgrading.md, 2.1.0)")
+        more("migration is applied")
         accountProblems++
       }
 

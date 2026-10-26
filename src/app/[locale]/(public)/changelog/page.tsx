@@ -8,9 +8,9 @@ import { Badge } from "@/components/ui/badge"
 import { siteConfig } from "@/config/site"
 import { pageMetadata } from "@/lib/metadata"
 
-// The entries are written for the repository, where `./docs/blog.md` is the
+// The entries are written for the repository, where `./ROADMAP.md` is the
 // right link. Here the same string would ask the browser for a page that does
-// not exist, so it is translated first (shared with the docs renderer).
+// not exist, so each one is translated to the file on GitHub first.
 // External links then leave the site: open those in a new tab.
 const markdownComponents: Components = {
   // Only href/title/children reach the DOM: react-markdown's extra props

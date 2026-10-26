@@ -7,8 +7,8 @@ import { collapseMessages, type Messages } from "./collapse"
 /**
  * Fills the gaps in `translated` with `source`, all the way down.
  *
- * A shallow merge would not do: a partial `it.json` that defines `docs.title`
- * would replace the whole `docs` object and take every sibling key with it,
+ * A shallow merge would not do: a partial `it.json` that defines `nav.pricing`
+ * would replace the whole `nav` object and take every sibling key with it,
  * so translating one string would silently blank the others. The merge has to
  * walk the tree.
  */

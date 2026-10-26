@@ -19,8 +19,8 @@ export type Changelog = {
 
 /**
  * Parses a Keep a Changelog file into per-release sections for the
- * /changelog page. The Markdown stays the single source of truth, same
- * philosophy as the docs, and the source follows the same split:
+ * /changelog page. The Markdown stays the single source of truth, and the
+ * source follows a split:
  *
  * - your app reads `content/changelog.md`, the release notes you write for
  *   your users. It ships with example entries: replace them, and keep the
@@ -35,7 +35,7 @@ const SOURCE = isKitSite
 /**
  * Where the file above sits in the repository, so relative links inside it
  * resolve from the right place when the page renders them. Same string means
- * different files depending on this: `./docs/blog.md` is the guide from the
+ * different files depending on this: `./ROADMAP.md` is the roadmap from the
  * root, something under `content/` from there.
  */
 export const CHANGELOG_BASE_DIR = isKitSite ? "" : "content"

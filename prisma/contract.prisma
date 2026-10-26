@@ -1,0 +1,200 @@
+// use prisma-8
+// Contract inferred from the live database schema. Edit as needed, then run `prisma contract emit`.
+
+namespace public {
+  model User {
+    id                    String              @id(map: "User_pkey")
+    name                  String
+    email                 String
+    image                 String?
+    role                  pg.enum(Role)       @default("USER")
+    stripeCustomerId      String?
+    createdAt             TimestampString(3)  @default(now())
+    updatedAt             TimestampString(3)
+    onboardingDismissedAt TimestampString(3)?
+    emailVerified         Boolean             @default(false)
+    twoFactorEnabled      Boolean             @default(false)
+    accounts              Account[]
+    projects              Project[]
+    purchases             Purchase[]
+    sessions              Session[]
+    subscription          Subscription?
+    twoFactors            TwoFactor[]
+
+    @@index([email], map: "User_email_key", unique: true)
+    @@index([stripeCustomerId], map: "User_stripeCustomerId_key", unique: true)
+  }
+
+  model Account {
+    id                    String              @id(map: "Account_pkey")
+    userId                String
+    scope                 String?
+    accountId             String
+    providerId            String
+    accessToken           String?
+    refreshToken          String?
+    accessTokenExpiresAt  TimestampString(3)?
+    refreshTokenExpiresAt TimestampString(3)?
+    idToken               String?
+    password              String?
+    createdAt             TimestampString(3)  @default(now())
+    updatedAt             TimestampString(3)
+    user                  User                @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Account_userId_fkey")
+
+    @@index([providerId, accountId], map: "Account_providerId_accountId_key", unique: true)
+    @@index([userId], map: "Account_userId_idx")
+  }
+
+  model NewsletterSubscriber {
+    id               String              @id(map: "NewsletterSubscriber_pkey")
+    email            String
+    source           String              @default("waitlist")
+    createdAt        TimestampString(3)  @default(now())
+    confirmedAt      TimestampString(3)?
+    confirmToken     String
+    unsubscribeToken String
+    unsubscribedAt   TimestampString(3)?
+
+    @@index([confirmToken], map: "NewsletterSubscriber_confirmToken_key", unique: true)
+    @@index([email], map: "NewsletterSubscriber_email_key", unique: true)
+    @@index([unsubscribeToken], map: "NewsletterSubscriber_unsubscribeToken_key", unique: true)
+  }
+
+  model Plan {
+    id             String                   @id(map: "Plan_pkey")
+    name           String
+    slug           String
+    description    String?
+    price          Int
+    interval       pg.enum(BillingInterval)
+    stripePriceId  String
+    features       String?[]?
+    isActive       Boolean                  @default(true)
+    createdAt      TimestampString(3)       @default(now())
+    updatedAt      TimestampString(3)
+    meterEventName String?
+    trialDays      Int?
+    purchases      Purchase[]
+    subscriptions  Subscription[]
+
+    @@index([slug], map: "Plan_slug_key", unique: true)
+    @@index([stripePriceId], map: "Plan_stripePriceId_key", unique: true)
+  }
+
+  model Project {
+    id          String             @id(map: "Project_pkey")
+    name        String
+    description String?
+    userId      String
+    createdAt   TimestampString(3) @default(now())
+    updatedAt   TimestampString(3)
+    user        User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Project_userId_fkey")
+
+    @@index([userId], map: "Project_userId_idx")
+  }
+
+  model Purchase {
+    id                      String                  @id(map: "Purchase_pkey")
+    userId                  String
+    planId                  String
+    stripePaymentIntentId   String
+    stripeCheckoutSessionId String?
+    amount                  Int
+    currency                String                  @default("usd")
+    status                  pg.enum(PurchaseStatus) @default("COMPLETED")
+    createdAt               TimestampString(3)      @default(now())
+    updatedAt               TimestampString(3)
+    plan                    Plan                    @relation(fields: [planId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "Purchase_planId_fkey", index: false)
+    user                    User                    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Purchase_userId_fkey")
+
+    @@index([stripeCheckoutSessionId], map: "Purchase_stripeCheckoutSessionId_key", unique: true)
+    @@index([stripePaymentIntentId], map: "Purchase_stripePaymentIntentId_key", unique: true)
+    @@index([userId], map: "Purchase_userId_idx")
+  }
+
+  model Session {
+    id        String             @id(map: "Session_pkey")
+    token     String
+    userId    String
+    expiresAt TimestampString(3)
+    ipAddress String?
+    userAgent String?
+    createdAt TimestampString(3) @default(now())
+    updatedAt TimestampString(3)
+    user      User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Session_userId_fkey")
+
+    @@index([token], map: "Session_token_key", unique: true)
+    @@index([userId], map: "Session_userId_idx")
+  }
+
+  model Subscription {
+    id                   String                      @id(map: "Subscription_pkey")
+    userId               String
+    planId               String
+    stripeSubscriptionId String
+    status               pg.enum(SubscriptionStatus)
+    currentPeriodStart   TimestampString(3)
+    currentPeriodEnd     TimestampString(3)
+    cancelAtPeriodEnd    Boolean                     @default(false)
+    createdAt            TimestampString(3)          @default(now())
+    updatedAt            TimestampString(3)
+    trialEndsAt          TimestampString(3)?
+    plan                 Plan                        @relation(fields: [planId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "Subscription_planId_fkey", index: false)
+    user                 User                        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Subscription_userId_fkey")
+
+    @@index([stripeSubscriptionId], map: "Subscription_stripeSubscriptionId_key", unique: true)
+    @@index([userId], map: "Subscription_userId_key", unique: true)
+  }
+
+  model TwoFactor {
+    id                      String              @id(map: "TwoFactor_pkey")
+    userId                  String
+    secret                  String
+    backupCodes             String
+    verified                Boolean             @default(true)
+    failedVerificationCount Int                 @default(0)
+    lockedUntil             TimestampString(3)?
+    createdAt               TimestampString(3)  @default(now())
+    updatedAt               TimestampString(3)
+    user                    User                @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "TwoFactor_userId_fkey")
+
+    @@index([secret], map: "TwoFactor_secret_idx")
+    @@index([userId], map: "TwoFactor_userId_idx")
+  }
+
+  model Verification {
+    id         String             @id(map: "Verification_pkey")
+    identifier String
+    value      String
+    expiresAt  TimestampString(3)
+    createdAt  TimestampString(3) @default(now())
+    updatedAt  TimestampString(3)
+
+    @@index([identifier], map: "Verification_identifier_idx")
+  }
+
+  native_enum BillingInterval {
+    MONTH = "MONTH"
+    YEAR = "YEAR"
+    ONE_TIME = "ONE_TIME"
+  }
+
+  native_enum PurchaseStatus {
+    COMPLETED = "COMPLETED"
+    REFUNDED = "REFUNDED"
+  }
+
+  native_enum Role {
+    USER = "USER"
+    ADMIN = "ADMIN"
+  }
+
+  native_enum SubscriptionStatus {
+    ACTIVE = "ACTIVE"
+    PAST_DUE = "PAST_DUE"
+    CANCELED = "CANCELED"
+    UNPAID = "UNPAID"
+    TRIALING = "TRIALING"
+    INCOMPLETE = "INCOMPLETE"
+  }
+}

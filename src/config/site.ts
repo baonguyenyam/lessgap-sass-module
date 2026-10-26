@@ -5,7 +5,7 @@
  * transactional emails, legal pages) reads from here.
  *
  * Every field can also be set per-deployment via a NEXT_PUBLIC_* env var
- * (see `.env.example` and `docs/configuration.md`), so you can rebrand from
+ * (see `.env.example`), so you can rebrand from
  * config without editing code. The kit ships with neutral placeholders.
  */
 import { isKitSite } from "@/config/kit"

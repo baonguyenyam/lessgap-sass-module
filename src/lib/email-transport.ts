@@ -10,8 +10,7 @@ import type { ResendOutcome } from "@/lib/email-delivery"
  * newsletter) goes through `sendEmail()`, and every place that asks "is email
  * set up?" asks `emailEnabled()`. Resend is the default. To use another
  * provider, SMTP through Nodemailer, Postmark, SES or anything with an API,
- * rewrite these two functions and nothing else: docs/email.md has worked
- * examples.
+ * rewrite these two functions and nothing else.
  *
  * Kept free of heavy imports on purpose: src/auth.ts reads `emailEnabled()`
  * when it starts, so the Resend SDK is loaded only when an email is sent.

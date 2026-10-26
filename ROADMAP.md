@@ -2,7 +2,7 @@
 
 lessGAP Starter Kit is **free and open source**, and ships continuously. Pull `main` to get every update and fix.
 
-The kit's conventions are treated as an interface rather than an internal detail: where a thing lives, what it exports, what its shape is called. What you build on top of them survives an update, and where a release has to break one, [Upgrading](./docs/upgrading.md) says which and what to change.
+The kit's conventions are treated as an interface rather than an internal detail: where a thing lives, what it exports, what its shape is called. What you build on top of them survives an update, and where a release has to break one, the changelog says which and what to change.
 
 > This roadmap is indicative and reorder-able based on community feedback: open an issue and tell us what matters to you.
 
@@ -69,7 +69,7 @@ See [CHANGELOG.md](./CHANGELOG.md).
 - An environment variable to turn Vercel Analytics off, which until now shipped mounted with no way to decline
 - **Search engines and answer engines**: per-page Open Graph, so a link to your pricing page stops previewing like your home page. Offers as structured data built from the same rows the pricing table renders, an outline and heading anchors on posts, breadcrumbs, and an optional line in `/llms.txt` for the sentence you want repeated about you
 - **Mobile audit across the whole kit**: every page and every flow opened on a phone, not the marketing pages alone
-- **Groundwork for 2.0**: everything that reads the signed-in user now goes through `@/lib/auth`, so the release that changes the authentication library changes one file. See [Upgrading](./docs/upgrading.md)
+- **Groundwork for 2.0**: everything that reads the signed-in user now goes through `@/lib/auth`, so the release that changes the authentication library changes one file
 
 ## ✅ v2.0 - Better Auth *(major)*
 One thing, and nothing else. The authentication layer moves to [Better Auth](https://better-auth.com), and no feature rides along: a major that only migrates is a major you can adopt in an afternoon, and one that also adds things is a major people postpone.

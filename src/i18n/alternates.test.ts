@@ -1,7 +1,5 @@
 import { describe, expect, it } from "vitest"
 import { localeAlternates, localizedPath } from "./alternates"
-import { translatedLocales } from "@/lib/docs"
-import { routing } from "./routing"
 import { siteConfig } from "@/config/site"
 
 /**
@@ -21,51 +19,35 @@ const url = (path: string) => `${siteConfig.url}${path}`
 
 describe("localizedPath", () => {
   it("leaves the default locale unprefixed, so indexed URLs never move", () => {
-    expect(localizedPath("/docs/billing", "en")).toBe("/docs/billing")
-    expect(localizedPath("/docs/billing", "it")).toBe("/it/docs/billing")
+    expect(localizedPath("/pricing", "en")).toBe("/pricing")
+    expect(localizedPath("/pricing", "it")).toBe("/it/pricing")
   })
 })
 
 describe("localeAlternates", () => {
   it("cross-links the languages a page really exists in, and names an x-default", () => {
-    const alternates = localeAlternates("/docs/getting-started", "it", ["en", "it"])
+    const alternates = localeAlternates("/changelog", "it", ["en", "it"])
     expect(alternates).toEqual({
-      canonical: url("/it/docs/getting-started"),
+      canonical: url("/it/changelog"),
       languages: {
-        en: url("/docs/getting-started"),
-        it: url("/it/docs/getting-started"),
-        "x-default": url("/docs/getting-started"),
+        en: url("/changelog"),
+        it: url("/it/changelog"),
+        "x-default": url("/changelog"),
       },
     })
   })
 
   it("declares no alternate for a page that exists in one language", () => {
-    expect(localeAlternates("/docs/deployment", "en", ["en"])).toEqual({
-      canonical: url("/docs/deployment"),
+    expect(localeAlternates("/pricing", "en", ["en"])).toEqual({
+      canonical: url("/pricing"),
     })
   })
 
   it("points a fallback page at the original instead of claiming to be one", () => {
-    // `/it/docs/deployment` serves the English text. Self-canonicalising here
+    // `/it/pricing` serves the English text. Self-canonicalising here
     // is the whole defect: it submits a second address for the same words.
-    expect(localeAlternates("/docs/deployment", "it", ["en"])).toEqual({
-      canonical: url("/docs/deployment"),
+    expect(localeAlternates("/pricing", "it", ["en"])).toEqual({
+      canonical: url("/pricing"),
     })
-  })
-})
-
-describe("translatedLocales", () => {
-  it("agrees with the files on disk, not with the configured locale list", () => {
-    // The check that ties the rule above to reality: read from `routing` and
-    // every page would look translated in every language.
-    for (const doc of ["getting-started", "projects", "billing-and-plans"]) {
-      const locales = translatedLocales(doc)
-      expect(locales).toContain(routing.defaultLocale)
-      expect(locales.every((l) => routing.locales.includes(l as never))).toBe(true)
-    }
-  })
-
-  it("never reports a locale that has no file", () => {
-    expect(translatedLocales("a-slug-that-does-not-exist")).toEqual([routing.defaultLocale])
   })
 })

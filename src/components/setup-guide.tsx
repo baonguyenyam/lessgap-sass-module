@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server"
-import { CodeBlock } from "@/components/blog/code-block"
+import { CodeBlock } from "@/components/code-block"
 import type { SetupStep } from "@/lib/setup-status"
 
 /**
@@ -8,9 +8,8 @@ import type { SetupStep } from "@/lib/setup-status"
  * on it, because at this point the landing has nothing to show: its plans come
  * from the database.
  *
- * It does not repeat the guide. It says where you are and links to
- * `/docs/getting-started`, which every clone serves from its own `docs/`
- * folder, so this works offline and there is one text to keep right.
+ * It does not repeat the guide. It says where you are and links to the
+ * getting-started guide published with the kit.
  *
  * Rendered only in development: see `pendingSetup()`.
  */
@@ -102,10 +101,9 @@ export async function SetupGuide({ step }: { step: SetupStep }) {
       <p className="mt-8 text-sm">
         {/* The published guide, in a new tab: it is the canonical one, and a
             release publishes it together with the code, so it says what this
-            version says. The same text also ships in the clone, at
-            docs/getting-started.md. */}
+            version says. */}
         <a
-          href="/docs/getting-started"
+          href="https://docs.lessgap.app/getting-started"
           target="_blank"
           rel="noreferrer"
           className="font-medium underline underline-offset-4"

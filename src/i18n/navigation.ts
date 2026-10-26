@@ -5,9 +5,9 @@ import { routing } from "./routing"
  * Locale aware navigation, for the parts of the site that have translations.
  *
  * These wrappers keep the current locale when you move between pages: from
- * `/it/docs` a `<Link href="/docs/getting-started">` lands on
- * `/it/docs/getting-started`, and `usePathname()` gives you `/docs` rather
- * than `/it/docs`, so an "is this link active" check does not need to know
+ * `/it/pricing` a `<Link href="/pricing">` lands on
+ * `/it/pricing`, and `usePathname()` gives you `/pricing` rather
+ * than `/it/pricing`, so an "is this link active" check does not need to know
  * about prefixes.
  *
  * **`Link` is used in the documentation section and nowhere else, on purpose.**

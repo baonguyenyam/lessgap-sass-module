@@ -5,8 +5,8 @@ import { breadcrumbJsonLd, type Crumb } from "./breadcrumb"
 
 const trail: Crumb[] = [
   { name: "Home", href: "/" },
-  { name: "Blog", href: "/blog" },
-  { name: "A post", href: "/blog/a-post" },
+  { name: "Changelog", href: "/changelog" },
+  { name: "A release", href: "/changelog/a-release" },
 ]
 
 describe("breadcrumbJsonLd", () => {
@@ -21,7 +21,7 @@ describe("breadcrumbJsonLd", () => {
     const out = breadcrumbJsonLd(trail)
 
     expect(out.itemListElement).toHaveLength(trail.length)
-    expect(out.itemListElement.map((item) => item.name)).toEqual(["Home", "Blog", "A post"])
+    expect(out.itemListElement.map((item) => item.name)).toEqual(["Home", "Changelog", "A release"])
   })
 
   // Schema.org counts from one. Emitting the array index would put the first
@@ -40,8 +40,8 @@ describe("breadcrumbJsonLd", () => {
 
     expect(out.itemListElement.map((item) => item.item)).toEqual([
       `${siteConfig.url}/`,
-      `${siteConfig.url}/blog`,
-      `${siteConfig.url}/blog/a-post`,
+      `${siteConfig.url}/changelog`,
+      `${siteConfig.url}/changelog/a-release`,
     ])
   })
 

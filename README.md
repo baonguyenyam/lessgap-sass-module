@@ -26,7 +26,6 @@
   <a href="#-features">Features</a> ·
   <a href="#-tech-stack">Tech stack</a> ·
   <a href="#-quick-start">Quick start</a> ·
-  <a href="./docs/README.md">Docs</a> ·
   <a href="#-deploy">Deploy</a> ·
   <a href="#-project-structure">Structure</a> ·
   <a href="./ROADMAP.md">Roadmap</a>
@@ -61,9 +60,8 @@ Most SaaS boilerplates either cost a few hundred dollars or ship as a barebones 
 | 🌗 | **Dark mode** | System-aware theme with no flash of unstyled content |
 | 🧱 | **Landing page** | Hero, Features, Pricing and FAQ sections ready to edit |
 | 🕹️ | **Demo mode** | Ship a public demo of your product: `DEMO_MODE="true"` gives one-click explore accounts, disabled writes and checkout, and a seeded dataset you can reset |
-| ✍️ | **Blog & content** | File-based MDX blog with categories and an RSS feed: write a Markdown file, commit, publish |
-| 🔎 | **SEO** | Sitemap, robots, dynamic Open Graph images and Article JSON-LD out of the box |
-| 🌍 | **i18n** | next-intl with a prefix only for non-default locales, per-key fallback to English, `hreflang`, and bilingual Markdown docs with a staleness check |
+| 🔎 | **SEO** | Sitemap, robots, dynamic Open Graph images and JSON-LD out of the box |
+| 🌍 | **i18n** | next-intl with a prefix only for non-default locales, per-key fallback to English, `hreflang` |
 | 📨 | **Waitlist & contact** | Double opt-in newsletter waitlist (admin export, Resend sync) and a spam-protected contact form |
 | 🤖 | **AI-ready** | Ships agent instructions for Claude Code, Cursor and Copilot (`AGENTS.md`) so your assistant is productive on day one |
 | ✅ | **CI + security** | GitHub Actions pipeline (lint, tests, build), security headers, per-endpoint rate limiting (in-memory by default, two optional env vars move it to a shared store), an axe-core accessibility audit against WCAG 2.1 AA across the app, Dependabot with grouped updates |
@@ -84,7 +82,6 @@ Most SaaS boilerplates either cost a few hundred dollars or ship as a barebones 
 - **Emails**: [Resend](https://resend.com) for welcome, subscription, magic link and password reset messages, with the templates in your repository rather than in a dashboard you do not own.
 - **Internationalization**: [next-intl](https://next-intl.dev) with plain JSON message files, plus routing, fallback and a language switch already wired.
 - **Validation**: [Zod](https://zod.dev) on forms, Server Actions and the environment schema, with the same definitions shared by client and server.
-- **Content**: the blog and docs are Markdown files with frontmatter, rendered through [MDX](https://mdxjs.com) with GitHub Flavored Markdown, so publishing a post means adding a file to the repository.
 - **Analytics**: [Vercel Analytics](https://vercel.com/analytics), mounted in the root layout and active on Vercel deployments. Delete the component if you would rather collect nothing.
 - **Tests**: [Vitest](https://vitest.dev) on the pure logic, the health endpoint and the Stripe webhook, and [Playwright](https://playwright.dev) end to end on signup and checkout.
 - **CI**: [GitHub Actions](https://github.com/features/actions) running lint, tests, build and `pnpm audit` on every push, so a broken or vulnerable commit fails before it reaches you.
@@ -108,7 +105,7 @@ Most SaaS boilerplates either cost a few hundred dollars or ship as a barebones 
 
 ## ⚡ Quick start
 
-> 📚 Prefer step-by-step guides? The full documentation lives in [docs/](./docs/README.md) and is rendered in the app itself at `/docs`: getting started, configuration, authentication, deployment.
+> 📚 Prefer step-by-step guides? The full documentation lives at [docs.lessgap.app](https://docs.lessgap.app): getting started, configuration, authentication, deployment.
 
 **You need:** Node 24 or newer, git, and a PostgreSQL database ([Neon](https://neon.tech) has a free tier).
 
@@ -151,7 +148,7 @@ Paste what it prints between the quotes of `AUTH_SECRET`.
 
 Leave `DIRECT_URL` as it is: the kit does not read it, and it ships in the example only because some hosts set it for you.
 
-Everything else (sign-in providers, Stripe, email) can wait: each feature turns on when its variables are set, and stays quietly off when they are not. Every variable is listed with its comment in [.env.example](.env.example) and explained in [Configuration](./docs/configuration.md).
+Everything else (sign-in providers, Stripe, email) can wait: each feature turns on when its variables are set, and stays quietly off when they are not. Every variable is listed with its comment in [.env.example](.env.example) and explained in [Configuration](https://docs.lessgap.app/configuration).
 
 ### 4. Create the tables
 
@@ -166,7 +163,7 @@ Both read `.env.local`, the same file the app reads.
 
 Restart `pnpm dev` and open the site again. Click **Sign in**: in development the login page has a **Dev Login (Admin)** button, which needs no OAuth app and lands you in the dashboard as an admin. 🎉
 
-**Next:** sign-in providers, Stripe and email each have their setup in [Configuration](./docs/configuration.md), and the same five steps with more detail are in [Getting started](./docs/getting-started.md).
+**Next:** sign-in providers, Stripe and email each have their setup in [Configuration](https://docs.lessgap.app/configuration), and the same five steps with more detail are in [Getting started](https://docs.lessgap.app/getting-started).
 
 ### 6. Make it yours
 
@@ -190,9 +187,9 @@ pnpm add -g vercel
 vercel
 ```
 
-Vercel's free Hobby plan is for non-commercial use: if you sell with the app, budget for Vercel Pro or deploy on any Node.js host ([Deployment](./docs/deployment.md)).
+Vercel's free Hobby plan is for non-commercial use: if you sell with the app, budget for Vercel Pro or deploy on any Node.js host ([Deployment](https://docs.lessgap.app/deployment)).
 
-Set all environment variables in the Vercel dashboard. For Stripe webhooks in production, create a new endpoint in the Stripe dashboard pointing to `https://yourdomain.com/api/webhooks/stripe`. Builds do not run migrations: apply them to the production database yourself, with `pnpm check:deploy` before and after (see [Deployment](./docs/deployment.md)).
+Set all environment variables in the Vercel dashboard. For Stripe webhooks in production, create a new endpoint in the Stripe dashboard pointing to `https://yourdomain.com/api/webhooks/stripe`. Builds do not run migrations: apply them to the production database yourself, with `pnpm check:deploy` before and after (see [Deployment](https://docs.lessgap.app/deployment)).
 
 ### Make yourself Admin
 
@@ -211,7 +208,7 @@ Find your user in the `User` table and set `role` to `ADMIN`. You'll then see th
 The kit ships **brand-neutral**: a placeholder name and a black + grayscale theme, a blank canvas you make yours. Everything (metadata, navbar, footer, emails, legal pages, Open Graph images) reads from a single source, so you can rebrand two ways:
 
 - **From config**: `src/config/site.ts` (name, tagline, description, links), `src/components/logo.tsx` (the logo mark), and the color tokens in `src/app/globals.css`.
-- **From env**: set the `NEXT_PUBLIC_BRAND_*` variables (name, tagline, logo accent, colors) and the app rebrands with no code changes. The gradient, glow and Open Graph images follow your accent automatically. See [Configuration](./docs/configuration.md#branding--theming).
+- **From env**: set the `NEXT_PUBLIC_BRAND_*` variables (name, tagline, logo accent, colors) and the app rebrands with no code changes. The gradient, glow and Open Graph images follow your accent automatically. See [Configuration](https://docs.lessgap.app/configuration).
 
 Change those, replace the landing copy, and the kit is fully yours. The only intentional exception is the optional ["Built with" badge](#%EF%B8%8F-attribution--the-badge), which credits the kit itself. The **code is MIT**: use it for anything, no strings attached.
 
@@ -277,7 +274,7 @@ pnpm test:watch    # re-run on change
 pnpm test:coverage # with a coverage report
 ```
 
-Vitest, on the pure logic in `src/lib`: the rate limiter and its shared store, the password policy, the backup code alphabet, the account linking rule that decides when a provider may attach itself, the billing rules behind free trials, discounts and the Stripe Tax check, the session rules behind role changes and revocation, the Markdown parsers behind the blog, docs and changelog, the environment schema, the builders behind structured data and page metadata, and the boundary every page reads the session through. Plus the two routes worth guarding: the health endpoint, and the Stripe webhook, tested with **real signatures** generated by Stripe's own SDK, so a forged or replayed request is proven never to reach the database writes behind it.
+Vitest, on the pure logic in `src/lib`: the rate limiter and its shared store, the password policy, the backup code alphabet, the account linking rule that decides when a provider may attach itself, the billing rules behind free trials, discounts and the Stripe Tax check, the session rules behind role changes and revocation, the Markdown handling behind the changelog, the environment schema, the builders behind structured data and page metadata, and the boundary every page reads the session through. Plus the two routes worth guarding: the health endpoint, and the Stripe webhook, tested with **real signatures** generated by Stripe's own SDK, so a forged or replayed request is proven never to reach the database writes behind it.
 
 ### End-to-end
 
@@ -314,7 +311,7 @@ Run `pnpm test:coverage` to check those numbers yourself: they are printed by th
 
 **Need coverage enforced rather than reported?** Thresholds that fail a build, history over time, and a report someone can hand to a compliance review are an organisation's problem, not a solo maker's. Add a coverage gate in CI when you need one; everything above stays in the kit.
 
-**What is fully covered:** the changelog parser, the environment schema, the password policy, the auth boundary, and the builders behind structured data and page metadata. **What is not:** the functions that read the database or the filesystem (`getEntitlement`, `getAllPosts`). Those need integration tests against a real client, and a unit test that mocks Prisma or Stripe only proves the mock works. Where a mocked test still earns its place is the decision taken around a call rather than the call itself: `recordUsage` is covered for the guards that drop an event in a keyless install and for the payload it builds, not for what Stripe does with it.
+**What is fully covered:** the changelog parser, the environment schema, the password policy, the auth boundary, and the builders behind structured data and page metadata. **What is not:** the functions that read the database or the filesystem (`getEntitlement`). Those need integration tests against a real client, and a unit test that mocks Prisma or Stripe only proves the mock works. Where a mocked test still earns its place is the decision taken around a call rather than the call itself: `recordUsage` is covered for the guards that drop an event in a keyless install and for the payload it builds, not for what Stripe does with it.
 
 Your environment is validated at boot (`src/instrumentation.ts`): a configuration that is half done, such as a Stripe key with no webhook secret, stops the server with an explanatory message instead of failing at the first payment.
 
@@ -325,7 +322,7 @@ pnpm smoke -- https://your-app.com
 pnpm smoke -- https://your-app.com --expect-version 2.5.0
 ```
 
-Checks a running deployment from the outside: `/api/health` (including whether the database has every migration the build ships), home, blog index, feed, a real post, the SEO surfaces, and two routing guards (an unknown path is a 404, `/dashboard` redirects to sign in). With `--expect-version` it also compares the version the site reports with the one you are releasing, which is how you catch a deploy that succeeded while still serving the previous build.
+Checks a running deployment from the outside: `/api/health` (including whether the database has every migration the build ships), home, changelog, the SEO surfaces, and two routing guards (an unknown path is a 404, `/dashboard` redirects to sign in). With `--expect-version` it also compares the version the site reports with the one you are releasing, which is how you catch a deploy that succeeded while still serving the previous build.
 
 Every request is a GET, so it is safe to run against production. The flows that write something (contact form, waitlist) send real email and stay on the manual checklist. Demo deployments are detected from `/api/health` and checked the other way around: the smoke verifies they are *not* indexable.
 
@@ -374,9 +371,7 @@ lessGAP Starter Kit ships continuously and stays free: pull `main` for updates.
 
 **From v1.6 every user facing string lives in a message file, not inside a component**, with one exception on purpose: the placeholder privacy, terms and cookies pages, which you replace with text of your own before launch and which should not be assembled from a file that quietly falls back to another language. Everything else means filling one JSON file instead of hunting through a hundred components, and needing two languages at once means the routing, the fallback and the language switch are already there rather than a refactor you pay for later.
 
-Built on [next-intl](https://next-intl.dev), with **no translation service and no account required**: the files are plain JSON in the standard layout, so running them through Crowdin or anything else is your call. Your Markdown docs translate too, one file at a time: see [docs/i18n.md](./docs/i18n.md).
-
-**The language switch is real in this repository**: every page of the documentation ships in English and Italian, and each translation records a checksum of the English file it was written from, so `pnpm check:translations` says which ones went stale instead of leaving you to compare by hand. The blog stays English on purpose. Anything without a translation, page or message key, falls back to English with a line saying so rather than a gap.
+Built on [next-intl](https://next-intl.dev), with **no translation service and no account required**: the files are plain JSON in the standard layout, so running them through Crowdin or anything else is your call. Anything without a translation, page or message key, falls back to English rather than leaving a gap.
 
 ## 🔒 Security
 
@@ -388,9 +383,7 @@ Once this is your app, write your own policy: add a `SECURITY.md` to your reposi
 
 ## 🎨 Content & assets
 
-The demo blog posts, the docs and the placeholder marketing copy that ship with this kit were produced with the help of AI tools. They are placeholders: replace them with your own before you launch.
-
-The blog covers in `content/blog/covers/` are hand written SVG. They carry two color placeholders that the kit fills in with your brand, so you can keep the artwork and change the palette without redrawing anything. See [docs/blog.md](./docs/blog.md) for how they work, and for one thing worth knowing before you swap them for generated images.
+The placeholder marketing copy that ships with this kit was produced with the help of AI tools. It is a placeholder: replace it with your own before you launch.
 
 The logo mark is a [lucide](https://lucide.dev) icon (ISC licence) rendered as code next to your product name, so there is no image file to swap. Your app ships the `Hexagon` as a placeholder: change it in `src/components/logo.tsx`, and change `src/app/icon.tsx` in the same pass, because the favicon is generated as the miniature of that same mark.
 

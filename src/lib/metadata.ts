@@ -10,7 +10,7 @@ import { siteConfig } from "@/config/site"
  * metadata shallowly, and those two facts do not combine the way they read.
  * A page that declares `openGraph` REPLACES the parent's object, and the image
  * the ancestor file put there goes with it. A colocated file survives, because
- * it is merged into the segment's own metadata: that is why blog posts, which
+ * it is merged into the segment's own metadata: that is why pages which
  * have their own image beside them, kept theirs while every page using this
  * helper had none.
  *

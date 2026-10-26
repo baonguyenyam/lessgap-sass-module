@@ -29,7 +29,7 @@ beforeEach(() => {
 })
 
 describe("proxy: the session is read only where it is used", () => {
-  it.each(["/", "/it", "/blog/some-post", "/docs/getting-started", "/pricing", "/api/auth/session", "/sitemap.xml"])(
+  it.each(["/", "/it", "/changelog", "/pricing", "/api/auth/session", "/sitemap.xml"])(
     "%s does not read it",
     async (path) => {
       await run(path)
@@ -69,7 +69,7 @@ describe("proxy: the redirects are unchanged", () => {
   })
 
   it("hands public pages to the locale middleware", async () => {
-    const res = await run("/blog")
+    const res = await run("/pricing")
     expect(intl).toHaveBeenCalledOnce()
     expect(res.headers.get("x-intl")).toBe("1")
   })

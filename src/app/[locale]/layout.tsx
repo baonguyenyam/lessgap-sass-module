@@ -38,8 +38,8 @@ export default async function LocaleLayout({
    * layout.
    *
    * The root layout sits above this segment, so it is not re-rendered when
-   * the segment changes: following the language switch from `/docs/billing`
-   * to `/it/docs/billing` left every client component holding the language it
+   * the segment changes: following the language switch from `/pricing`
+   * to `/it/pricing` left every client component holding the language it
    * was loaded with. The page turned Italian around a sidebar, an outline and
    * a language button that stayed English, which reads exactly like a
    * translation that stopped halfway. Nothing threw, so nothing said so, and

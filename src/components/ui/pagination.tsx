@@ -7,9 +7,9 @@ import { cn } from "@/lib/utils"
  * Page navigation for a paginated list.
  *
  * Takes an `href` builder rather than a base path, so a caller decides what a
- * page URL looks like: the blog index wants `/blog/page/2` while a category
- * wants `/blog/category/guides/page/2`, and both want page 1 to stay at the
- * bare address instead of gaining a redundant `/page/1`.
+ * page URL looks like: an index may want `/items/page/2` while a filtered
+ * view wants `/items/filter/guides/page/2`, and both want page 1 to stay at
+ * the bare address instead of gaining a redundant `/page/1`.
  *
  * Every entry is a real link, so the whole control works before JavaScript and
  * a crawler can walk the archive. The current page is a `span` with

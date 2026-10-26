@@ -16,7 +16,7 @@ const usageSchema = z.object({
  *   await recordUsage(session.user.id, "api_request")
  *
  * `eventName` must match the meter's event name in Stripe and the plan's
- * `meterEventName` (see docs/billing.md for the full setup). Pass a unique
+ * `meterEventName`. Pass a unique
  * `identifier` when the caller might retry, it is Stripe's dedupe key for
  * meter events (roughly a 24h window).
  *

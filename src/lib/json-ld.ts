@@ -4,8 +4,8 @@
  * `JSON.stringify` does not escape `<`, so any string that reaches the graph
  * and happens to contain `</script>` closes the element early: everything
  * after it is parsed as HTML instead of data. Here the graph is built from
- * post frontmatter and site config, which you write yourself, but a blog fed
- * by a contributor, a CMS or a generator is the ordinary case downstream, and
+ * site config and page copy you write yourself, but content fed by a
+ * contributor, a CMS or a generator is the ordinary case downstream, and
  * the escape costs nothing.
  *
  * Escaping `<` alone is enough. It also neutralises `<!--`, which opens an
