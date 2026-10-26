@@ -5,7 +5,6 @@ import { config } from "dotenv"
 // which does not go through the Prisma CLI.
 config({ path: [".env.local", ".env"], quiet: true })
 
-const { prisma } = await import("../src/lib/prisma")
 type BillingInterval = "MONTH" | "YEAR" | "ONE_TIME"
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -107,29 +106,34 @@ const examplePlans: {
 ]
 
 async function main() {
-  for (const plan of examplePlans) {
-    const { slug, ...data } = plan
-    await prisma.plan.upsert({
-      where: { slug },
-      // keep the Stripe price ID (and copy tweaks) in sync with env on re-seed
-      update: {
-        stripePriceId: data.stripePriceId,
-        description: data.description,
-        meterEventName: data.meterEventName ?? null,
-        trialDays: data.trialDays ?? null,
-      },
-      create: { slug, ...data },
-    })
-  }
+  // Imported after dotenv has run: src/lib/db8.ts reads DATABASE_URL while
+  // its module initializes.
+  const { prisma } = await import("../src/lib/prisma")
+  try {
+    for (const plan of examplePlans) {
+      const { slug, ...data } = plan
+      await prisma.plan.upsert({
+        where: { slug },
+        // keep the Stripe price ID (and copy tweaks) in sync with env on re-seed
+        update: {
+          stripePriceId: data.stripePriceId,
+          description: data.description,
+          meterEventName: data.meterEventName ?? null,
+          trialDays: data.trialDays ?? null,
+        },
+        create: { slug, ...data },
+      })
+    }
 
-  console.log(`Seed complete: ${examplePlans.length} example plans upserted`)
+    console.log(`Seed complete: ${examplePlans.length} example plans upserted`)
+  } finally {
+    await prisma.$disconnect()
+  }
 }
 
-main()
-  .catch((error) => {
-    console.error(error)
-    // Without this the process exits 0, and Prisma signs off with "The seed
-    // command has been executed" after a seed that did nothing.
-    process.exitCode = 1
-  })
-  .finally(() => prisma.$disconnect())
+main().catch((error) => {
+  console.error(error)
+  // Without this the process exits 0, and Prisma signs off with "The seed
+  // command has been executed" after a seed that did nothing.
+  process.exitCode = 1
+})

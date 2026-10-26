@@ -2,9 +2,6 @@ import { config } from "dotenv"
 
 config({ path: [".env.local", ".env"], quiet: true })
 
-const { prisma } = await import("../src/lib/prisma")
-const { seedDemoData } = await import("../src/lib/demo-seed")
-
 // ─────────────────────────────────────────────────────────────────────────────
 // DEMO seed — fills an ISOLATED demo database with believable fake data so a
 // public demo deployment (DEMO_MODE="true") has something to show: users for
@@ -19,14 +16,22 @@ const { seedDemoData } = await import("../src/lib/demo-seed")
 // with real users.
 // ─────────────────────────────────────────────────────────────────────────────
 
-seedDemoData(prisma)
-  .then(({ users, subscriptions, purchases, projects }) => {
+async function main() {
+  // Imported after dotenv has run: src/lib/db8.ts reads DATABASE_URL while
+  // its module initializes.
+  const { prisma } = await import("../src/lib/prisma")
+  const { seedDemoData } = await import("../src/lib/demo-seed")
+  try {
+    const { users, subscriptions, purchases, projects } = await seedDemoData(prisma)
     console.log(
       `Demo seed complete: ${users} users, ${subscriptions} subscriptions, ${purchases} purchases, ${projects} projects`
     )
-  })
-  .catch((e) => {
-    console.error(e)
-    process.exit(1)
-  })
-  .finally(() => prisma.$disconnect())
+  } finally {
+    await prisma.$disconnect()
+  }
+}
+
+main().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})

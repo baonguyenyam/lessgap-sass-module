@@ -202,8 +202,19 @@ pnpm typecheck              # type-check
 pnpm lint                   # ESLint
 pnpm test                   # Vitest unit tests
 pnpm test:e2e               # Playwright
-pnpm prisma migrate dev --name <change>  # after editing schema.prisma
+pnpm prisma7 migrate dev --name <change> # after editing prisma/schema.prisma (v7 CLI owns migrations)
+pnpm prisma contract emit   # after schema/contract change: regenerate generated/prisma8
+pnpm db:reset               # dev only: drop the database, rebuild the schema, run the system seed
+pnpm db:reset:demo          # the same, plus the demo seed
 ```
+
+Data access at runtime is Prisma ORM 8 (`@prisma/orm-postgres`, contract in
+`prisma/contract.prisma`, client `src/lib/db8.ts`). `src/lib/prisma.ts` is a
+v7-shaped facade over it — keep using `prisma.<model>.<verb>` in kit code.
+Better Auth talks to Postgres through its own Kysely pool (`src/lib/kysely.ts`),
+not through the ORM. Schema changes: edit `prisma/schema.prisma`, migrate with
+the v7 CLI, then re-introspect the contract (`pnpm prisma contract infer`) and
+emit.
 
 Use the package manager whose lockfile is committed. Never add a second lockfile.
 

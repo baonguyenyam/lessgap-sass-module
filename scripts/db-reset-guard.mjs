@@ -27,8 +27,31 @@ export function isLocalHost(hostname) {
 export function parseAllowHosts(value) {
   return (value ?? "")
     .split(",")
-    .map((entry) => entry.trim().toLowerCase())
+    .map((entry) => withoutNeonPooler(entry.trim().toLowerCase()))
     .filter(Boolean)
+}
+
+/** `ep-x-pooler.region.aws.neon.tech` → `ep-x.region.aws.neon.tech`; other hosts unchanged. */
+export function withoutNeonPooler(hostname) {
+  return hostname.replace(/^(ep-[a-z0-9-]+?)-pooler(\.|$)/, "$1$2")
+}
+
+/**
+ * The URL schema changes should use. Neon's `-pooler` hosts go through
+ * PgBouncer in transaction mode, which breaks the session-level work Prisma
+ * does while building a schema, so they are switched to the direct host of
+ * the same endpoint. Any other URL is returned as it is.
+ */
+export function toDirectUrl(url) {
+  try {
+    const parsed = new URL(url)
+    const direct = withoutNeonPooler(parsed.hostname)
+    if (direct === parsed.hostname) return url
+    parsed.hostname = direct
+    return parsed.toString()
+  } catch {
+    return url
+  }
 }
 
 /**
@@ -53,7 +76,7 @@ export function checkResetTarget({ url, env }) {
     return { ok: false, reason: `not a PostgreSQL URL (${parsed.protocol})` }
   }
 
-  const host = parsed.hostname.toLowerCase()
+  const host = withoutNeonPooler(parsed.hostname.toLowerCase())
   const database = decodeURIComponent(parsed.pathname.replace(/^\//, "")) || "postgres"
 
   if (isLocalHost(host)) return { ok: true, host, database }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { checkResetTarget, isLocalHost, parseAllowHosts } from "./db-reset-guard.mjs"
+import { checkResetTarget, isLocalHost, parseAllowHosts, toDirectUrl, withoutNeonPooler } from "./db-reset-guard.mjs"
 
 const NEON = "postgresql://user:secret@ep-old-rain-b5v5edey-pooler.c-7.us-east-2.aws.neon.tech/neondb?sslmode=require"
 
@@ -21,6 +21,24 @@ describe("parseAllowHosts", () => {
   it("splits, trims, lowercases and drops blanks", () => {
     expect(parseAllowHosts(" EP-A , ,ep-b ")).toEqual(["ep-a", "ep-b"])
     expect(parseAllowHosts(undefined)).toEqual([])
+  })
+})
+
+describe("toDirectUrl", () => {
+  it("switches a Neon pooler host to the direct host of the same endpoint", () => {
+    expect(toDirectUrl(NEON)).toBe(NEON.replace("-pooler", ""))
+  })
+
+  it("leaves direct Neon hosts, local hosts and invalid input unchanged", () => {
+    const direct = NEON.replace("-pooler", "")
+    expect(toDirectUrl(direct)).toBe(direct)
+    expect(toDirectUrl("postgresql://u:p@localhost:5432/x")).toBe("postgresql://u:p@localhost:5432/x")
+    expect(toDirectUrl("not a url")).toBe("not a url")
+  })
+
+  it("only strips -pooler from a Neon endpoint label", () => {
+    expect(withoutNeonPooler("my-pooler.example.com")).toBe("my-pooler.example.com")
+    expect(withoutNeonPooler("ep-a-b-pooler")).toBe("ep-a-b")
   })
 })
 
@@ -59,6 +77,11 @@ describe("checkResetTarget", () => {
     const env = { DB_RESET_ALLOW_HOSTS: "ep-old-rain-b5v5edey" }
     const other = NEON.replace("ep-old-rain-b5v5edey", "ep-new-sun-a1b2c3d4")
     expect(checkResetTarget({ url: other, env }).ok).toBe(false)
+  })
+
+  it("accepts an allow-list entry written with the full pooler hostname", () => {
+    const env = { DB_RESET_ALLOW_HOSTS: "ep-old-rain-b5v5edey-pooler.c-7.us-east-2.aws.neon.tech" }
+    expect(checkResetTarget({ url: toDirectUrl(NEON), env }).ok).toBe(true)
   })
 
   it("refuses a missing, malformed or non-PostgreSQL URL", () => {

@@ -23,7 +23,7 @@ import { createInterface } from "node:readline/promises"
 import { config } from "dotenv"
 import pg from "pg"
 
-import { checkResetTarget } from "./db-reset-guard.mjs"
+import { checkResetTarget, toDirectUrl } from "./db-reset-guard.mjs"
 
 config({ path: [".env.local", ".env"], quiet: true })
 
@@ -31,10 +31,11 @@ const args = new Set(process.argv.slice(2))
 const withDemo = args.has("--demo")
 const skipConfirm = args.has("--yes") || args.has("-y")
 
-// DDL goes through the direct connection when there is one: a pooler in
-// transaction mode handles these statements, but a direct connection is what
-// schema changes are meant to use.
-const url = process.env.DIRECT_URL?.trim() || process.env.DATABASE_URL?.trim()
+// Schema changes need a direct connection. DIRECT_URL wins when set; a Neon
+// `-pooler` host (in either variable) is switched to its direct host, because
+// PgBouncer in transaction mode breaks what Prisma does while building a schema.
+const configured = process.env.DIRECT_URL?.trim() || process.env.DATABASE_URL?.trim()
+const url = configured ? toDirectUrl(configured) : configured
 
 const target = checkResetTarget({ url, env: process.env })
 if (!target.ok) {
@@ -56,8 +57,13 @@ if (!skipConfirm) {
 }
 
 // 1. Drop.
+step("1/3 Dropping the schema")
 const client = new pg.Client({ connectionString: url })
-await client.connect()
+try {
+  await client.connect()
+} catch (error) {
+  fail("connecting to the database", error, "check the URL, the password and that the database is reachable from this machine")
+}
 try {
   const { rows } = await client.query(
     `SELECT nspname FROM pg_namespace
@@ -71,11 +77,14 @@ try {
   await client.query(`GRANT ALL ON SCHEMA public TO CURRENT_USER`)
   await client.query(`GRANT USAGE ON SCHEMA public TO PUBLIC`)
   console.log("  recreated schema public")
+} catch (error) {
+  fail("dropping the schema", error, "the database user must own the schema (on Neon: the role that owns the database)")
 } finally {
-  await client.end()
+  await client.end().catch(() => {})
 }
 
 // 2. Rebuild.
+step("2/3 Building the schema")
 const prisma = (...rest) => run("pnpm", ["exec", "prisma", ...rest, "--db", url, "--yes"])
 const migrationsDir = "migrations/app"
 const hasMigrations = existsSync(migrationsDir) && readdirSync(migrationsDir).some((name) => !name.startsWith("."))
@@ -88,6 +97,7 @@ if (hasMigrations) {
 }
 
 // 3. Seed.
+step("3/3 Seeding")
 console.log("Seeding system data…")
 run("pnpm", ["exec", "tsx", "prisma/seed.ts"])
 if (withDemo) {
@@ -97,10 +107,25 @@ if (withDemo) {
 
 console.log(`✔ ${target.database} on ${target.host} rebuilt${withDemo ? " with demo data" : ""}.`)
 
+function step(title) {
+  console.log(`\n▶ ${title}`)
+}
+
+function fail(what, error, hint) {
+  console.error(`\n✖ Failed while ${what}: ${error?.code ? `[${error.code}] ` : ""}${error?.message ?? error}`)
+  if (hint) console.error(`  Hint: ${hint}`)
+  process.exit(1)
+}
+
 function run(command, commandArgs) {
-  const result = spawnSync(command, commandArgs, { stdio: "inherit", env: process.env })
+  // The child gets the direct URL too, so seeds and Prisma talk to the same
+  // database the schema was just rebuilt in.
+  const env = { ...process.env, DATABASE_URL: url, DIRECT_URL: url }
+  const result = spawnSync(command, commandArgs, { stdio: "inherit", env })
+  if (result.error) fail(`starting ${command}`, result.error, `is ${command} on your PATH?`)
   if (result.status !== 0) {
-    console.error(`✖ ${command} ${commandArgs.filter((a) => a !== url).join(" ")} failed (exit ${result.status}).`)
+    const shown = commandArgs.map((a) => (a === url ? "<url>" : a)).join(" ")
+    console.error(`\n✖ ${command} ${shown} failed (exit ${result.status}). Its own error is printed above.`)
     process.exit(result.status ?? 1)
   }
 }

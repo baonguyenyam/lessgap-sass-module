@@ -6,6 +6,7 @@ Trong giai đoạn này nên chủ yếu sử dụgn các dịch vụ miễn ph�
 - Phải đảm bảo để dự án sẵn sàng cho nhàng ngàn kháhc hàng 
 - Phải có đủ mọi cơ chế F2A, bảo mật 2 lớp, sesion login, xác thực...
 - Phải cho phéo login nhiều cách
+
 - Cần bỏ những thứu dư thừa ra khỏi dự án, loại hẳn Prisma 7
 - Thêm cấp ROOT cho baonguyenyam@gmail.com là có quyền cao hơn cả admin, admin sẽ có quyền trên mỗi Tenat nhưng ROOT mới có quyền lớn trên hệ thống
 - Phải tham khảo các dự án khác để thêm tính năng switch as để khi dev có thể chuyển qua lại các loại thành viên để test cho lẹ 

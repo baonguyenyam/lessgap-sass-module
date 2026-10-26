@@ -331,11 +331,16 @@ function makeDelegate(model: string): any {
     },
     deleteMany: async (args: any) => ({ count: await filtered(args?.where ?? {}).deleteAndCount() }),
     upsert: async (args: any) =>
+      // v8 `upsert` is a terminal on the base collection: the conflict
+      // target goes in `conflictOn` (a unique-constraint criterion), not in
+      // a `.where(...)` — every call site upserts on a unique key, so the
+      // v7 `where` maps onto `conflictOn` unchanged.
       decodeRow(
         model,
-        await filtered(args.where).upsert({
+        await root().upsert({
           create: encodeWrite(model, args.create),
           update: encodeWrite(model, args.update),
+          conflictOn: args.where,
         }),
       ),
   }

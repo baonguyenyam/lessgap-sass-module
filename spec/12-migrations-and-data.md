@@ -38,11 +38,14 @@ through the other module's `server/index.ts`.
 ## Writing a migration
 
 1. Edit the owner's `.prisma` file.
-2. `pnpm prisma migrate dev --create-only --name <owner>_<change>`.
+2. `pnpm prisma7 migrate dev --create-only --name <owner>_<change>` (Prisma 8
+   has no `migrate dev`; the v7 CLI owns `prisma/migrations/`).
 3. Open the generated SQL and add what Prisma cannot express, in the same file:
    RLS (`ENABLE` + `FORCE` + policy), exclusion constraints, partial indexes,
    `CREATE EXTENSION` (`vector`, `btree_gist`), check constraints.
-4. `pnpm prisma migrate dev` to apply locally; run the tests.
+4. `pnpm prisma7 migrate dev` to apply locally; run the tests. Re-emit the
+   runtime contract when the shape changed: `pnpm prisma contract infer &&
+   pnpm prisma contract emit`.
 5. Classify every new model in `src/platform/tenancy/models.ts`.
 6. Commit schema, migration and classification together.
 
@@ -95,7 +98,9 @@ each in its own migration file (Postgres cannot run it inside a transaction).
 ## Never
 
 - Edit or delete a migration that has been merged to `main`. Fix forward.
-- Run `prisma migrate reset` or `db push` against anything but your own local database.
+- Reset or push a schema against anything but a development database.
+  `pnpm db:reset` is the only reset command, and it refuses production and
+  any remote host not listed in `DB_RESET_ALLOW_HOSTS`.
 - Put data fixes inside a schema migration when they touch many rows; use a backfill.
 - Store secrets, personal data or tenant content in a migration or seed.
 
@@ -120,6 +125,25 @@ One-off data changes live in `scripts/backfills/<YYYYMMDD>-<owner>-<what>.ts`:
 
 Seed code reuses factories from `tests/factories/` so seeds and tests build
 the same valid shapes.
+
+## Starting over
+
+`pnpm db:reset` rebuilds a development database from nothing; `pnpm
+db:reset:demo` adds the demo seed; `--yes` skips the confirmation for scripts.
+Prisma ORM 8 has no `migrate reset`, so `scripts/db-reset.mjs` does it:
+
+1. Refuses unless the target is safe (`scripts/db-reset-guard.mjs`, tested):
+   never when `NODE_ENV` or `VERCEL_ENV` is `production`; local hosts are
+   allowed; a remote host only if its name or Neon endpoint id is in
+   `DB_RESET_ALLOW_HOSTS` (set in `.env.local`, never in a shared env).
+2. Prints the database and host and asks you to type the database name.
+3. Drops `public` and Prisma's bookkeeping schemas (other schemas are left
+   alone), recreates `public`.
+4. Builds the schema: `prisma db migrate` when on-disk migrations exist,
+   otherwise `prisma db init` from the contract.
+5. Runs the system seed, then the demo seed with `--demo`.
+
+Seeds must therefore stay idempotent and must succeed on an empty database.
 
 ## Review checklist for any PR touching `prisma/`
 

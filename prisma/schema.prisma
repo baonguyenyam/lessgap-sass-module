@@ -139,7 +139,9 @@ model TwoFactor {
   lockedUntil             DateTime?
   user                    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt               DateTime  @default(now())
-  updatedAt               DateTime  @updatedAt
+  // `@default(now())` because Better Auth's Kysely adapter writes this table
+  // without touching timestamps — Prisma 8's `@onUpdate` covers ORM writes.
+  updatedAt               DateTime  @default(now()) @updatedAt
 
   @@index([userId])
   @@index([secret])

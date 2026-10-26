@@ -9,9 +9,11 @@ and any code that queries. Full standard: `spec/12-migrations-and-data.md`.
 - Schema lives in `prisma/schema/<owner>.prisma`. Edit only the file of the
   owner you are working on; a module never edits another module's models or
   adds relations to them.
-- Create migrations with `pnpm prisma migrate dev --create-only --name <owner>_<change>`,
-  then add the SQL Prisma cannot express (RLS, exclusion constraints,
-  extensions, partial indexes) to the same file before applying it.
+- Create migrations with `pnpm prisma7 migrate dev --create-only --name <owner>_<change>`
+  (the v7 CLI owns `prisma/migrations/`; Prisma 8 has no `migrate dev`), then
+  add the SQL Prisma cannot express (RLS, exclusion constraints, extensions,
+  partial indexes) to the same file before applying it. Afterwards re-emit
+  the runtime contract: `pnpm prisma contract infer && pnpm prisma contract emit`.
 - Every tenant-owned table: `tenantId`, `@@index([tenantId, ...])`, per-tenant
   uniques, the RLS block from the spec, and a classification entry. Same change.
 - Every migration must work with the code currently deployed. Renames, type

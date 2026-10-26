@@ -18,6 +18,13 @@ const DAY = 24 * 60 * 60 * 1000
 const daysAgo = (n: number) => new Date(Date.now() - n * DAY)
 const daysFromNow = (n: number) => new Date(Date.now() + n * DAY)
 
+/**
+ * Same `.env.example` contract as prisma/seed.ts: an unset variable arrives
+ * as "", and six plans sharing one empty price ID break the unique index on
+ * the second upsert.
+ */
+const priceId = (value: string | undefined, placeholder: string) => value?.trim() || placeholder
+
 /** Same example plans as the regular seed (prisma/seed.ts). */
 const examplePlans: {
   slug: string
@@ -37,7 +44,7 @@ const examplePlans: {
     description: "Example entry plan: replace with your own",
     price: 900,
     interval: "MONTH",
-    stripePriceId: process.env.STRIPE_STARTER_PRICE_ID ?? "price_starter_placeholder",
+    stripePriceId: priceId(process.env.STRIPE_STARTER_PRICE_ID, "price_starter_placeholder"),
     features: ["Up to 3 projects", "Basic analytics", "Community support"],
   },
   {
@@ -46,7 +53,7 @@ const examplePlans: {
     description: "Example annual plan: save 2 months",
     price: 9000,
     interval: "YEAR",
-    stripePriceId: process.env.STRIPE_STARTER_YEARLY_PRICE_ID ?? "price_starter_yearly_placeholder",
+    stripePriceId: priceId(process.env.STRIPE_STARTER_YEARLY_PRICE_ID, "price_starter_yearly_placeholder"),
     features: ["Up to 3 projects", "Basic analytics", "2 months free"],
   },
   {
@@ -55,7 +62,7 @@ const examplePlans: {
     description: "Example paid plan: replace with your own",
     price: 1900,
     interval: "MONTH",
-    stripePriceId: process.env.STRIPE_PRO_PRICE_ID ?? "price_pro_placeholder",
+    stripePriceId: priceId(process.env.STRIPE_PRO_PRICE_ID, "price_pro_placeholder"),
     trialDays: 14,
     features: [
       "Everything in Starter",
@@ -70,7 +77,7 @@ const examplePlans: {
     description: "Example annual plan: save 2 months",
     price: 19000,
     interval: "YEAR",
-    stripePriceId: process.env.STRIPE_PRO_YEARLY_PRICE_ID ?? "price_pro_yearly_placeholder",
+    stripePriceId: priceId(process.env.STRIPE_PRO_YEARLY_PRICE_ID, "price_pro_yearly_placeholder"),
     features: ["Everything in Pro", "2 months free", "Priority support"],
   },
   {
@@ -79,7 +86,7 @@ const examplePlans: {
     description: "Example one-time purchase: pay once, keep it forever",
     price: 29900,
     interval: "ONE_TIME",
-    stripePriceId: process.env.STRIPE_LIFETIME_PRICE_ID ?? "price_lifetime_placeholder",
+    stripePriceId: priceId(process.env.STRIPE_LIFETIME_PRICE_ID, "price_lifetime_placeholder"),
     features: ["Everything in Pro", "All future updates", "No recurring billing"],
   },
   {
@@ -88,7 +95,7 @@ const examplePlans: {
     description: "Example usage-based plan billed per API request",
     price: 0,
     interval: "MONTH",
-    stripePriceId: process.env.STRIPE_METERED_PRICE_ID ?? "price_metered_placeholder",
+    stripePriceId: priceId(process.env.STRIPE_METERED_PRICE_ID, "price_metered_placeholder"),
     features: ["Billed per API request", "No monthly minimum"],
     meterEventName: "api_request",
     isActive: false,
