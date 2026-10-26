@@ -1,9 +1,9 @@
 # Changelog
 
-All notable changes to lessGAP Starter Kit are documented here.
+All notable changes to lessGAP App are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/) and this project adheres to [Semantic Versioning](https://semver.org/).
 
-> 💡 **lessGAP Starter Kit is built on [OpenStarterKit](https://github.com/openstarterkit/nextjs-saas-starter-kit) (MIT).** Entries up to and including 2.4.0 are the upstream kit's release history, kept so the "if you customised" notes still make sense; the release links at the bottom point at the upstream repository, where those versions were published.
+> 💡 **lessGAP App is built on [OpenStarterKit](https://github.com/openstarterkit/nextjs-saas-starter-kit) (MIT).** Entries up to and including 2.4.0 are the upstream kit's release history, kept so the "if you customised" notes still make sense; the release links at the bottom point at the upstream repository, where those versions were published.
 
 ---
 
@@ -92,7 +92,7 @@ Rewrite those calls on `db8`: `prisma.user.findUnique({ where: { id } })` become
 
 ## [2.5.0] - 2026-10-26
 
-🔧 **The fork becomes lessGAP Starter Kit.** Rebranded, moved to pnpm, the seed scripts fixed and the demo seed grows a real admin account — all on top of the upstream 2.4.0 this fork started from. This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
+🔧 **The fork becomes lessGAP App.** Rebranded, moved to pnpm, the seed scripts fixed and the demo seed grows a real admin account — all on top of the upstream 2.4.0 this fork started from. This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
 
 ### Added
 
@@ -100,7 +100,7 @@ Rewrite those calls on `db8`: `prisma.user.findUnique({ where: { id } })` become
 
 ### Changed
 
-- **Rebranded to lessGAP Starter Kit**: `NEXT_PUBLIC_BRAND_NAME`, wordmark accent and contact email set in `.env`, the "Built with" badge disabled via `NEXT_PUBLIC_REMOVE_BRANDING`, `package.json` renamed to `lessgap-starter-kit`, and the developer-docs link in the setup guide now points at docs.lessgap.app
+- **Rebranded to lessGAP App**: `NEXT_PUBLIC_BRAND_NAME`, wordmark accent and contact email set in `.env`, the "Built with" badge disabled via `NEXT_PUBLIC_REMOVE_BRANDING`, `package.json` renamed to `lessgap-starter-kit`, and the developer-docs link in the setup guide now points at docs.lessgap.app
 - **Package manager is pnpm**: `packageManager` in `package.json`, the allowed build scripts in `pnpm-workspace.yaml`, and the commands in the README updated to match
 - **Latest compatible dependencies**: `@hookform/resolvers` 6, `@stripe/stripe-js` 10, `stripe` 23 (API version `2026-09-30.endive`), ESLint 10
 - **Prisma ORM 8 (`8.0.0-rc.27`) now owns data access.** The runtime is `@prisma/orm-postgres` with the contract in `prisma/contract.prisma` (emitted to `generated/prisma8/`), the client lives in `src/lib/db8.ts`, and `src/lib/prisma.ts` is a facade that keeps the `prisma.<model>.<verb>` call shape — including `Date` inputs/outputs, `include`/`select`, generated ids and `updatedAt` — so routes and actions did not have to be rewritten. Because `@better-auth/prisma-adapter` only supports Prisma 5–7, Better Auth moved to `@better-auth/kysely-adapter` on its own `pg` pool (`src/lib/kysely.ts`), with timestamp parsing pinned to UTC so both layers agree on instants. Migrations stay in `prisma/migrations/` and are applied by the Prisma 7 CLI (`prisma7.config.ts`, `@prisma/prisma7`); `pnpm db:reset` rebuilds a development database. New migration `20261026183000_twofactor_updatedat_default` gives `TwoFactor.updatedAt` a database default because Better Auth writes that table without touching timestamps. Removed: `@prisma/client`, `@prisma/adapter-pg`, `@better-auth/prisma-adapter`
@@ -478,7 +478,7 @@ We found it while checking whether the issuer format was worth reporting upstrea
 
 ## [2.0.0] - 2026-08-28
 
-🔐 **Authentication moves from Auth.js to Better Auth.** That is the whole release: no new features, nothing else to review, so the upgrade is as easy to adopt as a library change can be. Auth.js is now part of Better Auth and its own README points new projects at it, and a starter kit is a new project every time someone clones it. Version 1.7 built the boundary that makes this cheap, and it held: changing library touched seven files, and they are exactly the seven that 1.7 named in advance.
+🔐 **Authentication moves from Auth.js to Better Auth.** That is the whole release: no new features, nothing else to review, so the upgrade is as easy to adopt as a library change can be. Auth.js is now part of Better Auth and its own README points new projects at it, and a app is a new project every time someone clones it. Version 1.7 built the boundary that makes this cheap, and it held: changing library touched seven files, and they are exactly the seven that 1.7 named in advance.
 
 ### Breaking
 

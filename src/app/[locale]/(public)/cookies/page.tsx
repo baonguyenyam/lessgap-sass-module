@@ -27,7 +27,7 @@ export default function CookiesPage() {
           <div className="rounded-2xl border border-dashed border-border bg-muted/30 p-5">
             <p className="font-medium text-foreground">This is a placeholder.</p>
             <p className="mt-1">
-              It describes what this {isKitSite ? "starter kit" : "app"} stores out of the box. If
+              It describes what this {isKitSite ? "app" : "app"} stores out of the box. If
               you add analytics or any third-party tracking, update this page accordingly.
             </p>
           </div>

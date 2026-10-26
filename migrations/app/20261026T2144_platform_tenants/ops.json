@@ -1,0 +1,1137 @@
+[
+  {
+    "id": "createNativeEnumType.PlatformRole",
+    "label": "Create enum type \"PlatformRole\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "type",
+        "name": "PlatformRole"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "create enum type \"PlatformRole\"",
+        "sql": "CREATE TYPE \"public\".\"PlatformRole\" AS ENUM ('OWNER', 'ADMIN', 'SUPPORT', 'DESIGNER')",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "createNativeEnumType.TenantStatus",
+    "label": "Create enum type \"TenantStatus\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "type",
+        "name": "TenantStatus"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "create enum type \"TenantStatus\"",
+        "sql": "CREATE TYPE \"public\".\"TenantStatus\" AS ENUM ('PROVISIONING', 'ACTIVE', 'PAST_DUE', 'SUSPENDED', 'CANCELED')",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.Invitation",
+    "label": "Create table \"Invitation\"",
+    "summary": "Creates table \"Invitation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Invitation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Invitation\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Invitation\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"Invitation\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Invitation\"",
+        "sql": "CREATE TABLE \"public\".\"Invitation\" (\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"email\" text NOT NULL,\n  \"expiresAt\" timestamp(3) NOT NULL,\n  \"id\" text NOT NULL,\n  \"inviterId\" text NOT NULL,\n  \"organizationId\" text NOT NULL,\n  \"role\" text NOT NULL,\n  \"status\" text DEFAULT 'pending' NOT NULL,\n  \"teamId\" text,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  CONSTRAINT \"Invitation_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Invitation\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"Invitation\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"Invitation\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.Member",
+    "label": "Create table \"Member\"",
+    "summary": "Creates table \"Member\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Member"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Member\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Member\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"Member\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Member\"",
+        "sql": "CREATE TABLE \"public\".\"Member\" (\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"organizationId\" text NOT NULL,\n  \"role\" text NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"userId\" text NOT NULL,\n  CONSTRAINT \"Member_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Member\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"Member\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"Member\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.OrganizationRole",
+    "label": "Create table \"OrganizationRole\"",
+    "summary": "Creates table \"OrganizationRole\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "OrganizationRole"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"OrganizationRole\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"OrganizationRole\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"OrganizationRole\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"OrganizationRole\"",
+        "sql": "CREATE TABLE \"public\".\"OrganizationRole\" (\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"organizationId\" text NOT NULL,\n  \"permission\" json NOT NULL,\n  \"role\" text NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  CONSTRAINT \"OrganizationRole_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"OrganizationRole\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"OrganizationRole\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"OrganizationRole\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.Tenant",
+    "label": "Create table \"Tenant\"",
+    "summary": "Creates table \"Tenant\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Tenant"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Tenant\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Tenant\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"Tenant\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Tenant\"",
+        "sql": "CREATE TABLE \"public\".\"Tenant\" (\n  \"chargesEnabled\" bool DEFAULT false NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"currency\" text DEFAULT 'usd' NOT NULL,\n  \"defaultLanguage\" text DEFAULT 'en' NOT NULL,\n  \"id\" text NOT NULL,\n  \"logo\" text,\n  \"metadata\" json,\n  \"name\" text NOT NULL,\n  \"slug\" text NOT NULL,\n  \"status\" \"TenantStatus\" DEFAULT 'PROVISIONING'::\"TenantStatus\" NOT NULL,\n  \"stripeAccountId\" text,\n  \"stripeCustomerId\" text,\n  \"timeZone\" text DEFAULT 'America/Chicago' NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"verticalKey\" text DEFAULT 'generic' NOT NULL,\n  CONSTRAINT \"Tenant_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Tenant\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"Tenant\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"Tenant\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "column.public.User.platformRole",
+    "label": "Add column \"platformRole\" to \"User\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "platformRole",
+        "table": "User"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"platformRole\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "User",
+          "platformRole"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"platformRole\" on \"User\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"platformRole\"",
+        "sql": "ALTER TABLE \"public\".\"User\" ADD COLUMN \"platformRole\" \"PlatformRole\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"platformRole\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "User",
+          "platformRole"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"platformRole\" on \"User\""
+        }
+      },
+      {
+        "description": "verify column \"platformRole\" has type \"PlatformRole\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" WHERE (\"a\".\"attrelid\" = to_regclass($1) AND \"a\".\"attname\" = $2 AND \"a\".\"atttypid\" = to_regtype($3) AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "\"public\".\"User\"",
+          "platformRole",
+          "\"PlatformRole\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Invitation.Invitation_email_idx",
+    "label": "Create index \"Invitation_email_idx\" on \"Invitation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Invitation_email_idx",
+        "table": "Invitation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Invitation_email_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Invitation_email_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Invitation_email_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Invitation_email_idx\"",
+        "sql": "CREATE INDEX \"Invitation_email_idx\" ON \"public\".\"Invitation\" (\"email\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Invitation_email_idx\" exists on \"Invitation\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Invitation_email_idx\"",
+          "i",
+          "I",
+          "\"public\".\"Invitation\"",
+          "btree",
+          "[\"email\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Invitation.Invitation_inviterId_idx_c2d8c6d6",
+    "label": "Create index \"Invitation_inviterId_idx_c2d8c6d6\" on \"Invitation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Invitation_inviterId_idx_c2d8c6d6",
+        "table": "Invitation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Invitation_inviterId_idx_c2d8c6d6\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Invitation_inviterId_idx_c2d8c6d6\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Invitation_inviterId_idx_c2d8c6d6\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Invitation_inviterId_idx_c2d8c6d6\"",
+        "sql": "CREATE INDEX \"Invitation_inviterId_idx_c2d8c6d6\" ON \"public\".\"Invitation\" (\"inviterId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Invitation_inviterId_idx_c2d8c6d6\" exists on \"Invitation\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Invitation_inviterId_idx_c2d8c6d6\"",
+          "i",
+          "I",
+          "\"public\".\"Invitation\"",
+          "btree",
+          "[\"inviterId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Invitation.Invitation_organizationId_email_key",
+    "label": "Create index \"Invitation_organizationId_email_key\" on \"Invitation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Invitation_organizationId_email_key",
+        "table": "Invitation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Invitation_organizationId_email_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Invitation_organizationId_email_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Invitation_organizationId_email_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Invitation_organizationId_email_key\"",
+        "sql": "CREATE UNIQUE INDEX \"Invitation_organizationId_email_key\" ON \"public\".\"Invitation\" (\"organizationId\", \"email\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Invitation_organizationId_email_key\" exists on \"Invitation\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Invitation_organizationId_email_key\"",
+          "i",
+          "I",
+          "\"public\".\"Invitation\"",
+          "btree",
+          "[\"organizationId\",\"email\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Invitation.Invitation_organizationId_idx_2e17ef41",
+    "label": "Create index \"Invitation_organizationId_idx_2e17ef41\" on \"Invitation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Invitation_organizationId_idx_2e17ef41",
+        "table": "Invitation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Invitation_organizationId_idx_2e17ef41\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Invitation_organizationId_idx_2e17ef41\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Invitation_organizationId_idx_2e17ef41\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Invitation_organizationId_idx_2e17ef41\"",
+        "sql": "CREATE INDEX \"Invitation_organizationId_idx_2e17ef41\" ON \"public\".\"Invitation\" (\"organizationId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Invitation_organizationId_idx_2e17ef41\" exists on \"Invitation\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Invitation_organizationId_idx_2e17ef41\"",
+          "i",
+          "I",
+          "\"public\".\"Invitation\"",
+          "btree",
+          "[\"organizationId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Member.Member_organizationId_idx_2e17ef41",
+    "label": "Create index \"Member_organizationId_idx_2e17ef41\" on \"Member\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Member_organizationId_idx_2e17ef41",
+        "table": "Member"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Member_organizationId_idx_2e17ef41\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Member_organizationId_idx_2e17ef41\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Member_organizationId_idx_2e17ef41\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Member_organizationId_idx_2e17ef41\"",
+        "sql": "CREATE INDEX \"Member_organizationId_idx_2e17ef41\" ON \"public\".\"Member\" (\"organizationId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Member_organizationId_idx_2e17ef41\" exists on \"Member\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Member_organizationId_idx_2e17ef41\"",
+          "i",
+          "I",
+          "\"public\".\"Member\"",
+          "btree",
+          "[\"organizationId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Member.Member_organizationId_userId_key",
+    "label": "Create index \"Member_organizationId_userId_key\" on \"Member\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Member_organizationId_userId_key",
+        "table": "Member"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Member_organizationId_userId_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Member_organizationId_userId_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Member_organizationId_userId_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Member_organizationId_userId_key\"",
+        "sql": "CREATE UNIQUE INDEX \"Member_organizationId_userId_key\" ON \"public\".\"Member\" (\"organizationId\", \"userId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Member_organizationId_userId_key\" exists on \"Member\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Member_organizationId_userId_key\"",
+          "i",
+          "I",
+          "\"public\".\"Member\"",
+          "btree",
+          "[\"organizationId\",\"userId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Member.Member_userId_idx",
+    "label": "Create index \"Member_userId_idx\" on \"Member\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Member_userId_idx",
+        "table": "Member"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Member_userId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Member_userId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Member_userId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Member_userId_idx\"",
+        "sql": "CREATE INDEX \"Member_userId_idx\" ON \"public\".\"Member\" (\"userId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Member_userId_idx\" exists on \"Member\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Member_userId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"Member\"",
+          "btree",
+          "[\"userId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.OrganizationRole.OrganizationRole_organizationId_idx_2e17ef41",
+    "label": "Create index \"OrganizationRole_organizationId_idx_2e17ef41\" on \"OrganizationRole\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "OrganizationRole_organizationId_idx_2e17ef41",
+        "table": "OrganizationRole"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"OrganizationRole_organizationId_idx_2e17ef41\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"OrganizationRole_organizationId_idx_2e17ef41\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"OrganizationRole_organizationId_idx_2e17ef41\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"OrganizationRole_organizationId_idx_2e17ef41\"",
+        "sql": "CREATE INDEX \"OrganizationRole_organizationId_idx_2e17ef41\" ON \"public\".\"OrganizationRole\" (\"organizationId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"OrganizationRole_organizationId_idx_2e17ef41\" exists on \"OrganizationRole\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"OrganizationRole_organizationId_idx_2e17ef41\"",
+          "i",
+          "I",
+          "\"public\".\"OrganizationRole\"",
+          "btree",
+          "[\"organizationId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.OrganizationRole.OrganizationRole_organizationId_role_key",
+    "label": "Create index \"OrganizationRole_organizationId_role_key\" on \"OrganizationRole\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "OrganizationRole_organizationId_role_key",
+        "table": "OrganizationRole"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"OrganizationRole_organizationId_role_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"OrganizationRole_organizationId_role_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"OrganizationRole_organizationId_role_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"OrganizationRole_organizationId_role_key\"",
+        "sql": "CREATE UNIQUE INDEX \"OrganizationRole_organizationId_role_key\" ON \"public\".\"OrganizationRole\" (\"organizationId\", \"role\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"OrganizationRole_organizationId_role_key\" exists on \"OrganizationRole\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"OrganizationRole_organizationId_role_key\"",
+          "i",
+          "I",
+          "\"public\".\"OrganizationRole\"",
+          "btree",
+          "[\"organizationId\",\"role\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Tenant.Tenant_slug_key",
+    "label": "Create index \"Tenant_slug_key\" on \"Tenant\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Tenant_slug_key",
+        "table": "Tenant"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Tenant_slug_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Tenant_slug_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Tenant_slug_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Tenant_slug_key\"",
+        "sql": "CREATE UNIQUE INDEX \"Tenant_slug_key\" ON \"public\".\"Tenant\" (\"slug\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Tenant_slug_key\" exists on \"Tenant\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Tenant_slug_key\"",
+          "i",
+          "I",
+          "\"public\".\"Tenant\"",
+          "btree",
+          "[\"slug\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Tenant.Tenant_stripeAccountId_key",
+    "label": "Create index \"Tenant_stripeAccountId_key\" on \"Tenant\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Tenant_stripeAccountId_key",
+        "table": "Tenant"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Tenant_stripeAccountId_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Tenant_stripeAccountId_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Tenant_stripeAccountId_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Tenant_stripeAccountId_key\"",
+        "sql": "CREATE UNIQUE INDEX \"Tenant_stripeAccountId_key\" ON \"public\".\"Tenant\" (\"stripeAccountId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Tenant_stripeAccountId_key\" exists on \"Tenant\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Tenant_stripeAccountId_key\"",
+          "i",
+          "I",
+          "\"public\".\"Tenant\"",
+          "btree",
+          "[\"stripeAccountId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Tenant.Tenant_stripeCustomerId_key",
+    "label": "Create index \"Tenant_stripeCustomerId_key\" on \"Tenant\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Tenant_stripeCustomerId_key",
+        "table": "Tenant"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Tenant_stripeCustomerId_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Tenant_stripeCustomerId_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Tenant_stripeCustomerId_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Tenant_stripeCustomerId_key\"",
+        "sql": "CREATE UNIQUE INDEX \"Tenant_stripeCustomerId_key\" ON \"public\".\"Tenant\" (\"stripeCustomerId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Tenant_stripeCustomerId_key\" exists on \"Tenant\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Tenant_stripeCustomerId_key\"",
+          "i",
+          "I",
+          "\"public\".\"Tenant\"",
+          "btree",
+          "[\"stripeCustomerId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Invitation.Invitation_organizationId_fkey",
+    "label": "Add foreign key \"Invitation_organizationId_fkey\" on \"Invitation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Invitation_organizationId_fkey",
+        "table": "Invitation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Invitation_organizationId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Invitation_organizationId_fkey",
+          "public",
+          "\"public\".\"Invitation\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Invitation_organizationId_fkey\" on \"Invitation\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Invitation_organizationId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Invitation\"\nADD CONSTRAINT \"Invitation_organizationId_fkey\"\nFOREIGN KEY (\"organizationId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Invitation_organizationId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Invitation_organizationId_fkey",
+          "public",
+          "\"public\".\"Invitation\"",
+          "f",
+          "[\"organizationId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Invitation.Invitation_inviterId_fkey",
+    "label": "Add foreign key \"Invitation_inviterId_fkey\" on \"Invitation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Invitation_inviterId_fkey",
+        "table": "Invitation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Invitation_inviterId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Invitation_inviterId_fkey",
+          "public",
+          "\"public\".\"Invitation\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Invitation_inviterId_fkey\" on \"Invitation\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Invitation_inviterId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Invitation\"\nADD CONSTRAINT \"Invitation_inviterId_fkey\"\nFOREIGN KEY (\"inviterId\")\nREFERENCES \"public\".\"User\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Invitation_inviterId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Invitation_inviterId_fkey",
+          "public",
+          "\"public\".\"Invitation\"",
+          "f",
+          "[\"inviterId\"]",
+          "\"public\".\"User\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Member.Member_organizationId_fkey",
+    "label": "Add foreign key \"Member_organizationId_fkey\" on \"Member\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Member_organizationId_fkey",
+        "table": "Member"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Member_organizationId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Member_organizationId_fkey",
+          "public",
+          "\"public\".\"Member\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Member_organizationId_fkey\" on \"Member\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Member_organizationId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Member\"\nADD CONSTRAINT \"Member_organizationId_fkey\"\nFOREIGN KEY (\"organizationId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Member_organizationId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Member_organizationId_fkey",
+          "public",
+          "\"public\".\"Member\"",
+          "f",
+          "[\"organizationId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Member.Member_userId_fkey",
+    "label": "Add foreign key \"Member_userId_fkey\" on \"Member\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Member_userId_fkey",
+        "table": "Member"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Member_userId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Member_userId_fkey",
+          "public",
+          "\"public\".\"Member\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Member_userId_fkey\" on \"Member\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Member_userId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Member\"\nADD CONSTRAINT \"Member_userId_fkey\"\nFOREIGN KEY (\"userId\")\nREFERENCES \"public\".\"User\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Member_userId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Member_userId_fkey",
+          "public",
+          "\"public\".\"Member\"",
+          "f",
+          "[\"userId\"]",
+          "\"public\".\"User\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.OrganizationRole.OrganizationRole_organizationId_fkey",
+    "label": "Add foreign key \"OrganizationRole_organizationId_fkey\" on \"OrganizationRole\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "OrganizationRole_organizationId_fkey",
+        "table": "OrganizationRole"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"OrganizationRole_organizationId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "OrganizationRole_organizationId_fkey",
+          "public",
+          "\"public\".\"OrganizationRole\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"OrganizationRole_organizationId_fkey\" on \"OrganizationRole\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"OrganizationRole_organizationId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"OrganizationRole\"\nADD CONSTRAINT \"OrganizationRole_organizationId_fkey\"\nFOREIGN KEY (\"organizationId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"OrganizationRole_organizationId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "OrganizationRole_organizationId_fkey",
+          "public",
+          "\"public\".\"OrganizationRole\"",
+          "f",
+          "[\"organizationId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  }
+]

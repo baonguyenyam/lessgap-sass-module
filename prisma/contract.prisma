@@ -8,6 +8,8 @@ namespace public {
     email                 String
     image                 String?
     role                  pg.enum(Role)       @default("USER")
+    // Platform staff only (spec/02-tenancy.md). Null for every tenant member.
+    platformRole          pg.enum(PlatformRole)?
     stripeCustomerId      String?
     createdAt             TimestampString(3)  @default(now())
     updatedAt             TimestampString(3)  @onCreate(now()) @onUpdate(now())
@@ -20,6 +22,8 @@ onboardingDismissedAt TimestampString(3)?
     sessions              Session[]
     subscription          Subscription?
     twoFactors            TwoFactor[]
+    members               Member[]
+    invitations           Invitation[]
 
     @@index([email], map: "User_email_key", unique: true)
     @@index([stripeCustomerId], map: "User_stripeCustomerId_key", unique: true)
@@ -174,6 +178,97 @@ trialEndsAt          TimestampString(3)?
     createdAt  TimestampString(3) @default(now())
     updatedAt  TimestampString(3)  @onCreate(now()) @onUpdate(now())
     @@index([identifier], map: "Verification_identifier_idx")
+  }
+
+  // ── Platform: tenancy (spec/02-tenancy.md, ADR 0003, ADR 0019) ──────────
+  // Better Auth organization plugin tables. The plugin writes through Kysely
+  // with these exact column names; model names are mapped in src/auth.ts.
+  // Columns it never sends get database defaults, like TwoFactor did.
+
+  model Tenant {
+    id               String                @id(map: "Tenant_pkey") @onCreate(cuid(2))
+    name             String
+    slug             String
+    logo             String?
+    metadata         Json?
+    status           pg.enum(TenantStatus) @default("PROVISIONING")
+    verticalKey      String                @default("generic")
+    timeZone         String                @default("America/Chicago")
+    currency         String                @default("usd")
+    defaultLanguage  String                @default("en")
+    stripeCustomerId String?
+    stripeAccountId  String?
+    chargesEnabled   Boolean               @default(false)
+    createdAt        TimestampString(3)    @default(now())
+    updatedAt        TimestampString(3)    @default(now()) @onUpdate(now())
+    members          Member[]
+    invitations      Invitation[]
+    roles            OrganizationRole[]
+
+    @@index([slug], map: "Tenant_slug_key", unique: true)
+    @@index([stripeCustomerId], map: "Tenant_stripeCustomerId_key", unique: true)
+    @@index([stripeAccountId], map: "Tenant_stripeAccountId_key", unique: true)
+  }
+
+  model Member {
+    id             String            @id(map: "Member_pkey") @onCreate(cuid(2))
+    organizationId String
+    userId         String
+    role           String
+    createdAt      TimestampString(3) @default(now())
+    updatedAt      TimestampString(3) @default(now()) @onUpdate(now())
+    tenant         Tenant            @relation(fields: [organizationId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Member_organizationId_fkey")
+    user           User              @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Member_userId_fkey")
+
+    @@index([organizationId, userId], map: "Member_organizationId_userId_key", unique: true)
+    @@index([userId], map: "Member_userId_idx")
+  }
+
+  model Invitation {
+    id             String            @id(map: "Invitation_pkey") @onCreate(cuid(2))
+    organizationId String
+    email          String
+    role           String
+    status         String            @default("pending")
+    teamId         String?
+    inviterId      String
+    expiresAt      TimestampString(3)
+    createdAt      TimestampString(3) @default(now())
+    updatedAt      TimestampString(3) @default(now()) @onUpdate(now())
+    tenant         Tenant            @relation(fields: [organizationId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Invitation_organizationId_fkey")
+    inviter        User              @relation(fields: [inviterId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Invitation_inviterId_fkey")
+
+    @@index([organizationId, email], map: "Invitation_organizationId_email_key", unique: true)
+    @@index([email], map: "Invitation_email_idx")
+  }
+
+  // Custom permission groups ("nhóm quyền") written only through the plugin's
+  // dynamicAccessControl API — never by hand (ADR 0019).
+  model OrganizationRole {
+    id             String            @id(map: "OrganizationRole_pkey") @onCreate(cuid(2))
+    organizationId String
+    role           String
+    permission     Json
+    createdAt      TimestampString(3) @default(now())
+    updatedAt      TimestampString(3) @default(now()) @onUpdate(now())
+    tenant         Tenant            @relation(fields: [organizationId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "OrganizationRole_organizationId_fkey")
+
+    @@index([organizationId, role], map: "OrganizationRole_organizationId_role_key", unique: true)
+  }
+
+  native_enum TenantStatus {
+    PROVISIONING = "PROVISIONING"
+    ACTIVE = "ACTIVE"
+    PAST_DUE = "PAST_DUE"
+    SUSPENDED = "SUSPENDED"
+    CANCELED = "CANCELED"
+  }
+
+  native_enum PlatformRole {
+    OWNER = "OWNER"
+    ADMIN = "ADMIN"
+    SUPPORT = "SUPPORT"
+    DESIGNER = "DESIGNER"
   }
 
   native_enum BillingInterval {

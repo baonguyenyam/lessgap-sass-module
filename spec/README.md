@@ -1,6 +1,6 @@
 # Platform specification
 
-This folder is the plan for turning the starter kit into a multi-tenant
+This folder is the plan for turning the app into a multi-tenant
 website platform for local businesses: restaurants, nail salons, barbers,
 dental offices and similar. We are the operator. Businesses buy a plan, get a
 website we design for them, and manage the everyday parts of it themselves:
@@ -64,7 +64,7 @@ never a second list that can drift:
 Surprises go under "Findings" in the brief; mistakes that cost effort go in
 `.agents/memory/lessons.md`; decisions go in `adr/`.
 
-## Relationship to the starter kit
+## Relationship to the app
 
 The repository started from OpenStarterKit (MIT). It is now an independent
 project, lessgap-sass-module; the kit is a reference we learned from, not an

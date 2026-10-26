@@ -799,7 +799,7 @@
           "answer": "You get a production-ready Next.js 16 codebase with Better Auth, Stripe, Prisma, and Tailwind pre-configured. Clone the repo, set your env variables, and deploy. Everything works out of the box."
         },
         {
-          "question": "Why {site} instead of other starter kits?",
+          "question": "Why {site} instead of other apps?",
           "answer": "{site} uses a best-of-breed stack where every component is independent. No Supabase lock-in, no proprietary auth layer. If a dependency releases a breaking change, you update one package, not the entire stack."
         },
         {

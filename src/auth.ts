@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth"
 import { kyselyAdapter } from "@better-auth/kysely-adapter"
 import { createAuthEndpoint, APIError, getSessionFromCtx, sessionMiddleware } from "better-auth/api"
 import { deleteSessionCookie, expireCookie, setSessionCookie } from "better-auth/cookies"
-import { magicLink, twoFactor } from "better-auth/plugins"
+import { magicLink, organization, twoFactor } from "better-auth/plugins"
 import { z } from "zod"
 import { nextCookies } from "better-auth/next-js"
 import type { BetterAuthPlugin } from "better-auth"
@@ -15,6 +15,7 @@ import { siteConfig } from "@/config/site"
 import { emailEnabled } from "@/lib/email-transport"
 import { enabledOAuthProviders, oauthCredentials } from "@/lib/oauth-providers"
 import { canSwitchAs, isRole } from "@/lib/roles"
+import { tenantAc, tenantRoles } from "@/platform/tenancy/permissions"
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Fixture sign-ins: dev and demo.
@@ -491,6 +492,25 @@ export const auth = betterAuth({
       },
     }),
     switchAs(),
+    // Tenants are organizations (ADR 0003). Built-in roles owner/manager/staff
+    // come from the permission catalog; `dynamicAccessControl` is what lets an
+    // owner define their own role groups ("nhóm quyền") as OrganizationRole
+    // rows (ADR 0019). Model names map the plugin's camelCase tables onto our
+    // PascalCase contract tables, same convention as `user`/`session` above.
+    organization({
+      ac: tenantAc,
+      roles: tenantRoles,
+      creatorRole: "owner",
+      dynamicAccessControl: { enabled: true },
+      // Phase-1 decision 1-C: invitations live seven days.
+      invitationExpiresIn: 7 * 24 * 60 * 60,
+      schema: {
+        organization: { modelName: "Tenant" },
+        member: { modelName: "Member" },
+        invitation: { modelName: "Invitation" },
+        organizationRole: { modelName: "OrganizationRole" },
+      },
+    }),
     ...(process.env.NODE_ENV === "development" ? [devLogin()] : []),
     ...(process.env.DEMO_MODE === "true" ? [demoLogin()] : []),
     // MUST stay last. Server actions cannot set cookies the way a route

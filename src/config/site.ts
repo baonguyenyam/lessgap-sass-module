@@ -25,7 +25,7 @@ export const siteConfig = {
    */
   seoTitle:
     process.env.NEXT_PUBLIC_SEO_TITLE ||
-    (isKitSite ? "Next.js SaaS Starter Kit | Free & Open Source" : null),
+    (isKitSite ? "Next.js SaaS App | Free & Open Source" : null),
   /**
    * One sentence for the machines that summarise you, served in `/llms.txt`.
    *

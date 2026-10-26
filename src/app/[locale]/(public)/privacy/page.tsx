@@ -26,7 +26,7 @@ export default function PrivacyPage() {
             <p className="font-medium text-foreground">This is a placeholder.</p>
             <p className="mt-1">
               It outlines the sections a SaaS privacy policy typically needs, based on what this
-              starter kit does out of the box. Adapt it to your product and your jurisdiction
+              app does out of the box. Adapt it to your product and your jurisdiction
               before launch.
             </p>
           </div>

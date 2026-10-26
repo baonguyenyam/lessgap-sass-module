@@ -799,7 +799,7 @@
                     "answer": "Bạn nhận được mã nguồn Next.js 16 sẵn sàng cho sản xuất với Better Auth, Stripe, Prisma và Tailwind đã cấu hình sẵn. Chỉ cần clone repo, thiết lập biến môi trường và triển khai."
                 },
                 {
-                    "question": "Tại sao nên chọn {site} thay vì các bộ starter kit khác?",
+                    "question": "Tại sao nên chọn {site} thay vì các bộ app khác?",
                     "answer": "{site} sử dụng các công nghệ độc lập. Không bị phụ thuộc vào Supabase hay dịch vụ xác thực riêng. Bạn hoàn toàn chủ động cập nhật các gói phụ thuộc."
                 },
                 {

@@ -24,7 +24,7 @@ ${siteConfig.llmsSummary}
 ${summary}
 ${
     isKitSite
-      ? `${siteConfig.name} is an open-source, production-ready SaaS starter kit. It ships with authentication, Stripe billing, a Postgres database via Prisma, transactional email and a full dashboard, so you can launch a real product without wiring the plumbing yourself.`
+      ? `${siteConfig.name} is an open-source, production-ready SaaS app. It ships with authentication, Stripe billing, a Postgres database via Prisma, transactional email and a full dashboard, so you can launch a real product without wiring the plumbing yourself.`
       : `${siteConfig.name} is a SaaS product. Visitors can read about it here, sign up for an account, choose a plan and manage their subscription. Replace this paragraph with a short description of what you do and who you do it for.`
   }
 

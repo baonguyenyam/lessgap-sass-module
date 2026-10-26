@@ -1,6 +1,6 @@
 # Roadmap
 
-lessGAP Starter Kit is **free and open source**, and ships continuously. Pull `main` to get every update and fix.
+lessGAP App is **free and open source**, and ships continuously. Pull `main` to get every update and fix.
 
 The kit's conventions are treated as an interface rather than an internal detail: where a thing lives, what it exports, what its shape is called. What you build on top of them survives an update, and where a release has to break one, the changelog says which and what to change.
 

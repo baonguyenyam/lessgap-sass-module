@@ -1,7 +1,7 @@
-<h1 align="center">lessGAP Starter Kit</h1>
+<h1 align="center">lessGAP App</h1>
 
 <p align="center">
-  <strong>The Next.js SaaS starter kit we build lessGAP products on.</strong><br/>
+  <strong>The Next.js SaaS app we build lessGAP products on.</strong><br/>
   Auth, payments, admin and emails, wired up and production-ready. Ship your product this weekend.
 </p>
 
@@ -33,9 +33,9 @@
 
 ---
 
-## ✨ Why lessGAP Starter Kit?
+## ✨ Why lessGAP App?
 
-Most SaaS boilerplates either cost a few hundred dollars or ship as a barebones demo. **lessGAP Starter Kit is different:**
+Most SaaS boilerplates either cost a few hundred dollars or ship as a barebones demo. **lessGAP App is different:**
 
 - 💳 **Payments included in the free tier**: full Stripe Checkout, Customer Portal and webhooks, not paywalled behind a Pro plan.
 - 🔓 **It is plain Next.js**: no compiler, no config DSL, no proprietary CLI. The App Router, Server Actions and Prisma behave exactly as their own docs say, with plain PostgreSQL underneath: host it anywhere, own your data.
@@ -353,7 +353,7 @@ CI runs lint, unit tests, the build and `pnpm audit --prod --audit-level high` o
 
 ## 🏷️ Attribution & the badge
 
-lessGAP Starter Kit is built on [OpenStarterKit](https://github.com/openstarterkit/nextjs-saas-starter-kit), the open-source (MIT) Next.js SaaS starter kit, whose optional "Built with" badge still lives in `src/components/powered-by.tsx`. This deployment disables it from `.env`:
+lessGAP App is built on [OpenStarterKit](https://github.com/openstarterkit/nextjs-saas-starter-kit), the open-source (MIT) Next.js SaaS app, whose optional "Built with" badge still lives in `src/components/powered-by.tsx`. This deployment disables it from `.env`:
 
 ```bash
 NEXT_PUBLIC_REMOVE_BRANDING="true"
@@ -363,7 +363,7 @@ NEXT_PUBLIC_REMOVE_BRANDING="true"
 
 ## 🗺️ Roadmap & changelog
 
-lessGAP Starter Kit ships continuously and stays free: pull `main` for updates.
+lessGAP App ships continuously and stays free: pull `main` for updates.
 
 - 📍 [ROADMAP.md](./ROADMAP.md): what's next
 - 📝 [CHANGELOG.md](./CHANGELOG.md): what shipped, including the upstream history this fork builds on
