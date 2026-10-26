@@ -8,7 +8,9 @@ for the same thing is how a codebase starts to drift.
 | Platform | `platform` | Us, the operator, and everything we run |
 | Platform staff | `PlatformRole` | Our employees. Roles: `owner`, `admin`, `support`, `designer` |
 | Tenant | `Tenant` | One business that buys a plan. Owns one site and all its data |
-| Member | `Member` | A user who belongs to a tenant, with a tenant role: `owner`, `manager`, `staff` |
+| Member | `Member` | A user who belongs to a tenant, holding exactly one role |
+| Tenant role | `Member.role`, `organizationRole` | A named permission group inside a tenant: built-in `owner`/`manager`/`staff` or a custom role the owner defines ([ADR 0019](./adr/0019-tenant-roles-are-permission-groups.md)) |
+| Permission | `<module>.<verb>` string | One grantable action, declared by a module manifest, checked as entitlement AND role |
 | Customer | `Customer` | A person who uses a tenant's site: books, buys, asks for a quote. Not a platform user |
 | Site | `Site` | The public website of a tenant. One per tenant in v1 |
 | Vertical | `verticalKey` | The industry preset a tenant starts from: `barber`, `nail_salon`, `restaurant`, `dental`, `spa`, `generic` |

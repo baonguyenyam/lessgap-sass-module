@@ -5,8 +5,10 @@ import type { FieldOutputTypes } from "@/generated/prisma8/contract.d"
  *
  *   USER  <  ADMIN  <  ROOT
  *
- * - ADMIN runs the admin panel: users, revenue, the newsletter list.
- * - ROOT is above every admin: it alone changes roles. ROOT is granted only by configuration (`ROOT_EMAILS`,
+ * - ADMIN is the kit's middle tier; it no longer opens a panel — the
+ *   /admin area is ROOT-only (owner decision), and platform staff get the
+ *   /platform console in phase 1.
+ * - ROOT is above every admin: it alone changes roles and opens /admin. ROOT is granted only by configuration (`ROOT_EMAILS`,
  *   applied by the seeds), never from the UI, so a stolen admin session
  *   cannot make itself ROOT.
  *

@@ -63,8 +63,13 @@ describe("proxy: the redirects are unchanged", () => {
     expect(location(await run("/admin"))).toBe("http://localhost/dashboard")
   })
 
-  it("lets an admin into /admin", async () => {
+  it("keeps an ADMIN out of /admin — the area is ROOT-only", async () => {
     getSession.mockResolvedValue({ user: { role: "ADMIN" } })
+    expect(location(await run("/admin"))).toBe("http://localhost/dashboard")
+  })
+
+  it("lets ROOT into /admin", async () => {
+    getSession.mockResolvedValue({ user: { role: "ROOT" } })
     expect(location(await run("/admin"))).toBeNull()
   })
 

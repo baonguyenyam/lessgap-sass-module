@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { authClient } from "@/lib/auth-client"
-import { isAdmin } from "@/lib/roles"
+import { isRoot } from "@/lib/roles"
 
 interface AuthGuardProps {
   children: React.ReactNode
@@ -28,13 +28,13 @@ export function AuthGuard({ children, requireAdmin = false }: AuthGuardProps) {
       router.push("/login")
       return
     }
-    if (requireAdmin && !isAdmin(session.user.role)) {
+    if (requireAdmin && !isRoot(session.user.role)) {
       router.push("/dashboard")
     }
   }, [session, isPending, router, requireAdmin])
 
   if (isPending || !session) return null
-  if (requireAdmin && !isAdmin(session.user.role)) return null
+  if (requireAdmin && !isRoot(session.user.role)) return null
 
   return <>{children}</>
 }

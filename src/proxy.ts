@@ -1,5 +1,5 @@
 import { auth } from "@/auth"
-import { isAdmin } from "@/lib/roles"
+import { isRoot } from "@/lib/roles"
 import { NextResponse, type NextRequest } from "next/server"
 import createIntlMiddleware from "next-intl/middleware"
 import { routing } from "@/i18n/routing"
@@ -93,7 +93,7 @@ export default async function proxy(req: NextRequest) {
       ? await auth.api.getSession({ headers: req.headers })
       : null
   const isLoggedIn = !!session
-  const isAdminUser = isAdmin(session?.user?.role)
+  const isRootUser = isRoot(session?.user?.role)
 
   // `/api/auth` and the inbound webhooks (e.g. Stripe) carry no session and
   // need no special case here: they are not in the lists above, so they pass.
@@ -103,7 +103,7 @@ export default async function proxy(req: NextRequest) {
 
   if (isAdminRoute) {
     if (!isLoggedIn) return NextResponse.redirect(new URL("/login", req.nextUrl))
-    if (!isAdminUser) return NextResponse.redirect(new URL("/dashboard", req.nextUrl))
+    if (!isRootUser) return NextResponse.redirect(new URL("/dashboard", req.nextUrl))
     return NextResponse.next()
   }
 

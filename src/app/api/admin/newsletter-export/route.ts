@@ -1,7 +1,7 @@
 import { getCurrentUser } from "@/lib/auth"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
-import { isAdmin } from "@/lib/roles"
+import { isRoot } from "@/lib/roles"
 
 /**
  * CSV export of the newsletter list, admin-only. Includes every state
@@ -11,7 +11,7 @@ import { isAdmin } from "@/lib/roles"
  */
 export async function GET() {
   const user = await getCurrentUser()
-  if (!user || !isAdmin(user.role)) {
+  if (!user || !isRoot(user.role)) {
     return new Response("Forbidden", { status: 403 })
   }
 

@@ -23,6 +23,8 @@ kit's single-user `Subscription` moves from `User` to `Tenant` in phase 1.
 
 ## Roles
 
+Built-in tenant roles:
+
 | Role | Scope | Can |
 | --- | --- | --- |
 | `platform.owner` | all | everything, including platform staff and payouts settings |
@@ -33,10 +35,20 @@ kit's single-user `Subscription` moves from `User` to `Tenant` in phase 1.
 | `tenant.manager` | one tenant | content, services, prices, bookings, orders, quotes, chatbot sources |
 | `tenant.staff` | one tenant | own calendar and the bookings assigned to them |
 
+The user who creates the tenant is its first `tenant.owner` — paying plan or
+free plan alike. Owners then invite sub-users and may define **custom roles**
+("nhóm quyền"): named sets of permission strings stored as `organizationRole`
+rows through Better Auth's `dynamicAccessControl` ([ADR 0019](./adr/0019-tenant-roles-are-permission-groups.md)).
+A member holds exactly one role — built-in or custom. `tenant.owner` is
+immutable: permissions uneditable, role undeletable, last owner undemotable.
+Custom roles are gated by the `roles.custom` feature and capped by the
+`roles.max` limit.
+
 Permissions are checked as `(entitlement) AND (role permission)`. A plan that
-includes the shop does not let `tenant.staff` edit prices. Roles map to
-permission strings in one file, `src/platform/tenancy/permissions.ts`;
-nothing else decides what a role can do.
+includes the shop does not let `tenant.staff` — or a custom role — edit
+prices it does not declare. The permission catalog lives in one file,
+`src/platform/tenancy/permissions.ts`, built from module manifests plus
+kernel permissions; nothing else decides what a role can do.
 
 ## TenantContext
 

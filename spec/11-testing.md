@@ -106,6 +106,17 @@ area. Phase briefs copy the rows they own into their task lists.
 | T9 | Tenant deletion leaves no row with its id in any tenant-owned table | integration |
 | T10 | Platform staff without `platformRole` cannot open `/platform` | E2E |
 
+### Roles (phase 1, ADR 0019)
+
+| Id | Case | Layer |
+| --- | --- | --- |
+| R1 | A custom role granting `bookings.manage` lets its member open bookings but not billing | integration |
+| R2 | Creating a role with an undeclared permission is refused | unit |
+| R3 | `owner` role cannot be edited, deleted, or demoted when it is the last one | integration |
+| R4 | A role that still has members cannot be deleted | integration |
+| R5 | `roles.max` cap enforced; `roles.custom` off hides role management | integration |
+| R6 | Member's role change takes effect on the next request (no stale session permission) | integration |
+
 ### Entitlements (phase 2)
 | # | Case | Layer |
 |---|---|---|

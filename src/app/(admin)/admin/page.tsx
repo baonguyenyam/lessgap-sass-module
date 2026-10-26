@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { UserRoleButton } from "@/components/admin/user-role-button"
 import { SwitchAsButton } from "@/components/admin/switch-as-button"
-import { isAdmin } from "@/lib/roles"
+import { isAdmin, isRoot } from "@/lib/roles"
 import { RevenueChart } from "@/components/admin/revenue-chart"
 import { mrrHistory, monthlyEquivalent } from "@/lib/metrics"
 
@@ -104,7 +104,7 @@ export default async function AdminPage({
   const t = await getTranslations("admin")
   const format = await getFormatter()
   const user = await getCurrentUser()
-  if (!user || !isAdmin(user.role)) redirect("/dashboard")
+  if (!user || !isRoot(user.role)) redirect("/dashboard")
   const viewer = { id: user.id, role: user.role }
 
   const params = await searchParams

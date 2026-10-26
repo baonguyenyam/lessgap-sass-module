@@ -20,6 +20,8 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 | 1-A | Existing kit users in the current database | create one tenant per user / start empty | **One tenant per existing user**, 2026-10-26 |
 | 1-B | Self-service tenant creation in this phase | staff-created only / signup creates tenant | staff-created only in phase 1 (default); self-service signup arrives with the `signup.*` switches in phase 2 |
 | 1-C | Invitation expiry | 7 days / other | **7 days**, 2026-10-26 |
+| 1-D | Tenant role model | fixed enum / custom groups | **Built-in owner/manager/staff + custom role groups via `dynamicAccessControl`** ([ADR 0019](../adr/0019-tenant-roles-are-permission-groups.md)), 2026-10-26 |
+| 1-E | Kit `/admin` area | ADMIN+ROOT / ROOT only | **ROOT only** (done 2026-10-26); staff surface is `/platform` |
 
 ## Tasks
 
@@ -32,17 +34,17 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - [ ] done
 
 ### 1.2 — Tenant, Member, Invitation, platformRole
-- **Goal:** Better Auth organization plugin enabled, mapped to `Tenant`; `platformRole` on `User`.
-- **Files:** `prisma/schema/platform.prisma`, `prisma/schema/kit.prisma` (one field), migration `platform_tenants`, `src/auth.ts` (plugin config, comment `Platform change`), `src/platform/tenancy/models.ts`.
+- **Goal:** Better Auth organization plugin enabled, mapped to `Tenant`; `platformRole` on `User`; `ac` + static `roles` (`owner`, `manager`, `staff`) and `dynamicAccessControl` for custom roles ([ADR 0019](../adr/0019-tenant-roles-are-permission-groups.md)).
+- **Files:** `prisma/schema/platform.prisma`, `prisma/schema/kit.prisma` (one field), migration `platform_tenants` (org + member + invitation + organizationRole tables), `src/auth.ts` (plugin config, comment `Platform change`), `src/platform/tenancy/models.ts`.
 - **Tests:** T5 passes with the new models classified; factory `createTenant`, `createMember`.
 - **Checks:** M1, M2, audit, `pnpm build`.
 - **Done when:** a tenant and member can be created through the plugin API in an integration test.
 - [ ] done
 
-### 1.3 — Permissions map
-- **Goal:** one file mapping tenant and platform roles to permission strings.
-- **Files:** `src/platform/tenancy/permissions.ts` + test.
-- **Tests:** every role × permission pair in a table-driven test; unknown permission is a type error.
+### 1.3 — Permissions registry
+- **Goal:** one file declaring every `<module>.<verb>` permission (from manifests + kernel) and the built-in roles' grants; custom roles validate against it.
+- **Files:** `src/platform/tenancy/permissions.ts` + test; `ac`/`roles` wiring in `src/auth.ts`.
+- **Tests:** every role × permission pair in a table-driven test; unknown permission is a type error; a custom role created through the plugin refuses an undeclared permission.
 - **Checks:** `pnpm test`.
 - [ ] done
 
@@ -75,9 +77,16 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - [ ] done
 
 ### 1.8 — Invitations and members page
-- **Goal:** owners invite by email (Brevo through `sendEmail`), change roles, remove members.
+- **Goal:** owners invite by email (Brevo through `sendEmail`), assign a role on invite, change roles, remove members.
 - **Files:** members page and actions under `/t/[slug]/settings/members`, email template, translations.
-- **Tests:** only owners can invite; last owner cannot be removed or demoted; expired invitation refused.
+- **Tests:** only roles with `members.manage` invite; last owner cannot be removed or demoted; expired invitation refused; role select offers built-in and custom roles.
+- **Checks:** unit, integration, one E2E.
+- [ ] done
+
+### 1.8b — Tenant roles page ("nhóm quyền")
+- **Goal:** `/t/[slug]/settings/roles`: list built-in + custom roles, create/edit/delete a custom role as permission checkboxes grouped by module ([ADR 0019](../adr/0019-tenant-roles-are-permission-groups.md)).
+- **Files:** roles page and actions under `/t/[slug]/settings/roles`, permission-grouped UI, translations.
+- **Tests:** `roles.custom` feature off → page hidden and actions refuse; `roles.max` cap enforced through `maximumRolesPerOrganization`; `owner` role uneditable/undeletable; a role with members cannot be deleted; edited permissions apply on the member's next request (T7 pattern).
 - **Checks:** unit, integration, one E2E.
 - [ ] done
 
@@ -121,7 +130,7 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - [ ] done
 
 ## Exit criteria
-- T1–T10 and O8 green in CI.
+- T1–T10, R1–R6 and O8 green in CI.
 - `pnpm audit:tenancy`, M1–M3 green.
 - Query overhead of `tenantDb` recorded in Findings.
 

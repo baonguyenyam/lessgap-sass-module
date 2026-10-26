@@ -59,12 +59,13 @@ model Tenant {
 
 enum TenantStatus { PROVISIONING ACTIVE PAST_DUE SUSPENDED CANCELED }
 
-// Better Auth member, role constrained to our tenant roles.
+// Better Auth member; `role` is a role KEY — built-in ("owner", "manager",
+// "staff") or a custom organizationRole (ADR 0019). One role per member.
 model Member {
   id        String     @id @default(cuid())
   tenantId  String
   userId    String
-  role      TenantRole
+  role      String
   tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime   @default(now())
@@ -72,7 +73,10 @@ model Member {
   @@unique([tenantId, userId])
 }
 
-enum TenantRole { OWNER MANAGER STAFF }
+// Custom roles are Better Auth rows (`organizationRole` table from
+// `dynamicAccessControl`), not our models: identity classification, created
+// by the plugin's schema, shape { organizationId, role, permission }.
+// Nothing in our code writes them by hand — always through the plugin API.
 
 // On User (kit model): platformRole PlatformRole?  — null for everyone who is not our staff.
 enum PlatformRole { OWNER ADMIN SUPPORT DESIGNER }
