@@ -173,6 +173,7 @@ Before working in an area, read its rule file in `.agents/rules/`. They are shor
 | `prisma/` or any database query | `.agents/rules/database.md` |
 | `src/platform/`, tenant data, dashboard, sites | `.agents/rules/multi-tenancy.md` |
 | `src/modules/`, entitlements, `src/themes/`, `src/verticals/` | `.agents/rules/modules.md` |
+| `spec/`, phase briefs, ADRs | `spec/README.md`, `spec/phases/README.md` |
 | Auth, billing, webhooks, admin, user input, secrets | `.agents/rules/security.md` |
 | Tests, or code that needs them | `.agents/rules/testing.md` |
 | Styles, `src/components/`, anything visible | `.agents/rules/ui-accessibility.md` |
@@ -187,10 +188,17 @@ This repository is becoming a multi-tenant website platform for local
 businesses. The plan is in `spec/`; it is the source of truth for what to
 build and how.
 
-- **Start every platform task** by reading `spec/README.md`, then the phase you
-  were asked to work on in `spec/roadmap.md`, then the documents it links to.
-- **Stay inside the phase.** Build what its scope lists. Anything else you
-  notice goes under "Later" in the roadmap, not into the code.
+- **Start every platform task** by reading `spec/README.md`, then the brief of
+  the current phase in `spec/phases/`, then the documents that brief links to.
+  No brief for the phase yet → your task is to write it from
+  `spec/phases/TEMPLATE.md`, not to write code.
+- **One brief task per change.** Implement exactly one task, with the tests
+  and checks it lists, and tick it in the brief in the same change. Anything
+  else you notice goes under "Findings" in the brief, not into the code.
+- **Before your first change in these areas, read the standard:** tests
+  `spec/11-testing.md`, schema and migrations `spec/12-migrations-and-data.md`,
+  errors, logging, money, time and naming `spec/13-conventions.md`, modules
+  `spec/15-module-system.md`.
 - **Use the glossary** (`spec/glossary.md`). One word per concept, in code, schema and UI.
 - **Decisions are ADRs.** If the work needs a decision the spec does not make,
   or contradicts one it does, stop and propose an ADR in `spec/adr/` instead
@@ -222,3 +230,6 @@ Run these, do not assume them:
 - User-visible changes have a `CHANGELOG.md` entry; changes an adopter must act
   on are also in `docs/upgrading.md` and its translation.
 - The diff holds only what the task needed: no secrets, no `.env`, no debug logs.
+- Platform work: `pnpm test:integration`, `pnpm modules:check` and
+  `pnpm audit:tenancy` pass once they exist (phase 0), the brief task is
+  ticked, and the PR uses `.github/pull_request_template.md`.

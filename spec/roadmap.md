@@ -24,16 +24,20 @@ out of scope, even when it looks small: write it down under "Later" instead.
 ## Phase 0 — Foundation
 
 **Goal:** the rules, checks and decisions every later phase relies on.
+**Brief:** [phases/phase-0.md](./phases/phase-0.md)
 
 **Scope**
-- Accept or amend ADRs 0001–0008.
+- Accept or amend ADRs 0001–0008 and 0010.
+- Integration test layer with a real PostgreSQL locally and in CI; migration checks (M1, M2).
+- Prisma schema split by owner (`prisma/schema/`).
+- Module kernel skeleton, `pnpm new:module`, `pnpm modules:check`, boundary lint.
+- Shared conventions: errors, action wrapper, logger, money, time.
 - Platform domain is `lessgap.app`: add apex, `www` (redirect) and `app` to the Vercel project.
 - Sites domain is `lessgap.io`: move it to Vercel nameservers and add `*.lessgap.io` as a wildcard domain.
 - Add the upstream remote of the kit and document the merge routine (ADR 0001).
-- Create `src/platform/` and `src/modules/` with empty registries and their README-level comments.
 - `scripts/audit-tenancy.mjs` running in CI (passes trivially: no tenant models yet).
 - Add `vi` to dashboard locales scaffolding (decision in ADR 0001's notes), or record that it waits.
-- Resolve the package manager mismatch (CI uses `npm ci`, the repo has `pnpm-lock.yaml`).
+- CI on pnpm with a frozen lockfile and a type-check step (done 2026-10-26).
 
 **Exit criteria**
 - CI green with the tenancy audit step.
@@ -43,6 +47,7 @@ out of scope, even when it looks small: write it down under "Later" instead.
 ## Phase 1 — Tenancy core
 
 **Read:** [tenancy.md](./02-tenancy.md), [data-model.md](./09-data-model.md), ADR 0002, 0003.
+**Brief:** [phases/phase-1.md](./phases/phase-1.md)
 
 **Scope**
 - Better Auth organization plugin; `Tenant`, `Member`, `Invitation`; `platformRole` on `User`.

@@ -158,7 +158,7 @@ GA4 or Meta pixel id, rendered with consent.
 - A module reads another module's data only through that module's
   `server/index.ts`. Booking asks `catalog` for a service; it does not query
   the `Service` table.
-- Events between modules go through `emit(ctx, "booking.confirmed", payload)`
+- Events between modules go through `emit(ctx, "booking.appointment.confirmed", payload)`
   and subscribers registered in `module.ts`. Notifications, analytics and the
   chatbot's re-index subscribe; the emitting module does not know who listens.
 - Turning a module off hides it everywhere and stops its jobs. It never deletes data.

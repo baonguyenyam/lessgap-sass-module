@@ -17,7 +17,7 @@ up prices, hours or availability.
 | Site settings (hours, address, phone, policies) | structured, injected into the prompt, not embedded | always current, read at answer time |
 | Services and prices, menu, products | structured, retrieved by tool call, not embedded | always current |
 | Availability | tool call to `booking` | always current |
-| Pages on the site | chunked and embedded | re-indexed on save via `site.page.saved` event |
+| Pages on the site | chunked and embedded | re-indexed on save via `site.page.saved` event (per the `<module>.<entity>.<past-tense>` convention) |
 | FAQ entries written by the tenant | embedded | re-indexed on save |
 | Uploaded documents (PDF, DOCX, TXT) | extracted, chunked, embedded | re-indexed on upload or delete |
 

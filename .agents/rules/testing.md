@@ -3,7 +3,12 @@
 - Unit tests: Vitest, `*.test.ts` next to the file under test. Run `pnpm test`.
 - End-to-end: Playwright in `e2e/`, including `accessibility.spec.ts` (axe).
   Run `pnpm test:e2e` when you change a flow those specs cover.
-- New logic in `src/lib/` or `src/app/actions/` ships with tests in the same change.
+- Integration tests (from phase 0): `tests/integration/`, real PostgreSQL,
+  `pnpm test:integration`. Never mock Prisma there. Tenant isolation, RLS,
+  constraints, concurrency and webhooks are proven at this layer.
+- The mandatory cases for each area are listed in `spec/11-testing.md`; a
+  phase is not done until its rows exist as tests.
+- New logic in `src/lib/`, `src/platform/` or `src/modules/` ships with tests in the same change.
 - A bug fix starts with a test that fails for the bug, then the fix makes it pass.
 - Test behaviour, not implementation: inputs and outputs, not which private
   helper was called. One behaviour per `it`, named as a sentence in English

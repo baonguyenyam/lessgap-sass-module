@@ -50,7 +50,7 @@ export default defineModule({
     blocks: ["booking-widget", "next-available"],   // components in ./site/
   },
   events: {
-    emits: ["booking.requested", "booking.confirmed", "booking.canceled", "booking.completed"],
+    emits: ["booking.appointment.requested", "booking.appointment.confirmed", "booking.appointment.canceled", "booking.appointment.completed"],
     subscribes: { "catalog.service.archived": onServiceArchived },
   },
   jobs: { "booking.reminders": { schedule: "*/5 * * * *", handler: sendReminders } },
@@ -120,12 +120,12 @@ Modules collaborate without importing each other's internals:
 | Mechanism | Use when | API |
 | --- | --- | --- |
 | **Service call** | you need data or an action now from a dependency | `import { getService } from "@/modules/catalog/server"` (public index only) |
-| **Event** | something happened and others may react, later or not at all | `emit(ctx, "booking.confirmed", payload)`; subscribers in manifests; delivered in-process after commit, through the jobs table when the subscriber is slow |
+| **Event** | something happened and others may react, later or not at all | `emit(ctx, "booking.appointment.confirmed", payload)`; subscribers in manifests; delivered in-process after commit, through the jobs table when the subscriber is slow |
 | **Extension point** | a module lets others plug a step or a UI slot into its flow | declared in `extensionPoints`, filled in another module's `extends`, resolved by the kernel only for active modules |
 | **Site block** | a theme shows module UI | `site.blocks`, rendered by themes through `<ModuleBlock name="booking-widget" />` |
 
 Event payloads are typed in the emitting module's `events.ts` and versioned
-(`booking.confirmed@1`). Adding a field is fine; removing or changing one
+(`booking.appointment.confirmed@1`). Adding a field is fine; removing or changing one
 needs a new version and both emitted during migration.
 
 ## Boundaries, enforced

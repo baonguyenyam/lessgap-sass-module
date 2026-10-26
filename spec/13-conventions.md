@@ -32,7 +32,7 @@ conventions platform code needs so that the hundredth module reads like the firs
 ## Logging
 
 - One logger, `log` from `src/platform/log.ts`, structured:
-  `log.info("booking.confirmed", { tenantId, appointmentId })`.
+  `log.info("booking.appointment.confirmed", { tenantId, appointmentId })`.
   Event names are `<area>.<what>`; fields are ids and counts.
 - Never log personal data (names, emails, phones, message bodies), secrets or
   tokens. Email addresses are masked like the kit's `maskAddresses`.
