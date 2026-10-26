@@ -128,6 +128,8 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
   `node_modules/` first.
 - **Report honestly.** Say what you changed, how you verified it, and what you
   skipped or noticed out of scope. Never claim a check passed without running it.
+- **No emoji** anywhere: code, comments, UI copy, docs, test names, commit
+  messages. Icons come from the icon component, not Unicode.
 
 # Project memory
 

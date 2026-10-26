@@ -17,6 +17,41 @@
 | Webhook forgery | signature verification for Stripe billing, Stripe Connect, Resend, Twilio; idempotency keys |
 | Secret leakage | secrets only in env, validated in `src/lib/env.ts`; no secret in `NEXT_PUBLIC_*` |
 
+## Sign-in, sessions and two-factor
+
+People can sign in several ways; every way lands in the same session model
+and the same account rules.
+
+| Method | Where configured | Notes |
+| --- | --- | --- |
+| Email + password | always on | bcrypt (kept from the kit so existing hashes still verify), 8–72 chars |
+| Magic link | when email is configured | rate-limited — it spends outbound email |
+| OAuth: Google, GitHub | `GOOGLE_CLIENT_*`, `GITHUB_CLIENT_*` env pairs | only providers with both keys are registered |
+| Dev sign-in | `NODE_ENV=development` only | one click, no credential; the check is the environment, not the import |
+| Demo sign-in | `DEMO_MODE=true` only | shared fixture account; cannot enable 2FA |
+| Switch As | ROOT only | staff session as another account, reason + audit, 60-minute cap ([ADR 0015](./adr/0015-switch-as.md)) |
+| Passkeys | not yet | "later" in the roadmap; Better Auth plugin exists |
+
+- **Two-factor.** TOTP (authenticator app) plus one-time backup codes. Optional
+  for members today; **required for anyone with a `platformRole`** — the
+  platform console refuses a staff session without `twoFactorEnabled`, and
+  the requirement is enforced server-side, not by hiding UI. Turning 2FA off
+  for a staff account removes console access until it is on again.
+- **Automatic OAuth linking** is refused for accounts with 2FA on unless the
+  request carries that account's own session — otherwise a Google account
+  with your address becomes a door around your authenticator (implemented in
+  `validateUserInfo`, `src/lib/account-linking.ts`).
+- **Sessions** are database rows: revocable per device in Settings →
+  Security, carrying `ipAddress` and `userAgent`. The 60-second cookie cache
+  is the bound on how long a revoked session can still answer.
+  `revokeSessionsOnPasswordReset` ends every other session on a password
+  reset. Switch-As sessions expire after 60 minutes and cannot be extended.
+- **Email change** is a two-hop confirmation: the current address approves
+  first, the new address verifies second.
+- **Rate limits** sit on sign-in, sign-up, magic link, password reset and
+  public forms; the store upgrades from per-instance memory to shared Upstash
+  when `UPSTASH_REDIS_REST_*` is set ([operations](./16-operations.md)).
+
 ## Health information (dental, clinics, spas)
 
 A dental office in the US is a HIPAA covered entity. If our platform creates,

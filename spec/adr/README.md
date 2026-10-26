@@ -39,3 +39,5 @@ Each rejected option and the reason it lost.
 | [0014](./0014-root-role.md) | ROOT above ADMIN, granted by configuration | accepted |
 | [0015](./0015-switch-as.md) | Switch As: ROOT opens a session as another account | proposed |
 | [0016](./0016-tests-live-in-tests.md) | Every test lives in tests/ | accepted |
+| [0017](./0017-sentry-for-error-tracking.md) | Sentry for error tracking, `ErrorReport` table in the app | proposed |
+| [0018](./0018-cloudflare-r2-for-storage.md) | Cloudflare R2 for media, exports, snapshots and platform backups | proposed |

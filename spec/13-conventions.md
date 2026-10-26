@@ -108,3 +108,5 @@ module enable/disable, refunds. Action names follow `<module>.<entity>.<verb>`.
 
 Kit style: full sentences, explaining why. A module's `module.ts` starts with
 a comment saying what the module is for and linking its spec section.
+No emoji anywhere — not in code, comments, copy, docs, test names or commit
+messages; icons come from the icon component.

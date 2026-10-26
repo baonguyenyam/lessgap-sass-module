@@ -178,6 +178,19 @@ area. Phase briefs copy the rows they own into their task lists.
 | C3 | Injection text in a document does not change the tool policy | integration (stubbed model) |
 | C4 | Message over the monthly limit is refused politely | integration |
 
+### Operations (phases 0–8)
+
+| Id | Case | Layer |
+| --- | --- | --- |
+| O1 | Two concurrent cron runs claiming the same due job run it exactly once (`SKIP LOCKED`) | integration |
+| O2 | A failing job retries with backoff and lands `FAILED` with `lastError` after max attempts; console retry resets it | integration |
+| O3 | `sendEmail()` writes exactly one `EmailMessage` whose status matches the provider outcome; an exception path still records `FAILED` | unit + integration |
+| O4 | `log.error` writes/merges an `ErrorReport` by digest with masked message, `requestId` and `source`; reporting to Sentry is attempted only when configured | unit |
+| O5 | A `TenantSnapshot` of tenant A contains no row of tenant B | integration |
+| O6 | Restoring a snapshot creates a new tenant whose rows match the bundle (remapped ids, relations intact) | integration |
+| O7 | The cron route refuses a call without `CRON_SECRET` | integration |
+| O8 | A platform staff member without `twoFactorEnabled` is refused `/platform` until 2FA is on | E2E |
+
 ### Migrations (every phase)
 | # | Case | Layer |
 |---|---|---|

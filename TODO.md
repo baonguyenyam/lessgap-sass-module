@@ -11,7 +11,19 @@ Trong giai đoạn này nên chủ yếu sử dụgn các dịch vụ miễn ph�
 - nên học hỏi các dự án (về tính năng/logic thôi, ko học hỏi cách code) /Users/nguyenpham/Source Code/vnbca.org, /Users/nguyenpham/Source Code/bellav-2026, /Users/nguyenpham/Source Code/platform.madelab.io
 - Phải ghi kỹ ra mọi tài liệu trước để chúng ta sẽ làm sau
 
-
 Nên có cơ chế để biết làm xogn gì, chưa làm gì, 
 
 Ghi mọi thứu vào bộ nhớ AI, trogn quá trình code nếu có lỗi nào phát sinh và AI fixx thì phải ghi nhớ để ko vướng lại trogn tương lai 
+
+
+
+https://github.com/wshobson/agents
+https://github.com/anthropics/skills
+https://github.com/mblode/agent-skills
+https://github.com/vercel-labs/agent-skills
+https://github.com/obra/superpowers
+writing-plans
+codebase-architecture
+postgresql-table-design
+database-migration
+auth-implementation-patterns

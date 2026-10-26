@@ -31,6 +31,7 @@ asked to work on in [phases/](./phases/), then the documents that brief links to
 | 13 | [conventions.md](./13-conventions.md) | Errors, action results, logging, money, time, i18n, naming |
 | 14 | [environments-and-release.md](./14-environments-and-release.md) | Local, preview, staging, production; deploys, rollback, versioning |
 | 15 | [module-system.md](./15-module-system.md) | The kernel, module manifest, lifecycle, stages and experiments, extension points, boundaries |
+| 16 | [operations.md](./16-operations.md) | Free-now/paid-later services, errors and logs, jobs and email, backups, contention, scale targets, ops pages |
 | — | [phases/](./phases/) | The brief for each phase: tasks, files, tests, checks |
 | — | [roadmap.md](./roadmap.md) | The phases, their scope and their exit criteria |
 | — | [glossary.md](./glossary.md) | The words, so code and docs use the same ones |
@@ -48,6 +49,20 @@ asked to work on in [phases/](./phases/), then the documents that brief links to
   wrong; do not leave both.
 - **Statuses** used in headers: `draft` (open for change), `accepted`
   (build to it), `implemented` (shipped and matches), `superseded`.
+
+## How progress is tracked
+
+What is done and what is not is read at three levels, one source each —
+never a second list that can drift:
+
+- **Task:** the checkbox under each task in a phase brief, ticked in the same
+  change that ships the work.
+- **Brief:** the status column in [phases/README.md](./phases/README.md).
+- **Phase:** the status column in [roadmap.md](./roadmap.md), plus the exit
+  criteria each phase lists (proved by commands and tests, not impression).
+
+Surprises go under "Findings" in the brief; mistakes that cost effort go in
+`.agents/memory/lessons.md`; decisions go in `adr/`.
 
 ## Relationship to the starter kit
 

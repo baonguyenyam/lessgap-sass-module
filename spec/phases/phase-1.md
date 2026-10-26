@@ -2,7 +2,7 @@
 
 **Status:** draft
 **Roadmap:** [roadmap.md#phase-1--tenancy-core](../roadmap.md)
-**Read first:** [tenancy](../02-tenancy.md), [data-model](../09-data-model.md), [migrations-and-data](../12-migrations-and-data.md), [testing](../11-testing.md) (T1–T10), [module-system](../15-module-system.md), ADR [0002](../adr/0002-shared-database-tenant-id-and-rls.md), [0003](../adr/0003-better-auth-organizations-for-tenants.md)
+**Read first:** [tenancy](../02-tenancy.md), [data-model](../09-data-model.md), [migrations-and-data](../12-migrations-and-data.md), [testing](../11-testing.md) (T1–T10, O1–O8), [module-system](../15-module-system.md), [operations](../16-operations.md), ADR [0002](../adr/0002-shared-database-tenant-id-and-rls.md), [0003](../adr/0003-better-auth-organizations-for-tenants.md)
 
 ## Goal
 Users belong to tenants with roles; every tenant-owned query is scoped by
@@ -106,14 +106,22 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - **Tests:** M4 (backfill idempotent).
 - [ ] done
 
-### 1.13 — Tenant deletion job
+### 1.13 — Ops pages in the platform console
+- **Goal:** `/platform/jobs`, `/platform/emails`, `/platform/errors` — the operations surface from [operations.md](../16-operations.md#the-ops-pages).
+- **Files:** `src/app/(platform)/platform/jobs/*`, `src/app/(platform)/platform/emails/*`, `src/app/(platform)/platform/errors/*`, console nav, translations.
+- **Tests:** pages refuse non-staff (T10 pattern); retry and run-now actions re-scope through `requirePlatformRole`; resolving a digest sets `resolvedAt` and a recurrence clears it.
+- **Checks:** `pnpm test`, `pnpm test:integration`; E2E walk of the three pages.
+- **Done when:** a failed job and a masked error are visible and actionable in the console without psql or Vercel logs.
+- [ ] done
+
+### 1.14 — Tenant deletion job
 - **Goal:** delete a tenant completely, driven by the classification list and module `onPurge` hooks.
 - **Files:** `src/platform/tenancy/delete-tenant.ts`, job registration, console action with confirmation.
 - **Tests:** T9.
 - [ ] done
 
 ## Exit criteria
-- T1–T10 green in CI.
+- T1–T10 and O8 green in CI.
 - `pnpm audit:tenancy`, M1–M3 green.
 - Query overhead of `tenantDb` recorded in Findings.
 

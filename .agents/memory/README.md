@@ -7,6 +7,7 @@ code, is reviewed like code, and is the same for everyone.
 | File | Holds | Who writes it |
 | --- | --- | --- |
 | [lessons.md](./lessons.md) | Mistakes that were made and fixed, and the rule that prevents them | any agent, in the change that fixes the mistake |
+| [requirements.md](./requirements.md) | Standing requirements from the owner, with pointers to where each is specified | any agent, when the owner states one |
 | `spec/adr/` | Decisions and their reasons | proposed by an agent, accepted by a human |
 | `.agents/rules/` | Standing rules | changed by PR |
 

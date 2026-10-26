@@ -36,6 +36,9 @@ out of scope, even when it looks small: write it down under "Later" instead.
 - Sites domain is `lessgap.io`: move it to Vercel nameservers and add `*.lessgap.io` as a wildcard domain.
 - Replace the Italian locale and docs with Vietnamese; English stays the default.
 - `scripts/audit-tenancy.mjs` running in CI (passes trivially: no tenant models yet).
+- Error tracking: Sentry behind env, `ErrorReport` written by `log.error`, request ids stamped by the proxy ([operations](./16-operations.md), ADR 0017).
+- `Job` table and the cron runner route (ADR 0008), accepting Vercel Cron and an external pinger.
+- `EmailMessage` delivery record written by `sendEmail()`.
 - Add `vi` to dashboard locales scaffolding (decision in ADR 0001's notes), or record that it waits.
 - CI on pnpm with a frozen lockfile and a type-check step (done 2026-10-26).
 
@@ -55,6 +58,7 @@ out of scope, even when it looks small: write it down under "Later" instead.
 - RLS helper (`SET LOCAL app.tenant_id` in a transaction) and the first policy.
 - Dashboard moves under `/t/[slug]`; tenant switcher; invitations by email.
 - Platform console skeleton at `/platform`: tenants list, tenant detail, suspend and reactivate, impersonation with reason and audit.
+- Ops pages in the console: `/platform/jobs`, `/platform/emails`, `/platform/errors` ([operations](./16-operations.md#the-ops-pages)).
 - `AuditLog` writer.
 - Remove `Project` from the product surface.
 
@@ -121,6 +125,7 @@ out of scope, even when it looks small: write it down under "Later" instead.
 - Reservations for restaurants.
 - Customers module with consent records, export and delete.
 - `notify` with email templates; SMS behind its feature with consent and STOP handling; reminders job.
+- `/platform/emails/templates`: per-locale preview and send-test for every template (templates stay code).
 - Dental vertical's PHI restrictions applied.
 
 **Exit criteria**
@@ -156,11 +161,15 @@ out of scope, even when it looks small: write it down under "Later" instead.
 
 ## Phase 8 — Hardening and scale
 
+**Read:** [operations.md](./16-operations.md) — it owns the targets and the drill shapes.
+
 **Scope**
 - RLS on every tenant table verified by a test that lists tables without a policy.
-- Daily reconciliation of Vercel domains with `Domain` rows.
-- Backups and restore drill; per-tenant data export.
-- Load test of the site surface with many hosts; cache hit rate measured.
+- Daily reconciliation of Vercel domains with `Domain` rows, reported on `/platform/domains`.
+- Backups in all three layers: nightly `pg_dump` to R2 by a scheduled workflow, `TenantSnapshot` on demand then nightly, PITR window verified; a restore drill run and written up (database and tenant, O5–O6); `/platform/backups` page.
+- `/platform/usage` page: usage counters, job throughput, error rate, queue depth.
+- Load test of the site surface to the targets in [operations.md](./16-operations.md#scale-targets); cache hit rate measured.
+- Revisit the queue decision ([ADR 0008](./adr/0008-jobs-table-before-a-queue.md)) and the log-drain decision against measured volume; ADR whichever way it lands.
 - Public Suffix List submission for the sites domain.
 - Analytics module.
 
@@ -168,6 +177,10 @@ out of scope, even when it looks small: write it down under "Later" instead.
 
 ## Later (not scheduled)
 
+- Passkeys for members and platform staff.
+- In-place per-tenant restore (v1 restores to a new tenant).
+- Realtime updates (Pusher/Ably) for the dashboard.
+- Public status page; push notifications (FCM).
 - Gift cards, memberships and packages for salons.
 - Reviews collection (from real customers after a completed appointment only).
 - Google Business Profile and Reserve with Google integration.

@@ -2,7 +2,7 @@
 
 **Status:** draft
 **Roadmap:** [roadmap.md#phase-0--foundation](../roadmap.md)
-**Read first:** [README](../README.md), [architecture](../01-architecture.md), [testing](../11-testing.md), [migrations-and-data](../12-migrations-and-data.md), [conventions](../13-conventions.md), [environments-and-release](../14-environments-and-release.md), [module-system](../15-module-system.md), ADR [0010](../adr/0010-modules-are-plugins-with-a-kernel.md), [0011](../adr/0011-independent-project-kit-as-reference.md), [0012](../adr/0012-temporal-for-dates-and-time-zones.md)
+**Read first:** [README](../README.md), [architecture](../01-architecture.md), [testing](../11-testing.md), [migrations-and-data](../12-migrations-and-data.md), [conventions](../13-conventions.md), [environments-and-release](../14-environments-and-release.md), [module-system](../15-module-system.md), [operations](../16-operations.md), ADR [0010](../adr/0010-modules-are-plugins-with-a-kernel.md), [0011](../adr/0011-independent-project-kit-as-reference.md), [0012](../adr/0012-temporal-for-dates-and-time-zones.md), [0017](../adr/0017-sentry-for-error-tracking.md), [0018](../adr/0018-cloudflare-r2-for-storage.md)
 
 ## Goal
 Every guard rail later phases rely on exists and runs in CI: the test layers
@@ -127,9 +127,34 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 - **Checks:** `pnpm test`, `pnpm test:integration`, M1, M2.
 - [ ] done
 
+### 0.14 — Error tracking and request ids
+- **Goal:** `log.error` writes an `ErrorReport` row and reports to Sentry; every request carries a request id ([operations](../16-operations.md), ADR 0017).
+- **Files:** `src/proxy.ts` (stamp `x-request-id`, uuid v7), `src/platform/log.ts` (request-id context, `ErrorReport` writer), `src/platform/errors.ts`, `sentry.server.config.ts`, `sentry.edge.config.ts`, `instrumentation-client.ts`, `instrumentation.ts` (`onError` hook), `prisma/contract.prisma` (`ErrorReport`), migration `platform_error_reports`, `.env.example` (`SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_AUTH_TOKEN`), `/api/health` + `/api/health/live` routes.
+- **Tests:** O4 (digest merge, masking, requestId, Sentry skipped when unconfigured); `beforeSend` scrub test; health returns 503 with a code when the DB is down.
+- **Checks:** `pnpm test`, `pnpm test:integration`, M1, M2; set a scratch DSN and see an event arrive with tags, no user fields.
+- **Done when:** a thrown error in a dev action produces one `ErrorReport` row carrying a `requestId` that the response also shows.
+- [ ] done
+
+### 0.15 — Job table and cron runner
+- **Goal:** `Job` model, the runner route and the kind registry of [ADR 0008](../adr/0008-jobs-table-before-a-queue.md): due jobs claimed `FOR UPDATE SKIP LOCKED`, run with retries and backoff, landing `FAILED` with `lastError`.
+- **Files:** `prisma/contract.prisma` (`Job`), migration `platform_jobs`, `src/platform/jobs/runner.ts`, `src/platform/jobs/registry.ts`, `src/app/api/cron/route.ts` (refuses without `CRON_SECRET`, accepts Vercel Cron and external pingers), `vercel.json` daily cron, docs for the external pinger in `spec/14`.
+- **Tests:** O1, O2, O7; a handler that throws leaves the row retriable; an overdue locked job is reclaimed.
+- **Checks:** `pnpm test`, `pnpm test:integration`, M1, M2; call the route twice concurrently in an integration test.
+- **Done when:** a job enqueued for now runs on the next cron hit, and a second concurrent hit does not re-run it.
+- [ ] done
+
+### 0.16 — EmailMessage delivery record
+- **Goal:** every `sendEmail()` call writes one `EmailMessage` row ([operations](../16-operations.md#email-outbox)); the provider outcome maps to `status`.
+- **Files:** `prisma/contract.prisma` (`EmailMessage`), migration `platform_email_messages`, `src/lib/email-transport.ts`, `src/lib/email-delivery.ts`, retention prune job registered with 0.15's runner.
+- **Tests:** O3; masked `lastError` keeps no address (reuses `maskAddresses`).
+- **Checks:** `pnpm test`, `pnpm test:integration`, M1, M2.
+- **Done when:** a refused send (bad key, suppressed address) still leaves exactly one row with `REFUSED` and a masked error.
+- [ ] done
+
 ## Exit criteria
 - CI green with jobs: install, typecheck, lint (with boundary rules), unit + contract, integration with Postgres, migration checks, tenancy audit, build, audit.
 - `pnpm new:module` produces a module that passes `pnpm modules:check`.
+- O1–O4 and O7 green in CI.
 - Decisions 0-A…0-D recorded above.
 
 ## Findings

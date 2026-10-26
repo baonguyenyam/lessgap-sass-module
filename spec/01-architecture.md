@@ -115,7 +115,9 @@ registry (`src/modules/registry.ts`) is the only list of modules.
 | Capabilities | Modules as plugins on a kernel, with manifest, lifecycle and stages | Switch on/off and experiment per tenant without code changes | [0010](./adr/0010-modules-are-plugins-with-a-kernel.md) |
 | Email | Brevo now, Amazon SES later, behind `sendEmail()` | Already used by the company; Resend kept as kit fallback | [0009](./adr/0009-brevo-for-email-ses-later.md) |
 | SMS | Twilio, behind an interface | Reminders; consent rules in compliance doc | — |
-| Media | Vercel Blob or S3-compatible storage, tenant-prefixed keys | Images for services, menus, galleries | — |
+| Media, exports, backups | Cloudflare R2 (S3-compatible), tenant-prefixed keys | Zero egress; signed URLs; one wrapper | [0018](./adr/0018-cloudflare-r2-for-storage.md) |
+| Error tracking | Sentry (free tier) + `ErrorReport` table | Alerts and source maps out; console page in | [0017](./adr/0017-sentry-for-error-tracking.md) |
+| Rate limiting | in-memory, shared via Upstash REST when env-set | Speed bump now, real wall later, no rewrite | — |
 
 ## Caching
 

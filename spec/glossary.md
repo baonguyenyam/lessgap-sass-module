@@ -44,4 +44,9 @@ for the same thing is how a codebase starts to drift.
 | Event | `<module>.<entity>.<past-tense>` | A typed, versioned fact a module emits for others to react to |
 | Public code | `newPublicCode()` | A short code people read or type (booking reference, invite code), unique per tenant |
 | Purge | `ModulePurge` | Scheduled deletion of one module's data for one tenant, after a 7-day grace period |
+| Job | `Job` | A unit of background work in the jobs table: kind, payload, `runAt`, status ([ADR 0008](./adr/0008-jobs-table-before-a-queue.md)) |
+| Email message | `EmailMessage` | The delivery record of one `sendEmail()` call: kind, recipient, provider, status |
+| Error report | `ErrorReport` | One grouped application error: digest, source, masked message, count, first/last seen |
+| Snapshot | `TenantSnapshot` | A per-tenant backup bundle in R2, restorable into a new tenant |
+| Request id | `requestId` | A uuid v7 stamped per request by the proxy, carried through logs, errors and job runs |
 | Phase brief | `spec/phases/phase-N.md` | The task list an agent works through, one task per change |

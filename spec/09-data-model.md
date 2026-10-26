@@ -230,6 +230,62 @@ model Job {
   updatedAt   DateTime  @updatedAt
   @@index([status, runAt])
 }
+
+// Operations models — platform-owned, tenantId optional (a failed platform
+// job or an email to a non-member may have none). See operations.md.
+
+// Delivery record for every sendEmail() call; the "email queue" staff watch.
+model EmailMessage {
+  id          String      @id @default(uuid(7))   // append-only, high volume
+  tenantId    String?
+  kind        String                              // "auth.magic_link", "booking.confirmation", …
+  toAddress   String
+  subject     String
+  provider    String                              // "brevo" | "resend" | "ses"
+  providerId  String?
+  status      EmailStatus @default(QUEUED)
+  lastError   String?                             // masked — the log-line rule applies
+  sentAt      DateTime?
+  createdAt   DateTime    @default(now())
+  @@index([tenantId, createdAt])
+  @@index([status, createdAt])
+}
+
+enum EmailStatus { QUEUED SENT REFUSED FAILED }
+
+// One row per error digest; the record that survives log retention.
+model ErrorReport {
+  id          String    @id @default(uuid(7))
+  digest      String                            // hash of source + error name + first frame
+  source      String                            // marketing | dashboard | platform | site | api | cron | job
+  message     String                            // masked
+  requestId   String?
+  tenantId    String?
+  count       Int       @default(1)
+  firstSeenAt DateTime  @default(now())
+  lastSeenAt  DateTime  @default(now())
+  resolvedAt  DateTime?                         // set by staff; cleared if it recurs
+  @@unique([digest])
+  @@index([lastSeenAt])
+}
+
+// Per-tenant backup bundle in R2 (snapshots/<tenantId>/<id>.json.gz).
+model TenantSnapshot {
+  id          String         @id @default(cuid())
+  tenantId    String
+  status      SnapshotStatus @default(QUEUED)
+  storageKey  String?
+  sizeBytes   Int?
+  reason      String?                             // staff-entered for manual snapshots
+  createdById String?                             // null when the nightly job took it
+  expiresAt   DateTime?                           // matches the bucket lifecycle (30 days)
+  lastError   String?
+  createdAt   DateTime       @default(now())
+  completedAt DateTime?
+  @@index([tenantId, createdAt])
+}
+
+enum SnapshotStatus { QUEUED RUNNING READY FAILED }
 ```
 
 ## What changes in kit models
