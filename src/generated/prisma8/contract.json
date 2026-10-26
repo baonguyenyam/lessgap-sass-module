@@ -786,6 +786,13 @@
                   "kind": "scalar"
                 }
               },
+              "switchedBy": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "token": {
                 "nullable": false,
                 "type": {
@@ -849,6 +856,9 @@
                 },
                 "ipAddress": {
                   "column": "ipAddress"
+                },
+                "switchedBy": {
+                  "column": "switchedBy"
                 },
                 "token": {
                   "column": "token"
@@ -2141,6 +2151,11 @@
                   "dataType": "pg/text",
                   "nullable": true
                 },
+                "switchedBy": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
                 "token": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
@@ -2714,7 +2729,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "6537a51315de601b1ef71dffb3c857257730401726744069f6f97681de139818"
+    "storageHash": "261486cc3557069867398d8541b07c6ad27d09f8fb5df1f59384290842d32081"
   },
   "execution": {
     "executionHash": "cbedb4da5dc2e1b46867c3be26f34e00e4cb5e092148412552e5b2642130d5b2",

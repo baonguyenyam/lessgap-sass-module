@@ -158,14 +158,14 @@ export async function SettingsView({
                 {accountId ? (
                   <form action={unlinkProvider}>
                     <input type="hidden" name="accountId" value={accountId} />
-                    <PendingButton className="rounded-full border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
+                    <PendingButton variant="outline" size="xs">
                       {t("disconnect")}
                     </PendingButton>
                   </form>
                 ) : (
                   <form action={linkProvider}>
                     <input type="hidden" name="provider" value={provider} />
-                    <PendingButton className="rounded-full border border-primary/40 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/5">
+                    <PendingButton variant="outline-primary" size="xs">
                       {t("connect")}
                     </PendingButton>
                   </form>
@@ -190,7 +190,7 @@ export async function SettingsView({
                 className="h-9 w-full sm:w-64"
                 required
               />
-              <PendingButton className="rounded-full border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
+              <PendingButton variant="outline" size="xs">
                 {t("email.submit")}
               </PendingButton>
             </form>
@@ -224,7 +224,7 @@ export async function SettingsView({
                 minLength={8}
                 maxLength={72}
               />
-              <PendingButton className="self-start rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition-all hover:shadow-soft disabled:pointer-events-none disabled:opacity-80">
+              <PendingButton variant="primary" size="xs" className="self-start">
                 {hasPassword ? t("changePassword") : t("setPassword")}
               </PendingButton>
             </form>

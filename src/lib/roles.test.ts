@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { ASSIGNABLE_ROLES, ROLES, canChangeRole, isAdmin, isRole, isRoot} from "./roles"
+import { ASSIGNABLE_ROLES, ROLES, canChangeRole, canSwitchAs, isAdmin, isRole, isRoot} from "./roles"
 
 describe("isAdmin / isRoot", () => {
   it.each([
@@ -44,5 +44,29 @@ describe("canChangeRole", () => {
 
   it("refuses a change to the role already held", () => {
     expect(canChangeRole("ROOT", "ADMIN", "ADMIN")).toBe(false)
+  })
+})
+
+describe("canSwitchAs", () => {
+  const root = { id: "r1", role: "ROOT" as const, switched: false }
+
+  it("lets ROOT switch to a user or an admin", () => {
+    expect(canSwitchAs(root, { id: "u1", role: "USER" })).toBe(true)
+    expect(canSwitchAs(root, { id: "a1", role: "ADMIN" })).toBe(true)
+  })
+
+  it("refuses anyone who is not ROOT", () => {
+    for (const role of ["USER", "ADMIN"] as const) {
+      expect(canSwitchAs({ id: "x", role, switched: false }, { id: "u1", role: "USER" })).toBe(false)
+    }
+  })
+
+  it("never switches onto a ROOT account or onto yourself", () => {
+    expect(canSwitchAs(root, { id: "r2", role: "ROOT" })).toBe(false)
+    expect(canSwitchAs({ ...root, role: "ROOT" }, { id: "r1", role: "USER" })).toBe(false)
+  })
+
+  it("refuses to chain a switch from a session that is already switched", () => {
+    expect(canSwitchAs({ ...root, switched: true }, { id: "u1", role: "USER" })).toBe(false)
   })
 })

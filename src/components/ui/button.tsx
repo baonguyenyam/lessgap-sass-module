@@ -19,12 +19,19 @@ const buttonVariants = cva(
           "border border-border bg-background/60 backdrop-blur-sm text-foreground hover:bg-accent hover:-translate-y-0.5",
         ghost: "bg-transparent hover:bg-accent text-foreground",
         destructive: "bg-destructive text-white hover:opacity-90 hover:-translate-y-0.5",
+        "outline-primary":
+          "border border-primary/40 bg-transparent text-primary hover:-translate-y-0.5 hover:bg-primary/5 hover:shadow-soft",
+        "outline-destructive":
+          "border border-destructive/30 bg-transparent text-destructive hover:bg-destructive/5",
       },
       size: {
+        xs: "h-8 px-3 text-xs",
         sm: "h-9 px-4 text-sm",
         md: "h-11 px-5 text-sm",
         lg: "h-13 px-8 text-base",
         xl: "h-16 px-10 text-lg",
+        icon: "h-9 w-9",
+        "icon-lg": "h-11 w-11",
       },
     },
     defaultVariants: { variant: "primary", size: "md" },

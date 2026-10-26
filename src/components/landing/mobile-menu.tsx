@@ -15,6 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button"
 import { sections, useActiveSection } from "@/components/landing/use-active-section"
 
 export function MobileMenu({
@@ -50,12 +51,14 @@ export function MobileMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button
+        <Button
+          variant="ghost"
+          size="icon-lg"
           aria-label={t("openMenu")}
-          className="flex h-11 w-11 items-center justify-center rounded-[var(--radius)] text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground xl:hidden"
+          className="xl:hidden"
         >
           <Menu size={24} />
-        </button>
+        </Button>
       </DropdownMenuTrigger>
       {/* A phone on its side is about 400px tall, less than the list: the menu
           stops at the space Radix measures below the button and scrolls. */}

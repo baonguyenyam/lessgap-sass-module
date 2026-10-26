@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { ArrowUp } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 
 /**
  * Floating "back to top" button. Fades in once the user has scrolled down,
@@ -27,16 +28,18 @@ export function BackToTop() {
   }
 
   return (
-    <button
+    <Button
+      variant="outline"
+      size="icon-lg"
       type="button"
       aria-label={t("backToTop")}
       onClick={scrollToTop}
       className={cn(
-        "fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/80 text-foreground shadow-soft backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary hover:shadow-[var(--shadow-glow)]",
+        "fixed bottom-6 right-6 z-40 bg-background/80 shadow-soft backdrop-blur transition-all duration-300 hover:border-primary/40 hover:text-primary",
         visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"
       )}
     >
       <ArrowUp className="h-5 w-5" />
-    </button>
+    </Button>
   )
 }

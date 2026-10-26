@@ -6,6 +6,7 @@ import { useActionState, useEffect } from "react"
 import { updateProject, type ProjectState } from "@/app/actions/projects"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/sonner"
 
@@ -43,14 +44,13 @@ export function ProjectEditForm({ id, name, description }: ProjectEditFormProps)
 
       <div className="space-y-1.5">
         <Label htmlFor="description">Description</Label>
-        <textarea
+        <Textarea
           id="description"
           name="description"
           defaultValue={description ?? ""}
           placeholder={t("descriptionPlaceholder")}
           maxLength={280}
           rows={3}
-          className="flex w-full rounded-[var(--radius)] border border-border bg-secondary px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
         />
       </div>
 

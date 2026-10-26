@@ -10,6 +10,7 @@ import { isKitSite } from "@/config/kit"
 import { emailEnabled } from "@/lib/email-transport"
 import { FooterSignup } from "@/components/landing/footer-signup"
 import { FooterWordmark } from "@/components/landing/footer-wordmark"
+import { Button } from "@/components/ui/button"
 
 function XIcon() {
   return (
@@ -45,26 +46,28 @@ export function Footer() {
             </p>
             <div className="mt-4 flex items-center gap-2">
               {orgUrl && (
-                <a
-                  href={orgUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={t("github")}
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-                >
-                  <GithubIcon />
-                </a>
+                <Button asChild variant="outline" size="icon" className="text-muted-foreground">
+                  <a
+                    href={orgUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={t("github")}
+                  >
+                    <GithubIcon />
+                  </a>
+                </Button>
               )}
               {siteConfig.links.x && (
-                <a
-                  href={siteConfig.links.x}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="X / Twitter"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-                >
-                  <XIcon />
-                </a>
+                <Button asChild variant="outline" size="icon" className="text-muted-foreground">
+                  <a
+                    href={siteConfig.links.x}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="X / Twitter"
+                  >
+                    <XIcon />
+                  </a>
+                </Button>
               )}
             </div>
             {showSignup && <FooterSignup disabled={signupDisabled} />}

@@ -20,6 +20,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button"
 
 // Keep in sync with the sidebar navItems in (dashboard)/layout.tsx and
 // (admin)/layout.tsx — the sidebar is hidden below `md` and this menu
@@ -52,12 +53,14 @@ export function MobileNav({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button
+        <Button
+          variant="ghost"
+          size="icon-lg"
           aria-label={t("openNavigation")}
-          className="flex h-11 w-11 items-center justify-center rounded-[var(--radius)] text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground md:hidden"
+          className="md:hidden"
         >
           <Menu size={24} />
-        </button>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-60 md:hidden">
         {menus[variant].map(({ href, key, icon: Icon }) => (

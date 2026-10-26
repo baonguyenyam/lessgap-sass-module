@@ -3,6 +3,8 @@ import { getFormatter, getTranslations } from "next-intl/server"
 import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { UserRoleButton } from "@/components/admin/user-role-button"
@@ -165,19 +167,18 @@ export default async function AdminPage({
               <CardDescription>{t("usersCount", { count: totalUsers })}</CardDescription>
             </div>
             <form className="flex gap-2">
-              <input
-                type="text"
-                name="search"
-                defaultValue={search}
-                placeholder={t("searchPlaceholder")}
-                className="h-9 w-full rounded-[var(--radius)] border border-border bg-secondary px-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:w-64"
-              />
-              <button
-                type="submit"
-                className="h-9 rounded-[var(--radius)] bg-primary px-4 text-sm font-medium text-primary-foreground hover:opacity-90"
-              >
+              <div className="w-full sm:w-auto">
+                <Input
+                  type="text"
+                  name="search"
+                  defaultValue={search}
+                  placeholder={t("searchPlaceholder")}
+                  className="h-9 sm:w-64"
+                />
+              </div>
+              <Button type="submit" size="sm">
                 {t("search")}
-              </button>
+              </Button>
             </form>
           </div>
         </CardHeader>

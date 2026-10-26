@@ -7,6 +7,7 @@ import Link from "next/link"
 import { sendContactRequest, type ContactState } from "@/app/actions/contact"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 
 const initialState: ContactState = { status: "idle" }
 
@@ -68,7 +69,7 @@ export function ContactForm({ disabled = false }: { disabled?: boolean }) {
         <label htmlFor="contact-message" className="mb-1.5 block text-sm font-medium text-foreground">
           {t("message")}
         </label>
-        <textarea
+        <Textarea
           id="contact-message"
           name="message"
           required
@@ -76,7 +77,6 @@ export function ContactForm({ disabled = false }: { disabled?: boolean }) {
           rows={5}
           placeholder={t("messagePlaceholder")}
           disabled={disabled || pending}
-          className="flex w-full rounded-[var(--radius)] border border-border bg-secondary px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
         />
       </div>
 

@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl"
 
 import { useEffect, useState } from "react"
 import { PanelLeftClose, PanelLeftOpen } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 const STORAGE_KEY = "sidebar-collapsed"
 
@@ -32,13 +33,15 @@ export function SidebarCollapseToggle() {
 
   const label = collapsed ? t("expand") : t("collapse")
   return (
-    <button
+    <Button
+      variant="ghost"
+      size="icon"
       aria-label={label}
       title={label}
       onClick={toggle}
-      className="hidden h-9 w-9 items-center justify-center rounded-[var(--radius)] text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground md:flex"
+      className="hidden md:flex"
     >
       {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
-    </button>
+    </Button>
   )
 }

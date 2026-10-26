@@ -23,7 +23,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'6537a51315de601b1ef71dffb3c857257730401726744069f6f97681de139818'>;
+  StorageHashBase<'261486cc3557069867398d8541b07c6ad27d09f8fb5df1f59384290842d32081'>;
 export type ExecutionHash =
   ExecutionHashBase<'cbedb4da5dc2e1b46867c3be26f34e00e4cb5e092148412552e5b2642130d5b2'>;
 export type ProfileHash =
@@ -403,6 +403,7 @@ export namespace Models {
     expiresAt: FieldOutputTypes['public']['Session']['expiresAt'];
     id: FieldOutputTypes['public']['Session']['id'];
     ipAddress: FieldOutputTypes['public']['Session']['ipAddress'];
+    switchedBy: FieldOutputTypes['public']['Session']['switchedBy'];
     token: FieldOutputTypes['public']['Session']['token'];
     updatedAt: FieldOutputTypes['public']['Session']['updatedAt'];
     userAgent: FieldOutputTypes['public']['Session']['userAgent'];
@@ -1022,6 +1023,12 @@ type ContractBase = Omit<
                   readonly many: false;
                 };
                 readonly ipAddress: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly switchedBy: {
                   readonly dataType: 'pg/text';
                   readonly codecId: 'pg/text@1';
                   readonly nullable: true;
@@ -1976,6 +1983,10 @@ type ContractBase = Omit<
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
+              readonly switchedBy: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
               readonly token: {
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
@@ -2016,6 +2027,7 @@ type ContractBase = Omit<
                 readonly expiresAt: { readonly column: 'expiresAt' };
                 readonly id: { readonly column: 'id' };
                 readonly ipAddress: { readonly column: 'ipAddress' };
+                readonly switchedBy: { readonly column: 'switchedBy' };
                 readonly token: { readonly column: 'token' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
                 readonly userAgent: { readonly column: 'userAgent' };

@@ -7,6 +7,7 @@ import { auth } from "@/auth"
 import { signInWithPassword, signInWithMagicLink } from "@/app/actions/auth"
 import { LogoMark } from "@/components/logo"
 import { PendingButton } from "@/components/auth/pending-button"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { siteConfig } from "@/config/site"
 import { emailEnabled } from "@/lib/email-transport"
@@ -70,7 +71,9 @@ export default async function LoginPage({
             >
               <PendingButton
                 disabled={isDemo}
-                className="flex h-12 w-full items-center justify-center gap-3 rounded-full border border-border bg-background px-4 text-sm font-semibold text-foreground transition-all hover:-translate-y-0.5 hover:bg-secondary hover:shadow-soft disabled:pointer-events-none disabled:opacity-45"
+                variant="outline"
+                size="lg"
+                className="w-full"
               >
                 <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
                   <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z"/>
@@ -96,7 +99,9 @@ export default async function LoginPage({
             >
               <PendingButton
                 disabled={isDemo}
-                className="flex h-12 w-full items-center justify-center gap-3 rounded-full border border-border bg-background px-4 text-sm font-semibold text-foreground transition-all hover:-translate-y-0.5 hover:bg-secondary hover:shadow-soft disabled:pointer-events-none disabled:opacity-45"
+                variant="outline"
+                size="lg"
+                className="w-full"
               >
                 <GithubIcon className="h-[18px] w-[18px]" />
                 {t("github")}
@@ -153,7 +158,7 @@ export default async function LoginPage({
             <form action={signInWithPassword} className="flex flex-col gap-3">
               <Input name="email" type="email" placeholder={t("emailPlaceholder")} autoComplete="email" required className="h-12 rounded-full px-4" />
               <Input name="password" type="password" placeholder={t("passwordPlaceholder")} autoComplete="current-password" required className="h-12 rounded-full px-4" />
-              <PendingButton className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-80">
+              <PendingButton variant="primary" size="lg" className="w-full">
                 {t("submit")}
               </PendingButton>
               {hasMagicLink && (
@@ -163,7 +168,9 @@ export default async function LoginPage({
                 <PendingButton
                   formAction={signInWithMagicLink}
                   formNoValidate
-                  className="flex h-12 w-full items-center justify-center gap-2 rounded-full border border-border px-4 text-sm font-semibold text-foreground transition-all hover:-translate-y-0.5 hover:bg-secondary hover:shadow-soft disabled:pointer-events-none disabled:opacity-80"
+                  variant="outline"
+                  size="lg"
+                  className="w-full"
                 >
                   {t("magicLink")}
                 </PendingButton>
@@ -215,7 +222,7 @@ export default async function LoginPage({
                 }}
               >
                 <input type="hidden" name="role" value="user" />
-                <PendingButton className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-80">
+                <PendingButton variant="primary" size="lg" className="w-full">
                   <span>▶</span> {t("exploreUser")}
                 </PendingButton>
               </form>
@@ -231,7 +238,7 @@ export default async function LoginPage({
                 }}
               >
                 <input type="hidden" name="role" value="admin" />
-                <PendingButton className="flex h-12 w-full items-center justify-center gap-2 rounded-full border border-primary/40 px-4 text-sm font-semibold text-primary transition-all hover:-translate-y-0.5 hover:bg-primary/5 hover:shadow-soft disabled:pointer-events-none disabled:opacity-80">
+                <PendingButton variant="outline-primary" size="lg" className="w-full">
                   <span>🛡</span> {t("exploreAdmin")}
                 </PendingButton>
               </form>
@@ -271,12 +278,9 @@ export default async function LoginPage({
               }}
             >
               <input type="hidden" name="password" value="dev" />
-              <button
-                type="submit"
-                className="flex h-12 w-full items-center justify-center gap-2 rounded-full border border-dashed border-border px-4 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-              >
+              <Button type="submit" variant="outline" size="lg" className="w-full border-dashed">
                 <span>🔧</span> Dev Login (Admin)
-              </button>
+              </Button>
             </form>
           </>
         )}

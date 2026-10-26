@@ -44,3 +44,16 @@ export function canChangeRole(actor: Role, current: Role, next: Role): boolean {
   if (current === next) return false
   return (ASSIGNABLE_ROLES as readonly Role[]).includes(current) && (ASSIGNABLE_ROLES as readonly Role[]).includes(next)
 }
+
+/**
+ * Whether `actor` may open a Switch As session as `target`
+ * (spec/adr/0015-switch-as.md). Only ROOT, never onto another ROOT, never onto
+ * themselves, and never from a session that is already a Switch As session.
+ */
+export function canSwitchAs(
+  actor: { id: string; role: Role; switched: boolean },
+  target: { id: string; role: Role },
+): boolean {
+  if (!isRoot(actor.role) || actor.switched) return false
+  return actor.id !== target.id && !isRoot(target.role)
+}

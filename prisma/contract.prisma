@@ -119,6 +119,8 @@ plan                    Plan                    @relation(fields: [planId], refe
     expiresAt TimestampString(3)
     ipAddress String?
     userAgent String?
+    // Set on a Switch As session: the ROOT user who opened it (spec/adr/0015-switch-as.md).
+    switchedBy String?
     createdAt TimestampString(3) @default(now())
     updatedAt TimestampString(3)  @onCreate(now()) @onUpdate(now())
 user      User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Session_userId_fkey")

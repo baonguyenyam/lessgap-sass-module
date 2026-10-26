@@ -9,6 +9,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button"
 
 type Theme = "light" | "dark" | "system"
 
@@ -71,12 +72,9 @@ export function ThemeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button
-          aria-label={t("label")}
-          className="flex h-9 w-9 items-center justify-center rounded-[var(--radius)] text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-        >
+        <Button variant="ghost" size="icon" aria-label={t("label")}>
           {theme === null ? null : isDark ? <Moon size={18} /> : <Sun size={18} />}
-        </button>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[8rem]">
         {options.map(({ value, icon: Icon }) => (

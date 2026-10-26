@@ -1,7 +1,10 @@
 "use client"
 
 import { useFormStatus } from "react-dom"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
+import type { VariantProps } from "class-variance-authority"
 
 /**
  * Submit button that shows a spinner while its parent form's server action
@@ -14,6 +17,8 @@ export function PendingButton({
   disabled,
   formAction,
   formNoValidate,
+  variant,
+  size,
 }: {
   className?: string
   children: React.ReactNode
@@ -21,7 +26,7 @@ export function PendingButton({
   /** Alternative server action for this button within a shared form. */
   formAction?: string | ((formData: FormData) => void | Promise<void>)
   formNoValidate?: boolean
-}) {
+} & VariantProps<typeof buttonVariants>) {
   const { pending } = useFormStatus()
 
   return (
@@ -31,7 +36,7 @@ export function PendingButton({
       formNoValidate={formNoValidate}
       disabled={disabled || pending}
       aria-busy={pending}
-      className={className}
+      className={cn("group/btn", buttonVariants({ variant, size }), className)}
     >
       {pending ? <Spinner className="h-[18px] w-[18px]" /> : children}
     </button>
