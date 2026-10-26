@@ -3,7 +3,7 @@ import { vi, type Mock } from "vitest"
 /**
  * A stand-in for `@/lib/db8` in unit tests:
  *
- *   vi.mock("@/lib/db8", async () => (await import("@/test/db8-mock")).createDb8Mock())
+ *   vi.mock("@/lib/db8", async () => (await import("@tests/helpers/db8-mock")).createDb8Mock())
  *   const db = (await import("@/lib/db8")) as unknown as Db8Mock
  *
  * `db8.orm.public.<Model>` is a collection whose chain methods (where, select,

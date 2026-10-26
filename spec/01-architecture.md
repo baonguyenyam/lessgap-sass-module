@@ -47,7 +47,7 @@ app route (page, layout, route handler, server action)
 - A service takes a `TenantContext` as its first argument. It never reads the
   session itself, so it can be called from a job, a webhook or a test.
 - Pure rules (prices, availability, fee calculation, limits) are functions in
-  `src/modules/<module>/lib/` with tests beside them, as the kit already does in `src/lib`.
+  `src/modules/<module>/lib/` with tests in `tests/unit/modules/<module>/lib/`, as the kit already does for `src/lib`.
 
 ## Where code lives
 

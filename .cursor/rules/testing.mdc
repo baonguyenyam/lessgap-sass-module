@@ -1,6 +1,6 @@
 ---
 description: Vitest and Playwright testing rules
-globs: **/*.test.ts,**/*.test.mjs,e2e/**,vitest.config.mts,playwright.config.ts
+globs: tests/**,vitest.config.mts,playwright.config.ts
 alwaysApply: false
 ---
 

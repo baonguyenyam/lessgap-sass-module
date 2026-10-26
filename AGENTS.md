@@ -35,7 +35,8 @@ deployment goes in environment variables.
 
 **English everywhere**, including comments, test names and error strings.
 
-**Pure logic goes in `src/lib` with a `.test.ts` beside it.** If a rule can be
+**Pure logic goes in `src/lib` with a test in `tests/unit/`.** The test mirrors
+the path: `src/lib/ids.ts` → `tests/unit/lib/ids.test.ts`. If a rule can be
 stated as a function, state it as a function: components render, they do not
 decide.
 
@@ -146,17 +147,17 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 | Path | What lives there |
 | --- | --- |
 | `src/app/` | App Router. `(auth)`, `(dashboard)`, `(admin)` are route groups; `[locale]` holds the public pages |
-| `src/app/actions/` | Server actions, one file per domain, tests beside them |
+| `src/app/actions/` | Server actions, one file per domain (tests in `tests/unit/app/actions/`) |
 | `src/app/api/` | Route handlers: auth, billing, checkout, webhooks, cron, health |
 | `src/components/ui/` | Base primitives (Radix + Tailwind). Reuse before writing one |
 | `src/components/<area>/` | Feature components by area |
-| `src/lib/` | Pure logic and server utilities, each with a `.test.ts` |
+| `src/lib/` | Pure logic and server utilities, each with a test in `tests/unit/lib/` |
 | `src/lib/schemas/` | Zod schemas shared by forms and server actions |
 | `src/lib/auth/` | The session boundary: `getCurrentUser`, `requireUser` |
 | `src/config/` | Site, brand and kit configuration |
 | `src/i18n/`, `src/locales/` | next-intl setup; `en.json` is the source of every message |
 | `prisma/` | Schema, migrations, seeds |
-| `e2e/` | Playwright end-to-end and accessibility specs |
+| `tests/` | Every test ([ADR 0016](spec/adr/0016-tests-live-in-tests.md)): `unit/` mirrors `src/` (and `unit/scripts/`), `e2e/` Playwright and axe, `helpers/` shared doubles (`@tests/helpers/db8-mock`), `integration/` from phase 0 |
 | `spec/` | The platform plan: architecture, tenancy, modules, phases, ADRs |
 | `src/platform/` | Platform core: tenancy, entitlements, switches, domains, audit, jobs (from phase 0) |
 | `src/modules/<module>/` | One folder per business module, same shape for all (from phase 1) |
@@ -242,7 +243,7 @@ training data about Prisma is older than it.
   everywhere. Timestamp columns are `TimestampString` text: read them with
   `toDate` and write them with `toTs` / `nowTs` from `@/lib/timestamps`, never
   `new Date(row.createdAt)` (that parses as local time). Unit tests mock it with
-  `createDb8Mock()` from `@/test/db8-mock`.
+  `createDb8Mock()` from `@tests/helpers/db8-mock`.
 - Better Auth talks to Postgres through its own Kysely pool (`src/lib/kysely.ts`),
   not through the ORM.
 

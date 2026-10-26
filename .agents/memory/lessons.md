@@ -2,6 +2,24 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-26 · next · A server component cannot call `buttonVariants()`
+- **Symptom:** Settings → Backup rendered "This page couldn't load"; console: `Attempted to call buttonVariants() from the server but buttonVariants is on the client`.
+- **Cause:** `src/components/ui/button.tsx` is `"use client"`, so every export is a client reference on the server, including the plain `cva` function.
+- **Fix:** `<Button asChild variant=… size=…><a …/></Button>`.
+- **Rule:** in a server component, style a link as a button with `<Button asChild>`, never `buttonVariants()`. Typecheck and lint do not catch this; open the page.
+
+### 2026-10-26 · next · `useRenderedPathname` is relative to the layout that calls it
+- **Symptom:** the settings tabs never showed the active page.
+- **Cause:** inside `settings/layout.tsx` the hook returned "/security", not "/dashboard/settings/security" (`useSelectedLayoutSegments` starts below the calling layout).
+- **Fix:** `useSelectedLayoutSegment()` in `src/components/settings/settings-nav.tsx`, compared with the part of each href after the settings base.
+- **Rule:** in a nested layout, compare segments, not full paths.
+
+### 2026-10-26 · next · Deleting a route leaves stale types in `.next/`
+- **Symptom:** `pnpm typecheck` failed in `.next/types/validator.ts`: `Cannot find module '…/@modal/(.)settings/page.js'`.
+- **Cause:** tsconfig includes the route types Next generated for the routes that existed then.
+- **Fix:** `npx next typegen` regenerates them (or `pnpm dev` / `pnpm build`).
+- **Rule:** after adding, moving or deleting a route, run `npx next typegen` before trusting a typecheck failure in `.next/`.
+
 ### 2026-10-26 · prisma 8 · `upsert` refuses a unique key that is an index
 - **Symptom:** `conflictOn: { slug }` on `Plan.upsert` failed typecheck: "'slug' does not exist in type '{ id: string; }'".
 - **Cause:** Prisma 8 types `conflictOn` from unique *constraints*; the baseline made every unique key a unique *index* (`@@index([...], unique: true)`). Postgres accepts either in `ON CONFLICT`.

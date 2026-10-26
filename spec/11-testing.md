@@ -10,11 +10,11 @@ finished, whatever the diff looks like.
 
 | Layer | Tool | Where | Database | Runs |
 | --- | --- | --- | --- | --- |
-| Unit | Vitest | beside the file: `foo.ts` → `foo.test.ts` | none | `pnpm test`, every CI run |
+| Unit | Vitest | `tests/unit/` mirroring `src/`: `src/lib/foo.ts` → `tests/unit/lib/foo.test.ts` ([ADR 0016](./adr/0016-tests-live-in-tests.md)) | none | `pnpm test`, every CI run |
 | Integration | Vitest, separate config | `tests/integration/<area>/*.test.ts` | real PostgreSQL, migrated, emptied per test file | `pnpm test:integration`, every CI run |
 | Contract | Vitest | `tests/contract/*.test.ts` | none | `pnpm test`, every CI run |
-| End-to-end | Playwright | `e2e/<area>/*.spec.ts` | real PostgreSQL with seed | `pnpm test:e2e`, CI on `main` and on PRs touching UI or flows |
-| Accessibility | Playwright + axe | `e2e/accessibility*.spec.ts` | seed | with E2E |
+| End-to-end | Playwright | `tests/e2e/<area>/*.spec.ts` | real PostgreSQL with seed | `pnpm test:e2e`, CI on `main` and on PRs touching UI or flows |
+| Accessibility | Playwright + axe | `tests/e2e/accessibility*.spec.ts` | seed | with E2E |
 | Migration | script | `scripts/check-migrations.mjs` | throwaway PostgreSQL | every CI run that touches `prisma/` |
 
 - **Unit** tests cover pure functions: prices, fees, availability, limits,

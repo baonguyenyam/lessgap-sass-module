@@ -66,7 +66,7 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 
 ### 0.6 — Platform conventions: errors, action wrapper, logger, money, time
 - **Goal:** the shared helpers in [conventions.md](../13-conventions.md) exist with tests.
-- **Files:** `src/platform/errors.ts` (`AppError`, `ErrorCode`), `src/platform/action.ts` (`action()` wrapper → `ActionResult`), `src/platform/log.ts`, `src/platform/money.ts`, `src/platform/time.ts` (`@js-temporal/polyfill`, ADR 0012), tests beside each.
+- **Files:** `src/platform/errors.ts` (`AppError`, `ErrorCode`), `src/platform/action.ts` (`action()` wrapper → `ActionResult`), `src/platform/log.ts`, `src/platform/money.ts`, `src/platform/time.ts` (`@js-temporal/polyfill`, ADR 0012), tests in `tests/unit/platform/`.
 - **Tests:** error-to-result mapping for every code; logger masks emails; money formatting in `en-US` and `vi-VN` and integer arithmetic; time conversions across DST in America/Chicago, America/New_York, America/Los_Angeles, and `Asia/Ho_Chi_Minh` (no DST), including a booking made from Vietnam for a Texas salon.
 - **Checks:** `pnpm test`, coverage ≥ 90% on these files.
 - **Done when:** helpers are exported and documented by comment; nothing uses them yet.

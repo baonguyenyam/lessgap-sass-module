@@ -1,7 +1,12 @@
 # Testing
 
-- Unit tests: Vitest, `*.test.ts` next to the file under test. Run `pnpm test`.
-- End-to-end: Playwright in `e2e/`, including `accessibility.spec.ts` (axe).
+- Every test lives under `tests/` (spec/adr/0016-tests-live-in-tests.md), never in `src/`.
+- Unit tests: Vitest, in `tests/unit/` at the path of the file under test:
+  `src/lib/ids.ts` → `tests/unit/lib/ids.test.ts`, `scripts/x.mjs` →
+  `tests/unit/scripts/x.test.mjs`. Import the code under test with `@/…`
+  (`#scripts/…` for scripts), never `./` or `../`. Run `pnpm test`.
+- Shared test doubles live in `tests/helpers/` (`@tests/helpers/db8-mock` for the database).
+- End-to-end: Playwright in `tests/e2e/`, including `accessibility.spec.ts` (axe).
   Run `pnpm test:e2e` when you change a flow those specs cover.
 - Integration tests (from phase 0): `tests/integration/`, real PostgreSQL,
   `pnpm test:integration`. Never mock Prisma there. Tenant isolation, RLS,

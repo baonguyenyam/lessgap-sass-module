@@ -7,6 +7,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.9.0] - 2026-10-26
+
+⚙️ **Settings is a section of its own, and every test lives in `tests/`.** Settings opens as a page, not a modal, with four sub-pages: General, Security, Backup and Logs. This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
+
+### Added
+
+- **Settings → Backup**: download everything the app holds about you as JSON (`/api/account/export`), built from an allow-list that never includes passwords, tokens, two-factor secrets or backup codes
+- **Settings → Logs**: account activity, newest first: account creation, sign-in methods added, two-factor authentication, and every session on record with its device and IP, including sessions opened with Switch As
+- **Settings → Security**: sign-in methods, email address, password, two-factor authentication and active sessions, moved from the single settings page
+
+### Changed
+
+- **`/dashboard/settings` is always a full page** with its own sub-navigation; the intercepting modal is gone. Account actions redirect to the page their form lives on (`/dashboard/settings/security` for sign-in, password, email, 2FA and sessions)
+- **Tests moved to `tests/`** (spec/adr/0016-tests-live-in-tests.md): unit tests in `tests/unit/` mirroring `src/`, Playwright in `tests/e2e/`, shared doubles in `tests/helpers/`. A test file under `src/` or `scripts/` now fails the suite
+
+### Removed
+
+- The settings modal (`@modal` slot, `RouteModal`, `SettingsView`)
+
 ## [2.8.0] - 2026-10-26
 
 🧹 **One way to reach the database.** Every query now goes through the Prisma 8 client, `db8`, and the Prisma 7-shaped `@/lib/prisma` layer on top of it is gone. Nothing changes for visitors and there is nothing to migrate: `git pull`, `pnpm install`.
@@ -15,7 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 - **`@/lib/timestamps`**: `toDate`, `toTs` and `nowTs`, the one place a `TimestampString` column becomes a `Date` and back. Reading one with `new Date(value)` takes it as local time; these read it as UTC
 - **`uniqueIndexKey()` in `@/lib/db8`**: names a unique key for `upsert`, because the kit's unique keys are unique indexes and Prisma 8 only types unique constraints there
-- **`createDb8Mock()` in `src/test/db8-mock.ts`**: the stand-in for `db8` that the unit tests share
+- **`createDb8Mock()` in `tests/helpers/db8-mock.ts`**: the stand-in for `db8` that the unit tests share
 
 ### Changed
 

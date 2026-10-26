@@ -13,7 +13,8 @@ Applies to every `.ts` / `.tsx` / `.mts` file.
   APIs) with Zod. Inside the boundary, trust the types.
 - `import type` for type-only imports. Import app code through the `@/` alias.
   Never `../` (lint enforces it): `@/` everywhere TypeScript runs, including
-  `prisma/` seeds and `e2e/`; `#src/...` (package.json `imports`) from the plain
+  `prisma/` seeds and `tests/` (`@tests/...` for shared test helpers); `#src/...`
+  and `#scripts/...` (package.json `imports`) from the plain
   Node scripts in `scripts/*.mjs`, which can only import erasable TypeScript.
   Same-folder `./` imports are fine. Generated files (`migrations/`,
   `src/generated/`) are exempt.
