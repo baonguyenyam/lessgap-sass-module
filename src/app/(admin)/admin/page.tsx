@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { UserRoleButton } from "@/components/admin/user-role-button"
+import { SwitchAsButton } from "@/components/admin/switch-as-button"
 import { isAdmin } from "@/lib/roles"
 import { RevenueChart } from "@/components/admin/revenue-chart"
 import { mrrHistory, monthlyEquivalent, type MrrSubscription } from "@/lib/metrics"
@@ -212,8 +213,9 @@ export default async function AdminPage({
                     {t("joined", { date: formatJoined(format, user.createdAt) })}
                   </span>
                 </div>
-                <div className="mt-3 empty:hidden">
+                <div className="mt-3 flex gap-2 empty:hidden">
                   <UserRoleButton userId={user.id} currentRole={user.role} viewer={viewer} />
+                  <SwitchAsButton userId={user.id} role={user.role} viewer={viewer} />
                 </div>
               </div>
             ))}
@@ -271,7 +273,10 @@ export default async function AdminPage({
                       </span>
                     </TableCell>
                     <TableCell>
-                      <UserRoleButton userId={user.id} currentRole={user.role} viewer={viewer} />
+                      <div className="flex justify-end gap-2">
+                        <UserRoleButton userId={user.id} currentRole={user.role} viewer={viewer} />
+                        <SwitchAsButton userId={user.id} role={user.role} viewer={viewer} />
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

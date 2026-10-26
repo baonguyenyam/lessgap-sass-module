@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth"
 import { kyselyAdapter } from "@better-auth/kysely-adapter"
-import { createAuthEndpoint, APIError } from "better-auth/api"
-import { setSessionCookie } from "better-auth/cookies"
+import { createAuthEndpoint, APIError, getSessionFromCtx, sessionMiddleware } from "better-auth/api"
+import { deleteSessionCookie, expireCookie, setSessionCookie } from "better-auth/cookies"
 import { magicLink, twoFactor } from "better-auth/plugins"
 import { z } from "zod"
 import { nextCookies } from "better-auth/next-js"
@@ -14,6 +14,7 @@ import { refusesAutomaticLink } from "@/lib/account-linking"
 import { siteConfig } from "@/config/site"
 import { emailEnabled } from "@/lib/email-transport"
 import { enabledOAuthProviders, oauthCredentials } from "@/lib/oauth-providers"
+import { canSwitchAs, isRole } from "@/lib/roles"
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Fixture sign-ins: dev and demo.
@@ -115,6 +116,96 @@ const demoLogin = () =>
           return ctx.json({ ok: true })
         }
       ),
+    },
+  }) satisfies BetterAuthPlugin
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Switch As (spec/adr/0015-switch-as.md).
+//
+// ROOT opens a session as another account to see the app as that role sees
+// it, then switches back. The mechanism is Better Auth's own admin-plugin
+// impersonation, written out here because that plugin also brings ban fields
+// and a set-role endpoint that would let a role be granted from the API,
+// which ADR 0014 rules out.
+//
+//   start: a new session for the target, `switchedBy` = the ROOT user id,
+//          one hour long; the ROOT session token is kept in a signed cookie.
+//   stop:  the switched session is deleted and the ROOT session restored.
+//
+// Available in every environment, to ROOT only: the rule is `canSwitchAs` in
+// src/lib/roles.ts, and the server actions in src/app/actions/switch-as.ts
+// check it again before calling these endpoints.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const SWITCH_AS_SECONDS = 60 * 60
+const SWITCH_AS_COOKIE = "switch_as_session"
+
+const switchAs = () =>
+  ({
+    id: "switch-as",
+    endpoints: {
+      switchAsStart: createAuthEndpoint(
+        "/switch-as/start",
+        { method: "POST", body: z.object({ userId: z.string().min(1) }), use: [sessionMiddleware] },
+        async (ctx) => {
+          const actor = ctx.context.session
+          const target = await ctx.context.internalAdapter.findUserById(ctx.body.userId)
+          if (!target) throw new APIError("NOT_FOUND")
+
+          const actorRole = (actor.user as { role?: unknown }).role
+          const targetRole = (target as { role?: unknown }).role
+          const allowed =
+            isRole(actorRole) &&
+            isRole(targetRole) &&
+            canSwitchAs(
+              {
+                id: actor.user.id,
+                role: actorRole,
+                switched: Boolean((actor.session as { switchedBy?: string | null }).switchedBy),
+              },
+              { id: target.id, role: targetRole }
+            )
+          if (!allowed) throw new APIError("FORBIDDEN")
+
+          const session = await ctx.context.internalAdapter.createSession(
+            target.id,
+            true,
+            { switchedBy: actor.user.id, expiresAt: new Date(Date.now() + SWITCH_AS_SECONDS * 1000) },
+            true
+          )
+          if (!session) throw new APIError("INTERNAL_SERVER_ERROR")
+
+          const keep = ctx.context.createAuthCookie(SWITCH_AS_COOKIE)
+          await ctx.setSignedCookie(keep.name, actor.session.token, ctx.context.secret, {
+            ...ctx.context.authCookies.sessionToken.attributes,
+            maxAge: SWITCH_AS_SECONDS,
+          })
+          deleteSessionCookie(ctx, true)
+          await setSessionCookie(ctx, { session, user: target }, true)
+          return ctx.json({ ok: true })
+        }
+      ),
+      switchAsStop: createAuthEndpoint("/switch-as/stop", { method: "POST", requireHeaders: true }, async (ctx) => {
+        const current = await getSessionFromCtx(ctx)
+        const switchedBy = (current?.session as { switchedBy?: string | null } | undefined)?.switchedBy
+        if (!current || !switchedBy) throw new APIError("BAD_REQUEST")
+
+        const keep = ctx.context.createAuthCookie(SWITCH_AS_COOKIE)
+        const rootToken = await ctx.getSignedCookie(keep.name, ctx.context.secret)
+        const root = rootToken ? await ctx.context.internalAdapter.findSession(rootToken) : null
+
+        await ctx.context.internalAdapter.deleteSession(current.session.token)
+        expireCookie(ctx, keep)
+        // The ROOT session expired or was revoked meanwhile: end the switched
+        // session anyway and leave the browser signed out, never stuck as the
+        // other account.
+        if (!root || root.session.userId !== switchedBy) {
+          deleteSessionCookie(ctx)
+          return ctx.json({ restored: false })
+        }
+        await setSessionCookie(ctx, root)
+        return ctx.json({ restored: true })
+      }),
     },
   }) satisfies BetterAuthPlugin
 
@@ -260,6 +351,10 @@ export const auth = betterAuth({
     // alive on another device until the cookie expires. Same window, same
     // reasoning, one config line instead of three files.
     cookieCache: { enabled: true, maxAge: 60 },
+    additionalFields: {
+      // Who opened this session with Switch As. Server-owned, like `role`.
+      switchedBy: { type: "string", required: false, input: false },
+    },
   },
 
   emailAndPassword: {
@@ -390,6 +485,7 @@ export const auth = betterAuth({
         customBackupCodesGenerate: generateBackupCodes,
       },
     }),
+    switchAs(),
     ...(process.env.NODE_ENV === "development" ? [devLogin()] : []),
     ...(process.env.DEMO_MODE === "true" ? [demoLogin()] : []),
     // MUST stay last. Server actions cannot set cookies the way a route

@@ -7,6 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- **`Button` sizes `xs`, `icon`, `icon-lg` and variants `outline-primary`, `outline-destructive`**: the small form buttons and icon buttons that were restyled by hand now share one definition
+- **`components.json`** for the shadcn CLI, so `npx shadcn add <component>` drops new primitives into `src/components/ui` instead of being pasted by hand
+- **`PendingButton` takes `variant`/`size`** backed by `buttonVariants`, so submit buttons inside forms get the kit styles instead of a hand-copied `className`
+
+### Changed
+
+- **Hand-rolled controls replaced by kit components**: the admin user search (`Input`/`Button`), the two raw `<textarea>`s (`Textarea`), and the icon buttons in the theme toggle, sidebar collapse, nav menus, footer and back-to-top (`Button` ghost/outline with the icon sizes). Small visual diffs follow on purpose: icon buttons are now circular with one hover color, and the auth submit buttons are `size="lg"` (was a stray `h-12`).
+
 ## [2.6.0] - 2026-10-26
 
 🗄️ **Prisma 8 only.** Prisma 7 is gone from the project: no `schema.prisma`, no `prisma7` CLI, no `_prisma_migrations`. Migrations are Prisma 8 packages in `migrations/app`, starting from a baseline that matches the Prisma 7 schema exactly. This is a MINOR with one step: `git pull`, `pnpm install`, then `pnpm db:adopt` once per database Prisma 7 built (`pnpm check:deploy` says whether one needs it).

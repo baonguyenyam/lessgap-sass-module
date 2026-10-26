@@ -429,6 +429,12 @@
     "removeAdmin": "Remove Admin",
     "roleDemoted": "Admin rights removed. Their session picks it up within a minute."
   },
+  "switchAs": {
+    "button": "Switch as",
+    "failed": "Could not switch to this account",
+    "banner": "You are using the app as {email}. Every change you make is real.",
+    "back": "Switch back"
+  },
   "billing": {
     "checkout": {
       "paid": "Payment successful. Your plan updates in a few seconds.",

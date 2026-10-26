@@ -3,6 +3,7 @@ import { isAdmin } from "@/lib/roles"
 import { getTranslations } from "next-intl/server"
 import Link from "next/link"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { SwitchAsBanner } from "@/components/switch-as-banner"
 import { UserMenu } from "@/components/dashboard/user-menu"
 import { PoweredBy } from "@/components/powered-by"
 import { Logo } from "@/components/logo"
@@ -31,6 +32,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           child (a table) inflates the whole column past the viewport instead of
           scrolling inside its own container. */}
       <div className="flex min-w-0 flex-1 flex-col">
+        <SwitchAsBanner email={user.email} />
         <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-border bg-background px-4 md:px-6">
           <div className="flex min-w-0 items-center gap-3">
             <SidebarCollapseToggle />

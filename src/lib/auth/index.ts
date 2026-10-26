@@ -57,3 +57,13 @@ export async function requireUser(): Promise<CurrentUser> {
 export async function isSignedIn(): Promise<boolean> {
   return (await getCurrentUser()) !== null
 }
+
+/**
+ * Who opened the current session with Switch As, or null for an ordinary
+ * session (spec/adr/0015-switch-as.md). Kept apart from `getCurrentUser` so
+ * that shape stays the five fields it declares.
+ */
+export async function getSwitchedBy(): Promise<string | null> {
+  const session = await auth.api.getSession({ headers: await headers() })
+  return (session?.session as { switchedBy?: string | null } | undefined)?.switchedBy ?? null
+}
