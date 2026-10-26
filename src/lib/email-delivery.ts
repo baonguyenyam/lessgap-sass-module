@@ -46,10 +46,11 @@ export async function deliver(
   kind: string,
   send: () => Promise<ResendOutcome>,
   whenRefused?: string,
+  provider = "Resend",
 ): Promise<boolean> {
   const { error } = await send()
   if (!error) return true
-  console.error(`[email] ${kind} rejected by Resend`, {
+  console.error(`[email] ${kind} rejected by ${provider}`, {
     name: error.name ?? null,
     statusCode: error.statusCode ?? null,
     message: maskAddresses(error.message ?? ""),

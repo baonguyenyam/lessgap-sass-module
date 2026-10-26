@@ -6,10 +6,10 @@
 
 ```mermaid
 flowchart LR
-  V[Visitor] -->|www.platform.com| M[Marketing + signup]
-  O[Owner / staff] -->|app.platform.com| D[Dashboard]
-  P[Platform staff] -->|app.platform.com/platform| A[Platform console]
-  C[Customer] -->|slug.sites-domain.com or their-domain.com| S[Tenant site]
+  V[Visitor] -->|lessgap.app| M[Marketing + signup]
+  O[Owner / staff] -->|app.lessgap.app| D[Dashboard]
+  P[Platform staff] -->|app.lessgap.app/platform| A[Platform console]
+  C[Customer] -->|slug.lessgap.io or their-domain.com| S[Tenant site]
   M & D & A & S --> N[Next.js app on Vercel]
   N --> DB[(PostgreSQL + pgvector)]
   N --> ST[Stripe Billing + Connect]
@@ -23,9 +23,9 @@ internal route. Nothing else in the app reads the hostname.
 
 | Hostname | Surface | Internal route |
 | --- | --- | --- |
-| `www.<platform>`, `<platform>` | Marketing | `src/app/[locale]/(public)` (existing) |
-| `app.<platform>` | Dashboard, platform console, auth | `src/app/(dashboard)`, `src/app/(platform)`, `src/app/(auth)` |
-| `<slug>.<sites-domain>` | Tenant site | rewritten to `src/app/sites/[host]/...` |
+| `lessgap.app`, `www.lessgap.app` (redirects to apex) | Marketing | `src/app/[locale]/(public)` (existing) |
+| `app.lessgap.app` | Dashboard, platform console, auth | `src/app/(dashboard)`, `src/app/(platform)`, `src/app/(auth)` |
+| `<slug>.lessgap.io` | Tenant site | rewritten to `src/app/sites/[host]/...` |
 | any verified custom domain | Tenant site | rewritten to `src/app/sites/[host]/...` |
 | anything else | 404 | — |
 
@@ -107,7 +107,7 @@ registry (`src/modules/registry.ts`) is the only list of modules.
 | Tenant payments | Stripe Connect | Tenants get paid directly, we take an application fee | [0006](./adr/0006-stripe-connect-for-tenant-payments.md) |
 | Chatbot retrieval | pgvector in the same database | One database, tenant filter and RLS apply to embeddings too | [0007](./adr/0007-pgvector-for-rag.md) |
 | Background work | Vercel Cron + a jobs table processed by a cron route | No new infrastructure until volume needs it | [0008](./adr/0008-jobs-table-before-a-queue.md) |
-| Email | Resend (kit) | Already in the kit | — |
+| Email | Brevo now, Amazon SES later, behind `sendEmail()` | Already used by the company; Resend kept as kit fallback | [0009](./adr/0009-brevo-for-email-ses-later.md) |
 | SMS | Twilio, behind an interface | Reminders; consent rules in compliance doc | — |
 | Media | Vercel Blob or S3-compatible storage, tenant-prefixed keys | Images for services, menus, galleries | — |
 

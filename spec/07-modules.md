@@ -104,7 +104,7 @@ The phase column refers to [roadmap.md](./roadmap.md).
 ## notifications
 
 - One sender: `notify(ctx, template, recipient, data)`. Modules never call
-  Resend or Twilio directly.
+  Brevo, SES or Twilio directly; email goes through `sendEmail()` (ADR 0009).
 - Templates per tenant with defaults per vertical and language; the platform
   name never appears in tenant-to-customer messages unless the plan requires the badge.
 - Every message logged in `NotificationLog` with status from provider webhooks.

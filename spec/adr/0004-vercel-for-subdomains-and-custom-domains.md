@@ -12,7 +12,8 @@ on Pro with a soft limit of 100,000 per project, and rate limits of 100
 domain additions and 50 verifications per hour per team.
 
 ## Decision
-Host on Vercel. Sites apex on Vercel nameservers with a wildcard domain.
+Host on Vercel. The platform runs on `lessgap.app` (marketing on the apex,
+dashboard on `app.lessgap.app`). Sites apex on Vercel nameservers with a wildcard domain.
 Custom domains added and verified through the Vercel SDK, from one wrapper in
 `src/platform/domains/vercel.ts`. Tenant sites use a separate apex from the
 dashboard and that apex goes to the Public Suffix List.

@@ -27,7 +27,8 @@ out of scope, even when it looks small: write it down under "Later" instead.
 
 **Scope**
 - Accept or amend ADRs 0001–0008.
-- Choose product name, platform domain and sites domain; buy them; sites apex on Vercel nameservers.
+- Platform domain is `lessgap.app`: add apex, `www` (redirect) and `app` to the Vercel project.
+- Sites domain is `lessgap.io`: move it to Vercel nameservers and add `*.lessgap.io` as a wildcard domain.
 - Add the upstream remote of the kit and document the merge routine (ADR 0001).
 - Create `src/platform/` and `src/modules/` with empty registries and their README-level comments.
 - `scripts/audit-tenancy.mjs` running in CI (passes trivially: no tenant models yet).
@@ -37,7 +38,7 @@ out of scope, even when it looks small: write it down under "Later" instead.
 **Exit criteria**
 - CI green with the tenancy audit step.
 - `spec/adr/0001`–`0008` have status `accepted` or `superseded`.
-- Domains resolve to the Vercel project; `*.<sites-domain>` has a certificate.
+- `lessgap.app` and `app.lessgap.app` serve the deployment over HTTPS; `*.<sites-domain>` has a wildcard certificate.
 
 ## Phase 1 — Tenancy core
 

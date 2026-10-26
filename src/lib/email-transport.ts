@@ -1,6 +1,7 @@
 import { siteConfig } from "@/config/site"
 import { deliver } from "@/lib/email-delivery"
 import type { Resend } from "resend"
+import type { ResendOutcome } from "@/lib/email-delivery"
 
 /**
  * The one place the kit talks to an email provider.
@@ -16,9 +17,20 @@ import type { Resend } from "resend"
  * when it starts, so the Resend SDK is loaded only when an email is sent.
  */
 
+/**
+ * Platform change (spec/adr/0009): Brevo is the provider when BREVO_API_KEY is
+ * set, and wins over Resend. Resend stays as the kit ships it, so an upstream
+ * merge keeps working and a deployment without Brevo behaves as before.
+ */
+function provider(): "brevo" | "resend" | null {
+  if (process.env.BREVO_API_KEY) return "brevo"
+  if (process.env.RESEND_API_KEY) return "resend"
+  return null
+}
+
 /** Whether outgoing email is configured. Sign-in by link, password reset and every notification depend on it. */
 export function emailEnabled(): boolean {
-  return !!process.env.RESEND_API_KEY
+  return provider() !== null
 }
 
 /** The sender of every email. Set EMAIL_FROM to an address on your verified domain. */
@@ -43,6 +55,9 @@ export type OutgoingEmail = {
  * the provider.
  */
 export async function sendEmail(email: OutgoingEmail): Promise<boolean> {
+  if (provider() === "brevo") {
+    return deliver(email.kind, () => sendWithBrevo(email), undefined, "Brevo")
+  }
   const resend = await resendClient()
   return deliver(email.kind, () =>
     resend.emails.send({
@@ -53,6 +68,47 @@ export async function sendEmail(email: OutgoingEmail): Promise<boolean> {
       replyTo: email.replyTo,
     }),
   )
+}
+
+/**
+ * Splits `Name <address>` into its parts, as Brevo wants the sender as an
+ * object. A bare address is accepted too, with no name.
+ */
+export function parseSender(from: string): { name?: string; email: string } {
+  const match = from.match(/^\s*(.*?)\s*<\s*([^<>\s]+)\s*>\s*$/)
+  if (!match) return { email: from.trim() }
+  const name = match[1].replace(/^"|"$/g, "").trim()
+  return name ? { name, email: match[2] } : { email: match[2] }
+}
+
+const BREVO_SEND_URL = "https://api.brevo.com/v3/smtp/email"
+
+/**
+ * One transactional email through Brevo's API, answered in the shape
+ * `deliver()` reads. A refusal (4xx/5xx) resolves with an error, like Resend's
+ * SDK does; a network failure throws, like Resend's does.
+ */
+async function sendWithBrevo(email: OutgoingEmail): Promise<ResendOutcome> {
+  const response = await fetch(BREVO_SEND_URL, {
+    method: "POST",
+    headers: {
+      "api-key": process.env.BREVO_API_KEY!,
+      "content-type": "application/json",
+      accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender: parseSender(EMAIL_FROM),
+      to: [{ email: email.to }],
+      subject: email.subject,
+      htmlContent: email.html,
+      ...(email.replyTo ? { replyTo: { email: email.replyTo } } : {}),
+    }),
+  })
+  if (response.ok) return { error: null }
+  const body = (await response.json().catch(() => null)) as { code?: string; message?: string } | null
+  return {
+    error: { name: body?.code ?? "brevo_error", message: body?.message ?? response.statusText, statusCode: response.status },
+  }
 }
 
 let _resend: Resend | null = null

@@ -31,3 +31,4 @@ Each rejected option and the reason it lost.
 | [0006](./0006-stripe-connect-for-tenant-payments.md) | Stripe Connect for tenant payments | proposed |
 | [0007](./0007-pgvector-for-rag.md) | pgvector in the main database for the chatbot | proposed |
 | [0008](./0008-jobs-table-before-a-queue.md) | A jobs table processed by cron before a queue service | proposed |
+| [0009](./0009-brevo-for-email-ses-later.md) | Brevo for email now, Amazon SES later, one transport | accepted |

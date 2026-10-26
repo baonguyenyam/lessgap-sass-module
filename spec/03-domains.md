@@ -6,8 +6,16 @@
 
 | Domain | Example | Serves |
 | --- | --- | --- |
-| Platform | `madelab.io` (to decide) | `www` marketing, `app` dashboard and platform console |
-| Tenant sites | `madelab.site` (to decide) | `<slug>.madelab.site`, one per tenant |
+| Platform | `lessgap.app` (decided) | apex: marketing, pricing, signup; `app.lessgap.app`: dashboard and platform console; `www` redirects to the apex |
+| Tenant sites | `lessgap.io` (decided; written `<sites-domain>` below) | `<slug>.lessgap.io`, one per tenant |
+
+`.app` is on the browsers' HSTS preload list for the whole TLD: every
+`lessgap.app` hostname is HTTPS-only, with no way to serve plain HTTP. That is
+what we want in production; local development uses `localhost` and is unaffected.
+
+Reserved subdomains of `lessgap.app` for the platform itself: `app`, `api`,
+`www`, `status`, `docs`, `help`, `mail`, `cdn`. Tenant sites never get a
+`lessgap.app` subdomain.
 
 Tenant sites live under a **different apex** from the dashboard. Without that,
 a tenant subdomain is "same site" as `app.` for browsers, and anything served

@@ -31,12 +31,12 @@ Spanish; their customers mostly use English. The dashboard therefore needs
 
 | Actor | Where they work | What they can do |
 | --- | --- | --- |
-| Platform staff | `app.<platform>/platform` | Everything across tenants: plans, switches, themes, impersonation, support |
-| Tenant owner | `app.<platform>/t/<slug>` | Everything inside their tenant, including billing and members |
+| Platform staff | `app.lessgap.app/platform` | Everything across tenants: plans, switches, themes, impersonation, support |
+| Tenant owner | `app.lessgap.app/t/<slug>` | Everything inside their tenant, including billing and members |
 | Tenant manager | same | Content, services, bookings, orders. Not billing or members |
 | Tenant staff | same | Their own calendar and assigned bookings |
 | Customer | the tenant's site | Browse, book, buy, ask for a quote, chat |
-| Visitor | `www.<platform>` | Our marketing site, pricing, signup |
+| Visitor | `lessgap.app` | Our marketing site, pricing, signup |
 
 ## Principles
 
@@ -67,6 +67,5 @@ Spanish; their customers mostly use English. The dashboard therefore needs
 
 ## Open questions
 
-- Product name and the two domains (platform and tenant sites). See [domains.md](./03-domains.md).
 - Which payment models to launch with. See [billing.md](./05-billing.md).
 - Whether existing Madelab clients migrate in, and how their current sites map to themes.
