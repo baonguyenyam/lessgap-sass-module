@@ -69,7 +69,7 @@
       "emailPlaceholder": "you@example.com",
       "passwordPlaceholder": "Password",
       "submit": "Sign in",
-      "magicLink": "✉️ Email me a sign-in link",
+      "magicLink": "Email me a sign-in link",
       "magicLinkTwoFactorNote": "Accounts with two-factor authentication sign in with their password and a code, not with a link.",
       "forgot": "Forgot password?",
       "noAccount": "No account? Sign up",
@@ -125,7 +125,7 @@
       "clearSearch": "Clear search"
     },
     "home": {
-      "greeting": "Welcome back, {name} 👋",
+      "greeting": "Welcome back, {name}",
       "greetingFallback": "there",
       "subtitle": "Here's what's happening with your account.",
       "projectsTitle": "Projects",
@@ -497,15 +497,15 @@
     "newsletterConfirm": "Confirm your spot on the {site} waitlist",
     "newsletterWelcome": "You're on the list",
     "welcomeBody": {
-      "hello": "Hey {name} 👋",
+      "hello": "Hey {name}",
       "helloFallback": "there",
       "$product": {
         "intro": "Welcome to {site}! Your account is ready and there is nothing left to set up.",
-        "bullets": "<p>📁 <strong>Start a project</strong>: create your first one and invite your team</p>\n      <p>⚙️ <strong>Make it yours</strong>: add your name and preferences in settings</p>\n      <p>💳 <strong>Pick a plan</strong>: upgrade when you need more, cancel any time</p>"
+        "bullets": "<p> <strong>Start a project</strong>: create your first one and invite your team</p>\n      <p> <strong>Make it yours</strong>: add your name and preferences in settings</p>\n      <p> <strong>Pick a plan</strong>: upgrade when you need more, cancel any time</p>"
       },
       "$kit": {
         "intro": "Welcome to {site}! Your account is ready. You're now part of a community of developers shipping SaaS products faster.",
-        "bullets": "<p>🔐 <strong>Authentication</strong>: Google & GitHub OAuth, fully configured</p>\n      <p>💳 <strong>Billing</strong>: Stripe checkout ready to go</p>\n      <p>📊 <strong>Dashboard</strong>: Track your subscription and account</p>"
+        "bullets": "<p> <strong>Authentication</strong>: Google & GitHub OAuth, fully configured</p>\n      <p> <strong>Billing</strong>: Stripe checkout ready to go</p>\n      <p> <strong>Dashboard</strong>: Track your subscription and account</p>"
       },
       "whatNext": "Here's what you can do right now:",
       "ready": "Ready to dive in?",
@@ -513,7 +513,7 @@
       "help": "If you have any questions, just reply to this email. We're happy to help."
     },
     "magicLinkBody": {
-      "hello": "Hey there 👋",
+      "hello": "Hey there",
       "intro": "Click the button below to sign in to {site}. The link is valid for 15 minutes and can be used once.",
       "cta": "Sign in to {site} →",
       "ignore": "If you didn't request this email, you can safely ignore it: nothing happens unless the link is clicked."
@@ -532,7 +532,7 @@
       "ignore": "If this was not you, ignore this email and nothing will change — but do check that your password is still yours, because whoever asked was signed in as you."
     },
     "subscriptionBody": {
-      "hello": "Hey {name} 👋",
+      "hello": "Hey {name}",
       "intro": "Your <strong>{plan}</strong> subscription is now active. Thanks for subscribing!",
       "introTrial": "Your <strong>{plan}</strong> free trial has started. Nothing is charged until <strong>{date}</strong>, and you can cancel before then from your billing page.",
       "labelPlan": "Plan:",
@@ -544,7 +544,7 @@
       "changes": "Need to make changes? You can manage your subscription anytime from your billing page."
     },
     "purchaseBody": {
-      "hello": "Hey {name} 👋",
+      "hello": "Hey {name}",
       "intro": "Your <strong>{plan}</strong> purchase is confirmed. It was a one-time payment: no renewals, no recurring billing.",
       "labelPlan": "Plan:",
       "labelAmount": "Amount:",
@@ -573,10 +573,10 @@
     "newsletterWelcomeBody": {
       "intro": "You're in. Here is the deal:",
       "$product": {
-        "bullets": "<p>📬 <strong>One short email</strong> when there is real news to share.</p>\n      <p>🎟️ <strong>Early access</strong> when what you signed up for goes live.</p>"
+        "bullets": "<p> <strong>One short email</strong> when there is real news to share.</p>\n      <p> <strong>Early access</strong> when what you signed up for goes live.</p>"
       },
       "$kit": {
-        "bullets": "<p>📬 <strong>One short email</strong> when there is real news on the Pro.</p>\n      <p>🎟️ <strong>The launch price</strong> of Pro and Pro Studio, before the public announcement on October 31.</p>"
+        "bullets": "<p> <strong>One short email</strong> when there is real news on the Pro.</p>\n      <p> <strong>The launch price</strong> of Pro and Pro Studio, before the public announcement on October 31.</p>"
       },
       "noSpam": "No spam, no daily drip. Unsubscribe anytime with one click.",
       "unsubscribe": "Unsubscribe"
@@ -958,7 +958,7 @@
   "newsletter": {
     "confirmTitle": "Confirm subscription",
     "unsubscribeTitle": "Unsubscribe",
-    "confirmedHeading": "You're in 🎉",
+    "confirmedHeading": "You're in",
     "confirmedBody": {
       "$kit": "Check your inbox: the launch price of Pro and Pro Studio is on its way. If it is not there in a minute, look in Promotions or Spam. After that, one short email when there is real news. Unsubscribe anytime, one click.",
       "$product": "One short email when there is real news, and a discount waiting for you at launch. Unsubscribe anytime, one click."
@@ -989,7 +989,7 @@
     ],
     "ctaLabel": "Contact us",
     "ctaSubject": "{site} Enterprise: let's talk",
-    "ctaBody": "Team size:\n\nWhat we need:\n\n"
+    "ctaBody": "Team size:\n\nWhat we need:"
   },
   "errors": {
     "unauthorized": "Unauthorized",

@@ -69,7 +69,7 @@
             "emailPlaceholder": "bạn@example.com",
             "passwordPlaceholder": "Mật khẩu",
             "submit": "Đăng nhập",
-            "magicLink": "✉️ Gửi liên kết đăng nhập qua email",
+            "magicLink": "Gửi liên kết đăng nhập qua email",
             "magicLinkTwoFactorNote": "Tài khoản bật xác thực hai yếu tố sẽ đăng nhập bằng mật khẩu và mã xác thực, không dùng liên kết.",
             "forgot": "Quên mật khẩu?",
             "noAccount": "Chưa có tài khoản? Đăng ký",
@@ -125,7 +125,7 @@
             "clearSearch": "Xóa tìm kiếm"
         },
         "home": {
-            "greeting": "Chào mừng trở lại, {name} 👋",
+            "greeting": "Chào mừng trở lại, {name}",
             "greetingFallback": "bạn",
             "subtitle": "Đây là những gì đang diễn ra với tài khoản của bạn.",
             "projectsTitle": "Dự án",
@@ -274,36 +274,36 @@
                 "blurb": "Một số hành động không thể hoàn tác. Hãy cẩn trọng."
             },
             "nav": {
-              "label": "Settings sections",
-              "general": "General",
-              "security": "Security",
-              "backup": "Backup",
-              "logs": "Logs"
+                "label": "Các mục cài đặt",
+                "general": "Tổng quan",
+                "security": "Bảo mật",
+                "backup": "Sao lưu",
+                "logs": "Nhật ký"
             },
             "backup": {
-              "title": "Back up your data",
-              "description": "Download a copy of everything this app holds about you, as a JSON file you can keep or take elsewhere.",
-              "includes": {
-                "profile": "Your profile: name, email address, role and when the account was created",
-                "security": "Your sign-in methods and the sessions on record, with their devices and IP addresses",
-                "projects": "Your projects",
-                "billing": "Your subscription, purchases and newsletter status"
-              },
-              "excludes": "Passwords, sign-in tokens, two-factor secrets and backup codes are never included.",
-              "download": "Download my data"
+                "title": "Sao lưu dữ liệu",
+                "description": "Tải xuống bản sao toàn bộ dữ liệu ứng dụng lưu về bạn dưới dạng tệp JSON để lưu giữ hoặc chuyển sang nơi khác.",
+                "includes": {
+                    "profile": "Hồ sơ của bạn: tên, địa chỉ email, vai trò và thời điểm tạo tài khoản",
+                    "security": "Các phương thức đăng nhập và những phiên đăng nhập được ghi nhận, kèm thiết bị và địa chỉ IP",
+                    "projects": "Các dự án của bạn",
+                    "billing": "Gói đăng ký, các giao dịch mua và trạng thái nhận bản tin của bạn"
+                },
+                "excludes": "Tệp sao lưu không bao gồm mật khẩu, mã đăng nhập, khóa bí mật xác thực hai yếu tố và mã dự phòng.",
+                "download": "Tải dữ liệu của tôi"
             },
             "logs": {
-              "title": "Account activity",
-              "description": "Sign-ins and changes to how you get into your account, newest first. Sessions drop off this list once they are revoked or cleaned up after expiring.",
-              "accountCreated": "Account created",
-              "methodAdded": "{method} connected",
-              "passwordAdded": "Password set",
-              "twoFactorEnabled": "Two-factor authentication turned on",
-              "signedIn": "Signed in on {device}",
-              "switchedIn": "Opened by an administrator with Switch As, on {device}",
-              "unknownDevice": "an unknown device",
-              "thisDevice": "This device",
-              "ended": "Ended"
+                "title": "Hoạt động tài khoản",
+                "description": "Các lần đăng nhập và thay đổi phương thức truy cập tài khoản, sắp xếp từ mới nhất. Phiên đăng nhập sẽ biến mất khỏi danh sách khi bị kết thúc hoặc được dọn dẹp sau khi hết hạn.",
+                "accountCreated": "Đã tạo tài khoản",
+                "methodAdded": "Đã kết nối {method}",
+                "passwordAdded": "Đã thiết lập mật khẩu",
+                "twoFactorEnabled": "Đã bật xác thực hai yếu tố",
+                "signedIn": "Đã đăng nhập trên {device}",
+                "switchedIn": "Quản trị viên đã chuyển sang tài khoản này bằng chức năng Switch As trên {device}",
+                "unknownDevice": "thiết bị không xác định",
+                "thisDevice": "Thiết bị này",
+                "ended": "Đã kết thúc"
             }
         },
         "billing": {
@@ -497,15 +497,15 @@
         "newsletterConfirm": "Xác nhận vị trí của bạn trong danh sách chờ {site}",
         "newsletterWelcome": "Bạn đã có tên trong danh sách",
         "welcomeBody": {
-            "hello": "Xin chào {name} 👋",
+            "hello": "Xin chào {name}",
             "helloFallback": "bạn",
             "$product": {
                 "intro": "Chào mừng đến với {site}! Tài khoản của bạn đã sẵn sàng và không cần thiết lập thêm gì nữa.",
-                "bullets": "📁 Bắt đầu dự án: tạo dự án đầu tiên và mời đội ngũ của bạn\n      ⚙️ Cá nhân hóa: thêm tên và tùy chỉnh trong cài đặt\n      💳 Chọn một gói: nâng cấp khi cần mở rộng, hủy bất kỳ lúc nào"
+                "bullets": "Bắt đầu dự án: tạo dự án đầu tiên và mời đội ngũ của bạn\n       Cá nhân hóa: thêm tên và tùy chỉnh trong cài đặt\n       Chọn một gói: nâng cấp khi cần mở rộng, hủy bất kỳ lúc nào"
             },
             "$kit": {
                 "intro": "Chào mừng đến với {site}! Tài khoản của bạn đã sẵn sàng. Bạn hiện là một phần của cộng đồng nhà phát triển xây dựng sản phẩm SaaS nhanh hơn.",
-                "bullets": "🔐 Xác thực: Google & GitHub OAuth, đã được cấu hình đầy đủ\n      💳 Thanh toán: Tích hợp sẵn thanh toán Stripe\n      📊 Bảng điều khiển: Theo dõi gói đăng ký và tài khoản của bạn"
+                "bullets": "Xác thực: Google & GitHub OAuth, đã được cấu hình đầy đủ\n       Thanh toán: Tích hợp sẵn thanh toán Stripe\n       Bảng điều khiển: Theo dõi gói đăng ký và tài khoản của bạn"
             },
             "whatNext": "Dưới đây là những gì bạn có thể làm ngay bây giờ:",
             "ready": "Sẵn sàng trải nghiệm chưa?",
@@ -513,7 +513,7 @@
             "help": "Nếu bạn có bất kỳ câu hỏi nào, chỉ cần phản hồi lại email này. Chúng tôi rất vui được hỗ trợ."
         },
         "magicLinkBody": {
-            "hello": "Xin chào 👋",
+            "hello": "Xin chào",
             "intro": "Nhấp vào nút bên dưới để đăng nhập vào {site}. Liên kết có hiệu lực trong 15 phút và chỉ sử dụng được một lần.",
             "cta": "Đăng nhập vào {site} →",
             "ignore": "Nếu bạn không yêu cầu email này, bạn có thể an tâm bỏ qua: sẽ không có thay đổi nào trừ khi liên kết được nhấp."
@@ -532,7 +532,7 @@
             "ignore": "Nếu đây không phải là bạn, hãy bỏ qua email này và mọi thứ giữ nguyên — nhưng nhớ kiểm tra lại mật khẩu của bạn, vì người yêu cầu thay đổi đã đăng nhập dưới tên bạn."
         },
         "subscriptionBody": {
-            "hello": "Xin chào {name} 👋",
+            "hello": "Xin chào {name}",
             "intro": "Gói đăng ký {plan} của bạn hiện đã kích hoạt. Cảm ơn bạn đã đăng ký!",
             "introTrial": "Chương trình dùng thử miễn phí gói {plan} của bạn đã bắt đầu. Bạn chưa bị tính phí cho đến {date}, và bạn có thể hủy trước thời gian đó tại trang thanh toán.",
             "labelPlan": "Gói:",
@@ -544,7 +544,7 @@
             "changes": "Cần thay đổi? Bạn có thể quản lý gói đăng ký bất kỳ lúc nào từ trang thanh toán."
         },
         "purchaseBody": {
-            "hello": "Xin chào {name} 👋",
+            "hello": "Xin chào {name}",
             "intro": "Đơn hàng gói {plan} của bạn đã được xác nhận. Đây là khoản thanh toán một lần: không gia hạn, không tính phí định kỳ.",
             "labelPlan": "Gói:",
             "labelAmount": "Số tiền:",
@@ -573,10 +573,10 @@
         "newsletterWelcomeBody": {
             "intro": "Bạn đã đăng ký thành công. Chi tiết như sau:",
             "$product": {
-                "bullets": "📬 Một email ngắn khi có tin tức mới thực sự.\n      🎟️ Quyền truy cập sớm khi tính năng bạn đăng ký chính thức ra mắt."
+                "bullets": "Một email ngắn khi có tin tức mới thực sự.\n       Quyền truy cập sớm khi tính năng bạn đăng ký chính thức ra mắt."
             },
             "$kit": {
-                "bullets": "📬 Một email ngắn khi có tin tức mới về bản Pro.\n      🎟️ Mức giá ra mắt của Pro và Pro Studio, trước khi công bố rộng rãi vào ngày 31 tháng 10."
+                "bullets": "Một email ngắn khi có tin tức mới về bản Pro.\n       Mức giá ra mắt của Pro và Pro Studio, trước khi công bố rộng rãi vào ngày 31 tháng 10."
             },
             "noSpam": "Không spam, không tin nhắn rác hàng ngày. Hủy đăng ký bất kỳ lúc nào chỉ bằng một cú nhấp chuột.",
             "unsubscribe": "Hủy đăng ký"
@@ -958,7 +958,7 @@
     "newsletter": {
         "confirmTitle": "Xác nhận đăng ký",
         "unsubscribeTitle": "Hủy đăng ký",
-        "confirmedHeading": "Đã xác nhận 🎉",
+        "confirmedHeading": "Đã xác nhận",
         "confirmedBody": {
             "$kit": "Kiểm tra hộp thư đến: thông tin mức giá ưu đãi ra mắt của Pro và Pro Studio đang được gửi tới. Hủy đăng ký bất kỳ lúc nào.",
             "$product": "Email cập nhật tin tức và mã giảm giá dành cho bạn khi ra mắt. Hủy đăng ký bất kỳ lúc nào."
@@ -989,7 +989,7 @@
         ],
         "ctaLabel": "Liên hệ chúng tôi",
         "ctaSubject": "{site} Enterprise: hãy trao đổi",
-        "ctaBody": "Quy mô nhóm:\n\nNhu cầu của chúng tôi:\n\n"
+        "ctaBody": "Quy mô nhóm:\n\nNhu cầu của chúng tôi:"
     },
     "errors": {
         "unauthorized": "Không có quyền truy cập",
