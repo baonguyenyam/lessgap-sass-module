@@ -31,3 +31,7 @@ Based on the OWASP Top 10; each line maps to a class of defect.
 
 Order matters in destructive flows: run every check that can refuse *before*
 touching an external system (Stripe, email), so a refusal leaves nothing half done.
+
+---
+
+Based on: the [OWASP Top 10 (2021)](https://owasp.org/Top10/) and the OWASP Cheat Sheet Series.

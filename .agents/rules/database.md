@@ -20,3 +20,7 @@ Applies to `prisma/`, `src/lib/prisma.ts` and any code that queries.
 - No raw SQL unless Prisma cannot express it; if needed, use tagged
   `$queryRaw` (parameterised), never `$queryRawUnsafe` with interpolated input.
 - No database access in unit tests. Keep the logic in a pure function and test that.
+
+---
+
+Based on: the Prisma docs on migrations and the client (prisma.io/docs).

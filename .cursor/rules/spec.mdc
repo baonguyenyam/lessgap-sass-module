@@ -1,0 +1,9 @@
+---
+description: Platform spec, roadmap and ADRs
+globs: spec/**
+alwaysApply: false
+---
+
+`spec/` is the source of truth for the platform. Follow the rules in
+@spec/README.md (ADRs for decisions, statuses, spec and code move together)
+and the glossary in @spec/glossary.md.

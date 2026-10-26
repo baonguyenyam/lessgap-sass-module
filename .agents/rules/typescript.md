@@ -23,3 +23,7 @@ Applies to every `.ts` / `.tsx` / `.mts` file.
 - Comments explain *why*, not *what*. Match the existing comment style: full
   sentences, in English.
 - No `console.log` left in committed code. Use the existing error paths.
+
+---
+
+Based on: the TypeScript handbook's strict-mode guidance and the type-safety rules of `typescript-eslint`, adapted to this codebase's style.

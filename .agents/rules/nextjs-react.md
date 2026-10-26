@@ -53,3 +53,7 @@ Follow the shape already used in `src/app/actions/projects.ts`, in this order:
 
 - Page metadata goes through `src/lib/metadata.ts`; JSON-LD through
   `jsonLdScript()` in `src/lib/json-ld.ts`, built from the same value the page renders.
+
+---
+
+Based on: the Next.js docs shipped in `node_modules/next/dist/docs/` and the React docs (react.dev), narrowed to the patterns this codebase uses.

@@ -63,26 +63,81 @@ mode. See `src/components/docs/doc-media.tsx`.
 
 # How to work
 
-These hold for every agent and every task, in Claude Code, Cursor, Codex and
-Devin alike.
+The four principles below are copied verbatim from
+[forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills)
+(MIT, commit `2c60614`, based on Andrej Karpathy's notes on LLM coding
+mistakes). Keep them verbatim so they can be updated from upstream; put
+anything specific to this project in section 5.
 
-1. **Read before you write.** Open the files you will change and the ones that
-   call them. Find the existing pattern and follow it.
-2. **Plan, then act.** For anything beyond a one-line fix, state in a few lines
-   what you will change and why. If the request can be read two ways, name both
-   and ask instead of picking one silently.
-3. **Smallest change that solves the problem.** No speculative abstractions, no
-   options nobody asked for, no "while I was here" refactors.
-4. **Surgical diffs.** Do not rename, reorder, reformat or re-comment code the
-   task does not need. Every changed line traces back to the request.
-5. **Make done checkable.** Turn the task into something you can verify (a test
-   that fails before and passes after, a command that exits 0) and loop until
-   it holds.
-6. **Never guess an API.** Next.js, React, Prisma, Better Auth, Stripe and Zod
-   here are newer than most training data. Read the installed types or docs in
-   `node_modules/` first.
-7. **Report honestly.** Say what you changed, how you verified it, and what you
-   skipped or noticed out of scope. Never claim a check passed without running it.
+**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+
+## 1. Think Before Coding
+
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
+
+Before implementing:
+- State your assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them - don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
+
+## 2. Simplicity First
+
+**Minimum code that solves the problem. Nothing speculative.**
+
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
+
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+
+## 3. Surgical Changes
+
+**Touch only what you must. Clean up only your own mess.**
+
+When editing existing code:
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it - don't delete it.
+
+When your changes create orphans:
+- Remove imports/variables/functions that YOUR changes made unused.
+- Don't remove pre-existing dead code unless asked.
+
+The test: Every changed line should trace directly to the user's request.
+
+## 4. Goal-Driven Execution
+
+**Define success criteria. Loop until verified.**
+
+Transform tasks into verifiable goals:
+- "Add validation" → "Write tests for invalid inputs, then make them pass"
+- "Fix the bug" → "Write a test that reproduces it, then make it pass"
+- "Refactor X" → "Ensure tests pass before and after"
+
+For multi-step tasks, state a brief plan:
+```
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
+```
+
+Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+
+**These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+
+## 5. In this project
+
+- **Read before you write.** Open the files you will change and the ones that
+  call them, and follow the pattern already there.
+- **Never guess an API.** Next.js, React, Prisma, Better Auth, Stripe and Zod
+  here are newer than most training data. Read the installed types or docs in
+  `node_modules/` first.
+- **Report honestly.** Say what you changed, how you verified it, and what you
+  skipped or noticed out of scope. Never claim a check passed without running it.
 
 # Project map
 
@@ -101,6 +156,11 @@ Devin alike.
 | `prisma/` | Schema, migrations, seeds |
 | `docs/`, `content/docs/` | Guides, each in English and Italian |
 | `e2e/` | Playwright end-to-end and accessibility specs |
+| `spec/` | The platform plan: architecture, tenancy, modules, phases, ADRs |
+| `src/platform/` | Platform core: tenancy, entitlements, switches, domains, audit, jobs (from phase 0) |
+| `src/modules/<module>/` | One folder per business module, same shape for all (from phase 1) |
+| `src/themes/<themeKey>/` | Site themes, registered by key (from phase 3) |
+| `src/verticals/` | Industry presets applied at onboarding (from phase 4) |
 
 # Topic rules
 
@@ -111,6 +171,8 @@ Before working in an area, read its rule file in `.agents/rules/`. They are shor
 | Pages, layouts, components, server actions, route handlers | `.agents/rules/nextjs-react.md` |
 | Any TypeScript | `.agents/rules/typescript.md` |
 | `prisma/` or any database query | `.agents/rules/database.md` |
+| `src/platform/`, tenant data, dashboard, sites | `.agents/rules/multi-tenancy.md` |
+| `src/modules/`, entitlements, `src/themes/`, `src/verticals/` | `.agents/rules/modules.md` |
 | Auth, billing, webhooks, admin, user input, secrets | `.agents/rules/security.md` |
 | Tests, or code that needs them | `.agents/rules/testing.md` |
 | Styles, `src/components/`, anything visible | `.agents/rules/ui-accessibility.md` |
@@ -118,6 +180,23 @@ Before working in an area, read its rule file in `.agents/rules/`. They are shor
 
 The nine rules above come first. If a topic rule disagrees with them, follow the
 nine and point out the conflict.
+
+# Building the platform
+
+This repository is becoming a multi-tenant website platform for local
+businesses. The plan is in `spec/`; it is the source of truth for what to
+build and how.
+
+- **Start every platform task** by reading `spec/README.md`, then the phase you
+  were asked to work on in `spec/roadmap.md`, then the documents it links to.
+- **Stay inside the phase.** Build what its scope lists. Anything else you
+  notice goes under "Later" in the roadmap, not into the code.
+- **Use the glossary** (`spec/glossary.md`). One word per concept, in code, schema and UI.
+- **Decisions are ADRs.** If the work needs a decision the spec does not make,
+  or contradicts one it does, stop and propose an ADR in `spec/adr/` instead
+  of deciding in code.
+- **Spec and code move together.** A change that makes the spec untrue
+  updates the spec in the same change.
 
 # Commands
 

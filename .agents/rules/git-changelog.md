@@ -16,3 +16,7 @@
   adopter must change; MINOR adds; PATCH fixes.
 - A change an adopter must act on (migration, renamed env var, moved file) also
   goes in `docs/upgrading.md` and `docs/upgrading.it.md`.
+
+---
+
+Based on: [Conventional Commits 1.0](https://www.conventionalcommits.org/en/v1.0.0/), [Keep a Changelog 1.1](https://keepachangelog.com/en/1.1.0/) and [Semantic Versioning 2.0](https://semver.org/).

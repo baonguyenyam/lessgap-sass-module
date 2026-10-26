@@ -1,0 +1,7 @@
+---
+description: Module structure, entitlements, themes and verticals
+globs: src/modules/**,src/platform/entitlements/**,src/themes/**,src/verticals/**
+alwaysApply: false
+---
+
+Follow @.agents/rules/modules.md

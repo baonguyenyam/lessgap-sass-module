@@ -14,3 +14,7 @@
   boundary (`vi.mock`) or pass the dependency in.
 - Never weaken, skip or delete a failing test to make a change pass. If a test
   is wrong, say so and explain why before changing it.
+
+---
+
+Based on: the Vitest and Playwright docs, and the test-first bug fix of Karpathy's goal-driven execution (see AGENTS.md).

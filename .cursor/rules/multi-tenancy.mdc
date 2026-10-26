@@ -1,0 +1,7 @@
+---
+description: Multi-tenant isolation rules for platform code
+globs: src/platform/**,src/modules/**,src/app/(dashboard)/**,src/app/(platform)/**,src/app/sites/**,prisma/**
+alwaysApply: false
+---
+
+Follow @.agents/rules/multi-tenancy.md

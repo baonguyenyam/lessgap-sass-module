@@ -16,3 +16,7 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
   - colour is never the only signal; text contrast at least 4.5:1;
   - decorative images get `alt=""` and `aria-hidden`; meaningful ones a real `alt`.
 - All visible text comes from `src/locales/en.json` (see AGENTS.md).
+
+---
+
+Based on: [WCAG 2.1 AA](https://www.w3.org/TR/WCAG21/) and the Tailwind CSS 4 and Radix UI docs.
