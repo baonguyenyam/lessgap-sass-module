@@ -30,8 +30,8 @@ const menus = {
   admin: [{ href: "/admin", key: "overview", icon: LayoutGrid, exact: true }],
 }
 
-/** The kit's manual, published with every release: the same text as docs/ in your clone. */
-export const KIT_DOCS_URL = "https://openstarterkit.dev/docs"
+/** The kit's manual, served from this deployment: the same text as docs/. */
+export const KIT_DOCS_URL = "/docs"
 
 function linkClass(active: boolean) {
   return cn(

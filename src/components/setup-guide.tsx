@@ -105,7 +105,7 @@ export async function SetupGuide({ step }: { step: SetupStep }) {
             version says. The same text also ships in the clone, at
             docs/getting-started.md. */}
         <a
-          href="https://openstarterkit.dev/docs/getting-started"
+          href="/docs/getting-started"
           target="_blank"
           rel="noreferrer"
           className="font-medium underline underline-offset-4"

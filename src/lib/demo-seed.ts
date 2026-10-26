@@ -1,4 +1,5 @@
 import type { PrismaClient, SubscriptionStatus, BillingInterval } from "@prisma/client"
+import { hashPassword } from "./password"
 
 /**
  * The demo dataset, and the function that (re)writes it.
@@ -194,6 +195,26 @@ export async function seedDemoData(prisma: PrismaClient): Promise<DemoSeedResult
       emailVerified: true,
       role: "ADMIN",
       createdAt: daysAgo(90),
+    },
+  })
+
+  // lessGAP admin — a real credential account, so email+password sign-in works
+  // on this deployment. bcrypt via the same helper the auth config uses.
+  const admin = await prisma.user.create({
+    data: {
+      email: "baonguyenyam@gmail.com",
+      name: "Bao Nguyen",
+      emailVerified: true,
+      role: "ADMIN",
+      createdAt: daysAgo(90),
+    },
+  })
+  await prisma.account.create({
+    data: {
+      userId: admin.id,
+      providerId: "credential",
+      accountId: admin.id,
+      password: await hashPassword("adminadmin"),
     },
   })
 
