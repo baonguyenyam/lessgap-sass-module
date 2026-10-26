@@ -11,7 +11,7 @@ config({ path: [".env.local", ".env"], quiet: true });
 export default definePrismaConfig({
   orm: definePostgresConfig({
     contract: "prisma/contract.prisma",
-    output: "generated/prisma8",
+    output: "src/generated/prisma8",
     db: {
       connection: process.env["DATABASE_URL"],
     },

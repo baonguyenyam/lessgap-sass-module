@@ -19,13 +19,16 @@ config({ path: [".env.local", ".env"], quiet: true })
 async function main() {
   // Imported after dotenv has run: src/lib/db8.ts reads DATABASE_URL while
   // its module initializes.
-  const { prisma } = await import("../src/lib/prisma")
-  const { seedDemoData } = await import("../src/lib/demo-seed")
+  const { prisma } = await import("@/lib/prisma")
+  const { seedDemoData } = await import("@/lib/demo-seed")
+  const { grantRootFromConfig } = await import("@/lib/root-accounts")
   try {
     const { users, subscriptions, purchases, projects } = await seedDemoData(prisma)
     console.log(
       `Demo seed complete: ${users} users, ${subscriptions} subscriptions, ${purchases} purchases, ${projects} projects`
     )
+    const roots = await grantRootFromConfig(prisma)
+    if (roots > 0) console.log(`ROOT granted to ${roots} account(s) from ROOT_EMAILS`)
   } finally {
     await prisma.$disconnect()
   }

@@ -15,7 +15,8 @@ vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }))
 
 const { setUserRole } = await import("./admin")
 
-const asAdmin = () => session.mockResolvedValue({ user: { id: "admin-1", role: "ADMIN" } })
+// Only ROOT changes roles (spec/adr/0014-root-role.md).
+const asRoot = () => session.mockResolvedValue({ user: { id: "root-1", role: "ROOT" } })
 
 beforeEach(() => {
   session.mockReset()
@@ -30,14 +31,29 @@ describe("setUserRole", () => {
     expect(updateMany).not.toHaveBeenCalled()
   })
 
-  it("refuses a signed-in caller who is not an admin", async () => {
-    session.mockResolvedValue({ user: { id: "u2", role: "USER" } })
-    await expect(setUserRole("u1", "ADMIN", "USER")).rejects.toThrow("Unauthorized")
+  it("refuses a signed-in caller who is not ROOT, admins included", async () => {
+    for (const role of ["USER", "ADMIN"]) {
+      session.mockResolvedValue({ user: { id: "u2", role } })
+      await expect(setUserRole("u1", "ADMIN", "USER")).rejects.toThrow("Unauthorized")
+    }
+    expect(updateMany).not.toHaveBeenCalled()
+  })
+
+  it("never grants or removes ROOT", async () => {
+    asRoot()
+    await expect(setUserRole("u1", "ROOT", "ADMIN")).rejects.toThrow(/not allowed/)
+    await expect(setUserRole("r2", "USER", "ROOT")).rejects.toThrow(/not allowed/)
+    expect(updateMany).not.toHaveBeenCalled()
+  })
+
+  it("refuses a change to the caller's own role", async () => {
+    asRoot()
+    await expect(setUserRole("root-1", "USER", "ADMIN")).rejects.toThrow(/not allowed/)
     expect(updateMany).not.toHaveBeenCalled()
   })
 
   it("promotes when the row still holds the role the admin was looking at", async () => {
-    asAdmin()
+    asRoot()
     await expect(setUserRole("u1", "ADMIN", "USER")).resolves.toEqual({ role: "ADMIN" })
     expect(updateMany).toHaveBeenCalledWith({
       where: { id: "u1", role: "USER" },
@@ -52,13 +68,13 @@ describe("setUserRole", () => {
    * "User promoted to USER".
    */
   it("refuses instead of demoting when the role moved under a stale page", async () => {
-    asAdmin()
+    asRoot()
     updateMany.mockResolvedValue({ count: 0 })
     await expect(setUserRole("u1", "ADMIN", "USER")).rejects.toThrow(/changed since/)
   })
 
   it("refuses a request that would not change anything", async () => {
-    asAdmin()
+    asRoot()
     await expect(setUserRole("u1", "ADMIN", "ADMIN")).rejects.toThrow(/already set/)
     expect(updateMany).not.toHaveBeenCalled()
   })
@@ -66,7 +82,7 @@ describe("setUserRole", () => {
   it("never writes a role the caller did not ask for", async () => {
     // The role written comes from the argument, never from what the row holds:
     // that is the whole difference from the toggle this replaced.
-    asAdmin()
+    asRoot()
     await setUserRole("u1", "USER", "ADMIN")
     expect(updateMany).toHaveBeenCalledWith({
       where: { id: "u1", role: "ADMIN" },

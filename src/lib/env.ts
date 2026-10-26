@@ -88,6 +88,9 @@ export const envSchema = z
     // demo, so this is not a half-done configuration worth stopping a boot for.
     CRON_SECRET: optional,
 
+    // Accounts the seeds promote to ROOT (src/lib/root-accounts.ts), comma separated.
+    ROOT_EMAILS: optional,
+
     NEXT_PUBLIC_APP_URL: optional,
     NEXT_PUBLIC_DEMO_URL: optional,
     NEXT_PUBLIC_CONTACT_EMAIL: optional,

@@ -41,7 +41,7 @@ jobs:
       - name: Emit Prisma contract
         run: |
           pnpm exec prisma contract emit
-          git diff --exit-code -- generated/ || (echo "generated/prisma8 is stale: run pnpm db:emit and commit" && exit 1)
+          git diff --exit-code -- src/generated/prisma8/ || (echo "src/generated/prisma8 is stale: run pnpm db:emit and commit" && exit 1)
 
       - name: Check migration graph
         run: pnpm exec prisma migration check

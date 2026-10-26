@@ -1,5 +1,6 @@
 import { test, expect, type Page } from "@playwright/test"
 import AxeBuilder from "@axe-core/playwright"
+import { freshEmail as newFreshEmail } from "./fresh-email"
 
 /**
  * WCAG 2.1 AA, on every surface rather than on the marketing pages alone.
@@ -31,7 +32,7 @@ const PUBLIC_PAGES = [
 ]
 
 const password = "correct horse battery staple"
-const freshEmail = () => `e2e-a11y-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@example.com`
+const freshEmail = () => newFreshEmail("a11y")
 
 async function scan(page: Page, label: string) {
   // Measured with reduced motion, which is not a way of quieting the audit but

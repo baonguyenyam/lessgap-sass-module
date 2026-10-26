@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test"
 import { createHmac } from "node:crypto"
+import { freshEmail as newFreshEmail } from "./fresh-email"
 
 /**
  * Two-factor authentication, end to end (2.2).
@@ -17,7 +18,7 @@ import { createHmac } from "node:crypto"
  */
 
 const password = "correct horse battery staple"
-const freshEmail = () => `e2e-2fa-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@example.com`
+const freshEmail = () => newFreshEmail("2fa")
 
 /** RFC 4648 base32, the encoding an otpauth:// secret arrives in. */
 function base32Decode(input: string): Buffer {

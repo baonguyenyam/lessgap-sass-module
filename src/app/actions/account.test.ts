@@ -177,6 +177,17 @@ describe("deleteAccount", () => {
     expect(deleteUser).not.toHaveBeenCalled()
   })
 
+  it("refuses the last ROOT, whatever the number of admins", async () => {
+    getCurrentUser.mockResolvedValue({ id: "u1", email: "me@example.com", role: "ROOT" })
+    findUser.mockResolvedValue({ email: "me@example.com", role: "ROOT", subscription: live })
+    countUsers.mockResolvedValue(1)
+    expect(await redirectOf(() => deleteAccount(confirm("me@example.com")))).toBe(
+      "/dashboard/settings?error=last-root"
+    )
+    expect(cancelSubscription).not.toHaveBeenCalled()
+    expect(deleteUser).not.toHaveBeenCalled()
+  })
+
   it("cancels a live subscription, then deletes, when another admin remains", async () => {
     findUser.mockResolvedValue({ email: "me@example.com", role: "ADMIN", subscription: live })
     countUsers.mockResolvedValue(2)

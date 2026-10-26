@@ -1,4 +1,5 @@
 import { requireUser } from "@/lib/auth"
+import { isAdmin } from "@/lib/roles"
 import { getTranslations } from "next-intl/server"
 import Link from "next/link"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -23,7 +24,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <Logo animated wordmarkClassName="sidebar-collapsed:hidden" />
           </Link>
         </div>
-        <SidebarNav variant="dashboard" showAdminLink={user.role === "ADMIN"} />
+        <SidebarNav variant="dashboard" showAdminLink={isAdmin(user.role)} />
       </aside>
 
       {/* min-w-0: without it this flex item keeps `min-width: auto`, so any wide
@@ -40,7 +41,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
             />
           </div>
           <div className="flex items-center gap-1 md:hidden">
-            <MobileNav variant="dashboard" showAdminLink={user.role === "ADMIN"} />
+            <MobileNav variant="dashboard" showAdminLink={isAdmin(user.role)} />
             <Logo animated wordmarkClassName="text-base font-bold text-foreground" />
           </div>
           <div className="flex items-center gap-3 ml-auto">

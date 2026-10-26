@@ -1,7 +1,7 @@
 import postgres from "@prisma/orm-postgres/runtime"
 import { contractFromJson } from "@prisma/orm-postgres/static"
-import type { Contract } from "../../generated/prisma8/contract.d"
-import contractJson from "../../generated/prisma8/contract.json" with { type: "json" }
+import type { Contract } from "@/generated/prisma8/contract.d"
+import contractJson from "@/generated/prisma8/contract.json" with { type: "json" }
 
 /**
  * The Prisma ORM 8 client. `db.orm.public.<Model>` is the typed ORM surface;

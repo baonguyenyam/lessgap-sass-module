@@ -42,6 +42,7 @@ const MESSAGE_IS_ERROR: Record<string, boolean> = {
   confirm: true,
   subscription: true,
   "last-admin": true,
+  "last-root": true,
   unlink: true,
   policy: true,
   current: true,

@@ -25,6 +25,7 @@ Brief task:
 - [ ] No secrets, no `.env`, no personal data in logs
 - [ ] Spec, ADR or brief updated if behaviour or a decision changed
 - [ ] `CHANGELOG.md` entry if user-visible
+- [ ] A fixed error that could recur is recorded in `.agents/memory/lessons.md`
 
 ## Findings
 

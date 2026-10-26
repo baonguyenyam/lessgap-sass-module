@@ -1,5 +1,6 @@
 import { getCurrentUser } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { isAdmin } from "@/lib/roles"
 
 /**
  * CSV export of the newsletter list, admin-only. Includes every state
@@ -9,7 +10,7 @@ import { prisma } from "@/lib/prisma"
  */
 export async function GET() {
   const user = await getCurrentUser()
-  if (!user || user.role !== "ADMIN") {
+  if (!user || !isAdmin(user.role)) {
     return new Response("Forbidden", { status: 403 })
   }
 

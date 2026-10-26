@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test"
+import { freshEmail as newFreshEmail } from "./fresh-email"
 
 /**
  * Signing in as an existing user with email and password.
@@ -15,7 +16,7 @@ import { test, expect } from "@playwright/test"
  */
 
 const password = "correct horse battery staple"
-const freshEmail = () => `e2e-login-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@example.com`
+const freshEmail = () => newFreshEmail("login")
 
 test("an existing user can sign in with email and password", async ({ browser }) => {
   const email = freshEmail()

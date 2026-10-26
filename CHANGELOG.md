@@ -16,6 +16,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 - **Prisma 8 migrations** in `migrations/app`: `kit_baseline` (the schema the Prisma 7 migrations produced, including the `TwoFactor.updatedAt` default) and `kit_plan_features_required` (`Plan.features` becomes required, with a backfill of any NULL to `{}` first)
 - **`pnpm db:adopt`**: signs a database Prisma 7 built at the baseline (Prisma verifies the schema first and refuses a mismatch), applies the migrations after it and verifies; `--drop-legacy-table` removes `_prisma_migrations`
 - **Database scripts**: `db:emit`, `db:plan`, `db:migrate`, `db:status`, `db:verify`, next to `db:reset` and `db:reset:demo`
+- **ROOT role** above ADMIN (spec/adr/0014-root-role.md): only ROOT changes roles (now both "Make Admin" and "Remove Admin"), ROOT is granted only by `ROOT_EMAILS` through the seeds, and the last ROOT cannot delete their account. Every role check goes through `src/lib/roles.ts`
+- **One way to make ids** (spec/adr/0013-identifier-strategy.md): `src/lib/ids.ts` with CUID2, UUID v7 and NanoID codes on the same `uniku` generators Prisma 8 uses; lint rejects other generators and `crypto.randomUUID()`
+- **Project memory for every agent**: `.agents/memory/lessons.md`, read at the start of each task and extended whenever an error is fixed
 - **CI** emits the contract and fails on stale artefacts, checks the migration graph, and applies every migration to a fresh Postgres and verifies it against the contract in strict mode
 
 ### Changed
@@ -26,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ### Removed
 
+- Parent-relative imports (`../`): lint enforces `@/` (and `#src/` in plain Node scripts); the Prisma 8 artefacts moved to `src/generated/prisma8` for it
 - `@prisma/prisma7`, `prisma7.config.ts`, `prisma/schema.prisma`, the Prisma 7 migrations folder (kept in git history) and `ts-node`
 - New code can no longer import `@prisma/client`, `@prisma/adapter-pg`, `@prisma/prisma7` (lint), nor `@/lib/prisma` from `src/platform`, `src/modules`, `src/themes`, `src/verticals` and `tests`
 

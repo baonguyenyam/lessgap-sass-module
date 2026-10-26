@@ -23,7 +23,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'443e445118308f1cbde9721614e1678ce840f138f0dde25340e64d5edba25a7d'>;
+  StorageHashBase<'6537a51315de601b1ef71dffb3c857257730401726744069f6f97681de139818'>;
 export type ExecutionHash =
   ExecutionHashBase<'cbedb4da5dc2e1b46867c3be26f34e00e4cb5e092148412552e5b2642130d5b2'>;
 export type ProfileHash =
@@ -261,7 +261,10 @@ type FieldTypeOverrides = {
         };
       };
       readonly User: {
-        readonly role: { readonly output: 'USER' | 'ADMIN'; readonly input: 'USER' | 'ADMIN' };
+        readonly role: {
+          readonly output: 'USER' | 'ADMIN' | 'ROOT';
+          readonly input: 'USER' | 'ADMIN' | 'ROOT';
+        };
       };
     };
   };
@@ -301,7 +304,10 @@ type ColumnTypeOverrides = {
       };
     };
     readonly User: {
-      readonly role: { readonly output: 'USER' | 'ADMIN'; readonly input: 'USER' | 'ADMIN' };
+      readonly role: {
+        readonly output: 'USER' | 'ADMIN' | 'ROOT';
+        readonly input: 'USER' | 'ADMIN' | 'ROOT';
+      };
     };
   };
 };
@@ -1468,7 +1474,7 @@ type ContractBase = Omit<
             };
             readonly Role: {
               readonly kind: 'valueSet';
-              readonly values: readonly ['USER', 'ADMIN'];
+              readonly values: readonly ['USER', 'ADMIN', 'ROOT'];
             };
             readonly SubscriptionStatus: {
               readonly kind: 'valueSet';

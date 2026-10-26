@@ -5,7 +5,8 @@ import { prisma } from "@/lib/prisma"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { PromoteUserButton } from "@/components/admin/promote-user-button"
+import { UserRoleButton } from "@/components/admin/user-role-button"
+import { isAdmin } from "@/lib/roles"
 import { RevenueChart } from "@/components/admin/revenue-chart"
 import { mrrHistory, monthlyEquivalent, type MrrSubscription } from "@/lib/metrics"
 
@@ -96,7 +97,8 @@ export default async function AdminPage({
   const t = await getTranslations("admin")
   const format = await getFormatter()
   const user = await getCurrentUser()
-  if (!user || user.role !== "ADMIN") redirect("/dashboard")
+  if (!user || !isAdmin(user.role)) redirect("/dashboard")
+  const viewer = { id: user.id, role: user.role }
 
   const params = await searchParams
   // Guard against non-numeric ?page (e.g. ?page=abc → NaN), which would flow into
@@ -192,7 +194,7 @@ export default async function AdminPage({
                       <p className="truncate text-xs text-muted-foreground">{user.email}</p>
                     </div>
                   </div>
-                  <Badge variant={user.role === "ADMIN" ? "default" : "outline"}>{user.role}</Badge>
+                  <Badge variant={isAdmin(user.role) ? "default" : "outline"}>{user.role}</Badge>
                 </div>
                 <div className="mt-3 flex flex-wrap items-center gap-2">
                   {user.subscription ? (
@@ -209,11 +211,9 @@ export default async function AdminPage({
                     {t("joined", { date: formatJoined(format, user.createdAt) })}
                   </span>
                 </div>
-                {user.role !== "ADMIN" && (
-                  <div className="mt-3">
-                    <PromoteUserButton userId={user.id} currentRole={user.role} />
-                  </div>
-                )}
+                <div className="mt-3 empty:hidden">
+                  <UserRoleButton userId={user.id} currentRole={user.role} viewer={viewer} />
+                </div>
               </div>
             ))}
             {users.length === 0 && (
@@ -260,7 +260,7 @@ export default async function AdminPage({
                       )}
                     </TableCell>
                     <TableCell>
-                      <Badge variant={user.role === "ADMIN" ? "default" : "outline"}>
+                      <Badge variant={isAdmin(user.role) ? "default" : "outline"}>
                         {user.role}
                       </Badge>
                     </TableCell>
@@ -270,7 +270,7 @@ export default async function AdminPage({
                       </span>
                     </TableCell>
                     <TableCell>
-                      <PromoteUserButton userId={user.id} currentRole={user.role} />
+                      <UserRoleButton userId={user.id} currentRole={user.role} viewer={viewer} />
                     </TableCell>
                   </TableRow>
                 ))}

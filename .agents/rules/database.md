@@ -1,6 +1,6 @@
 # Database (Prisma ORM 8 + PostgreSQL)
 
-Applies to `prisma/`, `migrations/`, `generated/prisma8/`, `src/lib/db8.ts`,
+Applies to `prisma/`, `migrations/`, `src/generated/prisma8/`, `src/lib/db8.ts`,
 `src/lib/prisma.ts`, `src/platform/db.ts`, `scripts/backfills/` and any code that
 queries. Full standard: `spec/12-migrations-and-data.md`. Reference for the
 installed Prisma version: the `prisma-8` skill (`.claude/skills/prisma-8/`);
@@ -13,7 +13,7 @@ read its routing table and the reference for the task before writing code.
   `pnpm db:emit`, then `pnpm db:plan --name <owner>_<change>`, review the
   package, fill any `placeholder(...)` with a data transform, self-emit
   (`node migrations/app/<dir>/migration.ts`), then `pnpm db:migrate`. Commit the
-  contract, `generated/prisma8/`, the migration package and the snapshot together.
+  contract, `src/generated/prisma8/`, the migration package and the snapshot together.
 - Before planning, the `db` ref must point at the newest migration's `to` hash
   (`pnpm prisma migration ref set db <hash>`); a plan that says
   `from: (baseline)` over existing migrations is a mistake, stop.
@@ -39,6 +39,9 @@ read its routing table and the reference for the task before writing code.
   `migrations/app`. Do not hand-edit it.
 - Select only what you use on hot paths and lists; paginate lists. Multiple
   writes that must succeed together go in one transaction.
+- Ids follow ADR 0013: `@onCreate(cuid(2))` for business records, `@onCreate(uuid(7))`
+  for append-only high-volume tables, codes and tokens from `@/lib/ids`. Lint
+  rejects every other generator.
 - Money is `Int` cents; time is UTC plus the tenant's IANA time zone.
 - `pnpm db:reset` is the only reset command, and only for development databases.
 

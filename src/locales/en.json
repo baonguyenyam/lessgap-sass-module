@@ -256,7 +256,8 @@
         "email-invalid": "That does not look like an email address.",
         "email-same": "That is already your address.",
         "email-change": "The address could not be changed. Try again in a moment.",
-        "rate": "Too many attempts. Try again in a few minutes."
+        "rate": "Too many attempts. Try again in a few minutes.",
+        "last-root": "You are the only ROOT account. Add another one to ROOT_EMAILS and run the seed before deleting this account."
       },
       "deleteAccount": {
         "heading": "Delete this account",
@@ -424,7 +425,9 @@
     "noSubscribers": "No subscribers yet. The signup form lives on the pricing page.",
     "makeAdmin": "Make Admin",
     "rolePromoted": "User promoted to admin. Their session picks it up within a minute.",
-    "roleFailed": "Failed to update role"
+    "roleFailed": "Failed to update role",
+    "removeAdmin": "Remove Admin",
+    "roleDemoted": "Admin rights removed. Their session picks it up within a minute."
   },
   "billing": {
     "checkout": {

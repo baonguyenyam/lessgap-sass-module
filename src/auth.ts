@@ -244,7 +244,7 @@ export const auth = betterAuth({
       // can set it, so no one signs up as an admin. The values stay uppercase to
       // match the Prisma enum, which is what the admin panel and its tests read.
       role: {
-        type: ["USER", "ADMIN"],
+        type: ["USER", "ADMIN", "ROOT"],
         required: false,
         defaultValue: "USER",
         input: false,

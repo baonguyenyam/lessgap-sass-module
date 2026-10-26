@@ -7,6 +7,7 @@ import { z } from "zod"
 import { auth } from "@/auth"
 import { getCurrentUser } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { isAdmin, isRoot } from "@/lib/roles"
 import { passwordSchema } from "@/lib/password"
 import { stripe } from "@/lib/stripe"
 import { checkRateLimit } from "@/lib/rate-limit"
@@ -141,8 +142,13 @@ export async function deleteAccount(formData: FormData) {
   // The last administrator cannot remove themselves, or the deployment is left
   // with no way back into the admin panel. This refusal comes before Stripe:
   // refusing after the cancel would keep the account but lose its subscription.
-  if (user.role === "ADMIN") {
-    const admins = await prisma.user.count({ where: { role: "ADMIN" } })
+  // The same holds one level up: the last ROOT cannot remove themselves, or
+  // nobody is left who can change roles. ROOT counts as an administrator too.
+  if (isRoot(user.role)) {
+    const roots = await prisma.user.count({ where: { role: "ROOT" } })
+    if (roots <= 1) redirect(`${SETTINGS}?error=last-root`)
+  } else if (isAdmin(user.role)) {
+    const admins = await prisma.user.count({ where: { role: { in: ["ADMIN", "ROOT"] } } })
     if (admins <= 1) redirect(`${SETTINGS}?error=last-admin`)
   }
 

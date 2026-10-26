@@ -23,7 +23,7 @@ export default async function globalTeardown() {
     return
   }
 
-  const { prisma } = await import("../src/lib/prisma")
+  const { prisma } = await import("@/lib/prisma")
   try {
     const { count } = await prisma.user.deleteMany({ where: { email: { startsWith: "e2e-" } } })
     if (count > 0) console.log(`\n  cleaned up ${count} test account(s)`)

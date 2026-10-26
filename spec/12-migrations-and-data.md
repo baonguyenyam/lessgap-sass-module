@@ -33,7 +33,7 @@ The project runs Prisma 8 only. The `prisma-8` skill (`.claude/skills/prisma-8/`
 is the reference for every command below; read it before the first change.
 
 1. Edit `prisma/contract.prisma` (the owner's section).
-2. `pnpm db:emit` regenerates `generated/prisma8/`.
+2. `pnpm db:emit` regenerates `src/generated/prisma8/`.
 3. Check the `db` ref points at the newest migration's `to` hash
    (`pnpm prisma migration list`, `pnpm prisma migration ref set db <hash>`).
 4. `pnpm db:plan --name <owner>_<change>`. Read the output: the `from:` line
@@ -45,7 +45,7 @@ is the reference for every command below; read it before the first change.
 6. Advance the ref to the new migration: `pnpm prisma migration ref set db <to-hash>`.
 7. `pnpm db:migrate` locally; run the tests. `pnpm prisma migration check` must pass.
 8. Classify every new model in `src/platform/tenancy/models.ts` (from phase 0).
-9. Commit the contract, `generated/prisma8/`, the migration package, its
+9. Commit the contract, `src/generated/prisma8/`, the migration package, its
    snapshot under `migrations/snapshots/` and the ref together.
 
 ### The baseline and databases built by Prisma 7

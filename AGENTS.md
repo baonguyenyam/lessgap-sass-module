@@ -128,6 +128,19 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - **Report honestly.** Say what you changed, how you verified it, and what you
   skipped or noticed out of scope. Never claim a check passed without running it.
 
+# Project memory
+
+`.agents/memory/` is the memory every agent shares here, whatever the tool.
+
+- **At the start of every task, read `.agents/memory/lessons.md`.** It lists
+  mistakes already made in this repository and the rule that prevents each.
+- **When you fix an error** that took more than one attempt, or came from a
+  wrong assumption about a tool, a library or this codebase, add a lesson to
+  that file in the same change (format in `.agents/memory/README.md`). When a
+  lesson becomes a standing rule, move it into these rules, a lint rule or a
+  test, and leave a one-line pointer.
+- Never put secrets, personal data or real database hostnames in it.
+
 # Project map
 
 | Path | What lives there |
@@ -202,7 +215,7 @@ pnpm typecheck              # type-check
 pnpm lint                   # ESLint
 pnpm test                   # Vitest unit tests
 pnpm test:e2e               # Playwright
-pnpm db:emit                # after editing prisma/contract.prisma: regenerate generated/prisma8
+pnpm db:emit                # after editing prisma/contract.prisma: regenerate src/generated/prisma8
 pnpm db:plan --name <owner>_<change>   # plan a migration from the contract change
 pnpm db:migrate             # apply pending migrations to the database in .env
 pnpm db:status              # which migrations a database has and lacks
@@ -220,7 +233,7 @@ the `prisma-8` skill (`.claude/skills/prisma-8/`, same copy under `.agents/`,
 training data about Prisma is older than it.
 
 - Contract (the schema): `prisma/contract.prisma`. Emitted artefacts:
-  `generated/prisma8/` (never edit; `pnpm db:emit` rewrites them, CI fails if stale).
+  `src/generated/prisma8/` (never edit; `pnpm db:emit` rewrites them, CI fails if stale).
 - Migrations: `migrations/app/<timestamp>_<owner>_<change>/`, planned with
   `pnpm db:plan`, never written by hand except the holes the planner leaves
   (data transforms). The `db` ref in `migrations/app/refs/` must point at the
@@ -242,6 +255,8 @@ Run these, do not assume them:
 - New logic and every bug fix come with a test.
 - User-visible changes have a `CHANGELOG.md` entry.
 - The diff holds only what the task needed: no secrets, no `.env`, no debug logs.
+- An error you fixed along the way that could recur has a lesson in
+  `.agents/memory/lessons.md`.
 - Platform work: `pnpm test:integration`, `pnpm modules:check` and
   `pnpm audit:tenancy` pass once they exist (phase 0), the brief task is
   ticked, and the PR uses `.github/pull_request_template.md`.

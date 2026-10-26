@@ -185,9 +185,12 @@ trialEndsAt          TimestampString(3)?
     REFUNDED = "REFUNDED"
   }
 
+  // USER < ADMIN < ROOT (spec/adr/0014-root-role.md). ROOT is granted only by
+  // configuration (ROOT_EMAILS), never from the UI.
   native_enum Role {
     USER = "USER"
     ADMIN = "ADMIN"
+    ROOT = "ROOT"
   }
 
   native_enum SubscriptionStatus {

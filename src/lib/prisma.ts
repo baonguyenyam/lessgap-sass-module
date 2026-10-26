@@ -1,6 +1,6 @@
 import { and, not, or } from "@prisma/orm-postgres/orm-client"
 import { db8 } from "@/lib/db8"
-import type { FieldOutputTypes, Models } from "../../generated/prisma8/contract.d"
+import type { FieldOutputTypes, Models } from "@/generated/prisma8/contract.d"
 
 /**
  * Prisma ORM 7-shaped facade over the Prisma ORM 8 client (`db8`).
@@ -23,7 +23,7 @@ import type { FieldOutputTypes, Models } from "../../generated/prisma8/contract.
 // ---------------------------------------------------------------------------
 // Scalar/enum surface that used to come from `@prisma/client`.
 
-export type Role = "USER" | "ADMIN"
+export type { Role } from "@/lib/roles"
 export type BillingInterval = "MONTH" | "YEAR" | "ONE_TIME"
 export type PurchaseStatus = "COMPLETED" | "REFUNDED"
 export type SubscriptionStatus =
@@ -292,7 +292,7 @@ function applyArgs(collection: any, args: any): any {
 
 // ---------------------------------------------------------------------------
 // The facade itself. `any` is used deliberately at this boundary: the real
-// types live in `generated/prisma8/contract.d.ts` and new code should use
+// types live in `src/generated/prisma8/contract.d.ts` and new code should use
 // `db8`, which is fully typed.
 
 function makeDelegate(model: string): any {

@@ -18,23 +18,13 @@
  * fails src/lib/migration-manifest.test.ts.
  */
 
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs"
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import path from "node:path"
 import { pathToFileURL } from "node:url"
+import { readMigrationGraph } from "#src/lib/migration-graph.ts"
 
 const root = path.resolve(import.meta.dirname, "..")
 const outFile = path.join(root, "src", "generated", "migrations.ts")
-
-export function readMigrationGraph(migrationsDir) {
-  if (!existsSync(migrationsDir)) return []
-  return readdirSync(migrationsDir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && existsSync(path.join(migrationsDir, entry.name, "migration.json")))
-    .map((entry) => {
-      const meta = JSON.parse(readFileSync(path.join(migrationsDir, entry.name, "migration.json"), "utf8"))
-      return { name: entry.name, from: meta.from ?? null, to: meta.to }
-    })
-    .sort((a, b) => a.name.localeCompare(b.name))
-}
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const edges = readMigrationGraph(path.join(root, "migrations", "app"))

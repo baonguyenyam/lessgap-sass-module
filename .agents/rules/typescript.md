@@ -12,6 +12,11 @@ Applies to every `.ts` / `.tsx` / `.mts` file.
 - Validate at the boundaries (form data, request bodies, env, webhooks, external
   APIs) with Zod. Inside the boundary, trust the types.
 - `import type` for type-only imports. Import app code through the `@/` alias.
+  Never `../` (lint enforces it): `@/` everywhere TypeScript runs, including
+  `prisma/` seeds and `e2e/`; `#src/...` (package.json `imports`) from the plain
+  Node scripts in `scripts/*.mjs`, which can only import erasable TypeScript.
+  Same-folder `./` imports are fine. Generated files (`migrations/`,
+  `src/generated/`) are exempt.
 - Exhaustive `switch` over unions: end with a `never` check so a new member
   fails the build.
 - Prefer pure functions and `const`. No classes unless a library requires one.

@@ -11,7 +11,9 @@ apply to every model anyone adds.
 
 ## Conventions
 
-- Ids: `String @id @default(cuid())`, like the kit.
+- Ids ([ADR 0013](./adr/0013-identifier-strategy.md)): CUID2 (`@onCreate(cuid(2))`) for
+  business records, UUID v7 (`@onCreate(uuid(7))`, native `uuid`) for append-only
+  high-volume tables, NanoID codes from `@/lib/ids` for what people read or type.
 - Every tenant-owned model: `tenantId String`, relation to `Tenant` with
   `onDelete: Cascade`, and `@@index([tenantId, <most common filter>])`.
   Unique constraints that are unique per tenant include `tenantId`

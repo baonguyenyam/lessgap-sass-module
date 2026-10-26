@@ -37,8 +37,8 @@ import { readFileSync } from "node:fs"
 import path from "node:path"
 import pg from "pg"
 import { accountTableShape } from "./account-shape.mjs"
-import { readMigrationGraph } from "./generate-migration-manifest.mjs"
-import { pendingMigrations } from "../src/lib/migration-chain.ts"
+import { pendingMigrations } from "#src/lib/migration-chain.ts"
+import { readMigrationGraph } from "#src/lib/migration-graph.ts"
 
 const root = path.resolve(import.meta.dirname, "..")
 const LABEL = 15
@@ -103,7 +103,7 @@ try {
 
   // ── 2. Migrations (Prisma 8) ──────────────────────────────────────────────
   const edges = readMigrationGraph(path.join(root, "migrations", "app"))
-  const contractJson = JSON.parse(readFileSync(path.join(root, "generated", "prisma8", "contract.json"), "utf8"))
+  const contractJson = JSON.parse(readFileSync(path.join(root, "src", "generated", "prisma8", "contract.json"), "utf8"))
   const contractHash = contractJson.storage.storageHash
 
   let marker = null

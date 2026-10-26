@@ -26,7 +26,7 @@ import { config } from "dotenv"
 import pg from "pg"
 
 import { toDirectUrl } from "./db-reset-guard.mjs"
-import { readMigrationGraph } from "./generate-migration-manifest.mjs"
+import { readMigrationGraph } from "#src/lib/migration-graph.ts"
 
 config({ path: [".env.local", ".env"], quiet: true })
 

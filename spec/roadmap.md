@@ -168,6 +168,7 @@ out of scope, even when it looks small: write it down under "Later" instead.
 
 ## Later (not scheduled)
 
+- **Switch As** for ROOT (deferred 2026-10-26): open a session as another account to test roles quickly, with a banner and "switch back". Planned design: Better Auth's `admin` plugin impersonation (1-hour sessions, `Session.impersonatedBy`, signed `admin_session` cookie to return), access control giving ROOT only `user:impersonate`, ROOT never onto ROOT, called from a server action that checks `@/lib/roles` and writes an audit entry.
 - Gift cards, memberships and packages for salons.
 - Reviews collection (from real customers after a completed appointment only).
 - Google Business Profile and Reserve with Google integration.

@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test"
+import { freshEmail as newFreshEmail } from "./fresh-email"
 
 /**
  * Signing up with email and password, the whole way through: form, account
@@ -11,7 +12,7 @@ import { test, expect } from "@playwright/test"
  */
 
 const password = "correct horse battery staple"
-const freshEmail = () => `e2e-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@example.com`
+const freshEmail = () => newFreshEmail()
 
 test("a new visitor can sign up and lands on the dashboard", async ({ page }) => {
   await page.goto("/signup")

@@ -35,3 +35,5 @@ Each rejected option and the reason it lost.
 | [0010](./0010-modules-are-plugins-with-a-kernel.md) | Modules are plugins on a kernel | proposed |
 | [0011](./0011-independent-project-kit-as-reference.md) | Independent project; the kit is a reference, not an upstream | accepted |
 | [0012](./0012-temporal-for-dates-and-time-zones.md) | Temporal (polyfill) for dates and time zones | accepted |
+| [0013](./0013-identifier-strategy.md) | Identifier strategy: CUID2, UUID v7, NanoID | accepted |
+| [0014](./0014-root-role.md) | ROOT above ADMIN, granted by configuration | accepted |

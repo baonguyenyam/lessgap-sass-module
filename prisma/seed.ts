@@ -108,7 +108,8 @@ const examplePlans: {
 async function main() {
   // Imported after dotenv has run: src/lib/db8.ts reads DATABASE_URL while
   // its module initializes.
-  const { prisma } = await import("../src/lib/prisma")
+  const { prisma } = await import("@/lib/prisma")
+  const { grantRootFromConfig } = await import("@/lib/root-accounts")
   try {
     for (const plan of examplePlans) {
       const { slug, ...data } = plan
@@ -126,6 +127,8 @@ async function main() {
     }
 
     console.log(`Seed complete: ${examplePlans.length} example plans upserted`)
+    const roots = await grantRootFromConfig(prisma)
+    if (roots > 0) console.log(`ROOT granted to ${roots} account(s) from ROOT_EMAILS`)
   } finally {
     await prisma.$disconnect()
   }

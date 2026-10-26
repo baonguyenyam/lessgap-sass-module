@@ -21,7 +21,6 @@ node_modules
 out
 build
 coverage
-/src/generated/prisma
 
 # local tooling
 .git

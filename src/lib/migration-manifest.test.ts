@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest"
 import path from "node:path"
 import { MIGRATIONS } from "@/generated/migrations"
-import contractJson from "../../generated/prisma8/contract.json" with { type: "json" }
-import { readMigrationGraph } from "../../scripts/generate-migration-manifest.mjs"
+import contractJson from "@/generated/prisma8/contract.json" with { type: "json" }
+import { readMigrationGraph } from "@/lib/migration-graph"
 
 /**
  * The manifest compiled into the build must describe exactly the migrations in

@@ -6,4 +6,5 @@ import type { MigrationEdge } from "@/lib/migration-chain"
 export const MIGRATIONS: readonly MigrationEdge[] = [
   { name: "20261026T1841_kit_baseline", from: null, to: "6425f176da7cdd42a5091eea9f236b85b289d5e14ecc142e9769bfaee587819d" },
   { name: "20261026T1842_kit_plan_features_required", from: "6425f176da7cdd42a5091eea9f236b85b289d5e14ecc142e9769bfaee587819d", to: "443e445118308f1cbde9721614e1678ce840f138f0dde25340e64d5edba25a7d" },
+  { name: "20261026T1915_kit_role_root", from: "443e445118308f1cbde9721614e1678ce840f138f0dde25340e64d5edba25a7d", to: "6537a51315de601b1ef71dffb3c857257730401726744069f6f97681de139818" },
 ]

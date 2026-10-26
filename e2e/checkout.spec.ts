@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test"
+import { freshEmail as newFreshEmail } from "./fresh-email"
 
 /**
  * Starting a checkout.
@@ -15,7 +16,7 @@ import { test, expect } from "@playwright/test"
  */
 
 const password = "correct horse battery staple"
-const freshEmail = () => `e2e-pay-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@example.com`
+const freshEmail = () => newFreshEmail("pay")
 
 async function signUp(page: import("@playwright/test").Page) {
   await page.goto("/signup")

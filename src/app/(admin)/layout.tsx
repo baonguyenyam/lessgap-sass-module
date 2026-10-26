@@ -1,4 +1,5 @@
 import { getCurrentUser } from "@/lib/auth"
+import { isAdmin } from "@/lib/roles"
 import { getTranslations } from "next-intl/server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
@@ -15,7 +16,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const user = await getCurrentUser()
   const t = await getTranslations("admin")
   if (!user) redirect("/login")
-  if (user.role !== "ADMIN") redirect("/dashboard")
+  if (!isAdmin(user.role)) redirect("/dashboard")
 
   return (
     <div className="flex min-h-screen bg-muted/20">

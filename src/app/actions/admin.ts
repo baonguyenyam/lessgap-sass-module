@@ -1,9 +1,10 @@
 "use server"
 
-import type { Role } from "@/lib/prisma"
+import type { Role } from "@/lib/roles"
 
 import { getCurrentUser } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { canChangeRole, isRoot } from "@/lib/roles"
 import { revalidatePath } from "next/cache"
 
 /**
@@ -18,14 +19,21 @@ import { revalidatePath } from "next/cache"
  * The role a session carries is re-read from the database at most a minute
  * after this returns (see the jwt callback in src/auth.ts), so the change
  * reaches the other person without them signing out.
+ *
+ * Only ROOT changes roles, and only between USER and ADMIN
+ * (`canChangeRole` in src/lib/roles.ts): ROOT is granted by configuration,
+ * never from here, so a hijacked admin session cannot promote itself.
  */
 export async function setUserRole(userId: string, nextRole: Role, seenRole: Role) {
   const user = await getCurrentUser()
-  if (!user || user.role !== "ADMIN") {
+  if (!user || !isRoot(user.role)) {
     throw new Error("Unauthorized")
   }
   if (nextRole === seenRole) {
     throw new Error("Role is already set to that value")
+  }
+  if (userId === user.id || !canChangeRole(user.role, seenRole, nextRole)) {
+    throw new Error("This role change is not allowed")
   }
 
   // updateMany, not update: `where` has to carry the expected role, and that
