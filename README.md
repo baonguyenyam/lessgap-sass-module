@@ -77,7 +77,7 @@ Most SaaS boilerplates either cost a few hundred dollars or ship as a barebones 
 - **Icons**: [Lucide](https://lucide.dev), an open source set shipped as React components, so an icon is something you import and not an asset you manage.
 - **Notifications**: [Sonner](https://sonner.emilkowal.ski) for toasts, wired to every success and failure the interface reports back, Server Actions included.
 - **Auth**: [Better Auth](https://better-auth.com) with Google and GitHub OAuth, magic link, email and password, and two-factor authentication you host yourself. Sessions live in your own database, so there is no auth vendor and no per-user pricing as you grow.
-- **Database**: [Prisma 7](https://www.prisma.io) on [PostgreSQL](https://www.postgresql.org). Plain Postgres underneath keeps your data portable, and [Neon](https://neon.tech) has a free managed tier if you would rather not run one yourself.
+- **Database**: [Prisma ORM 8](https://www.prisma.io) on [PostgreSQL](https://www.postgresql.org). Plain Postgres underneath keeps your data portable, and [Neon](https://neon.tech) has a free managed tier if you would rather not run one yourself.
 - **Payments**: [Stripe](https://stripe.com) with Checkout, the Customer Portal and signature-verified webhooks, in the free kit instead of behind a Pro plan.
 - **Emails**: [Resend](https://resend.com) for welcome, subscription, magic link and password reset messages, with the templates in your repository rather than in a dashboard you do not own.
 - **Internationalization**: [next-intl](https://next-intl.dev) with plain JSON message files, plus routing, fallback and a language switch already wired.

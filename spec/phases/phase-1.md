@@ -118,4 +118,8 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - Query overhead of `tenantDb` recorded in Findings.
 
 ## Findings
-_none yet_
+- 2026-10-26: Switch As (ADR 0015) already gives ROOT a session as another
+  account through `Session.switchedBy` and the `switchAs` plugin in
+  `src/auth.ts`. The impersonation task should extend it (reason, tenant,
+  60-minute expiry already in place) rather than add a second mechanism, and
+  the `AuditLog` task should make Switch As start and stop write rows too.

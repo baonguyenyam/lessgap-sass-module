@@ -7,10 +7,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
-## [Unreleased]
+## [2.7.0] - 2026-10-26
+
+🔀 **Switch As for ROOT, and one set of button styles.** ROOT can open a session as any user or admin to see the app as they do, with a banner and "Switch back". This is a MINOR with one step: `git pull`, `pnpm install`, `pnpm db:migrate` (the migration adds one nullable column).
 
 ### Added
 
+- **Switch As** (spec/adr/0015-switch-as.md): a "Switch as" button on each user row of the admin panel, for ROOT only and never onto another ROOT. The session lasts at most an hour, a banner stays on every signed-in screen while it is open, and "Switch back" restores the ROOT session. Migration `kit_session_switch_as` adds `Session.switchedBy`
 - **`Button` sizes `xs`, `icon`, `icon-lg` and variants `outline-primary`, `outline-destructive`**: the small form buttons and icon buttons that were restyled by hand now share one definition
 - **`components.json`** for the shadcn CLI, so `npx shadcn add <component>` drops new primitives into `src/components/ui` instead of being pasted by hand
 - **`PendingButton` takes `variant`/`size`** backed by `buttonVariants`, so submit buttons inside forms get the kit styles instead of a hand-copied `className`

@@ -17,6 +17,7 @@ for the same thing is how a codebase starts to drift.
 | Module | `ModuleKey` | A business capability that can be switched on or off: `booking`, `shop`, `quotes`, `chatbot`, … |
 | Feature | `FeatureKey` | Something a plan grants: a module, a capability inside one, or a limit |
 | Entitlement | `Entitlements` | The resolved set of features and limits a tenant has right now |
+| Switch As | `switchAs`, `Session.switchedBy` | ROOT opening a session as another account to see the app as that account does, with a banner and "Switch back" ([ADR 0015](./adr/0015-switch-as.md)). Phase 1 tenant impersonation is the same mechanism plus a reason and audit rows |
 | Platform switch | `PlatformSwitch` | A global setting that applies to all tenants: signups open, free plan offered, maintenance |
 | Plan | `Plan` | What a tenant subscribes to. Grants features and limits |
 | Add-on | `AddOn` | A feature or extra limit bought on top of a plan |
