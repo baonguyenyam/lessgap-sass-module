@@ -13,12 +13,16 @@ import { stripe } from "@/lib/stripe"
 import { checkRateLimit } from "@/lib/rate-limit"
 import { emailEnabled } from "@/lib/email-transport"
 import { enabledOAuthProviders } from "@/lib/oauth-providers"
+import { settingsHref } from "@/lib/settings-pages"
 
 // Account-management actions behind a session: link/unlink OAuth providers
 // and set or change the password. Outcomes surface as query params on the
 // settings page (same redirect-with-code pattern as the auth pages).
 
-const SETTINGS = "/dashboard/settings"
+// Where each form lives (src/lib/settings-pages.ts): sign-in methods, email and
+// password on Security, deleting the account on General.
+const SETTINGS = settingsHref("security")
+const GENERAL = settingsHref("general")
 
 // A subscription in any of these still bills, or is about to: deleting the
 // account under it would leave Stripe charging a customer who no longer exists
@@ -121,7 +125,7 @@ export async function deleteAccount(formData: FormData) {
 
   // A demo deployment runs on seeded accounts that a cron restores. Letting a
   // visitor delete one would empty the showcase until the next reset.
-  if (process.env.DEMO_MODE === "true") redirect(`${SETTINGS}?error=demo`)
+  if (process.env.DEMO_MODE === "true") redirect(`${GENERAL}?error=demo`)
 
   const user = await db8.orm.public.User.select("email", "role")
     .include("subscription", (s) => s.select("status", "stripeSubscriptionId"))
@@ -132,7 +136,7 @@ export async function deleteAccount(formData: FormData) {
   // The address has to be typed back, so no single click can destroy an
   // account and no stray form submission can either.
   const typed = String(formData.get("confirm") ?? "").trim().toLowerCase()
-  if (typed !== user.email.toLowerCase()) redirect(`${SETTINGS}?error=confirm`)
+  if (typed !== user.email.toLowerCase()) redirect(`${GENERAL}?error=confirm`)
 
   // The last administrator cannot remove themselves, or the deployment is left
   // with no way back into the admin panel. This refusal comes before Stripe:
@@ -141,12 +145,12 @@ export async function deleteAccount(formData: FormData) {
   // nobody is left who can change roles. ROOT counts as an administrator too.
   if (isRoot(user.role)) {
     const roots = await db8.orm.public.User.where({ role: "ROOT" }).aggregate((a) => ({ n: a.count() }))
-    if (roots.n <= 1) redirect(`${SETTINGS}?error=last-root`)
+    if (roots.n <= 1) redirect(`${GENERAL}?error=last-root`)
   } else if (isAdmin(user.role)) {
     const admins = await db8.orm.public.User.where((u) => u.role.in(["ADMIN", "ROOT"])).aggregate((a) => ({
       n: a.count(),
     }))
-    if (admins.n <= 1) redirect(`${SETTINGS}?error=last-admin`)
+    if (admins.n <= 1) redirect(`${GENERAL}?error=last-admin`)
   }
 
   // A live subscription is cancelled at Stripe before anything is deleted here,
@@ -169,7 +173,7 @@ export async function deleteAccount(formData: FormData) {
       const code = (error as { code?: string })?.code
       if (code !== "resource_missing") {
         console.error("[account] subscription cancel failed:", error)
-        redirect(`${SETTINGS}?error=subscription`)
+        redirect(`${GENERAL}?error=subscription`)
       }
     }
   }

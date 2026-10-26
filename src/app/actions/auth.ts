@@ -10,6 +10,7 @@ import { passwordSchema } from "@/lib/password"
 import { checkRateLimit, rateLimitKeyFromIp } from "@/lib/rate-limit"
 import { BACKUP_CODE_LENGTH, normalizeBackupCode } from "@/lib/backup-codes"
 import { emailEnabled } from "@/lib/email-transport"
+import { settingsHref } from "@/lib/settings-pages"
 
 // Every action here calls auth.api.* and then redirects OUTSIDE the try block.
 // redirect() works by throwing, so a redirect inside a try is caught by the
@@ -154,7 +155,7 @@ export async function verifyTwoFactorBackupCode(formData: FormData) {
   // just spent a backup code has one fewer way back in and does not necessarily
   // know it; this puts them in front of the button that makes more, with the
   // reason written above it.
-  redirect("/dashboard/settings?ok=backup-used")
+  redirect(`${settingsHref("security")}?ok=backup-used`)
 }
 
 // ─── Sign up ──────────────────────────────────────────────────────────────────

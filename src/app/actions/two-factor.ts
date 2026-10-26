@@ -6,6 +6,7 @@ import { APIError } from "better-auth/api"
 import { auth } from "@/auth"
 import { getCurrentUser } from "@/lib/auth"
 import { checkRateLimit } from "@/lib/rate-limit"
+import { settingsHref } from "@/lib/settings-pages"
 
 /**
  * Two-factor authentication, from the settings page.
@@ -22,7 +23,7 @@ import { checkRateLimit } from "@/lib/rate-limit"
  * the difference between a feature and a lock-out.
  */
 
-const SETTINGS = "/dashboard/settings"
+const SETTINGS = settingsHref("security")
 
 export type SetupState = {
   error?: string

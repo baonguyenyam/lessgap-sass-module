@@ -17,8 +17,7 @@ import type { Crumb } from "@/lib/breadcrumb"
  * listed anywhere, as long as its segment has a label in `labels`. A segment
  * that is an id (a project) has no label: the page names itself with
  * <BreadcrumbName>, and until it does the crumb is simply left out, never
- * shown as an id. With Settings open as a modal the rendered path is still
- * the page underneath, and so is the trail.
+ * shown as an id.
  *
  * The area's icon comes first, the same one the sidebar shows for it, so the
  * space is recognised before the words are read.

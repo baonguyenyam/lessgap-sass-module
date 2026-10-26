@@ -12,8 +12,7 @@ import { usePathname } from "next/navigation"
  * A tiny store keyed by the path, so a name never outlives its page: leaving
  * the page takes it out again. The URL path here, not the rendered one the
  * header reads: useRenderedPathname answers relative to the layout that calls
- * it, so from inside a page it would be a shorter path than the header's. The
- * two agree everywhere except under the Settings modal, which names nothing.
+ * it, so from inside a page it would be a shorter path than the header's.
  */
 const store = {
   names: new Map<string, string>(),

@@ -33,6 +33,6 @@ export async function updateProfile(
   await db8.orm.public.User.where({ id: user.id }).update({ name: result.data.name })
 
   revalidatePath("/dashboard")
-  revalidatePath("/dashboard/settings")
+  revalidatePath("/dashboard/settings", "layout")
   return { success: true }
 }

@@ -142,10 +142,9 @@ function LinkNavigationOverlay() {
       if (anchor instanceof HTMLAnchorElement && isAppNavigation(event, anchor)) startLink()
     }
     // Back and forward: the URL has already changed when this fires, and the
-    // page follows. Only when the page on screen is a different one: closing
-    // the settings modal is a step back too (route-modal.tsx), and it lands
-    // on the dashboard that is already rendered, so nothing would come to
-    // end the wait.
+    // page follows. Only when the page on screen is a different one: a step
+    // back that lands on the page already rendered (only the query string
+    // changed) brings nothing that would end the wait.
     const onPopState = () => {
       const path = window.location.pathname
       if (isAppPath(path) && path !== renderedPath) startLink()

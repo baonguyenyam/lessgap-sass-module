@@ -67,3 +67,9 @@ export async function getSwitchedBy(): Promise<string | null> {
   const session = await auth.api.getSession({ headers: await headers() })
   return (session?.session as { switchedBy?: string | null } | undefined)?.switchedBy ?? null
 }
+
+/** The id of the session making this request, or null when signed out. */
+export async function getCurrentSessionId(): Promise<string | null> {
+  const session = await auth.api.getSession({ headers: await headers() })
+  return session?.session?.id ?? null
+}
