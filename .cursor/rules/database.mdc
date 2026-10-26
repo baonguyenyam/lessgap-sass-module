@@ -1,0 +1,7 @@
+---
+description: Prisma and PostgreSQL: schema, migrations, queries
+globs: prisma/**,src/lib/prisma.ts,src/app/actions/**,src/app/api/**
+alwaysApply: false
+---
+
+Follow @.agents/rules/database.md

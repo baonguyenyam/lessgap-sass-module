@@ -1,0 +1,7 @@
+---
+description: TypeScript conventions
+globs: **/*.ts,**/*.tsx,**/*.mts
+alwaysApply: false
+---
+
+Follow @.agents/rules/typescript.md

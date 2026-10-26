@@ -1,0 +1,7 @@
+---
+description: UI, Tailwind and WCAG 2.1 AA accessibility
+globs: src/components/**,src/app/**/*.tsx,src/app/globals.css
+alwaysApply: false
+---
+
+Follow @.agents/rules/ui-accessibility.md

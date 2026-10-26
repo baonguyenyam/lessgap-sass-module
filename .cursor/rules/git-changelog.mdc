@@ -1,0 +1,7 @@
+---
+description: Commits, changelog and releases
+globs: CHANGELOG.md,docs/upgrading*.md
+alwaysApply: false
+---
+
+Follow @.agents/rules/git-changelog.md

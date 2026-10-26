@@ -1,0 +1,7 @@
+---
+description: Vitest and Playwright testing rules
+globs: **/*.test.ts,**/*.test.mjs,e2e/**,vitest.config.mts,playwright.config.ts
+alwaysApply: false
+---
+
+Follow @.agents/rules/testing.md

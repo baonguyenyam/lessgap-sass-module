@@ -1,0 +1,7 @@
+---
+description: Next.js 16 and React 19: server components, server actions, route handlers
+globs: src/app/**,src/components/**,src/hooks/**
+alwaysApply: false
+---
+
+Follow @.agents/rules/nextjs-react.md

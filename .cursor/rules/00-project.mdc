@@ -1,0 +1,9 @@
+---
+description: Project rules for every task. AGENTS.md is the single source of truth.
+alwaysApply: true
+---
+
+Read and follow @AGENTS.md before writing code. It holds the project rules, the
+way to work, the project map, the commands and the definition of done. Topic
+rules live in `.agents/rules/` and are attached below by file pattern; this
+directory only points at them so every tool reads the same text.

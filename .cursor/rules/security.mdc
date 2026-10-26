@@ -1,0 +1,7 @@
+---
+description: Security rules based on the OWASP Top 10
+globs: src/lib/auth/**,src/auth.ts,src/app/api/**,src/app/actions/**,src/app/(admin)/**,src/lib/env.ts,src/lib/stripe*.ts,src/lib/rate-limit.ts
+alwaysApply: false
+---
+
+Follow @.agents/rules/security.md
