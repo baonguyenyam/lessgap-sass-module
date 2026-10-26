@@ -3,7 +3,6 @@
  * Moves a database that Prisma 7 built onto Prisma 8, once, without touching data:
  *
  *   pnpm db:adopt                         the database in DIRECT_URL / DATABASE_URL
- *   pnpm db:adopt --yes                   skip the typed confirmation
  *   pnpm db:adopt --drop-legacy-table     also drop Prisma 7's "_prisma_migrations"
  *
  * What it does:
@@ -23,7 +22,6 @@
  */
 import { spawnSync } from "node:child_process"
 import path from "node:path"
-import { createInterface } from "node:readline/promises"
 import { config } from "dotenv"
 import pg from "pg"
 
@@ -33,7 +31,6 @@ import { readMigrationGraph } from "./generate-migration-manifest.mjs"
 config({ path: [".env.local", ".env"], quiet: true })
 
 const args = new Set(process.argv.slice(2))
-const skipConfirm = args.has("--yes") || args.has("-y")
 const dropLegacy = args.has("--drop-legacy-table")
 
 const configured = process.env.DIRECT_URL?.trim() || process.env.DATABASE_URL?.trim()
@@ -78,12 +75,6 @@ try {
 
 console.log(`\nDatabase to adopt: ${database} on ${hostname}`)
 console.log(`It will be signed at ${baseline.name}, then migrated to the current contract. No data is deleted.`)
-if (!skipConfirm) {
-  const rl = createInterface({ input: process.stdin, output: process.stdout })
-  const answer = await rl.question(`Type the database name (${database}) to continue: `)
-  rl.close()
-  if (answer.trim() !== database) fail("Name did not match. Nothing was changed.")
-}
 
 step("1/3 Signing at the baseline")
 prisma("db", "sign", baseline.name, "--no-advance-ref")

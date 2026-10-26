@@ -145,14 +145,14 @@ the same valid shapes.
 ## Starting over
 
 `pnpm db:reset` rebuilds a development database from nothing; `pnpm
-db:reset:demo` adds the demo seed; `--yes` skips the confirmation for scripts.
+db:reset:demo` adds the demo seed. It asks no questions: the guard below is the protection.
 Prisma ORM 8 has no `migrate reset`, so `scripts/db-reset.mjs` does it:
 
 1. Refuses unless the target is safe (`scripts/db-reset-guard.mjs`, tested):
    never when `NODE_ENV` or `VERCEL_ENV` is `production`; local hosts are
    allowed; a remote host only if its name or Neon endpoint id is in
    `DB_RESET_ALLOW_HOSTS` (set in `.env.local`, never in a shared env).
-2. Prints the database and host and asks you to type the database name.
+2. Prints the database and host it is about to wipe.
 3. Drops `public` and Prisma's bookkeeping schemas (other schemas are left
    alone), recreates `public`.
 4. Builds the schema: `prisma db migrate` when on-disk migrations exist,

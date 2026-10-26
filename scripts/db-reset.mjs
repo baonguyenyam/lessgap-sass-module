@@ -4,7 +4,6 @@
  *
  *   pnpm db:reset          drop everything, recreate the schema, run the system seed
  *   pnpm db:reset:demo     the same, then the demo seed
- *   pnpm db:reset --yes    skip the typed confirmation (scripts, CI on a throwaway database)
  *
  * Prisma ORM 8 has no `migrate reset`, so this does the three steps itself:
  *   1. drop the `public` schema and any Prisma bookkeeping schema, then recreate `public`;
@@ -19,7 +18,6 @@
  */
 import { spawnSync } from "node:child_process"
 import { existsSync, readdirSync } from "node:fs"
-import { createInterface } from "node:readline/promises"
 import { config } from "dotenv"
 import pg from "pg"
 
@@ -29,7 +27,6 @@ config({ path: [".env.local", ".env"], quiet: true })
 
 const args = new Set(process.argv.slice(2))
 const withDemo = args.has("--demo")
-const skipConfirm = args.has("--yes") || args.has("-y")
 
 // Schema changes need a direct connection. DIRECT_URL wins when set; a Neon
 // `-pooler` host (in either variable) is switched to its direct host, because
@@ -43,18 +40,10 @@ if (!target.ok) {
   process.exit(1)
 }
 
-console.log(`Database to reset: ${target.database} on ${target.host}`)
-console.log("Everything in it will be deleted.")
-
-if (!skipConfirm) {
-  const rl = createInterface({ input: process.stdin, output: process.stdout })
-  const answer = await rl.question(`Type the database name (${target.database}) to continue: `)
-  rl.close()
-  if (answer.trim() !== target.database) {
-    console.error("✖ Name did not match. Nothing was changed.")
-    process.exit(1)
-  }
-}
+// No typed confirmation: the guard above already limits this to local
+// databases and the hosts listed in DB_RESET_ALLOW_HOSTS, never production.
+// The target is still printed first, so the log says what was wiped.
+console.log(`Resetting ${target.database} on ${target.host}: everything in it is deleted.`)
 
 // 1. Drop.
 step("1/3 Dropping the schema")
