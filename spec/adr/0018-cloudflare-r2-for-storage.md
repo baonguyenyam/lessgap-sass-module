@@ -1,7 +1,7 @@
 # 0018. Cloudflare R2 for media, exports, snapshots and platform backups
 
-**Status:** proposed
-**Date:** 2026-10-26
+**Status:** accepted
+**Date:** 2026-10-26 (accepted by owner 2026-10-26)
 
 ## Context
 The platform needs object storage for four things: tenant media (service

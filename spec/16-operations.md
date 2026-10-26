@@ -275,6 +275,11 @@ different stack generation (Auth.js, Prisma 7) and is not ported.
 
 ## Still to decide
 
+- **Production host at scale: DigitalOcean** (owner's direction; Vercel stays
+  for dev/preview and possibly early production). Must land before phase 3 —
+  it decides what replaces Vercel's domain API for tenant custom domains and
+  wildcard SSL (Cloudflare for SaaS vs self-managed on-demand TLS). Portability
+  rules in [environments-and-release](./14-environments-and-release.md#production-host).
 - Passkeys for members and staff — likely phase 8 or "later"; Better Auth
   has a plugin; the reference stack uses WebAuthn.
 - In-place per-tenant restore (vs restore-to-new).

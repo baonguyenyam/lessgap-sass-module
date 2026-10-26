@@ -40,3 +40,11 @@ Set by the owner for the whole platform build:
     → roadmap status; no second list).
 13. **Record fixed errors** → the existing lessons rule in this directory's
     README; restated here because the owner asked for it explicitly.
+
+## 2026-10-26 — Infrastructure decisions
+
+- **Cloudflare R2 is the object store** → ADR 0018 accepted.
+- **Dev and preview on Vercel; production is intended for DigitalOcean** →
+  spec/14 "Production host" and the phase-3 blocker in the roadmap. Keep the
+  app portable (standalone build, no Vercel-only APIs in owned paths); the
+  tenant custom-domains mechanism is what a non-Vercel host must replace.

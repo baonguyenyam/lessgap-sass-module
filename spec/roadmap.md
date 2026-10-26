@@ -94,6 +94,7 @@ out of scope, even when it looks small: write it down under "Later" instead.
 - Theme registry, theme manifest type, one shared theme built to the full contract with fixtures.
 - Per-host `robots.txt`, `sitemap.xml`, LocalBusiness JSON-LD; cache tags and revalidation on save.
 - Custom domains: Vercel wrapper, `Domain` lifecycle, verification job, primary and redirects.
+- **Decide the production host before this phase** (Vercel vs DigitalOcean — see [environments-and-release](./14-environments-and-release.md#production-host)); the domains implementation follows it.
 
 **Exit criteria**
 - E2E: a tenant created in the console is served at `<slug>.<sites-domain>`; editing hours shows on the site within 10 seconds.

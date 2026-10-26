@@ -11,6 +11,27 @@
 | Staging | `staging.lessgap.app`, sites on `<slug>.staging.lessgap.io` | Neon `staging` branch | test mode | Brevo to an allow-list only | team, demo tenants |
 | Production | `lessgap.app`, `app.lessgap.app`, `<slug>.lessgap.io`, custom domains | Neon `main` | live mode | Brevo (then SES) | customers |
 
+## Production host
+
+Development, previews and the first production deploys run on Vercel
+([ADR 0004](./adr/0004-vercel-for-subdomains-and-custom-domains.md)). The
+owner's stated direction is **DigitalOcean for production at scale** (lower
+predictable cost once traffic is real). That decision must land before phase
+3, because the domains system is what it changes:
+
+- **Tenant custom domains and wildcard SSL** depend on Vercel's domain API.
+  On DigitalOcean the replacement is Cloudflare for SaaS (SSL for SaaS) or a
+  self-managed reverse proxy with on-demand TLS (Caddy/Traefik). Whichever
+  lands gets its own ADR superseding 0004.
+- **What keeps the move cheap, required from now on:** `output: "standalone"`
+  builds packaged as a Docker image; no Vercel-only API in a request path the
+  spec owns; cron reachable by an external pinger, not only Vercel Cron
+  ([operations](./16-operations.md#background-work-and-queues)); logs to
+  stdout so `docker logs` and a drain both work. Neon, R2, Sentry, Upstash
+  and Brevo are host-agnostic already.
+- Preview environments stay on Vercel regardless — they are free there and a
+  preview is not the thing that needs to scale.
+
 - Secrets live in Vercel environment variables per environment; `.env` is
   local only and never committed. `.env.example` lists every variable with an
   empty value and a comment.
