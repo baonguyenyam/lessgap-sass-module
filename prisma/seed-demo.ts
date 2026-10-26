@@ -1,6 +1,9 @@
+import { config } from "dotenv"
 import { PrismaClient } from "@prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { seedDemoData } from "../src/lib/demo-seed"
+
+config({ path: [".env.local", ".env"], quiet: true })
 
 // ─────────────────────────────────────────────────────────────────────────────
 // DEMO seed — fills an ISOLATED demo database with believable fake data so a
