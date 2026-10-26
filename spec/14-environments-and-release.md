@@ -20,9 +20,11 @@ predictable cost once traffic is real). That decision must land before phase
 3, because the domains system is what it changes:
 
 - **Tenant custom domains and wildcard SSL** depend on Vercel's domain API.
-  On DigitalOcean the replacement is Cloudflare for SaaS (SSL for SaaS) or a
-  self-managed reverse proxy with on-demand TLS (Caddy/Traefik). Whichever
-  lands gets its own ADR superseding 0004.
+  Our DNS already lives at Cloudflare (and our object storage is R2), which
+  makes **Cloudflare for SaaS the front-runner replacement** on DigitalOcean:
+  tenants CNAME to us, Cloudflare issues the certificate and proxies to the
+  DO origin. The fallback is a self-managed reverse proxy with on-demand TLS
+  (Caddy/Traefik). Whichever lands gets its own ADR superseding 0004.
 - **What keeps the move cheap, required from now on:** `output: "standalone"`
   builds packaged as a Docker image; no Vercel-only API in a request path the
   spec owns; cron reachable by an external pinger, not only Vercel Cron
