@@ -74,12 +74,16 @@ src/
 
 ### Module folder shape
 
-Every module has the same shape. A module that needs less leaves folders out;
-it never invents new ones.
+Every module has the same shape, created by `pnpm new:module`. A module that
+needs less leaves folders out; it never invents new ones. The manifest,
+lifecycle, stages and extension points are specified in
+[module-system.md](./15-module-system.md).
 
 ```
 src/modules/booking/
-  module.ts            manifest: key, name, features it declares, nav entries, dependencies
+  module.ts            manifest: features, permissions, settings, models, nav, site blocks,
+                       events, jobs, extension points, lifecycle, dependencies, stage
+  events.ts            typed, versioned payloads of the events this module emits
   schema.ts            Zod schemas shared by forms and services
   lib/                 pure functions + *.test.ts
   server/              services ("server-only"), each takes TenantContext first
@@ -107,6 +111,7 @@ registry (`src/modules/registry.ts`) is the only list of modules.
 | Tenant payments | Stripe Connect | Tenants get paid directly, we take an application fee | [0006](./adr/0006-stripe-connect-for-tenant-payments.md) |
 | Chatbot retrieval | pgvector in the same database | One database, tenant filter and RLS apply to embeddings too | [0007](./adr/0007-pgvector-for-rag.md) |
 | Background work | Vercel Cron + a jobs table processed by a cron route | No new infrastructure until volume needs it | [0008](./adr/0008-jobs-table-before-a-queue.md) |
+| Capabilities | Modules as plugins on a kernel, with manifest, lifecycle and stages | Switch on/off and experiment per tenant without code changes | [0010](./adr/0010-modules-are-plugins-with-a-kernel.md) |
 | Email | Brevo now, Amazon SES later, behind `sendEmail()` | Already used by the company; Resend kept as kit fallback | [0009](./adr/0009-brevo-for-email-ses-later.md) |
 | SMS | Twilio, behind an interface | Reminders; consent rules in compliance doc | — |
 | Media | Vercel Blob or S3-compatible storage, tenant-prefixed keys | Images for services, menus, galleries | — |

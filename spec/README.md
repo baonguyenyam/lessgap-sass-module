@@ -8,8 +8,8 @@ business information, services and prices, appointments, a shop, quotes, a
 chatbot.
 
 It is written for two readers: the team, and the coding agents that build it
-phase by phase. Agents: read this file, then the phase you were asked to work
-on in [roadmap.md](./roadmap.md), then the documents that phase links to.
+phase by phase. Agents: read this file, then the brief of the phase you were
+asked to work on in [phases/](./phases/), then the documents that brief links to.
 
 ## Documents
 
@@ -26,6 +26,12 @@ on in [roadmap.md](./roadmap.md), then the documents that phase links to.
 | 08 | [chatbot-rag.md](./08-chatbot-rag.md) | The per-tenant assistant: ingestion, retrieval, limits, safety |
 | 09 | [data-model.md](./09-data-model.md) | The Prisma models, in one place |
 | 10 | [security-compliance.md](./10-security-compliance.md) | Threats, HIPAA, PCI, SMS consent, accessibility |
+| 11 | [testing.md](./11-testing.md) | Test layers, test database, factories, the mandatory test-case catalogue |
+| 12 | [migrations-and-data.md](./12-migrations-and-data.md) | Schema layout, writing migrations, RLS, zero-downtime changes, backfills, seeds |
+| 13 | [conventions.md](./13-conventions.md) | Errors, action results, logging, money, time, i18n, naming |
+| 14 | [environments-and-release.md](./14-environments-and-release.md) | Local, preview, staging, production; deploys, rollback, versioning |
+| 15 | [module-system.md](./15-module-system.md) | The kernel, module manifest, lifecycle, stages and experiments, extension points, boundaries |
+| — | [phases/](./phases/) | The brief for each phase: tasks, files, tests, checks |
 | — | [roadmap.md](./roadmap.md) | The phases, their scope and their exit criteria |
 | — | [glossary.md](./glossary.md) | The words, so code and docs use the same ones |
 | — | [adr/](./adr/) | Decisions, each with its reasons and the options we rejected |

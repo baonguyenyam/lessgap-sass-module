@@ -43,8 +43,6 @@ next-env.d.ts
 
 /src/generated/prisma
 
-.vercel
-.env*
 
 # playwright
 /test-results

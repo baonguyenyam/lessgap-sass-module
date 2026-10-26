@@ -22,33 +22,41 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # pnpm, at the version pinned in package.json's packageManager field:
+      # the lockfile is pnpm's, and `npm ci` needs a package-lock.json this
+      # repository does not have.
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: npm
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       # The Prisma client isn't committed (it's generated), so generate it
       # before the build. `generate` reads the schema, not a live database.
       - name: Generate Prisma client
-        run: npx prisma generate
+        run: pnpm exec prisma generate
+
+      - name: Type-check
+        run: pnpm typecheck
 
       - name: Lint
-        run: npm run lint
+        run: pnpm lint
 
       # Unit tests on the pure logic in src/lib. They need no database and no
       # secrets, so they run before the build and fail fast.
       - name: Test
-        run: npm test
+        run: pnpm test
 
       # `next build` type-checks and compiles. The env values below are
       # build-time placeholders, not real secrets: the build constructs clients
       # (Prisma adapter, Auth.js) at module load but never connects to a DB or
       # authenticates, so any well-formed value works here.
       - name: Build
-        run: npm run build
+        run: pnpm build
         env:
           DATABASE_URL: postgresql://user:pass@localhost:5432/db
           AUTH_SECRET: ci-build-placeholder-not-a-real-secret
@@ -75,4 +83,4 @@ jobs:
       # It runs last on purpose. A new advisory is not a defect of the code in
       # this commit, so it must never hide the result of lint, test and build.
       - name: Audit dependencies
-        run: npm audit --omit=dev --audit-level=high
+        run: pnpm audit --prod --audit-level high

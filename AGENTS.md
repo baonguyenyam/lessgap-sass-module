@@ -201,13 +201,13 @@ build and how.
 # Commands
 
 ```bash
-npm run dev                 # local server
-npx tsc --noEmit            # type-check
-npm run lint                # ESLint
-npm test                    # Vitest unit tests
-npm run test:e2e            # Playwright
-npm run check:translations  # translated docs in step with their source
-npx prisma migrate dev --name <change>   # after editing schema.prisma
+pnpm dev                    # local server
+pnpm typecheck              # type-check
+pnpm lint                   # ESLint
+pnpm test                   # Vitest unit tests
+pnpm test:e2e               # Playwright
+pnpm check:translations     # translated docs in step with their source
+pnpm prisma migrate dev --name <change>  # after editing schema.prisma
 ```
 
 Use the package manager whose lockfile is committed. Never add a second lockfile.
@@ -216,9 +216,9 @@ Use the package manager whose lockfile is committed. Never add a second lockfile
 
 Run these, do not assume them:
 
-- `npx tsc --noEmit`, `npm run lint` and `npm test` pass.
+- `pnpm typecheck`, `pnpm lint` and `pnpm test` pass.
 - New logic and every bug fix come with a test.
-- `npm run check:translations` passes if you touched `docs/` or `content/docs/`.
+- `pnpm check:translations` passes if you touched `docs/` or `content/docs/`.
 - User-visible changes have a `CHANGELOG.md` entry; changes an adopter must act
   on are also in `docs/upgrading.md` and its translation.
 - The diff holds only what the task needed: no secrets, no `.env`, no debug logs.

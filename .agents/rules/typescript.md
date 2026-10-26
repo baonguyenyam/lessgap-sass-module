@@ -2,7 +2,7 @@
 
 Applies to every `.ts` / `.tsx` / `.mts` file.
 
-- `strict` is on and stays on. Code must pass `npx tsc --noEmit` with zero errors.
+- `strict` is on and stays on. Code must pass `pnpm typecheck` with zero errors.
 - No `any`. Use `unknown` and narrow, or a precise type. No `@ts-ignore`; if a
   `@ts-expect-error` is truly needed, put the reason on the same line.
 - No non-null assertion (`!`) unless the value is guaranteed by something the

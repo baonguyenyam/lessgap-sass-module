@@ -19,7 +19,7 @@ Based on the OWASP Top 10; each line maps to a class of defect.
 - **Misconfiguration (A05).** A half-configured integration must fail at boot
   (`src/lib/env.ts`), not on the first request.
 - **Dependencies (A06).** Do not add a dependency for what a few lines can do.
-  If you add one, say why. CI runs `npm audit --omit=dev --audit-level=high`.
+  If you add one, say why. CI runs `pnpm audit --prod --audit-level high`.
 - **Authentication (A07).** Go through `@/lib/auth` and Better Auth; never roll
   your own session, token or password hashing.
 - **Integrity (A08).** Verify webhook signatures before reading the event.
