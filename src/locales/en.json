@@ -418,7 +418,52 @@
       "adminPanel": "Admin Panel",
       "more": "More",
       "backToDashboard": "Back to Dashboard",
-      "openNavigation": "Open navigation"
+      "openNavigation": "Open navigation",
+      "members": "Members",
+      "roles": "Roles"
+    },
+    "members": {
+      "title": "Members",
+      "subtitle": "People with access to {tenant}",
+      "invite": {
+        "title": "Invite a member",
+        "description": "They get an email to join with the role you pick.",
+        "emailPlaceholder": "person@example.com",
+        "submit": "Invite"
+      },
+      "list": {
+        "title": "Members",
+        "count": "{count} people",
+        "colMember": "Member",
+        "colRole": "Role",
+        "update": "Update",
+        "remove": "Remove"
+      },
+      "invitations": {
+        "title": "Pending invitations"
+      }
+    },
+    "roles": {
+      "title": "Roles",
+      "subtitle": "Permission groups for this workspace.",
+      "builtin": {
+        "title": "Built-in roles",
+        "description": "Fixed by the platform; they cannot be edited."
+      },
+      "custom": {
+        "title": "Custom roles",
+        "description": "Your own groups, created below.",
+        "empty": "No custom roles yet.",
+        "members": "members",
+        "delete": "Delete"
+      },
+      "create": {
+        "title": "Create a role",
+        "namePlaceholder": "role-name",
+        "submit": "Create role"
+      },
+      "colRole": "Role",
+      "colPermissions": "Permissions"
     }
   },
   "admin": {

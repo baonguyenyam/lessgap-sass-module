@@ -2,6 +2,12 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-26 · better auth · Never run `npx auth migrate` / `auth generate` here
+- **Symptom:** `Only kysely adapter is supported for migrations` after Better Auth logged `Run \`npx auth migrate\` to add the missing tables and columns`.
+- **Cause:** the auth CLI loads `src/auth.ts` without the app's env/bootstrap, so adapter detection fails — and even if it ran, it would write migrations outside our Prisma 8 migration graph.
+- **Fix:** schema changes a plugin needs (organization, twoFactor, new `additionalFields`) go through `prisma/contract.prisma` → `pnpm db:emit` → `pnpm db:plan --name <owner>_<change>` → `pnpm db:migrate`. A "missing tables" log means the contract lacks tables/columns the plugins write — fix the contract.
+- **Rule:** when Better Auth says a table or column is missing, add it to the contract and plan a migration; never run the auth CLI's migrate/generate.
+
 ### 2026-10-26 · next · A server component cannot call `buttonVariants()`
 - **Symptom:** Settings → Backup rendered "This page couldn't load"; console: `Attempted to call buttonVariants() from the server but buttonVariants is on the client`.
 - **Cause:** `src/components/ui/button.tsx` is `"use client"`, so every export is a client reference on the server, including the plain `cva` function.

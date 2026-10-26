@@ -1,1006 +1,1051 @@
 {
-    "auth": {
-        "verifyRequest": {
-            "title": "Kiểm tra email của bạn",
-            "body": "Chúng tôi đã gửi cho bạn một liên kết đăng nhập. Liên kết này có hiệu lực trong 15 phút và chỉ sử dụng được một lần.",
-            "spam": "Không thấy gì trong hộp thư đến? Hãy kiểm tra thư mục spam, hoặc thử lại."
-        },
-        "forgotPassword": {
-            "title": "Đặt lại mật khẩu",
-            "subtitle": "Nhập email của bạn và chúng tôi sẽ gửi liên kết đặt lại mật khẩu",
-            "demoNotice": "Bản demo trực tiếp này không kết nối dịch vụ email, vì vậy tính năng đặt lại mật khẩu đã bị vô hiệu hóa ở đây.",
-            "$kit": {
-                "demoNoticeExtra": "Trong bản triển khai riêng của bạn, hãy kết nối một nhà cung cấp email (bộ công cụ đi kèm với Resend) và quy trình này sẽ hoạt động.",
-                "noEmailService": "Đặt lại mật khẩu cần một dịch vụ email. Thiết lập RESEND_API_KEY để bật tính năng này (bộ công cụ đi kèm với Resend, xem docs/configuration.md)."
-            },
-            "$product": {
-                "demoNoticeExtra": "Mọi thứ khác vẫn hoạt động như trong môi trường thực tế.",
-                "noEmailService": "Đặt lại mật khẩu cần một dịch vụ email. Thiết lập RESEND_API_KEY để bật tính năng này."
-            },
-            "sent": "Nếu tài khoản tồn tại cho email đó, một liên kết đặt lại mật khẩu đang trên đường gửi đến. Nó có hiệu lực trong 30 phút.",
-            "emailPlaceholder": "bạn@example.com",
-            "submit": "Gửi liên kết đặt lại",
-            "backToSignIn": "Quay lại đăng nhập"
-        },
-        "resetPassword": {
-            "title": "Chọn mật khẩu mới",
-            "expired": "Liên kết đặt lại này không hợp lệ hoặc đã hết hạn.",
-            "requestNew": "Yêu cầu liên kết mới",
-            "policy": "Mật khẩu phải từ 8 đến 72 ký tự.",
-            "passwordPlaceholder": "Mật khẩu mới (tối thiểu 8 ký tự)",
-            "submit": "Cập nhật mật khẩu"
-        },
-        "signup": {
-            "title": "Tạo tài khoản của bạn",
-            "subtitleVerified": "Chúng tôi sẽ gửi email chứa liên kết để xác minh địa chỉ và đăng nhập cho bạn",
-            "subtitlePassword": "Đăng ký bằng email và mật khẩu của bạn",
-            "demoNotice": "Bản demo trực tiếp này không kết nối dịch vụ email, vì vậy tính năng đăng ký đã bị vô hiệu hóa ở đây.",
-            "$kit": {
-                "demoNoticeExtra": "Trong bản triển khai riêng của bạn, hãy kết nối một nhà cung cấp email (bộ công cụ đi kèm với Resend) và quy trình này sẽ hoạt động.",
-                "noEmailService": "Chưa có dịch vụ email nào được cấu hình, vì vậy tài khoản được tạo mà không cần xác minh email. Thiết lập RESEND_API_KEY để bật tính năng này (bộ công cụ đi kèm với Resend, xem docs/configuration.md)."
-            },
-            "$product": {
-                "demoNoticeExtra": "Mọi thứ khác vẫn hoạt động như trong môi trường thực tế.",
-                "noEmailService": "Chưa có dịch vụ email nào được cấu hình, vì vậy tài khoản được tạo mà không cần xác minh email. Thiết lập RESEND_API_KEY để bật tính năng này."
-            },
-            "namePlaceholder": "Tên (không bắt buộc)",
-            "emailPlaceholder": "bạn@example.com",
-            "passwordPlaceholder": "Mật khẩu (tối thiểu 8 ký tự)",
-            "submit": "Tạo tài khoản",
-            "haveAccount": "Đã có tài khoản? Đăng nhập",
-            "legal": "Bằng cách đăng ký, bạn đồng ý với Điều khoản dịch vụ và Chính sách bảo mật của chúng tôi.",
-            "errors": {
-                "invalid": "Kiểm tra lại thông tin: email hợp lệ và mật khẩu ít nhất 8 ký tự.",
-                "exists": "Tài khoản với email này đã tồn tại. Hãy đăng nhập thay thế.",
-                "rate": "Quá nhiều lần thử. Vui lòng thử lại sau vài phút.",
-                "generic": "Đã có lỗi xảy ra. Thử lại sau."
-            }
-        },
-        "login": {
-            "title": "Chào mừng trở lại",
-            "subtitle": "Đăng nhập vào tài khoản của bạn để tiếp tục",
-            "subtitleDemo": "Đây là bản demo trực tiếp - trải nghiệm ngay",
-            "google": "Tiếp tục với Google",
-            "github": "Tiếp tục với GitHub",
-            "demoOauth": "Đăng nhập OAuth được bật trong bản triển khai riêng của bạn - bản demo này sử dụng các tài khoản dùng chung.",
-            "demoEmailFlows": "Tò mò về quy trình gửi email? Xem trước đăng ký và đặt lại mật khẩu.",
-            "dividerEmail": "hoặc tiếp tục với email",
-            "passwordUpdated": "Đã cập nhật mật khẩu. Đăng nhập bằng mật khẩu mới của bạn.",
-            "emailPlaceholder": "bạn@example.com",
-            "passwordPlaceholder": "Mật khẩu",
-            "submit": "Đăng nhập",
-            "magicLink": "Gửi liên kết đăng nhập qua email",
-            "magicLinkTwoFactorNote": "Tài khoản bật xác thực hai yếu tố sẽ đăng nhập bằng mật khẩu và mã xác thực, không dùng liên kết.",
-            "forgot": "Quên mật khẩu?",
-            "noAccount": "Chưa có tài khoản? Đăng ký",
-            "dividerDemo": "dùng thử bản demo",
-            "exploreUser": "Trải nghiệm với vai trò Người dùng",
-            "exploreAdmin": "Trải nghiệm với vai trò Quản trị viên",
-            "demoAccounts": "Một cú nhấp chuột, không cần email - tài khoản dùng chung với dữ liệu giả, được đặt lại định kỳ.",
-            "errors": {
-                "credentials": "Email hoặc mật khẩu không hợp lệ.",
-                "email": "Nhập địa chỉ email hợp lệ.",
-                "rate": "Quá nhiều lần thử. Vui lòng thử lại sau vài phút.",
-                "Verification": "Liên kết đăng nhập đó không hợp lệ hoặc đã hết hạn. Yêu cầu một liên kết mới.",
-                "generic": "Đã có lỗi xảy ra. Thử lại sau.",
-                "2fa": "Tài khoản này sử dụng xác thực hai yếu tố, vì vậy cần đăng nhập bằng mật khẩu và mã từ ứng dụng xác thực của bạn.",
-                "two_factor_linking": "Tài khoản này sử dụng xác thực hai yếu tố, nên nhà cung cấp không thể liên kết trực tiếp tại đây. Đăng nhập bằng mật khẩu và mã, sau đó kết nối nhà cung cấp từ Cài đặt."
-            }
-        },
-        "twoFactor": {
-            "title": "Xác thực hai yếu tố",
-            "subtitle": "Nhập mã gồm 6 chữ số từ ứng dụng xác thực của bạn.",
-            "codeLabel": "Mã xác nhận",
-            "submit": "Xác minh",
-            "useBackup": "Sử dụng mã dự phòng",
-            "useApp": "Sử dụng ứng dụng xác thực",
-            "backupTitle": "Mã dự phòng",
-            "backupSubtitle": "Nhập một mã từ danh sách bạn đã lưu. Mỗi mã chỉ dùng được một lần và không ảnh hưởng đến các mã khác.",
-            "backupLabel": "Mã dự phòng",
-            "backToLogin": "Quay lại đăng nhập",
-            "errors": {
-                "code": "Mã đó không đúng hoặc đã hết hạn. Mã thay đổi mỗi 30 giây.",
-                "backup": "Mã dự phòng đó không đúng hoặc đã được sử dụng.",
-                "rate": "Quá nhiều lần thử. Vui lòng thử lại sau vài phút.",
-                "expired": "Phiên đăng nhập đã hết thời gian. Vui lòng bắt đầu lại.",
-                "generic": "Đã có lỗi xảy ra. Thử lại sau.",
-                "multiple": "Đó là toàn bộ danh sách. Nhập một mã duy nhất từ danh sách theo dạng ABCDE-FGHJK: các mã khác vẫn giữ nguyên hiệu lực."
-            },
-            "backupLost": "Mất điện thoại và cả các mã này? Bạn không thể tự đặt lại: hãy yêu cầu quản trị viên trang web xóa xác thực hai yếu tố khỏi tài khoản của bạn."
-        }
+  "auth": {
+    "verifyRequest": {
+      "title": "Kiểm tra email của bạn",
+      "body": "Chúng tôi đã gửi cho bạn một liên kết đăng nhập. Liên kết này có hiệu lực trong 15 phút và chỉ sử dụng được một lần.",
+      "spam": "Không thấy gì trong hộp thư đến? Hãy kiểm tra thư mục spam, hoặc thử lại."
     },
-    "dashboard": {
-        "projects": {
-            "title": "Dự án",
-            "subtitle": "Những công việc bạn đang thực hiện. Đây là tài nguyên mẫu.",
-            "newTitle": "Dự án mới",
-            "newDescription": "Tạo một dự án do bạn sở hữu.",
-            "emptyTitle": "Chưa có dự án nào",
-            "emptyBody": "Tạo dự án đầu tiên của bạn để bắt đầu.",
-            "noDescription": "Không có mô tả",
-            "updated": "Đã cập nhật {date}",
-            "searchPlaceholder": "Tìm kiếm dự án...",
-            "noResultsTitle": "Không tìm thấy kết quả",
-            "noResultsBody": "Không có dự án nào khớp với “{query}”. Thử từ khóa ngắn hơn hoặc xóa tìm kiếm.",
-            "clearSearch": "Xóa tìm kiếm"
-        },
-        "home": {
-            "greeting": "Chào mừng trở lại, {name}",
-            "greetingFallback": "bạn",
-            "subtitle": "Đây là những gì đang diễn ra với tài khoản của bạn.",
-            "projectsTitle": "Dự án",
-            "projectsCount": "{count, plural, =0 {Tạo dự án đầu tiên để bắt đầu.} one {Bạn có # dự án.} other {Bạn có # dự án.}}",
-            "projectsCreate": "Tạo một dự án",
-            "projectsViewAll": "Xem tất cả",
-            "currentPlan": "Gói hiện tại",
-            "planFree": "Miễn phí",
-            "status": "Trạng thái",
-            "statusLifetime": "Trọn đời",
-            "statusFree": "Gói miễn phí",
-            "nextBilling": "Kỳ thanh toán tiếp theo",
-            "none": "Không có",
-            "$product": {
-                "upsellTitle": "Làm được nhiều hơn với một gói nâng cấp",
-                "upsellBody": "Mở khóa không gian làm việc hoàn chỉnh cho bạn và đội ngũ. Thay đổi hoặc hủy bất kỳ lúc nào.",
-                "upsellCta": "Xem các gói"
-            },
-            "$kit": {
-                "upsellTitle": "Tính năng Nhóm, sắp ra mắt",
-                "upsellBody": "Tổ chức nhiều nhóm, phân quyền và thanh toán theo nhóm đang được phát triển. Hãy chia sẻ nhu cầu của bạn với chúng tôi.",
-                "upsellCta": "Tìm hiểu thêm"
-            },
-            "checklistTitle": "Bắt đầu",
-            "checklistProgress": "Hoàn thành {done} / {total}",
-            "checklistDismiss": "Ẩn danh sách công việc",
-            "checklistName": "Thêm tên của bạn",
-            "checklistProject": "Tạo dự án đầu tiên",
-            "checklistBilling": "Thiết lập thanh toán"
-        },
-        "settings": {
-            "title": "Cài đặt",
-            "subtitle": "Quản lý tùy chọn tài khoản của bạn.",
-            "profileTitle": "Hồ sơ",
-            "profileDescription": "Cập nhật tên hiển thị và xem chi tiết tài khoản.",
-            "methodsTitle": "Phương thức đăng nhập",
-            "methodsDescription": "Kết nối nhiều cách để đăng nhập vào cùng một tài khoản.",
-            "email": {
-                "label": "Địa chỉ email",
-                "hint": "Địa chỉ bạn dùng để đăng nhập. Việc thay đổi cần hai bước xác nhận: một từ địa chỉ này, sau đó một từ địa chỉ mới. Tài khoản chỉ chuyển đổi sau cả hai bước, đảm bảo bạn không bị khóa tài khoản nếu nhập sai.",
-                "placeholder": "moi@example.com",
-                "submit": "Thay đổi email"
-            },
-            "connected": "Đã kết nối",
-            "disconnect": "Hủy kết nối",
-            "connect": "Kết nối",
-            "password": "Mật khẩu",
-            "passwordSet": "Đã thiết lập",
-            "passwordNotSet": "Chưa thiết lập",
-            "currentPasswordPlaceholder": "Mật khẩu hiện tại",
-            "newPasswordPlaceholder": "Mật khẩu mới (tối thiểu 8 ký tự)",
-            "setPasswordPlaceholder": "Thiết lập mật khẩu (tối thiểu 8 ký tự)",
-            "changePassword": "Đổi mật khẩu",
-            "setPassword": "Thiết lập mật khẩu",
-            "passwordHint": "Khi đã thiết lập mật khẩu, bạn có thể đăng nhập ngay cả khi không dùng các nhà cung cấp OAuth.",
-            "twoFactor": {
-                "title": "Xác thực hai yếu tố",
-                "description": "Mã từ ứng dụng xác thực bổ sung bên cạnh mật khẩu của bạn.",
-                "status": "Xác thực hai yếu tố",
-                "on": "Bật",
-                "blurb": "Ghép nối ứng dụng xác thực. Sau đó, việc đăng nhập bằng mật khẩu sẽ yêu cầu thêm mã gồm 6 chữ số.",
-                "passwordLabel": "Mật khẩu tài khoản của bạn",
-                "turnOn": "Bật",
-                "turnOff": "Tắt",
-                "turnOffTitle": "Tắt xác thực hai yếu tố?",
-                "turnOffDescription": "Mã khóa bí mật sẽ bị xóa hoàn toàn chứ không lưu trữ, nên khi bật lại sau này bạn sẽ phải ghép nối ứng dụng xác thực mới từ đầu.",
-                "cancel": "Hủy",
-                "scan": "Quét mã này bằng ứng dụng xác thực của bạn.",
-                "manualEntry": "Không thể quét? Trong ứng dụng của bạn, chọn thêm tài khoản bằng cách nhập khóa và điền mã này:",
-                "codeLabel": "Mã từ ứng dụng",
-                "confirm": "Xác nhận",
-                "regenerate": "Mã dự phòng mới",
-                "codesTitle": "Mã dự phòng",
-                "codesWarning": "Chỉ hiển thị một lần. Hãy lưu lại ngay: mỗi mã có thể dùng để đăng nhập nếu bạn mất điện thoại, và việc rời khỏi trang này sẽ tạo ra một bộ mã mới.",
-                "copy": "Sao chép",
-                "copied": "Đã sao chép",
-                "download": "Tải về",
-                "needsPassword": "Hãy thiết lập mật khẩu trước. Yếu tố xác thực thứ hai được thêm vào mật khẩu, nên tài khoản chỉ đăng nhập bằng Google hoặc GitHub sẽ không thể thiết lập.",
-                "demo": "Xác thực hai yếu tố bị tắt trên bản demo. Các tài khoản ở đây dùng chung và được đặt lại mỗi đêm, nên yếu tố thứ hai sẽ khóa người truy cập tiếp theo.",
-                "errors": {
-                    "password": "Mật khẩu đó không đúng.",
-                    "code": "Mã đó không đúng hoặc đã hết hạn. Mã thay đổi mỗi 30 giây.",
-                    "rate": "Quá nhiều lần thử. Vui lòng thử lại sau vài phút.",
-                    "demo": "Không khả dụng trên bản demo.",
-                    "generic": "Đã có lỗi xảy ra. Thử lại sau."
-                },
-                "apps": "Mọi ứng dụng xác thực đều hoạt động: Google Authenticator, 1Password, Bitwarden, Authy.",
-                "codesStore": "Lưu trữ chúng ở nơi khác ngoài chiếc điện thoại chứa ứng dụng xác thực của bạn: mất một thiết bị không nên làm mất cả hai.",
-                "regenerateHint": "Đã dùng một mã hoặc làm mất danh sách? Bộ mã mới sẽ thay thế bộ mã cũ, và các mã cũ sẽ ngừng hoạt động ngay lập tức.",
-                "passwordWhy": "Mật khẩu bạn dùng để đăng nhập. Chúng tôi yêu cầu ở đây để người khác khi thấy màn hình của bạn mở khóa không thể tự ghép nối ứng dụng xác thực của họ vào tài khoản của bạn.",
-                "passwordWhyShort": "Mật khẩu bạn dùng để đăng nhập. Điều này xác nhận đó là bạn, chứ không phải ai đó sử dụng máy khi bạn để mở màn hình.",
-                "keyShape": "Chỉ gồm các chữ cái và các chữ số từ 2 đến 7: ký tự tròn luôn là chữ O, không bao giờ là số 0, và không có số 1 để tránh nhầm lẫn với I hoặc L. Khoảng trắng không ảnh hưởng.",
-                "codesShape": "Chữ in hoa, không chứa các ký tự dễ nhầm lẫn: không có O hoặc số 0, không có I hoặc số 1. Khoảng trắng và dấu gạch ngang sẽ được chấp nhận khi bạn nhập lại.",
-                "codesHowToUse": "Bạn nhận được 10 mã vì mỗi mã sẽ bị tiêu hủy sau khi dùng. Khi đăng nhập, bạn nhập một mã duy nhất chứ không phải toàn bộ danh sách: mã đó sẽ ngừng hoạt động từ lúc đó, và lần tới bạn dùng một mã khác."
-            },
-            "sessions": {
-                "title": "Phiên hoạt động",
-                "description": "Mọi thiết bị đang đăng nhập vào tài khoản này lúc này.",
-                "blurb": "Mỗi hàng tương ứng với một lần đăng nhập, cùng với thiết bị và địa chỉ khởi tạo. Nếu không nhận ra phiên nào, hãy kết thúc nó.",
-                "thisDevice": "Thiết bị này",
-                "unknownDevice": "Thiết bị không xác định",
-                "revoke": "Kết thúc phiên",
-                "revokeOthers": "Kết thúc tất cả các phiên khác ({count})",
-                "caveat": "Một phiên bạn kết thúc ở đây có thể duy trì trên thiết bị khác tối đa một phút do phiên được lưu trong bộ nhớ cache của cookie. Việc đổi mật khẩu sẽ kết thúc tất cả các phiên khác ngay lập tức mà không có độ trễ này."
-            },
-            "accountTitle": "Tài khoản",
-            "accountDescription": "Thông tin tài khoản và dữ liệu hệ thống.",
-            "memberSince": "Thành viên từ",
-            "messages": {
-                "unlinked": "Đã hủy kết nối tài khoản.",
-                "password": "Đã cập nhật mật khẩu.",
-                "last-method": "Bạn không thể hủy kết nối phương thức đăng nhập duy nhất. Hãy thiết lập mật khẩu trước.",
-                "unlink": "Tài khoản đó không thể hủy kết nối.",
-                "policy": "Mật khẩu phải từ 8 đến 72 ký tự.",
-                "current": "Mật khẩu hiện tại bạn nhập không đúng.",
-                "demo": "Xóa tài khoản bị vô hiệu hóa trên bản demo.",
-                "confirm": "Địa chỉ không khớp, không có gì bị xóa.",
-                "subscription": "Gói đăng ký của bạn không thể hủy, nên tài khoản chưa bị xóa. Hãy hủy gói trong trang thanh toán và thử lại.",
-                "last-admin": "Bạn là quản trị viên duy nhất. Hãy thăng cấp cho người khác trước khi xóa tài khoản này.",
-                "2fa-enabled": "Xác thực hai yếu tố đang bật.",
-                "2fa-disabled": "Xác thực hai yếu tố đang tắt.",
-                "2fa-password": "Mật khẩu đó không đúng, nên không có thay đổi nào.",
-                "backup-used": "Bạn đã đăng nhập bằng mã dự phòng và mã đó hiện đã được sử dụng. Nếu danh sách sắp hết, hãy tạo bộ mã mới bên dưới.",
-                "session-revoked": "Phiên đó đã được kết thúc.",
-                "sessions-revoked": "Tất cả các phiên khác đã được kết thúc.",
-                "session": "Không tìm thấy phiên đó, không có thay đổi nào.",
-                "email-sent": "Nếu địa chỉ đó có thể sử dụng, chúng tôi đã gửi thư xác nhận đến email hiện tại của bạn. Tài khoản chỉ chuyển đổi sau khi bạn xác nhận ở cả hai email.",
-                "email-invalid": "Đó không phải là địa chỉ email hợp lệ.",
-                "email-same": "Đó đã là địa chỉ email của bạn.",
-                "email-change": "Không thể thay đổi địa chỉ email. Vui lòng thử lại sau giây lát.",
-                "rate": "Quá nhiều lần thử. Vui lòng thử lại sau vài phút.",
-                "last-root": "Bạn là tài khoản ROOT duy nhất. Hãy thêm một tài khoản khác vào ROOT_EMAILS và chạy lại seed trước khi xóa tài khoản này."
-            },
-            "deleteAccount": {
-                "heading": "Xóa tài khoản này",
-                "blurb": "Xóa tài khoản, các dự án và các phương thức đăng nhập của bạn, đồng thời hủy mọi gói đăng ký đang hoạt động ngay lập tức. Hành động này không thể hoàn tác.",
-                "trigger": "Xóa tài khoản",
-                "title": "Xóa tài khoản của bạn?",
-                "description": "Hồ sơ, dự án, các phiên hoạt động và các phương thức đăng nhập đã liên kết sẽ bị xóa vĩnh viễn, và mọi gói đăng ký đang hoạt động sẽ bị hủy ngay lập tức. Không thể hoàn tác.",
-                "confirmLabel": "Nhập {email} để xác nhận",
-                "cancel": "Giữ lại tài khoản",
-                "confirm": "Xóa vĩnh viễn"
-            },
-            "dangerZone": {
-                "title": "Vùng nguy hiểm",
-                "blurb": "Một số hành động không thể hoàn tác. Hãy cẩn trọng."
-            },
-            "nav": {
-                "label": "Các mục cài đặt",
-                "general": "Tổng quan",
-                "security": "Bảo mật",
-                "backup": "Sao lưu",
-                "logs": "Nhật ký"
-            },
-            "backup": {
-                "title": "Sao lưu dữ liệu",
-                "description": "Tải xuống bản sao toàn bộ dữ liệu ứng dụng lưu về bạn dưới dạng tệp JSON để lưu giữ hoặc chuyển sang nơi khác.",
-                "includes": {
-                    "profile": "Hồ sơ của bạn: tên, địa chỉ email, vai trò và thời điểm tạo tài khoản",
-                    "security": "Các phương thức đăng nhập và những phiên đăng nhập được ghi nhận, kèm thiết bị và địa chỉ IP",
-                    "projects": "Các dự án của bạn",
-                    "billing": "Gói đăng ký, các giao dịch mua và trạng thái nhận bản tin của bạn"
-                },
-                "excludes": "Tệp sao lưu không bao gồm mật khẩu, mã đăng nhập, khóa bí mật xác thực hai yếu tố và mã dự phòng.",
-                "download": "Tải dữ liệu của tôi"
-            },
-            "logs": {
-                "title": "Hoạt động tài khoản",
-                "description": "Các lần đăng nhập và thay đổi phương thức truy cập tài khoản, sắp xếp từ mới nhất. Phiên đăng nhập sẽ biến mất khỏi danh sách khi bị kết thúc hoặc được dọn dẹp sau khi hết hạn.",
-                "accountCreated": "Đã tạo tài khoản",
-                "methodAdded": "Đã kết nối {method}",
-                "passwordAdded": "Đã thiết lập mật khẩu",
-                "twoFactorEnabled": "Đã bật xác thực hai yếu tố",
-                "signedIn": "Đã đăng nhập trên {device}",
-                "switchedIn": "Quản trị viên đã chuyển sang tài khoản này bằng chức năng Switch As trên {device}",
-                "unknownDevice": "thiết bị không xác định",
-                "thisDevice": "Thiết bị này",
-                "ended": "Đã kết thúc"
-            }
-        },
-        "billing": {
-            "title": "Thanh toán",
-            "subtitle": "Quản lý gói dịch vụ và lịch sử thanh toán.",
-            "checkoutDisabledDemo": "Tính năng thanh toán bị vô hiệu hóa trong bản demo công khai.",
-            "checkoutDisabledStripe": "Kết nối Stripe để bật thanh toán: thiết lập STRIPE_SECRET_KEY và ID giá, sau đó reseed.",
-            "currentPlan": "Gói hiện tại",
-            "purchasedOn": "Đã mua vào {date}",
-            "renewsOn": "Gia hạn vào {date}",
-            "trialEndsOn": "Dùng thử miễn phí kết thúc vào {date}",
-            "onFreePlan": "Bạn đang dùng gói miễn phí",
-            "free": "Miễn phí",
-            "lifetimeAccess": "Truy cập trọn đời",
-            "cancelsAtPeriodEnd": "Hủy vào cuối chu kỳ thanh toán",
-            "oneTime": "một lần",
-            "perMonth": "/ tháng",
-            "alsoSubscribed": "Bạn cũng có một gói đăng ký {plan}. Vì quyền truy cập trọn đời bao gồm tất cả, bạn có thể hủy nó trong cổng thanh toán.",
-            "portalHint": "Chuyển đổi gói hoặc cập nhật phương thức thanh toán trong cổng thanh toán.",
-            "availablePlans": "Các gói hiện có",
-            "availablePlansHint": "Đây là các gói mẫu đã khởi tạo: hãy thay thế bằng mức giá của riêng bạn.",
-            "invoiceHistory": "Lịch sử hóa đơn",
-            "invoiceHistoryHint": "Các khoản thanh toán và hóa đơn trước đây của bạn.",
-            "noInvoices": "Chưa có hóa đơn nào.",
-            "noInvoicesStripe": "Kết nối Stripe để xem lịch sử hóa đơn của bạn.",
-            "colDate": "Ngày",
-            "colAmount": "Số tiền",
-            "colStatus": "Trạng thái",
-            "colInvoice": "Hóa đơn",
-            "statusUnknown": "không xác định",
-            "viewInvoice": "Xem",
-            "downloadPdf": "PDF",
-            "discount": "Giảm giá: {discount} {duration}",
-            "discountPercent": "Giảm {percent}%",
-            "discountAmount": "Giảm {amount}",
-            "discountOnce": "cho hóa đơn tiếp theo",
-            "discountUntil": "cho đến {date}",
-            "discountForever": "cho mọi hóa đơn",
-            "discountCode": "mã {code}",
-            "status": {
-                "ACTIVE": "Hoạt động",
-                "TRIALING": "Dùng thử",
-                "PAST_DUE": "Quá hạn",
-                "CANCELED": "Đã hủy",
-                "UNPAID": "Chưa thanh toán",
-                "INCOMPLETE": "Chưa hoàn tất"
-            },
-            "invoiceStatus": {
-                "draft": "Nháp",
-                "open": "Mở",
-                "paid": "Đã thanh toán",
-                "uncollectible": "Không thể thu hồi",
-                "void": "Vô hiệu"
-            }
-        },
-        "projectDetail": {
-            "subtitle": "Chỉnh sửa chi tiết hoặc xóa dự án này.",
-            "detailsTitle": "Chi tiết",
-            "detailsDescription": "Cập nhật tên và mô tả dự án.",
-            "metadataTitle": "Dữ liệu hệ thống",
-            "created": "Đã tạo",
-            "updated": "Cập nhật lần cuối",
-            "dangerTitle": "Vùng nguy hiểm",
-            "dangerDescription": "Xóa dự án là vĩnh viễn và không thể hoàn tác.",
-            "delete": "Xóa dự án"
-        },
-        "createProject": {
-            "created": "Đã tạo dự án",
-            "name": "Tên dự án",
-            "description": "Mô tả (không bắt buộc)",
-            "descriptionPlaceholder": "Dự án này nói về điều gì?",
-            "descriptionHint": "Tùy chọn. Tối đa {max} ký tự.",
-            "submit": "Tạo dự án"
-        },
-        "projectEdit": {
-            "updated": "Đã cập nhật dự án",
-            "name": "Tên dự án",
-            "descriptionPlaceholder": "Dự án này nói về điều gì?"
-        },
-        "profile": {
-            "updated": "Đã cập nhật hồ sơ",
-            "avatarAlt": "Ảnh đại diện",
-            "displayName": "Tên hiển thị",
-            "namePlaceholder": "Tên của bạn",
-            "avatarFrom": "Ảnh từ {provider}",
-            "avatarCurrent": "Ảnh đại diện hiện tại",
-            "avatarNone": "Chưa có ảnh đại diện",
-            "email": "Email",
-            "emailHint": "Địa chỉ bạn dùng để đăng nhập. Thay đổi trong mục Phương thức đăng nhập bên dưới.",
-            "save": "Lưu thay đổi"
-        },
-        "signOut": {
-            "title": "Đăng xuất?",
-            "pending": "Đang đăng xuất…",
-            "confirm": "Đăng xuất"
-        },
-        "sidebar": {
-            "expand": "Mở rộng thanh bên",
-            "collapse": "Thu gọn thanh bên"
-        },
-        "userMenu": {
-            "open": "Mở menu tài khoản",
-            "avatarAlt": "Ảnh đại diện",
-            "myAccount": "Tài khoản của tôi"
-        },
-        "nav": {
-            "dashboard": "Bảng điều khiển",
-            "projects": "Dự án",
-            "billing": "Thanh toán",
-            "settings": "Cài đặt",
-            "overview": "Tổng quan",
-            "adminPanel": "Trang quản trị",
-            "more": "Thêm",
-            "backToDashboard": "Quay lại Bảng điều khiển",
-            "openNavigation": "Mở điều hướng"
-        }
+    "forgotPassword": {
+      "title": "Đặt lại mật khẩu",
+      "subtitle": "Nhập email của bạn và chúng tôi sẽ gửi liên kết đặt lại mật khẩu",
+      "demoNotice": "Bản demo trực tiếp này không kết nối dịch vụ email, vì vậy tính năng đặt lại mật khẩu đã bị vô hiệu hóa ở đây.",
+      "$kit": {
+        "demoNoticeExtra": "Trong bản triển khai riêng của bạn, hãy kết nối một nhà cung cấp email (bộ công cụ đi kèm với Resend) và quy trình này sẽ hoạt động.",
+        "noEmailService": "Đặt lại mật khẩu cần một dịch vụ email. Thiết lập RESEND_API_KEY để bật tính năng này (bộ công cụ đi kèm với Resend, xem docs/configuration.md)."
+      },
+      "$product": {
+        "demoNoticeExtra": "Mọi thứ khác vẫn hoạt động như trong môi trường thực tế.",
+        "noEmailService": "Đặt lại mật khẩu cần một dịch vụ email. Thiết lập RESEND_API_KEY để bật tính năng này."
+      },
+      "sent": "Nếu tài khoản tồn tại cho email đó, một liên kết đặt lại mật khẩu đang trên đường gửi đến. Nó có hiệu lực trong 30 phút.",
+      "emailPlaceholder": "bạn@example.com",
+      "submit": "Gửi liên kết đặt lại",
+      "backToSignIn": "Quay lại đăng nhập"
     },
-    "admin": {
-        "title": "Trang quản trị",
-        "badge": "Quản trị viên",
-        "subtitle": "Quản lý người dùng và theo dõi chỉ số kinh doanh.",
-        "totalUsers": "Tổng người dùng",
-        "activeSubscriptions": "Gói đăng ký hoạt động",
-        "mrr": "MRR (ước tính)",
-        "revenueTitle": "Doanh thu định kỳ",
-        "revenueSubtitle": "Doanh thu định kỳ hàng tháng trong 12 tuần qua.",
-        "revenueTooltip": "MRR",
-        "usersTitle": "Người dùng",
-        "usersCount": "{count, plural, one {# người dùng} other {# người dùng}}",
-        "searchPlaceholder": "Tìm kiếm theo email...",
-        "search": "Tìm kiếm",
-        "free": "Miễn phí",
-        "joined": "Tham gia {date}",
-        "noUsers": "Không tìm thấy người dùng nào.",
-        "colUser": "Người dùng",
-        "colPlan": "Gói",
-        "colStatus": "Trạng thái",
-        "colRole": "Vai trò",
-        "colJoined": "Đã tham gia",
-        "page": "Trang {page} / {total}",
-        "previous": "Trước",
-        "next": "Tiếp",
-        "waitlistTitle": "Danh sách chờ",
-        "exportCsv": "Xuất CSV",
-        "colEmail": "Email",
-        "colSource": "Nguồn",
-        "colRequested": "Đã yêu cầu",
-        "unsubscribed": "Đã hủy đăng ký",
-        "confirmed": "Đã xác nhận",
-        "pending": "Đang chờ",
-        "noSubscribers": "Chưa có người đăng ký. Biểu mẫu đăng ký nằm ở trang bảng giá.",
-        "makeAdmin": "Cấp quyền Admin",
-        "rolePromoted": "Người dùng đã được thăng cấp thành Admin. Phiên làm việc của họ sẽ cập nhật trong vòng một phút.",
-        "roleFailed": "Cập nhật vai trò thất bại",
-        "removeAdmin": "Gỡ quyền Admin",
-        "roleDemoted": "Đã gỡ quyền Admin. Phiên làm việc của họ sẽ cập nhật trong vòng một phút."
+    "resetPassword": {
+      "title": "Chọn mật khẩu mới",
+      "expired": "Liên kết đặt lại này không hợp lệ hoặc đã hết hạn.",
+      "requestNew": "Yêu cầu liên kết mới",
+      "policy": "Mật khẩu phải từ 8 đến 72 ký tự.",
+      "passwordPlaceholder": "Mật khẩu mới (tối thiểu 8 ký tự)",
+      "submit": "Cập nhật mật khẩu"
     },
-    "switchAs": {
-        "button": "Chuyển sang vai trò",
-        "failed": "Không thể chuyển sang tài khoản này",
-        "banner": "Bạn đang sử dụng ứng dụng dưới tên {email}. Mọi thay đổi bạn thực hiện đều là thật.",
-        "back": "Chuyển lại"
+    "signup": {
+      "title": "Tạo tài khoản của bạn",
+      "subtitleVerified": "Chúng tôi sẽ gửi email chứa liên kết để xác minh địa chỉ và đăng nhập cho bạn",
+      "subtitlePassword": "Đăng ký bằng email và mật khẩu của bạn",
+      "demoNotice": "Bản demo trực tiếp này không kết nối dịch vụ email, vì vậy tính năng đăng ký đã bị vô hiệu hóa ở đây.",
+      "$kit": {
+        "demoNoticeExtra": "Trong bản triển khai riêng của bạn, hãy kết nối một nhà cung cấp email (bộ công cụ đi kèm với Resend) và quy trình này sẽ hoạt động.",
+        "noEmailService": "Chưa có dịch vụ email nào được cấu hình, vì vậy tài khoản được tạo mà không cần xác minh email. Thiết lập RESEND_API_KEY để bật tính năng này (bộ công cụ đi kèm với Resend, xem docs/configuration.md)."
+      },
+      "$product": {
+        "demoNoticeExtra": "Mọi thứ khác vẫn hoạt động như trong môi trường thực tế.",
+        "noEmailService": "Chưa có dịch vụ email nào được cấu hình, vì vậy tài khoản được tạo mà không cần xác minh email. Thiết lập RESEND_API_KEY để bật tính năng này."
+      },
+      "namePlaceholder": "Tên (không bắt buộc)",
+      "emailPlaceholder": "bạn@example.com",
+      "passwordPlaceholder": "Mật khẩu (tối thiểu 8 ký tự)",
+      "submit": "Tạo tài khoản",
+      "haveAccount": "Đã có tài khoản? Đăng nhập",
+      "legal": "Bằng cách đăng ký, bạn đồng ý với Điều khoản dịch vụ và Chính sách bảo mật của chúng tôi.",
+      "errors": {
+        "invalid": "Kiểm tra lại thông tin: email hợp lệ và mật khẩu ít nhất 8 ký tự.",
+        "exists": "Tài khoản với email này đã tồn tại. Hãy đăng nhập thay thế.",
+        "rate": "Quá nhiều lần thử. Vui lòng thử lại sau vài phút.",
+        "generic": "Đã có lỗi xảy ra. Thử lại sau."
+      }
+    },
+    "login": {
+      "title": "Chào mừng trở lại",
+      "subtitle": "Đăng nhập vào tài khoản của bạn để tiếp tục",
+      "subtitleDemo": "Đây là bản demo trực tiếp - trải nghiệm ngay",
+      "google": "Tiếp tục với Google",
+      "github": "Tiếp tục với GitHub",
+      "demoOauth": "Đăng nhập OAuth được bật trong bản triển khai riêng của bạn - bản demo này sử dụng các tài khoản dùng chung.",
+      "demoEmailFlows": "Tò mò về quy trình gửi email? Xem trước đăng ký và đặt lại mật khẩu.",
+      "dividerEmail": "hoặc tiếp tục với email",
+      "passwordUpdated": "Đã cập nhật mật khẩu. Đăng nhập bằng mật khẩu mới của bạn.",
+      "emailPlaceholder": "bạn@example.com",
+      "passwordPlaceholder": "Mật khẩu",
+      "submit": "Đăng nhập",
+      "magicLink": "Gửi liên kết đăng nhập qua email",
+      "magicLinkTwoFactorNote": "Tài khoản bật xác thực hai yếu tố sẽ đăng nhập bằng mật khẩu và mã xác thực, không dùng liên kết.",
+      "forgot": "Quên mật khẩu?",
+      "noAccount": "Chưa có tài khoản? Đăng ký",
+      "dividerDemo": "dùng thử bản demo",
+      "exploreUser": "Trải nghiệm với vai trò Người dùng",
+      "exploreAdmin": "Trải nghiệm với vai trò Quản trị viên",
+      "demoAccounts": "Một cú nhấp chuột, không cần email - tài khoản dùng chung với dữ liệu giả, được đặt lại định kỳ.",
+      "errors": {
+        "credentials": "Email hoặc mật khẩu không hợp lệ.",
+        "email": "Nhập địa chỉ email hợp lệ.",
+        "rate": "Quá nhiều lần thử. Vui lòng thử lại sau vài phút.",
+        "Verification": "Liên kết đăng nhập đó không hợp lệ hoặc đã hết hạn. Yêu cầu một liên kết mới.",
+        "generic": "Đã có lỗi xảy ra. Thử lại sau.",
+        "2fa": "Tài khoản này sử dụng xác thực hai yếu tố, vì vậy cần đăng nhập bằng mật khẩu và mã từ ứng dụng xác thực của bạn.",
+        "two_factor_linking": "Tài khoản này sử dụng xác thực hai yếu tố, nên nhà cung cấp không thể liên kết trực tiếp tại đây. Đăng nhập bằng mật khẩu và mã, sau đó kết nối nhà cung cấp từ Cài đặt."
+      }
+    },
+    "twoFactor": {
+      "title": "Xác thực hai yếu tố",
+      "subtitle": "Nhập mã gồm 6 chữ số từ ứng dụng xác thực của bạn.",
+      "codeLabel": "Mã xác nhận",
+      "submit": "Xác minh",
+      "useBackup": "Sử dụng mã dự phòng",
+      "useApp": "Sử dụng ứng dụng xác thực",
+      "backupTitle": "Mã dự phòng",
+      "backupSubtitle": "Nhập một mã từ danh sách bạn đã lưu. Mỗi mã chỉ dùng được một lần và không ảnh hưởng đến các mã khác.",
+      "backupLabel": "Mã dự phòng",
+      "backToLogin": "Quay lại đăng nhập",
+      "errors": {
+        "code": "Mã đó không đúng hoặc đã hết hạn. Mã thay đổi mỗi 30 giây.",
+        "backup": "Mã dự phòng đó không đúng hoặc đã được sử dụng.",
+        "rate": "Quá nhiều lần thử. Vui lòng thử lại sau vài phút.",
+        "expired": "Phiên đăng nhập đã hết thời gian. Vui lòng bắt đầu lại.",
+        "generic": "Đã có lỗi xảy ra. Thử lại sau.",
+        "multiple": "Đó là toàn bộ danh sách. Nhập một mã duy nhất từ danh sách theo dạng ABCDE-FGHJK: các mã khác vẫn giữ nguyên hiệu lực."
+      },
+      "backupLost": "Mất điện thoại và cả các mã này? Bạn không thể tự đặt lại: hãy yêu cầu quản trị viên trang web xóa xác thực hai yếu tố khỏi tài khoản của bạn."
+    }
+  },
+  "dashboard": {
+    "projects": {
+      "title": "Dự án",
+      "subtitle": "Những công việc bạn đang thực hiện. Đây là tài nguyên mẫu.",
+      "newTitle": "Dự án mới",
+      "newDescription": "Tạo một dự án do bạn sở hữu.",
+      "emptyTitle": "Chưa có dự án nào",
+      "emptyBody": "Tạo dự án đầu tiên của bạn để bắt đầu.",
+      "noDescription": "Không có mô tả",
+      "updated": "Đã cập nhật {date}",
+      "searchPlaceholder": "Tìm kiếm dự án...",
+      "noResultsTitle": "Không tìm thấy kết quả",
+      "noResultsBody": "Không có dự án nào khớp với “{query}”. Thử từ khóa ngắn hơn hoặc xóa tìm kiếm.",
+      "clearSearch": "Xóa tìm kiếm"
+    },
+    "home": {
+      "greeting": "Chào mừng trở lại, {name}",
+      "greetingFallback": "bạn",
+      "subtitle": "Đây là những gì đang diễn ra với tài khoản của bạn.",
+      "projectsTitle": "Dự án",
+      "projectsCount": "{count, plural, =0 {Tạo dự án đầu tiên để bắt đầu.} one {Bạn có # dự án.} other {Bạn có # dự án.}}",
+      "projectsCreate": "Tạo một dự án",
+      "projectsViewAll": "Xem tất cả",
+      "currentPlan": "Gói hiện tại",
+      "planFree": "Miễn phí",
+      "status": "Trạng thái",
+      "statusLifetime": "Trọn đời",
+      "statusFree": "Gói miễn phí",
+      "nextBilling": "Kỳ thanh toán tiếp theo",
+      "none": "Không có",
+      "$product": {
+        "upsellTitle": "Làm được nhiều hơn với một gói nâng cấp",
+        "upsellBody": "Mở khóa không gian làm việc hoàn chỉnh cho bạn và đội ngũ. Thay đổi hoặc hủy bất kỳ lúc nào.",
+        "upsellCta": "Xem các gói"
+      },
+      "$kit": {
+        "upsellTitle": "Tính năng Nhóm, sắp ra mắt",
+        "upsellBody": "Tổ chức nhiều nhóm, phân quyền và thanh toán theo nhóm đang được phát triển. Hãy chia sẻ nhu cầu của bạn với chúng tôi.",
+        "upsellCta": "Tìm hiểu thêm"
+      },
+      "checklistTitle": "Bắt đầu",
+      "checklistProgress": "Hoàn thành {done} / {total}",
+      "checklistDismiss": "Ẩn danh sách công việc",
+      "checklistName": "Thêm tên của bạn",
+      "checklistProject": "Tạo dự án đầu tiên",
+      "checklistBilling": "Thiết lập thanh toán"
+    },
+    "settings": {
+      "title": "Cài đặt",
+      "subtitle": "Quản lý tùy chọn tài khoản của bạn.",
+      "profileTitle": "Hồ sơ",
+      "profileDescription": "Cập nhật tên hiển thị và xem chi tiết tài khoản.",
+      "methodsTitle": "Phương thức đăng nhập",
+      "methodsDescription": "Kết nối nhiều cách để đăng nhập vào cùng một tài khoản.",
+      "email": {
+        "label": "Địa chỉ email",
+        "hint": "Địa chỉ bạn dùng để đăng nhập. Việc thay đổi cần hai bước xác nhận: một từ địa chỉ này, sau đó một từ địa chỉ mới. Tài khoản chỉ chuyển đổi sau cả hai bước, đảm bảo bạn không bị khóa tài khoản nếu nhập sai.",
+        "placeholder": "moi@example.com",
+        "submit": "Thay đổi email"
+      },
+      "connected": "Đã kết nối",
+      "disconnect": "Hủy kết nối",
+      "connect": "Kết nối",
+      "password": "Mật khẩu",
+      "passwordSet": "Đã thiết lập",
+      "passwordNotSet": "Chưa thiết lập",
+      "currentPasswordPlaceholder": "Mật khẩu hiện tại",
+      "newPasswordPlaceholder": "Mật khẩu mới (tối thiểu 8 ký tự)",
+      "setPasswordPlaceholder": "Thiết lập mật khẩu (tối thiểu 8 ký tự)",
+      "changePassword": "Đổi mật khẩu",
+      "setPassword": "Thiết lập mật khẩu",
+      "passwordHint": "Khi đã thiết lập mật khẩu, bạn có thể đăng nhập ngay cả khi không dùng các nhà cung cấp OAuth.",
+      "twoFactor": {
+        "title": "Xác thực hai yếu tố",
+        "description": "Mã từ ứng dụng xác thực bổ sung bên cạnh mật khẩu của bạn.",
+        "status": "Xác thực hai yếu tố",
+        "on": "Bật",
+        "blurb": "Ghép nối ứng dụng xác thực. Sau đó, việc đăng nhập bằng mật khẩu sẽ yêu cầu thêm mã gồm 6 chữ số.",
+        "passwordLabel": "Mật khẩu tài khoản của bạn",
+        "turnOn": "Bật",
+        "turnOff": "Tắt",
+        "turnOffTitle": "Tắt xác thực hai yếu tố?",
+        "turnOffDescription": "Mã khóa bí mật sẽ bị xóa hoàn toàn chứ không lưu trữ, nên khi bật lại sau này bạn sẽ phải ghép nối ứng dụng xác thực mới từ đầu.",
+        "cancel": "Hủy",
+        "scan": "Quét mã này bằng ứng dụng xác thực của bạn.",
+        "manualEntry": "Không thể quét? Trong ứng dụng của bạn, chọn thêm tài khoản bằng cách nhập khóa và điền mã này:",
+        "codeLabel": "Mã từ ứng dụng",
+        "confirm": "Xác nhận",
+        "regenerate": "Mã dự phòng mới",
+        "codesTitle": "Mã dự phòng",
+        "codesWarning": "Chỉ hiển thị một lần. Hãy lưu lại ngay: mỗi mã có thể dùng để đăng nhập nếu bạn mất điện thoại, và việc rời khỏi trang này sẽ tạo ra một bộ mã mới.",
+        "copy": "Sao chép",
+        "copied": "Đã sao chép",
+        "download": "Tải về",
+        "needsPassword": "Hãy thiết lập mật khẩu trước. Yếu tố xác thực thứ hai được thêm vào mật khẩu, nên tài khoản chỉ đăng nhập bằng Google hoặc GitHub sẽ không thể thiết lập.",
+        "demo": "Xác thực hai yếu tố bị tắt trên bản demo. Các tài khoản ở đây dùng chung và được đặt lại mỗi đêm, nên yếu tố thứ hai sẽ khóa người truy cập tiếp theo.",
+        "errors": {
+          "password": "Mật khẩu đó không đúng.",
+          "code": "Mã đó không đúng hoặc đã hết hạn. Mã thay đổi mỗi 30 giây.",
+          "rate": "Quá nhiều lần thử. Vui lòng thử lại sau vài phút.",
+          "demo": "Không khả dụng trên bản demo.",
+          "generic": "Đã có lỗi xảy ra. Thử lại sau."
+        },
+        "apps": "Mọi ứng dụng xác thực đều hoạt động: Google Authenticator, 1Password, Bitwarden, Authy.",
+        "codesStore": "Lưu trữ chúng ở nơi khác ngoài chiếc điện thoại chứa ứng dụng xác thực của bạn: mất một thiết bị không nên làm mất cả hai.",
+        "regenerateHint": "Đã dùng một mã hoặc làm mất danh sách? Bộ mã mới sẽ thay thế bộ mã cũ, và các mã cũ sẽ ngừng hoạt động ngay lập tức.",
+        "passwordWhy": "Mật khẩu bạn dùng để đăng nhập. Chúng tôi yêu cầu ở đây để người khác khi thấy màn hình của bạn mở khóa không thể tự ghép nối ứng dụng xác thực của họ vào tài khoản của bạn.",
+        "passwordWhyShort": "Mật khẩu bạn dùng để đăng nhập. Điều này xác nhận đó là bạn, chứ không phải ai đó sử dụng máy khi bạn để mở màn hình.",
+        "keyShape": "Chỉ gồm các chữ cái và các chữ số từ 2 đến 7: ký tự tròn luôn là chữ O, không bao giờ là số 0, và không có số 1 để tránh nhầm lẫn với I hoặc L. Khoảng trắng không ảnh hưởng.",
+        "codesShape": "Chữ in hoa, không chứa các ký tự dễ nhầm lẫn: không có O hoặc số 0, không có I hoặc số 1. Khoảng trắng và dấu gạch ngang sẽ được chấp nhận khi bạn nhập lại.",
+        "codesHowToUse": "Bạn nhận được 10 mã vì mỗi mã sẽ bị tiêu hủy sau khi dùng. Khi đăng nhập, bạn nhập một mã duy nhất chứ không phải toàn bộ danh sách: mã đó sẽ ngừng hoạt động từ lúc đó, và lần tới bạn dùng một mã khác."
+      },
+      "sessions": {
+        "title": "Phiên hoạt động",
+        "description": "Mọi thiết bị đang đăng nhập vào tài khoản này lúc này.",
+        "blurb": "Mỗi hàng tương ứng với một lần đăng nhập, cùng với thiết bị và địa chỉ khởi tạo. Nếu không nhận ra phiên nào, hãy kết thúc nó.",
+        "thisDevice": "Thiết bị này",
+        "unknownDevice": "Thiết bị không xác định",
+        "revoke": "Kết thúc phiên",
+        "revokeOthers": "Kết thúc tất cả các phiên khác ({count})",
+        "caveat": "Một phiên bạn kết thúc ở đây có thể duy trì trên thiết bị khác tối đa một phút do phiên được lưu trong bộ nhớ cache của cookie. Việc đổi mật khẩu sẽ kết thúc tất cả các phiên khác ngay lập tức mà không có độ trễ này."
+      },
+      "accountTitle": "Tài khoản",
+      "accountDescription": "Thông tin tài khoản và dữ liệu hệ thống.",
+      "memberSince": "Thành viên từ",
+      "messages": {
+        "unlinked": "Đã hủy kết nối tài khoản.",
+        "password": "Đã cập nhật mật khẩu.",
+        "last-method": "Bạn không thể hủy kết nối phương thức đăng nhập duy nhất. Hãy thiết lập mật khẩu trước.",
+        "unlink": "Tài khoản đó không thể hủy kết nối.",
+        "policy": "Mật khẩu phải từ 8 đến 72 ký tự.",
+        "current": "Mật khẩu hiện tại bạn nhập không đúng.",
+        "demo": "Xóa tài khoản bị vô hiệu hóa trên bản demo.",
+        "confirm": "Địa chỉ không khớp, không có gì bị xóa.",
+        "subscription": "Gói đăng ký của bạn không thể hủy, nên tài khoản chưa bị xóa. Hãy hủy gói trong trang thanh toán và thử lại.",
+        "last-admin": "Bạn là quản trị viên duy nhất. Hãy thăng cấp cho người khác trước khi xóa tài khoản này.",
+        "2fa-enabled": "Xác thực hai yếu tố đang bật.",
+        "2fa-disabled": "Xác thực hai yếu tố đang tắt.",
+        "2fa-password": "Mật khẩu đó không đúng, nên không có thay đổi nào.",
+        "backup-used": "Bạn đã đăng nhập bằng mã dự phòng và mã đó hiện đã được sử dụng. Nếu danh sách sắp hết, hãy tạo bộ mã mới bên dưới.",
+        "session-revoked": "Phiên đó đã được kết thúc.",
+        "sessions-revoked": "Tất cả các phiên khác đã được kết thúc.",
+        "session": "Không tìm thấy phiên đó, không có thay đổi nào.",
+        "email-sent": "Nếu địa chỉ đó có thể sử dụng, chúng tôi đã gửi thư xác nhận đến email hiện tại của bạn. Tài khoản chỉ chuyển đổi sau khi bạn xác nhận ở cả hai email.",
+        "email-invalid": "Đó không phải là địa chỉ email hợp lệ.",
+        "email-same": "Đó đã là địa chỉ email của bạn.",
+        "email-change": "Không thể thay đổi địa chỉ email. Vui lòng thử lại sau giây lát.",
+        "rate": "Quá nhiều lần thử. Vui lòng thử lại sau vài phút.",
+        "last-root": "Bạn là tài khoản ROOT duy nhất. Hãy thêm một tài khoản khác vào ROOT_EMAILS và chạy lại seed trước khi xóa tài khoản này."
+      },
+      "deleteAccount": {
+        "heading": "Xóa tài khoản này",
+        "blurb": "Xóa tài khoản, các dự án và các phương thức đăng nhập của bạn, đồng thời hủy mọi gói đăng ký đang hoạt động ngay lập tức. Hành động này không thể hoàn tác.",
+        "trigger": "Xóa tài khoản",
+        "title": "Xóa tài khoản của bạn?",
+        "description": "Hồ sơ, dự án, các phiên hoạt động và các phương thức đăng nhập đã liên kết sẽ bị xóa vĩnh viễn, và mọi gói đăng ký đang hoạt động sẽ bị hủy ngay lập tức. Không thể hoàn tác.",
+        "confirmLabel": "Nhập {email} để xác nhận",
+        "cancel": "Giữ lại tài khoản",
+        "confirm": "Xóa vĩnh viễn"
+      },
+      "dangerZone": {
+        "title": "Vùng nguy hiểm",
+        "blurb": "Một số hành động không thể hoàn tác. Hãy cẩn trọng."
+      },
+      "nav": {
+        "label": "Các mục cài đặt",
+        "general": "Tổng quan",
+        "security": "Bảo mật",
+        "backup": "Sao lưu",
+        "logs": "Nhật ký"
+      },
+      "backup": {
+        "title": "Sao lưu dữ liệu",
+        "description": "Tải xuống bản sao toàn bộ dữ liệu ứng dụng lưu về bạn dưới dạng tệp JSON để lưu giữ hoặc chuyển sang nơi khác.",
+        "includes": {
+          "profile": "Hồ sơ của bạn: tên, địa chỉ email, vai trò và thời điểm tạo tài khoản",
+          "security": "Các phương thức đăng nhập và những phiên đăng nhập được ghi nhận, kèm thiết bị và địa chỉ IP",
+          "projects": "Các dự án của bạn",
+          "billing": "Gói đăng ký, các giao dịch mua và trạng thái nhận bản tin của bạn"
+        },
+        "excludes": "Tệp sao lưu không bao gồm mật khẩu, mã đăng nhập, khóa bí mật xác thực hai yếu tố và mã dự phòng.",
+        "download": "Tải dữ liệu của tôi"
+      },
+      "logs": {
+        "title": "Hoạt động tài khoản",
+        "description": "Các lần đăng nhập và thay đổi phương thức truy cập tài khoản, sắp xếp từ mới nhất. Phiên đăng nhập sẽ biến mất khỏi danh sách khi bị kết thúc hoặc được dọn dẹp sau khi hết hạn.",
+        "accountCreated": "Đã tạo tài khoản",
+        "methodAdded": "Đã kết nối {method}",
+        "passwordAdded": "Đã thiết lập mật khẩu",
+        "twoFactorEnabled": "Đã bật xác thực hai yếu tố",
+        "signedIn": "Đã đăng nhập trên {device}",
+        "switchedIn": "Quản trị viên đã chuyển sang tài khoản này bằng chức năng Switch As trên {device}",
+        "unknownDevice": "thiết bị không xác định",
+        "thisDevice": "Thiết bị này",
+        "ended": "Đã kết thúc"
+      }
     },
     "billing": {
-        "checkout": {
-            "paid": "Thanh toán thành công. Gói dịch vụ của bạn sẽ cập nhật sau vài giây.",
-            "canceled": "Đã hủy thanh toán. Bạn chưa bị tính phí."
-        },
-        "upgrade": {
-            "error": "Đã có lỗi xảy ra. Vui lòng thử lại.",
-            "upgrade": "Nâng cấp"
-        },
-        "plans": {
-            "current": "Gói hiện tại",
-            "payOnce": "Thanh toán một lần",
-            "upgradeTo": "Nâng cấp lên {plan}",
-            "get": "Sử dụng {plan}",
-            "trial": "Dùng thử miễn phí {days} ngày"
-        }
+      "title": "Thanh toán",
+      "subtitle": "Quản lý gói dịch vụ và lịch sử thanh toán.",
+      "checkoutDisabledDemo": "Tính năng thanh toán bị vô hiệu hóa trong bản demo công khai.",
+      "checkoutDisabledStripe": "Kết nối Stripe để bật thanh toán: thiết lập STRIPE_SECRET_KEY và ID giá, sau đó reseed.",
+      "currentPlan": "Gói hiện tại",
+      "purchasedOn": "Đã mua vào {date}",
+      "renewsOn": "Gia hạn vào {date}",
+      "trialEndsOn": "Dùng thử miễn phí kết thúc vào {date}",
+      "onFreePlan": "Bạn đang dùng gói miễn phí",
+      "free": "Miễn phí",
+      "lifetimeAccess": "Truy cập trọn đời",
+      "cancelsAtPeriodEnd": "Hủy vào cuối chu kỳ thanh toán",
+      "oneTime": "một lần",
+      "perMonth": "/ tháng",
+      "alsoSubscribed": "Bạn cũng có một gói đăng ký {plan}. Vì quyền truy cập trọn đời bao gồm tất cả, bạn có thể hủy nó trong cổng thanh toán.",
+      "portalHint": "Chuyển đổi gói hoặc cập nhật phương thức thanh toán trong cổng thanh toán.",
+      "availablePlans": "Các gói hiện có",
+      "availablePlansHint": "Đây là các gói mẫu đã khởi tạo: hãy thay thế bằng mức giá của riêng bạn.",
+      "invoiceHistory": "Lịch sử hóa đơn",
+      "invoiceHistoryHint": "Các khoản thanh toán và hóa đơn trước đây của bạn.",
+      "noInvoices": "Chưa có hóa đơn nào.",
+      "noInvoicesStripe": "Kết nối Stripe để xem lịch sử hóa đơn của bạn.",
+      "colDate": "Ngày",
+      "colAmount": "Số tiền",
+      "colStatus": "Trạng thái",
+      "colInvoice": "Hóa đơn",
+      "statusUnknown": "không xác định",
+      "viewInvoice": "Xem",
+      "downloadPdf": "PDF",
+      "discount": "Giảm giá: {discount} {duration}",
+      "discountPercent": "Giảm {percent}%",
+      "discountAmount": "Giảm {amount}",
+      "discountOnce": "cho hóa đơn tiếp theo",
+      "discountUntil": "cho đến {date}",
+      "discountForever": "cho mọi hóa đơn",
+      "discountCode": "mã {code}",
+      "status": {
+        "ACTIVE": "Hoạt động",
+        "TRIALING": "Dùng thử",
+        "PAST_DUE": "Quá hạn",
+        "CANCELED": "Đã hủy",
+        "UNPAID": "Chưa thanh toán",
+        "INCOMPLETE": "Chưa hoàn tất"
+      },
+      "invoiceStatus": {
+        "draft": "Nháp",
+        "open": "Mở",
+        "paid": "Đã thanh toán",
+        "uncollectible": "Không thể thu hồi",
+        "void": "Vô hiệu"
+      }
     },
-    "email": {
-        "welcome": "Chào mừng đến với {site}!",
-        "subscriptionActive": "Gói đăng ký {plan} của bạn đang hoạt động",
-        "trialStarted": "Thời gian dùng thử miễn phí gói {plan} đã bắt đầu",
-        "purchaseConfirmed": "Đơn hàng gói {plan} của bạn đã được xác nhận",
-        "magicLink": "Đăng nhập vào {site}",
-        "passwordReset": "Đặt lại mật khẩu {site} của bạn",
-        "changeEmail": "Xác nhận thay đổi địa chỉ email trên {site}",
-        "subscriptionCancelled": "Gói đăng ký {site} của bạn đã bị hủy",
-        "contact": "Biểu mẫu liên hệ: {from}",
-        "newsletterConfirm": "Xác nhận vị trí của bạn trong danh sách chờ {site}",
-        "newsletterWelcome": "Bạn đã có tên trong danh sách",
-        "welcomeBody": {
-            "hello": "Xin chào {name}",
-            "helloFallback": "bạn",
-            "$product": {
-                "intro": "Chào mừng đến với {site}! Tài khoản của bạn đã sẵn sàng và không cần thiết lập thêm gì nữa.",
-                "bullets": "Bắt đầu dự án: tạo dự án đầu tiên và mời đội ngũ của bạn\n       Cá nhân hóa: thêm tên và tùy chỉnh trong cài đặt\n       Chọn một gói: nâng cấp khi cần mở rộng, hủy bất kỳ lúc nào"
-            },
-            "$kit": {
-                "intro": "Chào mừng đến với {site}! Tài khoản của bạn đã sẵn sàng. Bạn hiện là một phần của cộng đồng nhà phát triển xây dựng sản phẩm SaaS nhanh hơn.",
-                "bullets": "Xác thực: Google & GitHub OAuth, đã được cấu hình đầy đủ\n       Thanh toán: Tích hợp sẵn thanh toán Stripe\n       Bảng điều khiển: Theo dõi gói đăng ký và tài khoản của bạn"
-            },
-            "whatNext": "Dưới đây là những gì bạn có thể làm ngay bây giờ:",
-            "ready": "Sẵn sàng trải nghiệm chưa?",
-            "cta": "Đi tới Bảng điều khiển →",
-            "help": "Nếu bạn có bất kỳ câu hỏi nào, chỉ cần phản hồi lại email này. Chúng tôi rất vui được hỗ trợ."
-        },
-        "magicLinkBody": {
-            "hello": "Xin chào",
-            "intro": "Nhấp vào nút bên dưới để đăng nhập vào {site}. Liên kết có hiệu lực trong 15 phút và chỉ sử dụng được một lần.",
-            "cta": "Đăng nhập vào {site} →",
-            "ignore": "Nếu bạn không yêu cầu email này, bạn có thể an tâm bỏ qua: sẽ không có thay đổi nào trừ khi liên kết được nhấp."
-        },
-        "passwordResetBody": {
-            "hello": "Xin chào,",
-            "intro": "Chúng tôi nhận được yêu cầu đặt lại mật khẩu {site} của bạn. Nhấp vào nút bên dưới để chọn mật khẩu mới. Liên kết có hiệu lực trong 30 phút và chỉ sử dụng được một lần.",
-            "cta": "Đặt lại mật khẩu →",
-            "ignore": "Nếu bạn không yêu cầu đặt lại mật khẩu, bạn có thể an tâm bỏ qua email này: mật khẩu của bạn sẽ giữ nguyên."
-        },
-        "changeEmailBody": {
-            "hello": "Xin chào,",
-            "intro": "Ai đó đã yêu cầu chuyển tài khoản {site} này sang {newEmail}. Thư này được gửi đến địa chỉ hiện tại của bạn: không có gì thay đổi cho đến khi bạn phê duyệt tại đây.",
-            "cta": "Xác nhận thay đổi này →",
-            "next": "Sau khi bạn xác nhận, chúng tôi sẽ gửi thêm một email nữa đến địa chỉ mới. Tài khoản chỉ chuyển đổi khi email mới cũng được xác nhận, giúp bạn không lo bị khóa tài khoản do gõ sai.",
-            "ignore": "Nếu đây không phải là bạn, hãy bỏ qua email này và mọi thứ giữ nguyên — nhưng nhớ kiểm tra lại mật khẩu của bạn, vì người yêu cầu thay đổi đã đăng nhập dưới tên bạn."
-        },
-        "subscriptionBody": {
-            "hello": "Xin chào {name}",
-            "intro": "Gói đăng ký {plan} của bạn hiện đã kích hoạt. Cảm ơn bạn đã đăng ký!",
-            "introTrial": "Chương trình dùng thử miễn phí gói {plan} của bạn đã bắt đầu. Bạn chưa bị tính phí cho đến {date}, và bạn có thể hủy trước thời gian đó tại trang thanh toán.",
-            "labelPlan": "Gói:",
-            "labelAmount": "Số tiền:",
-            "labelRenewal": "Ngày gia hạn tiếp theo:",
-            "labelTrialEnd": "Hết hạn dùng thử:",
-            "access": "Bạn có quyền truy cập đầy đủ tất cả các tính năng của {site}.",
-            "cta": "Quản lý thanh toán →",
-            "changes": "Cần thay đổi? Bạn có thể quản lý gói đăng ký bất kỳ lúc nào từ trang thanh toán."
-        },
-        "purchaseBody": {
-            "hello": "Xin chào {name}",
-            "intro": "Đơn hàng gói {plan} của bạn đã được xác nhận. Đây là khoản thanh toán một lần: không gia hạn, không tính phí định kỳ.",
-            "labelPlan": "Gói:",
-            "labelAmount": "Số tiền:",
-            "oneTime": "(một lần)",
-            "access": "Bạn hiện có quyền truy cập đầy đủ tất cả các tính năng của {site}.",
-            "cta": "Xem thanh toán →",
-            "receipt": "Hóa đơn của bạn có sẵn trên trang thanh toán. Bạn có câu hỏi? Chỉ cần phản hồi email này."
-        },
-        "cancellationBody": {
-            "hello": "Xin chào {name},",
-            "intro": "Gói đăng ký {site} của bạn đã bị hủy. Bạn vẫn tiếp tục có quyền truy cập cho đến {date}.",
-            "labelEnds": "Hết quyền truy cập:",
-            "dataSafe": "Dữ liệu của bạn an toàn và vẫn sẵn có.",
-            "changedMind": "Đổi ý? Bạn có thể đăng ký lại bất kỳ lúc nào trước khi quyền truy cập hết hạn.",
-            "cta": "Đăng ký lại →",
-            "feedback": "Nếu bạn muốn chia sẻ lý do hủy gói, chỉ cần trả lời email này - chúng tôi đọc mọi phản hồi."
-        },
-        "newsletterConfirmBody": {
-            "intro": {
-                "$kit": "Bạn đã yêu cầu tham gia danh sách chờ của {site}. Nhấp vào bên dưới để xác nhận, và mức giá ưu đãi khi ra mắt sẽ gửi tới trong email tiếp theo. Nếu không thấy trong hộp thư đến, hãy kiểm tra mục Quảng cáo hoặc Spam.",
-                "$product": "Bạn đã yêu cầu tham gia danh sách chờ của {site}. Nhấp vào bên dưới để xác nhận."
-            },
-            "cta": "Xác nhận vị trí của tôi →",
-            "expiry": "Liên kết hết hạn trong 7 ngày. Nếu đây không phải bạn, chỉ cần bỏ qua email này và sẽ không có gì xảy ra."
-        },
-        "newsletterWelcomeBody": {
-            "intro": "Bạn đã đăng ký thành công. Chi tiết như sau:",
-            "$product": {
-                "bullets": "Một email ngắn khi có tin tức mới thực sự.\n       Quyền truy cập sớm khi tính năng bạn đăng ký chính thức ra mắt."
-            },
-            "$kit": {
-                "bullets": "Một email ngắn khi có tin tức mới về bản Pro.\n       Mức giá ra mắt của Pro và Pro Studio, trước khi công bố rộng rãi vào ngày 31 tháng 10."
-            },
-            "noSpam": "Không spam, không tin nhắn rác hàng ngày. Hủy đăng ký bất kỳ lúc nào chỉ bằng một cú nhấp chuột.",
-            "unsubscribe": "Hủy đăng ký"
-        }
+    "projectDetail": {
+      "subtitle": "Chỉnh sửa chi tiết hoặc xóa dự án này.",
+      "detailsTitle": "Chi tiết",
+      "detailsDescription": "Cập nhật tên và mô tả dự án.",
+      "metadataTitle": "Dữ liệu hệ thống",
+      "created": "Đã tạo",
+      "updated": "Cập nhật lần cuối",
+      "dangerTitle": "Vùng nguy hiểm",
+      "dangerDescription": "Xóa dự án là vĩnh viễn và không thể hoàn tác.",
+      "delete": "Xóa dự án"
     },
-    "hero": {
-        "$kit": {
-            "headlineHead": "Bộ khởi tạo Next.js SaaS của bạn.",
-            "headlineAccent": "Sẵn sàng cho môi trường thực tế. Miễn phí.",
-            "subtitle": "Xác thực, thanh toán, bảng điều khiển và trang quản trị sẵn sàng cho sản xuất và miễn phí trọn đời. Mã nguồn thuần Next.js: không trình biên dịch phức tạp, không lớp cấu hình ẩn, không cần học thêm gì mới.",
-            "cta": "Bắt đầu miễn phí",
-            "pill": "Mã nguồn mở & Miễn phí · Pro và Pro Studio ra mắt vào 19 tháng 11"
-        },
-        "$product": {
-            "headlineHead": "",
-            "headlineAccent": "",
-            "subtitle": "Một không gian làm việc cho các dự án, khách hàng và thanh toán của bạn. Mời đội ngũ và tập trung vào những công việc quan trọng.",
-            "cta": "Bắt đầu ngay",
-            "trust": "Cài đặt trong vài phút · Không cần thẻ tín dụng · Hủy bất kỳ lúc nào",
-            "pill": "Hiện đã có bản Beta công khai"
-        },
-        "mock": {
-            "navDashboard": "Bảng điều khiển",
-            "navProjects": "Dự án",
-            "navBilling": "Thanh toán",
-            "navSettings": "Cài đặt",
-            "navAdmin": "Trang quản trị",
-            "statPlan": "Gói hiện tại",
-            "statStatus": "Trạng thái",
-            "statStatusValue": "Hoạt động",
-            "statBilling": "Kỳ thanh toán tiếp theo"
-        }
+    "createProject": {
+      "created": "Đã tạo dự án",
+      "name": "Tên dự án",
+      "description": "Mô tả (không bắt buộc)",
+      "descriptionPlaceholder": "Dự án này nói về điều gì?",
+      "descriptionHint": "Tùy chọn. Tối đa {max} ký tự.",
+      "submit": "Tạo dự án"
     },
-    "setupVideo": {
-        "$kit": {
-            "title": "Từ git clone đến một SaaS hoạt động",
-            "subtitle": "Được ghi lại trên bản clone mới: một vài câu lệnh, hai giá trị trong tệp cấu hình, và toàn bộ ứng dụng chạy ngay trên máy bạn. Không phải bản demo dựng sẵn.",
-            "videoLabel": "Video ghi lại màn hình terminal: tải bộ công cụ, cài đặt, kết nối cơ sở dữ liệu và khởi chạy, sau đó trình duyệt đăng nhập vào bảng điều khiển.",
-            "play": "Phát video",
-            "pause": "Tạm dừng",
-            "guide": "Thực hiện theo các bước trong hướng dẫn Bắt đầu"
-        }
+    "projectEdit": {
+      "updated": "Đã cập nhật dự án",
+      "name": "Tên dự án",
+      "descriptionPlaceholder": "Dự án này nói về điều gì?"
     },
-    "features": {
-        "$product": {
-            "title": "Mọi thứ bạn cần, tập trung ở một nơi",
-            "subtitle": "Những tính năng cốt lõi được hoàn thiện chuẩn mực, giúp bạn tập trung làm việc.",
-            "c1": {
-                "title": "Đăng nhập theo cách của bạn",
-                "description": "Google, GitHub, mật khẩu hoặc liên kết một lần gửi đến hộp thư. Chọn cách phù hợp với nhóm và thay đổi bất kỳ lúc nào."
-            },
-            "c2": {
-                "title": "Thanh toán đơn giản",
-                "description": "Nâng cấp, hạ cấp hoặc hủy chỉ với một cú nhấp. Hóa đơn và biên lai tự động gửi về, thông tin thanh toán được bảo mật bởi Stripe."
-            },
-            "c3": {
-                "title": "Dữ liệu luôn thuộc về bạn",
-                "description": "Mọi thứ lưu trữ trong một cơ sở dữ liệu do bạn kiểm soát. Không bị ràng buộc và có thể trích xuất dữ liệu dễ dàng."
-            },
-            "c4": {
-                "title": "Giao diện Sáng và Tối",
-                "description": "Giao diện tự động điều chỉnh theo hệ thống hoặc theo lựa chọn của bạn. Dễ chịu cho mắt dù làm việc ban ngày hay ban đêm."
-            },
-            "c5": {
-                "title": "Bảo mật theo mặc định",
-                "description": "Không gian làm việc chỉ hiển thị với bạn và những người được mời. Phiên làm việc tự hết hạn, quyền truy cập được kiểm tra trên mỗi yêu cầu."
-            },
-            "c6": {
-                "title": "Quyền kiểm soát của Quản trị viên",
-                "description": "Xem mọi thành viên, vai trò và gói dịch vụ của họ ở một nơi. Thăng cấp, xem xét và can thiệp khi cần đưa ra quyết định."
-            }
-        },
-        "$kit": {
-            "title": "Mọi thứ bạn cần để phát triển sản phẩm",
-            "subtitle": "Không còn mất thời gian làm lại hệ thống xác thực và thanh toán. Bắt đầu xây dựng sản phẩm của bạn ngay.",
-            "c1": {
-                "title": "Xác thực tích hợp sẵn",
-                "description": "Google và GitHub OAuth với Better Auth. Phiên làm việc lưu trong cơ sở dữ liệu của bạn. Không phụ thuộc dịch vụ xác thực bên thứ ba."
-            },
-            "c2": {
-                "title": "Thanh toán Stripe",
-                "description": "Thanh toán gói đăng ký, webhooks và Cổng thông tin khách hàng. Tự động xử lý nâng cấp, hạ cấp và hủy gói."
-            },
-            "c3": {
-                "title": "Prisma + PostgreSQL",
-                "description": "Lớp cơ sở dữ liệu type-safe với Prisma 7. Hoạt động với Neon, Supabase, Railway hoặc bất kỳ nhà cung cấp PostgreSQL nào."
-            },
-            "c4": {
-                "title": "Chế độ tối",
-                "description": "Chế độ tối tự động thích ứng hệ thống. Biến CSS trong Tailwind 4 giúp bạn tùy chỉnh màu sắc thương hiệu trong một tệp."
-            },
-            "c5": {
-                "title": "Bảo vệ tuyến đường (Route protection)",
-                "description": "Trình bảo vệ xác thực dựa trên Middleware. Phân nhóm tuyến đường công khai, xác thực, bảng điều khiển và admin với mã nguồn tối giản."
-            },
-            "c6": {
-                "title": "Trang quản trị",
-                "description": "Quản lý người dùng với phân quyền theo vai trò. Xem tất cả người dùng, gói dịch vụ và trạng thái đăng ký tại một nơi."
-            },
-            "c7": {
-                "title": "Triển khai Vercel với 1 cú nhấp",
-                "description": "Nút triển khai ngay trong README. Từ sao chép mã nguồn đến sản phẩm thực tế chưa đầy một giờ, kèm chế độ demo tích hợp để giới thiệu sản phẩm của bạn."
-            },
-            "c8": {
-                "title": "Next.js thuần túy, dễ tiếp cận",
-                "description": "Không có bước biên dịch phức tạp, không CLI độc quyền. App Router, Server Actions và Prisma hoạt động chuẩn mực theo tài liệu."
-            },
-            "c9": {
-                "title": "Email giao dịch",
-                "description": "Email chào mừng, biên lai và đặt lại mật khẩu qua Resend. Mẫu React Email thiết kế sẵn, tương thích nhiều thiết bị."
-            }
-        }
+    "profile": {
+      "updated": "Đã cập nhật hồ sơ",
+      "avatarAlt": "Ảnh đại diện",
+      "displayName": "Tên hiển thị",
+      "namePlaceholder": "Tên của bạn",
+      "avatarFrom": "Ảnh từ {provider}",
+      "avatarCurrent": "Ảnh đại diện hiện tại",
+      "avatarNone": "Chưa có ảnh đại diện",
+      "email": "Email",
+      "emailHint": "Địa chỉ bạn dùng để đăng nhập. Thay đổi trong mục Phương thức đăng nhập bên dưới.",
+      "save": "Lưu thay đổi"
     },
-    "footer": {
-        "blurb": {
-            "$kit": "{tagline}. Bộ khởi tạo sẵn sàng cho sản xuất bằng Next.js thuần."
-        },
-        "github": "GitHub",
-        "product": "Sản phẩm",
-        "features": "Tính năng",
-        "pricing": "Bảng giá",
-        "changelog": "Lịch sử cập nhật",
-        "about": "Giới thiệu",
-        "aboutLink": "Giới thiệu",
-        "faq": "Hỏi đáp",
-        "contact": "Liên hệ",
-        "openSource": "Mã nguồn mở",
-        "legal": "Pháp lý",
-        "privacy": "Chính sách bảo mật",
-        "terms": "Điều khoản dịch vụ",
-        "cookies": "Chính sách Cookie",
-        "copyright": "© {year} {site}. Bảo lưu mọi quyền.",
-        "license": "Giấy phép MIT · Xây dựng với Next.js",
-        "signup": {
-            "$kit": {
-                "title": "Bản Pro ra mắt vào 19 tháng 11.",
-                "cta": "Tham gia",
-                "disabledNote": "Danh sách chờ sẽ mở sớm."
-            },
-            "$product": {
-                "title": "Nhận cập nhật sản phẩm qua email.",
-                "cta": "Đăng ký",
-                "disabledNote": "Biểu mẫu bị vô hiệu hóa trong bản demo."
-            },
-            "sent": "Sắp hoàn tất: kiểm tra hộp thư đến để xác nhận."
-        }
+    "signOut": {
+      "title": "Đăng xuất?",
+      "pending": "Đang đăng xuất…",
+      "confirm": "Đăng xuất"
     },
-    "about": {
-        "$kit": {
-            "title": "Giới thiệu {site}",
-            "whatTitle": "Dự án này là gì",
-            "whoTitle": "Dành cho ai",
-            "principlesTitle": "Nguyên tắc phát triển",
-            "maintainerTitle": "Người phát triển",
-            "maintainerIntro": "{site} được tạo ra và duy trì bởi",
-            "maintainerBody": ". Một cá nhân làm việc công khai: lộ trình cho biết những gì sắp tới, lịch sử cập nhật ghi lại những gì đã phát hành. Các vấn đề và câu hỏi đều được phản hồi trực tiếp bởi người viết mã.",
-            "noteTitle": "Đây là văn bản mẫu.",
-            "noteBody": "Hãy kể câu chuyện của bạn tại đây: bạn đang xây dựng gì, dành cho ai và tại sao. Chỉnh sửa trang này tại src/app/[locale]/(public)/about/page.tsx.",
-            "what": "Một điểm khởi đầu hoàn chỉnh cho một dự án SaaS, không phải bản dựng minh họa. Xác thực với OAuth, liên kết đăng nhập nhanh và mật khẩu. Gói đăng ký Stripe, thanh toán một lần và xác thực webhook trước khi lưu vào cơ sở dữ liệu. Trang quản trị với số liệu doanh thu thực tế, email giao dịch và trang tiếp thị đi kèm.",
-            "who": "Dành cho những người phát triển độc lập hoặc nhóm nhỏ, muốn tập trung vào tính năng khác biệt của sản phẩm thay vì làm lại hệ thống thanh toán hay xác thực.",
-            "principles": [
-                "Next.js thuần túy: không trình biên dịch riêng, không lớp cấu hình phức tạp.",
-                "Thanh toán tích hợp sẵn trong bản miễn phí, không bị khóa sau bức tường thanh toán.",
-                "Minh bạch theo mặc định: tính năng thực tế, không tạo giá trị ảo.",
-                "Không giữ lại tính năng để bán sau: những gì bộ công cụ có, đều miễn phí."
-            ]
-        },
-        "$product": {
-            "title": "Giới thiệu {site}",
-            "whatTitle": "Dự án này là gì",
-            "whoTitle": "Dành cho ai",
-            "principlesTitle": "Nguyên tắc phát triển",
-            "maintainerTitle": "Người phát triển",
-            "maintainerIntro": "{site} được tạo ra và duy trì bởi",
-            "maintainerBody": ". Một cá nhân làm việc công khai: lộ trình cho biết những gì sắp tới, lịch sử cập nhật ghi lại những gì đã phát hành. Các vấn đề và câu hỏi đều được phản hồi trực tiếp bởi người viết mã.",
-            "noteTitle": "Đây là văn bản mẫu.",
-            "noteBody": "Hãy kể câu chuyện của bạn tại đây: bạn đang xây dựng gì, dành cho ai và tại sao. Chỉnh sửa trang này tại src/app/[locale]/(public)/about/page.tsx.",
-            "what": "Một nơi duy nhất cho công việc hàng ngày của nhóm bạn: các dự án, thành viên tham gia và thanh toán quản lý tập trung.",
-            "who": "Các đội ngũ nhỏ muốn tập trung thời gian vào công việc chuyên môn thay vì quản lý công cụ.",
-            "principles": [
-                "Dữ liệu thuộc về bạn: xuất dữ liệu bất kỳ lúc nào bạn muốn.",
-                "Mức giá rõ ràng, không có chi phí ẩn trên hóa đơn.",
-                "Minh bạch theo mặc định: tính năng thực tế, không tạo giá trị ảo."
-            ]
-        }
+    "sidebar": {
+      "expand": "Mở rộng thanh bên",
+      "collapse": "Thu gọn thanh bên"
+    },
+    "userMenu": {
+      "open": "Mở menu tài khoản",
+      "avatarAlt": "Ảnh đại diện",
+      "myAccount": "Tài khoản của tôi"
     },
     "nav": {
-        "features": "Tính năng",
-        "pricing": "Bảng giá",
-        "faq": "Hỏi đáp",
-        "changelog": "Lịch sử cập nhật",
-        "signIn": "Đăng nhập",
-        "demo": "Demo",
-        "getStarted": "Bắt đầu",
-        "openMenu": "Mở menu",
-        "backToTop": "Về đầu trang"
+      "dashboard": "Bảng điều khiển",
+      "projects": "Dự án",
+      "billing": "Thanh toán",
+      "settings": "Cài đặt",
+      "overview": "Tổng quan",
+      "adminPanel": "Trang quản trị",
+      "more": "Thêm",
+      "backToDashboard": "Quay lại Bảng điều khiển",
+      "openNavigation": "Mở điều hướng",
+      "members": "Thành viên",
+      "roles": "Nhóm quyền"
     },
-    "faq": {
-        "title": "Các câu hỏi thường gặp",
-        "$product": {
-            "items": [
-                {
-                    "question": "Tôi bắt đầu như thế nào?",
-                    "answer": "Tạo một tài khoản, đặt tên cho dự án đầu tiên và bạn đã hoàn tất. {site} hoạt động trên trình duyệt, không cần cài đặt và bạn có thể mời nhóm bất kỳ lúc nào."
-                },
-                {
-                    "question": "Việc thanh toán hoạt động như thế nào?",
-                    "answer": "Bạn chọn một gói và thanh toán bằng thẻ. Việc nâng cấp hoặc hạ cấp có hiệu lực ngay lập tức, hóa đơn được tự động gửi đến email của bạn."
-                },
-                {
-                    "question": "Ai có thể xem dữ liệu của tôi?",
-                    "answer": "Chỉ bạn và những người bạn mời. Dữ liệu nằm trong cơ sở dữ liệu của chúng tôi, thông tin thẻ được xử lý bởi Stripe và chúng tôi không bán dữ liệu của bạn."
-                }
-            ]
-        },
-        "$kit": {
-            "items": [
-                {
-                    "question": "Chính xác thì tôi nhận được gì?",
-                    "answer": "Bạn nhận được mã nguồn Next.js 16 sẵn sàng cho sản xuất với Better Auth, Stripe, Prisma và Tailwind đã cấu hình sẵn. Chỉ cần clone repo, thiết lập biến môi trường và triển khai."
-                },
-                {
-                    "question": "Tại sao nên chọn {site} thay vì các bộ app khác?",
-                    "answer": "{site} sử dụng các công nghệ độc lập. Không bị phụ thuộc vào Supabase hay dịch vụ xác thực riêng. Bạn hoàn toàn chủ động cập nhật các gói phụ thuộc."
-                },
-                {
-                    "question": "Những nhà cung cấp cơ sở dữ liệu nào được hỗ trợ?",
-                    "answer": "Bất kỳ nhà cung cấp PostgreSQL nào: Neon (khuyên dùng), Supabase, Railway, PlanetScale (chế độ Postgres) hoặc tự lưu trữ (self-hosted)."
-                },
-                {
-                    "question": "Tôi có cần tài khoản Stripe không?",
-                    "answer": "Có. Stripe được dùng cho thanh toán gói đăng ký. Bạn cần tạo sản phẩm, mức giá trong dashboard của Stripe và thêm ID giá vào biến môi trường."
-                },
-                {
-                    "question": "Tôi có thể dùng mã nguồn này cho dự án khách hàng không?",
-                    "answer": "Có, dưới giấy phép MIT. Bạn có thể sử dụng cho vô số dự án, bao gồm cả công việc làm cho khách hàng mà không tốn thêm chi phí."
-                },
-                {
-                    "question": "Nếu tôi cần trợ giúp hoặc phát hiện lỗi thì sao?",
-                    "answer": "Hãy tạo một Issue trên GitHub. Vì là mã nguồn mở, bạn sẽ nhận được các bản cập nhật mới nhất bằng cách kéo mã nguồn từ nhánh main. Hoặc liên hệ qua email để được hỗ trợ."
-                },
-                {
-                    "question": "Pro và Pro Studio là gì, khi nào ra mắt?",
-                    "answer": "Đây là các phiên bản trả phí dành cho làm việc nhóm: quản lý nhóm, lời mời, phân quyền và thanh toán nhóm. Mua một lần sử dụng trọn đời. Bản Pro ra mắt vào ngày 19 tháng 11."
-                }
-            ]
-        }
+    "members": {
+      "title": "Thành viên",
+      "subtitle": "Những người có quyền truy cập {tenant}",
+      "invite": {
+        "title": "Mời thành viên",
+        "description": "Họ sẽ nhận email tham gia với vai trò bạn chọn.",
+        "emailPlaceholder": "nguoi@example.com",
+        "submit": "Mời"
+      },
+      "list": {
+        "title": "Thành viên",
+        "count": "{count} người",
+        "colMember": "Thành viên",
+        "colRole": "Vai trò",
+        "update": "Cập nhật",
+        "remove": "Xoá"
+      },
+      "invitations": {
+        "title": "Lời mời đang chờ"
+      }
     },
-    "pricing": {
-        "$kit": {
-            "title": "Bắt đầu miễn phí, mở rộng khi phát triển",
-            "subtitle": "Mã nguồn mở và miễn phí mãi mãi: tích hợp sẵn xác thực, thanh toán, trang quản trị và email. Tính năng Nhóm sẽ có trong bản Pro ra mắt ngày 19 tháng 11.",
-            "freeTitle": "Miễn phí",
-            "freeDescription": "Mã nguồn mở, đầy đủ tính năng cốt lõi",
-            "forever": "mãi mãi",
-            "getOnGithub": "Tải trên GitHub",
-            "noSignup": "Clone, thả star và triển khai. Không cần đăng ký",
-            "proTitle": "Pro · Pro Studio · Teams",
-            "statusBadge": "Mở danh sách chờ",
-            "proDescription": "Dành cho các ứng dụng cần tính năng nhóm và các studio phát triển ứng dụng.",
-            "launchDate": "19 tháng 11",
-            "launchOffer": "Ưu đãi ngày ra mắt dành cho danh sách chờ. Xác nhận email để nhận thông tin giá ưu đãi ngay.",
-            "waitlistCta": "Tham gia danh sách chờ Pro & Pro Studio",
-            "waitlistNote": "Email thông báo khi có tin tức mới và mức giá ưu đãi khi xác nhận. Hủy đăng ký bất kỳ lúc nào.",
-            "formsDisabled": "Biểu mẫu bị vô hiệu hóa trong bản demo.",
-            "freeFeatures": [
-                "Next.js 16 + TypeScript + Tailwind 4",
-                "Better Auth: Google & GitHub OAuth",
-                "Prisma 7 + Cấu trúc PostgreSQL",
-                "Stripe Checkout + webhooks + Cổng khách hàng",
-                "Trang quản trị (người dùng, chỉ số, vai trò)",
-                "Email giao dịch (Resend)",
-                "Bảng điều khiển, chế độ tối, bảo vệ tuyến đường",
-                "Triển khai 1 cú nhấp trên Vercel",
-                "Chế độ demo: đăng nhập 1 nhấp, dữ liệu mẫu",
-                "Giấy phép MIT, dùng cho dự án khách hàng"
-            ],
-            "proFeatures": [
-                "Toàn bộ tính năng gói Miễn phí, cộng thêm:",
-                "Quản lý Nhóm và Tổ chức",
-                "Lời mời và chuyển quyền sở hữu",
-                "Phân quyền: chủ sở hữu, quản trị viên, thành viên",
-                "Thanh toán theo số lượng vị trí trong nhóm",
-                "Hỗ trợ qua email và kênh Discord riêng",
-                "Tất cả tính năng bổ sung sau khi ra mắt"
-            ]
-        }
-    },
-    "planPricing": {
-        "$product": {
-            "title": "Mức giá đơn giản, minh bạch",
-            "subtitleDemo": "Đây là các gói mẫu được lấy trực tiếp từ cơ sở dữ liệu. Đăng nhập bản demo để xem quy trình thanh toán đầy đủ.",
-            "subtitle": "Bắt đầu miễn phí và nâng cấp khi cần. Các gói bên dưới được đồng bộ từ cơ sở dữ liệu của bạn."
-        }
-    },
-    "setup": {
-        "title": "Sắp hoàn tất",
-        "subtitle": "Ứng dụng đang chạy. Bạn cần kết nối cơ sở dữ liệu để hiển thị nội dung.",
-        "step1Title": "Tạo cơ sở dữ liệu và điền tệp .env.local",
-        "step1Body": "Tạo một cơ sở dữ liệu PostgreSQL (Neon có gói miễn phí). Sau đó sao chép tệp .env.example thành .env.local: điền chuỗi kết nối vào DATABASE_URL và AUTH_SECRET.",
-        "step1Note": "Mỗi khi thay đổi tệp .env.local, hãy khởi động lại dev server (Ctrl+C và chạy lại).",
-        "step1Unreachable": "DATABASE_URL đã được thiết lập nhưng không thể kết nối tới cơ sở dữ liệu. Hãy kiểm tra lại chuỗi kết nối trong .env.local.",
-        "step2Title": "Áp dụng migration",
-        "step2Body": "Lệnh đầu tiên sẽ tạo các bảng, lệnh thứ hai thêm các gói dịch vụ mẫu.",
-        "step2Note": "Thấy cảnh báo SSL trong terminal? Đổi sslmode=require thành sslmode=verify-full trong tệp .env.local.",
-        "step3Title": "Khởi động lại",
-        "step3Body": "Khởi động lại dev server. Trang đăng nhập sẽ có thêm nút Dev Login (Admin). Các nút Google và GitHub sẽ xuất hiện khi bạn thêm API key tương ứng.",
-        "guideCta": "Đọc hướng dẫn đầy đủ",
-        "devOnly": "Trang này chỉ hiển thị trong môi trường phát triển (development) khi cơ sở dữ liệu chưa sẵn sàng."
-    },
-    "waitlist": {
-        "cta": "Tham gia danh sách chờ",
-        "note": "Chúng tôi chỉ gửi email khi có thông tin quan trọng. Hủy đăng ký bất kỳ lúc nào.",
-        "disabledNote": "Biểu mẫu bị vô hiệu hóa trong bản demo.",
-        "consent": "Bằng cách tham gia, bạn đồng ý với Chính sách bảo mật của chúng tôi.",
-        "sent": "Sắp hoàn tất: kiểm tra hộp thư đến để xác nhận vị trí của bạn.",
-        "emailPlaceholder": "Email của bạn",
-        "emailLabel": "Địa chỉ email",
-        "sending": "Đang tham gia…"
-    },
-    "contactForm": {
-        "sentTitle": "Cảm ơn bạn, tin nhắn đã được gửi.",
-        "sentBody": "Chúng tôi đọc tất cả phản hồi và sẽ phản hồi nhanh chóng.",
-        "name": "Tên (không bắt buộc)",
-        "email": "Email",
-        "message": "Tin nhắn",
-        "namePlaceholder": "Nguyen Van A",
-        "emailPlaceholder": "ban@company.com",
-        "messagePlaceholder": "Chúng tôi có thể giúp gì cho bạn?",
-        "sending": "Đang gửi…",
-        "submit": "Gửi tin nhắn"
-    },
-    "contactDialog": {
-        "copied": "Đã sao chép địa chỉ email",
-        "copyFailed": "Không thể sao chép - địa chỉ hiển thị ở trên",
-        "title": "Liên hệ",
-        "copiedShort": "Đã sao chép!",
-        "copy": "Sao chép email"
-    },
-    "changelog": {
-        "title": "Lịch sử cập nhật",
-        "latest": "Mới nhất",
-        "unreleased": "Chưa phát hành"
-    },
-    "contact": {
-        "title": "Liên hệ",
-        "intro": "Câu hỏi, phản hồi, ý tưởng: chúng tôi luôn lắng nghe. Muốn gửi email trực tiếp? Viết cho chúng tôi tại",
-        "formsDisabled": "Biểu mẫu bị vô hiệu hóa trong bản demo."
-    },
-    "loading": {
-        "default": "Đang tải",
-        "admin": "Đang tải trang quản trị…",
-        "workspace": "Đang tải không gian làm việc…"
-    },
-    "code": {
-        "copy": "Sao chép",
-        "copied": "Đã sao chép"
-    },
-    "common": {
-        "close": "Đóng",
-        "starOnGitHub": "Thả star trên GitHub"
-    },
-    "theme": {
-        "label": "Đổi giao diện",
-        "light": "Sáng",
-        "dark": "Tối",
-        "system": "Hệ thống"
-    },
-    "demo": {
-        "banner": "Bạn đang xem bản demo trực tiếp - trải nghiệm ứng dụng ngay"
-    },
-    "notFound": {
-        "badge": "Lỗi 404",
-        "title": "Không tìm thấy trang",
-        "body": "Rất tiếc, chúng tôi không thể tìm thấy trang bạn yêu cầu. Có thể bạn đã nhập sai URL hoặc trang đã chuyển dời.",
-        "home": "Quay lại Trang chủ",
-        "redirecting": "Đang chuyển hướng về trang chủ trong {seconds}s..."
-    },
-    "newsletter": {
-        "confirmTitle": "Xác nhận đăng ký",
-        "unsubscribeTitle": "Hủy đăng ký",
-        "confirmedHeading": "Đã xác nhận",
-        "confirmedBody": {
-            "$kit": "Kiểm tra hộp thư đến: thông tin mức giá ưu đãi ra mắt của Pro và Pro Studio đang được gửi tới. Hủy đăng ký bất kỳ lúc nào.",
-            "$product": "Email cập nhật tin tức và mã giảm giá dành cho bạn khi ra mắt. Hủy đăng ký bất kỳ lúc nào."
-        },
-        "expiredHeading": "Liên kết đã hết hạn",
-        "expiredBody": "Liên kết xác nhận có hiệu lực trong 7 ngày. Vui lòng đăng ký lại để nhận liên kết mới.",
-        "invalidHeading": "Liên kết không hợp lệ",
-        "invalidBody": "Liên kết xác nhận này không còn hợp lệ. Đăng ký lại để nhận liên kết mới.",
-        "unsubscribedHeading": "Đã hủy đăng ký",
-        "unsubscribedBody": "Bạn sẽ không nhận thêm email từ chúng tôi. Đổi ý? Bạn có thể đăng ký lại bất kỳ lúc nào.",
-        "unknownHeading": "Liên kết không hợp lệ",
-        "unknownBody": "Liên kết hủy đăng ký này không khớp với hệ thống. Hãy phản hồi trực tiếp email để được hỗ trợ thủ công.",
-        "backToSite": "Quay lại trang web",
-        "backToPricing": "Quay lại bảng giá"
-    },
-    "enterprise": {
-        "name": "Doanh nghiệp (Enterprise)",
-        "description": "Dành cho các đội ngũ và tổ chức lớn",
-        "priceLabel": "Tùy chỉnh",
-        "note": "thanh toán linh hoạt",
-        "yearlyNote": "theo hợp đồng hàng năm",
-        "features": [
-            "Toàn bộ tính năng gói Pro",
-            "Không giới hạn số lượng thành viên",
-            "Đăng nhập SSO và nhật ký kiểm toán (audit logs)",
-            "Hỗ trợ kỹ thuật riêng",
-            "Hóa đơn tùy chỉnh và cam kết chất lượng dịch vụ (SLA)"
-        ],
-        "ctaLabel": "Liên hệ chúng tôi",
-        "ctaSubject": "{site} Enterprise: hãy trao đổi",
-        "ctaBody": "Quy mô nhóm:\n\nNhu cầu của chúng tôi:"
-    },
-    "errors": {
-        "unauthorized": "Không có quyền truy cập",
-        "projectNotFound": "Không tìm thấy dự án",
-        "nameRequired": "Vui lòng nhập tên",
-        "nameTooLong": "Tên quá dài",
-        "descriptionTooLong": "Mô tả quá dài",
-        "invalidEmail": "Nhập địa chỉ email hợp lệ",
-        "messageTooShort": "Vui lòng nhập chi tiết hơn (ít nhất 10 ký tự)",
-        "checkTheForm": "Kiểm tra lại biểu mẫu và thử lại",
-        "tooManyMessages": "Quá nhiều tin nhắn từ kết nối này. Thử lại sau vài phút.",
-        "contactSendFailed": "Đã có lỗi xảy ra. Hãy gửi email trực tiếp cho chúng tôi tại {email}."
+    "roles": {
+      "title": "Nhóm quyền",
+      "subtitle": "Các nhóm quyền của không gian làm việc này.",
+      "builtin": {
+        "title": "Vai trò có sẵn",
+        "description": "Do nền tảng định sẵn, không chỉnh sửa được."
+      },
+      "custom": {
+        "title": "Nhóm quyền tự tạo",
+        "description": "Nhóm quyền của riêng bạn, tạo ở dưới.",
+        "empty": "Chưa có nhóm quyền tự tạo.",
+        "members": "thành viên",
+        "delete": "Xoá"
+      },
+      "create": {
+        "title": "Tạo nhóm quyền",
+        "namePlaceholder": "ten-nhom-quyen",
+        "submit": "Tạo nhóm quyền"
+      },
+      "colRole": "Vai trò",
+      "colPermissions": "Quyền"
     }
+  },
+  "admin": {
+    "title": "Trang quản trị",
+    "badge": "Quản trị viên",
+    "subtitle": "Quản lý người dùng và theo dõi chỉ số kinh doanh.",
+    "totalUsers": "Tổng người dùng",
+    "activeSubscriptions": "Gói đăng ký hoạt động",
+    "mrr": "MRR (ước tính)",
+    "revenueTitle": "Doanh thu định kỳ",
+    "revenueSubtitle": "Doanh thu định kỳ hàng tháng trong 12 tuần qua.",
+    "revenueTooltip": "MRR",
+    "usersTitle": "Người dùng",
+    "usersCount": "{count, plural, one {# người dùng} other {# người dùng}}",
+    "searchPlaceholder": "Tìm kiếm theo email...",
+    "search": "Tìm kiếm",
+    "free": "Miễn phí",
+    "joined": "Tham gia {date}",
+    "noUsers": "Không tìm thấy người dùng nào.",
+    "colUser": "Người dùng",
+    "colPlan": "Gói",
+    "colStatus": "Trạng thái",
+    "colRole": "Vai trò",
+    "colJoined": "Đã tham gia",
+    "page": "Trang {page} / {total}",
+    "previous": "Trước",
+    "next": "Tiếp",
+    "waitlistTitle": "Danh sách chờ",
+    "exportCsv": "Xuất CSV",
+    "colEmail": "Email",
+    "colSource": "Nguồn",
+    "colRequested": "Đã yêu cầu",
+    "unsubscribed": "Đã hủy đăng ký",
+    "confirmed": "Đã xác nhận",
+    "pending": "Đang chờ",
+    "noSubscribers": "Chưa có người đăng ký. Biểu mẫu đăng ký nằm ở trang bảng giá.",
+    "makeAdmin": "Cấp quyền Admin",
+    "rolePromoted": "Người dùng đã được thăng cấp thành Admin. Phiên làm việc của họ sẽ cập nhật trong vòng một phút.",
+    "roleFailed": "Cập nhật vai trò thất bại",
+    "removeAdmin": "Gỡ quyền Admin",
+    "roleDemoted": "Đã gỡ quyền Admin. Phiên làm việc của họ sẽ cập nhật trong vòng một phút."
+  },
+  "switchAs": {
+    "button": "Chuyển sang vai trò",
+    "failed": "Không thể chuyển sang tài khoản này",
+    "banner": "Bạn đang sử dụng ứng dụng dưới tên {email}. Mọi thay đổi bạn thực hiện đều là thật.",
+    "back": "Chuyển lại"
+  },
+  "billing": {
+    "checkout": {
+      "paid": "Thanh toán thành công. Gói dịch vụ của bạn sẽ cập nhật sau vài giây.",
+      "canceled": "Đã hủy thanh toán. Bạn chưa bị tính phí."
+    },
+    "upgrade": {
+      "error": "Đã có lỗi xảy ra. Vui lòng thử lại.",
+      "upgrade": "Nâng cấp"
+    },
+    "plans": {
+      "current": "Gói hiện tại",
+      "payOnce": "Thanh toán một lần",
+      "upgradeTo": "Nâng cấp lên {plan}",
+      "get": "Sử dụng {plan}",
+      "trial": "Dùng thử miễn phí {days} ngày"
+    }
+  },
+  "email": {
+    "welcome": "Chào mừng đến với {site}!",
+    "subscriptionActive": "Gói đăng ký {plan} của bạn đang hoạt động",
+    "trialStarted": "Thời gian dùng thử miễn phí gói {plan} đã bắt đầu",
+    "purchaseConfirmed": "Đơn hàng gói {plan} của bạn đã được xác nhận",
+    "magicLink": "Đăng nhập vào {site}",
+    "passwordReset": "Đặt lại mật khẩu {site} của bạn",
+    "changeEmail": "Xác nhận thay đổi địa chỉ email trên {site}",
+    "subscriptionCancelled": "Gói đăng ký {site} của bạn đã bị hủy",
+    "contact": "Biểu mẫu liên hệ: {from}",
+    "newsletterConfirm": "Xác nhận vị trí của bạn trong danh sách chờ {site}",
+    "newsletterWelcome": "Bạn đã có tên trong danh sách",
+    "welcomeBody": {
+      "hello": "Xin chào {name}",
+      "helloFallback": "bạn",
+      "$product": {
+        "intro": "Chào mừng đến với {site}! Tài khoản của bạn đã sẵn sàng và không cần thiết lập thêm gì nữa.",
+        "bullets": "Bắt đầu dự án: tạo dự án đầu tiên và mời đội ngũ của bạn\n       Cá nhân hóa: thêm tên và tùy chỉnh trong cài đặt\n       Chọn một gói: nâng cấp khi cần mở rộng, hủy bất kỳ lúc nào"
+      },
+      "$kit": {
+        "intro": "Chào mừng đến với {site}! Tài khoản của bạn đã sẵn sàng. Bạn hiện là một phần của cộng đồng nhà phát triển xây dựng sản phẩm SaaS nhanh hơn.",
+        "bullets": "Xác thực: Google & GitHub OAuth, đã được cấu hình đầy đủ\n       Thanh toán: Tích hợp sẵn thanh toán Stripe\n       Bảng điều khiển: Theo dõi gói đăng ký và tài khoản của bạn"
+      },
+      "whatNext": "Dưới đây là những gì bạn có thể làm ngay bây giờ:",
+      "ready": "Sẵn sàng trải nghiệm chưa?",
+      "cta": "Đi tới Bảng điều khiển →",
+      "help": "Nếu bạn có bất kỳ câu hỏi nào, chỉ cần phản hồi lại email này. Chúng tôi rất vui được hỗ trợ."
+    },
+    "magicLinkBody": {
+      "hello": "Xin chào",
+      "intro": "Nhấp vào nút bên dưới để đăng nhập vào {site}. Liên kết có hiệu lực trong 15 phút và chỉ sử dụng được một lần.",
+      "cta": "Đăng nhập vào {site} →",
+      "ignore": "Nếu bạn không yêu cầu email này, bạn có thể an tâm bỏ qua: sẽ không có thay đổi nào trừ khi liên kết được nhấp."
+    },
+    "passwordResetBody": {
+      "hello": "Xin chào,",
+      "intro": "Chúng tôi nhận được yêu cầu đặt lại mật khẩu {site} của bạn. Nhấp vào nút bên dưới để chọn mật khẩu mới. Liên kết có hiệu lực trong 30 phút và chỉ sử dụng được một lần.",
+      "cta": "Đặt lại mật khẩu →",
+      "ignore": "Nếu bạn không yêu cầu đặt lại mật khẩu, bạn có thể an tâm bỏ qua email này: mật khẩu của bạn sẽ giữ nguyên."
+    },
+    "changeEmailBody": {
+      "hello": "Xin chào,",
+      "intro": "Ai đó đã yêu cầu chuyển tài khoản {site} này sang {newEmail}. Thư này được gửi đến địa chỉ hiện tại của bạn: không có gì thay đổi cho đến khi bạn phê duyệt tại đây.",
+      "cta": "Xác nhận thay đổi này →",
+      "next": "Sau khi bạn xác nhận, chúng tôi sẽ gửi thêm một email nữa đến địa chỉ mới. Tài khoản chỉ chuyển đổi khi email mới cũng được xác nhận, giúp bạn không lo bị khóa tài khoản do gõ sai.",
+      "ignore": "Nếu đây không phải là bạn, hãy bỏ qua email này và mọi thứ giữ nguyên — nhưng nhớ kiểm tra lại mật khẩu của bạn, vì người yêu cầu thay đổi đã đăng nhập dưới tên bạn."
+    },
+    "subscriptionBody": {
+      "hello": "Xin chào {name}",
+      "intro": "Gói đăng ký {plan} của bạn hiện đã kích hoạt. Cảm ơn bạn đã đăng ký!",
+      "introTrial": "Chương trình dùng thử miễn phí gói {plan} của bạn đã bắt đầu. Bạn chưa bị tính phí cho đến {date}, và bạn có thể hủy trước thời gian đó tại trang thanh toán.",
+      "labelPlan": "Gói:",
+      "labelAmount": "Số tiền:",
+      "labelRenewal": "Ngày gia hạn tiếp theo:",
+      "labelTrialEnd": "Hết hạn dùng thử:",
+      "access": "Bạn có quyền truy cập đầy đủ tất cả các tính năng của {site}.",
+      "cta": "Quản lý thanh toán →",
+      "changes": "Cần thay đổi? Bạn có thể quản lý gói đăng ký bất kỳ lúc nào từ trang thanh toán."
+    },
+    "purchaseBody": {
+      "hello": "Xin chào {name}",
+      "intro": "Đơn hàng gói {plan} của bạn đã được xác nhận. Đây là khoản thanh toán một lần: không gia hạn, không tính phí định kỳ.",
+      "labelPlan": "Gói:",
+      "labelAmount": "Số tiền:",
+      "oneTime": "(một lần)",
+      "access": "Bạn hiện có quyền truy cập đầy đủ tất cả các tính năng của {site}.",
+      "cta": "Xem thanh toán →",
+      "receipt": "Hóa đơn của bạn có sẵn trên trang thanh toán. Bạn có câu hỏi? Chỉ cần phản hồi email này."
+    },
+    "cancellationBody": {
+      "hello": "Xin chào {name},",
+      "intro": "Gói đăng ký {site} của bạn đã bị hủy. Bạn vẫn tiếp tục có quyền truy cập cho đến {date}.",
+      "labelEnds": "Hết quyền truy cập:",
+      "dataSafe": "Dữ liệu của bạn an toàn và vẫn sẵn có.",
+      "changedMind": "Đổi ý? Bạn có thể đăng ký lại bất kỳ lúc nào trước khi quyền truy cập hết hạn.",
+      "cta": "Đăng ký lại →",
+      "feedback": "Nếu bạn muốn chia sẻ lý do hủy gói, chỉ cần trả lời email này - chúng tôi đọc mọi phản hồi."
+    },
+    "newsletterConfirmBody": {
+      "intro": {
+        "$kit": "Bạn đã yêu cầu tham gia danh sách chờ của {site}. Nhấp vào bên dưới để xác nhận, và mức giá ưu đãi khi ra mắt sẽ gửi tới trong email tiếp theo. Nếu không thấy trong hộp thư đến, hãy kiểm tra mục Quảng cáo hoặc Spam.",
+        "$product": "Bạn đã yêu cầu tham gia danh sách chờ của {site}. Nhấp vào bên dưới để xác nhận."
+      },
+      "cta": "Xác nhận vị trí của tôi →",
+      "expiry": "Liên kết hết hạn trong 7 ngày. Nếu đây không phải bạn, chỉ cần bỏ qua email này và sẽ không có gì xảy ra."
+    },
+    "newsletterWelcomeBody": {
+      "intro": "Bạn đã đăng ký thành công. Chi tiết như sau:",
+      "$product": {
+        "bullets": "Một email ngắn khi có tin tức mới thực sự.\n       Quyền truy cập sớm khi tính năng bạn đăng ký chính thức ra mắt."
+      },
+      "$kit": {
+        "bullets": "Một email ngắn khi có tin tức mới về bản Pro.\n       Mức giá ra mắt của Pro và Pro Studio, trước khi công bố rộng rãi vào ngày 31 tháng 10."
+      },
+      "noSpam": "Không spam, không tin nhắn rác hàng ngày. Hủy đăng ký bất kỳ lúc nào chỉ bằng một cú nhấp chuột.",
+      "unsubscribe": "Hủy đăng ký"
+    }
+  },
+  "hero": {
+    "$kit": {
+      "headlineHead": "Bộ khởi tạo Next.js SaaS của bạn.",
+      "headlineAccent": "Sẵn sàng cho môi trường thực tế. Miễn phí.",
+      "subtitle": "Xác thực, thanh toán, bảng điều khiển và trang quản trị sẵn sàng cho sản xuất và miễn phí trọn đời. Mã nguồn thuần Next.js: không trình biên dịch phức tạp, không lớp cấu hình ẩn, không cần học thêm gì mới.",
+      "cta": "Bắt đầu miễn phí",
+      "pill": "Mã nguồn mở & Miễn phí · Pro và Pro Studio ra mắt vào 19 tháng 11"
+    },
+    "$product": {
+      "headlineHead": "",
+      "headlineAccent": "",
+      "subtitle": "Một không gian làm việc cho các dự án, khách hàng và thanh toán của bạn. Mời đội ngũ và tập trung vào những công việc quan trọng.",
+      "cta": "Bắt đầu ngay",
+      "trust": "Cài đặt trong vài phút · Không cần thẻ tín dụng · Hủy bất kỳ lúc nào",
+      "pill": "Hiện đã có bản Beta công khai"
+    },
+    "mock": {
+      "navDashboard": "Bảng điều khiển",
+      "navProjects": "Dự án",
+      "navBilling": "Thanh toán",
+      "navSettings": "Cài đặt",
+      "navAdmin": "Trang quản trị",
+      "statPlan": "Gói hiện tại",
+      "statStatus": "Trạng thái",
+      "statStatusValue": "Hoạt động",
+      "statBilling": "Kỳ thanh toán tiếp theo"
+    }
+  },
+  "setupVideo": {
+    "$kit": {
+      "title": "Từ git clone đến một SaaS hoạt động",
+      "subtitle": "Được ghi lại trên bản clone mới: một vài câu lệnh, hai giá trị trong tệp cấu hình, và toàn bộ ứng dụng chạy ngay trên máy bạn. Không phải bản demo dựng sẵn.",
+      "videoLabel": "Video ghi lại màn hình terminal: tải bộ công cụ, cài đặt, kết nối cơ sở dữ liệu và khởi chạy, sau đó trình duyệt đăng nhập vào bảng điều khiển.",
+      "play": "Phát video",
+      "pause": "Tạm dừng",
+      "guide": "Thực hiện theo các bước trong hướng dẫn Bắt đầu"
+    }
+  },
+  "features": {
+    "$product": {
+      "title": "Mọi thứ bạn cần, tập trung ở một nơi",
+      "subtitle": "Những tính năng cốt lõi được hoàn thiện chuẩn mực, giúp bạn tập trung làm việc.",
+      "c1": {
+        "title": "Đăng nhập theo cách của bạn",
+        "description": "Google, GitHub, mật khẩu hoặc liên kết một lần gửi đến hộp thư. Chọn cách phù hợp với nhóm và thay đổi bất kỳ lúc nào."
+      },
+      "c2": {
+        "title": "Thanh toán đơn giản",
+        "description": "Nâng cấp, hạ cấp hoặc hủy chỉ với một cú nhấp. Hóa đơn và biên lai tự động gửi về, thông tin thanh toán được bảo mật bởi Stripe."
+      },
+      "c3": {
+        "title": "Dữ liệu luôn thuộc về bạn",
+        "description": "Mọi thứ lưu trữ trong một cơ sở dữ liệu do bạn kiểm soát. Không bị ràng buộc và có thể trích xuất dữ liệu dễ dàng."
+      },
+      "c4": {
+        "title": "Giao diện Sáng và Tối",
+        "description": "Giao diện tự động điều chỉnh theo hệ thống hoặc theo lựa chọn của bạn. Dễ chịu cho mắt dù làm việc ban ngày hay ban đêm."
+      },
+      "c5": {
+        "title": "Bảo mật theo mặc định",
+        "description": "Không gian làm việc chỉ hiển thị với bạn và những người được mời. Phiên làm việc tự hết hạn, quyền truy cập được kiểm tra trên mỗi yêu cầu."
+      },
+      "c6": {
+        "title": "Quyền kiểm soát của Quản trị viên",
+        "description": "Xem mọi thành viên, vai trò và gói dịch vụ của họ ở một nơi. Thăng cấp, xem xét và can thiệp khi cần đưa ra quyết định."
+      }
+    },
+    "$kit": {
+      "title": "Mọi thứ bạn cần để phát triển sản phẩm",
+      "subtitle": "Không còn mất thời gian làm lại hệ thống xác thực và thanh toán. Bắt đầu xây dựng sản phẩm của bạn ngay.",
+      "c1": {
+        "title": "Xác thực tích hợp sẵn",
+        "description": "Google và GitHub OAuth với Better Auth. Phiên làm việc lưu trong cơ sở dữ liệu của bạn. Không phụ thuộc dịch vụ xác thực bên thứ ba."
+      },
+      "c2": {
+        "title": "Thanh toán Stripe",
+        "description": "Thanh toán gói đăng ký, webhooks và Cổng thông tin khách hàng. Tự động xử lý nâng cấp, hạ cấp và hủy gói."
+      },
+      "c3": {
+        "title": "Prisma + PostgreSQL",
+        "description": "Lớp cơ sở dữ liệu type-safe với Prisma 7. Hoạt động với Neon, Supabase, Railway hoặc bất kỳ nhà cung cấp PostgreSQL nào."
+      },
+      "c4": {
+        "title": "Chế độ tối",
+        "description": "Chế độ tối tự động thích ứng hệ thống. Biến CSS trong Tailwind 4 giúp bạn tùy chỉnh màu sắc thương hiệu trong một tệp."
+      },
+      "c5": {
+        "title": "Bảo vệ tuyến đường (Route protection)",
+        "description": "Trình bảo vệ xác thực dựa trên Middleware. Phân nhóm tuyến đường công khai, xác thực, bảng điều khiển và admin với mã nguồn tối giản."
+      },
+      "c6": {
+        "title": "Trang quản trị",
+        "description": "Quản lý người dùng với phân quyền theo vai trò. Xem tất cả người dùng, gói dịch vụ và trạng thái đăng ký tại một nơi."
+      },
+      "c7": {
+        "title": "Triển khai Vercel với 1 cú nhấp",
+        "description": "Nút triển khai ngay trong README. Từ sao chép mã nguồn đến sản phẩm thực tế chưa đầy một giờ, kèm chế độ demo tích hợp để giới thiệu sản phẩm của bạn."
+      },
+      "c8": {
+        "title": "Next.js thuần túy, dễ tiếp cận",
+        "description": "Không có bước biên dịch phức tạp, không CLI độc quyền. App Router, Server Actions và Prisma hoạt động chuẩn mực theo tài liệu."
+      },
+      "c9": {
+        "title": "Email giao dịch",
+        "description": "Email chào mừng, biên lai và đặt lại mật khẩu qua Resend. Mẫu React Email thiết kế sẵn, tương thích nhiều thiết bị."
+      }
+    }
+  },
+  "footer": {
+    "blurb": {
+      "$kit": "{tagline}. Bộ khởi tạo sẵn sàng cho sản xuất bằng Next.js thuần."
+    },
+    "github": "GitHub",
+    "product": "Sản phẩm",
+    "features": "Tính năng",
+    "pricing": "Bảng giá",
+    "changelog": "Lịch sử cập nhật",
+    "about": "Giới thiệu",
+    "aboutLink": "Giới thiệu",
+    "faq": "Hỏi đáp",
+    "contact": "Liên hệ",
+    "openSource": "Mã nguồn mở",
+    "legal": "Pháp lý",
+    "privacy": "Chính sách bảo mật",
+    "terms": "Điều khoản dịch vụ",
+    "cookies": "Chính sách Cookie",
+    "copyright": "© {year} {site}. Bảo lưu mọi quyền.",
+    "license": "Giấy phép MIT · Xây dựng với Next.js",
+    "signup": {
+      "$kit": {
+        "title": "Bản Pro ra mắt vào 19 tháng 11.",
+        "cta": "Tham gia",
+        "disabledNote": "Danh sách chờ sẽ mở sớm."
+      },
+      "$product": {
+        "title": "Nhận cập nhật sản phẩm qua email.",
+        "cta": "Đăng ký",
+        "disabledNote": "Biểu mẫu bị vô hiệu hóa trong bản demo."
+      },
+      "sent": "Sắp hoàn tất: kiểm tra hộp thư đến để xác nhận."
+    }
+  },
+  "about": {
+    "$kit": {
+      "title": "Giới thiệu {site}",
+      "whatTitle": "Dự án này là gì",
+      "whoTitle": "Dành cho ai",
+      "principlesTitle": "Nguyên tắc phát triển",
+      "maintainerTitle": "Người phát triển",
+      "maintainerIntro": "{site} được tạo ra và duy trì bởi",
+      "maintainerBody": ". Một cá nhân làm việc công khai: lộ trình cho biết những gì sắp tới, lịch sử cập nhật ghi lại những gì đã phát hành. Các vấn đề và câu hỏi đều được phản hồi trực tiếp bởi người viết mã.",
+      "noteTitle": "Đây là văn bản mẫu.",
+      "noteBody": "Hãy kể câu chuyện của bạn tại đây: bạn đang xây dựng gì, dành cho ai và tại sao. Chỉnh sửa trang này tại src/app/[locale]/(public)/about/page.tsx.",
+      "what": "Một điểm khởi đầu hoàn chỉnh cho một dự án SaaS, không phải bản dựng minh họa. Xác thực với OAuth, liên kết đăng nhập nhanh và mật khẩu. Gói đăng ký Stripe, thanh toán một lần và xác thực webhook trước khi lưu vào cơ sở dữ liệu. Trang quản trị với số liệu doanh thu thực tế, email giao dịch và trang tiếp thị đi kèm.",
+      "who": "Dành cho những người phát triển độc lập hoặc nhóm nhỏ, muốn tập trung vào tính năng khác biệt của sản phẩm thay vì làm lại hệ thống thanh toán hay xác thực.",
+      "principles": [
+        "Next.js thuần túy: không trình biên dịch riêng, không lớp cấu hình phức tạp.",
+        "Thanh toán tích hợp sẵn trong bản miễn phí, không bị khóa sau bức tường thanh toán.",
+        "Minh bạch theo mặc định: tính năng thực tế, không tạo giá trị ảo.",
+        "Không giữ lại tính năng để bán sau: những gì bộ công cụ có, đều miễn phí."
+      ]
+    },
+    "$product": {
+      "title": "Giới thiệu {site}",
+      "whatTitle": "Dự án này là gì",
+      "whoTitle": "Dành cho ai",
+      "principlesTitle": "Nguyên tắc phát triển",
+      "maintainerTitle": "Người phát triển",
+      "maintainerIntro": "{site} được tạo ra và duy trì bởi",
+      "maintainerBody": ". Một cá nhân làm việc công khai: lộ trình cho biết những gì sắp tới, lịch sử cập nhật ghi lại những gì đã phát hành. Các vấn đề và câu hỏi đều được phản hồi trực tiếp bởi người viết mã.",
+      "noteTitle": "Đây là văn bản mẫu.",
+      "noteBody": "Hãy kể câu chuyện của bạn tại đây: bạn đang xây dựng gì, dành cho ai và tại sao. Chỉnh sửa trang này tại src/app/[locale]/(public)/about/page.tsx.",
+      "what": "Một nơi duy nhất cho công việc hàng ngày của nhóm bạn: các dự án, thành viên tham gia và thanh toán quản lý tập trung.",
+      "who": "Các đội ngũ nhỏ muốn tập trung thời gian vào công việc chuyên môn thay vì quản lý công cụ.",
+      "principles": [
+        "Dữ liệu thuộc về bạn: xuất dữ liệu bất kỳ lúc nào bạn muốn.",
+        "Mức giá rõ ràng, không có chi phí ẩn trên hóa đơn.",
+        "Minh bạch theo mặc định: tính năng thực tế, không tạo giá trị ảo."
+      ]
+    }
+  },
+  "nav": {
+    "features": "Tính năng",
+    "pricing": "Bảng giá",
+    "faq": "Hỏi đáp",
+    "changelog": "Lịch sử cập nhật",
+    "signIn": "Đăng nhập",
+    "demo": "Demo",
+    "getStarted": "Bắt đầu",
+    "openMenu": "Mở menu",
+    "backToTop": "Về đầu trang"
+  },
+  "faq": {
+    "title": "Các câu hỏi thường gặp",
+    "$product": {
+      "items": [
+        {
+          "question": "Tôi bắt đầu như thế nào?",
+          "answer": "Tạo một tài khoản, đặt tên cho dự án đầu tiên và bạn đã hoàn tất. {site} hoạt động trên trình duyệt, không cần cài đặt và bạn có thể mời nhóm bất kỳ lúc nào."
+        },
+        {
+          "question": "Việc thanh toán hoạt động như thế nào?",
+          "answer": "Bạn chọn một gói và thanh toán bằng thẻ. Việc nâng cấp hoặc hạ cấp có hiệu lực ngay lập tức, hóa đơn được tự động gửi đến email của bạn."
+        },
+        {
+          "question": "Ai có thể xem dữ liệu của tôi?",
+          "answer": "Chỉ bạn và những người bạn mời. Dữ liệu nằm trong cơ sở dữ liệu của chúng tôi, thông tin thẻ được xử lý bởi Stripe và chúng tôi không bán dữ liệu của bạn."
+        }
+      ]
+    },
+    "$kit": {
+      "items": [
+        {
+          "question": "Chính xác thì tôi nhận được gì?",
+          "answer": "Bạn nhận được mã nguồn Next.js 16 sẵn sàng cho sản xuất với Better Auth, Stripe, Prisma và Tailwind đã cấu hình sẵn. Chỉ cần clone repo, thiết lập biến môi trường và triển khai."
+        },
+        {
+          "question": "Tại sao nên chọn {site} thay vì các bộ app khác?",
+          "answer": "{site} sử dụng các công nghệ độc lập. Không bị phụ thuộc vào Supabase hay dịch vụ xác thực riêng. Bạn hoàn toàn chủ động cập nhật các gói phụ thuộc."
+        },
+        {
+          "question": "Những nhà cung cấp cơ sở dữ liệu nào được hỗ trợ?",
+          "answer": "Bất kỳ nhà cung cấp PostgreSQL nào: Neon (khuyên dùng), Supabase, Railway, PlanetScale (chế độ Postgres) hoặc tự lưu trữ (self-hosted)."
+        },
+        {
+          "question": "Tôi có cần tài khoản Stripe không?",
+          "answer": "Có. Stripe được dùng cho thanh toán gói đăng ký. Bạn cần tạo sản phẩm, mức giá trong dashboard của Stripe và thêm ID giá vào biến môi trường."
+        },
+        {
+          "question": "Tôi có thể dùng mã nguồn này cho dự án khách hàng không?",
+          "answer": "Có, dưới giấy phép MIT. Bạn có thể sử dụng cho vô số dự án, bao gồm cả công việc làm cho khách hàng mà không tốn thêm chi phí."
+        },
+        {
+          "question": "Nếu tôi cần trợ giúp hoặc phát hiện lỗi thì sao?",
+          "answer": "Hãy tạo một Issue trên GitHub. Vì là mã nguồn mở, bạn sẽ nhận được các bản cập nhật mới nhất bằng cách kéo mã nguồn từ nhánh main. Hoặc liên hệ qua email để được hỗ trợ."
+        },
+        {
+          "question": "Pro và Pro Studio là gì, khi nào ra mắt?",
+          "answer": "Đây là các phiên bản trả phí dành cho làm việc nhóm: quản lý nhóm, lời mời, phân quyền và thanh toán nhóm. Mua một lần sử dụng trọn đời. Bản Pro ra mắt vào ngày 19 tháng 11."
+        }
+      ]
+    }
+  },
+  "pricing": {
+    "$kit": {
+      "title": "Bắt đầu miễn phí, mở rộng khi phát triển",
+      "subtitle": "Mã nguồn mở và miễn phí mãi mãi: tích hợp sẵn xác thực, thanh toán, trang quản trị và email. Tính năng Nhóm sẽ có trong bản Pro ra mắt ngày 19 tháng 11.",
+      "freeTitle": "Miễn phí",
+      "freeDescription": "Mã nguồn mở, đầy đủ tính năng cốt lõi",
+      "forever": "mãi mãi",
+      "getOnGithub": "Tải trên GitHub",
+      "noSignup": "Clone, thả star và triển khai. Không cần đăng ký",
+      "proTitle": "Pro · Pro Studio · Teams",
+      "statusBadge": "Mở danh sách chờ",
+      "proDescription": "Dành cho các ứng dụng cần tính năng nhóm và các studio phát triển ứng dụng.",
+      "launchDate": "19 tháng 11",
+      "launchOffer": "Ưu đãi ngày ra mắt dành cho danh sách chờ. Xác nhận email để nhận thông tin giá ưu đãi ngay.",
+      "waitlistCta": "Tham gia danh sách chờ Pro & Pro Studio",
+      "waitlistNote": "Email thông báo khi có tin tức mới và mức giá ưu đãi khi xác nhận. Hủy đăng ký bất kỳ lúc nào.",
+      "formsDisabled": "Biểu mẫu bị vô hiệu hóa trong bản demo.",
+      "freeFeatures": [
+        "Next.js 16 + TypeScript + Tailwind 4",
+        "Better Auth: Google & GitHub OAuth",
+        "Prisma 7 + Cấu trúc PostgreSQL",
+        "Stripe Checkout + webhooks + Cổng khách hàng",
+        "Trang quản trị (người dùng, chỉ số, vai trò)",
+        "Email giao dịch (Resend)",
+        "Bảng điều khiển, chế độ tối, bảo vệ tuyến đường",
+        "Triển khai 1 cú nhấp trên Vercel",
+        "Chế độ demo: đăng nhập 1 nhấp, dữ liệu mẫu",
+        "Giấy phép MIT, dùng cho dự án khách hàng"
+      ],
+      "proFeatures": [
+        "Toàn bộ tính năng gói Miễn phí, cộng thêm:",
+        "Quản lý Nhóm và Tổ chức",
+        "Lời mời và chuyển quyền sở hữu",
+        "Phân quyền: chủ sở hữu, quản trị viên, thành viên",
+        "Thanh toán theo số lượng vị trí trong nhóm",
+        "Hỗ trợ qua email và kênh Discord riêng",
+        "Tất cả tính năng bổ sung sau khi ra mắt"
+      ]
+    }
+  },
+  "planPricing": {
+    "$product": {
+      "title": "Mức giá đơn giản, minh bạch",
+      "subtitleDemo": "Đây là các gói mẫu được lấy trực tiếp từ cơ sở dữ liệu. Đăng nhập bản demo để xem quy trình thanh toán đầy đủ.",
+      "subtitle": "Bắt đầu miễn phí và nâng cấp khi cần. Các gói bên dưới được đồng bộ từ cơ sở dữ liệu của bạn."
+    }
+  },
+  "setup": {
+    "title": "Sắp hoàn tất",
+    "subtitle": "Ứng dụng đang chạy. Bạn cần kết nối cơ sở dữ liệu để hiển thị nội dung.",
+    "step1Title": "Tạo cơ sở dữ liệu và điền tệp .env.local",
+    "step1Body": "Tạo một cơ sở dữ liệu PostgreSQL (Neon có gói miễn phí). Sau đó sao chép tệp .env.example thành .env.local: điền chuỗi kết nối vào DATABASE_URL và AUTH_SECRET.",
+    "step1Note": "Mỗi khi thay đổi tệp .env.local, hãy khởi động lại dev server (Ctrl+C và chạy lại).",
+    "step1Unreachable": "DATABASE_URL đã được thiết lập nhưng không thể kết nối tới cơ sở dữ liệu. Hãy kiểm tra lại chuỗi kết nối trong .env.local.",
+    "step2Title": "Áp dụng migration",
+    "step2Body": "Lệnh đầu tiên sẽ tạo các bảng, lệnh thứ hai thêm các gói dịch vụ mẫu.",
+    "step2Note": "Thấy cảnh báo SSL trong terminal? Đổi sslmode=require thành sslmode=verify-full trong tệp .env.local.",
+    "step3Title": "Khởi động lại",
+    "step3Body": "Khởi động lại dev server. Trang đăng nhập sẽ có thêm nút Dev Login (Admin). Các nút Google và GitHub sẽ xuất hiện khi bạn thêm API key tương ứng.",
+    "guideCta": "Đọc hướng dẫn đầy đủ",
+    "devOnly": "Trang này chỉ hiển thị trong môi trường phát triển (development) khi cơ sở dữ liệu chưa sẵn sàng."
+  },
+  "waitlist": {
+    "cta": "Tham gia danh sách chờ",
+    "note": "Chúng tôi chỉ gửi email khi có thông tin quan trọng. Hủy đăng ký bất kỳ lúc nào.",
+    "disabledNote": "Biểu mẫu bị vô hiệu hóa trong bản demo.",
+    "consent": "Bằng cách tham gia, bạn đồng ý với Chính sách bảo mật của chúng tôi.",
+    "sent": "Sắp hoàn tất: kiểm tra hộp thư đến để xác nhận vị trí của bạn.",
+    "emailPlaceholder": "Email của bạn",
+    "emailLabel": "Địa chỉ email",
+    "sending": "Đang tham gia…"
+  },
+  "contactForm": {
+    "sentTitle": "Cảm ơn bạn, tin nhắn đã được gửi.",
+    "sentBody": "Chúng tôi đọc tất cả phản hồi và sẽ phản hồi nhanh chóng.",
+    "name": "Tên (không bắt buộc)",
+    "email": "Email",
+    "message": "Tin nhắn",
+    "namePlaceholder": "Nguyen Van A",
+    "emailPlaceholder": "ban@company.com",
+    "messagePlaceholder": "Chúng tôi có thể giúp gì cho bạn?",
+    "sending": "Đang gửi…",
+    "submit": "Gửi tin nhắn"
+  },
+  "contactDialog": {
+    "copied": "Đã sao chép địa chỉ email",
+    "copyFailed": "Không thể sao chép - địa chỉ hiển thị ở trên",
+    "title": "Liên hệ",
+    "copiedShort": "Đã sao chép!",
+    "copy": "Sao chép email"
+  },
+  "changelog": {
+    "title": "Lịch sử cập nhật",
+    "latest": "Mới nhất",
+    "unreleased": "Chưa phát hành"
+  },
+  "contact": {
+    "title": "Liên hệ",
+    "intro": "Câu hỏi, phản hồi, ý tưởng: chúng tôi luôn lắng nghe. Muốn gửi email trực tiếp? Viết cho chúng tôi tại",
+    "formsDisabled": "Biểu mẫu bị vô hiệu hóa trong bản demo."
+  },
+  "loading": {
+    "default": "Đang tải",
+    "admin": "Đang tải trang quản trị…",
+    "workspace": "Đang tải không gian làm việc…"
+  },
+  "code": {
+    "copy": "Sao chép",
+    "copied": "Đã sao chép"
+  },
+  "common": {
+    "close": "Đóng",
+    "starOnGitHub": "Thả star trên GitHub"
+  },
+  "theme": {
+    "label": "Đổi giao diện",
+    "light": "Sáng",
+    "dark": "Tối",
+    "system": "Hệ thống"
+  },
+  "demo": {
+    "banner": "Bạn đang xem bản demo trực tiếp - trải nghiệm ứng dụng ngay"
+  },
+  "notFound": {
+    "badge": "Lỗi 404",
+    "title": "Không tìm thấy trang",
+    "body": "Rất tiếc, chúng tôi không thể tìm thấy trang bạn yêu cầu. Có thể bạn đã nhập sai URL hoặc trang đã chuyển dời.",
+    "home": "Quay lại Trang chủ",
+    "redirecting": "Đang chuyển hướng về trang chủ trong {seconds}s..."
+  },
+  "newsletter": {
+    "confirmTitle": "Xác nhận đăng ký",
+    "unsubscribeTitle": "Hủy đăng ký",
+    "confirmedHeading": "Đã xác nhận",
+    "confirmedBody": {
+      "$kit": "Kiểm tra hộp thư đến: thông tin mức giá ưu đãi ra mắt của Pro và Pro Studio đang được gửi tới. Hủy đăng ký bất kỳ lúc nào.",
+      "$product": "Email cập nhật tin tức và mã giảm giá dành cho bạn khi ra mắt. Hủy đăng ký bất kỳ lúc nào."
+    },
+    "expiredHeading": "Liên kết đã hết hạn",
+    "expiredBody": "Liên kết xác nhận có hiệu lực trong 7 ngày. Vui lòng đăng ký lại để nhận liên kết mới.",
+    "invalidHeading": "Liên kết không hợp lệ",
+    "invalidBody": "Liên kết xác nhận này không còn hợp lệ. Đăng ký lại để nhận liên kết mới.",
+    "unsubscribedHeading": "Đã hủy đăng ký",
+    "unsubscribedBody": "Bạn sẽ không nhận thêm email từ chúng tôi. Đổi ý? Bạn có thể đăng ký lại bất kỳ lúc nào.",
+    "unknownHeading": "Liên kết không hợp lệ",
+    "unknownBody": "Liên kết hủy đăng ký này không khớp với hệ thống. Hãy phản hồi trực tiếp email để được hỗ trợ thủ công.",
+    "backToSite": "Quay lại trang web",
+    "backToPricing": "Quay lại bảng giá"
+  },
+  "enterprise": {
+    "name": "Doanh nghiệp (Enterprise)",
+    "description": "Dành cho các đội ngũ và tổ chức lớn",
+    "priceLabel": "Tùy chỉnh",
+    "note": "thanh toán linh hoạt",
+    "yearlyNote": "theo hợp đồng hàng năm",
+    "features": [
+      "Toàn bộ tính năng gói Pro",
+      "Không giới hạn số lượng thành viên",
+      "Đăng nhập SSO và nhật ký kiểm toán (audit logs)",
+      "Hỗ trợ kỹ thuật riêng",
+      "Hóa đơn tùy chỉnh và cam kết chất lượng dịch vụ (SLA)"
+    ],
+    "ctaLabel": "Liên hệ chúng tôi",
+    "ctaSubject": "{site} Enterprise: hãy trao đổi",
+    "ctaBody": "Quy mô nhóm:\n\nNhu cầu của chúng tôi:"
+  },
+  "errors": {
+    "unauthorized": "Không có quyền truy cập",
+    "projectNotFound": "Không tìm thấy dự án",
+    "nameRequired": "Vui lòng nhập tên",
+    "nameTooLong": "Tên quá dài",
+    "descriptionTooLong": "Mô tả quá dài",
+    "invalidEmail": "Nhập địa chỉ email hợp lệ",
+    "messageTooShort": "Vui lòng nhập chi tiết hơn (ít nhất 10 ký tự)",
+    "checkTheForm": "Kiểm tra lại biểu mẫu và thử lại",
+    "tooManyMessages": "Quá nhiều tin nhắn từ kết nối này. Thử lại sau vài phút.",
+    "contactSendFailed": "Đã có lỗi xảy ra. Hãy gửi email trực tiếp cho chúng tôi tại {email}."
+  }
 }

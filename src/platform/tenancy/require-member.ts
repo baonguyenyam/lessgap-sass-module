@@ -7,9 +7,10 @@ import type { FieldOutputTypes } from "@/generated/prisma8/contract.d"
 
 type Tenant = FieldOutputTypes["public"]["Tenant"]
 type Member = FieldOutputTypes["public"]["Member"]
+export type CurrentUser = Awaited<ReturnType<typeof requireUser>>
 
 export type TenantMembership = {
-  user: FieldOutputTypes["public"]["User"]
+  user: CurrentUser
   member: Member
   tenant: Tenant
   tenantId: string
@@ -34,7 +35,7 @@ export async function getMembership(userId: string): Promise<Member | null> {
  * gets one tenant named after them, and the tenant is created the first time
  * they need it (sign-up provisioning arrives with the phase-4 wizard).
  */
-export async function ensureTenant(user: FieldOutputTypes["public"]["User"]): Promise<TenantMembership> {
+export async function ensureTenant(user: CurrentUser): Promise<TenantMembership> {
   const existing = await getMembership(user.id)
   if (existing) {
     const tenant = await db8.orm.public.Tenant.where({ id: existing.organizationId }).first()
@@ -42,13 +43,14 @@ export async function ensureTenant(user: FieldOutputTypes["public"]["User"]): Pr
     return { user, member: existing, tenant, tenantId: existing.organizationId }
   }
 
-  const base = slugify(user.name || user.email.split("@")[0])
+  const displayName = user.name || user.email || "workspace"
+  const base = slugify(displayName.includes("@") ? displayName.split("@")[0] : displayName)
   let slug = base
   for (let i = 2; await db8.orm.public.Tenant.where({ slug }).first(); i++) slug = `${base}-${i}`
 
   await auth.api.createOrganization({
     headers: await headers(),
-    body: { name: user.name || user.email, slug },
+    body: { name: displayName, slug },
   })
   const member = await getMembership(user.id)
   if (!member) throw new Error("Tenant creation did not produce a membership")

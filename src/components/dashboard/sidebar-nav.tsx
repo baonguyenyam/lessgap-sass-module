@@ -8,9 +8,11 @@ import {
   ArrowLeft,
   CreditCard,
   FolderKanban,
+  KeyRound,
   LayoutGrid,
   Settings,
   Shield,
+  Users,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -22,6 +24,8 @@ const menus = {
     // would light up on every sub-page too.
     { href: "/dashboard", key: "dashboard", icon: LayoutGrid, exact: true },
     { href: "/dashboard/projects", key: "projects", icon: FolderKanban },
+    { href: "/dashboard/members", key: "members", icon: Users },
+    { href: "/dashboard/roles", key: "roles", icon: KeyRound },
     { href: "/dashboard/billing", key: "billing", icon: CreditCard },
     { href: "/dashboard/settings", key: "settings", icon: Settings },
   ],

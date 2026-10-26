@@ -8,10 +8,12 @@ import {
   ArrowLeft,
   CreditCard,
   FolderKanban,
+  KeyRound,
   LayoutGrid,
   Menu,
   Settings,
   Shield,
+  Users,
 } from "lucide-react"
 import {
   DropdownMenu,
@@ -29,6 +31,8 @@ const menus = {
   dashboard: [
     { href: "/dashboard", key: "dashboard", icon: LayoutGrid },
     { href: "/dashboard/projects", key: "projects", icon: FolderKanban },
+    { href: "/dashboard/members", key: "members", icon: Users },
+    { href: "/dashboard/roles", key: "roles", icon: KeyRound },
     { href: "/dashboard/billing", key: "billing", icon: CreditCard },
     { href: "/dashboard/settings", key: "settings", icon: Settings },
   ],
