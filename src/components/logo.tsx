@@ -1,0 +1,140 @@
+import { Zap } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { siteConfig } from "@/config/site"
+import { isKitSite } from "@/config/kit"
+import { neutralMarkPath } from "@/config/brand"
+
+/**
+ * Your app's logo, in one place. Together with `src/config/site.ts` this is
+ * the only file to touch to rebrand the kit: swap the icon below for your own
+ * and the wordmark follows `siteConfig.name` automatically.
+ *
+ * Optional: set `NEXT_PUBLIC_BRAND_WORDMARK_ACCENT` to a substring of the
+ * name to gradient-highlight it (e.g. "Starter" in "OpenStarterKit"). Unset,
+ * the name renders plainly — the neutral default.
+ */
+
+export function LogoMark({
+  className,
+  iconClassName,
+  generic,
+  animated,
+}: {
+  className?: string
+  iconClassName?: string
+  /**
+   * Turns the head slowly and without stopping, a full turn every 8s.
+   * Reserved for the logo in the header and for the loader (BrandLoader,
+   * faster): the mark shows up several times on one page (footer, mockups)
+   * and all of them turning at once is noise, and in a mockup it would be
+   * someone else's logo moving.
+   *
+   * Only the placeholder head turns, never the kit's bolt, and reduced-motion
+   * switches it off through the reset in globals.css.
+   */
+  animated?: boolean
+  /**
+   * Renders a stand-in mark instead of this deployment's own: a black tile
+   * with the white socket head, even on the kit's site (a hairline ring keeps
+   * the tile visible on a dark surface). For screenshots and mockups
+   * that depict *someone else's* product, where our bolt would claim it as
+   * ours.
+   */
+  generic?: boolean
+}) {
+  const useOwnMark = isKitSite && !generic
+  return (
+    <span
+      className={cn(
+        "flex h-8 w-8 items-center justify-center rounded-lg",
+        // Light: a solid tile with a white bolt, so the logo matches the
+        // favicon this kit generates (src/app/icon.tsx), which has always been
+        // a solid tile. Dark stays tinted: a solid block reads as a hole on a
+        // dark surface.
+        // The kit's own site needs the hex spelled out, because its light
+        // `--primary` is #1d4ed8 and the brand blue is #2563eb.
+        generic
+          ? "bg-black text-white dark:ring-1 dark:ring-white/15"
+          : cn(
+              isKitSite ? "bg-[#2563eb]" : "bg-primary",
+              "text-white dark:bg-primary/10 dark:text-primary"
+            ),
+        className
+      )}
+    >
+      {/* The bolt is the OpenStarterKit mark and stays on the kit's own site
+          and on the attribution badge. Everywhere else the placeholder is the
+          socket head from `neutralMarkPath`: a clone should not ship wearing
+          our symbol, and with the badge in the footer the same bolt would
+          appear twice on one page meaning two different things.
+          Both filled. The head stays a size down from the bolt so the solid
+          shape keeps some tile around it instead of filling the whole square;
+          it covers more of its box than a lucide icon does, which is what
+          keeps this 18px the same 18px it always was (see neutralMarkPath).
+          Swap this together with src/app/icon.tsx when you rebrand. */}
+      {useOwnMark ? (
+        <Zap className={cn("h-5 w-5 fill-current", iconClassName)} />
+      ) : (
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          className={cn(
+            "h-[18px] w-[18px]",
+            animated && "origin-center animate-spin-mark",
+            iconClassName
+          )}
+        >
+          <path d={neutralMarkPath} fill="currentColor" fillRule="evenodd" />
+        </svg>
+      )}
+    </span>
+  )
+}
+
+/** Stand-in name for mockups, matching the alex@acme.io in the same screenshot. */
+const GENERIC_NAME = "Acme"
+
+export function LogoWordmark({ className, generic }: { className?: string; generic?: boolean }) {
+  const name = generic ? GENERIC_NAME : siteConfig.name
+  // The kit's own site highlights "Starter", as it did before this was
+  // configurable. Your app renders the name plainly unless you set the var.
+  const accent = generic
+    ? undefined
+    : process.env.NEXT_PUBLIC_BRAND_WORDMARK_ACCENT || (isKitSite ? "Starter" : undefined)
+
+  if (accent && name.includes(accent)) {
+    const [before, after] = name.split(accent)
+    return (
+      <span className={cn("tracking-tight", className)}>
+        {before}
+        <span className="text-gradient-brand">{accent}</span>
+        {after}
+      </span>
+    )
+  }
+
+  return <span className={cn("tracking-tight", className)}>{name}</span>
+}
+
+export function Logo({
+  className,
+  markClassName,
+  wordmarkClassName,
+  generic,
+  animated,
+}: {
+  className?: string
+  markClassName?: string
+  wordmarkClassName?: string
+  /** A stand-in brand, for depicting someone else's product. See LogoMark. */
+  generic?: boolean
+  /** Turns the head, slowly and without stopping. Header only. See LogoMark. */
+  animated?: boolean
+}) {
+  return (
+    <span className={cn("flex items-center gap-2", className)}>
+      <LogoMark className={markClassName} generic={generic} animated={animated} />
+      <LogoWordmark className={wordmarkClassName} generic={generic} />
+    </span>
+  )
+}

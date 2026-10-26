@@ -1,0 +1,93 @@
+version: 2
+
+# Dependency updates, grouped so the inbox stays readable.
+#
+# The reason for grouping: an ungrouped Dependabot on a Next + Radix + Prisma
+# project opens a dozen pull requests a week, they get ignored, and the repo
+# ends up less up to date than one with no automation at all. Patch and minor
+# bumps arrive as one pull request per area; majors come one at a time, because
+# those are the ones that need reading.
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      # The framework and its immediate surroundings move together: bumping
+      # next without eslint-config-next tends to fail the build on its own.
+      next:
+        patterns:
+          - next
+          - next-auth
+          - "@auth/*"
+          - eslint-config-next
+          # Sits on top of the App Router and follows its majors, so it belongs
+          # with them: on its own it would be the one dependency nobody watches.
+          - next-intl
+        update-types: [minor, patch]
+      react:
+        patterns:
+          - react
+          - react-dom
+          - "@types/react"
+          - "@types/react-dom"
+        update-types: [minor, patch]
+      prisma:
+        patterns:
+          - prisma
+          - "@prisma/*"
+          - pg
+          - "@types/pg"
+        update-types: [minor, patch]
+      ui:
+        patterns:
+          - "@radix-ui/*"
+          - tailwindcss
+          - "@tailwindcss/*"
+          - lucide-react
+          - class-variance-authority
+          - clsx
+          - tailwind-merge
+        update-types: [minor, patch]
+      # Anything else, including test and build tooling.
+      rest:
+        patterns:
+          - "*"
+        update-types: [minor, patch]
+    # Majors of the framework are release work, not maintenance: they land
+    # through the roadmap, not through an automated pull request.
+    ignore:
+      - dependency-name: next
+        update-types: [version-update:semver-major]
+      - dependency-name: react
+        update-types: [version-update:semver-major]
+      - dependency-name: react-dom
+        update-types: [version-update:semver-major]
+      # The lint rules are not ours: eslint.config.mjs only spreads
+      # eslint-config-next, so the ESLint major follows that config rather than
+      # the other way round. An automated pull request here reopens a decision
+      # that is already settled, and the moment it stops being settled arrives
+      # on its own: eslint-config-next requiring ESLint 10 shows up as a peer
+      # conflict on install, which is impossible to miss.
+      - dependency-name: eslint
+        update-types: [version-update:semver-major]
+      # Same shape as the ESLint case, and with a published number to point at.
+      # The compiler major is gated by the linter, not by this project:
+      # typescript-eslint arrives through eslint-config-next and its peer range
+      # is `typescript >=4.8.4 <6.1.0`, in its latest release. A TypeScript 7
+      # pull request therefore cannot go green here no matter what we do, and an
+      # automated one sat red for forty days, which makes the pull requests that
+      # matter harder to see.
+      #
+      # When to lift this: when typescript-eslint publishes a peer range that
+      # includes the major you want. Nothing else needs to change here.
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 2

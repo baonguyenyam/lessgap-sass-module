@@ -1,0 +1,284 @@
+import { NextRequest, NextResponse } from "next/server"
+import { stripe } from "@/lib/stripe"
+import { prisma } from "@/lib/prisma"
+import { subscriptionDates } from "@/lib/billing"
+import type Stripe from "stripe"
+import { emailEnabled } from "@/lib/email-transport"
+
+export async function POST(req: NextRequest) {
+  const body = await req.text()
+  const sig = req.headers.get("stripe-signature")
+
+  if (!sig || !process.env.STRIPE_WEBHOOK_SECRET) {
+    return NextResponse.json({ error: "Missing signature or webhook secret" }, { status: 400 })
+  }
+
+  let event: Stripe.Event
+
+  try {
+    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET)
+  } catch {
+    return NextResponse.json({ error: "Webhook signature verification failed" }, { status: 400 })
+  }
+
+  try {
+    switch (event.type) {
+      case "checkout.session.completed": {
+        const session = event.data.object as Stripe.Checkout.Session
+        await handleCheckoutCompleted(session)
+        break
+      }
+      case "customer.subscription.updated": {
+        const subscription = event.data.object as Stripe.Subscription
+        await handleSubscriptionUpdated(subscription)
+        break
+      }
+      case "customer.subscription.deleted": {
+        const subscription = event.data.object as Stripe.Subscription
+        await handleSubscriptionDeleted(subscription)
+        break
+      }
+      case "invoice.payment_failed": {
+        const invoice = event.data.object as Stripe.Invoice
+        await handlePaymentFailed(invoice)
+        break
+      }
+      case "charge.refunded": {
+        const charge = event.data.object as Stripe.Charge
+        await handleChargeRefunded(charge)
+        break
+      }
+    }
+  } catch (err) {
+    console.error(`Webhook handler error for ${event.type}:`, err)
+    return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 })
+  }
+
+  return NextResponse.json({ received: true })
+}
+
+const longDate = (date: Date) =>
+  date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
+
+async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
+  if (session.mode === "payment") {
+    await handleOneTimeCheckout(session)
+    return
+  }
+
+  if (!session.subscription || !session.metadata?.userId) return
+
+  const subscription = await stripe.subscriptions.retrieve(
+    session.subscription as string,
+    { expand: ["items.data.price.product"] }
+  )
+
+  const item = subscription.items.data[0]
+  const priceId = item?.price.id
+  if (!priceId) return
+
+  const plan = await prisma.plan.findUnique({ where: { stripePriceId: priceId } })
+  if (!plan) return
+
+  const { currentPeriodStart, currentPeriodEnd, trialEndsAt } = subscriptionDates(subscription)
+
+  // Idempotency guard for side effects. Stripe delivers events at least once and
+  // retries on errors, so the same checkout.session.completed can arrive twice.
+  // The upsert below is idempotent, but the confirmation email is not — so we
+  // only send it when this is a genuinely new subscription, not a replay of an
+  // event we've already applied. (For higher volume, a dedicated table keyed on
+  // event.id is the more general webhook-idempotency pattern.)
+  const existingSub = await prisma.subscription.findUnique({
+    where: { userId: session.metadata.userId },
+    select: { stripeSubscriptionId: true },
+  })
+  const isNewSubscription = existingSub?.stripeSubscriptionId !== subscription.id
+
+  await prisma.subscription.upsert({
+    where: { userId: session.metadata.userId },
+    update: {
+      planId: plan.id,
+      stripeSubscriptionId: subscription.id,
+      status: mapSubscriptionStatus(subscription.status),
+      currentPeriodStart,
+      currentPeriodEnd,
+      cancelAtPeriodEnd: subscription.cancel_at_period_end,
+      trialEndsAt,
+    },
+    create: {
+      userId: session.metadata.userId,
+      planId: plan.id,
+      stripeSubscriptionId: subscription.id,
+      status: mapSubscriptionStatus(subscription.status),
+      currentPeriodStart,
+      currentPeriodEnd,
+      cancelAtPeriodEnd: subscription.cancel_at_period_end,
+      trialEndsAt,
+    },
+  })
+
+  // Send subscription confirmation email (fire-and-forget)
+  const user = await prisma.user.findUnique({
+    where: { id: session.metadata.userId },
+    select: { email: true, name: true },
+  })
+  if (isNewSubscription && user && emailEnabled()) {
+    const { sendSubscriptionConfirmation } = await import("@/lib/email")
+    // Awaited: a promise left running after the response has no guarantee of
+    // finishing on a serverless platform. It cannot fail the webhook, because a
+    // refusal is reported and logged rather than thrown.
+    await sendSubscriptionConfirmation(
+      user.email,
+      user.name ?? "",
+      plan.name,
+      plan.price,
+      "usd",
+      longDate(currentPeriodEnd),
+      // Nothing has been charged yet on a trial, so the email says when the
+      // first charge happens instead of announcing an active subscription.
+      subscription.status === "trialing" && trialEndsAt ? longDate(trialEndsAt) : undefined
+    ).catch(console.error)
+  }
+}
+
+// One-time (mode: "payment") checkouts become a Purchase row. The PaymentIntent
+// id is the idempotency key: Stripe delivers events at least once, and a replay
+// finds the existing row, so the grant and the email both happen exactly once.
+async function handleOneTimeCheckout(session: Stripe.Checkout.Session) {
+  const paymentIntentId =
+    typeof session.payment_intent === "string"
+      ? session.payment_intent
+      : session.payment_intent?.id
+  const userId = session.metadata?.userId
+  const planId = session.metadata?.planId
+  // A payment session without our metadata wasn't created by /api/checkout
+  // (e.g. a Payment Link): acknowledge it so Stripe doesn't retry.
+  if (!paymentIntentId || !userId || !planId) return
+
+  const plan = await prisma.plan.findUnique({ where: { id: planId } })
+  if (!plan) return
+
+  const existing = await prisma.purchase.findUnique({
+    where: { stripePaymentIntentId: paymentIntentId },
+    select: { id: true },
+  })
+  const isNewPurchase = !existing
+
+  await prisma.purchase.upsert({
+    where: { stripePaymentIntentId: paymentIntentId },
+    update: {},
+    create: {
+      userId,
+      planId,
+      stripePaymentIntentId: paymentIntentId,
+      stripeCheckoutSessionId: session.id,
+      amount: session.amount_total ?? plan.price,
+      currency: session.currency ?? "usd",
+    },
+  })
+
+  if (isNewPurchase && emailEnabled()) {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { email: true, name: true },
+    })
+    if (user) {
+      const { sendPurchaseConfirmation } = await import("@/lib/email")
+      await sendPurchaseConfirmation(
+        user.email,
+        user.name ?? "",
+        plan.name,
+        session.amount_total ?? plan.price,
+        session.currency ?? "usd"
+      ).catch(console.error)
+    }
+  }
+}
+
+async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
+  const existing = await prisma.subscription.findUnique({
+    where: { stripeSubscriptionId: subscription.id },
+  })
+  if (!existing) return
+
+  const item = subscription.items.data[0]
+  const priceId = item?.price.id
+  const plan = priceId
+    ? await prisma.plan.findUnique({ where: { stripePriceId: priceId } })
+    : null
+
+  const { currentPeriodStart, currentPeriodEnd, trialEndsAt } = subscriptionDates(subscription)
+
+  await prisma.subscription.update({
+    where: { stripeSubscriptionId: subscription.id },
+    data: {
+      ...(plan && { planId: plan.id }),
+      status: mapSubscriptionStatus(subscription.status),
+      currentPeriodStart,
+      currentPeriodEnd,
+      cancelAtPeriodEnd: subscription.cancel_at_period_end,
+      trialEndsAt,
+    },
+  })
+
+  // Send cancellation email when subscription will cancel at period end
+  if (subscription.cancel_at_period_end && !existing.cancelAtPeriodEnd) {
+    const user = await prisma.user.findUnique({
+      where: { id: existing.userId },
+      select: { email: true, name: true },
+    })
+    if (user && emailEnabled()) {
+      const { sendSubscriptionCancelledEmail } = await import("@/lib/email")
+      await sendSubscriptionCancelledEmail(user.email, user.name ?? "", longDate(currentPeriodEnd)).catch(
+        console.error
+      )
+    }
+  }
+}
+
+async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+  await prisma.subscription.updateMany({
+    where: { stripeSubscriptionId: subscription.id },
+    data: { status: "CANCELED" },
+  })
+}
+
+async function handlePaymentFailed(invoice: Stripe.Invoice) {
+  // In Stripe API 2026, subscription reference is in invoice.parent.subscription_details.subscription
+  const subRef = invoice.parent?.subscription_details?.subscription
+  if (!subRef) return
+  const subscriptionId = typeof subRef === "string" ? subRef : subRef.id
+
+  await prisma.subscription.updateMany({
+    where: { stripeSubscriptionId: subscriptionId },
+    data: { status: "PAST_DUE" },
+  })
+}
+
+async function handleChargeRefunded(charge: Stripe.Charge) {
+  // charge.refunded is only true when FULLY refunded; a partial refund keeps
+  // the purchase (and the access it grants) intact.
+  if (!charge.refunded) return
+
+  const paymentIntentId =
+    typeof charge.payment_intent === "string" ? charge.payment_intent : charge.payment_intent?.id
+  if (!paymentIntentId) return
+
+  await prisma.purchase.updateMany({
+    where: { stripePaymentIntentId: paymentIntentId },
+    data: { status: "REFUNDED" },
+  })
+}
+
+function mapSubscriptionStatus(status: string) {
+  const map: Record<string, "ACTIVE" | "PAST_DUE" | "CANCELED" | "UNPAID" | "TRIALING" | "INCOMPLETE"> = {
+    active: "ACTIVE",
+    past_due: "PAST_DUE",
+    canceled: "CANCELED",
+    unpaid: "UNPAID",
+    trialing: "TRIALING",
+    incomplete: "INCOMPLETE",
+    incomplete_expired: "CANCELED",
+  }
+  return map[status] ?? "INCOMPLETE"
+}

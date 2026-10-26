@@ -1,0 +1,304 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+/* Typography (/docs prose) wired to the design tokens: colors follow the
+   theme in both light and dark mode, no prose-invert juggling needed.
+   These must stay UN-LAYERED so they beat the @tailwindcss/typography
+   defaults that are emitted inside the utilities layer. */
+.prose {
+  --tw-prose-body: var(--muted-foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-lead: var(--muted-foreground);
+  --tw-prose-links: var(--primary);
+  --tw-prose-bold: var(--foreground);
+  --tw-prose-counters: var(--muted-foreground);
+  --tw-prose-bullets: var(--muted-foreground);
+  --tw-prose-hr: var(--border);
+  --tw-prose-quotes: var(--foreground);
+  --tw-prose-quote-borders: var(--border);
+  --tw-prose-captions: var(--muted-foreground);
+  --tw-prose-code: var(--foreground);
+  --tw-prose-pre-code: var(--foreground);
+  --tw-prose-pre-bg: var(--muted);
+  --tw-prose-th-borders: var(--border);
+  --tw-prose-td-borders: var(--border);
+}
+/* In dark mode the default link/primary blue is too dim on the dark
+   background: use a lighter blue for legible links. */
+.dark .prose {
+  --tw-prose-links: color-mix(in srgb, var(--primary) 55%, #ffffff);
+}
+/* Inline code (not the fenced blocks): a subtle boxed style so it reads
+   as code in both themes. */
+.prose :not(pre) > code {
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+/* Inline code is usually a file path, an env var or a URL: one long token with
+   nowhere to break. Left alone it decides the width of whatever contains it,
+   which on a phone is a box wider than the screen, and the reader gets either a
+   sideways scroll or text cut off at the edge. Fenced blocks are excluded on
+   purpose: those keep their lines intact and scroll inside their own box, which
+   is what you want when the line is a command you may need to copy. */
+:not(pre) > code {
+  overflow-wrap: break-word;
+}
+
+/* Tailwind 4 dropped the pointer cursor its v3 preflight gave buttons, so
+   every clickable thing showed the arrow. Put back here once, for what can be
+   clicked and is not disabled, as the v4 upgrade guide suggests. In the base
+   layer, so a `cursor-*` class on a component still wins. */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  select:not(:disabled),
+  input:is([type="checkbox"], [type="radio"], [type="file"], [type="submit"], [type="button"], [type="reset"]):not(:disabled),
+  label[for],
+  summary {
+    cursor: pointer;
+  }
+}
+
+/* `.light` scopes a subtree back to the light theme inside a dark page (and
+   `.dark` the other way round): the hero's dashboard preview has its own
+   switch. `dark:` stops at a `.light` boundary; specificity stays zero. */
+@custom-variant dark (&:where(.dark, .dark *):not(:where(.light, .light *)));
+/* Active while the dashboard sidebar is collapsed to icons (class set on <html>
+   by SidebarCollapseToggle, persisted in localStorage). */
+@custom-variant sidebar-collapsed (&:where(html.sidebar-collapsed *));
+
+:root,
+.light {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --muted: #fafafa;
+  /* Both of these are the lightest values that still clear WCAG AA (4.5:1) on
+     every surface they are drawn on, not only on white: muted text sits on the
+     5% primary tint and on secondary, the destructive red is text on its own 5%
+     and 10% tints (danger zones, error messages) and a background under white
+     text (the destructive button). Lighter than this and those fall under. */
+  --muted-foreground: #6b6b6b;
+  --border: #e5e5e5;
+  --ring: #0a0a0a;
+  --primary: #0a0a0a;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #0a0a0a;
+  --destructive: #c81e1e;
+  --success: #22c55e;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+  --accent: #f5f5f5;
+  --accent-foreground: #0a0a0a;
+  --input: #e5e5e5;
+  --radius: 0.875rem;
+  /* Brand accent — neutral (true black + grayscale) premium default. Override
+     per-deploy with the NEXT_PUBLIC_BRAND_* env vars (see src/config/brand.ts). */
+  --primary-2: #404040;
+  --gradient-brand: linear-gradient(135deg, #0a0a0a 0%, #404040 100%);
+}
+
+.dark {
+  /* Background stays true black; surfaces (card/popover/muted) lift to a soft
+     warm "taupe" gray so cards read as raised, not fused with the black. */
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --muted: #1c1a17;
+  --muted-foreground: #a3a3a3;
+  --border: #2e2a25;
+  --ring: #d4d4d4;
+  --primary: #fafafa;
+  --primary-foreground: #0a0a0a;
+  --secondary: #2a2622;
+  --secondary-foreground: #fafafa;
+  --destructive: #ef4444;
+  --success: #22c55e;
+  --card: #1c1a17;
+  --card-foreground: #fafafa;
+  --popover: #24211d;
+  --popover-foreground: #fafafa;
+  --accent: #2a2622;
+  --accent-foreground: #fafafa;
+  --input: #2a2622;
+  --primary-2: #a3a3a3;
+  --gradient-brand: linear-gradient(135deg, #ffffff 0%, #d4d4d4 100%);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-destructive: var(--destructive);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-primary-2: var(--primary-2);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  /* Soft, diffused shadows — depth without heaviness (Supastarter-like) */
+  --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.04), 0 4px 16px rgb(15 23 42 / 0.05);
+  --shadow-soft-lg: 0 2px 4px rgb(15 23 42 / 0.04), 0 8px 28px rgb(15 23 42 / 0.07);
+  /* Glow tinted from the brand accent — follows --primary automatically */
+  --shadow-glow: 0 10px 30px -6px color-mix(in srgb, var(--primary) 35%, transparent), 0 4px 12px -4px color-mix(in srgb, var(--primary-2) 30%, transparent);
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-fade-in-up: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 2.5s ease-in-out infinite;
+  --animate-price-swap: price-swap 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-spin-mark: spin-mark 8s linear infinite;
+}
+
+/* Syntax highlighting (Shiki).
+
+   Shiki writes both palettes into the markup at build time, as inline CSS
+   variables on every token. Switching theme is therefore a matter of reading a
+   different variable: no second copy of the block in the HTML, no JavaScript,
+   and no flash on load — which is what a runtime highlighter costs.
+
+   `!important` is Shiki's own recipe for the dual-theme setup, because the
+   light colours it writes are inline styles and nothing else could win. */
+.dark .shiki,
+.dark .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+/* The prose styles paint their own code background; Shiki brings one that
+   belongs to the theme, so the block keeps the border and radius of the kit
+   and the colours of the theme. */
+.prose pre.shiki {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+@keyframes shine {
+  0% { transform: translateX(-120%) skewX(-12deg); }
+  100% { transform: translateX(220%) skewX(-12deg); }
+}
+@keyframes price-swap {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* The placeholder mark is a screw head, and in the header it turns: a full
+   turn every 8s, slow enough to read as motion and not as a spinner. Only the
+   header wears it (see the `animated` prop on Logo). Reduced-motion is handled
+   by the reset below, which cuts every animation to a single instant frame. */
+@keyframes spin-mark {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+html {
+  scroll-padding-top: 6.5rem;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  border-color: var(--border);
+}
+
+/* ── Decorative backgrounds (Light & Bold) ───────────────────────── */
+
+/* Subtle grid that fades toward the edges via radial mask */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 40%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+/* Soft brand-tinted glow blob — sits behind hero/login content */
+.bg-glow {
+  background:
+    radial-gradient(60% 50% at 50% 0%, color-mix(in srgb, var(--primary) 18%, transparent) 0%, transparent 70%),
+    radial-gradient(40% 40% at 80% 10%, color-mix(in srgb, var(--primary-2) 14%, transparent) 0%, transparent 70%);
+}
+
+/* Gradient text helper for accent words in headlines */
+.text-gradient-brand {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Animated gradient border for the highlighted pricing card */
+.border-gradient-brand {
+  position: relative;
+  background: var(--background);
+}
+.border-gradient-brand::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: var(--gradient-brand);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Respect reduced-motion: disable decorative animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

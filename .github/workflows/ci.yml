@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Least privilege for the token this workflow runs with. Nothing below writes to
+# the repository: it installs, lints, tests and builds. Declaring the scope here
+# means a step added later has to ask for more on purpose, instead of inheriting
+# whatever the repository default happens to be, which matters most on a public
+# repository where pull requests arrive from forks.
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Lint & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The Prisma client isn't committed (it's generated), so generate it
+      # before the build. `generate` reads the schema, not a live database.
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Lint
+        run: npm run lint
+
+      # Unit tests on the pure logic in src/lib. They need no database and no
+      # secrets, so they run before the build and fail fast.
+      - name: Test
+        run: npm test
+
+      # `next build` type-checks and compiles. The env values below are
+      # build-time placeholders, not real secrets: the build constructs clients
+      # (Prisma adapter, Auth.js) at module load but never connects to a DB or
+      # authenticates, so any well-formed value works here.
+      - name: Build
+        run: npm run build
+        env:
+          DATABASE_URL: postgresql://user:pass@localhost:5432/db
+          AUTH_SECRET: ci-build-placeholder-not-a-real-secret
+          NEXT_PUBLIC_APP_URL: http://localhost:3000
+
+      # Security net for the release cadence: dependency updates wait for the
+      # next release, so a serious advisory has to announce itself instead of
+      # waiting to be noticed.
+      #
+      # Scoped to production dependencies, at `high`. Two deliberate choices.
+      #
+      # `--omit=dev` because those are the packages that end up in the product
+      # you ship to your own users. Dev tooling advisories are often blocked
+      # upstream by a peer range nobody controls, so gating on them means a red
+      # build you cannot fix, and an alarm that is always on is an alarm nobody
+      # reads.
+      #
+      # `high` and not `critical` because in this ecosystem critical is rare, and
+      # a threshold that never fires is not a safety net. This step sat at
+      # `critical` while the high advisories inside Next.js's own tree (postcss,
+      # sharp) had no fix short of downgrading Next. Next 16.3.0 shipped that
+      # fix, so the reason is gone.
+      #
+      # It runs last on purpose. A new advisory is not a defect of the code in
+      # this commit, so it must never hide the result of lint, test and build.
+      - name: Audit dependencies
+        run: npm audit --omit=dev --audit-level=high

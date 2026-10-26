@@ -1,0 +1,113 @@
+---
+title: Blog e contenuti
+description: Blog MDX su file, con categorie, feed RSS e SEO per ogni articolo.
+translated_from: blog.md
+source_checksum: bd7438b96816
+---
+
+# Blog e contenuti
+
+Il kit include un blog basato su file: ogni articolo è un file `.mdx` (o `.md`) in `content/blog/`, e pubblicare è un commit. Nessun database, nessun CMS, nessun servizio esterno.
+
+## Scrivere un articolo
+
+Crea un file in `content/blog/`. Il nome del file diventa lo slug dell'indirizzo (`content/blog/mio-articolo.mdx` viene servito su `/blog/mio-articolo`). Il frontmatter porta i metadati:
+
+```mdx
+---
+title: "Il mio primo articolo"
+description: "Compare nell'indice, nei risultati di ricerca e nel feed RSS."
+date: "2026-08-01"
+category: "Product"
+---
+
+Il tuo contenuto qui. Markdown e tabelle GFM funzionano, e trattandosi di file
+MDX puoi anche importare e usare componenti React.
+```
+
+I campi obbligatori del frontmatter sono `title`, `description`, `date` e `category`. `cover` e `updated` sono facoltativi. Un campo obbligatorio mancante ferma il build con un errore, invece di spedire una scheda rotta. Il tempo di lettura è calcolato per te, e gli articoli sono ordinati dal più recente.
+
+## Immagini di copertina
+
+Aggiungi un `cover`, se vuoi:
+
+```mdx
+cover: "/blog/covers/mio-articolo.svg"
+```
+
+Compare come miniatura nell'indice del blog e come banner in cima all'articolo. Gli articoli senza `cover` rendono benissimo come solo testo.
+
+Gli articoli di esempio portano copertine vettoriali che prendono il tuo colore d'accento. I sorgenti vivono in `content/blog/covers/*.svg`, disegnati in grigi neutri con due segnaposto, `__ACCENT_1__` e `__ACCENT_2__`, e una route li riempie col tuo marchio prima di servirli sotto `/blog/covers/`. Quindi il kit arriva in scala di grigi, e impostando `NEXT_PUBLIC_BRAND_PRIMARY` (più `_2`) le ridipinge tutte insieme, senza un file da ridisegnare. Pesano poche centinaia di byte l'una, restano nitide su qualsiasi schermo e non hanno licenze.
+
+Preferisci disegni tuoi? Metti un file in `public/blog/covers/` e punta `cover` lì: un file statico vince sulla route, quindi fotografie e PNG esportati funzionano esattamente come prima.
+
+### Prima di sostituirle con immagini generate
+
+Le copertine incluse sono forme vettoriali astratte: nessuna persona, nessun luogo, niente di fotorealistico. Vale la pena pensarci prima di rimpiazzarle con l'output di un modello di immagini.
+
+Dal 2 agosto 2026 l'AI Act europeo chiede a chi pubblica contenuti generati o manipolati dall'intelligenza artificiale, di un certo tipo, di dichiararlo. La norma riguarda i contenuti che somigliano a persone, oggetti o luoghi reali e che passerebbero per autentici, quindi la geometria astratta ne resta fuori e queste copertine non pongono alcuna domanda. Un'immagine generata fotorealistica può invece rientrarci, e ciò che conta è **quando** l'immagine è stata generata, quindi tutto quello che produci da qui in avanti merita un secondo sguardo.
+
+Non è un motivo per evitare le immagini generate e non è un parere legale. È un avviso: quella scelta porta con sé una domanda che le copertine incluse non hanno, e la domanda diventa tua nel momento in cui pubblichi. Se preferisci non avercela, tieni le copertine vettoriali o usa fotografie tue.
+
+Nota che questo non c'entra con l'anteprima social: ogni articolo riceve comunque un'immagine Open Graph generata al volo per quando il link viene condiviso, che abbia una copertina o no.
+
+## Categorie
+
+`category` è una stringa libera. Il kit costruisce da solo una pagina per ogni categoria su `/blog/category/[slug]` e la collega da ogni articolo. Tieni l'insieme piccolo: due o tre categorie coprono quasi tutti i prodotti.
+
+## Bozze
+
+Aggiungi `draft: true` al frontmatter per tenere un articolo fuori dall'indice, dalle pagine di categoria, dal feed RSS e dalla sitemap. In sviluppo continua a rendere al suo indirizzo diretto, così puoi vederlo in anteprima.
+
+## RSS
+
+Il feed è generato dallo stesso frontmatter e servito su `/blog/rss.xml`. È dichiarato nei metadati dell'indice del blog, quindi i lettori di feed lo trovano da soli.
+
+## SEO
+
+Ogni articolo imposta i propri metadati, un indirizzo canonico, i tag Open Graph e un blocco JSON-LD `Article`, e riceve un'immagine Open Graph resa al volo (vedi `src/app/[locale]/(public)/blog/[slug]/opengraph-image.tsx`). Gli articoli finiscono in `sitemap.xml` automaticamente.
+
+### Dichiarare che un articolo è stato rivisto
+
+Quando modifichi un articolo già pubblicato, aggiungi una data `updated`:
+
+```yaml
+date: "2026-08-10"
+updated: "2026-08-31"
+```
+
+Imposta `dateModified` nello schema dell'articolo e `lastModified` nel sitemap, e mostra una riga «Updated» accanto alla data di pubblicazione. Senza, una modifica resta invisibile a un crawler fino alla prossima visita naturale, e invisibile a un lettore che sta decidendo se una guida di due mesi fa vale ancora.
+
+Contiene una data sola, la più recente. Se modifichi un articolo tre volte sovrascrivi `updated` ogni volta: non c'è uno storico, e delle revisioni precedenti non resta traccia.
+
+Di proposito non cambia l'ordinamento: il blog resta ordinato per `date`. Spostare `date` in avanti è la scorciatoia da evitare, perché dichiara freschezza mentendo sulla pubblicazione e riporta in cima all'indice un articolo vecchio.
+
+Mettila solo quando è cambiata la sostanza, non per un refuso o un link sistemato. Una data di modifica è un'affermazione, e un sito che la alza a ogni ritocco insegna ai motori di ricerca a non fidarsi più delle sue date, `lastmod` del sitemap compreso. Il costo di abusarne non è una penalizzazione: è perdere il segnale.
+
+Un `updated` anteriore a `date` ferma il build. Quella coppia spedirebbe un `dateModified` precedente al `datePublished`, che è structured data non valido, e un `lastmod` del sitemap che va all'indietro, e nessuno dei due protesta da solo.
+
+## Blocchi di codice
+
+I blocchi vengono colorati **in fase di build** e non spediscono JavaScript per farlo: al browser arriva markup già colorato. Entrambi i temi finiscono nel markup come variabili CSS, quindi la modalità scura cambia insieme al resto della pagina, senza un secondo render e senza sfarfallii.
+
+Se dichiari il file da cui viene lo snippet, il blocco riceve un'intestazione, con l'icona del tipo di file e il bottone copia accanto:
+
+````
+```ts title="src/lib/auth.ts"
+export const auth = betterAuth({ ... })
+```
+````
+
+`filename="..."` funziona allo stesso modo. Senza nessuno dei due il blocco resta come è sempre stato, con il bottone copia nell'angolo. Il bottone copia è sempre visibile invece di comparire al passaggio del mouse, perché un comando che esiste solo sotto il puntatore su un telefono non esiste affatto.
+
+Vale anche per le guide in `docs/`, che passano dallo stesso evidenziatore. Lì c'è una cosa da pesare: quei file li rende anche GitHub, che ignora il titolo, quindi un blocco la cui prima riga è un commento `// percorso/del/file` si tiene quel commento invece di spostarlo nell'intestazione, e il nome sopravvive in tutti e due i posti.
+
+I linguaggi sono quelli importati in `src/lib/shiki.ts`. Un blocco in un linguaggio diverso viene reso come testo semplice invece di fallire, e aggiungerne uno significa aggiungere il suo import a quella lista.
+
+## Dove vive il codice
+
+| File | Ruolo |
+|---|---|
+| `src/lib/blog.ts` | Legge e interpreta i file, espone `getAllPosts`, `getPost`, `getCategories` |
+| `src/app/[locale]/(public)/blog/` | Indice, pagina articolo, pagina categoria e la route del feed RSS |
+| `content/blog/` | I tuoi articoli |

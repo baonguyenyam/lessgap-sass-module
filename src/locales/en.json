@@ -1,0 +1,1026 @@
+{
+  "auth": {
+    "verifyRequest": {
+      "title": "Check your email",
+      "body": "We sent you a sign-in link. It's valid for 15 minutes and can be used once.",
+      "spam": "Nothing in your inbox? Check the spam folder, or <retry>try again</retry>."
+    },
+    "forgotPassword": {
+      "title": "Reset your password",
+      "subtitle": "Enter your email and we'll send you a reset link",
+      "demoNotice": "This live demo has no email service attached, so password reset is disabled here.",
+      "$kit": {
+        "demoNoticeExtra": "In your own deployment, wire an email provider (the kit ships with <resend>Resend</resend>) and this flow goes live.",
+        "noEmailService": "Password reset needs an email service. Set <code>RESEND_API_KEY</code> to enable it (the kit ships with Resend, see <code>docs/configuration.md</code>)."
+      },
+      "$product": {
+        "demoNoticeExtra": "Everything else works as it would in production.",
+        "noEmailService": "Password reset needs an email service. Set <code>RESEND_API_KEY</code> to enable it (see <code>docs/configuration.md</code>)."
+      },
+      "sent": "If an account exists for that email, a reset link is on its way. It's valid for 30 minutes.",
+      "emailPlaceholder": "you@example.com",
+      "submit": "Send reset link",
+      "backToSignIn": "Back to sign in"
+    },
+    "resetPassword": {
+      "title": "Choose a new password",
+      "expired": "This reset link is invalid or has expired.",
+      "requestNew": "Request a new one",
+      "policy": "Passwords must be 8 to 72 characters.",
+      "passwordPlaceholder": "New password (min 8 characters)",
+      "submit": "Update password"
+    },
+    "signup": {
+      "title": "Create your account",
+      "subtitleVerified": "We'll email you a link to verify your address and sign you in",
+      "subtitlePassword": "Sign up with your email and a password",
+      "demoNotice": "This live demo has no email service attached, so sign-up is disabled here.",
+      "$kit": {
+        "demoNoticeExtra": "In your own deployment, wire an email provider (the kit ships with <resend>Resend</resend>) and this flow goes live.",
+        "noEmailService": "No email service is configured, so accounts are created without email verification. Set <code>RESEND_API_KEY</code> to enable it (the kit ships with Resend, see <code>docs/configuration.md</code>)."
+      },
+      "$product": {
+        "demoNoticeExtra": "Everything else works as it would in production.",
+        "noEmailService": "No email service is configured, so accounts are created without email verification. Set <code>RESEND_API_KEY</code> to enable it (see <code>docs/configuration.md</code>)."
+      },
+      "namePlaceholder": "Name (optional)",
+      "emailPlaceholder": "you@example.com",
+      "passwordPlaceholder": "Password (min 8 characters)",
+      "submit": "Create account",
+      "haveAccount": "Already have an account? <signin>Sign in</signin>",
+      "legal": "By signing up, you agree to our <terms>Terms</terms> and <privacy>Privacy Policy</privacy>.",
+      "errors": {
+        "invalid": "Check your details: valid email and a password of at least 8 characters.",
+        "exists": "An account with this email already exists. Sign in instead.",
+        "rate": "Too many attempts. Try again in a few minutes.",
+        "generic": "Something went wrong. Try again."
+      }
+    },
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to your account to continue",
+      "subtitleDemo": "This is a live demo - jump straight in",
+      "google": "Continue with Google",
+      "github": "Continue with GitHub",
+      "demoOauth": "OAuth sign-in is enabled in your own deployment - this demo uses shared accounts.",
+      "demoEmailFlows": "Curious about the email flows? <signup>Preview sign-up</signup> and <reset>password reset</reset>.",
+      "dividerEmail": "or continue with email",
+      "passwordUpdated": "Password updated. Sign in with your new password.",
+      "emailPlaceholder": "you@example.com",
+      "passwordPlaceholder": "Password",
+      "submit": "Sign in",
+      "magicLink": "✉️ Email me a sign-in link",
+      "magicLinkTwoFactorNote": "Accounts with two-factor authentication sign in with their password and a code, not with a link.",
+      "forgot": "Forgot password?",
+      "noAccount": "No account? Sign up",
+      "dividerDemo": "try the demo",
+      "exploreUser": "Explore as User",
+      "exploreAdmin": "Explore as Admin",
+      "demoAccounts": "One click, no email - shared accounts with fake data, reset periodically.",
+      "errors": {
+        "credentials": "Invalid email or password.",
+        "email": "Enter a valid email address.",
+        "rate": "Too many attempts. Try again in a few minutes.",
+        "Verification": "That sign-in link is invalid or has expired. Request a new one.",
+        "generic": "Something went wrong. Try again.",
+        "2fa": "This account uses two-factor authentication, so it signs in with a password and a code from your authenticator app.",
+        "two_factor_linking": "This account uses two-factor authentication, so a provider cannot attach itself to it here. Sign in with your password and a code, then connect the provider from Settings."
+      }
+    },
+    "twoFactor": {
+      "title": "Two-factor authentication",
+      "subtitle": "Enter the six digit code from your authenticator app.",
+      "codeLabel": "Code",
+      "submit": "Verify",
+      "useBackup": "Use a backup code",
+      "useApp": "Use your authenticator app",
+      "backupTitle": "Backup code",
+      "backupSubtitle": "Enter one code from the list you saved. Each code works once, and using it does not affect the others.",
+      "backupLabel": "Backup code",
+      "backToLogin": "Back to sign in",
+      "errors": {
+        "code": "That code is wrong or has expired. Codes change every 30 seconds.",
+        "backup": "That backup code is wrong, or has already been used.",
+        "rate": "Too many attempts. Try again in a few minutes.",
+        "expired": "That sign-in timed out. Start again.",
+        "generic": "Something went wrong. Try again.",
+        "multiple": "That is the whole list. Enter a single code from it, in the form ABCDE-FGHJK: the others stay valid."
+      },
+      "backupLost": "Lost your phone and these codes? There is no way to reset this yourself: ask whoever runs this site to remove the second factor from your account."
+    }
+  },
+  "dashboard": {
+    "projects": {
+      "title": "Projects",
+      "subtitle": "The things you're working on. This is the example resource.",
+      "newTitle": "New project",
+      "newDescription": "Create a project you own.",
+      "emptyTitle": "No projects yet",
+      "emptyBody": "Create your first project to get started.",
+      "noDescription": "No description",
+      "updated": "Updated {date}",
+      "searchPlaceholder": "Search projects...",
+      "noResultsTitle": "Nothing matched",
+      "noResultsBody": "No project matches “{query}”. Try a shorter word, or clear the search.",
+      "clearSearch": "Clear search"
+    },
+    "home": {
+      "greeting": "Welcome back, {name} 👋",
+      "greetingFallback": "there",
+      "subtitle": "Here's what's happening with your account.",
+      "projectsTitle": "Projects",
+      "projectsCount": "{count, plural, =0 {Create your first project to get started.} one {You have # project.} other {You have # projects.}}",
+      "projectsCreate": "Create one",
+      "projectsViewAll": "View all",
+      "currentPlan": "Current Plan",
+      "planFree": "Free",
+      "status": "Status",
+      "statusLifetime": "Lifetime",
+      "statusFree": "Free tier",
+      "nextBilling": "Next Billing",
+      "none": "None",
+      "$product": {
+        "upsellTitle": "Do more with a plan",
+        "upsellBody": "Unlock the full workspace for you and your team. Change or cancel whenever you like.",
+        "upsellCta": "See plans"
+      },
+      "$kit": {
+        "upsellTitle": "Teams, coming soon",
+        "upsellBody": "Multi-tenancy, roles and team billing are on the way. Tell us what you'd need.",
+        "upsellCta": "Learn more"
+      },
+      "checklistTitle": "Get started",
+      "checklistProgress": "{done} of {total} complete",
+      "checklistDismiss": "Dismiss checklist",
+      "checklistName": "Add your name",
+      "checklistProject": "Create your first project",
+      "checklistBilling": "Set up billing"
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Manage your account preferences.",
+      "profileTitle": "Profile",
+      "profileDescription": "Update your display name and view account details.",
+      "methodsTitle": "Sign-in methods",
+      "methodsDescription": "Connect multiple ways to sign in to the same account.",
+      "email": {
+        "label": "Email address",
+        "hint": "The address you sign in with. Changing it takes two confirmations: one from this address, then one from the new one. The account moves only after both, so a mistyped address cannot lock you out.",
+        "placeholder": "new@example.com",
+        "submit": "Change email"
+      },
+      "connected": "Connected",
+      "disconnect": "Disconnect",
+      "connect": "Connect",
+      "password": "Password",
+      "passwordSet": "Set",
+      "passwordNotSet": "Not set",
+      "currentPasswordPlaceholder": "Current password",
+      "newPasswordPlaceholder": "New password (min 8 characters)",
+      "setPasswordPlaceholder": "Set a password (min 8 characters)",
+      "changePassword": "Change password",
+      "setPassword": "Set password",
+      "passwordHint": "With a password set you can sign in even without your OAuth providers.",
+      "twoFactor": {
+        "title": "Two-factor authentication",
+        "description": "A code from your authenticator app, on top of your password.",
+        "status": "Two-factor authentication",
+        "on": "On",
+        "blurb": "Pair an authenticator app. After that, signing in with your password also asks for a six digit code.",
+        "passwordLabel": "Your account password",
+        "turnOn": "Turn on",
+        "turnOff": "Turn off",
+        "turnOffTitle": "Turn off two-factor authentication?",
+        "turnOffDescription": "The secret is deleted rather than parked, so turning it back on later pairs a new authenticator from scratch.",
+        "cancel": "Cancel",
+        "scan": "Scan this with your authenticator app.",
+        "manualEntry": "Cannot scan it? In your app, choose to add an account by entering a key, and type this in:",
+        "codeLabel": "Code from the app",
+        "confirm": "Confirm",
+        "regenerate": "New backup codes",
+        "codesTitle": "Backup codes",
+        "codesWarning": "Shown once. Save them now: each one signs you in if you lose your phone, and leaving this page means generating a new set.",
+        "copy": "Copy",
+        "copied": "Copied",
+        "download": "Download",
+        "needsPassword": "Set a password first. A second factor is added to a password, so an account that only signs in with Google or GitHub has nothing to add it to.",
+        "demo": "Two-factor authentication is off on the demo. The accounts here are shared and reset every night, so a second factor would lock the next visitor out.",
+        "errors": {
+          "password": "That password is wrong.",
+          "code": "That code is wrong or has expired. Codes change every 30 seconds.",
+          "rate": "Too many attempts. Try again in a few minutes.",
+          "demo": "Not available on the demo.",
+          "generic": "Something went wrong. Try again."
+        },
+        "apps": "Any authenticator app works: Google Authenticator, 1Password, Bitwarden, Authy.",
+        "codesStore": "Keep them somewhere other than the phone holding your authenticator: one lost thing should not take both.",
+        "regenerateHint": "Used one, or lost the list? A new set replaces the old one, and the old codes stop working immediately.",
+        "passwordWhy": "The one you sign in with. We ask for it here so that somebody who finds your screen unlocked cannot pair their own authenticator to your account: a second factor set up by someone else protects them, not you.",
+        "passwordWhyShort": "The one you sign in with. It confirms it is you, and not somebody who found your screen unlocked.",
+        "keyShape": "Letters and the digits 2 to 7 only: a round character is always the letter O, never a zero, and there is no 1 to mistake for I or L. Spaces do not matter.",
+        "codesShape": "Upper case, without the characters that look like each other: no O or zero, no I or one. Spaces and the dash are forgiven when you type one back in.",
+        "codesHowToUse": "You get ten because each one is spent when you use it. At sign-in you enter a single code, not the list: that one stops working from then on, and next time you take another."
+      },
+      "sessions": {
+        "title": "Active sessions",
+        "description": "Every device signed in to this account right now.",
+        "blurb": "One row per sign-in, with the device and address it came from. If you do not recognise one, end it.",
+        "thisDevice": "This device",
+        "unknownDevice": "Unknown device",
+        "revoke": "End session",
+        "revokeOthers": "End all other sessions ({count})",
+        "caveat": "A session you end here can survive on the other device for up to a minute, because the session is cached in a cookie for that long. Changing your password ends every other session at once, with no such delay."
+      },
+      "accountTitle": "Account",
+      "accountDescription": "Account information and metadata.",
+      "memberSince": "Member since",
+      "messages": {
+        "unlinked": "Account disconnected.",
+        "password": "Password updated.",
+        "last-method": "You can't disconnect your only sign-in method. Set a password first.",
+        "unlink": "That account could not be disconnected.",
+        "policy": "Passwords must be 8 to 72 characters.",
+        "current": "The current password you entered is wrong.",
+        "demo": "Account deletion is disabled on the demo.",
+        "confirm": "The address did not match, so nothing was deleted.",
+        "subscription": "Your subscription could not be cancelled, so nothing was deleted. Cancel it in the billing portal and try again.",
+        "last-admin": "You are the only administrator. Promote someone else before deleting this account.",
+        "2fa-enabled": "Two-factor authentication is on.",
+        "2fa-disabled": "Two-factor authentication is off.",
+        "2fa-password": "That password is wrong, so nothing changed.",
+        "backup-used": "You signed in with a backup code, and that code is now spent. If the list is running low, generate a new set below.",
+        "session-revoked": "That session was ended.",
+        "sessions-revoked": "Every other session was ended.",
+        "session": "That session could not be found, so nothing changed.",
+        "email-sent": "If that address can be used, we have sent a confirmation to your current one. The account moves only after you confirm there and then on the new address.",
+        "email-invalid": "That does not look like an email address.",
+        "email-same": "That is already your address.",
+        "email-change": "The address could not be changed. Try again in a moment.",
+        "rate": "Too many attempts. Try again in a few minutes."
+      },
+      "deleteAccount": {
+        "heading": "Delete this account",
+        "blurb": "Removes your account, your projects and your sign-in methods, and cancels any active subscription immediately. This cannot be undone.",
+        "trigger": "Delete account",
+        "title": "Delete your account?",
+        "description": "Your profile, projects, sessions and linked sign-in methods are removed permanently, and any active subscription is cancelled at once. There is no undo.",
+        "confirmLabel": "Type {email} to confirm",
+        "cancel": "Keep my account",
+        "confirm": "Delete permanently"
+      },
+      "dangerZone": {
+        "title": "Danger zone",
+        "blurb": "Some actions cannot be undone. Proceed with care."
+      }
+    },
+    "billing": {
+      "title": "Billing",
+      "subtitle": "Manage your plan and payment history.",
+      "checkoutDisabledDemo": "Checkout is disabled in the public demo.",
+      "checkoutDisabledStripe": "Connect Stripe to enable checkout: set STRIPE_SECRET_KEY and the price IDs, then reseed.",
+      "currentPlan": "Current Plan",
+      "purchasedOn": "Purchased on {date}",
+      "renewsOn": "Renews on {date}",
+      "trialEndsOn": "Free trial ends on {date}",
+      "onFreePlan": "You are on the free plan",
+      "free": "Free",
+      "lifetimeAccess": "Lifetime access",
+      "cancelsAtPeriodEnd": "Cancels at end of billing period",
+      "oneTime": "one time",
+      "perMonth": "/ month",
+      "alsoSubscribed": "You also have a {plan} subscription. Since lifetime access covers everything, you can cancel it in the billing portal.",
+      "portalHint": "Switch plans or update your payment method in the billing portal.",
+      "availablePlans": "Available plans",
+      "availablePlansHint": "These are the seeded example plans: replace them with your own pricing.",
+      "invoiceHistory": "Invoice History",
+      "invoiceHistoryHint": "Your past payments and invoices.",
+      "noInvoices": "No invoices yet.",
+      "noInvoicesStripe": "Connect Stripe to see your invoice history.",
+      "colDate": "Date",
+      "colAmount": "Amount",
+      "colStatus": "Status",
+      "colInvoice": "Invoice",
+      "statusUnknown": "unknown",
+      "viewInvoice": "View",
+      "downloadPdf": "PDF",
+      "discount": "Discount: {discount} {duration}",
+      "discountPercent": "{percent}% off",
+      "discountAmount": "{amount} off",
+      "discountOnce": "on the next invoice",
+      "discountUntil": "until {date}",
+      "discountForever": "on every invoice",
+      "discountCode": "code {code}",
+      "status": {
+        "ACTIVE": "Active",
+        "TRIALING": "Trial",
+        "PAST_DUE": "Past Due",
+        "CANCELED": "Canceled",
+        "UNPAID": "Unpaid",
+        "INCOMPLETE": "Incomplete"
+      },
+      "invoiceStatus": {
+        "draft": "Draft",
+        "open": "Open",
+        "paid": "Paid",
+        "uncollectible": "Uncollectible",
+        "void": "Void"
+      }
+    },
+    "projectDetail": {
+      "subtitle": "Edit the details or delete this project.",
+      "detailsTitle": "Details",
+      "detailsDescription": "Update the project name and description.",
+      "metadataTitle": "Metadata",
+      "created": "Created",
+      "updated": "Last updated",
+      "dangerTitle": "Danger zone",
+      "dangerDescription": "Deleting a project is permanent and cannot be undone.",
+      "delete": "Delete project"
+    },
+    "createProject": {
+      "created": "Project created",
+      "name": "Project name",
+      "description": "Description (optional)",
+      "descriptionPlaceholder": "What is this project about?",
+      "descriptionHint": "Optional. Up to {max} characters.",
+      "submit": "Create project"
+    },
+    "projectEdit": {
+      "updated": "Project updated",
+      "name": "Project name",
+      "descriptionPlaceholder": "What is this project about?"
+    },
+    "profile": {
+      "updated": "Profile updated",
+      "avatarAlt": "Avatar",
+      "displayName": "Display name",
+      "namePlaceholder": "Your name",
+      "avatarFrom": "Photo from {provider}",
+      "avatarCurrent": "Current profile photo",
+      "avatarNone": "No profile photo yet",
+      "email": "Email",
+      "emailHint": "The address you sign in with. Change it under Sign-in methods, below.",
+      "save": "Save changes"
+    },
+    "signOut": {
+      "title": "Sign out?",
+      "pending": "Signing out…",
+      "confirm": "Sign out"
+    },
+    "sidebar": {
+      "expand": "Expand sidebar",
+      "collapse": "Collapse sidebar"
+    },
+    "userMenu": {
+      "open": "Open account menu",
+      "avatarAlt": "Avatar",
+      "myAccount": "My Account"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "projects": "Projects",
+      "billing": "Billing",
+      "settings": "Settings",
+      "overview": "Overview",
+      "adminPanel": "Admin Panel",
+      "devDocs": "Developer docs",
+      "newTab": "(opens in a new tab)",
+      "more": "More",
+      "backToDashboard": "Back to Dashboard",
+      "openNavigation": "Open navigation"
+    }
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "badge": "Admin",
+    "subtitle": "Manage users and monitor business metrics.",
+    "totalUsers": "Total Users",
+    "activeSubscriptions": "Active Subscriptions",
+    "mrr": "MRR (estimated)",
+    "revenueTitle": "Recurring revenue",
+    "revenueSubtitle": "Monthly recurring revenue over the last 12 weeks.",
+    "revenueTooltip": "MRR",
+    "usersTitle": "Users",
+    "usersCount": "{count, plural, one {# total user} other {# total users}}",
+    "searchPlaceholder": "Search by email...",
+    "search": "Search",
+    "free": "Free",
+    "joined": "Joined {date}",
+    "noUsers": "No users found.",
+    "colUser": "User",
+    "colPlan": "Plan",
+    "colStatus": "Status",
+    "colRole": "Role",
+    "colJoined": "Joined",
+    "page": "Page {page} of {total}",
+    "previous": "Previous",
+    "next": "Next",
+    "waitlistTitle": "Waitlist",
+    "exportCsv": "Export CSV",
+    "colEmail": "Email",
+    "colSource": "Source",
+    "colRequested": "Requested",
+    "unsubscribed": "Unsubscribed",
+    "confirmed": "Confirmed",
+    "pending": "Pending",
+    "noSubscribers": "No subscribers yet. The signup form lives on the pricing page.",
+    "makeAdmin": "Make Admin",
+    "rolePromoted": "User promoted to admin. Their session picks it up within a minute.",
+    "roleFailed": "Failed to update role"
+  },
+  "billing": {
+    "checkout": {
+      "paid": "Payment successful. Your plan updates in a few seconds.",
+      "canceled": "Checkout canceled. You have not been charged."
+    },
+    "upgrade": {
+      "error": "Something went wrong. Please try again.",
+      "upgrade": "Upgrade"
+    },
+    "plans": {
+      "current": "Current plan",
+      "payOnce": "Pay once",
+      "upgradeTo": "Upgrade to {plan}",
+      "get": "Get {plan}",
+      "trial": "{days}-day free trial"
+    }
+  },
+  "email": {
+    "welcome": "Welcome to {site}!",
+    "subscriptionActive": "Your {plan} subscription is active",
+    "trialStarted": "Your {plan} free trial has started",
+    "purchaseConfirmed": "Your {plan} purchase is confirmed",
+    "magicLink": "Sign in to {site}",
+    "passwordReset": "Reset your {site} password",
+    "changeEmail": "Confirm the change of address on {site}",
+    "subscriptionCancelled": "Your {site} subscription has been cancelled",
+    "contact": "Contact form: {from}",
+    "newsletterConfirm": "Confirm your spot on the {site} waitlist",
+    "newsletterWelcome": "You're on the list",
+    "welcomeBody": {
+      "hello": "Hey {name} 👋",
+      "helloFallback": "there",
+      "$product": {
+        "intro": "Welcome to {site}! Your account is ready and there is nothing left to set up.",
+        "bullets": "<p>📁 <strong>Start a project</strong>: create your first one and invite your team</p>\n      <p>⚙️ <strong>Make it yours</strong>: add your name and preferences in settings</p>\n      <p>💳 <strong>Pick a plan</strong>: upgrade when you need more, cancel any time</p>"
+      },
+      "$kit": {
+        "intro": "Welcome to {site}! Your account is ready. You're now part of a community of developers shipping SaaS products faster.",
+        "bullets": "<p>🔐 <strong>Authentication</strong>: Google & GitHub OAuth, fully configured</p>\n      <p>💳 <strong>Billing</strong>: Stripe checkout ready to go</p>\n      <p>📊 <strong>Dashboard</strong>: Track your subscription and account</p>"
+      },
+      "whatNext": "Here's what you can do right now:",
+      "ready": "Ready to dive in?",
+      "cta": "Go to Dashboard →",
+      "help": "If you have any questions, just reply to this email. We're happy to help."
+    },
+    "magicLinkBody": {
+      "hello": "Hey there 👋",
+      "intro": "Click the button below to sign in to {site}. The link is valid for 15 minutes and can be used once.",
+      "cta": "Sign in to {site} →",
+      "ignore": "If you didn't request this email, you can safely ignore it: nothing happens unless the link is clicked."
+    },
+    "passwordResetBody": {
+      "hello": "Hey there,",
+      "intro": "We received a request to reset your {site} password. Click the button below to choose a new one. The link is valid for 30 minutes and can be used once.",
+      "cta": "Reset password →",
+      "ignore": "If you didn't request a password reset, you can safely ignore this email: your password will not change."
+    },
+    "changeEmailBody": {
+      "hello": "Hey there,",
+      "intro": "Somebody asked to move this {site} account to {newEmail}. This message went to your current address on purpose: nothing changes until you approve it here.",
+      "cta": "Confirm this change →",
+      "next": "After you confirm, we send one more email to the new address. The account moves only when that one is confirmed too, so a mistyped address cannot lock you out.",
+      "ignore": "If this was not you, ignore this email and nothing will change — but do check that your password is still yours, because whoever asked was signed in as you."
+    },
+    "subscriptionBody": {
+      "hello": "Hey {name} 👋",
+      "intro": "Your <strong>{plan}</strong> subscription is now active. Thanks for subscribing!",
+      "introTrial": "Your <strong>{plan}</strong> free trial has started. Nothing is charged until <strong>{date}</strong>, and you can cancel before then from your billing page.",
+      "labelPlan": "Plan:",
+      "labelAmount": "Amount:",
+      "labelRenewal": "Next renewal:",
+      "labelTrialEnd": "Trial ends:",
+      "access": "You have full access to all {site} features.",
+      "cta": "Manage Billing →",
+      "changes": "Need to make changes? You can manage your subscription anytime from your billing page."
+    },
+    "purchaseBody": {
+      "hello": "Hey {name} 👋",
+      "intro": "Your <strong>{plan}</strong> purchase is confirmed. It was a one-time payment: no renewals, no recurring billing.",
+      "labelPlan": "Plan:",
+      "labelAmount": "Amount:",
+      "oneTime": "(one time)",
+      "access": "You now have full access to all {site} features.",
+      "cta": "View billing →",
+      "receipt": "Your receipt is available on the billing page. Questions? Just reply to this email."
+    },
+    "cancellationBody": {
+      "hello": "Hey {name},",
+      "intro": "Your {site} subscription has been cancelled. You'll continue to have access until <strong>{date}</strong>.",
+      "labelEnds": "Access ends:",
+      "dataSafe": "Your data is safe and will remain available.",
+      "changedMind": "Changed your mind? You can resubscribe anytime before your access expires.",
+      "cta": "Resubscribe →",
+      "feedback": "If you'd like to share feedback on why you cancelled, just reply to this email - we read every response."
+    },
+    "newsletterConfirmBody": {
+      "intro": {
+        "$kit": "You asked to join the {site} waitlist. Click below to confirm, and your launch price arrives in the next email. If it is not in your inbox, look in Promotions or Spam.",
+        "$product": "You asked to join the {site} waitlist. Click below to confirm."
+      },
+      "cta": "Confirm my spot →",
+      "expiry": "The link expires in 7 days. If this was not you, just ignore this email and nothing will happen."
+    },
+    "newsletterWelcomeBody": {
+      "intro": "You're in. Here is the deal:",
+      "$product": {
+        "bullets": "<p>📬 <strong>One short email</strong> when there is real news to share.</p>\n      <p>🎟️ <strong>Early access</strong> when what you signed up for goes live.</p>"
+      },
+      "$kit": {
+        "bullets": "<p>📬 <strong>One short email</strong> when there is real news on the Pro.</p>\n      <p>🎟️ <strong>The launch price</strong> of Pro and Pro Studio, before the public announcement on October 31.</p>"
+      },
+      "noSpam": "No spam, no daily drip. Unsubscribe anytime with one click.",
+      "unsubscribe": "Unsubscribe"
+    }
+  },
+  "hero": {
+    "$kit": {
+      "headlineHead": "Your Next.js SaaS Starter Kit.",
+      "headlineAccent": "Production-ready. Free.",
+      "subtitle": "Auth, payments, dashboard and admin panel, ready for production and free for life. It is plain Next.js: no compiler, no config layer, nothing new to learn before you can change a line.",
+      "cta": "Start free",
+      "pill": "Open Source & Free · Pro and Pro Studio on November 19"
+    },
+    "$product": {
+      "headlineHead": "",
+      "headlineAccent": "",
+      "subtitle": "One workspace for your projects, your customers and your billing. Invite your team and get back to the work that matters.",
+      "cta": "Get started",
+      "trust": "Set up in minutes · No credit card required · Cancel anytime",
+      "pill": "Now in public beta"
+    },
+    "mock": {
+      "navDashboard": "Dashboard",
+      "navProjects": "Projects",
+      "navBilling": "Billing",
+      "navSettings": "Settings",
+      "navAdmin": "Admin Panel",
+      "statPlan": "Current Plan",
+      "statStatus": "Status",
+      "statStatusValue": "Active",
+      "statBilling": "Next Billing"
+    }
+  },
+  "setupVideo": {
+    "$kit": {
+      "title": "From git clone to a running SaaS",
+      "subtitle": "Recorded on a fresh clone: a few commands, two values in a file, and the whole app runs on your machine. Not a demo shell.",
+      "videoLabel": "Recording of a terminal: the kit is cloned, installed, connected to a database and started, then the browser signs in to the dashboard.",
+      "play": "Play the recording",
+      "pause": "Pause the recording",
+      "guide": "Follow the same steps in the Getting started guide"
+    }
+  },
+  "features": {
+    "$product": {
+      "title": "Everything you need, in one place",
+      "subtitle": "The essentials done properly, so you can get on with the work.",
+      "c1": {
+        "title": "Sign in, your way",
+        "description": "Google, GitHub, a password or a one-time link in your inbox. Pick what suits your team and switch whenever you want."
+      },
+      "c2": {
+        "title": "Billing without the back and forth",
+        "description": "Upgrade, downgrade or cancel in a click. Invoices and receipts arrive on their own, and the payment details stay with Stripe."
+      },
+      "c3": {
+        "title": "Your data stays yours",
+        "description": "Everything lives in one database you control. Nothing is held hostage, and leaving is as easy as arriving."
+      },
+      "c4": {
+        "title": "Light and dark",
+        "description": "The interface follows your system theme, or you pick one and it stays. Easy on the eyes at 9am and at midnight."
+      },
+      "c5": {
+        "title": "Private by default",
+        "description": "Your workspace is visible to you and the people you invite, and to nobody else. Sessions expire, access is checked on every request."
+      },
+      "c6": {
+        "title": "Admin controls",
+        "description": "See every member, their role and their plan in one place. Promote, review and step in when something needs a decision."
+      }
+    },
+    "$kit": {
+      "title": "Everything you need to ship",
+      "subtitle": "Stop reinventing auth and payments. Start building your product.",
+      "c1": {
+        "title": "Auth out of the box",
+        "description": "Google and GitHub OAuth with Better Auth. Sessions stored in your own database. No third-party auth service required."
+      },
+      "c2": {
+        "title": "Stripe payments",
+        "description": "Subscription checkout, webhooks, and Customer Portal. Handles upgrades, downgrades, and cancellations automatically."
+      },
+      "c3": {
+        "title": "Prisma + PostgreSQL",
+        "description": "Type-safe database layer with Prisma 7. Works with Neon, Supabase, Railway, or any PostgreSQL provider."
+      },
+      "c4": {
+        "title": "Dark mode",
+        "description": "System-aware dark mode with a toggle. Tailwind 4 CSS variables let you customize your brand colors in one file."
+      },
+      "c5": {
+        "title": "Route protection",
+        "description": "Middleware-based auth guards. Public, auth, dashboard, and admin route groups with zero boilerplate per page."
+      },
+      "c6": {
+        "title": "Admin panel",
+        "description": "User management with role-based access. View all users, their plans, and subscription status in one place."
+      },
+      "c7": {
+        "title": "1-click Vercel deploy",
+        "description": "Deploy button in the README. From clone to production in under an hour, plus a built-in demo mode to showcase your product, like this site's live demo."
+      },
+      "c8": {
+        "title": "Plain Next.js, nothing to learn",
+        "description": "No compiler step, no config DSL, no proprietary CLI. The App Router, Server Actions and Prisma work as documented, so your Next.js knowledge transfers on day one, and every component stays swappable."
+      },
+      "c9": {
+        "title": "Transactional emails",
+        "description": "Welcome, receipt, and password reset emails via Resend. React Email templates included, branded and responsive."
+      }
+    }
+  },
+  "footer": {
+    "blurb": {
+      "$kit": "{tagline}. Production-ready boilerplate in plain Next.js."
+    },
+    "github": "GitHub",
+    "product": "Product",
+    "features": "Features",
+    "pricing": "Pricing",
+    "docs": "Docs",
+    "blog": "Blog",
+    "changelog": "Changelog",
+    "about": "About",
+    "aboutLink": "About",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "openSource": "Open Source",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "cookies": "Cookie Policy",
+    "copyright": "© {year} {site}. All rights reserved.",
+    "license": "MIT License · Built with Next.js",
+    "signup": {
+      "$kit": {
+        "title": "Pro launches November 19.",
+        "cta": "Join",
+        "disabledNote": "The waitlist opens shortly."
+      },
+      "$product": {
+        "title": "Get product updates by email.",
+        "cta": "Subscribe",
+        "disabledNote": "Forms are disabled in the live demo."
+      },
+      "sent": "Almost there: check your inbox to confirm."
+    }
+  },
+  "about": {
+    "$kit": {
+      "title": "About {site}",
+      "whatTitle": "What it is",
+      "whoTitle": "Who it is for",
+      "principlesTitle": "Principles",
+      "maintainerTitle": "Who builds it",
+      "maintainerIntro": "{site} is created and maintained by",
+      "maintainerBody": ". One person, working in the open: the roadmap says what is coming, the changelog says what already shipped, and every release is a tag you can read. Issues and questions are answered by the person who wrote the code.",
+      "noteTitle": "This is a placeholder.",
+      "noteBody": "Tell your story here: what you are building, who it is for, and why it exists. Edit this page in <path>src/app/[locale]/(public)/about/page.tsx</path>.",
+      "what": "A complete starting point for a SaaS, not a demo of one. Authentication with OAuth, magic links and passwords. Stripe subscriptions, one-time payments and webhooks whose signature is verified before anything reaches the database. An admin panel with real revenue figures, transactional email, a file-based blog and the marketing site around it. It is the plumbing every product needs and nobody enjoys writing twice, in a codebase small enough to read in an afternoon and yours to change.",
+      "who": "People shipping on their own or in a small team, who would rather spend the weekend on the part that makes their product different than on wiring a checkout for the tenth time. It assumes you know Next.js, and that you would rather own the code than rent a platform.",
+      "principles": [
+        "Plain Next.js: no compiler, no config layer, nothing to learn before you own it.",
+        "Payments belong in the free tier, not behind a paywall.",
+        "Honest by default: real features, no smoke and mirrors.",
+        "Nothing is held back to sell later: what the kit does, it does for free."
+      ]
+    },
+    "$product": {
+      "title": "About {site}",
+      "whatTitle": "What it is",
+      "whoTitle": "Who it is for",
+      "principlesTitle": "Principles",
+      "maintainerTitle": "Who builds it",
+      "maintainerIntro": "{site} is created and maintained by",
+      "maintainerBody": ". One person, working in the open: the roadmap says what is coming, the changelog says what already shipped, and every release is a tag you can read. Issues and questions are answered by the person who wrote the code.",
+      "noteTitle": "This is a placeholder.",
+      "noteBody": "Tell your story here: what you are building, who it is for, and why it exists. Edit this page in <path>src/app/[locale]/(public)/about/page.tsx</path>.",
+      "what": "One place for the work your team does every day: projects, the people involved, and the billing that keeps it running. No tab juggling, no spreadsheet of record.",
+      "who": "Small teams who would rather spend the afternoon on the work itself than on the tools around it.",
+      "principles": [
+        "Your data is yours: take it with you whenever you want.",
+        "Clear pricing, no surprises on the invoice.",
+        "Honest by default: real features, no smoke and mirrors."
+      ]
+    }
+  },
+  "nav": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "docs": "Docs",
+    "blog": "Blog",
+    "changelog": "Changelog",
+    "signIn": "Sign in",
+    "demo": "Demo",
+    "getStarted": "Get started",
+    "openMenu": "Open menu",
+    "backToTop": "Back to top"
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "$product": {
+      "items": [
+        {
+          "question": "How do I get started?",
+          "answer": "Create an account, name your first project and you are in. {site} works in the browser, there is nothing to install, and you can invite the rest of your team whenever you are ready."
+        },
+        {
+          "question": "How does billing work?",
+          "answer": "You pick a plan and pay by card. Upgrades and downgrades take effect right away and are prorated, invoices land in your inbox automatically, and you can see and change everything from the billing page in your account."
+        },
+        {
+          "question": "Who can see my data?",
+          "answer": "You, and the people you invite. Your data lives in our own database rather than being scattered across third parties, card details are held by Stripe and never touch our servers, and we do not sell any of it."
+        }
+      ]
+    },
+    "$kit": {
+      "items": [
+        {
+          "question": "What exactly do I get?",
+          "answer": "You get a production-ready Next.js 16 codebase with Better Auth, Stripe, Prisma, and Tailwind pre-configured. Clone the repo, set your env variables, and deploy. Everything works out of the box."
+        },
+        {
+          "question": "Why {site} instead of other starter kits?",
+          "answer": "{site} uses a best-of-breed stack where every component is independent. No Supabase lock-in, no proprietary auth layer. If a dependency releases a breaking change, you update one package, not the entire stack."
+        },
+        {
+          "question": "Which database providers are supported?",
+          "answer": "Any PostgreSQL provider: Neon (recommended, cheapest), Supabase, Railway, PlanetScale (via Postgres mode), or self-hosted. Just set your DATABASE_URL and run the migration."
+        },
+        {
+          "question": "Do I need a Stripe account?",
+          "answer": "Yes. Stripe is used for subscription payments. You'll need to create products and prices in your Stripe dashboard and add the price IDs to your env vars. The setup guide covers this step by step."
+        },
+        {
+          "question": "Can I use this for client projects?",
+          "answer": "Yes, MIT license. Use it for as many projects as you want, including client work. No per-project fees."
+        },
+        {
+          "question": "What if I need help or find a bug?",
+          "answer": "Open an issue on GitHub. It's open source, so you get every update and bug fix by pulling the latest main. For direct support, reach out via email."
+        },
+        {
+          "question": "What are Pro and Pro Studio, and when do they launch?",
+          "answer": "The paid tier, built on this kit for products where people work together: teams, invitations, roles and team billing. A one-time purchase with updates for life. Pro is for one person and their own products; Pro Studio is for an organization, client work included, with up to five people on the repository. The waitlist gets the launch price by email as soon as you confirm, and it is announced publicly on October 31. On November 19 both launch for the waitlist at that price, until November 27. From November 28 they are on sale to everyone at the full price."
+        }
+      ]
+    }
+  },
+  "pricing": {
+    "$kit": {
+      "title": "Start free, scale when you grow",
+      "subtitle": "Open source and free forever: auth, payments, admin and emails included. Teams arrive with Pro on November 19.",
+      "freeTitle": "Free",
+      "freeDescription": "Open source, the complete core",
+      "forever": "forever",
+      "getOnGithub": "Get it on GitHub",
+      "noSignup": "Clone, star, and ship. No signup required",
+      "proTitle": "Pro · Pro Studio · Teams",
+      "statusBadge": "Waitlist open",
+      "proDescription": "For apps that need teams, and for studios that build them.",
+      "launchDate": "November 19",
+      "launchOffer": "Launch day, at a launch price for the waitlist. Confirm your email and the price is in your inbox right away, before the public announcement on October 31.",
+      "waitlistCta": "Join the Pro & Pro Studio waitlist",
+      "waitlistNote": "One short email when there is real news, and the launch price as soon as you confirm. Unsubscribe anytime, one click.",
+      "formsDisabled": "Forms are disabled in the live demo.",
+      "freeFeatures": [
+        "Next.js 16 + TypeScript + Tailwind 4",
+        "Better Auth: Google & GitHub OAuth",
+        "Prisma 7 + PostgreSQL schema",
+        "Stripe Checkout + webhooks + Customer Portal",
+        "Admin panel (users, metrics, roles)",
+        "Transactional emails (Resend)",
+        "Dashboard, dark mode, route protection",
+        "1-click Vercel deploy",
+        "Demo mode: one-click sign-in, sample data, reset",
+        "MIT license, use in client projects"
+      ],
+      "proFeatures": [
+        "Everything in Free, plus:",
+        "Teams and organizations",
+        "Invitations and ownership transfer",
+        "Roles: owner, admin, member, and your own",
+        "Team billing with seats",
+        "Email support and private Discord",
+        "Everything we add after launch, included"
+      ]
+    }
+  },
+  "planPricing": {
+    "$product": {
+      "title": "Simple, transparent pricing",
+      "subtitleDemo": "These are example plans, rendered live from the database with monthly and yearly tiers. Sign in to the demo to see the full billing flow, including a one-time lifetime purchase.",
+      "subtitle": "Start free and upgrade when you need more. Every plan below comes straight from your database, so your pricing changes without a deploy."
+    }
+  },
+  "setup": {
+    "title": "Almost there",
+    "subtitle": "The app is running. It needs a database before it can show anything else.",
+    "step1Title": "Create a database and fill .env.local",
+    "step1Body": "First create a PostgreSQL database (Neon has a free tier). Then copy .env.example to .env.local next to this project: .env.local is the file you edit, the example stays as it is. Put the connection string in DATABASE_URL, and fill AUTH_SECRET with what this command prints.",
+    "step1Note": "Every time you change .env.local, stop the dev server (Ctrl+C) and start it again: the values are read when it boots.",
+    "step1Unreachable": "DATABASE_URL is set, but the database did not answer. Check the connection string in .env.local: the host, the password, and that the database still exists.",
+    "step2Title": "Apply the migrations",
+    "step2Body": "The first creates the tables, the second adds the example plans.",
+    "step2Note": "Seeing an SSL warning in the terminal? The string Neon gives you ends with sslmode=require: change it to sslmode=verify-full in .env.local.",
+    "step3Title": "Restart",
+    "step3Body": "Stop the dev server and start it again. The landing page comes back, and Sign in has a Dev Login (Admin) button that needs no OAuth app. The Google and GitHub buttons appear once their keys are in .env.local (docs/configuration.md).",
+    "guideCta": "Read the full guide",
+    "devOnly": "This page only appears in development, while the database is not ready."
+  },
+  "waitlist": {
+    "cta": "Join the waitlist",
+    "note": "One short email when there is something worth telling you. Unsubscribe anytime, one click.",
+    "disabledNote": "Forms are disabled in the live demo.",
+    "consent": "By joining you agree to our <privacy>Privacy Policy</privacy>.",
+    "sent": "Almost there: check your inbox to confirm your spot.",
+    "emailPlaceholder": "Your email",
+    "emailLabel": "Email address",
+    "sending": "Joining…"
+  },
+  "contactForm": {
+    "sentTitle": "Thanks, your message is on its way.",
+    "sentBody": "We read everything and reply fast.",
+    "name": "Name <opt>(optional)</opt>",
+    "email": "Email",
+    "message": "Message",
+    "namePlaceholder": "Ada Lovelace",
+    "emailPlaceholder": "you@company.com",
+    "messagePlaceholder": "How can we help?",
+    "sending": "Sending…",
+    "submit": "Send message"
+  },
+  "contactDialog": {
+    "copied": "Email address copied",
+    "copyFailed": "Couldn't copy - the address is shown above",
+    "title": "Get in touch",
+    "copiedShort": "Copied!",
+    "copy": "Copy email"
+  },
+  "changelog": {
+    "title": "Changelog",
+    "latest": "Latest",
+    "unreleased": "Unreleased"
+  },
+  "contact": {
+    "title": "Get in touch",
+    "intro": "Questions, feedback, ideas: we read everything and reply fast. Prefer email? Write to",
+    "formsDisabled": "Forms are disabled in the live demo."
+  },
+  "blog": {
+    "title": "Blog",
+    "intro": "Guides, product updates and build notes. Follow along via",
+    "publishedOn": "Published: {date}",
+    "updatedOn": "Updated: {date}",
+    "empty": "No posts yet. Add an <code>.mdx</code> file to <code>content/blog/</code> to publish the first one.",
+    "figureOpen": "Enlarge the diagram",
+    "figureTitle": "Diagram",
+    "signup": {
+      "$kit": {
+        "title": "Teams are the part we are building next",
+        "body": "The billing, the auth and the admin panel are free and MIT licensed today. Multi-tenancy, roles and team billing are what the Pro adds, and it is being shaped now. Tell us what you would need from it.",
+        "cta": "Join the Pro waitlist",
+        "note": "One short email when there is real news, and the launch price as soon as you confirm. Unsubscribe anytime, one click."
+      },
+      "$product": {
+        "title": "Get the next one",
+        "body": "New posts land every few weeks. Leave your address and we will send you the next one.",
+        "cta": "Subscribe",
+        "note": "One email per post, no more. Unsubscribe anytime, one click."
+      },
+      "disabledNote": "Forms are disabled in the live demo."
+    },
+    "readingTime": "{minutes} min read",
+    "inCategory": "{count, plural, =0 {No posts} one {# post} other {# posts}} in this category.",
+    "categoryMeta": "All {site} blog posts in the {category} category.",
+    "breadcrumbHome": "Home",
+    "breadcrumbBlog": "Blog",
+    "previous": "Previous",
+    "next": "Next",
+    "pagination": "Blog pages",
+    "page": "Page",
+    "code": {
+      "copy": "Copy",
+      "copied": "Copied"
+    }
+  },
+  "docs": {
+    "title": "Documentation",
+    "sectionLabel": "Documentation",
+    "overview": "Overview",
+    "contents": "Contents",
+    "needHelp": "Need help?",
+    "contactSupport": "Contact Support",
+    "starNote": "Bookmark it with a <star></star>",
+    "$kit": {
+      "intro": "Everything you need to go from <code>git clone</code> to production. The same guides live in the repo's <repo>docs/ folder</repo>, so they version with the code.",
+      "metaDescription": "Setup guides for {site}: getting started, configuration, authentication, billing and deployment."
+    },
+    "$product": {
+      "intro": "Guides for getting the most out of <site></site>. Each one is a Markdown file in <code>content/docs/</code>, so your documentation ships and versions with your app.",
+      "metaDescription": "Guides for {site}, written as Markdown files that ship and version with the app."
+    }
+  },
+  "language": {
+    "label": "Change language",
+    "notTranslated": "This page has not been translated into {language} yet, so you are reading the original."
+  },
+  "loading": {
+    "default": "Loading",
+    "admin": "Loading admin…",
+    "workspace": "Loading your workspace…"
+  },
+  "common": {
+    "close": "Close",
+    "starOnGitHub": "Star on GitHub"
+  },
+  "theme": {
+    "label": "Change theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "demo": {
+    "banner": "You're viewing the live demo - jump into the app"
+  },
+  "notFound": {
+    "badge": "404 Error",
+    "title": "Page not found",
+    "body": "Sorry, we couldn't find the page you're looking for. Perhaps you've mistyped the URL or the page has been moved.",
+    "home": "Back to Home",
+    "docs": "Check Documentation",
+    "redirecting": "Redirecting to homepage in <strong>{seconds}s</strong>..."
+  },
+  "newsletter": {
+    "confirmTitle": "Confirm subscription",
+    "unsubscribeTitle": "Unsubscribe",
+    "confirmedHeading": "You're in 🎉",
+    "confirmedBody": {
+      "$kit": "Check your inbox: the launch price of Pro and Pro Studio is on its way. If it is not there in a minute, look in Promotions or Spam. After that, one short email when there is real news. Unsubscribe anytime, one click.",
+      "$product": "One short email when there is real news, and a discount waiting for you at launch. Unsubscribe anytime, one click."
+    },
+    "expiredHeading": "This link has expired",
+    "expiredBody": "Confirmation links are valid for 7 days. Subscribe again and we will send you a fresh one.",
+    "invalidHeading": "Link not valid",
+    "invalidBody": "This confirmation link is not valid anymore. Subscribe again to get a new one.",
+    "unsubscribedHeading": "You're unsubscribed",
+    "unsubscribedBody": "No more emails from us, effective immediately. Changed your mind? You can subscribe again anytime.",
+    "unknownHeading": "Link not valid",
+    "unknownBody": "This unsubscribe link does not match any subscription. If you keep receiving emails, reply to one of them and we will remove you by hand.",
+    "backToSite": "Back to the site",
+    "backToPricing": "Back to pricing"
+  },
+  "enterprise": {
+    "name": "Enterprise",
+    "description": "For large teams and organizations",
+    "priceLabel": "Custom",
+    "note": "billed your way",
+    "yearlyNote": "on an annual contract",
+    "features": [
+      "Everything in Pro",
+      "Unlimited team members",
+      "SSO and audit logs",
+      "Dedicated support",
+      "Custom invoicing and SLA"
+    ],
+    "ctaLabel": "Contact us",
+    "ctaSubject": "{site} Enterprise: let's talk",
+    "ctaBody": "Team size:\n\nWhat we need:\n\n"
+  },
+  "errors": {
+    "unauthorized": "Unauthorized",
+    "projectNotFound": "Project not found",
+    "nameRequired": "Name is required",
+    "nameTooLong": "Name too long",
+    "descriptionTooLong": "Description too long",
+    "invalidEmail": "Enter a valid email address",
+    "messageTooShort": "Tell us a bit more (at least 10 characters)",
+    "checkTheForm": "Check the form and try again",
+    "tooManyMessages": "Too many messages from this connection. Try again in a few minutes.",
+    "contactSendFailed": "Something went wrong on our side. Email us directly at {email}."
+  }
+}
