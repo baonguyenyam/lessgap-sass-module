@@ -2,7 +2,9 @@
 
 **Status:** `draft`
 
-The platform core, as it will be added to `prisma/schema.prisma` in phases 1–3.
+The platform core, as it will be added to `prisma/contract.prisma` in phases 1–3.
+The sketches below use Prisma 7 syntax for readability; write them in the
+contract's Prisma 8 syntax (see the `prisma-8` skill, `contract.md`).
 Module models are listed in [modules.md](./07-modules.md) and get their full
 definition in the phase that builds them. Conventions first, because they
 apply to every model anyone adds.

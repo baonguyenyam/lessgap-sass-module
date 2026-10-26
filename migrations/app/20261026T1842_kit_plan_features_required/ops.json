@@ -1,0 +1,153 @@
+[
+  {
+    "id": "data_migration.backfill-plan-features",
+    "label": "Data transform: backfill-plan-features",
+    "operationClass": "data",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "features",
+        "table": "Plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "Check backfill-plan-features has work to do",
+        "sql": "SELECT EXISTS (SELECT \"id\" AS \"id\" FROM \"public\".\"Plan\" WHERE \"features\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "Run backfill-plan-features",
+        "sql": "UPDATE \"public\".\"Plan\" SET \"features\" = $1::text[], \"updatedAt\" = $2 WHERE \"features\" IS NULL",
+        "params": [
+          [],
+          "2026-10-26 18:43:19.765"
+        ]
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "Verify backfill-plan-features resolved all violations",
+        "sql": "SELECT NOT EXISTS (SELECT \"id\" AS \"id\" FROM \"public\".\"Plan\" WHERE \"features\" IS NULL LIMIT 1) AS ok",
+        "params": [],
+        "meta": {
+          "requiredColumn": {
+            "table": "Plan",
+            "column": "features",
+            "reason": "backfillMissedRows"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.setNotNull.Plan.features",
+    "label": "Set NOT NULL on \"Plan\".\"features\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "features",
+        "table": "Plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"features\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "features"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"features\" on \"Plan\""
+        }
+      },
+      {
+        "description": "ensure no NULL values in \"features\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"public\".\"Plan\" WHERE \"features\" IS NULL) AS \"result\"",
+        "params": [],
+        "meta": {
+          "requiredColumn": {
+            "table": "Plan",
+            "column": "features",
+            "reason": "nullValues"
+          }
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "set NOT NULL on \"features\"",
+        "sql": "ALTER TABLE \"public\".\"Plan\" ALTER COLUMN \"features\" SET NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"features\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "features",
+          "NO"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "checkConstraint.Plan.Plan_features_elem_not_null_1a661718",
+    "label": "Add check constraint \"Plan_features_elem_not_null_1a661718\" on \"Plan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "Plan_features_elem_not_null_1a661718",
+        "table": "Plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Plan_features_elem_not_null_1a661718\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Plan_features_elem_not_null_1a661718",
+          "public",
+          "\"public\".\"Plan\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"Plan_features_elem_not_null_1a661718\" on \"Plan\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"Plan_features_elem_not_null_1a661718\"",
+        "sql": "ALTER TABLE \"public\".\"Plan\" ADD CONSTRAINT \"Plan_features_elem_not_null_1a661718\" CHECK (array_position(\"features\", NULL) IS NULL)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify check constraint \"Plan_features_elem_not_null_1a661718\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4)) AS \"result\"",
+        "params": [
+          "Plan_features_elem_not_null_1a661718",
+          "public",
+          "\"public\".\"Plan\"",
+          "c"
+        ]
+      }
+    ]
+  }
+]

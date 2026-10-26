@@ -7,49 +7,65 @@ hardest defect to undo, so the rules here are stricter than anywhere else.
 
 ## Schema layout
 
-From phase 0 the schema is split into files, one per owner, using Prisma's
-multi-file schema (`schema: "prisma/schema"` in `prisma.config.ts`):
-
-```
-prisma/schema/
-  base.prisma          generator, datasource
-  kit.prisma           models inherited from the kit (User, Account, Session, …)
-  platform.prisma      Tenant, Member, Domain, Site, Plan, switches, overrides, usage, audit, jobs
-  booking.prisma       one file per module that owns models
-  shop.prisma
-  …
-```
-
-A module owns the models in its file and nobody else edits them. Relations
-across files are allowed only towards `platform.prisma` and `kit.prisma`
-(every module model points at `Tenant`); a module never adds a relation to
-another module's model. Cross-module references are plain id columns read
-through the other module's `server/index.ts`.
+One contract, `prisma/contract.prisma` (Prisma 8 reads a single contract
+source). Ownership is by section: the file is ordered kit models, then
+platform models, then one section per module, each opened by a comment
+`// ── <owner> ──` naming the owner. A module owns the models in its section and
+nobody else edits them. Relations across sections are allowed only towards
+platform and kit models (every module model points at `Tenant`); a module never
+adds a relation to another module's model. Cross-module references are plain id
+columns read through the other module's `server/index.ts`. Whether modules
+should instead get a Postgres namespace each (`namespace booking { … }`) is
+decided in phase 0, task 0.4.
 
 ## Naming
 
 - Migration folder: Prisma's timestamp plus `<owner>_<change>`, e.g.
-  `20261102140000_booking_add_appointments`. Owner is `kit`, `platform` or a module key.
+  `20261102T1400_booking_add_appointments` (the slug passed to `pnpm db:plan --name`). Owner is `kit`, `platform` or a module key.
 - Tables and columns: Prisma model and field names, PascalCase models,
   camelCase fields, as the kit does. Enums PascalCase, values SCREAMING_SNAKE.
 - Indexes and constraints named explicitly when written by hand in SQL:
   `<table>_<columns>_idx`, `<table>_<what>_excl`, `<table>_tenant_isolation` for RLS policies.
 
-## Writing a migration
+## Writing a migration (Prisma ORM 8)
 
-1. Edit the owner's `.prisma` file.
-2. `pnpm prisma7 migrate dev --create-only --name <owner>_<change>` (Prisma 8
-   has no `migrate dev`; the v7 CLI owns `prisma/migrations/`).
-3. Open the generated SQL and add what Prisma cannot express, in the same file:
-   RLS (`ENABLE` + `FORCE` + policy), exclusion constraints, partial indexes,
-   `CREATE EXTENSION` (`vector`, `btree_gist`), check constraints.
-4. `pnpm prisma7 migrate dev` to apply locally; run the tests. Re-emit the
-   runtime contract when the shape changed: `pnpm prisma contract infer &&
-   pnpm prisma contract emit`.
-5. Classify every new model in `src/platform/tenancy/models.ts`.
-6. Commit schema, migration and classification together.
+The project runs Prisma 8 only. The `prisma-8` skill (`.claude/skills/prisma-8/`)
+is the reference for every command below; read it before the first change.
 
-### RLS block every tenant-owned table gets
+1. Edit `prisma/contract.prisma` (the owner's section).
+2. `pnpm db:emit` regenerates `generated/prisma8/`.
+3. Check the `db` ref points at the newest migration's `to` hash
+   (`pnpm prisma migration list`, `pnpm prisma migration ref set db <hash>`).
+4. `pnpm db:plan --name <owner>_<change>`. Read the output: the `from:` line
+   must name the previous contract, never `(baseline)` over existing migrations.
+5. Review `migrations/app/<dir>/migration.ts`. Replace every `placeholder(...)`
+   with a `this.dataTransform(...)` built on the end contract; add what the
+   contract cannot declare with `rawSql(...)`. Self-emit:
+   `node migrations/app/<dir>/migration.ts`.
+6. Advance the ref to the new migration: `pnpm prisma migration ref set db <to-hash>`.
+7. `pnpm db:migrate` locally; run the tests. `pnpm prisma migration check` must pass.
+8. Classify every new model in `src/platform/tenancy/models.ts` (from phase 0).
+9. Commit the contract, `generated/prisma8/`, the migration package, its
+   snapshot under `migrations/snapshots/` and the ref together.
+
+### The baseline and databases built by Prisma 7
+
+`migrations/app/*_kit_baseline` describes exactly the schema the kit's Prisma 7
+migrations produced (verified in strict mode against a database built from
+them). Every later migration chains from it.
+
+- A new, empty database: `pnpm db:migrate` applies the baseline and everything after it.
+- A database Prisma 7 built (it has `_prisma_migrations`): run `pnpm db:adopt`
+  once. It signs the database at the baseline (Prisma verifies the schema first
+  and refuses a mismatch), applies the migrations after it, verifies, and with
+  `--drop-legacy-table` removes `_prisma_migrations`.
+- `pnpm check:deploy` tells which of the three a database is.
+
+### RLS every tenant-owned table gets
+
+Declared in the contract (`@@rls` and a policy block per operation, see the
+`prisma-8` skill, `contract.md`), so the planner writes it into the migration
+and `db verify` checks it. The resulting SQL is equivalent to:
 
 ```sql
 ALTER TABLE "Appointment" ENABLE ROW LEVEL SECURITY;
@@ -65,7 +81,7 @@ Test M3 fails when a tenant-owned table lacks it.
 
 | Role | Used by | RLS |
 | --- | --- | --- |
-| `owner` (Neon default) | `prisma migrate deploy`, platform-wide maintenance scripts | bypasses (table owner) |
+| `owner` (Neon default) | `prisma db migrate`, platform-wide maintenance scripts | bypasses (table owner) |
 | `app` | the running application through `tenantDb` | enforced; no `BYPASSRLS` |
 | `platform` | `src/platform/` reads across tenants (console, jobs) | `BYPASSRLS`, used only through a dedicated client in `src/platform/db.ts` |
 

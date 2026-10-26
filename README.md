@@ -153,8 +153,8 @@ Everything else (sign-in providers, Stripe, email) can wait: each feature turns 
 ### 4. Create the tables
 
 ```bash
-pnpm prisma migrate deploy   # applies the committed migrations
-pnpm prisma db seed          # six example plans, one inactive (edit prisma/seed.ts later)
+pnpm db:migrate   # applies the committed Prisma 8 migrations (migrations/app)
+pnpm db:seed      # six example plans, one inactive (edit prisma/seed.ts later)
 ```
 
 Both read `.env.local`, the same file the app reads.
@@ -253,14 +253,15 @@ src/
 │   ├── settings/          # Two-factor card, active sessions, sign-in methods
 │   └── admin/             # Admin components
 ├── lib/
-│   ├── prisma.ts          # Prisma client (Prisma 7 + adapter)
+│   ├── db8.ts             # Prisma ORM 8 client (db8.orm / db8.sql)
+│   ├── prisma.ts          # compatibility layer over db8 for existing kit code
 │   ├── stripe.ts          # Stripe client (lazy proxy)
 │   ├── email.ts           # Resend email helpers
 │   └── utils.ts           # cn() utility
 ├── app/actions/           # Server actions (profile, admin)
 └── auth.ts                # Better Auth configuration
 prisma/
-├── schema.prisma          # User, Account, Session, TwoFactor, Plan, Subscription
+├── contract.prisma        # Prisma 8 contract: User, Account, Session, TwoFactor, Plan, Subscription
 └── seed.ts                # Seeds example plans (replace with your own)
 ```
 
@@ -340,7 +341,7 @@ CI runs lint, unit tests, the build and `pnpm audit --prod --audit-level high` o
 
 ## 🧠 Tech decisions
 
-**Why Prisma 7?** New WASM engine requires a driver adapter; we use `@prisma/adapter-pg`. See `src/lib/prisma.ts`.
+**Why Prisma 8?** A contract-first data layer: the schema is `prisma/contract.prisma`, migrations are planned from contract changes into `migrations/app/`, and the runtime is `@prisma/orm-postgres` with no engine binary. See `src/lib/db8.ts` and `spec/12-migrations-and-data.md`.
 
 **Why Stripe lazy proxy?** `new Stripe("")` throws at module load time. The proxy defers instantiation to first request. See `src/lib/stripe.ts`.
 

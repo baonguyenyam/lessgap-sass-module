@@ -8,8 +8,8 @@
  *
  * Prisma ORM 8 has no `migrate reset`, so this does the three steps itself:
  *   1. drop the `public` schema and any Prisma bookkeeping schema, then recreate `public`;
- *   2. build the schema: `prisma db migrate` when on-disk migrations exist,
- *      otherwise `prisma db init` (bootstrap from the contract and sign it);
+ *   2. build the schema by applying every migration in migrations/app
+ *      (`prisma db migrate`), which also writes the Prisma 8 marker;
  *   3. run prisma/seed.ts, and prisma/seed-demo.ts with --demo.
  *
  * It refuses production and any remote host that is not explicitly allowed
@@ -86,15 +86,11 @@ try {
 // 2. Rebuild.
 step("2/3 Building the schema")
 const prisma = (...rest) => run("pnpm", ["exec", "prisma", ...rest, "--db", url, "--yes"])
-const migrationsDir = "migrations/app"
-const hasMigrations = existsSync(migrationsDir) && readdirSync(migrationsDir).some((name) => !name.startsWith("."))
-if (hasMigrations) {
-  console.log("Applying migrations (prisma db migrate)…")
-  prisma("db", "migrate")
-} else {
-  console.log("No migrations yet: bootstrapping from the contract (prisma db init)…")
-  prisma("db", "init")
+if (!existsSync("migrations/app") || readdirSync("migrations/app").every((name) => name.startsWith("."))) {
+  fail("rebuilding the schema", new Error("no migrations in migrations/app"), "plan the baseline first: pnpm db:plan --name kit_baseline")
 }
+console.log("Applying every migration (prisma db migrate)…")
+prisma("db", "migrate")
 
 // 3. Seed.
 step("3/3 Seeding")

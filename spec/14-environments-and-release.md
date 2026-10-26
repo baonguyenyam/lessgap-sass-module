@@ -34,7 +34,7 @@
 ## Deploys
 
 1. Merge to `main`.
-2. CI runs `prisma migrate deploy` against Production with the owner role
+2. CI runs `prisma db migrate` against Production with the owner role
    **before** the Vercel production build is promoted. Migrations are
    backward compatible by rule ([migrations-and-data.md](./12-migrations-and-data.md)),
    so the old deployment keeps working during the build.

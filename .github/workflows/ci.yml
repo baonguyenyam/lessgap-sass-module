@@ -35,10 +35,16 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # The Prisma client isn't committed (it's generated), so generate it
-      # before the build. `generate` reads the schema, not a live database.
-      - name: Generate Prisma client
-        run: pnpm exec prisma generate
+      # Prisma 8: emit the contract artefacts from prisma/contract.prisma (also
+      # done by postinstall) and fail if the committed ones are stale, then
+      # check the migration graph's integrity. Both are offline.
+      - name: Emit Prisma contract
+        run: |
+          pnpm exec prisma contract emit
+          git diff --exit-code -- generated/ || (echo "generated/prisma8 is stale: run pnpm db:emit and commit" && exit 1)
+
+      - name: Check migration graph
+        run: pnpm exec prisma migration check
 
       - name: Type-check
         run: pnpm typecheck
@@ -84,3 +90,32 @@ jobs:
       # this commit, so it must never hide the result of lint, test and build.
       - name: Audit dependencies
         run: pnpm audit --prod --audit-level high
+
+  migrations:
+    name: Migrations apply and match the contract
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ci
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ci
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # M1: every migration applies on an empty database, in one transaction.
+      - run: pnpm exec prisma db migrate --db "$DATABASE_URL"
+      # M2: the result is exactly the contract, nothing more (strict).
+      - run: pnpm exec prisma db verify --strict --db "$DATABASE_URL"
+      # The seeds run on the migrated schema.
+      - run: pnpm db:seed

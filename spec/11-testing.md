@@ -44,7 +44,7 @@ An E2E test that checks a rule a unit test could check is in the wrong layer.
   0) or a personal Neon branch. `DATABASE_URL_TEST` points at it; the
   integration config refuses to run if it equals `DATABASE_URL`.
 - CI: a `postgres` service container with the pgvector image.
-- Each integration test file runs `migrate deploy` once (global setup) and
+- Each integration test file runs `prisma db migrate` once (global setup) and
   truncates tenant tables between tests through `resetDatabase()`.
 - Tests that check RLS connect as the application role, not as the owner
   role, because owners bypass RLS.
@@ -181,7 +181,7 @@ area. Phase briefs copy the rows they own into their task lists.
 ### Migrations (every phase)
 | # | Case | Layer |
 |---|---|---|
-| M1 | `migrate deploy` on an empty database succeeds | CI script |
-| M2 | Schema and migrations are in step (`prisma migrate diff` shows no drift) | CI script |
+| M1 | `prisma db migrate` on an empty database succeeds | CI job `migrations` |
+| M2 | The migrated database matches the contract exactly (`prisma db verify --strict`), the graph is intact (`prisma migration check`), and a migration reaches the current contract | CI job `migrations` + `migration-manifest.test.ts` |
 | M3 | Every tenant-owned table has RLS enabled and a policy | integration |
 | M4 | Backfill scripts are idempotent: running twice changes nothing the second time | integration |

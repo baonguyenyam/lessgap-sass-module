@@ -2,8 +2,8 @@
 /**
  * Tells you whether a database is ready for the code in this checkout.
  *
- *   npm run check:deploy
- *   DATABASE_URL="postgresql://..." npm run check:deploy
+ *   pnpm check:deploy
+ *   DATABASE_URL="postgresql://..." pnpm check:deploy
  *
  * The first form checks the database in your .env.local (or .env). The second
  * checks any other one, production included: a DATABASE_URL set in the shell
@@ -22,8 +22,9 @@
  * It checks, in order:
  *
  *   1. that the database answers;
- *   2. that every folder in prisma/migrations has been applied, and that none
- *      started and never finished;
+ *   2. that the database is at the contract this checkout was built with
+ *      (Prisma 8 marker vs contract hash), and if not, how many of the
+ *      migrations in migrations/app it is missing;
  *   3. the account table: which shape it is in, and, on a database upgraded
  *      from 2.0.x, the two problems the 2.1.0 migration refuses to run over.
  *      This part used to be scripts/verify-auth-migration.mjs.
@@ -32,14 +33,12 @@
  * check could not run, which is a different answer from "not ready".
  */
 
-import { existsSync, readdirSync } from "node:fs"
+import { readFileSync } from "node:fs"
 import path from "node:path"
 import pg from "pg"
 import { accountTableShape } from "./account-shape.mjs"
-
-// The migration that converts the account table. Named here so the shape and
-// the migration list do not report the same thing twice.
-const CONVERTS_ACCOUNT_TABLE = "20260828100000_better_auth"
+import { readMigrationGraph } from "./generate-migration-manifest.mjs"
+import { pendingMigrations } from "../src/lib/migration-chain.ts"
 
 const root = path.resolve(import.meta.dirname, "..")
 const LABEL = 15
@@ -48,7 +47,7 @@ const more = (text) => console.log(`  ${"".padEnd(LABEL)}${text}`)
 
 const url = process.env.DATABASE_URL
 if (!url) {
-  console.error('\nDATABASE_URL is not set. Put it in .env.local, or run:\n  DATABASE_URL="postgresql://..." npm run check:deploy\n')
+  console.error('\nDATABASE_URL is not set. Put it in .env.local, or run:\n  DATABASE_URL="postgresql://..." pnpm check:deploy\n')
   process.exit(2)
 }
 
@@ -102,50 +101,39 @@ try {
     more("migrations over the direct one (the same host without -pooler)")
   }
 
-  // ── 2. Migrations ─────────────────────────────────────────────────────────
-  const dir = path.join(root, "prisma", "migrations")
-  const expected = readdirSync(dir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && existsSync(path.join(dir, entry.name, "migration.sql")))
-    .map((entry) => entry.name)
-    .sort()
+  // ── 2. Migrations (Prisma 8) ──────────────────────────────────────────────
+  const edges = readMigrationGraph(path.join(root, "migrations", "app"))
+  const contractJson = JSON.parse(readFileSync(path.join(root, "generated", "prisma8", "contract.json"), "utf8"))
+  const contractHash = contractJson.storage.storageHash
 
-  let recorded = []
+  let marker = null
   try {
-    const result = await client.query(
-      `SELECT migration_name, finished_at, rolled_back_at FROM "_prisma_migrations"`,
-    )
-    recorded = result.rows
+    const { rows } = await client.query(`SELECT core_hash FROM prisma_contract.marker WHERE space = 'app'`)
+    marker = rows[0]?.core_hash ?? null
   } catch (error) {
-    // No migrations table: nothing was ever applied to this database.
-    if (error.code !== "42P01") throw error
+    // No marker table: Prisma 8 never migrated or signed this database.
+    if (error.code !== "42P01" && error.code !== "3F000") throw error
   }
+  const { rows: legacy } = await client.query(`SELECT to_regclass('"_prisma_migrations"') IS NOT NULL AS present`)
+  const builtByPrisma7 = legacy[0]?.present === true
 
-  const applied = new Set(recorded.filter((r) => r.finished_at && !r.rolled_back_at).map((r) => r.migration_name))
-  const stuck = recorded.filter((r) => !r.finished_at && !r.rolled_back_at).map((r) => r.migration_name)
-  const missing = expected.filter((name) => !applied.has(name))
-  const elsewhere = [...applied].filter((name) => !expected.includes(name)).sort()
-
-  if (missing.length === 0 && stuck.length === 0) {
-    line("migrations", `${expected.length} of ${expected.length} applied`)
-  }
-  if (stuck.length > 0) {
-    line("migrations", `${stuck.length} started and never finished:`)
-    for (const name of stuck) more(`  ${name}`)
-    more("fix what stopped it, then record the outcome with")
-    more("npx prisma migrate resolve (https://pris.ly/d/migrate-resolve)")
-    problems.push("a migration is stuck half way")
-  }
-  if (missing.length > 0) {
-    line(stuck.length > 0 ? "" : "migrations", `${missing.length} of ${expected.length} not applied:`)
-    for (const name of missing) more(`  ${name}`)
-    more("-> npx prisma migrate deploy")
-    problems.push(`${missing.length} migration(s) not applied`)
-  }
-  // Not a problem on its own: a database that ran a migration from another
-  // branch, or a newer checkout. Worth seeing before you deploy this one on it.
-  if (elsewhere.length > 0) {
-    more(`${elsewhere.length} applied here that this checkout does not have:`)
-    for (const name of elsewhere) more(`  ${name}`)
+  const pending = pendingMigrations(edges, marker, contractHash)
+  if (marker === contractHash) {
+    line("migrations", `at the contract (${edges.length} migration(s) in the graph)`)
+  } else if (marker === null && builtByPrisma7) {
+    line("migrations", "this database was built by Prisma 7 and is not signed for Prisma 8:")
+    more("-> pnpm db:adopt   (signs it at the baseline, then applies what follows)")
+    problems.push("the database has not been adopted by Prisma 8")
+  } else if (pending === null) {
+    line("migrations", "the database is on no path to this checkout's contract:")
+    more("it was changed outside the migration system, or built from another")
+    more("branch. Inspect with: pnpm prisma db verify --db <url>")
+    problems.push("the database schema is not on the migration graph")
+  } else {
+    line("migrations", `${pending.length} not applied:`)
+    for (const edge of pending) more(`  ${edge.name}`)
+    more("-> pnpm db:migrate")
+    problems.push(`${pending.length} migration(s) not applied`)
   }
 
   // ── 3. The account table ──────────────────────────────────────────────────
@@ -175,11 +163,9 @@ try {
       more("migration converts it, and moves every password while it")
       more("does. Nothing else about this")
       more("table can be checked until then")
-      // Only when the migration list did not already say so, which it does on
-      // every database that simply has not been migrated yet.
-      if (!missing.includes(CONVERTS_ACCOUNT_TABLE)) {
-        problems.push("the account table is still the shape it had before 2.0")
-      }
+      // The Prisma 8 baseline starts after 2.0: such a database cannot be
+      // adopted until it is upgraded with the 2.x kit first.
+      problems.push("the account table is still the shape it had before 2.0")
       await reportRowCounts()
     } else {
       const issuer = columns.find((c) => c.column_name === "issuer")
@@ -214,7 +200,7 @@ try {
     if (error.code !== "42P01" && error.code !== "42703") throw error
     line("account table", "could not be read on this database:")
     more(error.message)
-    more("apply the migrations above, then run this again")
+    more("apply the migrations above (pnpm db:migrate), then run this again")
   }
 } catch (error) {
   console.log(`\nThe check stopped on an unexpected error: ${error.message}\n`)

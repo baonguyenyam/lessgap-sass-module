@@ -23,9 +23,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'a5d50250b02174ec86eb295a0fa752bb8cba38137bc9db1af8a86086efebdef5'>;
+  StorageHashBase<'443e445118308f1cbde9721614e1678ce840f138f0dde25340e64d5edba25a7d'>;
 export type ExecutionHash =
-  ExecutionHashBase<'5d517b30b81b703ad2d116f9362d6265e2a8c7b8c4c5b0bbc56a1df062e82ee6'>;
+  ExecutionHashBase<'cbedb4da5dc2e1b46867c3be26f34e00e4cb5e092148412552e5b2642130d5b2'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -1249,6 +1249,7 @@ type ContractBase = Omit<
                   readonly dataType: 'pg/timestamp';
                   readonly codecId: 'pg/timestamp-string@1';
                   readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                   readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
@@ -2561,7 +2562,6 @@ type ContractBase = Omit<
           };
         },
         {
-          readonly onCreate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
           readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'TwoFactor';

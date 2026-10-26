@@ -1,12 +1,4 @@
 {
-  "ts-node": {
-    "transpileOnly": true,
-    "compilerOptions": {
-      "module": "node16",
-      "moduleResolution": "node16",
-      "rootDir": "."
-    }
-  },
   "compilerOptions": {
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],

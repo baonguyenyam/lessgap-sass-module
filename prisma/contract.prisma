@@ -155,7 +155,9 @@ trialEndsAt          TimestampString(3)?
     failedVerificationCount Int                 @default(0)
     lockedUntil             TimestampString(3)?
     createdAt               TimestampString(3)  @default(now())
-    updatedAt               TimestampString(3)  @onCreate(now()) @onUpdate(now())
+    // Database default as well as the client-side stamp: Better Auth writes this
+    // table through Kysely and its two-factor model sends no timestamps.
+    updatedAt               TimestampString(3)  @default(now()) @onUpdate(now())
     user                    User                @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "TwoFactor_userId_fkey")
 
     @@index([secret], map: "TwoFactor_secret_idx")

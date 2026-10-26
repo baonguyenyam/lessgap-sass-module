@@ -202,19 +202,35 @@ pnpm typecheck              # type-check
 pnpm lint                   # ESLint
 pnpm test                   # Vitest unit tests
 pnpm test:e2e               # Playwright
-pnpm prisma7 migrate dev --name <change> # after editing prisma/schema.prisma (v7 CLI owns migrations)
-pnpm prisma contract emit   # after schema/contract change: regenerate generated/prisma8
-pnpm db:reset               # dev only: drop the database, rebuild the schema, run the system seed
+pnpm db:emit                # after editing prisma/contract.prisma: regenerate generated/prisma8
+pnpm db:plan --name <owner>_<change>   # plan a migration from the contract change
+pnpm db:migrate             # apply pending migrations to the database in .env
+pnpm db:status              # which migrations a database has and lacks
+pnpm db:reset               # dev only: drop the database, apply every migration, run the system seed
 pnpm db:reset:demo          # the same, plus the demo seed
+pnpm db:adopt               # once per database Prisma 7 built: sign it at the baseline, then migrate
+pnpm check:deploy           # is this database ready for this checkout?
 ```
 
-Data access at runtime is Prisma ORM 8 (`@prisma/orm-postgres`, contract in
-`prisma/contract.prisma`, client `src/lib/db8.ts`). `src/lib/prisma.ts` is a
-v7-shaped facade over it — keep using `prisma.<model>.<verb>` in kit code.
-Better Auth talks to Postgres through its own Kysely pool (`src/lib/kysely.ts`),
-not through the ORM. Schema changes: edit `prisma/schema.prisma`, migrate with
-the v7 CLI, then re-introspect the contract (`pnpm prisma contract infer`) and
-emit.
+**Prisma 8 only.** The project runs Prisma ORM 8 (`prisma` CLI and
+`@prisma/orm-postgres`); Prisma 7 is gone: no `schema.prisma`, no
+`@prisma/client`, no `prisma migrate …` commands. Before any database task, read
+the `prisma-8` skill (`.claude/skills/prisma-8/`, same copy under `.agents/`,
+`.cursor/`, `.devin/`): it is the reference for the installed version, and your
+training data about Prisma is older than it.
+
+- Contract (the schema): `prisma/contract.prisma`. Emitted artefacts:
+  `generated/prisma8/` (never edit; `pnpm db:emit` rewrites them, CI fails if stale).
+- Migrations: `migrations/app/<timestamp>_<owner>_<change>/`, planned with
+  `pnpm db:plan`, never written by hand except the holes the planner leaves
+  (data transforms). The `db` ref in `migrations/app/refs/` must point at the
+  newest migration's `to` hash after every plan.
+- Runtime client: `db8` from `@/lib/db8` (`db8.orm.public.<Model>`, `db8.sql`).
+  `@/lib/prisma` is a compatibility layer with the old call shape over `db8`,
+  kept for the kit code that already uses it. It is frozen: do not add to it,
+  and do not import it from new code; new code uses `db8` directly.
+- Better Auth talks to Postgres through its own Kysely pool (`src/lib/kysely.ts`),
+  not through the ORM.
 
 Use the package manager whose lockfile is committed. Never add a second lockfile.
 

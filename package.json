@@ -1,6 +1,6 @@
 {
   "name": "lessgap-starter-kit",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "private": true,
   "packageManager": "pnpm@12.8.1",
   "engines": {
@@ -23,7 +23,13 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:seed:demo": "tsx prisma/seed-demo.ts",
     "db:reset": "node scripts/db-reset.mjs",
-    "db:reset:demo": "node scripts/db-reset.mjs --demo"
+    "db:reset:demo": "node scripts/db-reset.mjs --demo",
+    "db:emit": "prisma contract emit",
+    "db:plan": "prisma migration plan",
+    "db:migrate": "prisma db migrate",
+    "db:status": "prisma migration status",
+    "db:verify": "prisma db verify",
+    "db:adopt": "node scripts/db-adopt.mjs"
   },
   "dependencies": {
     "@better-auth/kysely-adapter": "^1.7.13",
@@ -73,7 +79,6 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "^1.64.1",
-    "@prisma/prisma7": "7.10.1",
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.20",
     "@types/node": "^26.6.5",
@@ -85,7 +90,6 @@
     "eslint-config-next": "16.4.3",
     "prisma": "8.0.0-rc.27",
     "tailwindcss": "^4",
-    "ts-node": "^10.9.2",
     "tsx": "^4.23.15",
     "typescript": "6.0.3",
     "vitest": "^5.0.5"

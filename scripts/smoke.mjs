@@ -94,7 +94,7 @@ if (health && Object.hasOwn(health, "schema")) {
     await check("the database has every migration this build ships", () => {
       expect(
         health.schema?.aligned === true,
-        `${health.schema?.pending} migration(s) not applied: run npx prisma migrate deploy against this database, then run the smoke again`,
+        `${health.schema?.pending} migration(s) not applied: run pnpm db:migrate against this database, then run the smoke again`,
       )
       return "aligned"
     })

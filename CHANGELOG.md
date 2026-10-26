@@ -7,6 +7,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.6.0] - 2026-10-26
+
+🗄️ **Prisma 8 only.** Prisma 7 is gone from the project: no `schema.prisma`, no `prisma7` CLI, no `_prisma_migrations`. Migrations are Prisma 8 packages in `migrations/app`, starting from a baseline that matches the Prisma 7 schema exactly. This is a MINOR with one step: `git pull`, `pnpm install`, then `pnpm db:adopt` once per database Prisma 7 built (`pnpm check:deploy` says whether one needs it).
+
+### Added
+
+- **Prisma 8 migrations** in `migrations/app`: `kit_baseline` (the schema the Prisma 7 migrations produced, including the `TwoFactor.updatedAt` default) and `kit_plan_features_required` (`Plan.features` becomes required, with a backfill of any NULL to `{}` first)
+- **`pnpm db:adopt`**: signs a database Prisma 7 built at the baseline (Prisma verifies the schema first and refuses a mismatch), applies the migrations after it and verifies; `--drop-legacy-table` removes `_prisma_migrations`
+- **Database scripts**: `db:emit`, `db:plan`, `db:migrate`, `db:status`, `db:verify`, next to `db:reset` and `db:reset:demo`
+- **CI** emits the contract and fails on stale artefacts, checks the migration graph, and applies every migration to a fresh Postgres and verifies it against the contract in strict mode
+
+### Changed
+
+- **`/api/health` and `pnpm check:deploy`** compare the database's Prisma 8 marker with the contract hash and count the missing migrations on the graph; `check:deploy` recognises a database Prisma 7 built and points at `db:adopt`
+- **`pnpm db:reset`** always applies the migrations (`prisma db migrate`) and uses Neon's direct host instead of the pooler
+- **The `TwoFactor.updatedAt` default** is declared in the contract, so the contract and the database agree
+
+### Removed
+
+- `@prisma/prisma7`, `prisma7.config.ts`, `prisma/schema.prisma`, the Prisma 7 migrations folder (kept in git history) and `ts-node`
+- New code can no longer import `@prisma/client`, `@prisma/adapter-pg`, `@prisma/prisma7` (lint), nor `@/lib/prisma` from `src/platform`, `src/modules`, `src/themes`, `src/verticals` and `tests`
+
 ## [2.5.0] - 2026-10-26
 
 🔧 **The fork becomes lessGAP Starter Kit.** Rebranded, moved to pnpm, the seed scripts fixed and the demo seed grows a real admin account — all on top of the upstream 2.4.0 this fork started from. This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.

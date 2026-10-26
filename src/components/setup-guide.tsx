@@ -44,9 +44,9 @@ export async function SetupGuide({ step }: { step: SetupStep }) {
       // where it gets read: in the dev overlay it looks like a failure, and
       // it is not one.
       note: t("step2Note"),
-      command: "npx prisma migrate deploy\nnpx prisma db seed",
+      command: "pnpm db:migrate\npnpm db:seed",
     },
-    { title: t("step3Title"), body: t("step3Body"), command: "npm run dev" },
+    { title: t("step3Title"), body: t("step3Body"), command: "pnpm dev" },
   ]
 
   return (
