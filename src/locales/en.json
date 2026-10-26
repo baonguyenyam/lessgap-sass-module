@@ -272,6 +272,38 @@
       "dangerZone": {
         "title": "Danger zone",
         "blurb": "Some actions cannot be undone. Proceed with care."
+      },
+      "nav": {
+        "label": "Settings sections",
+        "general": "General",
+        "security": "Security",
+        "backup": "Backup",
+        "logs": "Logs"
+      },
+      "backup": {
+        "title": "Back up your data",
+        "description": "Download a copy of everything this app holds about you, as a JSON file you can keep or take elsewhere.",
+        "includes": {
+          "profile": "Your profile: name, email address, role and when the account was created",
+          "security": "Your sign-in methods and the sessions on record, with their devices and IP addresses",
+          "projects": "Your projects",
+          "billing": "Your subscription, purchases and newsletter status"
+        },
+        "excludes": "Passwords, sign-in tokens, two-factor secrets and backup codes are never included.",
+        "download": "Download my data"
+      },
+      "logs": {
+        "title": "Account activity",
+        "description": "Sign-ins and changes to how you get into your account, newest first. Sessions drop off this list once they are revoked or cleaned up after expiring.",
+        "accountCreated": "Account created",
+        "methodAdded": "{method} connected",
+        "passwordAdded": "Password set",
+        "twoFactorEnabled": "Two-factor authentication turned on",
+        "signedIn": "Signed in on {device}",
+        "switchedIn": "Opened by an administrator with Switch As, on {device}",
+        "unknownDevice": "an unknown device",
+        "thisDevice": "This device",
+        "ended": "Ended"
       }
     },
     "billing": {
@@ -360,7 +392,7 @@
       "avatarCurrent": "Current profile photo",
       "avatarNone": "No profile photo yet",
       "email": "Email",
-      "emailHint": "The address you sign in with. Change it under Sign-in methods, below.",
+      "emailHint": "The address you sign in with. Change it under Settings → Security.",
       "save": "Save changes"
     },
     "signOut": {

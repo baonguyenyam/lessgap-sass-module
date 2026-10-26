@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server"
 import { requireUser } from "@/lib/auth"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 
 /**
  * Settings → Backup: a copy of everything the app holds about the user, as a
@@ -27,10 +27,11 @@ export default async function BackupSettingsPage() {
         <p className="text-muted-foreground">{t("excludes")}</p>
         {/* A file download from a route handler, not a page: `next/link`
             would prefetch it. */}
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a href="/api/account/export" download className={buttonVariants({ variant: "primary", size: "sm" })}>
-          {t("download")}
-        </a>
+        <Button asChild variant="primary" size="sm">
+          <a href="/api/account/export" download>
+            {t("download")}
+          </a>
+        </Button>
       </CardContent>
     </Card>
   )

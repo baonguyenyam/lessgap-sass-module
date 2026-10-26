@@ -13,10 +13,10 @@ import path from "node:path"
 export default defineConfig({
   test: {
     environment: "node",
-    // scripts/ is in here for the pure helpers the deploy checks are built on:
-    // plain ESM, because the scripts that import them run under node with no
-    // build step.
-    include: ["src/**/*.test.ts", "scripts/**/*.test.mjs"],
+    // Every test lives under tests/ (spec/adr/0016-tests-live-in-tests.md):
+    // tests/unit mirrors src/, and tests/unit/scripts holds the plain ESM tests
+    // of the pure helpers the deploy checks in scripts/ are built on.
+    include: ["tests/unit/**/*.test.ts", "tests/unit/**/*.test.mjs"],
     coverage: {
       provider: "v8",
       reporter: ["text-summary", "text", "html"],
@@ -33,6 +33,9 @@ export default defineConfig({
   resolve: {
     // import.meta.dirname, not __dirname: this config is ESM and Vite's native
     // loader (the coming default) rejects the CommonJS global.
-    alias: { "@": path.resolve(import.meta.dirname, "src") },
+    alias: {
+      "@tests": path.resolve(import.meta.dirname, "tests"),
+      "@": path.resolve(import.meta.dirname, "src"),
+    },
   },
 })

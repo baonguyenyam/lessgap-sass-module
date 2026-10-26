@@ -27,9 +27,9 @@ config({ path: ".env" })
  * to run as often as you like.
  */
 export default defineConfig({
-  testDir: "./e2e",
+  testDir: "./tests/e2e",
   // Signing up is the flow under test, so each run creates real accounts.
-  globalTeardown: "./e2e/global-teardown.ts",
+  globalTeardown: "./tests/e2e/global-teardown.ts",
   fullyParallel: false,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,

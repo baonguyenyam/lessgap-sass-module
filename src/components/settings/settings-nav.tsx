@@ -2,19 +2,21 @@
 
 import Link from "next/link"
 import { useTranslations } from "next-intl"
-import { useRenderedPathname } from "@/hooks/use-rendered-pathname"
-import { SETTINGS_PAGES } from "@/lib/settings-pages"
+import { useSelectedLayoutSegment } from "next/navigation"
+import { SETTINGS_BASE, SETTINGS_PAGES } from "@/lib/settings-pages"
 import { cn } from "@/lib/utils"
 
 /** The settings sub-navigation: a row of tabs that scrolls on a narrow screen. */
 export function SettingsNav() {
   const t = useTranslations("dashboard.settings.nav")
-  const pathname = useRenderedPathname()
+  // Rendered under the settings layout, so the segment is the page's own:
+  // null for General, "security" for Security, and so on.
+  const segment = useSelectedLayoutSegment()
 
   return (
     <nav aria-label={t("label")} className="-mx-1 flex gap-1 overflow-x-auto border-b border-border px-1">
       {SETTINGS_PAGES.map((page) => {
-        const active = pathname === page.href
+        const active = (page.href.slice(SETTINGS_BASE.length + 1) || null) === segment
         return (
           <Link
             key={page.key}
