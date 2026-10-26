@@ -2,7 +2,9 @@ import { requireUser } from "@/lib/auth"
 import { getFormatter, getTranslations } from "next-intl/server"
 import Link from "next/link"
 import { FolderKanban, SearchX } from "lucide-react"
-import { prisma } from "@/lib/prisma"
+import { or } from "@prisma/orm-postgres/orm-client"
+import { db8 } from "@/lib/db8"
+import { toDate } from "@/lib/timestamps"
 import { Card, CardContent } from "@/components/ui/card"
 import { NewProjectDialog } from "@/components/dashboard/new-project-dialog"
 import { ProjectSearch } from "@/components/dashboard/project-search"
@@ -21,20 +23,13 @@ export default async function ProjectsPage({
 
   // Filtering in the query rather than over the fetched array: the version
   // that still works once someone has more projects than fit on a screen.
-  const projects = await prisma.project.findMany({
-    where: {
-      userId: user.id,
-      ...(query
-        ? {
-            OR: [
-              { name: { contains: query, mode: "insensitive" as const } },
-              { description: { contains: query, mode: "insensitive" as const } },
-            ],
-          }
-        : {}),
-    },
-    orderBy: { updatedAt: "desc" },
-  })
+  const mine = db8.orm.public.Project.where({ userId: user.id })
+  const projects = await (query
+    ? mine.where((p) => or(p.name.ilike(`%${query}%`), p.description.ilike(`%${query}%`)))
+    : mine
+  )
+    .orderBy((p) => p.updatedAt.desc())
+    .all()
 
   return (
     <div className="space-y-6">
@@ -94,7 +89,7 @@ export default async function ProjectsPage({
                   )}
                   <p className="mt-auto pt-2 text-xs text-muted-foreground">
                     {t("updated", {
-                      date: format.relativeTime(new Date(project.updatedAt)),
+                      date: format.relativeTime(toDate(project.updatedAt)),
                     })}
                   </p>
                 </CardContent>

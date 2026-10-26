@@ -6,7 +6,7 @@ import { APIError } from "better-auth/api"
 import { z } from "zod"
 import { auth } from "@/auth"
 import { getCurrentUser } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
 import { isAdmin, isRoot } from "@/lib/roles"
 import { passwordSchema } from "@/lib/password"
 import { stripe } from "@/lib/stripe"
@@ -43,18 +43,18 @@ export async function unlinkProvider(formData: FormData) {
   const currentUser = await getCurrentUser()
   if (!currentUser) redirect("/login")
 
-  const user = await prisma.user.findUnique({
-    where: { id: currentUser.id },
-    select: { accounts: { select: { id: true, providerId: true } } },
-  })
+  const user = await db8.orm.public.User.select("id")
+    .include("accounts", (a) => a.select("id", "providerId"))
+    .where({ id: currentUser.id })
+    .first()
   if (!user) redirect("/login")
 
   const accountId = String(formData.get("accountId") ?? "")
   // The password now lives in Account too, as a row with providerId
   // "credential". So the OAuth accounts are everything except that one, and
   // the password is that one existing: both counts come from the same list.
-  const oauthAccounts = (user.accounts ?? []).filter((a) => a.providerId !== "credential")
-  const hasPassword = (user.accounts ?? []).some((a) => a.providerId === "credential")
+  const oauthAccounts = user.accounts.filter((a) => a.providerId !== "credential")
+  const hasPassword = user.accounts.some((a) => a.providerId === "credential")
 
   // Ownership check: only the user's own OAuth rows can be unlinked, and the
   // credential row is not something this form may delete.
@@ -66,7 +66,7 @@ export async function unlinkProvider(formData: FormData) {
     oauthAccounts.length - 1 + (hasPassword ? 1 : 0) + (emailEnabled() ? 1 : 0)
   if (remainingMethods < 1) redirect(`${SETTINGS}?error=last-method`)
 
-  await prisma.account.delete({ where: { id: accountId } })
+  await db8.orm.public.Account.where({ id: accountId }).delete()
   redirect(`${SETTINGS}?ok=unlinked`)
 }
 
@@ -77,10 +77,9 @@ export async function updatePassword(formData: FormData) {
   const parsed = passwordSchema.safeParse(String(formData.get("password") ?? ""))
   if (!parsed.success) redirect(`${SETTINGS}?error=policy`)
 
-  const credential = await prisma.account.findFirst({
-    where: { userId: currentUser.id, providerId: "credential" },
-    select: { id: true },
-  })
+  const credential = await db8.orm.public.Account.select("id")
+    .where({ userId: currentUser.id, providerId: "credential" })
+    .first()
 
   // Changing an existing password requires proving you know the current one;
   // setting the first password doesn't (the live session is the proof). The
@@ -124,14 +123,10 @@ export async function deleteAccount(formData: FormData) {
   // visitor delete one would empty the showcase until the next reset.
   if (process.env.DEMO_MODE === "true") redirect(`${SETTINGS}?error=demo`)
 
-  const user = await prisma.user.findUnique({
-    where: { id: currentUser.id },
-    select: {
-      email: true,
-      role: true,
-      subscription: { select: { status: true, stripeSubscriptionId: true } },
-    },
-  })
+  const user = await db8.orm.public.User.select("email", "role")
+    .include("subscription", (s) => s.select("status", "stripeSubscriptionId"))
+    .where({ id: currentUser.id })
+    .first()
   if (!user) redirect("/login")
 
   // The address has to be typed back, so no single click can destroy an
@@ -145,11 +140,13 @@ export async function deleteAccount(formData: FormData) {
   // The same holds one level up: the last ROOT cannot remove themselves, or
   // nobody is left who can change roles. ROOT counts as an administrator too.
   if (isRoot(user.role)) {
-    const roots = await prisma.user.count({ where: { role: "ROOT" } })
-    if (roots <= 1) redirect(`${SETTINGS}?error=last-root`)
+    const roots = await db8.orm.public.User.where({ role: "ROOT" }).aggregate((a) => ({ n: a.count() }))
+    if (roots.n <= 1) redirect(`${SETTINGS}?error=last-root`)
   } else if (isAdmin(user.role)) {
-    const admins = await prisma.user.count({ where: { role: { in: ["ADMIN", "ROOT"] } } })
-    if (admins <= 1) redirect(`${SETTINGS}?error=last-admin`)
+    const admins = await db8.orm.public.User.where((u) => u.role.in(["ADMIN", "ROOT"])).aggregate((a) => ({
+      n: a.count(),
+    }))
+    if (admins.n <= 1) redirect(`${SETTINGS}?error=last-admin`)
   }
 
   // A live subscription is cancelled at Stripe before anything is deleted here,
@@ -177,7 +174,7 @@ export async function deleteAccount(formData: FormData) {
     }
   }
 
-  await prisma.user.delete({ where: { id: currentUser.id } })
+  await db8.orm.public.User.where({ id: currentUser.id }).delete()
   // The session rows go with the user (onDelete: Cascade), so this only clears
   // the cookie that now points at nothing.
   await auth.api.signOut({ headers: await headers() })

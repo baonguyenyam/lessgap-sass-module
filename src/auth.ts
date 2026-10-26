@@ -6,7 +6,7 @@ import { magicLink, twoFactor } from "better-auth/plugins"
 import { z } from "zod"
 import { nextCookies } from "better-auth/next-js"
 import type { BetterAuthPlugin } from "better-auth"
-import { prisma } from "@/lib/prisma"
+import { db8, uniqueIndexKey } from "@/lib/db8"
 import { authDb } from "@/lib/kysely"
 import { hashPassword, verifyPassword } from "@/lib/password"
 import { generateBackupCodes } from "@/lib/backup-codes"
@@ -56,8 +56,8 @@ const devLogin = () =>
           }
           if (ctx.body.password !== "dev") throw new APIError("UNAUTHORIZED")
 
-          const user = await prisma.user.upsert({
-            where: { email: "admin@dev.local" },
+          const row = await db8.orm.public.User.upsert({
+            conflictOn: uniqueIndexKey({ email: "admin@dev.local" }),
             update: {},
             create: {
               email: "admin@dev.local",
@@ -67,6 +67,10 @@ const devLogin = () =>
             },
           })
 
+          // Read back through the library, which returns the user in the shape
+          // its session cookie takes (dates as Date, not the column's text).
+          const user = await ctx.context.internalAdapter.findUserById(row.id)
+          if (!user) throw new APIError("INTERNAL_SERVER_ERROR")
           const session = await ctx.context.internalAdapter.createSession(user.id)
           await setSessionCookie(ctx, { session, user })
           return ctx.json({ ok: true })
@@ -97,8 +101,8 @@ const demoLogin = () =>
           const asAdmin = ctx.body.role === "admin"
           const email = asAdmin ? "demo-admin@example.com" : "demo-user@example.com"
 
-          const user = await prisma.user.upsert({
-            where: { email },
+          const row = await db8.orm.public.User.upsert({
+            conflictOn: uniqueIndexKey({ email }),
             // Re-assert the role on every sign-in: a previous visitor may have
             // promoted the shared user account from the admin panel. Reset the
             // checklist dismissal too, so every demo visitor sees "Get started".
@@ -111,6 +115,10 @@ const demoLogin = () =>
             },
           })
 
+          // Read back through the library, which returns the user in the shape
+          // its session cookie takes (dates as Date, not the column's text).
+          const user = await ctx.context.internalAdapter.findUserById(row.id)
+          if (!user) throw new APIError("INTERNAL_SERVER_ERROR")
           const session = await ctx.context.internalAdapter.createSession(user.id)
           await setSessionCookie(ctx, { session, user })
           return ctx.json({ ok: true })
@@ -295,10 +303,7 @@ export const auth = betterAuth({
       if (source.method !== "oauth" || source.action !== "link-account") return
       if (!user.email) return
 
-      const existing = await prisma.user.findUnique({
-        where: { email: user.email },
-        select: { id: true, twoFactorEnabled: true },
-      })
+      const existing = await db8.orm.public.User.select("id", "twoFactorEnabled").where({ email: user.email }).first()
       if (!existing) return
 
       // A session belonging to this same user means the request came from

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { stripe } from "@/lib/stripe"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
 import { CHECKOUT_BLOCKING_STATUSES, trialDaysFor } from "@/lib/billing"
 import { AUTOMATIC_TAX_PARAMS, checkStripeTax } from "@/lib/stripe-tax"
 import type Stripe from "stripe"
@@ -25,30 +25,24 @@ export async function POST(req: NextRequest) {
   // Stripe computes the amount server-side, so this isn't about underpaying;
   // it's intent + defense in depth. The webhook only grants a plan when the
   // price maps to a Plan row, so an unknown price would mean "paid for nothing".
-  const plan = await prisma.plan.findUnique({
-    where: { stripePriceId: priceId },
-    select: { id: true, interval: true, meterEventName: true, isActive: true, trialDays: true },
-  })
+  const plan = await db8.orm.public.Plan.select("id", "interval", "meterEventName", "isActive", "trialDays")
+    .where({ stripePriceId: priceId })
+    .first()
   if (!plan || !plan.isActive) {
     return NextResponse.json({ error: "Invalid price" }, { status: 400 })
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: currentUser.id },
-    select: {
-      stripeCustomerId: true,
-      email: true,
-      name: true,
-      subscription: { select: { status: true } },
-      purchases: { where: { status: "COMPLETED" }, select: { id: true }, take: 1 },
-    },
-  })
+  const user = await db8.orm.public.User.select("stripeCustomerId", "email", "name")
+    .include("subscription", (s) => s.select("status"))
+    .include("purchases", (p) => p.where({ status: "COMPLETED" }).select("id").limit(1))
+    .where({ id: currentUser.id })
+    .first()
 
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 })
   }
 
-  if ((user.purchases?.length ?? 0) > 0) {
+  if (user.purchases.length > 0) {
     return NextResponse.json({ error: "You already have lifetime access" }, { status: 400 })
   }
 
@@ -74,10 +68,7 @@ export async function POST(req: NextRequest) {
       metadata: { userId: currentUser.id },
     })
     customerId = customer.id
-    await prisma.user.update({
-      where: { id: currentUser.id },
-      data: { stripeCustomerId: customerId },
-    })
+    await db8.orm.public.User.where({ id: currentUser.id }).update({ stripeCustomerId: customerId })
   }
 
   const isOneTime = plan.interval === "ONE_TIME"

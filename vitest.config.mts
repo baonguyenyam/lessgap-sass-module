@@ -7,7 +7,7 @@ import path from "node:path"
  * pure parts of the scripts in scripts/, which run outside the build.
  *
  * Deliberately out of scope: anything that talks to an external service
- * (prisma.ts, stripe.ts, email.ts). Those need integration tests with a real
+ * (db8.ts, stripe.ts, email.ts). Those need integration tests with a real
  * client, not unit tests against a mock that only proves the mock works.
  */
 export default defineConfig({
@@ -27,7 +27,7 @@ export default defineConfig({
       include: ["src/lib/**/*.ts"],
       // Thin wrappers around external services: covering them means asserting
       // against a mock of Prisma, Stripe or Resend, which proves the mock works.
-      exclude: ["src/lib/prisma.ts", "src/lib/stripe.ts", "src/lib/email.ts"],
+      exclude: ["src/lib/db8.ts", "src/lib/stripe.ts", "src/lib/email.ts"],
     },
   },
   resolve: {

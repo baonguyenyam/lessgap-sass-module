@@ -3,7 +3,7 @@ import type Stripe from "stripe"
 
 // getEntitlement queries the database; importing the module must not construct
 // a real client just to read the constant below.
-vi.mock("@/lib/prisma", () => ({ prisma: {} }))
+vi.mock("@/lib/db8", () => ({ db8: {} }))
 
 const { CHECKOUT_BLOCKING_STATUSES, trialDaysFor, subscriptionDates, describeDiscount } = await import(
   "@/lib/billing"

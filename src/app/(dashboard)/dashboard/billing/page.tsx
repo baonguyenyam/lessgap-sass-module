@@ -1,6 +1,8 @@
 import { requireUser } from "@/lib/auth"
 import { getFormatter, getTranslations } from "next-intl/server"
-import { prisma } from "@/lib/prisma"
+import { and } from "@prisma/orm-postgres/orm-client"
+import { db8 } from "@/lib/db8"
+import { toDate } from "@/lib/timestamps"
 import { describeDiscount, getEntitlement, trialDaysFor, type DiscountSummary } from "@/lib/billing"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -48,10 +50,10 @@ export default async function BillingPage() {
   const format = await getFormatter()
   const currentUser = await requireUser()
 
-  const user = await prisma.user.findUnique({
-    where: { id: currentUser.id },
-    select: { stripeCustomerId: true, subscription: { select: { id: true } } },
-  })
+  const user = await db8.orm.public.User.select("stripeCustomerId")
+    .include("subscription", (s) => s.select("id"))
+    .where({ id: currentUser.id })
+    .first()
 
   const entitlement = await getEntitlement(currentUser.id)
   const purchase = entitlement.kind === "lifetime" ? entitlement.purchase : null
@@ -71,16 +73,12 @@ export default async function BillingPage() {
   // In demo mode the one-time plan is excluded too: the grid mirrors the
   // Starter / Pro / Enterprise triad of the demo landing.
   const isDemo = process.env.DEMO_MODE === "true"
+  const selfServe = db8.orm.public.Plan.where((p) => and(p.isActive.eq(true), p.meterEventName.isNull()))
   const planRows =
     entitlement.kind === "free"
-      ? await prisma.plan.findMany({
-        where: {
-          isActive: true,
-          meterEventName: null,
-          ...(isDemo ? { interval: { not: "ONE_TIME" as const } } : {}),
-        },
-        orderBy: { price: "asc" },
-      })
+      ? await (isDemo ? selfServe.where((p) => p.interval.neq("ONE_TIME")) : selfServe)
+        .orderBy((p) => p.price.asc())
+        .all()
       : []
   // Same rule as the checkout route, so a card only shows the trial a checkout
   // from it would really carry: a free user whose subscription was cancelled
@@ -102,17 +100,16 @@ export default async function BillingPage() {
     ? t("checkoutDisabledDemo")
     : t("checkoutDisabledStripe")
 
-  const longDate = (date: Date) =>
-    format.dateTime(new Date(date), { year: "numeric", month: "long", day: "numeric" })
+  const longDate = (date: Date) => format.dateTime(date, { year: "numeric", month: "long", day: "numeric" })
   const money = (amount: number, currency: string | null) =>
     format.number(amount / 100, { style: "currency", currency: (currency ?? "usd").toUpperCase() })
-  const renewalDate = subscription?.currentPeriodEnd ? longDate(subscription.currentPeriodEnd) : null
+  const renewalDate = subscription?.currentPeriodEnd ? longDate(toDate(subscription.currentPeriodEnd)) : null
   // trialEndsAt stays set after a trial is over, so the status decides.
   const trialEndDate =
     subscription?.status === "TRIALING" && subscription.trialEndsAt
-      ? longDate(subscription.trialEndsAt)
+      ? longDate(toDate(subscription.trialEndsAt))
       : null
-  const purchaseDate = purchase ? longDate(purchase.createdAt) : null
+  const purchaseDate = purchase ? longDate(toDate(purchase.createdAt)) : null
 
   const discountLines = discounts.map((d) => {
     const off =

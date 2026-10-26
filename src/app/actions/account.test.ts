@@ -1,5 +1,6 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest"
 import { APIError } from "better-auth/api"
+import type { Db8Mock } from "@/test/db8-mock"
 
 /**
  * Changing the address the account signs in with (2.2).
@@ -19,9 +20,6 @@ import { APIError } from "better-auth/api"
 const changeEmailApi = vi.fn()
 const getCurrentUser = vi.fn()
 const allowRateLimit = vi.fn()
-const findUser = vi.fn()
-const countUsers = vi.fn()
-const deleteUser = vi.fn()
 const cancelSubscription = vi.fn()
 
 vi.mock("@/auth", () => ({
@@ -34,15 +32,7 @@ vi.mock("@/auth", () => ({
 }))
 vi.mock("@/lib/auth", () => ({ getCurrentUser: () => getCurrentUser() }))
 vi.mock("next/headers", () => ({ headers: async () => new Headers() }))
-vi.mock("@/lib/prisma", () => ({
-  prisma: {
-    user: {
-      findUnique: (...a: unknown[]) => findUser(...a),
-      count: (...a: unknown[]) => countUsers(...a),
-      delete: (...a: unknown[]) => deleteUser(...a),
-    },
-  },
-}))
+vi.mock("@/lib/db8", async () => (await import("@/test/db8-mock")).createDb8Mock())
 vi.mock("@/lib/stripe", () => ({
   stripe: { subscriptions: { cancel: (...a: unknown[]) => cancelSubscription(...a) } },
 }))
@@ -54,6 +44,10 @@ vi.mock("next/navigation", () => ({
 }))
 
 const { changeEmail, deleteAccount } = await import("./account")
+const db = (await import("@/lib/db8")) as unknown as Db8Mock
+const findUser = db.fn("User.first")
+const countUsers = db.fn("User.aggregate")
+const deleteUser = db.fn("User.delete")
 
 async function redirectOf(run: () => Promise<unknown>): Promise<string> {
   try {
@@ -169,7 +163,7 @@ describe("deleteAccount", () => {
    */
   it("refuses the last admin before touching the subscription", async () => {
     findUser.mockResolvedValue({ email: "me@example.com", role: "ADMIN", subscription: live })
-    countUsers.mockResolvedValue(1)
+    countUsers.mockResolvedValue({ n: 1 })
     expect(await redirectOf(() => deleteAccount(confirm("me@example.com")))).toBe(
       "/dashboard/settings?error=last-admin"
     )
@@ -180,7 +174,7 @@ describe("deleteAccount", () => {
   it("refuses the last ROOT, whatever the number of admins", async () => {
     getCurrentUser.mockResolvedValue({ id: "u1", email: "me@example.com", role: "ROOT" })
     findUser.mockResolvedValue({ email: "me@example.com", role: "ROOT", subscription: live })
-    countUsers.mockResolvedValue(1)
+    countUsers.mockResolvedValue({ n: 1 })
     expect(await redirectOf(() => deleteAccount(confirm("me@example.com")))).toBe(
       "/dashboard/settings?error=last-root"
     )
@@ -190,10 +184,10 @@ describe("deleteAccount", () => {
 
   it("cancels a live subscription, then deletes, when another admin remains", async () => {
     findUser.mockResolvedValue({ email: "me@example.com", role: "ADMIN", subscription: live })
-    countUsers.mockResolvedValue(2)
+    countUsers.mockResolvedValue({ n: 2 })
     expect(await redirectOf(() => deleteAccount(confirm("ME@example.com")))).toBe("/")
     expect(cancelSubscription).toHaveBeenCalledWith("sub_1")
-    expect(deleteUser).toHaveBeenCalledWith({ where: { id: "u1" } })
+    expect(db.call("User.delete")?.chain).toEqual([["where", [{ id: "u1" }]]])
   })
 
   it("deletes nothing when Stripe refuses the cancel", async () => {

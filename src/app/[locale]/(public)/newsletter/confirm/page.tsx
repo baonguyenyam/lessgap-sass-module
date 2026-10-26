@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { getTranslations } from "next-intl/server"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
+import { nowTs, toDate } from "@/lib/timestamps"
 import { sendNewsletterWelcomeEmail, syncNewsletterContact } from "@/lib/email"
 import { siteConfig } from "@/config/site"
 
@@ -36,19 +37,19 @@ export default async function NewsletterConfirmPage({
   let state: "confirmed" | "expired" | "invalid" = "invalid"
 
   if (token) {
-    const sub = await prisma.newsletterSubscriber.findUnique({ where: { confirmToken: token } })
+    const sub = await db8.orm.public.NewsletterSubscriber.where({ confirmToken: token }).first()
     if (!sub) {
       state = "invalid"
     } else if (sub.confirmedAt && !sub.unsubscribedAt) {
       state = "confirmed" // already done: same happy page, no side effects
       // Server Component: reading the clock for the expiry window is intentional.
       // eslint-disable-next-line react-hooks/purity
-    } else if (Date.now() - sub.createdAt.getTime() > CONFIRM_WINDOW_MS) {
+    } else if (Date.now() - toDate(sub.createdAt).getTime() > CONFIRM_WINDOW_MS) {
       state = "expired"
     } else {
-      await prisma.newsletterSubscriber.update({
-        where: { id: sub.id },
-        data: { confirmedAt: sub.confirmedAt ?? new Date(), unsubscribedAt: null },
+      await db8.orm.public.NewsletterSubscriber.where({ id: sub.id }).update({
+        confirmedAt: sub.confirmedAt ?? nowTs(),
+        unsubscribedAt: null,
       })
       try {
         await syncNewsletterContact(sub.email)

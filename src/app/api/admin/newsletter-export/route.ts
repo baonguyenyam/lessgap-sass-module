@@ -1,5 +1,6 @@
 import { getCurrentUser } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
+import { toDate } from "@/lib/timestamps"
 import { isAdmin } from "@/lib/roles"
 
 /**
@@ -14,7 +15,7 @@ export async function GET() {
     return new Response("Forbidden", { status: 403 })
   }
 
-  const subs = await prisma.newsletterSubscriber.findMany({ orderBy: { createdAt: "asc" } })
+  const subs = await db8.orm.public.NewsletterSubscriber.orderBy((s) => s.createdAt.asc()).all()
 
   const esc = (value: string) => `"${value.replace(/"/g, '""')}"`
   const lines = ["email,source,requested_at,confirmed_at,unsubscribed_at"]
@@ -23,9 +24,9 @@ export async function GET() {
       [
         esc(s.email),
         esc(s.source),
-        s.createdAt.toISOString(),
-        s.confirmedAt?.toISOString() ?? "",
-        s.unsubscribedAt?.toISOString() ?? "",
+        toDate(s.createdAt).toISOString(),
+        toDate(s.confirmedAt)?.toISOString() ?? "",
+        toDate(s.unsubscribedAt)?.toISOString() ?? "",
       ].join(",")
     )
   }

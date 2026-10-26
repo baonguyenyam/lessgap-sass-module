@@ -1,6 +1,6 @@
 ---
 description: Prisma and PostgreSQL: schema, migrations, queries
-globs: prisma/**,src/lib/prisma.ts,src/app/actions/**,src/app/api/**
+globs: prisma/**,src/lib/db8.ts,src/app/actions/**,src/app/api/**
 alwaysApply: false
 ---
 

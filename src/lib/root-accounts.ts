@@ -1,4 +1,5 @@
-import type { PrismaClient } from "@/lib/prisma"
+import { and } from "@prisma/orm-postgres/orm-client"
+import { db8 } from "@/lib/db8"
 
 /**
  * ROOT is granted by configuration only (spec/adr/0014-root-role.md):
@@ -20,14 +21,11 @@ export function parseRootEmails(value: string | undefined): string[] {
 
 /** Promotes the users listed in ROOT_EMAILS to ROOT. Returns how many rows changed. */
 export async function grantRootFromConfig(
-  prisma: PrismaClient,
   env: Record<string, string | undefined> = process.env,
 ): Promise<number> {
   const emails = parseRootEmails(env.ROOT_EMAILS)
   if (emails.length === 0) return 0
-  const { count } = await prisma.user.updateMany({
-    where: { email: { in: emails }, role: { not: "ROOT" } },
-    data: { role: "ROOT" },
+  return db8.orm.public.User.where((u) => and(u.email.in(emails), u.role.neq("ROOT"))).updateAndCount({
+    role: "ROOT",
   })
-  return count
 }

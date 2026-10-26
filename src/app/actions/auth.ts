@@ -5,7 +5,7 @@ import { redirect } from "next/navigation"
 import { APIError } from "better-auth/api"
 import { z } from "zod"
 import { auth } from "@/auth"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
 import { passwordSchema } from "@/lib/password"
 import { checkRateLimit, rateLimitKeyFromIp } from "@/lib/rate-limit"
 import { BACKUP_CODE_LENGTH, normalizeBackupCode } from "@/lib/backup-codes"
@@ -88,10 +88,7 @@ export async function signInWithMagicLink(formData: FormData) {
   // account, or whether that account has 2FA. What replaces the explanation is
   // a line on the sign-in page, shown to everyone rather than to the accounts
   // it applies to.
-  const user = await prisma.user.findUnique({
-    where: { email: parsed.data },
-    select: { twoFactorEnabled: true },
-  })
+  const user = await db8.orm.public.User.select("twoFactorEnabled").where({ email: parsed.data }).first()
   if (!user?.twoFactorEnabled) {
     await auth.api.signInMagicLink({
       body: { email: parsed.data, callbackURL: "/dashboard" },
@@ -176,7 +173,7 @@ export async function registerUser(formData: FormData) {
   const { name, email, password } = parsed.data
   if (!(await checkRateLimit(`signup:${email}`, 3))) redirect("/signup?error=rate")
 
-  const existing = await prisma.user.findUnique({ where: { email } })
+  const existing = await db8.orm.public.User.select("id").where({ email }).first()
   // Nudge existing accounts to /login (they can add a password from Settings
   // or via the reset flow). Message stays generic about which methods exist.
   if (existing) redirect("/signup?error=exists")

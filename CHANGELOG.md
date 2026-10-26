@@ -7,6 +7,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.8.0] - 2026-10-26
+
+🧹 **One way to reach the database.** Every query now goes through the Prisma 8 client, `db8`, and the Prisma 7-shaped `@/lib/prisma` layer on top of it is gone. Nothing changes for visitors and there is nothing to migrate: `git pull`, `pnpm install`.
+
+### Added
+
+- **`@/lib/timestamps`**: `toDate`, `toTs` and `nowTs`, the one place a `TimestampString` column becomes a `Date` and back. Reading one with `new Date(value)` takes it as local time; these read it as UTC
+- **`uniqueIndexKey()` in `@/lib/db8`**: names a unique key for `upsert`, because the kit's unique keys are unique indexes and Prisma 8 only types unique constraints there
+- **`createDb8Mock()` in `src/test/db8-mock.ts`**: the stand-in for `db8` that the unit tests share
+
+### Changed
+
+- **Every page, action, route, seed and test uses `db8.orm.public.<Model>` directly**, including the Stripe webhook, checkout, the admin panel and the demo seed. `seedDemoData()` and `grantRootFromConfig()` no longer take a client argument
+- **The first-run setup notice recognises Prisma 8's errors**: it still matched the Prisma 7 codes `P1000`, `P1001` and `P1013`, which Prisma 8 never throws, so an unreachable database was reported as missing migrations
+
+### Removed
+
+- `src/lib/prisma.ts`. Lint now rejects `@/lib/prisma` everywhere
+
+### If you customised code that imports `@/lib/prisma`
+
+Rewrite those calls on `db8`: `prisma.user.findUnique({ where: { id } })` becomes `db8.orm.public.User.where({ id }).first()`, `count` becomes `.aggregate((a) => ({ n: a.count() }))`, `updateMany` becomes `.updateAndCount(...)`. Timestamps come back as text: wrap them in `toDate` before formatting or comparing, and write them with `toTs`.
+
 ## [2.7.0] - 2026-10-26
 
 🔀 **Switch As for ROOT, and one set of button styles.** ROOT can open a session as any user or admin to see the app as they do, with a banner and "Switch back". This is a MINOR with one step: `git pull`, `pnpm install`, `pnpm db:migrate` (the migration adds one nullable column).

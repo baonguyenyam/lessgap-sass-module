@@ -108,13 +108,13 @@ const examplePlans: {
 async function main() {
   // Imported after dotenv has run: src/lib/db8.ts reads DATABASE_URL while
   // its module initializes.
-  const { prisma } = await import("@/lib/prisma")
+  const { db8, uniqueIndexKey } = await import("@/lib/db8")
   const { grantRootFromConfig } = await import("@/lib/root-accounts")
   try {
     for (const plan of examplePlans) {
       const { slug, ...data } = plan
-      await prisma.plan.upsert({
-        where: { slug },
+      await db8.orm.public.Plan.upsert({
+        conflictOn: uniqueIndexKey({ slug }),
         // keep the Stripe price ID (and copy tweaks) in sync with env on re-seed
         update: {
           stripePriceId: data.stripePriceId,
@@ -127,10 +127,10 @@ async function main() {
     }
 
     console.log(`Seed complete: ${examplePlans.length} example plans upserted`)
-    const roots = await grantRootFromConfig(prisma)
+    const roots = await grantRootFromConfig()
     if (roots > 0) console.log(`ROOT granted to ${roots} account(s) from ROOT_EMAILS`)
   } finally {
-    await prisma.$disconnect()
+    await db8.close()
   }
 }
 

@@ -1,5 +1,8 @@
-import type { PrismaClient, SubscriptionStatus, BillingInterval } from "@/lib/prisma"
+import { not } from "@prisma/orm-postgres/orm-client"
+import { db8, uniqueIndexKey } from "@/lib/db8"
+import type { BillingInterval, SubscriptionStatus } from "@/lib/billing"
 import { hashPassword } from "./password"
+import { toTs } from "@/lib/timestamps"
 
 /**
  * The demo dataset, and the function that (re)writes it.
@@ -15,8 +18,8 @@ import { hashPassword } from "./password"
  */
 
 const DAY = 24 * 60 * 60 * 1000
-const daysAgo = (n: number) => new Date(Date.now() - n * DAY)
-const daysFromNow = (n: number) => new Date(Date.now() + n * DAY)
+const daysAgo = (n: number) => toTs(new Date(Date.now() - n * DAY))
+const daysFromNow = (n: number) => toTs(new Date(Date.now() + n * DAY))
 
 /**
  * Same `.env.example` contract as prisma/seed.ts: an unset variable arrives
@@ -152,13 +155,15 @@ export type DemoSeedResult = {
   projects: number
 }
 
-export async function seedDemoData(prisma: PrismaClient): Promise<DemoSeedResult> {
+export async function seedDemoData(): Promise<DemoSeedResult> {
+  const { Account, Plan, Project, Purchase, Subscription, User } = db8.orm.public
+
   // Plans first (same example plans as the regular seed)
   const planBySlug = new Map<string, { id: string; price: number }>()
   for (const plan of examplePlans) {
     const { slug, ...data } = plan
-    const row = await prisma.plan.upsert({
-      where: { slug },
+    const row = await Plan.upsert({
+      conflictOn: uniqueIndexKey({ slug }),
       // keep the Stripe price ID (and copy tweaks) in sync with env on re-seed
       update: {
         stripePriceId: data.stripePriceId,
@@ -175,54 +180,46 @@ export async function seedDemoData(prisma: PrismaClient): Promise<DemoSeedResult
   // accounts, sessions). Since 2.0 sessions are rows rather than cookies, so
   // this is also what signs out every visitor currently poking at the demo:
   // the cascade takes their session with the user it belonged to.
-  await prisma.user.deleteMany()
+  await User.where((u) => u.id.isNotNull()).deleteAndCount()
 
   // Now that no subscription points at a plan any more, anything else that
   // ended up in the plan table goes too. A demo database is a showcase: a stray
   // plan left behind by a script or an experiment shows up on the pricing page
   // next to the real ones, and nobody looking at it can tell which is which.
-  await prisma.plan.deleteMany({ where: { slug: { notIn: [...planBySlug.keys()] } } })
+  await Plan.where((p) => not(p.slug.in([...planBySlug.keys()]))).deleteAndCount()
 
   // The two shared demo accounts (the login buttons upsert these too)
-  await prisma.user.create({
-    data: {
-      email: "demo-user@example.com",
-      name: "Demo User",
-      // Required since 2.0. It defaults to false, so leaving it out would work
-      // and would quietly show every seeded account as unverified.
-      emailVerified: true,
-      role: "USER",
-      createdAt: daysAgo(10),
-    },
+  await User.create({
+    email: "demo-user@example.com",
+    name: "Demo User",
+    // Required since 2.0. It defaults to false, so leaving it out would work
+    // and would quietly show every seeded account as unverified.
+    emailVerified: true,
+    role: "USER",
+    createdAt: daysAgo(10),
   })
-  await prisma.user.create({
-    data: {
-      email: "demo-admin@example.com",
-      name: "Demo Admin",
-      emailVerified: true,
-      role: "ADMIN",
-      createdAt: daysAgo(90),
-    },
+  await User.create({
+    email: "demo-admin@example.com",
+    name: "Demo Admin",
+    emailVerified: true,
+    role: "ADMIN",
+    createdAt: daysAgo(90),
   })
 
   // lessGAP admin — a real credential account, so email+password sign-in works
   // on this deployment. bcrypt via the same helper the auth config uses.
-  const admin = await prisma.user.create({
-    data: {
-      email: "baonguyenyam@gmail.com",
-      name: "Bao Nguyen",
-      emailVerified: true,
-      role: "ADMIN",
-      createdAt: daysAgo(90),
-    },
+  const admin = await User.create({
+    email: "baonguyenyam@gmail.com",
+    name: "Bao Nguyen",
+    emailVerified: true,
+    role: "ADMIN",
+    createdAt: daysAgo(90),
   })
-  await prisma.account.create({
-    data: {
-      userId: admin.id,
-      providerId: "credential",
-      accountId: admin.id,
-      password: await hashPassword("adminadmin"),
-    },
+  await Account.create({
+    userId: admin.id,
+    providerId: "credential",
+    accountId: admin.id,
+    password: await hashPassword("adminadmin"),
   })
 
   // Fake population
@@ -230,29 +227,27 @@ export async function seedDemoData(prisma: PrismaClient): Promise<DemoSeedResult
   for (const fake of fakeUsers) {
     const createdAt = daysAgo(fake.signedUpDaysAgo)
     const hasBilling = Boolean(fake.plan || fake.lifetime)
-    const user = await prisma.user.create({
-      data: {
-        email: fake.email,
-        name: fake.name,
-        emailVerified: true,
-        role: "USER",
-        createdAt,
-        stripeCustomerId: hasBilling ? `cus_demo_${String(++customerCounter).padStart(3, "0")}` : null,
-        projects: {
-          create: fake.projects.map((name, i) => ({
-            name,
-            description: "Demo project (seeded data)",
-            createdAt: daysAgo(Math.max(fake.signedUpDaysAgo - 1 - i * 2, 0)),
-          })),
-        },
-      },
+    const user = await User.create({
+      email: fake.email,
+      name: fake.name,
+      emailVerified: true,
+      role: "USER",
+      createdAt,
+      stripeCustomerId: hasBilling ? `cus_demo_${String(++customerCounter).padStart(3, "0")}` : null,
     })
+    for (const [i, name] of fake.projects.entries()) {
+      await Project.create({
+        userId: user.id,
+        name,
+        description: "Demo project (seeded data)",
+        createdAt: daysAgo(Math.max(fake.signedUpDaysAgo - 1 - i * 2, 0)),
+      })
+    }
 
     if (fake.plan && fake.subStatus) {
       const plan = planBySlug.get(fake.plan)!
       const periodDays = fake.plan === "pro-yearly" ? 365 : 30
-      await prisma.subscription.create({
-        data: {
+      await Subscription.create({
           userId: user.id,
           planId: plan.id,
           stripeSubscriptionId: `sub_demo_${String(customerCounter).padStart(3, "0")}`,
@@ -267,31 +262,28 @@ export async function seedDemoData(prisma: PrismaClient): Promise<DemoSeedResult
           // During a trial Stripe ends the first period when the trial ends,
           // so the two dates are the same one.
           trialEndsAt: fake.subStatus === "TRIALING" ? daysFromNow(periodDays / 2) : null,
-        },
       })
     }
 
     if (fake.lifetime) {
       const plan = planBySlug.get("lifetime")!
-      await prisma.purchase.create({
-        data: {
+      await Purchase.create({
           userId: user.id,
           planId: plan.id,
           stripePaymentIntentId: `pi_demo_${String(customerCounter).padStart(3, "0")}`,
           stripeCheckoutSessionId: `cs_demo_${String(customerCounter).padStart(3, "0")}`,
           amount: plan.price,
           createdAt: daysAgo(Math.max(fake.signedUpDaysAgo - 2, 0)),
-        },
       })
     }
   }
 
   const [users, subscriptions, purchases, projects] = await Promise.all([
-    prisma.user.count(),
-    prisma.subscription.count(),
-    prisma.purchase.count(),
-    prisma.project.count(),
+    User.aggregate((a) => ({ n: a.count() })),
+    Subscription.aggregate((a) => ({ n: a.count() })),
+    Purchase.aggregate((a) => ({ n: a.count() })),
+    Project.aggregate((a) => ({ n: a.count() })),
   ])
 
-  return { users, subscriptions, purchases, projects }
+  return { users: users.n, subscriptions: subscriptions.n, purchases: purchases.n, projects: projects.n }
 }

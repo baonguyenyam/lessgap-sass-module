@@ -1,7 +1,7 @@
 "use server"
 
 import { getCurrentUser } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { getTranslations } from "next-intl/server"
@@ -42,12 +42,10 @@ export async function createProject(
     return { error: result.error.issues[0].message }
   }
 
-  await prisma.project.create({
-    data: {
-      name: result.data.name,
-      description: result.data.description ?? null,
-      userId: user.id,
-    },
+  await db8.orm.public.Project.create({
+    name: result.data.name,
+    description: result.data.description ?? null,
+    userId: user.id,
   })
 
   revalidatePath("/dashboard/projects")
@@ -73,17 +71,14 @@ export async function updateProject(
   }
 
   // Ownership check — never trust the client-supplied id.
-  const existing = await prisma.project.findUnique({ where: { id } })
+  const existing = await db8.orm.public.Project.where({ id }).first()
   if (!existing || existing.userId !== user.id) {
     return { error: t("projectNotFound") }
   }
 
-  await prisma.project.update({
-    where: { id },
-    data: {
-      name: result.data.name,
-      description: result.data.description ?? null,
-    },
+  await db8.orm.public.Project.where({ id }).update({
+    name: result.data.name,
+    description: result.data.description ?? null,
   })
 
   revalidatePath("/dashboard/projects")
@@ -98,10 +93,10 @@ export async function deleteProject(formData: FormData): Promise<void> {
   const id = String(formData.get("id") ?? "")
 
   // Ownership check — only delete a project that belongs to the current user.
-  const existing = await prisma.project.findUnique({ where: { id } })
+  const existing = await db8.orm.public.Project.where({ id }).first()
   if (!existing || existing.userId !== user.id) return
 
-  await prisma.project.delete({ where: { id } })
+  await db8.orm.public.Project.where({ id }).delete()
 
   revalidatePath("/dashboard/projects")
   revalidatePath("/dashboard")

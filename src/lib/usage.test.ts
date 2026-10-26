@@ -1,23 +1,23 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
+import type { Db8Mock } from "@/test/db8-mock"
 
-const findUnique = vi.fn()
 const createMeterEvent = vi.fn()
 
-vi.mock("@/lib/prisma", () => ({
-  prisma: { user: { findUnique: (...args: unknown[]) => findUnique(...args) } },
-}))
+vi.mock("@/lib/db8", async () => (await import("@/test/db8-mock")).createDb8Mock())
 vi.mock("@/lib/stripe", () => ({
   stripe: { billing: { meterEvents: { create: (...args: unknown[]) => createMeterEvent(...args) } } },
 }))
 
 const { recordUsage } = await import("./usage")
+const db = (await import("@/lib/db8")) as unknown as Db8Mock
+const findUser = db.fn("User.first")
 
-const withCustomer = (id: string | null) => findUnique.mockResolvedValue({ stripeCustomerId: id })
+const withCustomer = (id: string | null) => findUser.mockResolvedValue({ stripeCustomerId: id })
 
 beforeEach(() => {
   vi.stubEnv("STRIPE_SECRET_KEY", "sk_test_123")
   vi.spyOn(console, "warn").mockImplementation(() => {})
-  findUnique.mockReset()
+  db.reset()
   createMeterEvent.mockReset()
   createMeterEvent.mockResolvedValue({ id: "mbe_1" })
   withCustomer("cus_123")
@@ -32,10 +32,10 @@ describe("recordUsage", () => {
   it("reports the event against the user's Stripe customer", async () => {
     await expect(recordUsage("u1", "api_request")).resolves.toEqual({ id: "mbe_1" })
 
-    expect(findUnique).toHaveBeenCalledWith({
-      where: { id: "u1" },
-      select: { stripeCustomerId: true },
-    })
+    expect(db.call("User.first")?.chain).toEqual([
+      ["select", ["stripeCustomerId"]],
+      ["where", [{ id: "u1" }]],
+    ])
     expect(createMeterEvent).toHaveBeenCalledWith({
       event_name: "api_request",
       payload: { stripe_customer_id: "cus_123", value: "1" },
@@ -67,7 +67,7 @@ describe("recordUsage", () => {
     vi.stubEnv("STRIPE_SECRET_KEY", "")
 
     await expect(recordUsage("u1", "api_request")).resolves.toBeNull()
-    expect(findUnique).not.toHaveBeenCalled()
+    expect(findUser).not.toHaveBeenCalled()
     expect(createMeterEvent).not.toHaveBeenCalled()
   })
 
@@ -79,7 +79,7 @@ describe("recordUsage", () => {
   })
 
   it("drops the event when the user does not exist", async () => {
-    findUnique.mockResolvedValue(null)
+    findUser.mockResolvedValue(null)
 
     await expect(recordUsage("u1", "api_request")).resolves.toBeNull()
     expect(createMeterEvent).not.toHaveBeenCalled()

@@ -13,7 +13,7 @@ check `node_modules/next/dist/docs/` before relying on what you remember.
 - Fetch data on the server (in the page, layout or a server function), not in a
   client `useEffect`.
 - Route `params` and `searchParams` are Promises: `const { locale } = await params`.
-- Never import server-only modules (`@/lib/prisma`, `@/lib/stripe`, secrets,
+- Never import server-only modules (`@/lib/db8`, `@/lib/stripe`, secrets,
   `next/headers`) into a file marked `"use client"`.
 
 ## Server actions

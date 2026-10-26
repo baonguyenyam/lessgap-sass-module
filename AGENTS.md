@@ -238,10 +238,11 @@ training data about Prisma is older than it.
   `pnpm db:plan`, never written by hand except the holes the planner leaves
   (data transforms). The `db` ref in `migrations/app/refs/` must point at the
   newest migration's `to` hash after every plan.
-- Runtime client: `db8` from `@/lib/db8` (`db8.orm.public.<Model>`, `db8.sql`).
-  `@/lib/prisma` is a compatibility layer with the old call shape over `db8`,
-  kept for the kit code that already uses it. It is frozen: do not add to it,
-  and do not import it from new code; new code uses `db8` directly.
+- Runtime client: `db8` from `@/lib/db8` (`db8.orm.public.<Model>`, `db8.sql`),
+  everywhere. Timestamp columns are `TimestampString` text: read them with
+  `toDate` and write them with `toTs` / `nowTs` from `@/lib/timestamps`, never
+  `new Date(row.createdAt)` (that parses as local time). Unit tests mock it with
+  `createDb8Mock()` from `@/test/db8-mock`.
 - Better Auth talks to Postgres through its own Kysely pool (`src/lib/kysely.ts`),
   not through the ORM.
 

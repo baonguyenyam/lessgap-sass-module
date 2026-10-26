@@ -254,7 +254,7 @@ src/
 │   └── admin/             # Admin components
 ├── lib/
 │   ├── db8.ts             # Prisma ORM 8 client (db8.orm / db8.sql)
-│   ├── prisma.ts          # compatibility layer over db8 for existing kit code
+│   ├── timestamps.ts      # toDate / toTs for the TimestampString columns
 │   ├── stripe.ts          # Stripe client (lazy proxy)
 │   ├── email.ts           # Resend email helpers
 │   └── utils.ts           # cn() utility

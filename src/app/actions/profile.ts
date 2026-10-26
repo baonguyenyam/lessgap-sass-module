@@ -1,7 +1,7 @@
 "use server"
 
 import { getCurrentUser } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
 import { revalidatePath } from "next/cache"
 import { getTranslations } from "next-intl/server"
 import { z } from "zod"
@@ -30,10 +30,7 @@ export async function updateProfile(
     return { error: result.error.issues[0].message }
   }
 
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { name: result.data.name },
-  })
+  await db8.orm.public.User.where({ id: user.id }).update({ name: result.data.name })
 
   revalidatePath("/dashboard")
   revalidatePath("/dashboard/settings")

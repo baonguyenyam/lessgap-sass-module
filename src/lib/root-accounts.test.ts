@@ -1,6 +1,12 @@
-import { describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
+import type { Db8Mock } from "@/test/db8-mock"
 
-import { grantRootFromConfig, parseRootEmails } from "./root-accounts"
+vi.mock("@/lib/db8", async () => (await import("@/test/db8-mock")).createDb8Mock())
+
+const { grantRootFromConfig, parseRootEmails } = await import("./root-accounts")
+const db = (await import("@/lib/db8")) as unknown as Db8Mock
+
+beforeEach(() => db.reset())
 
 describe("parseRootEmails", () => {
   it("splits, trims, lowercases and de-duplicates", () => {
@@ -18,18 +24,13 @@ describe("parseRootEmails", () => {
 
 describe("grantRootFromConfig", () => {
   it("promotes the listed users that are not ROOT yet", async () => {
-    const updateMany = vi.fn().mockResolvedValue({ count: 1 })
-    const prisma = { user: { updateMany } } as never
-    await expect(grantRootFromConfig(prisma, { ROOT_EMAILS: "Root@example.com" })).resolves.toBe(1)
-    expect(updateMany).toHaveBeenCalledWith({
-      where: { email: { in: ["root@example.com"] }, role: { not: "ROOT" } },
-      data: { role: "ROOT" },
-    })
+    db.fn("User.updateAndCount").mockResolvedValue(1)
+    await expect(grantRootFromConfig({ ROOT_EMAILS: "Root@example.com" })).resolves.toBe(1)
+    expect(db.call("User.updateAndCount")?.args).toEqual([{ role: "ROOT" }])
   })
 
   it("touches nothing when no address is configured", async () => {
-    const updateMany = vi.fn()
-    await expect(grantRootFromConfig({ user: { updateMany } } as never, {})).resolves.toBe(0)
-    expect(updateMany).not.toHaveBeenCalled()
+    await expect(grantRootFromConfig({})).resolves.toBe(0)
+    expect(db.calls).toEqual([])
   })
 })

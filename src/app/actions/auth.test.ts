@@ -1,5 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from "vitest"
 import { APIError } from "better-auth/api"
+import type { Db8Mock } from "@/test/db8-mock"
 
 /**
  * The sign-in branches that two-factor authentication added (2.2).
@@ -16,7 +17,6 @@ const signInEmail = vi.fn()
 const signInMagicLink = vi.fn()
 const verifyTOTP = vi.fn()
 const verifyBackupCode = vi.fn()
-const findUnique = vi.fn()
 const allowRateLimit = vi.fn()
 
 vi.mock("@/auth", () => ({
@@ -30,9 +30,7 @@ vi.mock("@/auth", () => ({
   },
 }))
 vi.mock("next/headers", () => ({ headers: async () => new Headers() }))
-vi.mock("@/lib/prisma", () => ({
-  prisma: { user: { findUnique: (...a: unknown[]) => findUnique(...a) } },
-}))
+vi.mock("@/lib/db8", async () => (await import("@/test/db8-mock")).createDb8Mock())
 vi.mock("@/lib/rate-limit", () => ({
   checkRateLimit: () => allowRateLimit(),
   rateLimitKeyFromIp: async (scope: string) => `${scope}:test`,
@@ -52,6 +50,8 @@ const {
   verifyTwoFactorCode,
   verifyTwoFactorBackupCode,
 } = await import("./auth")
+const db = (await import("@/lib/db8")) as unknown as Db8Mock
+const findUnique = db.fn("User.first")
 
 /** Runs the action and returns the path it redirected to. */
 async function redirectOf(run: () => Promise<unknown>): Promise<string> {

@@ -1,7 +1,9 @@
 import { getCurrentUser } from "@/lib/auth"
 import { getFormatter, getTranslations } from "next-intl/server"
 import { redirect } from "next/navigation"
-import { prisma } from "@/lib/prisma"
+import { and } from "@prisma/orm-postgres/orm-client"
+import { db8 } from "@/lib/db8"
+import { toDate } from "@/lib/timestamps"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,7 +13,7 @@ import { UserRoleButton } from "@/components/admin/user-role-button"
 import { SwitchAsButton } from "@/components/admin/switch-as-button"
 import { isAdmin } from "@/lib/roles"
 import { RevenueChart } from "@/components/admin/revenue-chart"
-import { mrrHistory, monthlyEquivalent, type MrrSubscription } from "@/lib/metrics"
+import { mrrHistory, monthlyEquivalent } from "@/lib/metrics"
 
 const ITEMS_PER_PAGE = 20
 
@@ -19,8 +21,8 @@ const ITEMS_PER_PAGE = 20
 // scope, so it cannot reach the request locale on its own.
 type Formatter = Awaited<ReturnType<typeof getFormatter>>
 
-function formatJoined(format: Formatter, date: Date) {
-  return format.dateTime(new Date(date), {
+function formatJoined(format: Formatter, date: string) {
+  return format.dateTime(toDate(date), {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -47,37 +49,39 @@ function UserAvatar({
 }
 
 async function getAdminData(page: number, search: string) {
-  const where = search
-    ? { email: { contains: search, mode: "insensitive" as const } }
-    : {}
+  const { NewsletterSubscriber, Subscription, User } = db8.orm.public
+  const matching = search ? User.where((u) => u.email.ilike(`%${search}%`)) : User
 
   const [totalUsers, allSubscriptions, users, waitlistConfirmed, waitlistPending, waitlistRecent] =
     await Promise.all([
-      prisma.user.count(),
+      User.aggregate((a) => ({ n: a.count() })).then((r) => r.n),
       // Every subscription, not just the active ones: the chart needs the rows
       // that have since churned to show the revenue they produced while they
       // were running. The active-only figures below are derived from the same
       // result, so the page still makes a single query for all of them.
-      prisma.subscription.findMany({
-        include: { plan: true },
-      }),
-      prisma.user.findMany({
-        where,
-        include: { subscription: { include: { plan: true } } },
-        orderBy: { createdAt: "desc" },
-        skip: (page - 1) * ITEMS_PER_PAGE,
-        take: ITEMS_PER_PAGE,
-      }),
-      prisma.newsletterSubscriber.count({ where: { confirmedAt: { not: null }, unsubscribedAt: null } }),
-      prisma.newsletterSubscriber.count({ where: { confirmedAt: null, unsubscribedAt: null } }),
-      prisma.newsletterSubscriber.findMany({ orderBy: { createdAt: "desc" }, take: 8 }),
+      Subscription.include("plan").all(),
+      matching
+        .include("subscription", (s) => s.include("plan"))
+        .orderBy((u) => u.createdAt.desc())
+        .offset((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE)
+        .all(),
+      NewsletterSubscriber.where((n) => and(n.confirmedAt.isNotNull(), n.unsubscribedAt.isNull()))
+        .aggregate((a) => ({ n: a.count() }))
+        .then((r) => r.n),
+      NewsletterSubscriber.where((n) => and(n.confirmedAt.isNull(), n.unsubscribedAt.isNull()))
+        .aggregate((a) => ({ n: a.count() }))
+        .then((r) => r.n),
+      NewsletterSubscriber.orderBy((n) => n.createdAt.desc()).limit(8).all(),
     ])
 
   const totalFiltered = search ? users.length : totalUsers
 
   const activeSubscriptions = allSubscriptions.filter((sub) => sub.status === "ACTIVE")
-  const mrr = activeSubscriptions.reduce((sum, sub) => sum + monthlyEquivalent(sub.plan!), 0)
-  const revenue = mrrHistory(allSubscriptions as MrrSubscription[])
+  const mrr = activeSubscriptions.reduce((sum, sub) => sum + monthlyEquivalent(sub.plan), 0)
+  const revenue = mrrHistory(
+    allSubscriptions.map((sub) => ({ ...sub, createdAt: toDate(sub.createdAt), updatedAt: toDate(sub.updatedAt) }))
+  )
 
   return {
     totalUsers,

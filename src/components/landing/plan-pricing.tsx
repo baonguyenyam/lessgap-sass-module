@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server"
-import { prisma } from "@/lib/prisma"
+import { and } from "@prisma/orm-postgres/orm-client"
+import { db8 } from "@/lib/db8"
 import { jsonLdScript } from "@/lib/json-ld"
 import { softwareApplicationJsonLd } from "@/lib/pricing-jsonld"
 import { PlanCards, type PlanCardData } from "@/components/billing/plan-cards"
@@ -31,10 +32,11 @@ export async function PlanPricing({
 
   // Metered plans stay docs-only; one-time plans (Lifetime) live on the
   // billing page, the landing shows the classic recurring triad.
-  const planRows = await prisma.plan.findMany({
-    where: { isActive: true, meterEventName: null, interval: { not: "ONE_TIME" } },
-    orderBy: { price: "asc" },
-  })
+  const planRows = await db8.orm.public.Plan.where((p) =>
+    and(p.isActive.eq(true), p.meterEventName.isNull(), p.interval.neq("ONE_TIME"))
+  )
+    .orderBy((p) => p.price.asc())
+    .all()
   if (planRows.length === 0) return null
 
   const plans: PlanCardData[] = planRows.map((p) => ({

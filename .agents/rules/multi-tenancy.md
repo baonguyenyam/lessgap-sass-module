@@ -6,9 +6,9 @@ Applies to everything under `src/platform/`, `src/modules/`, `src/app/(dashboard
 A record shown to the wrong tenant is the worst defect this product can have.
 These rules exist so that it cannot happen by forgetting one `where`.
 
-- **Tenant data goes through `tenantDb(ctx)`.** The raw `prisma` client is for
+- **Tenant data goes through `tenantDb(ctx)`.** The raw `db8` client is for
   `src/platform/` and migrations only. A module service that imports
-  `@/lib/prisma` is wrong even if every query has a `tenantId`.
+  `@/lib/db8` is wrong even if every query has a `tenantId`.
 - **Services take `TenantContext` first** and never read the session, the
   host or the URL themselves. Build the context with `requireTenantMember`
   (dashboard), `getSiteContext` (public site) or a `system` context from a

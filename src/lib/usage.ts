@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
 
 const usageSchema = z.object({
   userId: z.string().min(1),
@@ -37,10 +37,7 @@ export async function recordUsage(
     return null
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: parsed.userId },
-    select: { stripeCustomerId: true },
-  })
+  const user = await db8.orm.public.User.select("stripeCustomerId").where({ id: parsed.userId }).first()
   if (!user?.stripeCustomerId) {
     console.warn(`recordUsage: user ${parsed.userId} has no Stripe customer, usage event dropped`)
     return null

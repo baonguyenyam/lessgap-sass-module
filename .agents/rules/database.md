@@ -1,8 +1,7 @@
 # Database (Prisma ORM 8 + PostgreSQL)
 
 Applies to `prisma/`, `migrations/`, `src/generated/prisma8/`, `src/lib/db8.ts`,
-`src/lib/prisma.ts`, `src/platform/db.ts`, `scripts/backfills/` and any code that
-queries. Full standard: `spec/12-migrations-and-data.md`. Reference for the
+`src/platform/db.ts`, `scripts/backfills/` and any code that queries. Full standard: `spec/12-migrations-and-data.md`. Reference for the
 installed Prisma version: the `prisma-8` skill (`.claude/skills/prisma-8/`);
 read its routing table and the reference for the task before writing code.
 
@@ -21,10 +20,12 @@ read its routing table and the reference for the task before writing code.
   migration, never `--from @empty` except for a deliberate baseline.
 - Runtime: `db8` from `@/lib/db8` in new code (`db8.orm.public.<Model>` for
   the ORM, `db8.sql` for the query builder, `db8.raw.sql` only when neither can
-  express it, always as a tagged template). `@/lib/prisma` is a frozen
-  compatibility layer for existing kit code: do not extend it or import it
-  from new code. `tenantDb(ctx)` in module code once it exists (phase 1), and
-  the platform client only inside `src/platform/`.
+  express it, always as a tagged template). `tenantDb(ctx)` in module code once
+  it exists (phase 1), and the platform client only inside `src/platform/`.
+- Timestamps are `TimestampString` text ("YYYY-MM-DD HH:mm:ss.SSS", UTC):
+  `toDate` / `toTs` / `nowTs` from `@/lib/timestamps`, never `new Date(value)`.
+- The kit's unique keys are unique indexes, which `upsert`'s `conflictOn` does
+  not type: wrap the key in `uniqueIndexKey({ ... })` from `@/lib/db8`.
 - Every tenant-owned table: `tenantId`, an index starting with `tenantId`,
   per-tenant uniques, RLS declared in the contract, and a classification entry.
   Same change.

@@ -1,9 +1,11 @@
-import { prisma } from "@/lib/prisma"
-import type { BillingInterval, Plan, Purchase, Subscription } from "@/lib/prisma"
+import { db8, type Row } from "@/lib/db8"
 import type Stripe from "stripe"
 
-export type PurchaseWithPlan = Purchase & { plan: Plan }
-export type SubscriptionWithPlan = Subscription & { plan: Plan }
+export type Plan = Row<"Plan">
+export type BillingInterval = Plan["interval"]
+export type SubscriptionStatus = Row<"Subscription">["status"]
+export type PurchaseWithPlan = Row<"Purchase"> & { plan: Plan }
+export type SubscriptionWithPlan = Row<"Subscription"> & { plan: Plan }
 
 // The user's current billing state, most privileged first. A lifetime purchase
 // outranks a subscription; when both exist the subscription is still surfaced
@@ -16,15 +18,11 @@ export type Entitlement =
 
 export async function getEntitlement(userId: string): Promise<Entitlement> {
   const [purchase, subscription] = await Promise.all([
-    prisma.purchase.findFirst({
-      where: { userId, status: "COMPLETED" },
-      orderBy: { createdAt: "desc" },
-      include: { plan: true },
-    }),
-    prisma.subscription.findUnique({
-      where: { userId },
-      include: { plan: true },
-    }),
+    db8.orm.public.Purchase.where({ userId, status: "COMPLETED" })
+      .orderBy((p) => p.createdAt.desc())
+      .include("plan")
+      .first(),
+    db8.orm.public.Subscription.where({ userId }).include("plan").first(),
   ])
 
   // A subscription only counts while Stripe still manages it (same statuses

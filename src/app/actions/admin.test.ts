@@ -1,27 +1,27 @@
 import { describe, expect, it, vi, beforeEach } from "vitest"
+import type { Db8Mock } from "@/test/db8-mock"
 
 const session = vi.fn()
-const updateMany = vi.fn()
 
 // The library moved: what used to be `auth()` is `auth.api.getSession()`.
 // Only the shape of the mock changes. Every assertion below is the one the
 // 1.7 suite made, because the boundary still returns the same five fields.
 vi.mock("@/auth", () => ({ auth: { api: { getSession: () => session() } } }))
 vi.mock("next/headers", () => ({ headers: async () => new Headers() }))
-vi.mock("@/lib/prisma", () => ({
-  prisma: { user: { updateMany: (...args: unknown[]) => updateMany(...args) } },
-}))
+vi.mock("@/lib/db8", async () => (await import("@/test/db8-mock")).createDb8Mock())
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }))
 
 const { setUserRole } = await import("./admin")
+const db = (await import("@/lib/db8")) as unknown as Db8Mock
+const updateMany = db.fn("User.updateAndCount")
 
 // Only ROOT changes roles (spec/adr/0014-root-role.md).
 const asRoot = () => session.mockResolvedValue({ user: { id: "root-1", role: "ROOT" } })
 
 beforeEach(() => {
   session.mockReset()
-  updateMany.mockReset()
-  updateMany.mockResolvedValue({ count: 1 })
+  db.reset()
+  updateMany.mockResolvedValue(1)
 })
 
 describe("setUserRole", () => {
@@ -55,9 +55,9 @@ describe("setUserRole", () => {
   it("promotes when the row still holds the role the admin was looking at", async () => {
     asRoot()
     await expect(setUserRole("u1", "ADMIN", "USER")).resolves.toEqual({ role: "ADMIN" })
-    expect(updateMany).toHaveBeenCalledWith({
-      where: { id: "u1", role: "USER" },
-      data: { role: "ADMIN" },
+    expect(db.call("User.updateAndCount")).toMatchObject({
+      chain: [["where", [{ id: "u1", role: "USER" }]]],
+      args: [{ role: "ADMIN" }],
     })
   })
 
@@ -69,7 +69,7 @@ describe("setUserRole", () => {
    */
   it("refuses instead of demoting when the role moved under a stale page", async () => {
     asRoot()
-    updateMany.mockResolvedValue({ count: 0 })
+    updateMany.mockResolvedValue(0)
     await expect(setUserRole("u1", "ADMIN", "USER")).rejects.toThrow(/changed since/)
   })
 
@@ -84,9 +84,9 @@ describe("setUserRole", () => {
     // that is the whole difference from the toggle this replaced.
     asRoot()
     await setUserRole("u1", "USER", "ADMIN")
-    expect(updateMany).toHaveBeenCalledWith({
-      where: { id: "u1", role: "ADMIN" },
-      data: { role: "USER" },
+    expect(db.call("User.updateAndCount")).toMatchObject({
+      chain: [["where", [{ id: "u1", role: "ADMIN" }]]],
+      args: [{ role: "USER" }],
     })
   })
 })

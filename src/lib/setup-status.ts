@@ -1,5 +1,3 @@
-import { prisma } from "@/lib/prisma"
-
 /**
  * What the first run is still missing, so the public pages can say it instead
  * of failing. The landing and the pricing page read their plans from the
@@ -14,13 +12,14 @@ export type SetupStep = "database-url" | "database-unreachable" | "migrations"
 
 /**
  * Maps the failure of the first cheap query onto the step that fixes it.
- * P1000 (authentication failed), P1001 (server unreachable) and P1013 (the
- * URL itself is malformed) are about the connection; anything else at this
- * point means the connection worked and the tables are not there yet.
+ * Prisma 8 reports a server it cannot reach (or a refused login) as an error
+ * caused by a `SqlConnectionError`, and a URL that is not one as
+ * `RUNTIME.BINDING_INVALID`; anything else at this point means the
+ * connection worked and the tables are not there yet.
  */
 export function stepFromError(error: unknown): SetupStep {
-  const code = (error as { code?: string } | null)?.code
-  return code === "P1000" || code === "P1001" || code === "P1013"
+  const e = error as { code?: string; cause?: { name?: string } } | null
+  return e?.code === "RUNTIME.BINDING_INVALID" || e?.cause?.name === "SqlConnectionError"
     ? "database-unreachable"
     : "migrations"
 }
@@ -30,7 +29,9 @@ export async function pendingSetup(): Promise<SetupStep | null> {
   if (process.env.NODE_ENV === "production") return null
   if (!process.env.DATABASE_URL) return "database-url"
   try {
-    await prisma.plan.count()
+    // Imported here: a malformed DATABASE_URL throws while the client is built.
+    const { db8 } = await import("@/lib/db8")
+    await db8.orm.public.Plan.aggregate((a) => ({ n: a.count() }))
     return null
   } catch (error) {
     return stepFromError(error)

@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
 import { seedDemoData } from "@/lib/demo-seed"
 
 export const dynamic = "force-dynamic"
@@ -46,7 +45,7 @@ export async function GET(request: Request) {
 
   const startedAt = Date.now()
   try {
-    const counts = await seedDemoData(prisma)
+    const counts = await seedDemoData()
     return NextResponse.json({
       status: "ok",
       resetAt: new Date().toISOString(),

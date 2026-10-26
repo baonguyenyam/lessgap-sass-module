@@ -6,6 +6,8 @@ import nextTs from "eslint-config-next/typescript";
 const PRISMA_7 = [
   { name: "@prisma/client", message: "Prisma 7 is gone. Use db8 from @/lib/db8 (Prisma ORM 8)." },
   { name: "@prisma/adapter-pg", message: "Prisma 7 is gone. Use db8 from @/lib/db8 (Prisma ORM 8)." },
+  // The Prisma 7-shaped facade over db8, removed in 2.8.0.
+  { name: "@/lib/prisma", message: 'Removed. Use the Prisma 8 client: import { db8 } from "@/lib/db8".' },
 ]
 const PRISMA_7_PATTERNS = [{ group: ["@prisma/prisma7", "@prisma/prisma7/*"], message: "Prisma 7 is gone." }]
 
@@ -23,11 +25,6 @@ const ID_PATTERNS = [{ group: ["uniku", "uniku/*"], message: "Make identifiers w
 const NO_RANDOM_UUID = {
   selector: "CallExpression[callee.property.name='randomUUID']",
   message: "Make identifiers with @/lib/ids (newTimeId for a UUID).",
-}
-
-const LEGACY_FACADE = {
-  name: "@/lib/prisma",
-  message: 'New code uses the Prisma 8 client: import { db8 } from "@/lib/db8" (tenantDb(ctx) in modules from phase 1).',
 }
 
 const eslintConfig = defineConfig([
@@ -65,20 +62,6 @@ const eslintConfig = defineConfig([
         { paths: [...PRISMA_7, ...ID_LIBRARIES], patterns: [...NO_PARENT, ...PRISMA_7_PATTERNS, ...ID_PATTERNS] },
       ],
       "no-restricted-syntax": ["error", NO_RANDOM_UUID],
-    },
-  },
-  // New code talks to the Prisma 8 client directly: `@/lib/prisma` is a
-  // frozen compatibility layer for kit code that already used it.
-  {
-    files: ["src/platform/**", "src/modules/**", "src/themes/**", "src/verticals/**", "tests/**"],
-    rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          paths: [...PRISMA_7, ...ID_LIBRARIES, LEGACY_FACADE],
-          patterns: [...NO_PARENT, ...PRISMA_7_PATTERNS, ...ID_PATTERNS],
-        },
-      ],
     },
   },
   // The one file allowed to import the generators.

@@ -1,7 +1,8 @@
 import { requireUser } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { getFormatter, getTranslations } from "next-intl/server"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
+import { toDate } from "@/lib/timestamps"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
@@ -73,25 +74,18 @@ export async function SettingsView({
   const code = error ?? ok ?? ""
   const message = code in MESSAGE_IS_ERROR ? { text: t(`messages.${code}`), error: MESSAGE_IS_ERROR[code] } : null
 
-  const user = await prisma.user.findUnique({
-    where: { id: currentUser.id },
-    select: {
-      name: true,
-      email: true,
-      image: true,
-      createdAt: true,
-      twoFactorEnabled: true,
-      accounts: { select: { id: true, providerId: true } },
-    },
-  })
+  const user = await db8.orm.public.User.select("name", "email", "image", "createdAt", "twoFactorEnabled")
+    .include("accounts", (a) => a.select("id", "providerId"))
+    .where({ id: currentUser.id })
+    .first()
 
   if (!user) redirect("/login")
 
   // Since 2.0 the password is a row in Account, not a column on User, so
   // "has a password" and "which providers are linked" are both read from the
   // same list instead of from two different places.
-  const hasPassword = (user.accounts ?? []).some((a) => a.providerId === "credential")
-  const linked = new Map((user.accounts ?? []).map((a) => [a.providerId, a.id]))
+  const hasPassword = user.accounts.some((a) => a.providerId === "credential")
+  const linked = new Map(user.accounts.map((a) => [a.providerId, a.id]))
   // A provider without its keys cannot be connected, so its row would offer a
   // button that fails. One already linked stays listed, to be disconnected.
   const enabled: string[] = enabledOAuthProviders()
@@ -104,7 +98,7 @@ export async function SettingsView({
   // Skipping the credential row matters here: since 2.0 the password is an
   // Account too, and it would otherwise be picked as the source of a photo it
   // cannot have supplied.
-  const firstOAuth = (user.accounts ?? []).find((a) => a.providerId !== "credential")
+  const firstOAuth = user.accounts.find((a) => a.providerId !== "credential")
   const avatarProvider = firstOAuth ? PROVIDER_LABELS[firstOAuth.providerId] : undefined
 
   return (
@@ -274,7 +268,7 @@ export async function SettingsView({
           <div className="flex justify-between">
             <span className="text-muted-foreground">{t("memberSince")}</span>
             <span className="font-medium">
-              {format.dateTime(new Date(user.createdAt), {
+              {format.dateTime(toDate(user.createdAt), {
                 year: "numeric",
                 month: "long",
                 day: "numeric",

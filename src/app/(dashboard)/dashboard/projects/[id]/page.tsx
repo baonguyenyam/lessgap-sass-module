@@ -1,7 +1,8 @@
 import { requireUser } from "@/lib/auth"
 import { notFound } from "next/navigation"
 import { getFormatter, getTranslations } from "next-intl/server"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
+import { toDate } from "@/lib/timestamps"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { BreadcrumbName } from "@/components/dashboard/breadcrumb-name"
 import { Button } from "@/components/ui/button"
@@ -19,13 +20,12 @@ export default async function ProjectDetailPage({
 
   const { id } = await params
 
-  const project = await prisma.project.findUnique({ where: { id } })
+  const project = await db8.orm.public.Project.where({ id }).first()
 
   // Ownership check — a project not owned by the current user is "not found".
   if (!project || project.userId !== user.id) notFound()
 
-  const dateFmt = (d: Date) =>
-    format.dateTime(new Date(d), { year: "numeric", month: "long", day: "numeric" })
+  const dateFmt = (d: string) => format.dateTime(toDate(d), { year: "numeric", month: "long", day: "numeric" })
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">

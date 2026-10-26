@@ -3,7 +3,7 @@
 import type { Role } from "@/lib/roles"
 
 import { getCurrentUser } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
 import { canChangeRole, isRoot } from "@/lib/roles"
 import { revalidatePath } from "next/cache"
 
@@ -36,12 +36,9 @@ export async function setUserRole(userId: string, nextRole: Role, seenRole: Role
     throw new Error("This role change is not allowed")
   }
 
-  // updateMany, not update: `where` has to carry the expected role, and that
-  // is not a unique constraint. A count of zero means the row moved under us.
-  const { count } = await prisma.user.updateMany({
-    where: { id: userId, role: seenRole },
-    data: { role: nextRole },
-  })
+  // The filter carries the expected role, so a count of zero means the row
+  // moved under us.
+  const count = await db8.orm.public.User.where({ id: userId, role: seenRole }).updateAndCount({ role: nextRole })
   if (count === 0) {
     throw new Error("This user's role changed since the page was loaded")
   }

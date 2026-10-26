@@ -2,7 +2,8 @@ import { headers } from "next/headers"
 import { getFormatter, getTranslations } from "next-intl/server"
 
 import { auth } from "@/auth"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
+import { nowTs, toDate } from "@/lib/timestamps"
 import { revokeSession, revokeOtherSessions } from "@/app/actions/sessions"
 import { Badge } from "@/components/ui/badge"
 import { PendingButton } from "@/components/auth/pending-button"
@@ -38,11 +39,11 @@ export async function ActiveSessions() {
 
   // Expired rows are still rows until something deletes them, and a device that
   // cannot sign in is not an active session.
-  const sessions = await prisma.session.findMany({
-    where: { userId: current.user.id, expiresAt: { gt: new Date() } },
-    select: { id: true, createdAt: true, ipAddress: true, userAgent: true },
-    orderBy: { createdAt: "desc" },
-  })
+  const sessions = await db8.orm.public.Session.select("id", "createdAt", "ipAddress", "userAgent")
+    .where({ userId: current.user.id })
+    .where((s) => s.expiresAt.gt(nowTs()))
+    .orderBy((s) => s.createdAt.desc())
+    .all()
 
   // Newest first, and the one you are reading this on pinned to the top: it is
   // the row people look for to orient themselves before judging the others.
@@ -73,7 +74,7 @@ export async function ActiveSessions() {
                   {isCurrent && <Badge variant="secondary">{t("thisDevice")}</Badge>}
                 </div>
                 <p className="mt-0.5 text-xs text-muted-foreground">
-                  {format.dateTime(new Date(session.createdAt), {
+                  {format.dateTime(toDate(session.createdAt), {
                     year: "numeric",
                     month: "short",
                     day: "numeric",

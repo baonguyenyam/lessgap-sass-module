@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { getTranslations } from "next-intl/server"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
+import { nowTs } from "@/lib/timestamps"
 import { removeNewsletterContact } from "@/lib/email"
 import { siteConfig } from "@/config/site"
 
@@ -32,13 +33,10 @@ export default async function NewsletterUnsubscribePage({
 
   let done = false
   if (token) {
-    const sub = await prisma.newsletterSubscriber.findUnique({ where: { unsubscribeToken: token } })
+    const sub = await db8.orm.public.NewsletterSubscriber.where({ unsubscribeToken: token }).first()
     if (sub) {
       if (!sub.unsubscribedAt) {
-        await prisma.newsletterSubscriber.update({
-          where: { id: sub.id },
-          data: { unsubscribedAt: new Date() },
-        })
+        await db8.orm.public.NewsletterSubscriber.where({ id: sub.id }).update({ unsubscribedAt: nowTs() })
         try {
           await removeNewsletterContact(sub.email)
         } catch (error) {

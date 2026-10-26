@@ -1,7 +1,8 @@
 import { requireUser } from "@/lib/auth"
 import { getFormatter, getTranslations } from "next-intl/server"
 import Link from "next/link"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
+import { toDate } from "@/lib/timestamps"
 import { getEntitlement } from "@/lib/billing"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -21,18 +22,17 @@ export default async function DashboardPage() {
   const lifetime = entitlement.kind === "lifetime" ? entitlement.purchase : null
 
   const [projectCount, userRow] = await Promise.all([
-    prisma.project.count({ where: { userId: user.id } }),
-    prisma.user.findUnique({
-      where: { id: user.id },
-      select: { name: true, onboardingDismissedAt: true, stripeCustomerId: true },
-    }),
+    db8.orm.public.Project.where({ userId: user.id })
+      .aggregate((a) => ({ n: a.count() }))
+      .then((r) => r.n),
+    db8.orm.public.User.select("name", "onboardingDismissedAt", "stripeCustomerId").where({ id: user.id }).first(),
   ])
 
   // Formatted through next-intl rather than a hardcoded "en-US": a date is
   // part of the interface, and a locale that reads dates day-first would show
   // the wrong one otherwise.
   const renewalDate = subscription?.currentPeriodEnd
-    ? format.dateTime(new Date(subscription.currentPeriodEnd), {
+    ? format.dateTime(toDate(subscription.currentPeriodEnd), {
       month: "short",
       day: "numeric",
       year: "numeric",

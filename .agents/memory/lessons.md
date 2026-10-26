@@ -2,6 +2,36 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-26 · prisma 8 · `upsert` refuses a unique key that is an index
+- **Symptom:** `conflictOn: { slug }` on `Plan.upsert` failed typecheck: "'slug' does not exist in type '{ id: string; }'".
+- **Cause:** Prisma 8 types `conflictOn` from unique *constraints*; the baseline made every unique key a unique *index* (`@@index([...], unique: true)`). Postgres accepts either in `ON CONFLICT`.
+- **Fix:** `conflictOn: uniqueIndexKey({ slug })` from `@/lib/db8`.
+- **Rule:** promoted to `.agents/rules/database.md`.
+
+### 2026-10-26 · prisma 8 · Timestamps are text, and `new Date(text)` is local time
+- **Symptom (avoided):** pages formatted `new Date(row.createdAt)`; it compiles with a `TimestampString`, and is off by the machine's offset.
+- **Cause:** the `timestamp(3)` columns read back as "YYYY-MM-DD HH:mm:ss.SSS" with no zone; JavaScript parses that as local time. Typecheck catches `Date` passed where text is expected, not `new Date(text)`.
+- **Fix:** `toDate` / `toTs` / `nowTs` in `src/lib/timestamps.ts`.
+- **Rule:** promoted to `AGENTS.md` and `.agents/rules/database.md`. Grep for `new Date(` on a column after touching queries.
+
+### 2026-10-26 · prisma 8 · Error codes are dotted names, not `P1001`
+- **Symptom:** the setup notice matched `P1000`/`P1001`/`P1013`, which Prisma 8 never throws.
+- **Cause:** checked by running a query against `127.0.0.1:1`, an unresolvable host and `not-a-url`: a server it cannot reach throws `CONTRACT.MARKER_READ_FAILED` with `cause.name === "SqlConnectionError"`; a malformed URL throws `RUNTIME.BINDING_INVALID` when `db8` is constructed, at import.
+- **Fix:** `stepFromError` in `src/lib/setup-status.ts`, which now imports `db8` inside its `try`.
+- **Rule:** never match a Prisma 7 `P####` code; confirm a Prisma 8 code by triggering it before relying on it.
+
+### 2026-10-26 · release · The version lives in three places
+- **Symptom:** `changelog-real.test.ts` failed on `## [Unreleased]` ("has no date", "leads with the version the kit declares"), then `site.test.ts` failed on `2.6.0` vs `2.7.0`.
+- **Cause:** the tests require the top CHANGELOG heading to be a dated release equal to `package.json` `version`, which must equal `siteConfig.version` in `src/config/site.ts`.
+- **Fix:** `## [2.7.0] - 2026-10-26`, and the same number in `package.json` and `src/config/site.ts`.
+- **Rule:** no `[Unreleased]` section here. A user-visible change goes under a dated version, and a new version is bumped in all three files at once.
+
+### 2026-10-26 · better auth · A session or user `additionalField` is written on every insert
+- **Symptom (avoided):** adding `session.additionalFields.switchedBy` makes Better Auth include the column in every new session, so sign-in fails everywhere until the column exists.
+- **Cause:** Better Auth writes through Kysely with all declared fields; it does not check the schema.
+- **Fix:** migration `kit_session_switch_as` planned and applied before the code runs.
+- **Rule:** a new `additionalFields` entry ships with its migration, and the migration is applied (`pnpm db:migrate`) before that code is deployed.
+
 ### 2026-10-26 · imports · Plain Node scripts cannot use `@/`
 - **Symptom:** a `scripts/*.mjs` file needed code from `src/`, and the only path that resolved was `../src/...`, which the import rule forbids.
 - **Cause:** `@/` is a TypeScript path alias; `node` does not read `tsconfig.json`.

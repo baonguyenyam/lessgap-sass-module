@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 import Stripe from "stripe"
+import type { Db8Mock } from "@/test/db8-mock"
 
 /**
  * Integration test for the Stripe webhook, with real signatures.
@@ -16,14 +17,7 @@ import Stripe from "stripe"
 
 const SECRET = "whsec_test_secret"
 
-const prismaMock = {
-  user: { findUnique: vi.fn(), update: vi.fn() },
-  subscription: { upsert: vi.fn(), update: vi.fn(), updateMany: vi.fn(), findFirst: vi.fn() },
-  purchase: { create: vi.fn(), findFirst: vi.fn(), findUnique: vi.fn(), upsert: vi.fn() },
-  plan: { findFirst: vi.fn(), findUnique: vi.fn() },
-}
-
-vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }))
+vi.mock("@/lib/db8", async () => (await import("@/test/db8-mock")).createDb8Mock())
 // The names the route actually imports. Until 2.3.2 this mocked three
 // functions that no longer existed, which went unnoticed because no test here
 // reached a handler: they all stopped at the signature gate.
@@ -35,6 +29,7 @@ const emailMock = {
 vi.mock("@/lib/email", () => emailMock)
 
 const { POST } = await import("./route")
+const db = (await import("@/lib/db8")) as unknown as Db8Mock
 
 const original = { ...process.env }
 
@@ -121,9 +116,9 @@ describe("POST /api/webhooks/stripe: signature gate", () => {
   // The point of the gate: nothing behind it runs unless the signature checks out.
   it("never touches the database on a rejected request", async () => {
     await POST(signed(event("checkout.session.completed", { id: "cs_1" }), { secret: "whsec_wrong" }) as never)
-    expect(prismaMock.user.update).not.toHaveBeenCalled()
-    expect(prismaMock.subscription.upsert).not.toHaveBeenCalled()
-    expect(prismaMock.purchase.create).not.toHaveBeenCalled()
+    expect(db.fn("User.update")).not.toHaveBeenCalled()
+    expect(db.fn("Subscription.upsert")).not.toHaveBeenCalled()
+    expect(db.fn("Purchase.create")).not.toHaveBeenCalled()
   })
 })
 
@@ -146,17 +141,17 @@ describe("POST /api/webhooks/stripe: a refused email never fails the payment", (
 
   beforeEach(() => {
     process.env.RESEND_API_KEY = "re_placeholder"
-    prismaMock.plan.findUnique.mockResolvedValue({ id: "plan_1", name: "Lifetime", price: 9900 })
-    prismaMock.purchase.findUnique.mockResolvedValue(null)
-    prismaMock.purchase.upsert.mockResolvedValue({ id: "purchase_1" })
-    prismaMock.user.findUnique.mockResolvedValue({ email: "buyer@example.com", name: "Buyer" })
+    db.fn("Plan.first").mockResolvedValue({ id: "plan_1", name: "Lifetime", price: 9900 })
+    db.fn("Purchase.first").mockResolvedValue(null)
+    db.fn("Purchase.upsert").mockResolvedValue({ id: "purchase_1" })
+    db.fn("User.first").mockResolvedValue({ email: "buyer@example.com", name: "Buyer" })
   })
 
   it("records the purchase and answers 200 when Resend refuses the receipt", async () => {
     emailMock.sendPurchaseConfirmation.mockResolvedValue(false)
     const response = await POST(signed(paidOnce()) as never)
     expect(response.status).toBe(200)
-    expect(prismaMock.purchase.upsert).toHaveBeenCalledOnce()
+    expect(db.fn("Purchase.upsert")).toHaveBeenCalledOnce()
     expect(emailMock.sendPurchaseConfirmation).toHaveBeenCalledOnce()
   })
 
@@ -165,7 +160,7 @@ describe("POST /api/webhooks/stripe: a refused email never fails the payment", (
     const log = vi.spyOn(console, "error").mockImplementation(() => {})
     const response = await POST(signed(paidOnce()) as never)
     expect(response.status).toBe(200)
-    expect(prismaMock.purchase.upsert).toHaveBeenCalledOnce()
+    expect(db.fn("Purchase.upsert")).toHaveBeenCalledOnce()
     log.mockRestore()
   })
 })

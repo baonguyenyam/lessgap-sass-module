@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
 const seedDemoData = vi.fn()
-vi.mock("@/lib/prisma", () => ({ prisma: {} }))
 vi.mock("@/lib/demo-seed", () => ({ seedDemoData: (...a: unknown[]) => seedDemoData(...a) }))
 
 const { GET } = await import("./route")

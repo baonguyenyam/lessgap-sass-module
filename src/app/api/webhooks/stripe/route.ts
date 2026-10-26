@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { stripe } from "@/lib/stripe"
-import { prisma } from "@/lib/prisma"
+import { db8, uniqueIndexKey } from "@/lib/db8"
+import { toTs } from "@/lib/timestamps"
 import { subscriptionDates } from "@/lib/billing"
 import type Stripe from "stripe"
 import { emailEnabled } from "@/lib/email-transport"
@@ -77,7 +78,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   const priceId = item?.price.id
   if (!priceId) return
 
-  const plan = await prisma.plan.findUnique({ where: { stripePriceId: priceId } })
+  const plan = await db8.orm.public.Plan.where({ stripePriceId: priceId }).first()
   if (!plan) return
 
   const { currentPeriodStart, currentPeriodEnd, trialEndsAt } = subscriptionDates(subscription)
@@ -88,40 +89,28 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   // only send it when this is a genuinely new subscription, not a replay of an
   // event we've already applied. (For higher volume, a dedicated table keyed on
   // event.id is the more general webhook-idempotency pattern.)
-  const existingSub = await prisma.subscription.findUnique({
-    where: { userId: session.metadata.userId },
-    select: { stripeSubscriptionId: true },
-  })
+  const existingSub = await db8.orm.public.Subscription.select("stripeSubscriptionId")
+    .where({ userId: session.metadata.userId })
+    .first()
   const isNewSubscription = existingSub?.stripeSubscriptionId !== subscription.id
 
-  await prisma.subscription.upsert({
-    where: { userId: session.metadata.userId },
-    update: {
-      planId: plan.id,
-      stripeSubscriptionId: subscription.id,
-      status: mapSubscriptionStatus(subscription.status),
-      currentPeriodStart,
-      currentPeriodEnd,
-      cancelAtPeriodEnd: subscription.cancel_at_period_end,
-      trialEndsAt,
-    },
-    create: {
-      userId: session.metadata.userId,
-      planId: plan.id,
-      stripeSubscriptionId: subscription.id,
-      status: mapSubscriptionStatus(subscription.status),
-      currentPeriodStart,
-      currentPeriodEnd,
-      cancelAtPeriodEnd: subscription.cancel_at_period_end,
-      trialEndsAt,
-    },
+  const fields = {
+    planId: plan.id,
+    stripeSubscriptionId: subscription.id,
+    status: mapSubscriptionStatus(subscription.status),
+    currentPeriodStart: toTs(currentPeriodStart),
+    currentPeriodEnd: toTs(currentPeriodEnd),
+    cancelAtPeriodEnd: subscription.cancel_at_period_end,
+    trialEndsAt: toTs(trialEndsAt),
+  }
+  await db8.orm.public.Subscription.upsert({
+    conflictOn: uniqueIndexKey({ userId: session.metadata.userId }),
+    update: fields,
+    create: { userId: session.metadata.userId, ...fields },
   })
 
   // Send subscription confirmation email (fire-and-forget)
-  const user = await prisma.user.findUnique({
-    where: { id: session.metadata.userId },
-    select: { email: true, name: true },
-  })
+  const user = await db8.orm.public.User.select("email", "name").where({ id: session.metadata.userId }).first()
   if (isNewSubscription && user && emailEnabled()) {
     const { sendSubscriptionConfirmation } = await import("@/lib/email")
     // Awaited: a promise left running after the response has no guarantee of
@@ -155,17 +144,14 @@ async function handleOneTimeCheckout(session: Stripe.Checkout.Session) {
   // (e.g. a Payment Link): acknowledge it so Stripe doesn't retry.
   if (!paymentIntentId || !userId || !planId) return
 
-  const plan = await prisma.plan.findUnique({ where: { id: planId } })
+  const plan = await db8.orm.public.Plan.where({ id: planId }).first()
   if (!plan) return
 
-  const existing = await prisma.purchase.findUnique({
-    where: { stripePaymentIntentId: paymentIntentId },
-    select: { id: true },
-  })
+  const existing = await db8.orm.public.Purchase.select("id").where({ stripePaymentIntentId: paymentIntentId }).first()
   const isNewPurchase = !existing
 
-  await prisma.purchase.upsert({
-    where: { stripePaymentIntentId: paymentIntentId },
+  await db8.orm.public.Purchase.upsert({
+    conflictOn: uniqueIndexKey({ stripePaymentIntentId: paymentIntentId }),
     update: {},
     create: {
       userId,
@@ -178,10 +164,7 @@ async function handleOneTimeCheckout(session: Stripe.Checkout.Session) {
   })
 
   if (isNewPurchase && emailEnabled()) {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { email: true, name: true },
-    })
+    const user = await db8.orm.public.User.select("email", "name").where({ id: userId }).first()
     if (user) {
       const { sendPurchaseConfirmation } = await import("@/lib/email")
       await sendPurchaseConfirmation(
@@ -196,37 +179,29 @@ async function handleOneTimeCheckout(session: Stripe.Checkout.Session) {
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
-  const existing = await prisma.subscription.findUnique({
-    where: { stripeSubscriptionId: subscription.id },
-  })
+  const existing = await db8.orm.public.Subscription.where({ stripeSubscriptionId: subscription.id }).first()
   if (!existing) return
 
   const item = subscription.items.data[0]
   const priceId = item?.price.id
   const plan = priceId
-    ? await prisma.plan.findUnique({ where: { stripePriceId: priceId } })
+    ? await db8.orm.public.Plan.where({ stripePriceId: priceId }).first()
     : null
 
   const { currentPeriodStart, currentPeriodEnd, trialEndsAt } = subscriptionDates(subscription)
 
-  await prisma.subscription.update({
-    where: { stripeSubscriptionId: subscription.id },
-    data: {
-      ...(plan && { planId: plan.id }),
-      status: mapSubscriptionStatus(subscription.status),
-      currentPeriodStart,
-      currentPeriodEnd,
-      cancelAtPeriodEnd: subscription.cancel_at_period_end,
-      trialEndsAt,
-    },
+  await db8.orm.public.Subscription.where({ stripeSubscriptionId: subscription.id }).update({
+    ...(plan && { planId: plan.id }),
+    status: mapSubscriptionStatus(subscription.status),
+    currentPeriodStart: toTs(currentPeriodStart),
+    currentPeriodEnd: toTs(currentPeriodEnd),
+    cancelAtPeriodEnd: subscription.cancel_at_period_end,
+    trialEndsAt: toTs(trialEndsAt),
   })
 
   // Send cancellation email when subscription will cancel at period end
   if (subscription.cancel_at_period_end && !existing.cancelAtPeriodEnd) {
-    const user = await prisma.user.findUnique({
-      where: { id: existing.userId },
-      select: { email: true, name: true },
-    })
+    const user = await db8.orm.public.User.select("email", "name").where({ id: existing.userId }).first()
     if (user && emailEnabled()) {
       const { sendSubscriptionCancelledEmail } = await import("@/lib/email")
       await sendSubscriptionCancelledEmail(user.email, user.name ?? "", longDate(currentPeriodEnd)).catch(
@@ -237,9 +212,8 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
-  await prisma.subscription.updateMany({
-    where: { stripeSubscriptionId: subscription.id },
-    data: { status: "CANCELED" },
+  await db8.orm.public.Subscription.where({ stripeSubscriptionId: subscription.id }).updateAndCount({
+    status: "CANCELED",
   })
 }
 
@@ -249,9 +223,8 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
   if (!subRef) return
   const subscriptionId = typeof subRef === "string" ? subRef : subRef.id
 
-  await prisma.subscription.updateMany({
-    where: { stripeSubscriptionId: subscriptionId },
-    data: { status: "PAST_DUE" },
+  await db8.orm.public.Subscription.where({ stripeSubscriptionId: subscriptionId }).updateAndCount({
+    status: "PAST_DUE",
   })
 }
 
@@ -264,9 +237,8 @@ async function handleChargeRefunded(charge: Stripe.Charge) {
     typeof charge.payment_intent === "string" ? charge.payment_intent : charge.payment_intent?.id
   if (!paymentIntentId) return
 
-  await prisma.purchase.updateMany({
-    where: { stripePaymentIntentId: paymentIntentId },
-    data: { status: "REFUNDED" },
+  await db8.orm.public.Purchase.where({ stripePaymentIntentId: paymentIntentId }).updateAndCount({
+    status: "REFUNDED",
   })
 }
 

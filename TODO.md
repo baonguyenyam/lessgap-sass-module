@@ -6,6 +6,8 @@ Trong giai đoạn này nên chủ yếu sử dụgn các dịch vụ miễn ph�
 - Phải đảm bảo để dự án sẵn sàng cho nhàng ngàn kháhc hàng 
 - Phải có đủ mọi cơ chế F2A, bảo mật 2 lớp, sesion login, xác thực...
 - Phải cho phéo login nhiều cách
+- Khôgn dùng emoji trogn dự án
+- nên học hỏi các dự án (về tính năng/logic thôi, ko học hỏi cách code) /Users/nguyenpham/Source Code/vnbca.org, /Users/nguyenpham/Source Code/bellav-2026, /Users/nguyenpham/Source Code/platform.madelab.io
 
 Ghi mọi thứu vào bộ nhớ AI, trogn quá trình code nếu có lỗi nào phát sinh và AI fixx thì phải ghi nhớ để ko vướng lại trogn tương lai 
 
@@ -15,5 +17,10 @@ Ghi mọi thứu vào bộ nhớ AI, trogn quá trình code nếu có lỗi nào
 - Nên có UUID v7, Nano ID, CUID2 phù hợp cho những nơi tỏng hệ thống 
 - Khôgn dùng ../ trogn dự án nên dùng @/
 - Mọi thứ trong dự án phải nhất quán 
+
+Ghi mọi thứu vào bộ nhớ AI, trogn quá trình code nếu có lỗi nào phát sinh và AI fixx thì phải ghi nhớ để ko vướng lại trogn tương lai 
+
+- http://localhost:3000/dashboard/settings phải là một trang riêng ko phải modal, phải có đủ mọi trang như backup, setting, logs... 
+- Các file test nên tập trung vào /tests/* chư sko nên nằm tùm lum 
 
 Ghi mọi thứu vào bộ nhớ AI, trogn quá trình code nếu có lỗi nào phát sinh và AI fixx thì phải ghi nhớ để ko vướng lại trogn tương lai 

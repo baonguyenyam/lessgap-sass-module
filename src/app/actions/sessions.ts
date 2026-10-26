@@ -4,7 +4,7 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { auth } from "@/auth"
 import { getCurrentUser } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
 
 /**
  * Ending sessions from Settings.
@@ -37,10 +37,7 @@ export async function revokeSession(formData: FormData) {
   if (!id) redirect(`${SETTINGS}?error=session`)
 
   // Ownership is enforced by the query, not by a check after the fact.
-  const session = await prisma.session.findFirst({
-    where: { id, userId: currentUser.id },
-    select: { token: true },
-  })
+  const session = await db8.orm.public.Session.select("token").where({ id, userId: currentUser.id }).first()
   if (!session) redirect(`${SETTINGS}?error=session`)
 
   await auth.api.revokeSession({ body: { token: session.token }, headers: await headers() })

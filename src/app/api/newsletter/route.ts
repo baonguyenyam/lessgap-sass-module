@@ -1,7 +1,8 @@
 import crypto from "node:crypto"
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
+import { nowTs } from "@/lib/timestamps"
 import { checkRateLimit, rateLimitKeyFromIp } from "@/lib/rate-limit"
 import { isNewsletterContactUnsubscribed, sendNewsletterConfirmEmail } from "@/lib/email"
 import { siteConfig } from "@/config/site"
@@ -47,35 +48,30 @@ export async function POST(req: Request) {
   const confirmUrl = (t: string) => `${siteConfig.url}/newsletter/confirm?token=${t}`
 
   try {
-    const existing = await prisma.newsletterSubscriber.findUnique({ where: { email } })
+    const subscribers = db8.orm.public.NewsletterSubscriber
+    const existing = await subscribers.where({ email }).first()
 
     if (!existing) {
-      const sub = await prisma.newsletterSubscriber.create({
-        data: {
-          email,
-          source: source ?? "waitlist",
-          confirmToken: token(),
-          unsubscribeToken: token(),
-        },
+      const sub = await subscribers.create({
+        email,
+        source: source ?? "waitlist",
+        confirmToken: token(),
+        unsubscribeToken: token(),
       })
       await sendNewsletterConfirmEmail(email, confirmUrl(sub.confirmToken))
     } else if (!existing.confirmedAt || existing.unsubscribedAt) {
       // Unconfirmed or previously unsubscribed and asking again: rotate the
       // token (old links die) and restart the 7-day confirmation window.
-      const sub = await prisma.newsletterSubscriber.update({
-        where: { email },
-        data: { confirmToken: token(), createdAt: new Date() },
-      })
-      await sendNewsletterConfirmEmail(email, confirmUrl(sub.confirmToken))
+      const sub = await subscribers.where({ email }).update({ confirmToken: token(), createdAt: nowTs() })
+      if (sub) await sendNewsletterConfirmEmail(email, confirmUrl(sub.confirmToken))
     } else if (await isNewsletterContactUnsubscribed(email)) {
       // Confirmed here, but unsubscribed on Resend through the link of a
       // Broadcast, which never reaches the database. Record it, then the same
       // path as any returning address: confirming clears it on both sides.
-      const sub = await prisma.newsletterSubscriber.update({
-        where: { email },
-        data: { unsubscribedAt: new Date(), confirmToken: token(), createdAt: new Date() },
-      })
-      await sendNewsletterConfirmEmail(email, confirmUrl(sub.confirmToken))
+      const sub = await subscribers
+        .where({ email })
+        .update({ unsubscribedAt: nowTs(), confirmToken: token(), createdAt: nowTs() })
+      if (sub) await sendNewsletterConfirmEmail(email, confirmUrl(sub.confirmToken))
     }
     // Confirmed and active on both sides: nothing to do, same neutral answer.
   } catch (error) {

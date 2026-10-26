@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { stripe } from "@/lib/stripe"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
 
 export async function POST() {
   const currentUser = await getCurrentUser()
@@ -9,10 +9,7 @@ export async function POST() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: currentUser.id },
-    select: { stripeCustomerId: true },
-  })
+  const user = await db8.orm.public.User.select("stripeCustomerId").where({ id: currentUser.id }).first()
 
   if (!user?.stripeCustomerId) {
     return NextResponse.json({ error: "No billing account found" }, { status: 404 })

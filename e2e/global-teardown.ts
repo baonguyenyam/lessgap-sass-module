@@ -23,11 +23,11 @@ export default async function globalTeardown() {
     return
   }
 
-  const { prisma } = await import("@/lib/prisma")
+  const { db8 } = await import("@/lib/db8")
   try {
-    const { count } = await prisma.user.deleteMany({ where: { email: { startsWith: "e2e-" } } })
+    const count = await db8.orm.public.User.where((u) => u.email.like("e2e-%")).deleteAndCount()
     if (count > 0) console.log(`\n  cleaned up ${count} test account(s)`)
   } finally {
-    await prisma.$disconnect()
+    await db8.close()
   }
 }
