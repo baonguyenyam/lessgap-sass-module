@@ -7,6 +7,8 @@ Trong giai đoạn này nên chủ yếu sử dụgn các dịch vụ miễn ph�
 - Phải có đủ mọi cơ chế F2A, bảo mật 2 lớp, sesion login, xác thực...
 - Phải cho phéo login nhiều cách
 
+Ghi mọi thứu vào bộ nhớ AI, trogn quá trình code nếu có lỗi nào phát sinh và AI fixx thì phải ghi nhớ để ko vướng lại trogn tương lai 
+
 - Cần bỏ những thứu dư thừa ra khỏi dự án, loại hẳn Prisma 7
 - Thêm cấp ROOT cho baonguyenyam@gmail.com là có quyền cao hơn cả admin, admin sẽ có quyền trên mỗi Tenat nhưng ROOT mới có quyền lớn trên hệ thống
 - Phải tham khảo các dự án khác để thêm tính năng switch as để khi dev có thể chuyển qua lại các loại thành viên để test cho lẹ 
