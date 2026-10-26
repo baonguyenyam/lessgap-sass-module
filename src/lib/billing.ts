@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma"
-import type { BillingInterval, Plan, Purchase, Subscription } from "@prisma/client"
+import type { BillingInterval, Plan, Purchase, Subscription } from "@/lib/prisma"
 import type Stripe from "stripe"
 
 export type PurchaseWithPlan = Purchase & { plan: Plan }
@@ -33,10 +33,10 @@ export async function getEntitlement(userId: string): Promise<Entitlement> {
   const liveSubscription =
     subscription &&
     (CHECKOUT_BLOCKING_STATUSES as readonly string[]).includes(subscription.status)
-      ? subscription
+      ? (subscription as SubscriptionWithPlan)
       : null
 
-  if (purchase) return { kind: "lifetime", purchase, subscription: liveSubscription }
+  if (purchase) return { kind: "lifetime", purchase: purchase as PurchaseWithPlan, subscription: liveSubscription }
   if (liveSubscription) return { kind: "subscription", subscription: liveSubscription }
   return { kind: "free" }
 }

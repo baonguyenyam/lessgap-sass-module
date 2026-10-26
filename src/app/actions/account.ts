@@ -52,8 +52,8 @@ export async function unlinkProvider(formData: FormData) {
   // The password now lives in Account too, as a row with providerId
   // "credential". So the OAuth accounts are everything except that one, and
   // the password is that one existing: both counts come from the same list.
-  const oauthAccounts = user.accounts.filter((a) => a.providerId !== "credential")
-  const hasPassword = user.accounts.some((a) => a.providerId === "credential")
+  const oauthAccounts = (user.accounts ?? []).filter((a) => a.providerId !== "credential")
+  const hasPassword = (user.accounts ?? []).some((a) => a.providerId === "credential")
 
   // Ownership check: only the user's own OAuth rows can be unlinked, and the
   // credential row is not something this form may delete.

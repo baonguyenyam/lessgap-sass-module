@@ -22,7 +22,7 @@ export type PlanCardData = {
   price: number
   interval: "MONTH" | "YEAR" | "ONE_TIME"
   stripePriceId: string
-  features: string[]
+  features: readonly string[]
   // Days of free trial this visitor would actually get at checkout. The page
   // passes null to anyone who has already had a subscription, so the card never
   // promises a trial the checkout will not give.
@@ -63,7 +63,7 @@ function formatPrice(cents: number) {
   return cents % 100 === 0 ? `$${cents / 100}` : `$${(cents / 100).toFixed(2)}`
 }
 
-function FeatureList({ features }: { features: string[] }) {
+function FeatureList({ features }: { features: readonly string[] }) {
   return (
     <ul className="space-y-2.5">
       {features.map((feature) => (

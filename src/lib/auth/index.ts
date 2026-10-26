@@ -1,6 +1,6 @@
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
-import type { Role } from "@prisma/client"
+import type { Role } from "@/lib/prisma"
 
 import { auth } from "@/auth"
 

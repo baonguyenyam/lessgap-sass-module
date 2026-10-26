@@ -1,14 +1,12 @@
 import { config } from "dotenv"
-import { PrismaClient, BillingInterval } from "@prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
 
 // Same loading order as prisma.config.ts: .env.local first, .env after it,
 // variables already set in the shell win. Needed when run via `npm run db:seed`,
 // which does not go through the Prisma CLI.
 config({ path: [".env.local", ".env"], quiet: true })
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
-const prisma = new PrismaClient({ adapter })
+const { prisma } = await import("../src/lib/prisma")
+type BillingInterval = "MONTH" | "YEAR" | "ONE_TIME"
 
 // ─────────────────────────────────────────────────────────────────────────────
 // EXAMPLE plans — these exist so the Stripe checkout flow works out of the box.

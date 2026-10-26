@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { PromoteUserButton } from "@/components/admin/promote-user-button"
 import { RevenueChart } from "@/components/admin/revenue-chart"
-import { mrrHistory, monthlyEquivalent } from "@/lib/metrics"
+import { mrrHistory, monthlyEquivalent, type MrrSubscription } from "@/lib/metrics"
 
 const ITEMS_PER_PAGE = 20
 
@@ -72,8 +72,8 @@ async function getAdminData(page: number, search: string) {
   const totalFiltered = search ? users.length : totalUsers
 
   const activeSubscriptions = allSubscriptions.filter((sub) => sub.status === "ACTIVE")
-  const mrr = activeSubscriptions.reduce((sum, sub) => sum + monthlyEquivalent(sub.plan), 0)
-  const revenue = mrrHistory(allSubscriptions)
+  const mrr = activeSubscriptions.reduce((sum, sub) => sum + monthlyEquivalent(sub.plan!), 0)
+  const revenue = mrrHistory(allSubscriptions as MrrSubscription[])
 
   return {
     totalUsers,
@@ -203,7 +203,7 @@ export default async function AdminPage({
                     <Badge variant="secondary">{t("free")}</Badge>
                   )}
                   <span className="text-sm text-muted-foreground">
-                    {user.subscription?.plan.name ?? t("free")}
+                    {user.subscription?.plan?.name ?? t("free")}
                   </span>
                   <span className="ml-auto text-xs text-muted-foreground">
                     {t("joined", { date: formatJoined(format, user.createdAt) })}
@@ -246,7 +246,7 @@ export default async function AdminPage({
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">{user.subscription?.plan.name ?? t("free")}</span>
+                      <span className="text-sm">{user.subscription?.plan?.name ?? t("free")}</span>
                     </TableCell>
                     <TableCell>
                       {user.subscription ? (

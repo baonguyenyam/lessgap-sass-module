@@ -3,15 +3,15 @@
 
 namespace public {
   model User {
-    id                    String              @id(map: "User_pkey")
+    id                    String              @id(map: "User_pkey") @onCreate(cuid(2))
     name                  String
     email                 String
     image                 String?
     role                  pg.enum(Role)       @default("USER")
     stripeCustomerId      String?
     createdAt             TimestampString(3)  @default(now())
-    updatedAt             TimestampString(3)
-    onboardingDismissedAt TimestampString(3)?
+    updatedAt             TimestampString(3)  @onCreate(now()) @onUpdate(now())
+onboardingDismissedAt TimestampString(3)?
     emailVerified         Boolean             @default(false)
     twoFactorEnabled      Boolean             @default(false)
     accounts              Account[]
@@ -26,7 +26,7 @@ namespace public {
   }
 
   model Account {
-    id                    String              @id(map: "Account_pkey")
+    id                    String              @id(map: "Account_pkey") @onCreate(cuid(2))
     userId                String
     scope                 String?
     accountId             String
@@ -38,15 +38,15 @@ namespace public {
     idToken               String?
     password              String?
     createdAt             TimestampString(3)  @default(now())
-    updatedAt             TimestampString(3)
-    user                  User                @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Account_userId_fkey")
+    updatedAt             TimestampString(3)  @onCreate(now()) @onUpdate(now())
+user                  User                @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Account_userId_fkey")
 
     @@index([providerId, accountId], map: "Account_providerId_accountId_key", unique: true)
     @@index([userId], map: "Account_userId_idx")
   }
 
   model NewsletterSubscriber {
-    id               String              @id(map: "NewsletterSubscriber_pkey")
+    id               String              @id(map: "NewsletterSubscriber_pkey") @onCreate(cuid(2))
     email            String
     source           String              @default("waitlist")
     createdAt        TimestampString(3)  @default(now())
@@ -61,18 +61,18 @@ namespace public {
   }
 
   model Plan {
-    id             String                   @id(map: "Plan_pkey")
+    id             String                   @id(map: "Plan_pkey") @onCreate(cuid(2))
     name           String
     slug           String
     description    String?
     price          Int
     interval       pg.enum(BillingInterval)
     stripePriceId  String
-    features       String?[]?
+    features       String[]
     isActive       Boolean                  @default(true)
     createdAt      TimestampString(3)       @default(now())
-    updatedAt      TimestampString(3)
-    meterEventName String?
+    updatedAt      TimestampString(3)  @onCreate(now()) @onUpdate(now())
+meterEventName String?
     trialDays      Int?
     purchases      Purchase[]
     subscriptions  Subscription[]
@@ -82,19 +82,19 @@ namespace public {
   }
 
   model Project {
-    id          String             @id(map: "Project_pkey")
+    id          String             @id(map: "Project_pkey") @onCreate(cuid(2))
     name        String
     description String?
     userId      String
     createdAt   TimestampString(3) @default(now())
-    updatedAt   TimestampString(3)
-    user        User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Project_userId_fkey")
+    updatedAt   TimestampString(3)  @onCreate(now()) @onUpdate(now())
+user        User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Project_userId_fkey")
 
     @@index([userId], map: "Project_userId_idx")
   }
 
   model Purchase {
-    id                      String                  @id(map: "Purchase_pkey")
+    id                      String                  @id(map: "Purchase_pkey") @onCreate(cuid(2))
     userId                  String
     planId                  String
     stripePaymentIntentId   String
@@ -103,8 +103,8 @@ namespace public {
     currency                String                  @default("usd")
     status                  pg.enum(PurchaseStatus) @default("COMPLETED")
     createdAt               TimestampString(3)      @default(now())
-    updatedAt               TimestampString(3)
-    plan                    Plan                    @relation(fields: [planId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "Purchase_planId_fkey", index: false)
+    updatedAt               TimestampString(3)  @onCreate(now()) @onUpdate(now())
+plan                    Plan                    @relation(fields: [planId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "Purchase_planId_fkey", index: false)
     user                    User                    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Purchase_userId_fkey")
 
     @@index([stripeCheckoutSessionId], map: "Purchase_stripeCheckoutSessionId_key", unique: true)
@@ -113,22 +113,22 @@ namespace public {
   }
 
   model Session {
-    id        String             @id(map: "Session_pkey")
+    id        String             @id(map: "Session_pkey") @onCreate(cuid(2))
     token     String
     userId    String
     expiresAt TimestampString(3)
     ipAddress String?
     userAgent String?
     createdAt TimestampString(3) @default(now())
-    updatedAt TimestampString(3)
-    user      User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Session_userId_fkey")
+    updatedAt TimestampString(3)  @onCreate(now()) @onUpdate(now())
+user      User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Session_userId_fkey")
 
     @@index([token], map: "Session_token_key", unique: true)
     @@index([userId], map: "Session_userId_idx")
   }
 
   model Subscription {
-    id                   String                      @id(map: "Subscription_pkey")
+    id                   String                      @id(map: "Subscription_pkey") @onCreate(cuid(2))
     userId               String
     planId               String
     stripeSubscriptionId String
@@ -137,8 +137,8 @@ namespace public {
     currentPeriodEnd     TimestampString(3)
     cancelAtPeriodEnd    Boolean                     @default(false)
     createdAt            TimestampString(3)          @default(now())
-    updatedAt            TimestampString(3)
-    trialEndsAt          TimestampString(3)?
+    updatedAt            TimestampString(3)  @onCreate(now()) @onUpdate(now())
+trialEndsAt          TimestampString(3)?
     plan                 Plan                        @relation(fields: [planId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "Subscription_planId_fkey", index: false)
     user                 User                        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Subscription_userId_fkey")
 
@@ -147,7 +147,7 @@ namespace public {
   }
 
   model TwoFactor {
-    id                      String              @id(map: "TwoFactor_pkey")
+    id                      String              @id(map: "TwoFactor_pkey") @onCreate(cuid(2))
     userId                  String
     secret                  String
     backupCodes             String
@@ -155,7 +155,7 @@ namespace public {
     failedVerificationCount Int                 @default(0)
     lockedUntil             TimestampString(3)?
     createdAt               TimestampString(3)  @default(now())
-    updatedAt               TimestampString(3)
+    updatedAt               TimestampString(3)  @onCreate(now()) @onUpdate(now())
     user                    User                @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "TwoFactor_userId_fkey")
 
     @@index([secret], map: "TwoFactor_secret_idx")
@@ -163,13 +163,12 @@ namespace public {
   }
 
   model Verification {
-    id         String             @id(map: "Verification_pkey")
+    id         String             @id(map: "Verification_pkey") @onCreate(cuid(2))
     identifier String
     value      String
     expiresAt  TimestampString(3)
     createdAt  TimestampString(3) @default(now())
-    updatedAt  TimestampString(3)
-
+    updatedAt  TimestampString(3)  @onCreate(now()) @onUpdate(now())
     @@index([identifier], map: "Verification_identifier_idx")
   }
 

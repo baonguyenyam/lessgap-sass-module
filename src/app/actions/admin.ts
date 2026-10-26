@@ -1,6 +1,6 @@
 "use server"
 
-import type { Role } from "@prisma/client"
+import type { Role } from "@/lib/prisma"
 
 import { getCurrentUser } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"

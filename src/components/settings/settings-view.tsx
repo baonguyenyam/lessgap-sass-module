@@ -89,8 +89,8 @@ export async function SettingsView({
   // Since 2.0 the password is a row in Account, not a column on User, so
   // "has a password" and "which providers are linked" are both read from the
   // same list instead of from two different places.
-  const hasPassword = user.accounts.some((a) => a.providerId === "credential")
-  const linked = new Map(user.accounts.map((a) => [a.providerId, a.id]))
+  const hasPassword = (user.accounts ?? []).some((a) => a.providerId === "credential")
+  const linked = new Map((user.accounts ?? []).map((a) => [a.providerId, a.id]))
   // A provider without its keys cannot be connected, so its row would offer a
   // button that fails. One already linked stays listed, to be disconnected.
   const enabled: string[] = enabledOAuthProviders()
@@ -103,7 +103,7 @@ export async function SettingsView({
   // Skipping the credential row matters here: since 2.0 the password is an
   // Account too, and it would otherwise be picked as the source of a photo it
   // cannot have supplied.
-  const firstOAuth = user.accounts.find((a) => a.providerId !== "credential")
+  const firstOAuth = (user.accounts ?? []).find((a) => a.providerId !== "credential")
   const avatarProvider = firstOAuth ? PROVIDER_LABELS[firstOAuth.providerId] : undefined
 
   return (

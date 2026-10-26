@@ -1,4 +1,4 @@
-import type { PrismaClient, SubscriptionStatus, BillingInterval } from "@prisma/client"
+import type { PrismaClient, SubscriptionStatus, BillingInterval } from "@/lib/prisma"
 import { hashPassword } from "./password"
 
 /**

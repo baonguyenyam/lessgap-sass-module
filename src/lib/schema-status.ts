@@ -1,5 +1,5 @@
 import { MIGRATIONS } from "@/generated/migrations"
-import { prisma } from "@/lib/prisma"
+import { db8 } from "@/lib/db8"
 
 /**
  * Whether the database this deployment talks to has every migration the code
@@ -80,10 +80,11 @@ export function isUndefinedTable(error: unknown): boolean {
 async function readAppliedFromDatabase(): Promise<string[] | null> {
   if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set")
   try {
-    const rows = await prisma.$queryRaw<{ migration_name: string }[]>`
+    const plan = db8.raw.sql`
       SELECT migration_name FROM "_prisma_migrations"
        WHERE finished_at IS NOT NULL AND rolled_back_at IS NULL
-    `
+    `.returnsRow({ migration_name: "pg/text@1" }).build()
+    const rows = await db8.query(plan)
     return rows.map((row) => row.migration_name)
   } catch (error) {
     // No table means migrations were never applied to this database at all.

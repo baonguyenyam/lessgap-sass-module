@@ -1,5 +1,3 @@
-import { PrismaClient } from "@prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
 import { config } from "dotenv"
 
 // Playwright does not read .env files the way Next does, so without this the
@@ -25,7 +23,7 @@ export default async function globalTeardown() {
     return
   }
 
-  const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString }) })
+  const { prisma } = await import("../src/lib/prisma")
   try {
     const { count } = await prisma.user.deleteMany({ where: { email: { startsWith: "e2e-" } } })
     if (count > 0) console.log(`\n  cleaned up ${count} test account(s)`)

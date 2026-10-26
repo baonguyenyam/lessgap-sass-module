@@ -1,9 +1,9 @@
 import { config } from "dotenv"
-import { PrismaClient } from "@prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
-import { seedDemoData } from "../src/lib/demo-seed"
 
 config({ path: [".env.local", ".env"], quiet: true })
+
+const { prisma } = await import("../src/lib/prisma")
+const { seedDemoData } = await import("../src/lib/demo-seed")
 
 // ─────────────────────────────────────────────────────────────────────────────
 // DEMO seed — fills an ISOLATED demo database with believable fake data so a
@@ -18,9 +18,6 @@ config({ path: [".env.local", ".env"], quiet: true })
 // that's the point: re-run it to reset the demo. Never point it at a database
 // with real users.
 // ─────────────────────────────────────────────────────────────────────────────
-
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
-const prisma = new PrismaClient({ adapter })
 
 seedDemoData(prisma)
   .then(({ users, subscriptions, purchases, projects }) => {

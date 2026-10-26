@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "User not found" }, { status: 404 })
   }
 
-  if (user.purchases.length > 0) {
+  if ((user.purchases?.length ?? 0) > 0) {
     return NextResponse.json({ error: "You already have lifetime access" }, { status: 400 })
   }
 

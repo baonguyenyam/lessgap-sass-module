@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth"
-import { prismaAdapter } from "@better-auth/prisma-adapter"
+import { kyselyAdapter } from "@better-auth/kysely-adapter"
 import { createAuthEndpoint, APIError } from "better-auth/api"
 import { setSessionCookie } from "better-auth/cookies"
 import { magicLink, twoFactor } from "better-auth/plugins"
@@ -7,6 +7,7 @@ import { z } from "zod"
 import { nextCookies } from "better-auth/next-js"
 import type { BetterAuthPlugin } from "better-auth"
 import { prisma } from "@/lib/prisma"
+import { authDb } from "@/lib/kysely"
 import { hashPassword, verifyPassword } from "@/lib/password"
 import { generateBackupCodes } from "@/lib/backup-codes"
 import { refusesAutomaticLink } from "@/lib/account-linking"
@@ -118,7 +119,10 @@ const demoLogin = () =>
   }) satisfies BetterAuthPlugin
 
 export const auth = betterAuth({
-  database: prismaAdapter(prisma, { provider: "postgresql" }),
+  // The Prisma adapter stops at Prisma ORM 7. Auth talks SQL directly
+  // through Kysely instead — the same database, no Prisma in the middle —
+  // which is also what keeps auth working on Prisma ORM 8.
+  database: kyselyAdapter(authDb, { type: "postgres" }),
 
   // Keeping the Auth.js variable name is deliberate: the upgrade to 2.0 already
   // drops every active session, and asking everyone to rename an environment
@@ -131,7 +135,11 @@ export const auth = betterAuth({
   baseURL: process.env.NEXT_PUBLIC_APP_URL,
 
 
+  // Better Auth's models are named in camelCase; the tables the Prisma
+  // migrations created are PascalCase. `modelName` maps each, the column
+  // names already match one-to-one.
   user: {
+    modelName: "User",
     /**
      * Changing the address the account is identified by.
      *
@@ -245,6 +253,7 @@ export const auth = betterAuth({
   },
 
   session: {
+    modelName: "Session",
     // Sessions live in the database now, so `auth.api.getSession` would hit it
     // on nearly every request. This cache is the same trade the 1.6.4 fix made
     // by hand with a 60 second throttle: a session revoked elsewhere can stay
@@ -282,6 +291,7 @@ export const auth = betterAuth({
   ),
 
   account: {
+    modelName: "Account",
     // What Auth.js needed `allowDangerousEmailAccountLinking` for. Here it is
     // the default: a provider that verified the email links to the account that
     // already has it. Written out because it is a security-relevant behaviour,
@@ -305,6 +315,8 @@ export const auth = betterAuth({
       await sendMagicLinkEmail(user.email, url)
     },
   },
+
+  verification: { modelName: "Verification" },
 
   // Where a failed OAuth round trip lands. The default is Better Auth's own
   // error page at /api/auth/error, which is outside the kit's design and says
@@ -357,6 +369,7 @@ export const auth = betterAuth({
     // asked for a second factor until they turn one on themselves, and the
     // table is empty until then.
     twoFactor({
+      twoFactorTable: "TwoFactor",
       // The name the user will read INSIDE their authenticator app, forever.
       // It has to come from config: a clone that renames itself would otherwise
       // ship its users a code labelled with somebody else's product.
