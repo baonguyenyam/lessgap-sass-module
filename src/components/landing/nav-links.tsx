@@ -28,12 +28,6 @@ export function NavLinks() {
           </Link>
         </Fragment>
       ))}
-      <Link href="/docs" className={linkClass(pathname.startsWith("/docs"))}>
-        {t("docs")}
-      </Link>
-      <Link href="/blog" className={linkClass(pathname.startsWith("/blog"))}>
-        {t("blog")}
-      </Link>
       <Link href="/changelog" className={linkClass(pathname.startsWith("/changelog"))}>
         {t("changelog")}
       </Link>

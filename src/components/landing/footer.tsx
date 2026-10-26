@@ -80,8 +80,6 @@ export function Footer() {
                   to: a link from every page is what tells search engines the
                   page matters, and a fragment only ever counts as the home. */}
               <li><Link href="/pricing" className="transition-colors hover:text-foreground">{t("pricing")}</Link></li>
-              <li><Link href="/docs" className="transition-colors hover:text-foreground">{t("docs")}</Link></li>
-              <li><Link href="/blog" className="transition-colors hover:text-foreground">{t("blog")}</Link></li>
               <li><Link href="/changelog" className="transition-colors hover:text-foreground">{t("changelog")}</Link></li>
               <li>
                 <Link href={siteConfig.links.demo ?? "/login"} className="transition-colors hover:text-foreground">

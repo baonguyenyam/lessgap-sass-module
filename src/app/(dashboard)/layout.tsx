@@ -14,10 +14,6 @@ import { LayoutGrid } from "lucide-react"
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser()
   const tNav = await getTranslations("dashboard.nav")
-  // The kit's manual, for whoever is building: while developing, and in the
-  // demo, where the visitor is a developer weighing the kit. Never in your
-  // production app, whose users would find setup instructions instead of help.
-  const showDevDocs = process.env.NODE_ENV === "development" || process.env.DEMO_MODE === "true"
 
   return (
     <div className="flex min-h-screen bg-muted/20">
@@ -27,7 +23,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <Logo animated wordmarkClassName="sidebar-collapsed:hidden" />
           </Link>
         </div>
-        <SidebarNav variant="dashboard" showAdminLink={user.role === "ADMIN"} showDevDocsLink={showDevDocs} />
+        <SidebarNav variant="dashboard" showAdminLink={user.role === "ADMIN"} />
       </aside>
 
       {/* min-w-0: without it this flex item keeps `min-width: auto`, so any wide
@@ -44,7 +40,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
             />
           </div>
           <div className="flex items-center gap-1 md:hidden">
-            <MobileNav variant="dashboard" showAdminLink={user.role === "ADMIN"} showDevDocsLink={showDevDocs} />
+            <MobileNav variant="dashboard" showAdminLink={user.role === "ADMIN"} />
             <Logo animated wordmarkClassName="text-base font-bold text-foreground" />
           </div>
           <div className="flex items-center gap-3 ml-auto">

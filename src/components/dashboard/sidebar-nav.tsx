@@ -6,8 +6,6 @@ import Link from "next/link"
 import { useRenderedPathname } from "@/hooks/use-rendered-pathname"
 import {
   ArrowLeft,
-  ArrowUpRight,
-  Code,
   CreditCard,
   FolderKanban,
   LayoutGrid,
@@ -30,9 +28,6 @@ const menus = {
   admin: [{ href: "/admin", key: "overview", icon: LayoutGrid, exact: true }],
 }
 
-/** The kit's manual, served from this deployment: the same text as docs/. */
-export const KIT_DOCS_URL = "/docs"
-
 function linkClass(active: boolean) {
   return cn(
     "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors sidebar-collapsed:justify-center sidebar-collapsed:px-2",
@@ -51,12 +46,9 @@ function NavLabel({ children }: { children: React.ReactNode }) {
 export function SidebarNav({
   variant,
   showAdminLink = false,
-  showDevDocsLink = false,
 }: {
   variant: keyof typeof menus
   showAdminLink?: boolean
-  /** The kit's manual, while developing and in the demo: see the layout. */
-  showDevDocsLink?: boolean
 }) {
   const t = useTranslations("dashboard.nav")
   // Rendered route, not the URL: with Settings open as a modal over the
@@ -104,27 +96,15 @@ export function SidebarNav({
           </div>
         )}
       </nav>
-      {/* The Admin Panel and the kit's manual sit at the bottom of the sidebar,
-          under a rule, apart from the entries you use every day: they are
-          other places, not more sections of this one. */}
-      {variant === "dashboard" && (showAdminLink || showDevDocsLink) && (
+      {/* The Admin Panel sits at the bottom of the sidebar, under a rule,
+          apart from the entries you use every day: it is another place, not
+          one more section of this one. */}
+      {variant === "dashboard" && showAdminLink && (
         <nav aria-label={t("more")} className="space-y-1 border-t border-border p-3">
-          {showAdminLink && (
-            <Link href="/admin" title={t("adminPanel")} className={linkClass(false)}>
-              <Shield className="h-4 w-4 shrink-0" />
-              <NavLabel>{t("adminPanel")}</NavLabel>
-            </Link>
-          )}
-          {showDevDocsLink && (
-            <a href={KIT_DOCS_URL} target="_blank" rel="noreferrer" title={t("devDocs")} className={linkClass(false)}>
-              <Code className="h-4 w-4 shrink-0" />
-              <NavLabel>{t("devDocs")}</NavLabel>
-              {/* It leaves the app, for another site in a new tab: said by the
-                  arrow, and in words for whoever does not see it. */}
-              <ArrowUpRight className="ml-auto h-3.5 w-3.5 shrink-0 sidebar-collapsed:hidden" aria-hidden="true" />
-              <span className="sr-only">{t("newTab")}</span>
-            </a>
-          )}
+          <Link href="/admin" title={t("adminPanel")} className={linkClass(false)}>
+            <Shield className="h-4 w-4 shrink-0" />
+            <NavLabel>{t("adminPanel")}</NavLabel>
+          </Link>
         </nav>
       )}
     </>
