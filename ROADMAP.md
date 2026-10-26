@@ -1,6 +1,6 @@
 # Roadmap
 
-OpenStarterKit is **free and open source**, and ships continuously. Pull `main` to get every update and fix.
+lessGAP Starter Kit is **free and open source**, and ships continuously. Pull `main` to get every update and fix.
 
 The kit's conventions are treated as an interface rather than an internal detail: where a thing lives, what it exports, what its shape is called. What you build on top of them survives an update, and where a release has to break one, [Upgrading](./docs/upgrading.md) says which and what to change.
 
@@ -28,7 +28,7 @@ See [CHANGELOG.md](./CHANGELOG.md).
 ## ✅ v1.3 - Content & SEO
 - MDX blog: categories, RSS feed, cover images, reading time and drafts (file-based, no CMS)
 - SEO: sitemap, robots, dynamic Open Graph images and Article JSON-LD
-- Newsletter waitlist: double opt-in, one-click unsubscribe, admin CSV export and optional Resend Audience sync. It also powers the **Pro early adopter waitlist**: one short email when there is real news on the Pro, and a launch discount for subscribers
+- Newsletter waitlist: double opt-in, one-click unsubscribe, admin CSV export and optional Resend Audience sync
 - Contact form done right (Resend + Zod validation + honeypot anti-spam + privacy notice)
 - Per-endpoint rate limiting on the public forms
 - Brand-neutral by default: rebrand the name, logo and colors from one config file or from env vars, no code changes. Plus a marketing pages scaffold (about, legal)
@@ -121,29 +121,5 @@ Where you are and who you are, in the header, where most apps keep them.
 - **The Admin Panel and the kit's manual at the bottom of the sidebar**, the manual only while developing
 - **Sign-in buttons only for the providers you configured**, so a fresh clone never shows one that fails
 
-## 🎯 Pro & Pro Studio - Teams *(paid, launching November 19)*
-The paid tier, built on this kit for products where people work together. A one-time purchase with updates for life.
-
-**Dates**
-- **October 31**: the launch price for the waitlist is announced.
-- **November 19**: Pro and Pro Studio launch for the waitlist, at the launch price.
-- **November 27**: last day of the launch price. Anyone who joins the waitlist by then gets it.
-- **November 28**: open sale at the full price.
-
-**Included at launch**
-- Teams and organizations, next to the personal space every user keeps
-- Member invitations by email, and ownership transfer
-- Roles beyond USER/ADMIN: owner, admin, member, and your own roles in code
-- Team billing with seats, with the team's own Stripe customer and portal
-- Email support and private Discord access, for Pro and Pro Studio
-
-More is planned after launch, and everything that joins the Pro later is included.
-
-**Pro** is for one person and their own products. **Pro Studio** is for an organization, client work included, with up to five people on the repository.
-
-Join the waitlist on [openstarterkit.dev/pricing](https://openstarterkit.dev/pricing).
-
----
-
 ## 💡 Have a request?
-Community feedback reorders this roadmap. Open an issue or reply to any OpenStarterKit email: the features people actually ask for get built first.
+Community feedback reorders this roadmap. Open an issue or reply to any lessGAP email: the features people actually ask for get built first.

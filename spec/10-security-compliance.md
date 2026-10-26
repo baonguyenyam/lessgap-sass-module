@@ -79,6 +79,8 @@ dashboard requires alt text before an image can be published.
 | Data | Kept |
 | --- | --- |
 | Tenant business data | while the tenant is active, 30 days after cancelation |
+| A module's data after the owner deletes it | 7-day grace period, then deleted; gone from backups when they expire |
+| Module data exports | 7 days, then the file is deleted |
 | Chat conversations | 90 days default, tenant-configurable down to 0 |
 | Notification logs | 1 year |
 | Audit log | 2 years |

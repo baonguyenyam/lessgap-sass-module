@@ -17,9 +17,9 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 ## Decisions needed before starting
 | # | Question | Options | Decision |
 |---|---|---|---|
-| 1-A | Existing kit users in the current database | create one tenant per user with data (default) / start empty | |
-| 1-B | Self-service tenant creation in this phase | staff-created only (default) / signup creates tenant | |
-| 1-C | Invitation expiry | 7 days (default) / other | |
+| 1-A | Existing kit users in the current database | create one tenant per user / start empty | **One tenant per existing user**, 2026-10-26 |
+| 1-B | Self-service tenant creation in this phase | staff-created only / signup creates tenant | staff-created only in phase 1 (default); self-service signup arrives with the `signup.*` switches in phase 2 |
+| 1-C | Invitation expiry | 7 days / other | **7 days**, 2026-10-26 |
 
 ## Tasks
 
@@ -61,7 +61,7 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - [ ] done
 
 ### 1.6 — Tenant settings and module enablement storage
-- **Goal:** `TenantModule` (tenantId, moduleKey, enabled, settings JSON) and `isModuleActive` using it (entitlements arrive in phase 2).
+- **Goal:** `TenantModule` (as in data-model.md) and `isModuleActive` using it (entitlements arrive in phase 2). `ModulePurge` and `ModuleExport` and the Settings → Modules page are phase 2.
 - **Files:** `prisma/schema/platform.prisma`, migration, `src/platform/modules/runtime.ts`, tests.
 - **Tests:** enable/disable is idempotent; disabling a dependency is refused; disabled module's routes 404 (integration with a fixture module).
 - **Checks:** `pnpm test`, `pnpm test:integration`, `pnpm modules:check`.
@@ -101,7 +101,7 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - [ ] done
 
 ### 1.12 — Migrate kit data and retire Project
-- **Goal:** per decision 1-A, existing users with subscriptions get a tenant; `Project` leaves the product surface (model kept until a contract migration in a later phase).
+- **Goal:** per decision 1-A, every existing user gets a tenant (named after the user, slug from the name, the user as owner, their subscription or purchases moved to it); `Project` leaves the product surface (model kept until a contract migration in a later phase).
 - **Files:** backfill `scripts/backfills/2026xxxx-platform-tenant-per-user.ts`, dashboard nav, tests.
 - **Tests:** M4 (backfill idempotent).
 - [ ] done

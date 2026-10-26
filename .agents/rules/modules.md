@@ -54,6 +54,13 @@ Design: `spec/15-module-system.md` (read it before your first module task),
 - Off never deletes data. Only `onPurge`, run by tenant deletion or an explicit
   audited staff action, deletes a module's data.
 - `onEnable` and every job and subscriber are idempotent.
+- Enabling a module never creates tables. Tables come from the module's migration, shared by all tenants.
+- A module with models implements `describeData`, `onExport` and `onPurge`
+  (contract test L10). `onPurge` deletes only its own models' rows for that
+  tenant, through `tenantDb`, in batches, idempotently, plus its files and
+  embeddings. It is called only by the purge job or tenant deletion.
+- Code that refers to another module's rows by id renders a missing row
+  gracefully; that module's data can be purged.
 
 ## Entitlements
 

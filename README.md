@@ -1,18 +1,14 @@
-<p align="center">
-  <img src=".github/openstarterkit.webp" alt="OpenStarterKit" width="100%" />
-</p>
-
+<h1 align="center">lessGAP Starter Kit</h1>
 
 <p align="center">
-  <strong>The free, open-source Next.js SaaS starter kit.</strong><br/>
+  <strong>The Next.js SaaS starter kit we build lessGAP products on.</strong><br/>
   Auth, payments, admin and emails, wired up and production-ready. Ship your product this weekend.
 </p>
 
 <p align="center">
-  <a href="./ROADMAP.md"><img alt="Version" src="https://img.shields.io/badge/version-2.4.0-6366f1.svg" /></a>
+  <a href="./ROADMAP.md"><img alt="Version" src="https://img.shields.io/badge/version-2.5.0-6366f1.svg" /></a>
   <a href="./LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
-  <a href="https://github.com/openstarterkit/nextjs-saas-starter-kit/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/openstarterkit/nextjs-saas-starter-kit/actions/workflows/ci.yml/badge.svg" /></a>
-  <img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" />
+  <a href="https://github.com/baonguyenyam/lessgap-sass-module/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/baonguyenyam/lessgap-sass-module/actions/workflows/ci.yml/badge.svg" /></a>
 </p>
 
 <p align="center">
@@ -27,12 +23,6 @@
 </p>
 
 <p align="center">
-  <a href="https://vercel.com/new/clone?repository-url=https://github.com/openstarterkit/nextjs-saas-starter-kit&env=DATABASE_URL,AUTH_SECRET,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,NEXT_PUBLIC_APP_URL&envDescription=Required%20environment%20variables%20for%20OpenStarterKit&envLink=https://github.com/openstarterkit/nextjs-saas-starter-kit/blob/main/.env.example&project-name=nextjs-saas-starter-kit&repository-name=nextjs-saas-starter-kit">
-    <img alt="Deploy with Vercel" src="https://vercel.com/button" />
-  </a>
-</p>
-
-<p align="center">
   <a href="#-features">Features</a> ·
   <a href="#-tech-stack">Tech stack</a> ·
   <a href="#-quick-start">Quick start</a> ·
@@ -44,9 +34,9 @@
 
 ---
 
-## ✨ Why OpenStarterKit?
+## ✨ Why lessGAP Starter Kit?
 
-Most SaaS boilerplates either cost a few hundred dollars or ship as a barebones demo. **OpenStarterKit is different:**
+Most SaaS boilerplates either cost a few hundred dollars or ship as a barebones demo. **lessGAP Starter Kit is different:**
 
 - 💳 **Payments included in the free tier**: full Stripe Checkout, Customer Portal and webhooks, not paywalled behind a Pro plan.
 - 🔓 **It is plain Next.js**: no compiler, no config DSL, no proprietary CLI. The App Router, Server Actions and Prisma behave exactly as their own docs say, with plain PostgreSQL underneath: host it anywhere, own your data.
@@ -97,7 +87,7 @@ Most SaaS boilerplates either cost a few hundred dollars or ship as a barebones 
 - **Content**: the blog and docs are Markdown files with frontmatter, rendered through [MDX](https://mdxjs.com) with GitHub Flavored Markdown, so publishing a post means adding a file to the repository.
 - **Analytics**: [Vercel Analytics](https://vercel.com/analytics), mounted in the root layout and active on Vercel deployments. Delete the component if you would rather collect nothing.
 - **Tests**: [Vitest](https://vitest.dev) on the pure logic, the health endpoint and the Stripe webhook, and [Playwright](https://playwright.dev) end to end on signup and checkout.
-- **CI**: [GitHub Actions](https://github.com/features/actions) running lint, tests, build and `npm audit` on every push, so a broken or vulnerable commit fails before it reaches you.
+- **CI**: [GitHub Actions](https://github.com/features/actions) running lint, tests, build and `pnpm audit` on every push, so a broken or vulnerable commit fails before it reaches you.
 
 ### Routes
 
@@ -118,26 +108,22 @@ Most SaaS boilerplates either cost a few hundred dollars or ship as a barebones 
 
 ## ⚡ Quick start
 
-<p align="center">
-  <img src="public/media/quick-setup.webp" alt="A terminal runs git clone, npm install and npm run dev, then the app opens at localhost:3000" width="100%" />
-</p>
-
-> 📚 Prefer step-by-step guides? The full documentation lives in [docs/](./docs/README.md) and is rendered at [openstarterkit.dev/docs](https://openstarterkit.dev/docs): getting started, configuration, authentication, deployment.
+> 📚 Prefer step-by-step guides? The full documentation lives in [docs/](./docs/README.md) and is rendered in the app itself at `/docs`: getting started, configuration, authentication, deployment.
 
 **You need:** Node 24 or newer, git, and a PostgreSQL database ([Neon](https://neon.tech) has a free tier).
 
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/openstarterkit/nextjs-saas-starter-kit.git
-cd nextjs-saas-starter-kit
-npm install
+git clone https://github.com/baonguyenyam/lessgap-sass-module.git
+cd lessgap-sass-module
+pnpm install
 ```
 
 ### 2. Start it
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000). There is no database yet, so the page lists the steps left and marks the one you are on. It appears in development only, until the database is ready.
@@ -170,15 +156,15 @@ Everything else (sign-in providers, Stripe, email) can wait: each feature turns 
 ### 4. Create the tables
 
 ```bash
-npx prisma migrate deploy   # applies the committed migrations
-npx prisma db seed          # six example plans, one inactive (edit prisma/seed.ts later)
+pnpm prisma migrate deploy   # applies the committed migrations
+pnpm prisma db seed          # six example plans, one inactive (edit prisma/seed.ts later)
 ```
 
 Both read `.env.local`, the same file the app reads.
 
 ### 5. Sign in
 
-Restart `npm run dev` and open the site again. Click **Sign in**: in development the login page has a **Dev Login (Admin)** button, which needs no OAuth app and lands you in the dashboard as an admin. 🎉
+Restart `pnpm dev` and open the site again. Click **Sign in**: in development the login page has a **Dev Login (Admin)** button, which needs no OAuth app and lands you in the dashboard as an admin. 🎉
 
 **Next:** sign-in providers, Stripe and email each have their setup in [Configuration](./docs/configuration.md), and the same five steps with more detail are in [Getting started](./docs/getting-started.md).
 
@@ -200,20 +186,20 @@ Then rewrite the landing copy and the `/privacy` + `/terms` placeholders, and it
 Click the **Deploy with Vercel** button at the top, or:
 
 ```bash
-npm i -g vercel
+pnpm add -g vercel
 vercel
 ```
 
 Vercel's free Hobby plan is for non-commercial use: if you sell with the app, budget for Vercel Pro or deploy on any Node.js host ([Deployment](./docs/deployment.md)).
 
-Set all environment variables in the Vercel dashboard. For Stripe webhooks in production, create a new endpoint in the Stripe dashboard pointing to `https://yourdomain.com/api/webhooks/stripe`. Builds do not run migrations: apply them to the production database yourself, with `npm run check:deploy` before and after (see [Deployment](./docs/deployment.md)).
+Set all environment variables in the Vercel dashboard. For Stripe webhooks in production, create a new endpoint in the Stripe dashboard pointing to `https://yourdomain.com/api/webhooks/stripe`. Builds do not run migrations: apply them to the production database yourself, with `pnpm check:deploy` before and after (see [Deployment](./docs/deployment.md)).
 
 ### Make yourself Admin
 
 After signing in for the first time, run:
 
 ```bash
-npx prisma studio
+pnpm prisma studio
 ```
 
 Find your user in the `User` table and set `role` to `ADMIN`. You'll then see the Admin Panel shortcut in your dashboard.
@@ -233,7 +219,7 @@ Change those, replace the landing copy, and the kit is fully yours. The only int
 
 ## 🕹️ Demo mode
 
-Want a public demo of your product (like [the kit's own demo](https://demo.openstarterkit.dev)) without collecting anyone's personal data? Deploy a second instance of this repo against an **isolated database** and set:
+Want a public demo of your product without collecting anyone's personal data? Deploy a second instance of this repo against an **isolated database** and set:
 
 ```bash
 DEMO_MODE="true"          # on the demo deployment
@@ -243,8 +229,10 @@ NEXT_PUBLIC_DEMO_URL=""   # on the marketing deployment → points "Sign in"/"De
 With `DEMO_MODE` on, the OAuth buttons are disabled and the login page offers **one-click shared accounts** instead: *Explore as User* and *Explore as Admin* (so visitors can see the admin panel too). Fill the demo database with believable fake users, subscriptions and projects:
 
 ```bash
-npm run db:seed:demo   # ⚠️ wipes users/projects and recreates fixtures; re-run to reset
+pnpm db:seed:demo   # ⚠️ wipes users/projects and recreates fixtures; re-run to reset
 ```
+
+The same seed also creates a real credential admin for this deployment — `baonguyenyam@gmail.com` / `adminadmin` — so email + password sign-in works on the demo too.
 
 No real emails, no real payments (use Stripe test keys), nothing to GDPR-worry about.
 
@@ -284,9 +272,9 @@ prisma/
 ## 🧪 Tests
 
 ```bash
-npm test              # run once
-npm run test:watch    # re-run on change
-npm run test:coverage # with a coverage report
+pnpm test              # run once
+pnpm test:watch    # re-run on change
+pnpm test:coverage # with a coverage report
 ```
 
 Vitest, on the pure logic in `src/lib`: the rate limiter and its shared store, the password policy, the backup code alphabet, the account linking rule that decides when a provider may attach itself, the billing rules behind free trials, discounts and the Stripe Tax check, the session rules behind role changes and revocation, the Markdown parsers behind the blog, docs and changelog, the environment schema, the builders behind structured data and page metadata, and the boundary every page reads the session through. Plus the two routes worth guarding: the health endpoint, and the Stripe webhook, tested with **real signatures** generated by Stripe's own SDK, so a forged or replayed request is proven never to reach the database writes behind it.
@@ -294,8 +282,8 @@ Vitest, on the pure logic in `src/lib`: the rate limiter and its shared store, t
 ### End-to-end
 
 ```bash
-npx playwright install chromium   # once, about 115 MB
-npm run test:e2e
+pnpm playwright install chromium   # once, about 115 MB
+pnpm test:e2e
 ```
 
 Playwright on the flows that cost something when they break:
@@ -305,7 +293,7 @@ Playwright on the flows that cost something when they break:
 - **The whole two-factor chain**: enable it, sign out, sign back in with a code, then with a backup code. The test computes the TOTP itself, so it runs with nobody in front of it.
 - **Accessibility**: axe-core against WCAG 2.1 AA on the public pages, an error state and the signed-in pages, each measured at its full height so contrast below the first screen is judged too, failing on serious and critical findings.
 
-Deliberately not part of `npm test` or CI: these need a database and a browser binary, and a clone should not have to install either to run the unit suite. Chromium only, because three engines mean three downloads and three times the flakes.
+Deliberately not part of `pnpm test` or CI: these need a database and a browser binary, and a clone should not have to install either to run the unit suite. Chromium only, because three engines mean three downloads and three times the flakes.
 
 Nothing here sends email or takes a payment. The test server runs with the Resend key blanked, so registering signs the user straight in instead of mailing a magic link, and the checkout test stops at the handoff rather than driving Stripe's hosted page. Accounts created by the run are deleted afterwards.
 
@@ -318,13 +306,13 @@ Coverage of `src/lib`, excluding the thin wrappers around Prisma, Stripe and Res
 | Functions | **84%** |
 | Branches | **72%** |
 
-Run `npm run test:coverage` to check those numbers yourself: they are printed by the command, not published to a badge service.
+Run `pnpm test:coverage` to check those numbers yourself: they are printed by the command, not published to a badge service.
 
 **Why no coverage badge?** Because it would travel with the kit and cost you something. A badge points at one specific repository, so every clone would show *our* coverage as if it were yours. Publishing it needs a third-party account, a token in your CI, and an uploader that runs where your secrets live. None of that belongs in a starter you are about to make your own: the command above reports the real figure for your code, and nothing leaves your machine.
 
-**Want one anyway?** Perfectly reasonable, and common on open source projects. Point Codecov, Coveralls or whichever tool you prefer at *your* repository, then add its upload step to `.github/workflows/ci.yml` after `npm test`. Both services are free for public repositories. The workflow is yours to edit, and leaving it out of the kit is what makes adding it a decision rather than a leftover.
+**Want one anyway?** Perfectly reasonable, and common on open source projects. Point Codecov, Coveralls or whichever tool you prefer at *your* repository, then add its upload step to `.github/workflows/ci.yml` after `pnpm test`. Both services are free for public repositories. The workflow is yours to edit, and leaving it out of the kit is what makes adding it a decision rather than a leftover.
 
-**Need coverage enforced rather than reported?** Thresholds that fail a build, history over time, and a report someone can hand to a compliance review are an organisation's problem, not a solo maker's. That is the kind of requirement the paid **Pro** tier is aimed at. Everything above stays in the free kit.
+**Need coverage enforced rather than reported?** Thresholds that fail a build, history over time, and a report someone can hand to a compliance review are an organisation's problem, not a solo maker's. Add a coverage gate in CI when you need one; everything above stays in the kit.
 
 **What is fully covered:** the changelog parser, the environment schema, the password policy, the auth boundary, and the builders behind structured data and page metadata. **What is not:** the functions that read the database or the filesystem (`getEntitlement`, `getAllPosts`). Those need integration tests against a real client, and a unit test that mocks Prisma or Stripe only proves the mock works. Where a mocked test still earns its place is the decision taken around a call rather than the call itself: `recordUsage` is covered for the guards that drop an event in a keyless install and for the payload it builds, not for what Stripe does with it.
 
@@ -333,8 +321,8 @@ Your environment is validated at boot (`src/instrumentation.ts`): a configuratio
 ### Release smoke
 
 ```bash
-npm run smoke -- https://your-app.com
-npm run smoke -- https://your-app.com --expect-version 2.4.0
+pnpm smoke -- https://your-app.com
+pnpm smoke -- https://your-app.com --expect-version 2.5.0
 ```
 
 Checks a running deployment from the outside: `/api/health` (including whether the database has every migration the build ships), home, blog index, feed, a real post, the SEO surfaces, and two routing guards (an unknown path is a 404, `/dashboard` redirects to sign in). With `--expect-version` it also compares the version the site reports with the one you are releasing, which is how you catch a deploy that succeeded while still serving the previous build.
@@ -349,7 +337,7 @@ Patch and minor bumps are **grouped by area** (Next, React, Prisma, UI, everythi
 
 GitHub Actions versions are checked monthly.
 
-CI runs lint, unit tests, the build and `npm audit --omit=dev --audit-level=high` on every push and pull request to `main`. The audit step is a gate, not a report: a high advisory in a runtime dependency stops the pipeline.
+CI runs lint, unit tests, the build and `pnpm audit --prod --audit-level high` on every push and pull request to `main`. The audit step is a gate, not a report: a high advisory in a runtime dependency stops the pipeline.
 
 ---
 
@@ -367,29 +355,20 @@ CI runs lint, unit tests, the build and `npm audit --omit=dev --audit-level=high
 
 ## 🏷️ Attribution & the badge
 
-OpenStarterKit ships with a small **"Built with OpenStarterKit"** badge in the app footer. It's on by default: it costs you nothing and helps other makers find the kit.
-
-**Want to remove it?** You're completely free to. Just set:
+lessGAP Starter Kit is built on [OpenStarterKit](https://github.com/openstarterkit/nextjs-saas-starter-kit), the open-source (MIT) Next.js SaaS starter kit, whose optional "Built with" badge still lives in `src/components/powered-by.tsx`. This deployment disables it from `.env`:
 
 ```bash
 NEXT_PUBLIC_REMOVE_BRANDING="true"
 ```
 
-No license to buy, no fee, no unlock: the badge simply disappears.
-
-If the kit saved you a weekend, the nicest way to say thanks is a coffee.
-Totally optional: ☕ [buy us a coffee](https://buymeacoffee.com/openstarterkit).
-
 ---
 
 ## 🗺️ Roadmap & changelog
 
-OpenStarterKit ships continuously and stays free: pull `main` for updates. A paid **Pro** tier (teams & scale) is coming later.
+lessGAP Starter Kit ships continuously and stays free: pull `main` for updates.
 
 - 📍 [ROADMAP.md](./ROADMAP.md): what's next
-- 📝 [CHANGELOG.md](./CHANGELOG.md): what shipped
-
-Every release is tagged, so **Watch → Custom → Releases** on the repository tells you when one lands without subscribing to every commit and issue.
+- 📝 [CHANGELOG.md](./CHANGELOG.md): what shipped, including the upstream history this fork builds on
 
 ## 🌍 Languages
 
@@ -397,15 +376,15 @@ Every release is tagged, so **Watch → Custom → Releases** on the repository 
 
 Built on [next-intl](https://next-intl.dev), with **no translation service and no account required**: the files are plain JSON in the standard layout, so running them through Crowdin or anything else is your call. Your Markdown docs translate too, one file at a time: see [docs/i18n.md](./docs/i18n.md).
 
-**On openstarterkit.dev the language switch is real**: every page of the documentation is there in Italian, and each translation records a checksum of the English file it was written from, so `npm run check:translations` says which ones went stale instead of leaving you to compare by hand, in your repository exactly as in ours. The blog stays English on purpose. Anything without a translation, page or message key, falls back to English with a line saying so rather than a gap, which is the behaviour you inherit and can see working on us instead of reading a description of it.
+**The language switch is real in this repository**: every page of the documentation ships in English and Italian, and each translation records a checksum of the English file it was written from, so `pnpm check:translations` says which ones went stale instead of leaving you to compare by hand. The blog stays English on purpose. Anything without a translation, page or message key, falls back to English with a line saying so rather than a gap.
 
 ## 🔒 Security
 
-Found a vulnerability **in the kit**? Please don't open a public issue: report it privately through [our security policy](https://github.com/openstarterkit/nextjs-saas-starter-kit/security/policy).
+Found a vulnerability **in this project**? Please don't open a public issue: report it privately to [baonguyenyam@gmail.com](mailto:baonguyenyam@gmail.com). Issues in the upstream kit it is based on go through the [OpenStarterKit security policy](https://github.com/openstarterkit/nextjs-saas-starter-kit/security/policy).
 
 Once this is your app, write your own policy: add a `SECURITY.md` to your repository, or one in a `.github` repository if you keep several projects under an organisation.
 
-**On dependencies**, the kit is kept clear of every advisory that has a fix, and Dependabot opens the updates weekly. What can still show up in `npm audit` are advisories inside Next.js's own dependency tree: those clear when Next ships a release, not when you run `npm audit fix`, and the "fix" npm suggests for them is a downgrade to an ancient major that you do not want. Run `npm audit` and read what it points at before assuming your clone is exposed.
+**On dependencies**, the kit is kept clear of every advisory that has a fix, and Dependabot opens the updates weekly. What can still show up in `pnpm audit` are advisories inside Next.js's own dependency tree: those clear when Next ships a release, not when you run `pnpm audit --fix`, and the "fix" the audit suggests for them is a downgrade to an ancient major that you do not want. Run `pnpm audit` and read what it points at before assuming your clone is exposed.
 
 ## 🎨 Content & assets
 
@@ -422,6 +401,6 @@ The logo mark is a [lucide](https://lucide.dev) icon (ISC licence) rendered as c
 ---
 
 <p align="center">
-  Built with ❤️ by <a href="https://openstarterkit.dev">OpenStarterKit</a><br/>
+  Built with ❤️ by <a href="https://github.com/baonguyenyam/lessgap-sass-module">lessGAP</a><br/>
   <sub>If this saved you time, a ⭐ on the repo means a lot.</sub>
 </p>

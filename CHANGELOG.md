@@ -1,9 +1,30 @@
 # Changelog
 
-All notable changes to OpenStarterKit are documented here.
+All notable changes to lessGAP Starter Kit are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/) and this project adheres to [Semantic Versioning](https://semver.org/).
 
-> 💡 **OpenStarterKit is free and open source (MIT).** It ships continuously: pull `main` to get every update and fix.
+> 💡 **lessGAP Starter Kit is built on [OpenStarterKit](https://github.com/openstarterkit/nextjs-saas-starter-kit) (MIT).** Entries up to and including 2.4.0 are the upstream kit's release history, kept so the "if you customised" notes still make sense; the release links at the bottom point at the upstream repository, where those versions were published.
+
+---
+
+## [2.5.0] - 2026-10-26
+
+🔧 **The fork becomes lessGAP Starter Kit.** Rebranded, moved to pnpm, the seed scripts fixed and the demo seed grows a real admin account — all on top of the upstream 2.4.0 this fork started from. This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
+
+### Added
+
+- **A real credential admin in the demo seed**: `pnpm db:seed:demo` now creates `baonguyenyam@gmail.com` (password `adminadmin`, `ADMIN` role) next to the shared one-click demo accounts, so email + password sign-in works on the demo too
+- **`shiki` as a direct dependency**: `src/lib/shiki.ts` imported it but it only ever arrived transitively through `@shikijs/rehype`, which pnpm does not hoist to `node_modules`
+
+### Changed
+
+- **Rebranded to lessGAP Starter Kit**: `NEXT_PUBLIC_BRAND_NAME`, wordmark accent and contact email set in `.env`, the "Built with" badge disabled via `NEXT_PUBLIC_REMOVE_BRANDING`, `package.json` renamed to `lessgap-starter-kit`, and the developer-docs links in the sidebar and setup guide now point at this deployment's own `/docs` instead of openstarterkit.dev
+- **Package manager is pnpm**: `packageManager` in `package.json`, the allowed build scripts in `pnpm-workspace.yaml`, and the commands in the README updated to match
+
+### Fixed
+
+- **`pnpm db:seed` and `pnpm db:seed:demo` run the seed again**: the scripts wrapped `ts-node` in `dotenv -e`, a flag dotenv-cli 11 removed, so they exited before the seed ever ran. The seed files now load `.env.local` then `.env` themselves, the same order as `prisma.config.ts`, and `dotenv-cli` is gone
+- **The version-consistency test reads a lockfile that exists**: it looked for `package-lock.json`, which a pnpm install never writes. The check now runs only when that file exists — `pnpm-lock.yaml` does not record the project version
 
 ---
 

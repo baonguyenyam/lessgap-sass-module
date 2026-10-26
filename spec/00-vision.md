@@ -23,9 +23,10 @@ and off, self-service where it is safe and staff-assisted where it is not.
 | Dental, small clinic | Services, team, hours, appointment requests | Insurance info pages, intake forms (see compliance) |
 | Generic local service | Business info, services, quote requests | Booking, payments |
 
-Many owners in the first two rows run their business in Vietnamese or
-Spanish; their customers mostly use English. The dashboard therefore needs
-`vi` early, and sites need more than one language as a plan feature.
+Many owners in the first two rows run their business in Vietnamese; their
+customers mostly use English. The product is therefore bilingual from the
+start: English (default) and Vietnamese across the marketing site, dashboard
+and console. Tenant sites can add languages as a plan feature.
 
 ## Actors
 

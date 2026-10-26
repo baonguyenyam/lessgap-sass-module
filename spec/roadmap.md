@@ -27,14 +27,14 @@ out of scope, even when it looks small: write it down under "Later" instead.
 **Brief:** [phases/phase-0.md](./phases/phase-0.md)
 
 **Scope**
-- Accept or amend ADRs 0001–0008 and 0010.
+- Accept or amend ADRs 0002–0008 and 0010 (0001 superseded by 0011; 0009, 0011, 0012 accepted).
 - Integration test layer with a real PostgreSQL locally and in CI; migration checks (M1, M2).
 - Prisma schema split by owner (`prisma/schema/`).
 - Module kernel skeleton, `pnpm new:module`, `pnpm modules:check`, boundary lint.
 - Shared conventions: errors, action wrapper, logger, money, time.
 - Platform domain is `lessgap.app`: add apex, `www` (redirect) and `app` to the Vercel project.
 - Sites domain is `lessgap.io`: move it to Vercel nameservers and add `*.lessgap.io` as a wildcard domain.
-- Add the upstream remote of the kit and document the merge routine (ADR 0001).
+- Replace the Italian locale and docs with Vietnamese; English stays the default.
 - `scripts/audit-tenancy.mjs` running in CI (passes trivially: no tenant models yet).
 - Add `vi` to dashboard locales scaffolding (decision in ADR 0001's notes), or record that it waits.
 - CI on pnpm with a frozen lockfile and a type-check step (done 2026-10-26).
@@ -73,6 +73,7 @@ out of scope, even when it looks small: write it down under "Later" instead.
 - Kit billing re-owned by tenant; add-ons; setup fee; free plan without Stripe subscription.
 - Pricing page reads public plans; signup respects `signup.*` switches.
 - Grace period and suspension on `past_due`.
+- **Settings → Modules** page: enable, disable, export data, scheduled delete with a 7-day grace period, cancel; the same in the platform console. Test cases L1–L10.
 
 **Exit criteria**
 - Resolver unit tests for every layer combination.

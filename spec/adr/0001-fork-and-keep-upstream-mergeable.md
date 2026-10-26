@@ -1,6 +1,6 @@
 # 0001. Fork the kit and keep it mergeable with upstream
 
-**Status:** proposed
+**Status:** superseded by [0011](./0011-independent-project-kit-as-reference.md)
 **Date:** 2026-10-26
 
 ## Context

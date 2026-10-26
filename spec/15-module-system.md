@@ -62,7 +62,9 @@ export default defineModule({
   lifecycle: {
     onEnable: seedDefaultAvailability,   // per tenant, idempotent
     onDisable: undefined,                // optional; never deletes data
-    onPurge: purgeBookingData,           // per tenant; called only by tenant deletion or explicit purge
+    describeData: countBookingData,      // per tenant: { appointments: 1240, resources: 4, … } for the purge screen
+    onExport: exportBookingData,         // per tenant: streams CSV/JSON files, one per entity
+    onPurge: purgeBookingData,           // per tenant; batched, idempotent; only via the purge job
   },
 })
 ```
@@ -79,7 +81,9 @@ not load.
 | **available** | platform switch `module.<key>` on, and stage allows it for this tenant | platform staff |
 | **entitled** | the tenant's plan/add-on/override includes the module feature | billing, platform staff |
 | **enabled** | the tenant (or staff) turned it on in **Settings → Modules** | tenant owner |
-| **purged** | data removed for one tenant | tenant deletion or explicit purge job |
+| **disabled** | turned off; data kept, everything hidden and paused | tenant owner or staff |
+| **purge scheduled** | disabled, deletion requested, waiting out the grace period | tenant owner or staff |
+| **purged** | data removed for one tenant | purge job, or tenant deletion |
 
 A module is **active for a tenant** when it is available, entitled, enabled,
 and every `dependsOn` module is active for that tenant. One function answers
@@ -91,9 +95,75 @@ for routes and a typed error for actions.
 - Disabling never deletes data and never runs a destructive hook. It hides
   navigation, routes (404), site blocks, and pauses the module's jobs and
   event subscribers for that tenant.
-- `onPurge` deletes the module's rows for one tenant. It is called by tenant
-  deletion and by an explicit staff action with confirmation and audit, never automatically on disable.
+- `onPurge` deletes the module's rows for one tenant. It is called only by
+  the purge job (below) and by tenant deletion, never automatically on disable.
 - Disabling a module that others depend on is refused with the list of dependants.
+
+### No tables per tenant
+
+Turning a module on creates **no table and no database**. A module's tables
+are created once, for every tenant, by the migration that ships with its
+code; rows carry `tenantId` and RLS keeps each tenant to its own
+([ADR 0002](./adr/0002-shared-database-tenant-id-and-rls.md)). Enabling for a
+tenant writes one `TenantModule` row and runs `onEnable`.
+
+### Settings → Modules
+
+One page in the tenant dashboard, owner only (managers see it read-only),
+listing every module that is available to the tenant:
+
+| Module state | Shown | Actions |
+| --- | --- | --- |
+| not entitled | name, what it does, which plan includes it | Upgrade |
+| entitled, never enabled | name, description | Enable |
+| active | name, short usage summary | Settings, Disable |
+| disabled | "Off since <date>. Your data is kept." and the counts from `describeData` | Enable, Export data, Delete data |
+| purge scheduled | "Deletes on <date>." | Cancel deletion, Export data |
+
+Platform staff see the same page for any tenant in the console, with the
+same actions plus an immediate purge (still audited, still with the counts and typed confirmation).
+
+### Export
+
+Available while a module is disabled or purge-scheduled (and always to
+staff). Runs as a job, calls the module's `onExport`, writes one file per
+entity (CSV for tables people open in a spreadsheet, JSON for nested data)
+into a zip under the tenant's storage prefix, emails the owner a signed link
+valid for 7 days, and writes an audit entry. Exports never include data of
+other modules, secrets, payment card data (never stored) or other tenants' rows.
+
+### Delete data (scheduled purge)
+
+1. The module must be disabled. No active module may `dependsOn` it; if one
+   does, the button is disabled with "Used by: Booking, Quotes".
+2. The owner clicks **Delete data**. The screen shows exactly what goes, from
+   `describeData` ("1,240 appointments, 4 resources, 312 reminders logged"),
+   recommends **Export data** first, and asks the owner to type the module's name.
+3. A `ModulePurge` row is created with status `scheduled` and
+   `runAfter = now + 7 days`. The owner gets an email with a cancel link;
+   audit entry `module.purge.scheduled`.
+4. During the 7 days the data stays untouched and the module cannot be
+   re-enabled without first cancelling the deletion (one click, audited).
+5. After `runAfter`, the purge job calls `onPurge` in batches until it reports
+   zero remaining rows, records the counts it deleted, sets status `done`,
+   resets the module's `TenantModule` row (as if never enabled), emails the
+   owner and writes `module.purge.completed`.
+6. A failure leaves status `failed` with the error, alerts platform staff, and
+   is retried; `onPurge` is idempotent, so a retry continues where it stopped.
+
+Rules for `onPurge`:
+
+- Deletes only rows of its own models for that tenant, through `tenantDb`.
+- Deletes the module's files in storage and its embeddings, if any.
+- Never deletes data of another module. Other modules refer to this one's
+  rows by plain id and must render a missing reference gracefully ("deleted
+  service"); that is checked by their tests, not prevented here.
+- Data required by law (tax records of paid orders) is anonymised instead of
+  deleted, and the screen says so before the owner confirms.
+
+Backups: deleted rows remain in database point-in-time backups until those
+expire (retention set in [security-compliance.md](./10-security-compliance.md)).
+The confirmation screen states this plainly.
 
 ## Stages and experiments
 

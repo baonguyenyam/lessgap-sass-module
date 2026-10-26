@@ -133,6 +133,20 @@ area. Phase briefs copy the rows they own into their task lists.
 | D8 | Every shared theme renders its fixture with zero axe violations | E2E |
 | D9 | Theme with an unknown key falls back to the vertical default and logs | unit |
 
+### Module lifecycle (phase 2)
+| # | Case | Layer |
+|---|---|---|
+| L1 | Enabling a module creates no table; it writes one `TenantModule` row and runs `onEnable` once, even when enabled twice | integration |
+| L2 | Disabling hides nav, returns 404 on its routes, hides site blocks, pauses its jobs and subscribers; data unchanged | integration + E2E |
+| L3 | Disabling a module another active module depends on is refused with the dependants listed | integration |
+| L4 | Delete data is refused while the module is enabled or while a dependant is active | integration |
+| L5 | Scheduling a purge needs the typed name, shows `describeData` counts, emails a cancel link, writes audit | integration + E2E |
+| L6 | Cancel within the grace period: data intact, status `CANCELED`, module can be re-enabled | integration |
+| L7 | Purge job before `runAfter` does nothing; after it, deletes every row of the module's models for that tenant and none of other tenants or other modules | integration |
+| L8 | Purge interrupted mid-way and re-run completes with no error (idempotent) | integration |
+| L9 | Export contains only this tenant's rows of this module; link expires after 7 days | integration |
+| L10 | Every module with models implements `describeData`, `onExport` and `onPurge` | contract |
+
 ### Booking (phase 5)
 | # | Case | Layer |
 |---|---|---|

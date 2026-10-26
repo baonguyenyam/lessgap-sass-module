@@ -2,7 +2,7 @@
 title: Primi passi
 description: Da git clone all'app che gira, in una decina di minuti.
 translated_from: getting-started.md
-source_checksum: 5f0df1f76045
+source_checksum: 0ce72e5a805d
 ---
 
 # Primi passi
@@ -11,20 +11,19 @@ Da zero all'app che gira in una decina di minuti.
 
 **Ti servono:** Node 24 o superiore, git e un database PostgreSQL ([Neon](https://neon.tech) ha un piano gratuito).
 
-![Un terminale esegue git clone, npm install e npm run dev, poi l'app si apre su localhost:3000](../public/media/quick-setup.webp "I passi 1 e 2 su un clone appena fatto: la pagina che si apre elenca cosa manca.")
 
 ## 1. Clona e installa
 
 ```bash
-git clone https://github.com/openstarterkit/nextjs-saas-starter-kit.git
-cd nextjs-saas-starter-kit
-npm install
+git clone https://github.com/baonguyenyam/lessgap-sass-module.git
+cd lessgap-sass-module
+pnpm install
 ```
 
 ## 2. Avvialo
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Apri [http://localhost:3000](http://localhost:3000). Il database non c'è ancora, quindi la pagina elenca i passi che restano e segna quello a cui sei arrivato. Compare solo in sviluppo, finché il database non è pronto.
@@ -57,15 +56,15 @@ Il resto (OAuth, Stripe, email) può aspettare: il kit funziona lo stesso e ogni
 ## 4. Crea le tabelle
 
 ```bash
-npx prisma migrate deploy   # applica le migrazioni gia in repository
-npx prisma db seed          # sei piani di esempio, uno spento (poi modifica prisma/seed.ts)
+pnpm prisma migrate deploy   # applica le migrazioni gia in repository
+pnpm prisma db seed          # sei piani di esempio, uno spento (poi modifica prisma/seed.ts)
 ```
 
 Tutti e due leggono `.env.local`, lo stesso file che legge l'app.
 
 ## 5. Entra
 
-Riavvia `npm run dev` e riapri il sito. Premi **Sign in**: in sviluppo la pagina di accesso ha un pulsante **Dev Login (Admin)**, che non richiede nessuna app OAuth e ti porta nella dashboard come amministratore.
+Riavvia `pnpm dev` e riapri il sito. Premi **Sign in**: in sviluppo la pagina di accesso ha un pulsante **Dev Login (Admin)**, che non richiede nessuna app OAuth e ti porta nella dashboard come amministratore.
 
 ## 6. Da qui in poi
 

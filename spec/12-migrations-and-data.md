@@ -13,7 +13,7 @@ multi-file schema (`schema: "prisma/schema"` in `prisma.config.ts`):
 ```
 prisma/schema/
   base.prisma          generator, datasource
-  kit.prisma           kit models (User, Account, Session, …) — keep close to upstream
+  kit.prisma           models inherited from the kit (User, Account, Session, …)
   platform.prisma      Tenant, Member, Domain, Site, Plan, switches, overrides, usage, audit, jobs
   booking.prisma       one file per module that owns models
   shop.prisma

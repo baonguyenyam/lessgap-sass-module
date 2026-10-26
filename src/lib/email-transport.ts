@@ -19,8 +19,8 @@ import type { ResendOutcome } from "@/lib/email-delivery"
 
 /**
  * Platform change (spec/adr/0009): Brevo is the provider when BREVO_API_KEY is
- * set, and wins over Resend. Resend stays as the kit ships it, so an upstream
- * merge keeps working and a deployment without Brevo behaves as before.
+ * set, and wins over Resend. Resend stays as the kit shipped it, so a
+ * deployment without Brevo behaves as before.
  */
 function provider(): "brevo" | "resend" | null {
   if (process.env.BREVO_API_KEY) return "brevo"

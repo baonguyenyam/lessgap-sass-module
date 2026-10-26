@@ -63,15 +63,22 @@ module enable/disable, refunds. Action names follow `<module>.<entity>.<verb>`.
 ## Time
 
 - Store UTC. Every tenant has an IANA `timeZone`; display and slot
-  calculations convert with `src/platform/time.ts`, which wraps one date
-  library chosen in phase 0 (Temporal polyfill or date-fns-tz; an ADR records it).
+  calculations convert with `src/platform/time.ts`, which wraps the Temporal polyfill
+  ([ADR 0012](./adr/0012-temporal-for-dates-and-time-zones.md)). US zones and
+  `Asia/Ho_Chi_Minh` are first-class and covered by tests.
 - Wall-clock values (opening hours) are `"HH:mm"` plus weekday, interpreted in the tenant's zone.
 - Code that needs "now" takes a `now` parameter or a clock, so tests are deterministic.
 
 ## Internationalisation
 
-- Dashboard strings: `src/locales/<lang>.json` (kit rule). Module strings live
-  under a `modules.<key>.*` namespace in the same files.
+- The product is bilingual: English (`en`, default) and Vietnamese (`vi`),
+  for the marketing site, the dashboard, the platform console and emails to
+  members. Every key exists in both `src/locales/en.json` and
+  `src/locales/vi.json`; the kit's test that fails on missing or unused keys
+  covers both. Module strings live under `modules.<key>.*`.
+- A member's language is a user preference (default from the browser, then
+  `en`); emails to a member use it. Emails to a tenant's customers use the
+  customer's language among the site's languages.
 - Tenant content in several languages is data: `{ en: "...", vi: "..." }`
   columns validated by a schema, never translation-file keys.
 - The platform name never appears in tenant-facing copy except the plan badge.

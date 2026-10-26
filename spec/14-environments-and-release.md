@@ -52,24 +52,13 @@
 
 ## Versioning and changelog
 
-- The product follows SemVer in `package.json` and `CHANGELOG.md` (Keep a
-  Changelog), separate from the kit's version, which is recorded as
-  "based on OpenStarterKit x.y.z" in the changelog header.
+- The product follows SemVer in `package.json` and `CHANGELOG.md` (Keep a Changelog).
 - Each module has its own `version` in its manifest for its contract (events,
   public service API, settings schema).
 - Tenant-facing changes are also summarised in a "What's new" entry in the dashboard (phase 4+).
 
-## Upstream kit merges
+## Inherited kit code
 
-Monthly and on every kit security release ([ADR 0001](./adr/0001-fork-and-keep-upstream-mergeable.md)):
-
-```bash
-git fetch upstream
-git switch -c chore/merge-kit-<version>
-git merge upstream/main
-pnpm install && pnpm typecheck && pnpm lint && pnpm test && pnpm test:integration
-```
-
-Conflicts are resolved in favour of the kit's behaviour unless the platform's
-change is documented in `spec/`; every kit file we changed carries a comment
-`Platform change (spec/...)` saying why.
+There is no upstream to merge ([ADR 0011](./adr/0011-independent-project-kit-as-reference.md)).
+Dependencies are kept current by Dependabot and the `pnpm audit` CI step. If
+the kit later fixes something we also have, port it by hand as a normal change.

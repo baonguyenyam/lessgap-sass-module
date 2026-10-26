@@ -51,8 +51,9 @@ app route (page, layout, route handler, server action)
 
 ## Where code lives
 
-Kit code stays where it is. Platform code is added in new places so that
-upstream merges stay small ([ADR 0001](./adr/0001-fork-and-keep-upstream-mergeable.md)).
+Code inherited from the kit stays where it is unless a phase brief moves it.
+Platform code goes into its own directories so module boundaries stay clear
+([ADR 0011](./adr/0011-independent-project-kit-as-reference.md)).
 
 ```
 src/

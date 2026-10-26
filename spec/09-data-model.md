@@ -171,6 +171,47 @@ model AuditLog {
   @@index([tenantId, createdAt])
 }
 
+model TenantModule {
+  id          String    @id @default(cuid())
+  tenantId    String
+  moduleKey   String
+  enabled     Boolean   @default(false)
+  settings    Json?                       // validated by the module's settings schema
+  enabledAt   DateTime?
+  disabledAt  DateTime?
+  firstEnabledAt DateTime?                // onEnable ran
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  @@unique([tenantId, moduleKey])
+}
+
+model ModulePurge {
+  id            String       @id @default(cuid())
+  tenantId      String
+  moduleKey     String
+  status        PurgeStatus  @default(SCHEDULED)   // SCHEDULED | RUNNING | DONE | CANCELED | FAILED
+  runAfter      DateTime                           // now + 7 days when scheduled by a tenant
+  requestedById String
+  counts        Json?                              // describeData at request time, then deleted counts
+  lastError     String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  @@index([status, runAfter])
+  @@index([tenantId, moduleKey])
+}
+
+model ModuleExport {
+  id            String   @id @default(cuid())
+  tenantId      String
+  moduleKey     String
+  status        String   // queued | ready | expired | failed
+  storageKey    String?  // tenants/<tenantId>/exports/<id>.zip
+  expiresAt     DateTime?
+  requestedById String
+  createdAt     DateTime @default(now())
+  @@index([tenantId, createdAt])
+}
+
 model Job {
   id          String    @id @default(cuid())
   tenantId    String?

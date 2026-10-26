@@ -23,7 +23,7 @@ Each rejected option and the reason it lost.
 
 | # | Decision | Status |
 | --- | --- | --- |
-| [0001](./0001-fork-and-keep-upstream-mergeable.md) | Fork the kit and keep it mergeable with upstream | proposed |
+| [0001](./0001-fork-and-keep-upstream-mergeable.md) | Fork the kit and keep it mergeable with upstream | superseded by 0011 |
 | [0002](./0002-shared-database-tenant-id-and-rls.md) | Shared database, `tenantId` on every tenant row, RLS as second line | proposed |
 | [0003](./0003-better-auth-organizations-for-tenants.md) | Tenants are Better Auth organizations | proposed |
 | [0004](./0004-vercel-for-subdomains-and-custom-domains.md) | Vercel for Platforms for subdomains and custom domains | proposed |
@@ -33,3 +33,5 @@ Each rejected option and the reason it lost.
 | [0008](./0008-jobs-table-before-a-queue.md) | A jobs table processed by cron before a queue service | proposed |
 | [0009](./0009-brevo-for-email-ses-later.md) | Brevo for email now, Amazon SES later, one transport | accepted |
 | [0010](./0010-modules-are-plugins-with-a-kernel.md) | Modules are plugins on a kernel | proposed |
+| [0011](./0011-independent-project-kit-as-reference.md) | Independent project; the kit is a reference, not an upstream | accepted |
+| [0012](./0012-temporal-for-dates-and-time-zones.md) | Temporal (polyfill) for dates and time zones | accepted |

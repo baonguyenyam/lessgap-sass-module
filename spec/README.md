@@ -51,11 +51,12 @@ asked to work on in [phases/](./phases/), then the documents that brief links to
 
 ## Relationship to the starter kit
 
-The repository started as OpenStarterKit (MIT). We keep it mergeable with
-upstream: see [ADR 0001](./adr/0001-fork-and-keep-upstream-mergeable.md). Kit
-rules in `AGENTS.md` still apply to kit code; platform code follows the same
-rules plus `.agents/rules/multi-tenancy.md` and `.agents/rules/modules.md`.
+The repository started from OpenStarterKit (MIT). It is now an independent
+project, lessgap-sass-module; the kit is a reference we learned from, not an
+upstream we merge ([ADR 0011](./adr/0011-independent-project-kit-as-reference.md)).
+The rules in `AGENTS.md` apply to all code, plus `.agents/rules/multi-tenancy.md`
+and `.agents/rules/modules.md` for platform code.
 
-This folder lives outside `docs/` on purpose: `docs/` holds the kit's user
-guides, each in two languages. The spec is an internal working document in
-English, like the rest of the code.
+This folder lives outside `docs/` on purpose: `docs/` holds user guides,
+each in two languages. The spec is an internal working document in English,
+like the rest of the code.

@@ -41,4 +41,5 @@ for the same thing is how a codebase starts to drift.
 | Active module | `isModuleActive` | Available, entitled, enabled, and all dependencies active, for one tenant |
 | Extension point | `extensionPoints` | A named place in a module's flow or UI that other modules may fill |
 | Event | `<module>.<entity>.<past-tense>` | A typed, versioned fact a module emits for others to react to |
+| Purge | `ModulePurge` | Scheduled deletion of one module's data for one tenant, after a 7-day grace period |
 | Phase brief | `spec/phases/phase-N.md` | The task list an agent works through, one task per change |

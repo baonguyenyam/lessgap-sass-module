@@ -4,20 +4,19 @@ From zero to a running app in about 10 minutes.
 
 **You need:** Node 24 or newer, git, and a PostgreSQL database ([Neon](https://neon.tech) has a free tier).
 
-![A terminal runs git clone, npm install and npm run dev, then the app opens at localhost:3000](../public/media/quick-setup.webp "Steps 1 and 2 on a fresh clone: the page that opens lists what is left.")
 
 ## 1. Clone and install
 
 ```bash
-git clone https://github.com/openstarterkit/nextjs-saas-starter-kit.git
-cd nextjs-saas-starter-kit
-npm install
+git clone https://github.com/baonguyenyam/lessgap-sass-module.git
+cd lessgap-sass-module
+pnpm install
 ```
 
 ## 2. Start it
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000). There is no database yet, so the page lists the steps left and marks the one you are on. It appears in development only, until the database is ready.
@@ -50,15 +49,15 @@ Everything else (OAuth, Stripe, email) can wait: the kit degrades gracefully and
 ## 4. Create the tables
 
 ```bash
-npx prisma migrate deploy   # applies the committed migrations
-npx prisma db seed          # six example plans, one inactive (edit prisma/seed.ts later)
+pnpm prisma migrate deploy   # applies the committed migrations
+pnpm prisma db seed          # six example plans, one inactive (edit prisma/seed.ts later)
 ```
 
 Both read `.env.local`, the same file the app reads.
 
 ## 5. Sign in
 
-Restart `npm run dev` and open the site again. Click **Sign in**: in development the login page has a **Dev Login (Admin)** button, which needs no OAuth app and lands you in the dashboard as an admin.
+Restart `pnpm dev` and open the site again. Click **Sign in**: in development the login page has a **Dev Login (Admin)** button, which needs no OAuth app and lands you in the dashboard as an admin.
 
 ## 6. Next steps
 
