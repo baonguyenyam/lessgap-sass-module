@@ -11,7 +11,7 @@
 import { isKitSite } from "@/config/kit"
 
 export const siteConfig = {
-  name: process.env.NEXT_PUBLIC_BRAND_NAME || (isKitSite ? "OpenStarterKit" : "Acme"),
+  name: process.env.NEXT_PUBLIC_BRAND_NAME || (isKitSite ? "less[GAP] App" : "Acme"),
   tagline:
     process.env.NEXT_PUBLIC_BRAND_TAGLINE || (isKitSite ? "Ship your SaaS this weekend" : "Ship your product faster"),
 

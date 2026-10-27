@@ -14,8 +14,16 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
   fields at their default height, which matches a default button. Never set a
   field's height by hand; a busy button is `disabled` with a `<Spinner />`
   inside, not a `loading` prop.
-- **Selects:** `Select` in client components; `NativeSelect` in forms
-  rendered on the server. Never a bare `<select>`: its arrow sits against the border.
+- **Picking from a list:** `OptionSelect` (`components/form/option-select.tsx`)
+  in client components: the stock Select up to 8 options, searchable from 9
+  on. `NativeSelect` only in forms rendered on the server. Never a raw `Select`
+  or a bare `<select>` elsewhere.
+- **Waiting for data:** a field that is loading shows a spinner in place of
+  its icon (`loading` on `OptionSelect`, the DataTable search while rows load),
+  never a frozen field with no sign of life.
+- **Language files:** every string goes into `en.json` and, in the same change,
+  into every other file in `src/locales/` with the same key; a test fails on a
+  missing or stale key.
   Use a searchable combobox when options are long or come from database records;
   fetch remote matches through an API instead of loading the whole dataset into
   the page. Select menus open below/away from their trigger so the menu does not

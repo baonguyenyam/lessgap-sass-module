@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, type AriaAttributes } from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
@@ -14,7 +14,13 @@ export type SearchableSelectOption = {
   label: string
 }
 
-type SearchableSelectProps = {
+/**
+ * A searchable list: the long-list half of `OptionSelect` (pick through that).
+ * Filters in the browser, or, with `onSearchChange`, lets the caller search on
+ * the server while it shows a spinner. Forwards `id` and ARIA attributes so it
+ * works inside `FormControl`.
+ */
+type SearchableSelectProps = AriaAttributes & {
   options: SearchableSelectOption[]
   value: string
   onValueChange: (value: string) => void
@@ -25,6 +31,7 @@ type SearchableSelectProps = {
   searchPlaceholder?: string
   emptyMessage?: string
   className?: string
+  id?: string
 }
 
 export function SearchableSelect({
@@ -38,6 +45,8 @@ export function SearchableSelect({
   searchPlaceholder,
   emptyMessage,
   className,
+  id,
+  ...aria
 }: SearchableSelectProps) {
   const t = useTranslations("ui.searchableSelect")
   const [open, setOpen] = useState(false)
@@ -53,10 +62,13 @@ export function SearchableSelect({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          {...aria}
+          id={id}
           type="button"
           variant="outline"
           role="combobox"
           aria-expanded={open}
+          aria-busy={loading || undefined}
           disabled={disabled}
           className={cn("w-full justify-between font-normal", className)}
         >

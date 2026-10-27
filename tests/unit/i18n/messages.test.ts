@@ -290,3 +290,26 @@ describe("message key names", () => {
     expect(offenders).toEqual([])
   })
 })
+
+/**
+ * Language files stay consistent with each other: every locale carries exactly
+ * the keys of en.json. A missing key would show English in the middle of a
+ * translated page; a stale key is a string nothing reads any more.
+ */
+describe("locale files", () => {
+  const flatten = (node: unknown, prefix = ""): string[] =>
+    node && typeof node === "object" && !Array.isArray(node)
+      ? Object.entries(node).flatMap(([key, value]) => flatten(value, `${prefix}${key}.`))
+      : [prefix.slice(0, -1)]
+  const dir = path.join(SRC, "locales")
+  const source = new Set(flatten(JSON.parse(fs.readFileSync(path.join(dir, "en.json"), "utf8"))))
+  const others = fs.readdirSync(dir).filter((f) => f.endsWith(".json") && f !== "en.json")
+
+  it.each(others)("%s has exactly the keys of en.json", (file) => {
+    const keys = new Set(flatten(JSON.parse(fs.readFileSync(path.join(dir, file), "utf8"))))
+    expect({
+      missing: [...source].filter((key) => !keys.has(key)),
+      stale: [...keys].filter((key) => !source.has(key)),
+    }).toEqual({ missing: [], stale: [] })
+  })
+})

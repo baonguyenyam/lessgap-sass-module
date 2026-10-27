@@ -98,7 +98,7 @@ export function LogoWordmark({ className, generic }: { className?: string; gener
   if (accent && name.includes(accent)) {
     const [before, after] = name.split(accent)
     return (
-      <span className={cn("tracking-tight", className)}>
+      <span className={cn("tracking-tight font-bold", className)}>
         {before}
         <span className="text-gradient-brand">{accent}</span>
         {after}

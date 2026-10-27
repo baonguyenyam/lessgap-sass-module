@@ -5,6 +5,20 @@ requirement is specified so agents read the source, not this summary. When a
 requirement becomes spec, ADR, rule or test, the pointer is updated and this
 file stays the index — not the place requirements are defined.
 
+## 2026-10-27 — Searchable selects, loading fields, consistent language files
+
+1. **Long selects have search**: every list is picked through `OptionSelect`
+   (`src/components/form/option-select.tsx`), which is the stock Select up to 8
+   options and the searchable `SearchableSelect` (shadcn Popover + Command) from
+   9 on → UI rules, `tests/unit/ui-consistency.test.ts` (no raw `Select`
+   outside `components/form`).
+2. **A field waiting for data shows a loading icon**: `OptionSelect` /
+   `SearchableSelect` take `loading` (spinner, `aria-busy`); the table search
+   shows a spinner while results load → UI rules.
+3. **Language files are always consistent**: every file in `src/locales/` has
+   exactly the keys of `en.json`, translated, no missing and no stale keys →
+   `tests/unit/i18n/messages.test.ts` ("every locale has the same keys").
+
 ## 2026-10-27 — Standard shadcn templates
 
 - **Build on standard shadcn/ui templates, not a home-made design system.**

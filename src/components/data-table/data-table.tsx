@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { OptionSelect } from "@/components/form/option-select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ConfirmDialog, type ConfirmCopy } from "@/components/data-table/confirm-dialog"
 import {
@@ -167,10 +167,16 @@ export function DataTable<TData extends RowData>({
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
         {searchPlaceholder && (
           <div className="relative sm:w-72">
-            <Search
-              aria-hidden
-              className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-            />
+            {/* The search is a field waiting for data while the new rows load:
+                the icon turns into a spinner until they arrive. */}
+            {pending || search !== query.q ? (
+              <Spinner className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground" />
+            ) : (
+              <Search
+                aria-hidden
+                className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+              />
+            )}
             <Input
               type="search"
               value={search}
@@ -182,23 +188,14 @@ export function DataTable<TData extends RowData>({
           </div>
         )}
         {filters.map((filter) => (
-          <Select
+          <OptionSelect
             key={filter.key}
             value={query.filters[filter.key] ?? ALL}
             onValueChange={(value) => go({ filters: { [filter.key]: value === ALL ? null : value } })}
-          >
-            <SelectTrigger className="sm:w-44" aria-label={filter.label}>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value={ALL}>{t("all", { label: filter.label })}</SelectItem>
-              {filter.options.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            options={[{ value: ALL, label: t("all", { label: filter.label }) }, ...filter.options]}
+            aria-label={filter.label}
+            className="sm:w-44"
+          />
         ))}
         {actions && <div className="flex gap-2 sm:ml-auto">{actions}</div>}
       </div>
@@ -295,18 +292,13 @@ export function DataTable<TData extends RowData>({
         <span>{t("showing", { from, to, total })}</span>
         <div className="flex items-center gap-2">
           <span className="hidden sm:inline">{t("rowsPerPage")}</span>
-          <Select value={String(query.pageSize)} onValueChange={(value) => go({ pageSize: Number(value) })}>
-            <SelectTrigger className="w-20" aria-label={t("rowsPerPage")}>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {PAGE_SIZES.map((size) => (
-                <SelectItem key={size} value={String(size)}>
-                  {size}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <OptionSelect
+            value={String(query.pageSize)}
+            onValueChange={(value) => go({ pageSize: Number(value) })}
+            options={PAGE_SIZES.map((size) => ({ value: String(size), label: String(size) }))}
+            aria-label={t("rowsPerPage")}
+            className="w-20"
+          />
           <span className="px-1 whitespace-nowrap">{t("page", { page: query.page, pages })}</span>
           <Button
             size="icon"

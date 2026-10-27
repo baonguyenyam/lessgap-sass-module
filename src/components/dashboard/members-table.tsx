@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { OptionSelect } from "@/components/form/option-select"
 import { inviteMemberSchema, type InviteMemberInput } from "@/lib/schemas/tenant"
 import type { TableQuery } from "@/lib/table-query"
 import { useDrawer } from "@/stores/drawer"
@@ -202,20 +202,13 @@ function RoleSelect({
   roleOptions: string[]
 }) {
   return (
-    <Select value={value} onValueChange={onChange}>
-      <FormControl>
-        <SelectTrigger>
-          <SelectValue />
-        </SelectTrigger>
-      </FormControl>
-      <SelectContent>
-        {roleOptions.map((role) => (
-          <SelectItem key={role} value={role}>
-            {role}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <FormControl>
+      <OptionSelect
+        value={value}
+        onValueChange={onChange}
+        options={roleOptions.map((role) => ({ value: role, label: role }))}
+      />
+    </FormControl>
   )
 }
 

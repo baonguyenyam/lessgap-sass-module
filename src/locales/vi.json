@@ -53,8 +53,10 @@
         "invalid": "Kiểm tra lại thông tin: email hợp lệ và mật khẩu ít nhất 8 ký tự.",
         "exists": "Tài khoản với email này đã tồn tại. Hãy đăng nhập thay thế.",
         "rate": "Quá nhiều lần thử. Vui lòng thử lại sau vài phút.",
-        "generic": "Đã có lỗi xảy ra. Thử lại sau."
-      }
+        "generic": "Đã có lỗi xảy ra. Thử lại sau.",
+        "closed": "Hiện không nhận đăng ký mới."
+      },
+      "closedNotice": "Hiện chưa thể tạo tài khoản mới. Nếu bạn đã có tài khoản, hãy đăng nhập."
     },
     "login": {
       "title": "Chào mừng trở lại",
@@ -84,7 +86,8 @@
         "Verification": "Liên kết đăng nhập đó không hợp lệ hoặc đã hết hạn. Yêu cầu một liên kết mới.",
         "generic": "Đã có lỗi xảy ra. Thử lại sau.",
         "2fa": "Tài khoản này sử dụng xác thực hai yếu tố, vì vậy cần đăng nhập bằng mật khẩu và mã từ ứng dụng xác thực của bạn.",
-        "two_factor_linking": "Tài khoản này sử dụng xác thực hai yếu tố, nên nhà cung cấp không thể liên kết trực tiếp tại đây. Đăng nhập bằng mật khẩu và mã, sau đó kết nối nhà cung cấp từ Cài đặt."
+        "two_factor_linking": "Tài khoản này sử dụng xác thực hai yếu tố, nên nhà cung cấp không thể liên kết trực tiếp tại đây. Đăng nhập bằng mật khẩu và mã, sau đó kết nối nhà cung cấp từ Cài đặt.",
+        "signup_closed": "Hệ thống đang đóng đăng ký nên chưa tạo tài khoản mới. Nếu bạn đã có tài khoản, hãy đăng nhập bằng tài khoản đó."
       }
     },
     "twoFactor": {
@@ -118,7 +121,20 @@
       "emptyBody": "Tạo dự án đầu tiên của bạn để bắt đầu.",
       "noDescription": "Không có mô tả",
       "searchPlaceholder": "Tìm kiếm dự án...",
-      "noResultsBody": "Không có dự án nào khớp với “{query}”. Thử từ khóa ngắn hơn hoặc xóa tìm kiếm."
+      "noResultsBody": "Không có dự án nào khớp với “{query}”. Thử từ khóa ngắn hơn hoặc xóa tìm kiếm.",
+      "colName": "Tên",
+      "colUpdated": "Cập nhật",
+      "colCreated": "Ngày tạo",
+      "colActions": "Thao tác",
+      "description": "Mô tả",
+      "open": "Mở",
+      "edit": "Sửa",
+      "delete": "Xóa",
+      "editTitle": "Sửa dự án",
+      "deleteConfirm": {
+        "title": "Xóa các dự án đã chọn?",
+        "description": "Chúng sẽ bị xóa vĩnh viễn. Không thể hoàn tác."
+      }
     },
     "home": {
       "greeting": "Chào mừng trở lại, {name}",
@@ -431,7 +447,8 @@
       "description": "Bạn sẽ được đăng xuất và quay về trang chủ."
     },
     "userMenu": {
-      "open": "Mở menu tài khoản"
+      "open": "Mở menu tài khoản",
+      "signOut": "Đăng xuất"
     },
     "nav": {
       "dashboard": "Bảng điều khiển",
@@ -445,8 +462,17 @@
       "openNavigation": "Mở điều hướng",
       "members": "Thành viên",
       "roles": "Nhóm quyền",
-      "account": "Tài khoản",
-      "newsletter": "Newsletter"
+      "users": "Người dùng",
+      "newsletter": "Newsletter",
+      "platformSettings": "Cài đặt",
+      "groups": {
+        "main": "Tổng quan",
+        "workspace": "Không gian làm việc",
+        "account": "Tài khoản",
+        "admin": "Quản trị",
+        "back": "Quay lại"
+      },
+      "account": "Tài khoản"
     },
     "members": {
       "title": "Thành viên",
@@ -455,15 +481,17 @@
         "title": "Mời thành viên",
         "description": "Họ sẽ nhận email tham gia với vai trò bạn chọn.",
         "emailPlaceholder": "nguoi@example.com",
-        "submit": "Mời"
+        "email": "Email"
       },
       "list": {
-        "title": "Thành viên",
-        "count": "{count} người",
         "colMember": "Thành viên",
         "colRole": "Vai trò",
-        "update": "Cập nhật",
         "remove": "Xoá",
+        "colJoined": "Ngày tham gia",
+        "colActions": "Thao tác",
+        "changeRole": "Đổi vai trò",
+        "search": "Tìm theo tên hoặc email…",
+        "empty": "Không có thành viên nào phù hợp.",
         "colStatus": "Trạng thái",
         "colLastActive": "Hoạt động gần nhất",
         "never": "Chưa có",
@@ -476,8 +504,25 @@
       },
       "invitations": {
         "title": "Lời mời đang chờ",
+        "status": {
+          "pending": "Đang chờ",
+          "accepted": "Đã chấp nhận",
+          "rejected": "Đã từ chối",
+          "canceled": "Đã hủy"
+        },
         "revoke": "Thu hồi lời mời của {email}",
         "revoked": "Đã thu hồi lời mời."
+      },
+      "removeConfirm": {
+        "title": "Xóa các thành viên đã chọn?",
+        "description": "Họ mất quyền truy cập không gian làm việc này ngay lập tức. Bạn và chủ sở hữu cuối cùng không bao giờ bị xóa."
+      },
+      "errors": {
+        "invalidEmail": "Nhập một địa chỉ email hợp lệ.",
+        "roleRequired": "Chọn một vai trò.",
+        "unknownRole": "Vai trò này không tồn tại trong không gian làm việc.",
+        "notFound": "Thành viên này không còn trong không gian làm việc.",
+        "lastOwner": "Không thể đổi vai trò của chủ sở hữu cuối cùng."
       },
       "suspendConfirm": {
         "title": "Tạm khoá các thành viên đã chọn?",
@@ -487,24 +532,47 @@
     "roles": {
       "title": "Nhóm quyền",
       "subtitle": "Các nhóm quyền của không gian làm việc này.",
-      "builtin": {
-        "title": "Vai trò có sẵn",
-        "description": "Do nền tảng định sẵn, không chỉnh sửa được."
-      },
       "custom": {
-        "title": "Nhóm quyền tự tạo",
-        "description": "Nhóm quyền của riêng bạn, tạo ở dưới.",
         "empty": "Chưa có nhóm quyền tự tạo.",
-        "members": "thành viên",
         "delete": "Xoá"
       },
       "create": {
         "title": "Tạo nhóm quyền",
         "namePlaceholder": "ten-nhom-quyen",
-        "submit": "Tạo nhóm quyền"
+        "description": "Một nhóm quyền bạn có thể gán cho thành viên.",
+        "name": "Tên",
+        "nameHint": "Chữ thường, chữ số và dấu gạch ngang. Không thể đổi sau khi tạo."
       },
       "colRole": "Vai trò",
-      "colPermissions": "Quyền"
+      "colPermissions": "Quyền",
+      "colMembers": "Thành viên",
+      "colActions": "Thao tác",
+      "builtInTag": "Có sẵn",
+      "edit": "Sửa quyền",
+      "editTitle": "Sửa vai trò",
+      "search": "Tìm vai trò…",
+      "kind": {
+        "label": "Loại",
+        "builtIn": "Có sẵn",
+        "custom": "Tùy chỉnh"
+      },
+      "deleteConfirm": {
+        "title": "Xóa các vai trò đã chọn?",
+        "description": "Vai trò có sẵn và vai trò còn thành viên sẽ được giữ lại."
+      },
+      "errors": {
+        "roleKey": "Dùng chữ thường, chữ số và dấu gạch ngang.",
+        "permissionsRequired": "Chọn ít nhất một quyền.",
+        "builtIn": "Tên này thuộc về một vai trò có sẵn.",
+        "unknownPermission": "Một trong các quyền không tồn tại."
+      }
+    },
+    "search": {
+      "button": "Tìm kiếm…",
+      "title": "Tìm kiếm",
+      "description": "Đi tới bất kỳ trang nào theo tên.",
+      "placeholder": "Nhập tên trang…",
+      "empty": "Không có trang nào phù hợp."
     },
     "newsletter": {
       "title": "Newsletter",
@@ -533,13 +601,121 @@
     "revenueSubtitle": "Doanh thu định kỳ hàng tháng trong 12 tuần qua.",
     "revenueTooltip": "MRR",
     "waitlistTitle": "Danh sách chờ",
+    "users": {
+      "title": "Người dùng",
+      "subtitle": "Mọi tài khoản, kèm gói dịch vụ và vai trò.",
+      "search": "Tìm theo email hoặc tên…",
+      "colUser": "Người dùng",
+      "colPlan": "Gói",
+      "colStatus": "Trạng thái",
+      "colRole": "Vai trò",
+      "colJoined": "Ngày tham gia",
+      "colActions": "Thao tác",
+      "free": "Miễn phí",
+      "empty": "Không có người dùng nào phù hợp.",
+      "edit": "Sửa",
+      "switchAs": "Chuyển sang người dùng này",
+      "copyEmail": "Sao chép email",
+      "copied": "Đã sao chép email",
+      "exportCsv": "Xuất CSV",
+      "setRole": {
+        "USER": "Đặt làm người dùng",
+        "ADMIN": "Đặt làm quản trị viên"
+      },
+      "setRoleConfirm": {
+        "title": "Đổi vai trò của những người dùng đã chọn?",
+        "USER": "Họ mất quyền vào trang quản trị từ lần truy cập kế tiếp. Tài khoản ROOT và tài khoản của bạn được giữ nguyên.",
+        "ADMIN": "Họ được vào trang quản trị. Tài khoản ROOT và tài khoản của bạn được giữ nguyên."
+      },
+      "drawer": {
+        "title": "Sửa người dùng",
+        "name": "Tên",
+        "role": "Vai trò",
+        "roleHint": "Chỉ ROOT được đổi vai trò, và không bao giờ đổi sang hoặc từ ROOT.",
+        "roleLocked": "Bạn không thể đổi vai trò này."
+      }
+    },
+    "waitlistSummary": "{confirmed} đã xác nhận · {pending} đang chờ xác nhận",
+    "waitlistOpen": "Mở danh sách",
+    "newsletter": {
+      "title": "Bản tin",
+      "subtitle": "Mọi địa chỉ đã đăng ký, kèm ngày đồng ý nhận tin.",
+      "search": "Tìm theo email…",
+      "colEmail": "Email",
+      "colSource": "Nguồn",
+      "colStatus": "Trạng thái",
+      "colRequested": "Ngày đăng ký",
+      "colActions": "Thao tác",
+      "status": {
+        "pending": "Đang chờ",
+        "confirmed": "Đã xác nhận",
+        "unsubscribed": "Đã hủy đăng ký"
+      },
+      "empty": "Không có người đăng ký nào phù hợp.",
+      "copyEmail": "Sao chép email",
+      "copied": "Đã sao chép email",
+      "unsubscribe": "Hủy đăng ký",
+      "unsubscribeConfirm": {
+        "title": "Hủy đăng ký các địa chỉ đã chọn?",
+        "description": "Họ ngừng nhận bản tin và bị xóa khỏi danh sách gửi thư. Họ có thể tự đăng ký lại."
+      },
+      "exportSelected": "Xuất mục đã chọn",
+      "exportAll": "Xuất tất cả (CSV)"
+    },
     "settings": {
+      "title": "Cài đặt",
+      "subtitle": "Cách toàn hệ thống hiển thị ngày giờ và danh sách, dùng ngôn ngữ nào, và ai được tham gia.",
+      "tabsLabel": "Các mục cài đặt",
+      "tabs": {
+        "display": "Hiển thị",
+        "language": "Ngôn ngữ",
+        "access": "Truy cập"
+      },
+      "descriptions": {
+        "display": "Áp dụng cho mọi danh sách và mọi ngày giờ, với tất cả mọi người.",
+        "language": "Ngôn ngữ của bảng điều khiển, trang quản trị và các trang đăng nhập. Trang công khai theo địa chỉ URL.",
+        "access": "Ai được tạo tài khoản."
+      },
       "fields": {
+        "display": {
+          "page_size": {
+            "label": "Số dòng mỗi trang",
+            "description": "Số dòng một danh sách hiển thị trước khi sang trang. Ai cũng có thể đổi cho từng danh sách ở chân bảng."
+          },
+          "date_style": {
+            "label": "Định dạng ngày",
+            "description": "Cách viết ngày tháng."
+          },
+          "hour_cycle": {
+            "label": "Định dạng giờ",
+            "description": "Đồng hồ 12 giờ hoặc 24 giờ."
+          },
+          "time_zone": {
+            "label": "Múi giờ",
+            "description": "Mọi ngày giờ đều hiển thị theo múi giờ này."
+          }
+        },
         "locale": {
           "app": {
+            "label": "Ngôn ngữ",
             "description": "Ngôn ngữ mặc định. Mỗi người có thể đổi ở thanh tiêu đề."
           }
+        },
+        "signup": {
+          "enabled": {
+            "label": "Mở đăng ký",
+            "description": "Khi tắt, không ai tạo được tài khoản mới, kể cả bằng email hay qua Google, GitHub. Tài khoản đã có vẫn đăng nhập bình thường."
+          }
         }
+      },
+      "save": "Lưu thay đổi",
+      "saved": "Đã lưu cài đặt",
+      "rootOnly": "Chỉ ROOT được thay đổi các cài đặt này.",
+      "errors": {
+        "unknown": "Cài đặt này không tồn tại.",
+        "forbidden": "Bạn không được phép thay đổi một trong các cài đặt này.",
+        "invalid": "Một trong các giá trị không hợp lệ.",
+        "failed": "Không lưu được cài đặt."
       }
     }
   },
@@ -1080,12 +1256,50 @@
     "messageTooShort": "Vui lòng nhập chi tiết hơn (ít nhất 10 ký tự)",
     "checkTheForm": "Kiểm tra lại biểu mẫu và thử lại",
     "tooManyMessages": "Quá nhiều tin nhắn từ kết nối này. Thử lại sau vài phút.",
-    "contactSendFailed": "Đã có lỗi xảy ra. Hãy gửi email trực tiếp cho chúng tôi tại {email}."
+    "contactSendFailed": "Đã có lỗi xảy ra. Hãy gửi email trực tiếp cho chúng tôi tại {email}.",
+    "userNotFound": "Người dùng này không còn tồn tại."
+  },
+  "dataTable": {
+    "all": "{label}: Tất cả",
+    "bulkActions": "Thao tác hàng loạt",
+    "selected": "Đã chọn {count}",
+    "clearSelection": "Bỏ chọn",
+    "showing": "{from}–{to} trên {total}",
+    "rowsPerPage": "Số dòng mỗi trang",
+    "page": "Trang {page}/{pages}",
+    "previous": "Trang trước",
+    "next": "Trang sau",
+    "selectAll": "Chọn mọi dòng trên trang này",
+    "selectRow": "Chọn dòng",
+    "actionsFor": "Thao tác cho {label}",
+    "cancel": "Hủy",
+    "done": "Xong",
+    "failed": "Đã có lỗi. Chưa có gì bị thay đổi.",
+    "save": "Lưu",
+    "saving": "Đang lưu…",
+    "actions": "Thao tác"
+  },
+  "ui": {
+    "searchableSelect": {
+      "placeholder": "Chọn một mục…",
+      "searchPlaceholder": "Tìm trong danh sách…",
+      "empty": "Không tìm thấy mục nào.",
+      "loading": "Đang tải danh sách…"
+    },
+    "close": "Đóng",
+    "sidebar": "Thanh bên",
+    "sidebarDescription": "Điều hướng chính.",
+    "toggleSidebar": "Ẩn/hiện thanh bên",
+    "pagination": "Phân trang",
+    "previous": "Trước",
+    "next": "Sau",
+    "previousPage": "Về trang trước",
+    "nextPage": "Sang trang sau",
+    "morePages": "Các trang khác",
+    "breadcrumb": "Đường dẫn",
+    "more": "Thêm"
   },
   "language": {
     "label": "Đổi ngôn ngữ"
-  },
-  "dataTable": {
-    "actions": "Thao tác"
   }
 }

@@ -15,7 +15,7 @@ import { RowActions, type RowAction } from "@/components/data-table/row-actions"
 import { Badge } from "@/components/ui/badge"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { OptionSelect } from "@/components/form/option-select"
 import { ASSIGNABLE_ROLES, ROLES, canChangeRole, canSwitchAs, isAdmin, type Role } from "@/lib/roles"
 import { userSchema } from "@/lib/schemas/user"
 import type { TableQuery } from "@/lib/table-query"
@@ -213,20 +213,14 @@ function EditUserForm({ user, viewer }: { user: UserRow; viewer: Viewer }) {
         render={({ field }) => (
           <FormItem>
             <FormLabel>{t("drawer.role")}</FormLabel>
-            <Select value={field.value} onValueChange={field.onChange} disabled={!roleEditable}>
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                {(roleEditable ? ASSIGNABLE_ROLES : [user.role]).map((role) => (
-                  <SelectItem key={role} value={role}>
-                    {role}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <FormControl>
+              <OptionSelect
+                value={field.value}
+                onValueChange={field.onChange}
+                options={(roleEditable ? ASSIGNABLE_ROLES : [user.role]).map((role) => ({ value: role, label: role }))}
+                disabled={!roleEditable}
+              />
+            </FormControl>
             <FormDescription>{roleEditable ? t("drawer.roleHint") : t("drawer.roleLocked")}</FormDescription>
           </FormItem>
         )}

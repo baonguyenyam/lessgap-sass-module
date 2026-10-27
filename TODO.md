@@ -46,4 +46,4 @@ Các select dài nên có search, các fields khi đang đợi dữ liệu thì 
 Các fie ngôn ngữ luôn phải nhất quán với nhau 
 
 
-Ghi nhơ smoij thứu vào AI 
+Ghi nhơ mọi thứu vào AI 

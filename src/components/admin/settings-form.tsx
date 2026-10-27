@@ -12,7 +12,7 @@ import { savePlatformSettings } from "@/app/actions/platform-settings"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { OptionSelect } from "@/components/form/option-select"
 import { Switch } from "@/components/ui/switch"
 import { PLATFORM_SETTINGS, type SettingKey } from "@/platform/settings/registry"
 
@@ -98,20 +98,14 @@ export function SettingsForm({
               ) : (
                 <FormItem className="max-w-md">
                   <FormLabel>{setting.label}</FormLabel>
-                  <Select value={String(field.value)} onValueChange={field.onChange} disabled={!setting.editable}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {setting.options?.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <OptionSelect
+                      value={String(field.value)}
+                      onValueChange={field.onChange}
+                      options={setting.options ?? []}
+                      disabled={!setting.editable}
+                    />
+                  </FormControl>
                   <FormDescription>{setting.description}</FormDescription>
                   <FormMessage />
                 </FormItem>

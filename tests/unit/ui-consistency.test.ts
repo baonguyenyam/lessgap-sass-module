@@ -36,6 +36,16 @@ describe("UI consistency", () => {
     expect(offenders, 'use size="sm" | "md" | "lg" instead').toEqual([])
   })
 
+  // Long lists need a search box, and a field loading its options needs a
+  // spinner: OptionSelect does both, so it is the only way to pick from a list.
+  it("picks from lists only through OptionSelect", () => {
+    const offenders = files
+      .filter((file) => !file.includes(join("components", "form")))
+      .filter((file) => readFileSync(file, "utf8").includes('from "@/components/ui/select"'))
+      .map((f) => relative(ROOT, f))
+    expect(offenders, "use OptionSelect from @/components/form/option-select").toEqual([])
+  })
+
   it("uses no bare <select>", () => {
     const offenders = files.filter((file) => /<select\b/.test(readFileSync(file, "utf8"))).map((f) => relative(ROOT, f))
     expect(offenders, "use NativeSelect (server forms) or Select (client components)").toEqual([])
