@@ -58,3 +58,26 @@ describe("UI consistency", () => {
     expect(offenders, "the UI is flat: separate surfaces with a border or a ring").toEqual([])
   })
 })
+
+/**
+ * Every app page loads the same way: its own `loading.tsx` with a
+ * `PageSkeleton`. A parent boundary does not show for a navigation between
+ * sibling pages, so each page folder needs one.
+ */
+describe("page loading", () => {
+  const pageDirs = ["src/app/(dashboard)/dashboard", "src/app/(admin)/admin"].flatMap((dir) =>
+    readdirSync(join(ROOT, dir), { withFileTypes: true, recursive: true })
+      .filter((e) => e.isFile() && e.name === "page.tsx")
+      .map((e) => e.parentPath)
+  )
+
+  it("finds the app pages", () => {
+    expect(pageDirs.length).toBeGreaterThan(10)
+  })
+
+  it.each(pageDirs.map((dir) => [relative(ROOT, dir), dir]))("%s has a PageSkeleton loading.tsx", (_, dir) => {
+    const loading = join(dir, "loading.tsx")
+    expect(readdirSync(dir)).toContain("loading.tsx")
+    expect(readFileSync(loading, "utf8")).toContain("<PageSkeleton")
+  })
+})

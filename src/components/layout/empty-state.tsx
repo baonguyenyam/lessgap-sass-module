@@ -1,11 +1,13 @@
 import type { LucideIcon } from "lucide-react"
+import { cn } from "@/lib/utils"
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 
 /**
  * Every empty block in the app (requirements: empty states are consistent):
- * the stock shadcn `Empty` with an icon, a title, an optional sentence and an
- * optional next step. Lists get it through `DataTable`; anything else that can
- * be empty renders this, never a bare line of grey text.
+ * the stock shadcn `Empty` as a block of its own (dashed border), with an icon,
+ * a title, an optional sentence and an optional next step. Lists get it through
+ * `DataTable`, in place of the table; anything else that can be empty renders
+ * this, never a bare line of grey text.
  */
 export function EmptyState({
   icon: Icon,
@@ -21,7 +23,7 @@ export function EmptyState({
   className?: string
 }) {
   return (
-    <Empty className={className}>
+    <Empty className={cn("min-h-64 border md:p-12", className)}>
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <Icon />

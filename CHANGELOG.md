@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.16.0] - 2026-10-27
+
+**Empty lists are a block of their own, and every page loads as a skeleton.** This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
+
+### Added
+
+- **`PageSkeleton`** (`src/components/layout/page-skeleton.tsx`): every page under `/dashboard` and `/admin` now has its own `loading.tsx` showing a skeleton in the page's shape (a list, a form or cards) instead of dimming the screen. Settings and account pages keep their title and tabs on screen and skeleton only the content. A test fails when a page folder has no skeleton
+
+### Changed
+
+- **An empty list is no longer drawn as a table**: no header row, no pagination, one dashed block with an icon, a sentence and the next step. With a search or filter active, the search box stays above the "No results" block so it can be changed
+- The dimmed overlay with the logo now shows only on the first entry into the app; a link to a page that has no skeleton still falls back to it
+
 ## [2.15.0] - 2026-10-27
 
 **Empty lists explain themselves.** Every empty block now has the same shape: an icon, a title, one sentence and, where there is one, the next step. This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.

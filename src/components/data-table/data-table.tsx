@@ -89,9 +89,10 @@ type DataTableProps<TData extends RowData> = {
   /** Buttons at the right of the toolbar, such as "New". */
   actions?: React.ReactNode
   /**
-   * What the list shows when it has no rows at all. When a search or a filter
-   * is active the table shows its own "no results" state instead, with a way
-   * to clear them, so every list says it the same way.
+   * What the list shows when it has no rows at all: one block in place of the
+   * toolbar and the table. When a search or a filter is active the toolbar
+   * stays and the block says "no results" instead, with a way to clear them,
+   * so every list says it the same way. An empty list is never drawn as a table.
    */
   empty: { icon: LucideIcon; title: string; description?: string; action?: React.ReactNode }
 }
@@ -187,6 +188,9 @@ export function DataTable<TData extends RowData>({
   const from = total === 0 ? 0 : offsetOf(query) + 1
   const to = Math.min(offsetOf(query) + data.length, total)
 
+  // Nothing at all yet: no toolbar, no table, only the block and its next step.
+  if (data.length === 0 && !narrowed) return <EmptyState {...empty} />
+
   return (
     <div className="space-y-3">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -251,113 +255,110 @@ export function DataTable<TData extends RowData>({
         </div>
       )}
 
-      <div className={cn("rounded-[var(--radius)] border border-border transition-opacity", pending && "opacity-60")}>
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((group) => (
-              <TableRow key={group.id}>
-                {group.headers.map((header) => {
-                  const id = header.column.id
-                  const canSort = sortable.includes(id)
-                  const active = query.sort === id
-                  return (
-                    <TableHead
-                      key={header.id}
-                      aria-sort={active ? (query.dir === "asc" ? "ascending" : "descending") : undefined}
-                      className={cn(id === "select" && "w-10", id === "actions" && "w-12 text-right")}
-                    >
-                      {header.isPlaceholder ? null : canSort ? (
-                        <button
-                          type="button"
-                          className="-ml-1 inline-flex items-center gap-1 rounded px-1 hover:text-foreground"
-                          onClick={() => go({ sort: id, dir: active && query.dir === "asc" ? "desc" : "asc" })}
+      {data.length === 0 ? (
+        <EmptyState
+          icon={SearchX}
+          title={t("noResults.title")}
+          description={t("noResults.description")}
+          action={
+            <Button variant="outline" onClick={clearFilters}>
+              {t("noResults.clear")}
+            </Button>
+          }
+        />
+      ) : (
+        <>
+          <div
+            className={cn("rounded-[var(--radius)] border border-border transition-opacity", pending && "opacity-60")}
+          >
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((group) => (
+                  <TableRow key={group.id}>
+                    {group.headers.map((header) => {
+                      const id = header.column.id
+                      const canSort = sortable.includes(id)
+                      const active = query.sort === id
+                      return (
+                        <TableHead
+                          key={header.id}
+                          aria-sort={active ? (query.dir === "asc" ? "ascending" : "descending") : undefined}
+                          className={cn(id === "select" && "w-10", id === "actions" && "w-12 text-right")}
                         >
-                          <table.FlexRender header={header} />
-                          {active ? (
-                            query.dir === "asc" ? (
-                              <ArrowUp className="h-3.5 w-3.5" />
-                            ) : (
-                              <ArrowDown className="h-3.5 w-3.5" />
-                            )
+                          {header.isPlaceholder ? null : canSort ? (
+                            <button
+                              type="button"
+                              className="-ml-1 inline-flex items-center gap-1 rounded px-1 hover:text-foreground"
+                              onClick={() => go({ sort: id, dir: active && query.dir === "asc" ? "desc" : "asc" })}
+                            >
+                              <table.FlexRender header={header} />
+                              {active ? (
+                                query.dir === "asc" ? (
+                                  <ArrowUp className="h-3.5 w-3.5" />
+                                ) : (
+                                  <ArrowDown className="h-3.5 w-3.5" />
+                                )
+                              ) : (
+                                <ArrowUpDown className="h-3.5 w-3.5 opacity-40" />
+                              )}
+                            </button>
                           ) : (
-                            <ArrowUpDown className="h-3.5 w-3.5 opacity-40" />
+                            <table.FlexRender header={header} />
                           )}
-                        </button>
-                      ) : (
-                        <table.FlexRender header={header} />
-                      )}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id} data-state={row.getIsSelected() ? "selected" : undefined}>
-                {row.getAllCells().map((cell) => (
-                  <TableCell key={cell.id} className={cn(cell.column.id === "actions" && "text-right")}>
-                    <table.FlexRender cell={cell} />
-                  </TableCell>
+                        </TableHead>
+                      )
+                    })}
+                  </TableRow>
                 ))}
-              </TableRow>
-            ))}
-            {data.length === 0 && (
-              <TableRow className="hover:bg-transparent">
-                <TableCell colSpan={allColumns.length} className="p-0">
-                  {narrowed ? (
-                    <EmptyState
-                      icon={SearchX}
-                      title={t("noResults.title")}
-                      description={t("noResults.description")}
-                      action={
-                        <Button variant="outline" onClick={clearFilters}>
-                          {t("noResults.clear")}
-                        </Button>
-                      }
-                    />
-                  ) : (
-                    <EmptyState {...empty} />
-                  )}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id} data-state={row.getIsSelected() ? "selected" : undefined}>
+                    {row.getAllCells().map((cell) => (
+                      <TableCell key={cell.id} className={cn(cell.column.id === "actions" && "text-right")}>
+                        <table.FlexRender cell={cell} />
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
 
-      <div className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <span>{t("showing", { from, to, total })}</span>
-        <div className="flex items-center gap-2">
-          <span className="hidden sm:inline">{t("rowsPerPage")}</span>
-          <OptionSelect
-            value={String(query.pageSize)}
-            onValueChange={(value) => go({ pageSize: Number(value) })}
-            options={PAGE_SIZES.map((size) => ({ value: String(size), label: String(size) }))}
-            aria-label={t("rowsPerPage")}
-            className="w-20"
-          />
-          <span className="px-1 whitespace-nowrap">{t("page", { page: query.page, pages })}</span>
-          <Button
-            size="icon"
-            variant="outline"
-            aria-label={t("previous")}
-            disabled={query.page <= 1}
-            onClick={() => go({ page: query.page - 1 })}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <Button
-            size="icon"
-            variant="outline"
-            aria-label={t("next")}
-            disabled={query.page >= pages}
-            onClick={() => go({ page: query.page + 1 })}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+          <div className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+            <span>{t("showing", { from, to, total })}</span>
+            <div className="flex items-center gap-2">
+              <span className="hidden sm:inline">{t("rowsPerPage")}</span>
+              <OptionSelect
+                value={String(query.pageSize)}
+                onValueChange={(value) => go({ pageSize: Number(value) })}
+                options={PAGE_SIZES.map((size) => ({ value: String(size), label: String(size) }))}
+                aria-label={t("rowsPerPage")}
+                className="w-20"
+              />
+              <span className="px-1 whitespace-nowrap">{t("page", { page: query.page, pages })}</span>
+              <Button
+                size="icon"
+                variant="outline"
+                aria-label={t("previous")}
+                disabled={query.page <= 1}
+                onClick={() => go({ page: query.page - 1 })}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button
+                size="icon"
+                variant="outline"
+                aria-label={t("next")}
+                disabled={query.page >= pages}
+                onClick={() => go({ page: query.page + 1 })}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </>
+      )}
 
       <ConfirmDialog
         copy={confirming?.confirm ?? null}

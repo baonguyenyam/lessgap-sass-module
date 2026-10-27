@@ -11,8 +11,9 @@ import { BrandLoader } from "@/components/brand-loader"
  *
  * Two things start it:
  *
- *   - a `loading.tsx` boundary, which renders <RouteLoading />. This is the
- *     one that shows on the very first load too, before any script runs;
+ *   - a `loading.tsx` boundary, which renders <RouteLoading /> on the first
+ *     entry into the app (pages render a <PageSkeleton /> instead, which also
+ *     counts as a boundary);
  *   - a click on a link into the app (/dashboard, /admin), or back and
  *     forward, for the pages with no boundary of their own, where the old
  *     page used to sit there with no sign that anything was happening.
@@ -103,6 +104,15 @@ export function LoadingOverlay({ label, animate = true }: { label?: string; anim
  */
 export function RouteLoading({ label }: { label?: string }) {
   const [continued] = useState(() => linkVisible)
+  useLoadingBoundary()
+  return <LoadingOverlay label={label} animate={!continued} />
+}
+
+/**
+ * Marks a `loading.tsx` boundary as on screen (the overlay or a page
+ * skeleton), so the link overlay steps aside instead of covering it.
+ */
+export function useLoadingBoundary() {
   useEffect(() => {
     boundaries++
     emit()
@@ -111,7 +121,6 @@ export function RouteLoading({ label }: { label?: string }) {
       emit()
     }
   }, [])
-  return <LoadingOverlay label={label} animate={!continued} />
 }
 
 /** Whether a click on this anchor is an in-app page change we should cover. */

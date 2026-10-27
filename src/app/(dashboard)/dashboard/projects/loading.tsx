@@ -1,5 +1,5 @@
-import { RouteLoading } from "@/components/navigation-overlay"
+import { PageSkeleton } from "@/components/layout/page-skeleton"
 
 export default function ProjectsLoading() {
-  return <RouteLoading />
+  return <PageSkeleton variant="list" />
 }

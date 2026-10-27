@@ -5,6 +5,22 @@ requirement is specified so agents read the source, not this summary. When a
 requirement becomes spec, ADR, rule or test, the pointer is updated and this
 file stays the index — not the place requirements are defined.
 
+## 2026-10-27 — Empty lists are a block of their own; every page loads as a skeleton
+
+1. **An empty list is not drawn as a table.** No header row, no pagination,
+   no empty table frame: one standalone `EmptyState` block (bordered, dashed)
+   in the place of the table. With nothing yet, the toolbar goes too (searching
+   an empty list is pointless) and the block carries the next step. With a
+   search or filter active, the toolbar stays so it can be changed, and the
+   block says "no results" with "Clear filters" → `DataTable`, UI rules.
+2. **Every app page shows a skeleton while it loads**, the same component
+   everywhere (`PageSkeleton`, `src/components/layout/page-skeleton.tsx`) in
+   the page's `loading.tsx`, shaped like the page (list, form, cards). Every
+   page segment under `/dashboard` and `/admin` has its own `loading.tsx`,
+   because a parent boundary does not show for navigations between siblings.
+   Pages inside a section layout (settings, account) skeleton only the content:
+   the title and the vertical tabs stay → UI rules "Waiting for data".
+
 ## 2026-10-27 — Loading and empty states, everywhere the same
 
 1. **While data loads, show it the same way everywhere**, three cases:
