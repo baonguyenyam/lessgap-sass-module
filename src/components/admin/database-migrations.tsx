@@ -1,12 +1,13 @@
 "use client"
 
 import { useMutation } from "@tanstack/react-query"
-import { CircleCheck, CircleHelp, DatabaseZap, CircleDot, Check, X } from "lucide-react"
+import { CircleCheck, CircleHelp, DatabaseZap, X } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { toast } from "sonner"
 import { applyDatabaseMigrations } from "@/app/actions/database"
+import { DataTable, dataTableColumns } from "@/components/data-table/data-table"
 import { EmptyState } from "@/components/layout/empty-state"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import {
@@ -22,6 +23,7 @@ import { Button } from "@/components/ui/button"
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
+import type { TableQuery } from "@/lib/table-query"
 import type { MigrationStatus } from "@/platform/database/migration-status"
 
 const CONFIRM_WORD = "MIGRATE"
@@ -34,12 +36,18 @@ export function DatabaseMigrations({
   status,
   pendingCount,
   migrations,
+  total,
+  query,
+  defaults,
   backupFirst,
 }: {
   status: MigrationStatus["state"]
   /** The number of migrations waiting to be applied. */
   pendingCount: number
   migrations: { name: string; status: "applied" | "pending" | "unknown" }[]
+  total: number
+  query: TableQuery
+  defaults: { sort: string; dir: "asc" | "desc"; pageSize: number }
   /** Whether a backup is taken before migrating (storage configured). */
   backupFirst: boolean
 }) {
@@ -48,6 +56,22 @@ export function DatabaseMigrations({
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [typed, setTyped] = useState("")
+
+  const columns = useMemo(() => {
+    const col = dataTableColumns<(typeof migrations)[number]>()
+    return col.columns([
+      col.accessor("name", {
+        id: "name",
+        header: t("colName"),
+        cell: ({ row }) => <span className="font-mono text-xs font-medium">{row.original.name}</span>,
+      }),
+      col.accessor("status", {
+        id: "status",
+        header: t("colStatus"),
+        cell: ({ row }) => t(`state.${row.original.status}`),
+      }),
+    ])
+  }, [t])
 
   const apply = useMutation({
     mutationFn: () => applyDatabaseMigrations(typed),
@@ -74,21 +98,17 @@ export function DatabaseMigrations({
         </Alert>
       )}
       {status === "behind" && <p className="text-sm text-muted-foreground">{t("behind", { count: pendingCount })}</p>}
-      <ol className="divide-y rounded-[var(--radius)] border">
-        {migrations.map((migration) => (
-          <li key={migration.name} className="flex items-center justify-between gap-4 px-4 py-3 text-sm">
-            <span className="flex min-w-0 items-center gap-2">
-              {migration.status === "applied" ? (
-                <Check className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-              ) : (
-                <CircleDot className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-              )}
-              <span className="truncate font-mono text-xs font-medium">{migration.name}</span>
-              <span className="shrink-0 text-xs text-muted-foreground">{t(`state.${migration.status}`)}</span>
-            </span>
-          </li>
-        ))}
-      </ol>
+      <DataTable
+        columns={columns}
+        data={migrations}
+        total={total}
+        query={query}
+        defaults={defaults}
+        getRowId={(migration) => migration.name}
+        sortable={["name"]}
+        searchPlaceholder={t("search")}
+        empty={{ icon: CircleCheck, title: t("empty.title"), description: t("empty.description") }}
+      />
       {status === "behind" && (
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <Button onClick={() => setOpen(true)}>

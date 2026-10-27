@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ### Changed
 
+- The migrations list uses the shared table with search, sorting and pagination.
 - Admin → Database → Migrations now lists every migration in the build and marks each one as applied, pending or unknown.
 - Database migrations and backups now have separate pages under Admin → Database. The existing `/admin/database` address opens Migrations.
 - Platform, workspace and personal settings are cached on the server with `"use cache"`, each under its own tag (one per workspace, one per person, one for the platform), and saving expires that tag. A change used to reach other server instances only after up to 30 seconds; now the next request reads it. The cache also refreshes on its own every minute as a backstop for hosts that do not share tag expiry. If you customised: anything else that writes `PlatformSwitch`, `TenantSetting` or `UserSetting` must call `updateTag` with the tag from `src/platform/settings/cache-tags.ts`

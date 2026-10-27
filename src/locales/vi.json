@@ -684,6 +684,13 @@
       "migrations": {
         "title": "Migration",
         "subtitle": "Các thay đổi cấu trúc cơ sở dữ liệu đi kèm mỗi bản phát hành, chạy theo thứ tự.",
+        "colName": "Migration",
+        "colStatus": "Trạng thái",
+        "search": "Tìm migration...",
+        "empty": {
+          "title": "Không tìm thấy migration",
+          "description": "Hãy thử từ khóa tìm kiếm khác."
+        },
         "state": {
           "applied": "Đã chạy",
           "pending": "Chưa chạy",

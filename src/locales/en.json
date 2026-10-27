@@ -684,6 +684,13 @@
       "migrations": {
         "title": "Migrations",
         "subtitle": "Changes to the database structure that ship with each release, applied in order.",
+        "colName": "Migration",
+        "colStatus": "Status",
+        "search": "Search migrations...",
+        "empty": {
+          "title": "No migrations found",
+          "description": "Try a different search term."
+        },
         "state": {
           "applied": "Applied",
           "pending": "Pending",
