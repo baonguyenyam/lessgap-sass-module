@@ -23,7 +23,9 @@ describe("passwordSchema", () => {
   })
 })
 
-describe("hashPassword / verifyPassword", () => {
+// bcrypt at cost 12 takes a few hundred ms per hash; under the full suite's
+// parallel load a test that hashes twice passed the 5 s default.
+describe("hashPassword / verifyPassword", { timeout: 20_000 }, () => {
   it("accepts the right password and rejects the wrong one", async () => {
     const hash = await hashPassword("correct horse battery")
     await expect(verifyPassword("correct horse battery", hash)).resolves.toBe(true)

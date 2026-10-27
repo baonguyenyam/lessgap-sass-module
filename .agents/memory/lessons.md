@@ -2,6 +2,12 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-27 · vitest · bcrypt tests time out under the full suite
+- **Symptom:** `password.test.ts > accepts the right password and rejects the wrong one` failed once in the full run and passed alone and on the rerun.
+- **Cause:** bcrypt at cost 12 is deliberately slow; with 70 test files in parallel workers, two hashes in one test passed the 5 s default.
+- **Fix:** a 20 s timeout on the hashing tests.
+- **Rule:** a test that does deliberately slow work (bcrypt, the full auth config) gets an explicit timeout; a test that fails only under load is a timeout, not a pass.
+
 ### 2026-10-27 · browser checks · A streamed page holds a hidden second copy
 - **Symptom:** checking a settings page in dev, `document.querySelectorAll('button[role=combobox]')` returned two selects, one empty, and the empty one looked like a bug in the new settings cache.
 - **Cause:** with Cache Components the streamed HTML keeps a hidden `<div hidden id="S:0">` copy of the page until React swaps it in; the server values were right.
