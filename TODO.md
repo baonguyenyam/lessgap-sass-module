@@ -40,3 +40,10 @@ Phải tận dụng khuôn mẫu chuẩn của shadcn hoặc https://shadcnuikit
 
 Các select quá dài hoặc cần gọi db thì nên có search, call api để giảm tải và hài hoà UI, các select khi chọn thì hiện tại dropdown lại đè lên select nhìn hơi lạ
 hạn chế card trong card (ví dụ http://localhost:3000/dashboard/account/notifications) => ghi nhớ vào qui tắc của AI
+
+Các select dài nên có search, các fields khi đang đợi dữ liệu thì nên có icon loading
+
+Các fie ngôn ngữ luôn phải nhất quán với nhau 
+
+
+Ghi nhơ smoij thứu vào AI 

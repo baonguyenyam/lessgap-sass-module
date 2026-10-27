@@ -1280,6 +1280,12 @@
     "actions": "Actions"
   },
   "ui": {
+    "searchableSelect": {
+      "placeholder": "Select an option…",
+      "searchPlaceholder": "Search options…",
+      "empty": "No options found.",
+      "loading": "Loading options…"
+    },
     "close": "Close",
     "sidebar": "Sidebar",
     "sidebarDescription": "The main navigation.",
