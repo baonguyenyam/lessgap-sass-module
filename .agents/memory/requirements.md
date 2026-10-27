@@ -20,7 +20,8 @@ The Cache Components and Partial Prefetching plan is
 (accepted 2026-10-27): all four steps, one PR each; tenant settings may be
 cached on the server keyed by tenant id; the session is not cached in the
 browser; the navigation overlay goes once prefetching covers it. Step 1
-(unblock) done 2026-10-27. Step 2 (settings caches) done 2026-10-27.
+(unblock) done 2026-10-27. Step 2 (settings caches) done 2026-10-27. From then on the owner wants
+all work on `main`: steps 3 and 4 land there directly, not as one PR each.
 
 ## 2026-10-27 — Empty lists are a block of their own; every page loads as a skeleton
 
