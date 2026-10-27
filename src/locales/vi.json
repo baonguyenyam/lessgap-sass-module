@@ -467,6 +467,7 @@
       "roles": "Nhóm quyền",
       "users": "Người dùng",
       "newsletter": "Newsletter",
+      "database": "Cơ sở dữ liệu",
       "platformSettings": "Cài đặt",
       "groups": {
         "main": "Tổng quan",
@@ -676,6 +677,68 @@
       },
       "exportSelected": "Xuất mục đã chọn",
       "exportAll": "Xuất tất cả (CSV)"
+    },
+    "database": {
+      "title": "Cơ sở dữ liệu",
+      "subtitle": "Cập nhật cấu trúc cơ sở dữ liệu và giữ các bản sao lưu.",
+      "migrations": {
+        "title": "Migration",
+        "subtitle": "Các thay đổi cấu trúc cơ sở dữ liệu đi kèm mỗi bản phát hành, chạy theo thứ tự.",
+        "current": {
+          "title": "Cơ sở dữ liệu đã mới nhất",
+          "description": "Khớp với phiên bản ứng dụng đang chạy. Không có gì cần chạy."
+        },
+        "unknown": {
+          "title": "Bản phát hành này không nhận ra trạng thái cơ sở dữ liệu",
+          "description": "Phiên bản ghi trong cơ sở dữ liệu không nằm trên đường tới bản phát hành này: nó đã bị sửa ngoài hệ thống migration, hoặc được dựng từ nhánh khác. Trang này sẽ không chạy gì; hãy kiểm tra bằng pnpm db:status."
+        },
+        "behind": "Có {count, plural, other {# migration}} đang chờ, cũ nhất ở trên.",
+        "apply": "{count, plural, other {Chạy # migration}}",
+        "backupFirst": "Hệ thống sao lưu trước; nếu sao lưu lỗi thì migration không chạy.",
+        "noBackup": "Chưa cấu hình nơi lưu trữ nên sẽ không sao lưu trước. Chỉ được phép ngoài production.",
+        "confirm": {
+          "title": "{count, plural, other {Chạy # migration?}}",
+          "description": "Hệ thống sẽ sao lưu trước. Migration thay đổi cơ sở dữ liệu cho mọi người và không thể hoàn tác từ đây.",
+          "descriptionNoBackup": "Sẽ không có bản sao lưu nào. Migration thay đổi cơ sở dữ liệu cho mọi người và không thể hoàn tác từ đây.",
+          "label": "Gõ {word} để xác nhận"
+        },
+        "applied": "{count, plural, =0 {Đã mới nhất} other {Đã chạy # migration}}",
+        "failed": "Không chạy được migration."
+      },
+      "backups": {
+        "title": "Bản sao lưu",
+        "subtitle": "Bản sao dữ liệu của mọi bảng, lưu trong bucket của bạn. Khôi phục được thực hiện từ terminal; các bước nằm trong spec/adr/0023.",
+        "backUpNow": "Sao lưu ngay",
+        "done": "Đã lưu bản sao lưu",
+        "failed": "Không tạo được bản sao lưu.",
+        "colTakenAt": "Thời điểm",
+        "colSize": "Dung lượng",
+        "colActions": "Thao tác",
+        "download": "Tải về",
+        "empty": {
+          "title": "Chưa có bản sao lưu nào",
+          "description": "Tạo bản đầu tiên ngay. Nó được lưu trong bucket, mục platform-backups/."
+        },
+        "notConfigured": {
+          "title": "Chưa cấu hình nơi lưu trữ",
+          "description": "Bản sao lưu được giữ trong một bucket R2. Đặt R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET và R2_ACCOUNT_ID, rồi khởi động lại server."
+        },
+        "listFailed": {
+          "title": "Không liệt kê được bản sao lưu",
+          "description": "Bucket không phản hồi. Kiểm tra khoá R2 và tên bucket; log của server có chi tiết."
+        }
+      },
+      "errors": {
+        "noStorage": "Chưa cấu hình nơi lưu trữ nên không có chỗ để lưu bản sao lưu.",
+        "rate": "Đã sao lưu quá nhiều lần trong một giờ qua. Hãy thử lại sau.",
+        "backupFailed": "Không tạo được bản sao lưu. Log của server có chi tiết.",
+        "notFound": "Bản sao lưu đó không tồn tại.",
+        "confirm": "Gõ MIGRATE để xác nhận.",
+        "locked": "Một migration khác đang chạy. Hãy chờ nó xong.",
+        "unknownState": "Bản phát hành này không nhận ra trạng thái cơ sở dữ liệu. Không có gì được chạy.",
+        "noStorageForMigrate": "Ở production phải sao lưu trước khi chạy migration, nhưng chưa cấu hình nơi lưu trữ.",
+        "migrateFailed": "Migration lỗi ({code}). Các bước sau bước lỗi không được chạy; log của server có chi tiết."
+      }
     },
     "settings": {
       "title": "Cài đặt",

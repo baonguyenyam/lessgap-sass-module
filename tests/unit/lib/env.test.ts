@@ -55,12 +55,12 @@ describe("parseEnv", () => {
   })
 
   it("refuses a half-configured R2 bucket and accepts a complete one", () => {
-    expect(() => parseEnv({ ...base, R2_BUCKET: "app" })).toThrow(/R2_ACCESS_KEY_ID is required/)
+    expect(() => parseEnv(base({ R2_BUCKET: "app" }))).toThrow(/R2_ACCESS_KEY_ID is required/)
+    expect(() => parseEnv(base({ R2_BUCKET: "app", R2_ACCESS_KEY_ID: "k", R2_SECRET_ACCESS_KEY: "s" }))).toThrow(
+      /R2_ACCOUNT_ID or R2_ENDPOINT/
+    )
     expect(() =>
-      parseEnv({ ...base, R2_BUCKET: "app", R2_ACCESS_KEY_ID: "k", R2_SECRET_ACCESS_KEY: "s" })
-    ).toThrow(/R2_ACCOUNT_ID or R2_ENDPOINT/)
-    expect(() =>
-      parseEnv({ ...base, R2_BUCKET: "app", R2_ACCESS_KEY_ID: "k", R2_SECRET_ACCESS_KEY: "s", R2_ACCOUNT_ID: "a" })
+      parseEnv(base({ R2_BUCKET: "app", R2_ACCESS_KEY_ID: "k", R2_SECRET_ACCESS_KEY: "s", R2_ACCOUNT_ID: "a" }))
     ).not.toThrow()
   })
 

@@ -55,6 +55,9 @@ const nextConfig: NextConfig = {
     // Not localized: these two live outside `[locale]`.
     "/sitemap.xml": ["./content/blog/**"],
     "/llms.txt": ["./content/blog/**"],
+    // Admin → Database applies the migration packages on disk (spec/adr/0023);
+    // nothing imports them, so tracing would leave them out.
+    "/admin/database": ["./migrations/**"],
   },
   // Account pages lived under /dashboard/settings until 2.12.0; links in sent
   // emails and bookmarks keep working. The query string is carried over.

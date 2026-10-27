@@ -467,6 +467,7 @@
       "roles": "Roles",
       "users": "Users",
       "newsletter": "Newsletter",
+      "database": "Database",
       "platformSettings": "Settings",
       "groups": {
         "main": "Overview",
@@ -676,6 +677,68 @@
       },
       "exportSelected": "Export selected",
       "exportAll": "Export all (CSV)"
+    },
+    "database": {
+      "title": "Database",
+      "subtitle": "Bring the database up to date and keep backups of it.",
+      "migrations": {
+        "title": "Migrations",
+        "subtitle": "Changes to the database structure that ship with each release, applied in order.",
+        "current": {
+          "title": "The database is up to date",
+          "description": "It matches the version of the app that is running. Nothing to apply."
+        },
+        "unknown": {
+          "title": "This release does not recognise the database's state",
+          "description": "Its recorded version is on no path to this release: it was changed outside the migration system, or built from another branch. Nothing is applied from here; check it with pnpm db:status."
+        },
+        "behind": "{count, plural, one {# migration is} other {# migrations are}} waiting, oldest first.",
+        "apply": "{count, plural, one {Apply # migration} other {Apply # migrations}}",
+        "backupFirst": "A backup is taken first; the migration does not start if it fails.",
+        "noBackup": "Storage is not configured, so no backup is taken first. This is allowed outside production only.",
+        "confirm": {
+          "title": "{count, plural, one {Apply # migration?} other {Apply # migrations?}}",
+          "description": "A backup is taken first. Migrations change the database for everyone and cannot be undone from here.",
+          "descriptionNoBackup": "No backup will be taken. Migrations change the database for everyone and cannot be undone from here.",
+          "label": "Type {word} to confirm"
+        },
+        "applied": "{count, plural, =0 {Already up to date} one {# migration applied} other {# migrations applied}}",
+        "failed": "The migration could not be run."
+      },
+      "backups": {
+        "title": "Backups",
+        "subtitle": "Copies of every table's data, kept in your storage bucket. A backup is restored from a terminal; the steps are in spec/adr/0023.",
+        "backUpNow": "Back up now",
+        "done": "Backup saved",
+        "failed": "The backup could not be taken.",
+        "colTakenAt": "Taken",
+        "colSize": "Size",
+        "colActions": "Actions",
+        "download": "Download",
+        "empty": {
+          "title": "No backups yet",
+          "description": "Take the first one now. It is stored in your bucket under platform-backups/."
+        },
+        "notConfigured": {
+          "title": "Storage is not configured",
+          "description": "Backups are kept in an R2 bucket. Set R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET and R2_ACCOUNT_ID, then restart the server."
+        },
+        "listFailed": {
+          "title": "The backups could not be listed",
+          "description": "The bucket did not answer. Check the R2 keys and the bucket name; the server log has the details."
+        }
+      },
+      "errors": {
+        "noStorage": "Storage is not configured, so there is nowhere to put a backup.",
+        "rate": "Too many backups in the last hour. Try again later.",
+        "backupFailed": "The backup could not be taken. The server log has the details.",
+        "notFound": "That backup does not exist.",
+        "confirm": "Type MIGRATE to confirm.",
+        "locked": "A migration is already running. Wait for it to finish.",
+        "unknownState": "This release does not recognise the database's state. Nothing was applied.",
+        "noStorageForMigrate": "In production a backup is required before migrating, and storage is not configured.",
+        "migrateFailed": "The migration failed ({code}). Nothing after the failing step was applied; the server log has the details."
+      }
     },
     "settings": {
       "title": "Settings",

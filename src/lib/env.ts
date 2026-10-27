@@ -146,7 +146,11 @@ export const envSchema = z
         if (!env[name]) ctx.addIssue({ code: "custom", path: [name], message: `${name} is required: ${why}` })
       }
       if (!env.R2_ACCOUNT_ID && !env.R2_ENDPOINT) {
-        ctx.addIssue({ code: "custom", path: ["R2_ACCOUNT_ID"], message: `R2_ACCOUNT_ID or R2_ENDPOINT is required: ${why}` })
+        ctx.addIssue({
+          code: "custom",
+          path: ["R2_ACCOUNT_ID"],
+          message: `R2_ACCOUNT_ID or R2_ENDPOINT is required: ${why}`,
+        })
       }
     }
 

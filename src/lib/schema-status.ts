@@ -84,7 +84,8 @@ export function isUndefinedTable(error: unknown): boolean {
   return visit(error)
 }
 
-async function readMarkerFromDatabase(): Promise<string | null> {
+/** The `app` space marker of the database in `DATABASE_URL`; null when it was never migrated or signed. */
+export async function readMarkerFromDatabase(): Promise<string | null> {
   if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set")
   try {
     const plan = db8.raw.sql`

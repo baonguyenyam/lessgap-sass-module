@@ -26,7 +26,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       breadcrumbs={{
         icon: <Shield className="h-4 w-4" />,
         base: { name: t("badge"), href: "/admin" },
-        labels: { users: tNav("users"), newsletter: tNav("newsletter"), settings: tNav("platformSettings") },
+        labels: {
+          users: tNav("users"),
+          newsletter: tNav("newsletter"),
+          database: tNav("database"),
+          settings: tNav("platformSettings"),
+        },
       }}
     >
       {children}

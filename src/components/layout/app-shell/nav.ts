@@ -2,6 +2,7 @@ import type { Route } from "next"
 import {
   ArrowLeft,
   CreditCard,
+  Database,
   FolderKanban,
   KeyRound,
   LayoutGrid,
@@ -33,6 +34,7 @@ export function navGroups(area: NavArea, { showAdmin }: { showAdmin: boolean }):
           { key: "overview", href: "/admin", icon: LayoutGrid, exact: true },
           { key: "users", href: "/admin/users", icon: UserCog },
           { key: "newsletter", href: "/admin/newsletter", icon: Mail },
+          { key: "database", href: "/admin/database", icon: Database },
           { key: "platformSettings", href: "/admin/settings", icon: SlidersHorizontal },
         ],
       },
