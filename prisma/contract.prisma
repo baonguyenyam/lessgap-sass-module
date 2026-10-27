@@ -2,6 +2,7 @@
 // Contract inferred from the live database schema. Edit as needed, then run `prisma contract emit`.
 
 namespace public {
+  // ── kit ──
   model User {
     id                    String              @id(map: "User_pkey") @onCreate(cuid(2))
     name                  String
@@ -66,16 +67,6 @@ user                  User                @relation(fields: [userId], references
     @@index([confirmToken], map: "NewsletterSubscriber_confirmToken_key", unique: true)
     @@index([tenantId, email], map: "NewsletterSubscriber_tenantId_email_key", unique: true)
     @@index([unsubscribeToken], map: "NewsletterSubscriber_unsubscribeToken_key", unique: true)
-  }
-
-  // Global settings, one row per key (spec/04-entitlements.md, "Platform
-  // switches"). Keys, types, defaults and who may change each live in
-  // src/lib/platform-settings.ts; a key with no row reads as its default.
-  model PlatformSwitch {
-    key         String             @id(map: "PlatformSwitch_pkey")
-    value       Json
-    updatedById String?
-    updatedAt   TimestampString(3) @default(now()) @onUpdate(now())
   }
 
   model Plan {
@@ -197,7 +188,18 @@ trialEndsAt          TimestampString(3)?
     @@index([identifier], map: "Verification_identifier_idx")
   }
 
-  // ── Platform: tenancy (spec/02-tenancy.md, ADR 0003, ADR 0019) ──────────
+  // ── platform ──
+  // Global settings, one row per key (spec/04-entitlements.md, "Platform
+  // switches"). Keys, types, defaults and who may change each live in
+  // src/lib/platform-settings.ts; a key with no row reads as its default.
+  model PlatformSwitch {
+    key         String             @id(map: "PlatformSwitch_pkey")
+    value       Json
+    updatedById String?
+    updatedAt   TimestampString(3) @default(now()) @onUpdate(now())
+  }
+
+  // Tenancy (spec/02-tenancy.md, ADR 0003, ADR 0019).
   // Better Auth organization plugin tables. The plugin writes through Kysely
   // with these exact column names; model names are mapped in src/auth.ts.
   // Columns it never sends get database defaults, like TwoFactor did.

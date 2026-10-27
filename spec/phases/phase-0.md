@@ -54,7 +54,7 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 - **Tests:** M2 (reordering sections must plan no migration).
 - **Checks:** `pnpm db:emit`, `pnpm db:plan --name noop` reports nothing to plan, M1, M2.
 - **Done when:** the ADR is accepted and the contract follows it.
-- [ ] done
+- [x] done (accepted ADR 0024; section reorder leaves the contract and migration graph unchanged)
 
 ### 0.5 — Tenancy audit skeleton (T5)
 - **Goal:** CI fails on any Prisma model that is not classified.
@@ -159,3 +159,4 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 
 ## Findings
 - **Resolved 2026-10-27 — CI build needs a migrated database:** the first PR run exposed `CONTRACT.MARKER_READ_FAILED` while prerendering `/en/pricing` because the build job had no PostgreSQL service. Per owner approval, task 0.1 now provisions an isolated PostgreSQL service and applies Prisma 8 migrations before building; CI run 67 passes.
+- **Resolved 2026-10-27 — Migration ref lagged the existing `Member.status` migration:** task 0.4's first plan proposed the same column again because `db` still pointed to the previous contract. Advanced `db` to the existing latest migration's `to` hash; `prisma migration check` and a repeat plan now pass with no changes.

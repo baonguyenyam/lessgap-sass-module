@@ -46,3 +46,4 @@ Each rejected option and the reason it lost.
 | [0021](./0021-standard-shadcn-and-studio-admin.md) | Standard shadcn/ui components and the Studio Admin app shell | accepted |
 | [0022](./0022-cache-components-and-partial-prefetching.md) | Adopt Cache Components and Partial Prefetching, site surface first | accepted |
 | [0023](./0023-database-backup-and-migrate-from-admin.md) | Back up and migrate the database from the admin panel | accepted |
+| [0024](./0024-contract-ownership-by-section.md) | Keep contract ownership in sections of the public schema | accepted |

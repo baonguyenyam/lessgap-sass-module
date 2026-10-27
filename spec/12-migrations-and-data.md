@@ -8,15 +8,14 @@ hardest defect to undo, so the rules here are stricter than anywhere else.
 ## Schema layout
 
 One contract, `prisma/contract.prisma` (Prisma 8 reads a single contract
-source). Ownership is by section: the file is ordered kit models, then
-platform models, then one section per module, each opened by a comment
-`// ── <owner> ──` naming the owner. A module owns the models in its section and
-nobody else edits them. Relations across sections are allowed only towards
-platform and kit models (every module model points at `Tenant`); a module never
-adds a relation to another module's model. Cross-module references are plain id
-columns read through the other module's `server/index.ts`. Whether modules
-should instead get a Postgres namespace each (`namespace booking { … }`) is
-decided in phase 0, task 0.4.
+source), in the single `public` schema ([ADR 0002](./adr/0002-shared-database-tenant-id-and-rls.md)).
+Ownership is by section: the file is ordered kit models, then platform models,
+then one section per module, each opened by a comment `// ── <owner> ──` naming
+the owner ([ADR 0024](./adr/0024-contract-ownership-by-section.md)). A section
+owner alone changes its models. Relations across sections are allowed only
+towards platform and kit models (every module model points at `Tenant`); a
+module never adds a relation to another module's model. Cross-module references
+are plain id columns read through the other module's `server/index.ts`.
 
 ## Naming
 
