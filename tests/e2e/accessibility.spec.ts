@@ -29,6 +29,9 @@ const PUBLIC_PAGES = [
   { path: "/login?error=credentials", name: "sign in with an error" },
   { path: "/signup", name: "sign up" },
   { path: "/contact", name: "contact" },
+  // The Vietnamese public site (phase 0, task 0.12): same pages, other words.
+  { path: "/vi", name: "home in Vietnamese" },
+  { path: "/vi/pricing", name: "pricing in Vietnamese" },
 ]
 
 const password = "correct horse battery staple"

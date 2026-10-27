@@ -5,7 +5,7 @@ import { routing } from "@/i18n/routing"
  * These tests exist for one reason, and it is not tidiness.
  *
  * The private areas are matched by prefix in `src/proxy.ts`. If a locale
- * segment could appear in front of them, `/it/dashboard` would not start with
+ * segment could appear in front of them, `/vi/dashboard` would not start with
  * `/dashboard` and would stop looking protected. The design answer is that
  * those URLs do not exist at all, because the route groups live outside
  * `src/app/[locale]/`.
@@ -27,7 +27,7 @@ describe("locale routing", () => {
   it("declares exactly the locales that have a message file", async () => {
     const { existsSync } = await import("node:fs")
     const { join } = await import("node:path")
-    expect([...routing.locales]).toEqual(["en"])
+    expect([...routing.locales]).toEqual(["en", "vi"])
     // The list and the folder have to agree in both directions. A locale with
     // no file is a 500 the first time somebody opens its URL, and the array on
     // its own cannot tell you that: it was green for a day while `it.json` did

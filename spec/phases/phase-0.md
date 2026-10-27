@@ -118,7 +118,7 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 - **Tests:** existing message tests pass for `en` and `vi`; routing test for `/vi/...`; language name for `vi` renders as "Tiếng Việt".
 - **Checks:** `pnpm test`, `pnpm check:translations`, E2E accessibility on `/vi`.
 - **Done when:** `/vi` serves the public pages in Vietnamese and `grep -r '\bit\b' src/i18n` finds no Italian locale.
-- [ ] done
+- [x] done (`vi` added to `routing.ts`; `pnpm check:translations` (the i18n tests) and the axe checks for `/vi` and `/vi/pricing` pass. Shipped differently: `it.json`, `docs/` and `content/docs/` were already gone, so there is nothing to translate there and no docs rule to add; `check:translations` runs `tests/unit/i18n` instead of a separate script, which `messages.test.ts` already covers)
 
 ### 0.13 — Localise the private areas
 - **Goal:** dashboard, platform console and auth pages render in the member's language (`en` or `vi`), chosen by a user preference with a switcher, without a locale segment in private URLs (the kit's proxy rule stays).

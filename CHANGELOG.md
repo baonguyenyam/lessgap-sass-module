@@ -7,6 +7,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.20.0] - 2026-10-27
+
+**The public site speaks Vietnamese, and ROOT can back up and migrate the database from the admin panel.** This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
+
+### Added
+
+- **`/vi`**: every public page in Vietnamese, under a `/vi` prefix; English stays unprefixed (phase 0, task 0.12)
+- **Admin → Database** (ROOT only, [ADR 0023](spec/adr/0023-database-backup-and-migrate-from-admin.md)): apply pending migrations behind a typed confirmation, a lock and an automatic backup first; take data-only backups (`.sql.gz`) into R2 and download them through a five-minute link. Restoring is done from a terminal, following the ADR. Needs `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET` and `R2_ACCOUNT_ID`; a half-set group now stops the boot
+- `pnpm check:translations`, which runs the message-file tests
+
+### Changed
+
+- `toDirectUrl` moved to `src/lib/database-url.ts`; `scripts/db-reset-guard.mjs` re-exports it
+
 ## [2.19.0] - 2026-10-27
 
 **A settings change shows everywhere at once, step 2 of spec/adr/0022.** This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.

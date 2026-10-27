@@ -5,7 +5,7 @@ import { defineRouting } from "next-intl/routing"
  *
  * **Only the public surface is localized.** The dashboard, the admin panel,
  * the sign-in pages and the API live outside `[locale]`, so a URL like
- * `/it/dashboard` does not exist. That is a deliberate simplification and a
+ * `/vi/dashboard` does not exist. That is a deliberate simplification and a
  * security property at once: `src/proxy.ts` matches private routes by prefix,
  * and a locale segment in front of `/dashboard` would stop those prefixes from
  * matching. Keeping the private area out of the prefix removes the problem
@@ -17,7 +17,7 @@ import { defineRouting } from "next-intl/routing"
  * and not a rewrite.
  */
 export const routing = defineRouting({
-  locales: ["en"],
+  locales: ["en", "vi"],
   defaultLocale: "en",
 
   /**

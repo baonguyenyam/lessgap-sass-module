@@ -1,6 +1,6 @@
 {
   "name": "lessgap-starter-kit",
-  "version": "2.19.0",
+  "version": "2.20.0",
   "private": true,
   "packageManager": "pnpm@12.15.0",
   "imports": {
@@ -20,6 +20,7 @@
     "format": "prettier --write .",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "pnpm modules:check && vitest run",
+    "check:translations": "vitest run tests/unit/i18n",
     "test:integration": "vitest run --config vitest.integration.config.mts",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
