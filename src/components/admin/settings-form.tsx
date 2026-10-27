@@ -9,6 +9,7 @@ import { toast } from "sonner"
 import { z } from "zod"
 import { savePlatformSettings } from "@/app/actions/platform-settings"
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
@@ -112,7 +113,8 @@ export function SettingsForm({ fields, values }: { fields: SettingField[]; value
           </p>
         )}
         {fields.some((f) => f.editable) ? (
-          <Button type="submit" size="md" loading={mutation.isPending}>
+          <Button type="submit" disabled={mutation.isPending}>
+            {mutation.isPending && <Spinner />}
             {t("save")}
           </Button>
         ) : (

@@ -15,6 +15,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useMemo, useRef, useState, useTransition } from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -170,7 +171,6 @@ export function DataTable<TData extends RowData>({
               className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground"
             />
             <Input
-              size="sm"
               type="search"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
@@ -186,7 +186,7 @@ export function DataTable<TData extends RowData>({
             value={query.filters[filter.key] ?? ALL}
             onValueChange={(value) => go({ filters: { [filter.key]: value === ALL ? null : value } })}
           >
-            <SelectTrigger size="sm" className="sm:w-44" aria-label={filter.label}>
+            <SelectTrigger className="sm:w-44" aria-label={filter.label}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -212,16 +212,16 @@ export function DataTable<TData extends RowData>({
           {bulkActions.map((action) => (
             <Button
               key={action.label}
-              size="xs"
-              variant={action.variant === "destructive" ? "outline-destructive" : "outline"}
-              loading={bulk.isPending && bulk.variables?.action === action}
+              size="sm"
+              variant={action.variant === "destructive" ? "destructive" : "outline"}
               disabled={bulk.isPending}
               onClick={() => runBulk(action)}
             >
+              {bulk.isPending && bulk.variables?.action === action && <Spinner />}
               {action.label}
             </Button>
           ))}
-          <Button size="xs" variant="ghost" className="ml-auto" onClick={() => table.resetRowSelection()}>
+          <Button size="sm" variant="ghost" className="ml-auto" onClick={() => table.resetRowSelection()}>
             <X className="h-3.5 w-3.5" />
             {t("clearSelection")}
           </Button>
@@ -295,7 +295,7 @@ export function DataTable<TData extends RowData>({
         <div className="flex items-center gap-2">
           <span className="hidden sm:inline">{t("rowsPerPage")}</span>
           <Select value={String(query.pageSize)} onValueChange={(value) => go({ pageSize: Number(value) })}>
-            <SelectTrigger size="sm" className="w-20" aria-label={t("rowsPerPage")}>
+            <SelectTrigger className="w-20" aria-label={t("rowsPerPage")}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

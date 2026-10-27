@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import type { FieldValues, UseFormReturn } from "react-hook-form"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 import { Form } from "@/components/ui/form"
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { useDrawer } from "@/stores/drawer"
@@ -73,10 +74,11 @@ export function FormDrawer<TValues extends FieldValues>({
               </p>
             )}
             <SheetFooter className="mt-auto pt-4">
-              <Button type="button" variant="outline" size="md" onClick={close} disabled={mutation.isPending}>
+              <Button type="button" variant="outline" onClick={close} disabled={mutation.isPending}>
                 {t("cancel")}
               </Button>
-              <Button type="submit" size="md" loading={mutation.isPending}>
+              <Button type="submit" disabled={mutation.isPending}>
+                {mutation.isPending && <Spinner />}
                 {mutation.isPending ? t("saving") : t("save")}
               </Button>
             </SheetFooter>

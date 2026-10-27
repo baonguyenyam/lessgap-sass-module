@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server"
-import { SectionLayout, SectionNav } from "@/components/ui/section-nav"
+import { SectionLayout, SectionNav } from "@/components/layout/section-nav"
 import { SETTINGS_BASE, SETTINGS_PAGES } from "@/lib/settings-pages"
 
 /** Every settings page: the title, the vertical sub-navigation, then the page. */

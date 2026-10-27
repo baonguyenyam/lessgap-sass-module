@@ -94,7 +94,7 @@ export default async function AdminPage() {
               {t("waitlistSummary", { confirmed: waitlistConfirmed, pending: waitlistPending })}
             </CardDescription>
           </div>
-          <Button asChild variant="outline" size="sm">
+          <Button asChild variant="outline">
             <Link href="/admin/newsletter">{t("waitlistOpen")}</Link>
           </Button>
         </CardHeader>

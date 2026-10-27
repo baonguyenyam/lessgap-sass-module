@@ -44,7 +44,7 @@ export default async function LoginPage({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-3xl border border-border bg-card/80 p-8 shadow-[var(--shadow-soft-lg)] backdrop-blur-xl">
+      <div className="flex flex-col">
         <div className="mb-8 text-center">
           <div className="mb-4 flex justify-center">
             <LogoMark className="h-12 w-12 rounded-2xl ring-1 ring-primary/15" iconClassName="h-7 w-7" />
@@ -154,23 +154,15 @@ export default async function LoginPage({
             )}
 
             <form action={signInWithPassword} className="flex flex-col gap-3">
-              <Input
-                name="email"
-                type="email"
-                placeholder={t("emailPlaceholder")}
-                autoComplete="email"
-                required
-                size="lg"
-              />
+              <Input name="email" type="email" placeholder={t("emailPlaceholder")} autoComplete="email" required />
               <Input
                 name="password"
                 type="password"
                 placeholder={t("passwordPlaceholder")}
                 autoComplete="current-password"
                 required
-                size="lg"
               />
-              <PendingButton variant="primary" size="lg" className="w-full">
+              <PendingButton variant="default" size="lg" className="w-full">
                 {t("submit")}
               </PendingButton>
               {hasMagicLink && (
@@ -232,7 +224,7 @@ export default async function LoginPage({
                 }}
               >
                 <input type="hidden" name="role" value="user" />
-                <PendingButton variant="primary" size="lg" className="w-full">
+                <PendingButton variant="default" size="lg" className="w-full">
                   <span>▶</span> {t("exploreUser")}
                 </PendingButton>
               </form>
@@ -248,7 +240,7 @@ export default async function LoginPage({
                 }}
               >
                 <input type="hidden" name="role" value="admin" />
-                <PendingButton variant="outline-primary" size="lg" className="w-full">
+                <PendingButton variant="outline" size="lg" className="w-full">
                   <span>🛡</span> {t("exploreAdmin")}
                 </PendingButton>
               </form>

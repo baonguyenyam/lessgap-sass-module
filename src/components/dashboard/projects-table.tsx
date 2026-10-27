@@ -122,7 +122,7 @@ export function ProjectsTable({
         bulkActions={bulkActions}
         emptyMessage={query.q ? t("noResultsBody", { query: query.q }) : t("emptyBody")}
         actions={
-          <Button size="sm" onClick={() => openDrawer(DRAWER)}>
+          <Button onClick={() => openDrawer(DRAWER)}>
             <Plus className="h-4 w-4" />
             {t("newTitle")}
           </Button>

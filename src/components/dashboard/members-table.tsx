@@ -115,7 +115,7 @@ export function MembersTable({ rows, total, query, defaults, roleOptions, canMan
         emptyMessage={t("list.empty")}
         actions={
           canManage ? (
-            <Button size="sm" onClick={() => openDrawer(INVITE)}>
+            <Button onClick={() => openDrawer(INVITE)}>
               <UserPlus className="h-4 w-4" />
               {t("invite.title")}
             </Button>

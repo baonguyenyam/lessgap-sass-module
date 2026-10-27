@@ -2,6 +2,22 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-27 · shadcn · Stock radix-nova components need their providers and wrappers
+- **Symptom:** "`Tooltip` must be used within `TooltipProvider`" on every app page after the stock sidebar landed; "Cannot read properties of undefined (reading 'subscribe')" from `CommandInput`.
+- **Cause:** the stock Tooltip no longer brings its own provider, and the stock `CommandDialog` does not wrap its children in `<Command>`. Studio Admin does both in its own code.
+- **Fix:** `<TooltipProvider>` in `src/app/layout.tsx`; `<Command>` inside `CommandDialog` in `search-dialog.tsx`.
+- **Rule:** when copying a stock component, read how the source project mounts it (root layout, wrappers), not only the component file.
+
+### 2026-10-27 · tooling · Regex edits of JSX stop at the `>` of an arrow function
+- **Symptom:** a script that moved `loading={x}` into `{x && <Spinner />}` produced `onClick={() =>\n{x && <Spinner />} run()}` and a broken file.
+- **Cause:** the tag pattern `<Button[^>]*>` ended at the `>` of `() =>`.
+- **Rule:** after a bulk JSX rewrite, grep every changed spot before typechecking; prefer one file at a time where tags hold arrow functions.
+
+### 2026-10-27 · vitest · Importing the whole auth config can pass the 5s default
+- **Symptom:** `tests/unit/auth-schema.test.ts` timed out one run in three under the full suite, and passed alone.
+- **Fix:** a 30s timeout on that test.
+- **Rule:** a test that imports `@/auth` (every plugin) gets an explicit longer timeout.
+
 ### 2026-10-27 · spec · ADR numbers collide when agents work in parallel
 - **Symptom:** a new ADR was written as 0017 while another agent had already added 0017, 0018 and 0019; a global `sed` renaming "ADR 0017" then rewrote references to the *other* 0017.
 - **Cause:** the number was chosen from an old listing, and the rename matched text, not files.

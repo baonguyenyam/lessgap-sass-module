@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState, useSyncExternalStore } from "react"
 import { usePathname, useSearchParams } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { BrandLoader } from "@/components/ui/spinner"
+import { BrandLoader } from "@/components/brand-loader"
 
 /**
  * One loading state for every page change in the app: the page dims like it

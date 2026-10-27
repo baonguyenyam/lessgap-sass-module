@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl"
 import { useActionState, useEffect } from "react"
 import { updateProject, type ProjectState } from "@/app/actions/projects"
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
@@ -36,10 +37,11 @@ export function ProjectEditForm({ id, name, description }: ProjectEditFormProps)
           name="name"
           defaultValue={name}
           placeholder={t("name")}
-          error={state.error}
+          aria-invalid={state.error ? true : undefined}
           maxLength={60}
           required
         />
+        {state.error && <p className="text-xs text-destructive">{state.error}</p>}
       </div>
 
       <div className="space-y-1.5">
@@ -54,7 +56,8 @@ export function ProjectEditForm({ id, name, description }: ProjectEditFormProps)
         />
       </div>
 
-      <Button type="submit" loading={isPending} className="w-full sm:w-auto">
+      <Button type="submit" className="w-full sm:w-auto" disabled={isPending}>
+        {isPending && <Spinner />}
         Save changes
       </Button>
     </form>

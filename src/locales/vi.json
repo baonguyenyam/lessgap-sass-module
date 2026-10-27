@@ -388,14 +388,8 @@
       "pending": "Đang đăng xuất…",
       "confirm": "Đăng xuất"
     },
-    "sidebar": {
-      "expand": "Mở rộng thanh bên",
-      "collapse": "Thu gọn thanh bên"
-    },
     "userMenu": {
-      "open": "Mở menu tài khoản",
-      "avatarAlt": "Ảnh đại diện",
-      "myAccount": "Tài khoản của tôi"
+      "open": "Mở menu tài khoản"
     },
     "nav": {
       "dashboard": "Bảng điều khiển",
@@ -939,7 +933,6 @@
     "copied": "Đã sao chép"
   },
   "common": {
-    "close": "Đóng",
     "starOnGitHub": "Thả star trên GitHub"
   },
   "theme": {

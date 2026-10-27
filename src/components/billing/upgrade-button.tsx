@@ -5,19 +5,20 @@ import { useTranslations } from "next-intl"
 import { useState } from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 
 export function UpgradeButton({
   priceId,
   className,
   children,
   disabled,
-  variant = "primary",
+  variant = "default",
 }: {
   priceId: string
   className?: string
   children?: React.ReactNode
   disabled?: boolean
-  variant?: "primary" | "outline" | "gradient"
+  variant?: "default" | "outline" | "gradient"
 }) {
   const t = useTranslations("billing.upgrade")
   const [loading, setLoading] = useState(false)
@@ -49,7 +50,8 @@ export function UpgradeButton({
   }
 
   return (
-    <Button onClick={handleClick} loading={loading} disabled={disabled} variant={variant} className={className}>
+    <Button onClick={handleClick} disabled={disabled || loading} variant={variant} className={className}>
+      {loading && <Spinner />}
       {children ?? t("upgrade")}
     </Button>
   )

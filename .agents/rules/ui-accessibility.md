@@ -4,12 +4,16 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
 
 - Tailwind CSS 4. Use the design tokens in `globals.css` (`bg-background`,
   `text-muted-foreground`, …), not raw hex colours. Merge classes with `cn()`.
-- Build on `src/components/ui/` (shadcn/ui on Radix). Variants go through
-  `class-variance-authority`, like the existing components.
-- **Fields share one size scale** (`src/components/ui/field.ts`): `sm` (36px)
-  in toolbars and filters, `md` (40px) in forms, `lg` (48px pill) on the auth
-  pages. A button beside a field takes the same size name. Never set a field's
-  height by hand.
+- **`src/components/ui/` is stock shadcn/ui** (spec/adr/0021: "radix-nova"
+  style, copied from Studio Admin, attribution in `NOTICE`). Do not restyle a
+  stock component; add one with `npx shadcn add <name>` and point `cn` at
+  `@/lib/utils`. Our own building blocks live elsewhere (`components/data-table`,
+  `components/layout`). The only extensions are marked in the file (Button
+  `gradient` and `xl` for the marketing site, Badge `success`).
+- **Stock sizes only**: Button `xs` / `sm` / `default` / `lg` / `icon*`, and
+  fields at their default height, which matches a default button. Never set a
+  field's height by hand; a busy button is `disabled` with a `<Spinner />`
+  inside, not a `loading` prop.
 - **Selects:** `Select` in client components; `NativeSelect` in forms
   rendered on the server. Never a bare `<select>`: its arrow sits against the border.
 - **Sub-pages of a section use vertical tabs:** `SectionLayout` + `SectionNav`

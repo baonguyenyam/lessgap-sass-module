@@ -97,11 +97,10 @@ export function TwoFactorCard({
                   name="password"
                   type="password"
                   autoComplete="current-password"
-                  size="sm"
                   className="w-full sm:w-56"
                   required
                 />
-                <Button type="submit" variant="outline" size="sm" disabled={codesPending}>
+                <Button type="submit" variant="outline" disabled={codesPending}>
                   {t("regenerate")}
                 </Button>
               </div>
@@ -109,9 +108,7 @@ export function TwoFactorCard({
 
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="outline" size="sm">
-                  {t("turnOff")}
-                </Button>
+                <Button variant="outline">{t("turnOff")}</Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -186,12 +183,11 @@ export function TwoFactorCard({
                 inputMode="numeric"
                 autoComplete="one-time-code"
                 placeholder="123456"
-                size="sm"
                 className="w-40 font-mono tracking-widest"
                 required
               />
             </div>
-            <Button type="submit" size="sm" disabled={confirmPending}>
+            <Button type="submit" disabled={confirmPending}>
               {t("confirm")}
             </Button>
           </form>
@@ -215,11 +211,10 @@ export function TwoFactorCard({
                 name="password"
                 type="password"
                 autoComplete="current-password"
-                size="sm"
                 className="w-full sm:w-56"
                 required
               />
-              <Button type="submit" size="sm" disabled={setupPending}>
+              <Button type="submit" disabled={setupPending}>
                 {t("turnOn")}
               </Button>
             </div>
@@ -275,10 +270,10 @@ function BackupCodes({ codes }: { codes: string[] }) {
         ))}
       </ul>
       <div className="mt-3 flex gap-2">
-        <Button type="button" variant="outline" size="sm" onClick={copy}>
+        <Button type="button" variant="outline" onClick={copy}>
           {copied ? t("copied") : t("copy")}
         </Button>
-        <Button type="button" variant="outline" size="sm" onClick={download}>
+        <Button type="button" variant="outline" onClick={download}>
           {t("download")}
         </Button>
       </div>

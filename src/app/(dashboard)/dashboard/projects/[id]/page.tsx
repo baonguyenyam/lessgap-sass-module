@@ -68,7 +68,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <CardContent>
           <form action={deleteProject}>
             <input type="hidden" name="id" value={project.id} />
-            <Button type="submit" variant="destructive" size="sm">
+            <Button type="submit" variant="destructive">
               {t("delete")}
             </Button>
           </form>

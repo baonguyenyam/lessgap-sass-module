@@ -70,14 +70,14 @@ export default async function SecuritySettingsPage({
                 {accountId ? (
                   <form action={unlinkProvider}>
                     <input type="hidden" name="accountId" value={accountId} />
-                    <PendingButton variant="outline" size="xs">
+                    <PendingButton variant="outline" size="sm">
                       {t("disconnect")}
                     </PendingButton>
                   </form>
                 ) : (
                   <form action={linkProvider}>
                     <input type="hidden" name="provider" value={provider} />
-                    <PendingButton variant="outline-primary" size="xs">
+                    <PendingButton variant="outline" size="sm">
                       {t("connect")}
                     </PendingButton>
                   </form>
@@ -101,13 +101,10 @@ export default async function SecuritySettingsPage({
                 name="email"
                 type="email"
                 placeholder={t("email.placeholder")}
-                size="sm"
                 className="w-full sm:w-64"
                 required
               />
-              <PendingButton variant="outline" size="sm">
-                {t("email.submit")}
-              </PendingButton>
+              <PendingButton variant="outline">{t("email.submit")}</PendingButton>
             </form>
           </div>
 
@@ -139,7 +136,7 @@ export default async function SecuritySettingsPage({
                 minLength={8}
                 maxLength={72}
               />
-              <PendingButton variant="primary" size="xs" className="self-start">
+              <PendingButton variant="default" size="sm" className="self-start">
                 {hasPassword ? t("changePassword") : t("setPassword")}
               </PendingButton>
             </form>

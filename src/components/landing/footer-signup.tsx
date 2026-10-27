@@ -65,10 +65,9 @@ export function FooterSignup({ disabled = false }: { disabled?: boolean }) {
             onChange={(e) => setEmail(e.target.value)}
             disabled={disabled || state === "sending"}
             aria-label={tw("emailLabel")}
-            size="sm"
             className="min-w-0 flex-1"
           />
-          <Button type="submit" size="sm" disabled={disabled || state === "sending"} className="shrink-0">
+          <Button type="submit" disabled={disabled || state === "sending"} className="shrink-0">
             {state === "sending" ? tw("sending") : t("cta")}
           </Button>
         </form>

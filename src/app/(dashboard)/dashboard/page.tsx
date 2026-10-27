@@ -64,7 +64,7 @@ export default async function DashboardPage() {
               <CardTitle className="text-base">{t("projectsTitle")}</CardTitle>
               <CardDescription>{t("projectsCount", { count: projectCount })}</CardDescription>
             </div>
-            <Button asChild size="sm" variant="outline">
+            <Button asChild variant="outline">
               <Link href="/dashboard/projects">{projectCount === 0 ? t("projectsCreate") : t("projectsViewAll")}</Link>
             </Button>
           </div>

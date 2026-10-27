@@ -25,7 +25,7 @@ export default async function ForgotPasswordPage({ searchParams }: { searchParam
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-3xl border border-border bg-card/80 p-8 shadow-[var(--shadow-soft-lg)] backdrop-blur-xl">
+      <div className="flex flex-col">
         <div className="mb-8 text-center">
           <div className="mb-4 flex justify-center">
             <LogoMark className="h-12 w-12 rounded-2xl ring-1 ring-primary/15" iconClassName="h-7 w-7" />
@@ -67,9 +67,8 @@ export default async function ForgotPasswordPage({ searchParams }: { searchParam
               autoComplete="email"
               required
               disabled={formDisabled}
-              size="lg"
             />
-            <PendingButton disabled={formDisabled} variant="primary" size="lg" className="w-full">
+            <PendingButton disabled={formDisabled} variant="default" size="lg" className="w-full">
               {t("submit")}
             </PendingButton>
           </form>

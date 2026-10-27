@@ -7,9 +7,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.11.0] - 2026-10-27
+
+**Standard shadcn/ui, and the Studio Admin app shell.** The UI components are stock shadcn (the "radix-nova" style), and the dashboard, admin panel and sign-in pages use the layout of Studio Admin, an MIT-licensed shadcn dashboard (credited in `NOTICE`). This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
+
+### Added
+
+- **App sidebar** (shadcn `Sidebar`): grouped navigation, collapses to icons on desktop, opens as a sheet on a phone, remembers its state in a cookie, and keeps the signed-in user and the account menu at the bottom
+- **Search** in the header: go to any page by name, Cmd/Ctrl+K
+- **Split-screen sign-in pages**: the form on the left, the deployment's name and tagline on a brand panel on the right from large screens up
+- `NOTICE` with Studio Admin's MIT license; spec/adr/0021 with the plan and its status
+
+### Changed
+
+- **`src/components/ui/` is stock shadcn/ui**, copied from Studio Admin, with its built-in labels translated. Button and field sizes are shadcn's (default 32px), the radius is shadcn's standard, and busy buttons show a spinner. The marketing site keeps its own two button extensions (`gradient`, `xl`)
+- The admin panel and the dashboard share one frame (`AppShell`), so they can no longer drift apart
+
+### Removed
+
+- The hand-made sidebar, mobile menu, collapse toggle and header user menu, the field size scale (`field.ts`), and the `loading` and `error` props of Button and Input
+
 ## [2.10.0] - 2026-10-27
 
-🧩 **One way to build every screen.** Every list is a data table with search, filters, sorting, pagination, bulk actions and a row menu; create and edit happen in a drawer; fields share one size scale; section sub-pages use vertical tabs; and ROOT has a settings page for the whole system. This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (one new table, `PlatformSwitch`), then restart the server.
+**One way to build every screen.** Every list is a data table with search, filters, sorting, pagination, bulk actions and a row menu; create and edit happen in a drawer; fields share one size scale; section sub-pages use vertical tabs; and ROOT has a settings page for the whole system. This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (one new table, `PlatformSwitch`), then restart the server.
 
 ### Added
 
@@ -35,7 +55,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ## [2.9.1] - 2026-10-27
 
-🩹 **Every page answered 500 after the organization plugin landed.** Better Auth writes `Session.activeOrganizationId` and the database had no such column. This is a PATCH: `git pull`, `pnpm install`, `pnpm db:migrate`, then restart the server (Better Auth checks the schema once, at startup).
+**Every page answered 500 after the organization plugin landed.** Better Auth writes `Session.activeOrganizationId` and the database had no such column. This is a PATCH: `git pull`, `pnpm install`, `pnpm db:migrate`, then restart the server (Better Auth checks the schema once, at startup).
 
 ### Fixed
 
@@ -44,7 +64,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ## [2.9.0] - 2026-10-26
 
-⚙️ **Settings is a section of its own, and every test lives in `tests/`.** Settings opens as a page, not a modal, with four sub-pages: General, Security, Backup and Logs. This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
+**Settings is a section of its own, and every test lives in `tests/`.** Settings opens as a page, not a modal, with four sub-pages: General, Security, Backup and Logs. This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
 
 ### Added
 
@@ -63,7 +83,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ## [2.8.0] - 2026-10-26
 
-🧹 **One way to reach the database.** Every query now goes through the Prisma 8 client, `db8`, and the Prisma 7-shaped `@/lib/prisma` layer on top of it is gone. Nothing changes for visitors and there is nothing to migrate: `git pull`, `pnpm install`.
+**One way to reach the database.** Every query now goes through the Prisma 8 client, `db8`, and the Prisma 7-shaped `@/lib/prisma` layer on top of it is gone. Nothing changes for visitors and there is nothing to migrate: `git pull`, `pnpm install`.
 
 ### Added
 
@@ -86,7 +106,7 @@ Rewrite those calls on `db8`: `prisma.user.findUnique({ where: { id } })` become
 
 ## [2.7.0] - 2026-10-26
 
-🔀 **Switch As for ROOT, and one set of button styles.** ROOT can open a session as any user or admin to see the app as they do, with a banner and "Switch back". This is a MINOR with one step: `git pull`, `pnpm install`, `pnpm db:migrate` (the migration adds one nullable column).
+**Switch As for ROOT, and one set of button styles.** ROOT can open a session as any user or admin to see the app as they do, with a banner and "Switch back". This is a MINOR with one step: `git pull`, `pnpm install`, `pnpm db:migrate` (the migration adds one nullable column).
 
 ### Added
 

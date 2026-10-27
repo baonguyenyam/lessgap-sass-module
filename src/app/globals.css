@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+/* The variants and animations the stock shadcn components expect (spec/adr/0021). */
+@import "shadcn/tailwind.css";
 @plugin "@tailwindcss/typography";
 
 /* Typography (/docs prose) wired to the design tokens: colors follow the
@@ -71,9 +73,6 @@
    `.dark` the other way round): the hero's dashboard preview has its own
    switch. `dark:` stops at a `.light` boundary; specificity stays zero. */
 @custom-variant dark (&:where(.dark, .dark *):not(:where(.light, .light *)));
-/* Active while the dashboard sidebar is collapsed to icons (class set on <html>
-   by SidebarCollapseToggle, persisted in localStorage). */
-@custom-variant sidebar-collapsed (&:where(html.sidebar-collapsed *));
 
 :root,
 .light {
@@ -101,7 +100,22 @@
   --accent: #f5f5f5;
   --accent-foreground: #0a0a0a;
   --input: #e5e5e5;
-  --radius: 0.875rem;
+  /* shadcn's standard radius (spec/adr/0021); the scale below derives from it. */
+  --radius: 0.625rem;
+  /* App shell (shadcn Sidebar) and charts, Studio Admin's neutral defaults. */
+  --sidebar: #fafafa;
+  --sidebar-foreground: #0a0a0a;
+  --sidebar-primary: #0a0a0a;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f0f0f0;
+  --sidebar-accent-foreground: #0a0a0a;
+  --sidebar-border: #e5e5e5;
+  --sidebar-ring: #a3a3a3;
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
   /* Brand accent — neutral (true black + grayscale) premium default. Override
      per-deploy with the NEXT_PUBLIC_BRAND_* env vars (see src/config/brand.ts). */
   --primary-2: #404040;
@@ -130,6 +144,19 @@
   --accent: #2a2622;
   --accent-foreground: #fafafa;
   --input: #2a2622;
+  --sidebar: #141210;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #fafafa;
+  --sidebar-primary-foreground: #0a0a0a;
+  --sidebar-accent: #2a2622;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #2e2a25;
+  --sidebar-ring: #737373;
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
   --primary-2: #a3a3a3;
   --gradient-brand: linear-gradient(135deg, #ffffff 0%, #d4d4d4 100%);
 }
@@ -154,6 +181,26 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-primary-2: var(--primary-2);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   /* Soft, diffused shadows — depth without heaviness (Supastarter-like) */

@@ -8,7 +8,7 @@ export default function VerifyRequestPage() {
   const t = useTranslations("auth.verifyRequest")
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-3xl border border-border bg-card/80 p-8 text-center shadow-[var(--shadow-soft-lg)] backdrop-blur-xl">
+      <div className="flex flex-col text-center">
         <div className="mb-4 flex justify-center">
           <LogoMark className="h-12 w-12 rounded-2xl ring-1 ring-primary/15" iconClassName="h-7 w-7" />
         </div>

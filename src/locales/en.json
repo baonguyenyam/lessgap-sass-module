@@ -404,14 +404,9 @@
       "pending": "Signing out…",
       "confirm": "Sign out"
     },
-    "sidebar": {
-      "expand": "Expand sidebar",
-      "collapse": "Collapse sidebar"
-    },
     "userMenu": {
       "open": "Open account menu",
-      "avatarAlt": "Avatar",
-      "myAccount": "My Account"
+      "signOut": "Sign out"
     },
     "nav": {
       "dashboard": "Dashboard",
@@ -427,7 +422,14 @@
       "roles": "Roles",
       "users": "Users",
       "newsletter": "Newsletter",
-      "platformSettings": "Settings"
+      "platformSettings": "Settings",
+      "groups": {
+        "main": "Overview",
+        "workspace": "Workspace",
+        "account": "Account",
+        "admin": "Administration",
+        "back": "Back"
+      }
     },
     "members": {
       "title": "Members",
@@ -506,6 +508,13 @@
         "builtIn": "That name belongs to a built-in role.",
         "unknownPermission": "One of the permissions does not exist."
       }
+    },
+    "search": {
+      "button": "Search…",
+      "title": "Search",
+      "description": "Go to any page by name.",
+      "placeholder": "Type a page name…",
+      "empty": "No page matches."
     }
   },
   "admin": {
@@ -1110,7 +1119,6 @@
     "copied": "Copied"
   },
   "common": {
-    "close": "Close",
     "starOnGitHub": "Star on GitHub"
   },
   "theme": {
@@ -1179,7 +1187,7 @@
     "userNotFound": "That user no longer exists."
   },
   "dataTable": {
-    "all": "All {label}",
+    "all": "{label}: All",
     "bulkActions": "Bulk actions",
     "selected": "{count, plural, one {# selected} other {# selected}}",
     "clearSelection": "Clear",
@@ -1196,5 +1204,19 @@
     "failed": "Something went wrong. Nothing was changed.",
     "save": "Save",
     "saving": "Saving…"
+  },
+  "ui": {
+    "close": "Close",
+    "sidebar": "Sidebar",
+    "sidebarDescription": "The main navigation.",
+    "toggleSidebar": "Toggle sidebar",
+    "pagination": "Pagination",
+    "previous": "Previous",
+    "next": "Next",
+    "previousPage": "Go to the previous page",
+    "nextPage": "Go to the next page",
+    "morePages": "More pages",
+    "breadcrumb": "Breadcrumb",
+    "more": "More"
   }
 }

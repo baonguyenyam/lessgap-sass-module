@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -43,11 +44,12 @@ export function ConfirmDialog({
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel asChild>
-                <Button variant="outline" size="sm" disabled={pending}>
+                <Button variant="outline" disabled={pending}>
                   {t("cancel")}
                 </Button>
               </AlertDialogCancel>
-              <Button variant="destructive" size="sm" loading={pending} onClick={onConfirm}>
+              <Button variant="destructive" onClick={onConfirm} disabled={pending}>
+                {pending && <Spinner />}
                 {fill(copy.confirmLabel)}
               </Button>
             </AlertDialogFooter>

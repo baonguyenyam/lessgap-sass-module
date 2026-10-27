@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl"
 import { useActionState, useEffect } from "react"
 import { updateProfile, type ProfileState } from "@/app/actions/profile"
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
@@ -66,12 +67,14 @@ export function ProfileForm({ name, email, image, avatarProvider }: ProfileFormP
           name="name"
           defaultValue={name ?? ""}
           placeholder={t("namePlaceholder")}
-          error={state.error}
+          aria-invalid={state.error ? true : undefined}
           maxLength={50}
         />
+        {state.error && <p className="text-xs text-destructive">{state.error}</p>}
       </div>
 
-      <Button type="submit" loading={isPending} className="w-full sm:w-auto">
+      <Button type="submit" className="w-full sm:w-auto" disabled={isPending}>
+        {isPending && <Spinner />}
         {t("save")}
       </Button>
     </form>

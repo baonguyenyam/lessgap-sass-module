@@ -138,7 +138,9 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 `.agents/memory/` is the memory every agent shares here, whatever the tool.
 
-- **At the start of every task, read `.agents/memory/lessons.md`.** It lists
+- **At the start of every task, read `.agents/memory/requirements.md`** (what
+  the owner has asked for, with pointers to where each is specified) **and
+  `.agents/memory/lessons.md`.** The lessons list
   mistakes already made in this repository and the rule that prevents each.
 - **When you fix an error** that took more than one attempt, or came from a
   wrong assumption about a tool, a library or this codebase, add a lesson to

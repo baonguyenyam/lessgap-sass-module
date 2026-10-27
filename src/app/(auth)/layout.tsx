@@ -1,9 +1,28 @@
+import { LogoMark } from "@/components/logo"
+import { siteConfig } from "@/config/site"
+
+/**
+ * The sign-in pages (spec/adr/0021, Studio Admin's auth v2): the form on the
+ * left, a brand panel on the right from `lg` up. The panel only carries the
+ * deployment's own name and tagline (environment variables), never copy about
+ * the kit.
+ */
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-muted/40">
-      <div aria-hidden className="bg-grid pointer-events-none absolute inset-0" />
-      <div aria-hidden className="bg-glow pointer-events-none absolute inset-x-0 top-0 h-[500px]" />
-      <div className="relative w-full max-w-md px-4">{children}</div>
-    </div>
+    <main className="grid min-h-dvh p-2 lg:grid-cols-2">
+      <div className="relative flex items-center justify-center px-4 py-10">
+        <div className="w-full max-w-sm">{children}</div>
+      </div>
+      <div className="relative hidden h-full flex-col justify-between rounded-3xl bg-primary p-10 text-primary-foreground lg:flex">
+        <div className="space-y-3">
+          <LogoMark className="h-10 w-10 rounded-xl ring-1 ring-primary-foreground/20" iconClassName="h-6 w-6" />
+          <p className="text-2xl font-medium">{siteConfig.name}</p>
+          <p className="max-w-md text-sm text-primary-foreground/80">{siteConfig.tagline}</p>
+        </div>
+        <p className="text-sm text-primary-foreground/60">
+          © {new Date().getFullYear()} {siteConfig.name}
+        </p>
+      </div>
+    </main>
   )
 }

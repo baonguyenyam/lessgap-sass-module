@@ -30,7 +30,7 @@ export default async function SignupPage({ searchParams }: { searchParams: Promi
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-3xl border border-border bg-card/80 p-8 shadow-[var(--shadow-soft-lg)] backdrop-blur-xl">
+      <div className="flex flex-col">
         <div className="mb-8 text-center">
           <div className="mb-4 flex justify-center">
             <LogoMark className="h-12 w-12 rounded-2xl ring-1 ring-primary/15" iconClassName="h-7 w-7" />
@@ -76,7 +76,6 @@ export default async function SignupPage({ searchParams }: { searchParams: Promi
             autoComplete="name"
             maxLength={100}
             disabled={isDemo || closed}
-            size="lg"
           />
           <Input
             name="email"
@@ -85,7 +84,6 @@ export default async function SignupPage({ searchParams }: { searchParams: Promi
             autoComplete="email"
             required
             disabled={isDemo || closed}
-            size="lg"
           />
           <Input
             name="password"
@@ -96,9 +94,8 @@ export default async function SignupPage({ searchParams }: { searchParams: Promi
             minLength={8}
             maxLength={72}
             disabled={isDemo || closed}
-            size="lg"
           />
-          <PendingButton disabled={isDemo || closed} variant="primary" size="lg" className="w-full">
+          <PendingButton disabled={isDemo || closed} variant="default" size="lg" className="w-full">
             {t("submit")}
           </PendingButton>
         </form>

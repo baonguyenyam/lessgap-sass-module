@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server"
-import { SectionLayout, SectionNav } from "@/components/ui/section-nav"
+import { SectionLayout, SectionNav } from "@/components/layout/section-nav"
 import { SETTINGS_TABS } from "@/platform/settings/fields"
 
 /** Admin → Settings: the platform settings, one vertical tab per group. */

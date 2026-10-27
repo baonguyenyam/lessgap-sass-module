@@ -18,7 +18,7 @@ export async function SwitchAsBanner({ email }: { email?: string | null }) {
     >
       <span>{t("banner", { email: email ?? "" })}</span>
       <form action={stopSwitchAs}>
-        <Button type="submit" variant="secondary" size="sm">
+        <Button type="submit" variant="secondary">
           {t("back")}
         </Button>
       </form>

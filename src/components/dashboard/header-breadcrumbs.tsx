@@ -1,6 +1,6 @@
 "use client"
 
-import { BreadcrumbTrail } from "@/components/ui/breadcrumb"
+import { BreadcrumbTrail } from "@/components/layout/breadcrumb-trail"
 import { useBreadcrumbName } from "@/components/dashboard/breadcrumb-name"
 import { useRenderedPathname } from "@/hooks/use-rendered-pathname"
 import type { Crumb } from "@/lib/breadcrumb"

@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 
 export function ManageBillingButton({ className }: { className?: string }) {
   const [loading, setLoading] = useState(false)
@@ -18,7 +19,8 @@ export function ManageBillingButton({ className }: { className?: string }) {
   }
 
   return (
-    <Button variant="outline" onClick={handleClick} loading={loading} className={className}>
+    <Button variant="outline" onClick={handleClick} className={className} disabled={loading}>
+      {loading && <Spinner />}
       Manage Billing
     </Button>
   )

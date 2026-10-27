@@ -50,5 +50,7 @@ describe("the Better Auth schema", () => {
       }
     }
     expect(missing, "add these to prisma/contract.prisma, then pnpm db:emit and pnpm db:plan").toEqual([])
-  })
+    // Loading the whole auth configuration (every plugin) can pass the default
+    // 5s when the suite runs every file in parallel.
+  }, 30_000)
 })

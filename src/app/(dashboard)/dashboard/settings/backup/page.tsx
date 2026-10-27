@@ -27,7 +27,7 @@ export default async function BackupSettingsPage() {
         <p className="text-muted-foreground">{t("excludes")}</p>
         {/* A file download from a route handler, not a page: `next/link`
             would prefetch it. */}
-        <Button asChild variant="primary" size="sm">
+        <Button asChild variant="default">
           <a href="/api/account/export" download>
             {t("download")}
           </a>

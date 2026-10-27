@@ -1,99 +1,93 @@
-import Link from "next/link"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-
+import { useTranslations } from "next-intl"
+import * as React from "react"
 import { cn } from "@/lib/utils"
 
-/**
- * Page navigation for a paginated list.
- *
- * Takes an `href` builder rather than a base path, so a caller decides what a
- * page URL looks like: an index may want `/items/page/2` while a filtered
- * view wants `/items/filter/guides/page/2`, and both want page 1 to stay at
- * the bare address instead of gaining a redundant `/page/1`.
- *
- * Every entry is a real link, so the whole control works before JavaScript and
- * a crawler can walk the archive. The current page is a `span` with
- * `aria-current`, because a link to where you already are is noise for anyone
- * navigating by keyboard or screen reader.
- */
-export function Pagination({
-  page,
-  totalPages,
-  href,
-  labels,
-  className,
-}: {
-  page: number
-  totalPages: number
-  href: (page: number) => string
-  labels: { previous: string; next: string; navigation: string; page: string }
-  className?: string
-}) {
-  if (totalPages <= 1) return null
+import { Button } from "@/components/ui/button"
+import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-react"
 
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1)
-  const base =
-    "inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-[var(--radius)] border px-3 text-sm transition-colors"
-
+function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
+  const t = useTranslations("ui")
   return (
-    <nav aria-label={labels.navigation} className={cn("flex justify-center gap-2", className)}>
-      {page > 1 ? (
-        <Link
-          href={href(page - 1)}
-          rel="prev"
-          className={cn(base, "border-border text-muted-foreground hover:text-foreground")}
-        >
-          <ChevronLeft className="h-4 w-4" />
-          {labels.previous}
-        </Link>
-      ) : (
-        <span className={cn(base, "border-transparent text-muted-foreground/40")} aria-hidden="true">
-          <ChevronLeft className="h-4 w-4" />
-          {labels.previous}
-        </span>
-      )}
-
-      <ul className="flex gap-1">
-        {pages.map((n) =>
-          n === page ? (
-            <li key={n}>
-              <span
-                aria-current="page"
-                aria-label={`${labels.page} ${n}`}
-                className={cn(base, "border-primary bg-primary/10 font-medium text-primary")}
-              >
-                {n}
-              </span>
-            </li>
-          ) : (
-            <li key={n}>
-              <Link
-                href={href(n)}
-                aria-label={`${labels.page} ${n}`}
-                className={cn(base, "border-border text-muted-foreground hover:text-foreground")}
-              >
-                {n}
-              </Link>
-            </li>
-          )
-        )}
-      </ul>
-
-      {page < totalPages ? (
-        <Link
-          href={href(page + 1)}
-          rel="next"
-          className={cn(base, "border-border text-muted-foreground hover:text-foreground")}
-        >
-          {labels.next}
-          <ChevronRight className="h-4 w-4" />
-        </Link>
-      ) : (
-        <span className={cn(base, "border-transparent text-muted-foreground/40")} aria-hidden="true">
-          {labels.next}
-          <ChevronRight className="h-4 w-4" />
-        </span>
-      )}
-    </nav>
+    <nav
+      role="navigation"
+      aria-label={t("pagination")}
+      data-slot="pagination"
+      className={cn("mx-auto flex w-full justify-center", className)}
+      {...props}
+    />
   )
+}
+
+function PaginationContent({ className, ...props }: React.ComponentProps<"ul">) {
+  return <ul data-slot="pagination-content" className={cn("flex items-center gap-0.5", className)} {...props} />
+}
+
+function PaginationItem({ ...props }: React.ComponentProps<"li">) {
+  return <li data-slot="pagination-item" {...props} />
+}
+
+type PaginationLinkProps = {
+  isActive?: boolean
+} & Pick<React.ComponentProps<typeof Button>, "size"> &
+  React.ComponentProps<"a">
+
+function PaginationLink({ className, isActive, size = "icon", ...props }: PaginationLinkProps) {
+  return (
+    <Button asChild variant={isActive ? "outline" : "ghost"} size={size} className={cn(className)}>
+      <a aria-current={isActive ? "page" : undefined} data-slot="pagination-link" data-active={isActive} {...props} />
+    </Button>
+  )
+}
+
+function PaginationPrevious({
+  className,
+  text,
+  ...props
+}: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
+  const t = useTranslations("ui")
+  return (
+    <PaginationLink aria-label={t("previousPage")} size="default" className={cn("pl-1.5!", className)} {...props}>
+      <ChevronLeftIcon data-icon="inline-start" />
+      <span className="hidden sm:block">{text ?? t("previous")}</span>
+    </PaginationLink>
+  )
+}
+
+function PaginationNext({
+  className,
+  text,
+  ...props
+}: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
+  const t = useTranslations("ui")
+  return (
+    <PaginationLink aria-label={t("nextPage")} size="default" className={cn("pr-1.5!", className)} {...props}>
+      <span className="hidden sm:block">{text ?? t("next")}</span>
+      <ChevronRightIcon data-icon="inline-end" />
+    </PaginationLink>
+  )
+}
+
+function PaginationEllipsis({ className, ...props }: React.ComponentProps<"span">) {
+  const t = useTranslations("ui")
+  return (
+    <span
+      aria-hidden
+      data-slot="pagination-ellipsis"
+      className={cn("flex size-8 items-center justify-center [&_svg:not([class*='size-'])]:size-4", className)}
+      {...props}
+    >
+      <MoreHorizontalIcon />
+      <span className="sr-only">{t("morePages")}</span>
+    </span>
+  )
+}
+
+export {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
 }

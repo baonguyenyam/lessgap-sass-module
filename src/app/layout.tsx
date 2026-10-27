@@ -8,6 +8,7 @@ import { brandOverrideCss } from "@/config/brand"
 import { getLocale } from "next-intl/server"
 import { NextIntlClientProvider } from "next-intl"
 import { QueryProvider } from "@/components/query-provider"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import "./globals.css"
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] })
@@ -37,12 +38,6 @@ export const metadata: Metadata = {
 const themeInit =
   "(function(){var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}})()"
 
-// Same trick for the dashboard sidebar: restore the collapsed state before
-// first paint (toggled by SidebarCollapseToggle, styled via the
-// `sidebar-collapsed:` variant).
-const sidebarInit =
-  "try{if(localStorage.getItem('sidebar-collapsed')==='1')document.documentElement.classList.add('sidebar-collapsed')}catch(e){}"
-
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const brandCss = brandOverrideCss()
   // Read from the request instead of hardcoded. This layout sits above
@@ -64,7 +59,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
-        <script dangerouslySetInnerHTML={{ __html: `${themeInit};${sidebarInit}` }} />
+        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
         {brandCss && <style dangerouslySetInnerHTML={{ __html: brandCss }} />}
         {/* Sits at the root, not inside `[locale]`, so that client components
             in the dashboard, the admin panel and the sign-in pages can read
@@ -72,7 +67,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             always render in the default locale, but their strings still live
             in the message files rather than in the components. */}
         <NextIntlClientProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            {/* Stock shadcn tooltips (the collapsed sidebar's labels) need one provider at the root. */}
+            <TooltipProvider>{children}</TooltipProvider>
+          </QueryProvider>
           {/* Inside the provider: the loader's screen-reader text is translated. */}
           <NavigationOverlay />
         </NextIntlClientProvider>

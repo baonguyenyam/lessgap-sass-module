@@ -131,7 +131,7 @@ export function RolesTable({
         emptyMessage={t("custom.empty")}
         actions={
           canManage ? (
-            <Button size="sm" onClick={() => openDrawer(DRAWER)}>
+            <Button onClick={() => openDrawer(DRAWER)}>
               <Plus className="h-4 w-4" />
               {t("create.title")}
             </Button>
