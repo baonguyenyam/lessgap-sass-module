@@ -334,8 +334,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-main, 
-main > header {
+* {
   border-color: var(--border);
 }
 
