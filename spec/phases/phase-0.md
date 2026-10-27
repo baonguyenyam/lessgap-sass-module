@@ -102,7 +102,7 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 - **Tests:** factory produces a valid row in the integration database.
 - **Checks:** `pnpm test:integration`.
 - **Done when:** factories are used by the 0.2 smoke test.
-- [ ] done
+- [x] done (`pnpm test:integration` passed against the compose PostgreSQL on port 5434, 2026-10-27)
 
 ### 0.11 — Domains
 - **Goal:** `lessgap.app` (apex, `www` → apex, `app`) and `*.lessgap.io` on the Vercel project.
