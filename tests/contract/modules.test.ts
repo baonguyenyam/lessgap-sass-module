@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest"
 import { moduleRegistry } from "@/modules/registry"
-import { moduleManifestSchema } from "@/platform/modules/manifest-schema"
+import { moduleManifestSchema, type ModuleManifest } from "@/platform/modules/manifest-schema"
 import { MODEL_CLASSIFICATION } from "@/platform/tenancy/models"
 import { validateModuleGraph } from "@/platform/modules/manifest-schema"
 
-const entries = Object.entries(moduleRegistry)
+const registeredModules: Readonly<Record<string, ModuleManifest>> = moduleRegistry
+const entries = Object.entries(registeredModules)
 const modules = entries.map(([, manifest]) => manifest)
 
 describe("registered module contracts", () => {

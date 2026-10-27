@@ -86,7 +86,7 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 - **Tests:** scaffold a module in a temp dir → contract tests pass on it; invalid key refused.
 - **Checks:** `pnpm new:module demo_check` in a scratch branch → `pnpm modules:check` green → remove it.
 - **Done when:** the scaffolder output matches the module shape in the spec exactly.
-- [ ] done
+- [x] done (`pnpm new:module demo_check`, `pnpm modules:check`, scaffolded-module typecheck and full `pnpm test` passed)
 
 ### 0.9 — Boundary lint
 - **Goal:** imports across module internals, from themes into services, and from the kernel into modules fail lint.
