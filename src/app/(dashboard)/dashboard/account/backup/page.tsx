@@ -4,6 +4,10 @@ import { requireUser } from "@/lib/auth"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /**
  * Settings → Backup: a copy of everything the app holds about the user, as a
  * JSON file. The file is built by `buildAccountExport` (src/lib/account-export.ts).

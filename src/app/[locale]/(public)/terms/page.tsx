@@ -1,6 +1,10 @@
 import { siteConfig } from "@/config/site"
 import { pageMetadata } from "@/lib/metadata"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 export const metadata = pageMetadata({
   title: `Terms of Service | ${siteConfig.name}`,
   description: `The terms that govern use of ${siteConfig.name}.`,
@@ -16,7 +20,8 @@ export default function TermsPage() {
       <div className="mx-auto max-w-3xl px-6 lg:px-12">
         <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Terms of Service</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+          {/* The date this text last changed: update it with the text. */}
+          Last updated: October 27, 2026
         </p>
 
         <div className="mt-10 space-y-8 text-sm leading-7 text-muted-foreground">

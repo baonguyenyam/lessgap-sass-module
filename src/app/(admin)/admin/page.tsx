@@ -12,6 +12,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { RevenueChart } from "@/components/admin/revenue-chart"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /**
  * Admin → Overview: the numbers. The lists live on their own pages
  * (Users, Newsletter), each a DataTable.

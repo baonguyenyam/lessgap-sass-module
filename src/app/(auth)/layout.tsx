@@ -1,5 +1,10 @@
 import { LogoMark } from "@/components/logo"
 import { siteConfig } from "@/config/site"
+import { currentYear } from "@/lib/current-year"
+
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
 
 /**
  * The sign-in pages (spec/adr/0021, Studio Admin's auth v2): the form on the
@@ -7,7 +12,7 @@ import { siteConfig } from "@/config/site"
  * deployment's own name and tagline (environment variables), never copy about
  * the kit.
  */
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+export default async function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className="grid min-h-dvh p-2 lg:grid-cols-2">
       <div className="relative flex items-center justify-center px-4 py-10">
@@ -20,7 +25,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <p className="max-w-md text-sm text-primary-foreground/80">{siteConfig.tagline}</p>
         </div>
         <p className="text-sm text-primary-foreground/60">
-          © {new Date().getFullYear()} {siteConfig.name}
+          © {await currentYear()} {siteConfig.name}
         </p>
       </div>
     </main>

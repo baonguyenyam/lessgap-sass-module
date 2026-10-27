@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Suspense, use, useEffect, useState } from "react"
+import { io } from "next/cache"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
@@ -65,9 +66,20 @@ export default function NotFound() {
 
         {/* Branding Footer */}
         <div className="mt-16 text-xs text-muted-foreground">
-          © {new Date().getFullYear()} {siteConfig.name}
+          ©{" "}
+          {/* The clock is read in the browser and at request time, never while
+          the page prerenders (spec/adr/0022). */}
+          <Suspense>
+            <CurrentYear />
+          </Suspense>{" "}
+          {siteConfig.name}
         </div>
       </div>
     </div>
   )
+}
+
+function CurrentYear() {
+  use(io())
+  return new Date().getFullYear()
 }

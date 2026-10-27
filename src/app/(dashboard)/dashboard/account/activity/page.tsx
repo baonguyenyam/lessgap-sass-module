@@ -7,6 +7,10 @@ import { formatDevice, formatIpAddress } from "@/lib/user-agent"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 // Product names stay as they are; the password is a word, so it is translated.
 const PROVIDER_LABELS: Record<string, string> = {
   google: "Google",

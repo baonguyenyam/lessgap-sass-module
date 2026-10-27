@@ -2,6 +2,10 @@ import { getTranslations } from "next-intl/server"
 import { SectionLayout, SectionNav } from "@/components/layout/section-nav"
 import { SETTINGS_BASE, SETTINGS_PAGES } from "@/lib/settings-pages"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Every settings page: the title, the vertical sub-navigation, then the page. */
 export default async function SettingsLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations("dashboard.settings")

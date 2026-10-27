@@ -58,11 +58,14 @@ export default getRequestConfig(async ({ requestLocale }) => {
   // Every date on every page is shown in one time zone and one style, set by
   // an administrator (`display.*`).
   // `now` is fixed per request and handed to the browser with the messages, so
-  // a relative time ("2 minutes ago") renders the same on both sides.
+  // a relative time ("2 minutes ago") renders the same on both sides. Only in
+  // the app areas: they have read the request (the cookie above) by now, while
+  // the public pages prerender, where reading the clock is a build error under
+  // Cache Components (spec/adr/0022), and show no relative times.
   const shared = {
     timeZone: settings["display.time_zone"],
     formats: { dateTime: dateTimeFormats(settings) },
-    now: new Date(),
+    ...(hasLocale(routing.locales, requested) ? {} : { now: new Date() }),
   }
 
   const source: Messages = (await import(`../locales/${routing.defaultLocale}.json`)).default

@@ -33,6 +33,12 @@ const nextConfig: NextConfig = {
   // exist: a typo or a deleted page fails the typecheck instead of a click.
   // `pnpm typecheck` runs `next typegen` first so the route types are fresh.
   typedRoutes: true,
+  // Cache Components and Partial Prefetching (spec/adr/0022, accepted). Pages
+  // prerender a static shell and request data streams behind Suspense; links
+  // prefetch that shell. Adopted in steps: every segment starts opted out
+  // with `export const instant = false`, removed route by route.
+  cacheComponents: true,
+  partialPrefetching: true,
   // The /docs pages render the repo's docs/*.md at request time (the navbar
   // session check makes them dynamic), so the files must ship with the
   // serverless bundle.

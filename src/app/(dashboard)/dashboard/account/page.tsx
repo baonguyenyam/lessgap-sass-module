@@ -8,6 +8,10 @@ import { ProfileForm } from "@/components/dashboard/profile-form"
 import { DeleteAccount } from "@/components/dashboard/delete-account"
 import { SettingsMessage } from "@/components/settings/settings-message"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 const PROVIDER_LABELS: Record<string, string> = {
   google: "Google",
   github: "GitHub",

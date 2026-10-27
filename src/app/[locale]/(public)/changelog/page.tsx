@@ -8,6 +8,10 @@ import { Badge } from "@/components/ui/badge"
 import { siteConfig } from "@/config/site"
 import { pageMetadata } from "@/lib/metadata"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 // The entries are written for the repository, where `./ROADMAP.md` is the
 // right link. Here the same string would ask the browser for a page that does
 // not exist, so each one is translated to the file on GitHub first.

@@ -8,6 +8,13 @@ const schema = vi.hoisted(() => ({
 }))
 vi.mock("@/lib/schema-status", () => ({ getSchemaStatus: async () => schema.current }))
 
+// `connection()` needs a Next request scope; outside one it throws. These
+// tests call the handler directly, so it resolves at once.
+vi.mock("next/server", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("next/server")>()),
+  connection: async () => {},
+}))
+
 import { GET } from "@/app/api/health/route"
 import { siteConfig } from "@/config/site"
 

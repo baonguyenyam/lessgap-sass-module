@@ -9,6 +9,10 @@ import { toDate } from "@/lib/timestamps"
 import { getPlatformSettings } from "@/platform/settings/store"
 import { NewsletterTable, NEWSLETTER_STATUSES, type SubscriberRow } from "@/components/admin/newsletter-table"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Admin → Newsletter: every address, with its consent dates. */
 export default async function AdminNewsletterPage({
   searchParams,

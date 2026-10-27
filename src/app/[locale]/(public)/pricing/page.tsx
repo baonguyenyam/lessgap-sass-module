@@ -7,6 +7,10 @@ import { isKitSite } from "@/config/kit"
 import { pendingSetup } from "@/lib/setup-status"
 import { SetupGuide } from "@/components/setup-guide"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 export const metadata = pageMetadata({
   title: `Pricing | ${siteConfig.name}`,
   // Without one of its own, this page inherited the site-wide description,

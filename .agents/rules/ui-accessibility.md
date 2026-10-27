@@ -33,7 +33,9 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
   of grey text.
 - **Page loading:** every page under `/dashboard` and `/admin` has a
   `loading.tsx` rendering `PageSkeleton` (`components/layout/page-skeleton.tsx`)
-  in the page's shape (`list`, `form`, `cards`). Inside a section layout pass
+  in the page's shape (`list`, `form`, `cards`). Skeletons are grey blocks only: no
+  border, frame or card around them (the owner found a framed skeleton heavy
+  on every page change). Inside a section layout pass
   `header={false}`: the title and tabs stay on screen.
 - **Language files:** every string goes into `en.json` and, in the same change,
   into every other file in `src/locales/` with the same key; a test fails on a

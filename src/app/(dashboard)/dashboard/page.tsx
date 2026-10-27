@@ -13,6 +13,10 @@ import { CheckoutStatusToast } from "@/components/billing/checkout-status-toast"
 import { SubscriptionStatusBadge } from "@/components/billing/subscription-status-badge"
 import { isKitSite } from "@/config/kit"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 export default async function DashboardPage() {
   const t = await getTranslations("dashboard.home")
   const format = await getFormatter()

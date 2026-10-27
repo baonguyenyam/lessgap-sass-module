@@ -7,6 +7,10 @@ import { toDate } from "@/lib/timestamps"
 import { getViewerSettings } from "@/platform/settings/tenant-store"
 import { ProjectsTable, type ProjectRow } from "@/components/dashboard/projects-table"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Dashboard → Projects: the caller's projects, searched and paged on the server. */
 export default async function ProjectsPage({
   searchParams,

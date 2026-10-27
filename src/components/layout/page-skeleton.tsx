@@ -39,7 +39,7 @@ export function PageSkeleton({ variant, header = true }: { variant: "list" | "fo
               <Skeleton className="h-9 w-full sm:w-72" />
               <Skeleton className="ml-auto hidden h-9 w-32 sm:block" />
             </div>
-            <div className="space-y-px overflow-hidden rounded-[var(--radius)] border border-border">
+            <div className="space-y-px">
               {Array.from({ length: 6 }, (_, i) => (
                 <div key={i} className="flex items-center gap-4 px-4 py-3">
                   <Skeleton className="h-4 w-4" />

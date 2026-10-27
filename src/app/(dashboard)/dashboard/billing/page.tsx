@@ -15,6 +15,10 @@ import { PlanCards, type PlanCardData } from "@/components/billing/plan-cards"
 import { exampleEnterpriseCard } from "@/components/billing/enterprise-card"
 import { CheckoutStatusToast } from "@/components/billing/checkout-status-toast"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 // Invoice statuses come from Stripe as stable codes, like subscription ones;
 // their labels live in the message files under `dashboard.billing.invoiceStatus`.
 

@@ -12,6 +12,10 @@ import { getViewerSettings } from "@/platform/settings/tenant-store"
 import { memberCan } from "@/platform/tenancy/permissions"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** This workspace's own newsletter list. */
 export default async function NewsletterPage({
   searchParams,

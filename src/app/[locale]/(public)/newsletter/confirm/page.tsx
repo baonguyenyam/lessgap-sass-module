@@ -6,6 +6,10 @@ import { nowTs, toDate } from "@/lib/timestamps"
 import { sendNewsletterWelcomeEmail, syncNewsletterContact } from "@/lib/email"
 import { siteConfig } from "@/config/site"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: "newsletter" })

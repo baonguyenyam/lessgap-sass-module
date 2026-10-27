@@ -3,6 +3,13 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 const seedDemoData = vi.fn()
 vi.mock("@/lib/demo-seed", () => ({ seedDemoData: (...a: unknown[]) => seedDemoData(...a) }))
 
+// `connection()` needs a Next request scope; outside one it throws. These
+// tests call the handler directly, so it resolves at once.
+vi.mock("next/server", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("next/server")>()),
+  connection: async () => {},
+}))
+
 const { GET } = await import("@/app/api/cron/reset-demo/route")
 
 const original = { ...process.env }

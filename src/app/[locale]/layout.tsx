@@ -3,6 +3,10 @@ import { hasLocale, NextIntlClientProvider } from "next-intl"
 import { getMessages, setRequestLocale } from "next-intl/server"
 import { routing } from "@/i18n/routing"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /**
  * Wraps the public surface in the requested locale.
  *

@@ -4,6 +4,10 @@ import { getTranslations } from "next-intl/server"
 import { LayoutGrid } from "lucide-react"
 import { AppShell } from "@/components/layout/app-shell/app-shell"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser()
   const tNav = await getTranslations("dashboard.nav")

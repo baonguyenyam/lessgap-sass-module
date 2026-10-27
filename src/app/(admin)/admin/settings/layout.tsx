@@ -3,6 +3,10 @@ import { getTranslations } from "next-intl/server"
 import { SectionLayout, SectionNav } from "@/components/layout/section-nav"
 import { SETTINGS_TABS } from "@/platform/settings/fields"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Admin → Settings: the platform settings, one vertical tab per group. */
 export default async function PlatformSettingsLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations("admin.settings")

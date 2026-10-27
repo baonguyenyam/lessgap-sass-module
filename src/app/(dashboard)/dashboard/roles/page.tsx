@@ -8,6 +8,10 @@ import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { ROLE_PERMISSIONS, TENANT_PERMISSIONS } from "@/platform/tenancy/permissions"
 import { RolesTable, type RoleRow } from "@/components/dashboard/roles-table"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /**
  * Dashboard → Roles: the tenant's permission groups ("nhóm quyền"). Built-in
  * roles come from ROLE_PERMISSIONS and cannot be changed; custom roles are

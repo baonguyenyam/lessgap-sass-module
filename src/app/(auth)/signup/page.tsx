@@ -11,6 +11,10 @@ import { siteConfig } from "@/config/site"
 import { emailEnabled } from "@/lib/email-transport"
 import { getPlatformSettings } from "@/platform/settings/store"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 export default async function SignupPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams
   const t = await getTranslations("auth.signup")

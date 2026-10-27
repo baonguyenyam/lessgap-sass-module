@@ -4,6 +4,10 @@ import { BackToTop } from "@/components/landing/back-to-top"
 import { DemoBanner } from "@/components/landing/demo-banner"
 import { StickyHeader } from "@/components/landing/sticky-header"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
     // From 2xl (1536px) up the public pages grow as a whole, 12%, so on a

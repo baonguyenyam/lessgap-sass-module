@@ -14,6 +14,10 @@ import { PendingButton } from "@/components/auth/pending-button"
 import { changeEmail, linkProvider, unlinkProvider, updatePassword } from "@/app/actions/account"
 import { enabledOAuthProviders } from "@/lib/oauth-providers"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 const PROVIDER_LABELS: Record<string, string> = {
   google: "Google",
   github: "GitHub",

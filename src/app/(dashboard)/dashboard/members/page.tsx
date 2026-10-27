@@ -12,6 +12,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MembersTable, type MemberRow } from "@/components/dashboard/members-table"
 import { RevokeInvitation } from "@/components/dashboard/revoke-invitation"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /**
  * Dashboard → Members: the tenant's sub-users ("user con") and pending
  * invitations. `members.view` to see them; owners and managers manage them.

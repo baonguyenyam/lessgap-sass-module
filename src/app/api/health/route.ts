@@ -1,10 +1,6 @@
-import { NextResponse } from "next/server"
+import { connection, NextResponse } from "next/server"
 import { siteConfig } from "@/config/site"
 import { getSchemaStatus } from "@/lib/schema-status"
-
-// Always fresh: a cached health check reports the version of whatever build
-// happened to fill the cache, which is the opposite of what it is for.
-export const dynamic = "force-dynamic"
 
 /**
  * What is actually running here, and whether its database can run it.
@@ -28,6 +24,11 @@ export const dynamic = "force-dynamic"
  * be asked. The details are in src/lib/schema-status.ts.
  */
 export async function GET() {
+  // Always fresh: a prerendered health check reports the version of whatever
+  // build produced it, which is the opposite of what it is for. Under Cache
+  // Components a GET handler that reads no request is prerendered, so it waits
+  // for a real request first (spec/adr/0022).
+  await connection()
   const schema = await getSchemaStatus()
 
   return NextResponse.json(

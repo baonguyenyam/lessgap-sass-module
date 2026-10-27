@@ -1,6 +1,7 @@
 import type { Route } from "next"
 import Link from "next/link"
 import { GithubIcon } from "@/components/icons/github"
+import { currentYear } from "@/lib/current-year"
 import { PoweredBy } from "@/components/powered-by"
 import { ContactDialog } from "@/components/landing/contact-dialog"
 import { Logo } from "@/components/logo"
@@ -21,7 +22,7 @@ function XIcon() {
   )
 }
 
-export function Footer() {
+export async function Footer() {
   const t = useTranslations("footer")
   const orgUrl = siteConfig.links.githubOrg ?? siteConfig.links.github
   // The footer signup collects addresses from every page on its own, so it
@@ -189,7 +190,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 text-sm text-muted-foreground md:flex-row">
-          <p>{t("copyright", { year: new Date().getFullYear(), site: siteConfig.name })}</p>
+          <p>{t("copyright", { year: await currentYear(), site: siteConfig.name })}</p>
           <p>
             <Link href="/changelog" className="transition-colors hover:text-foreground">
               v{siteConfig.version}

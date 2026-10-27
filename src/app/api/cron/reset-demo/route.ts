@@ -1,7 +1,6 @@
-import { NextResponse } from "next/server"
+import { connection, NextResponse } from "next/server"
 import { seedDemoData } from "@/lib/demo-seed"
 
-export const dynamic = "force-dynamic"
 // Reseeding writes a few hundred rows; the default 10s is not enough.
 export const maxDuration = 60
 
@@ -24,6 +23,9 @@ export const maxDuration = 60
  *     to open.
  */
 export async function GET(request: Request) {
+  // At request time only: the refusals below read no request, and under Cache
+  // Components a handler that reads none is prerendered (spec/adr/0022).
+  await connection()
   if (process.env.DEMO_MODE !== "true") {
     return NextResponse.json({ error: "Not a demo deployment: refusing to wipe data." }, { status: 403 })
   }
