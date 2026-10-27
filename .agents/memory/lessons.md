@@ -2,6 +2,12 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-27 · better auth · A plugin's fields must be in the contract, and the check runs once
+- **Symptom:** every page answered 500 with `BetterAuthError: Database schema mismatch — Missing columns Session.activeOrganizationId`.
+- **Cause:** the organization plugin writes `Session.activeOrganizationId`; the `platform_tenants` migration added its tables but not that column. Better Auth checks the schema once when the server starts and keeps the result, so even after the migration the running `pnpm dev` kept failing until restarted.
+- **Fix:** `activeOrganizationId String?` on `Session` in `prisma/contract.prisma`, migration `kit_session_active_organization`, then restart `pnpm dev`.
+- **Rule:** `tests/unit/auth-schema.test.ts` now fails when a column Better Auth writes is missing from the contract. After `pnpm db:migrate`, restart the dev server before judging a schema error.
+
 ### 2026-10-26 · better auth · Never run `npx auth migrate` / `auth generate` here
 - **Symptom:** `Only kysely adapter is supported for migrations` after Better Auth logged `Run \`npx auth migrate\` to add the missing tables and columns`.
 - **Cause:** the auth CLI loads `src/auth.ts` without the app's env/bootstrap, so adapter detection fails — and even if it ran, it would write migrations outside our Prisma 8 migration graph.

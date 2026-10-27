@@ -23,7 +23,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'4e0598a39b7e69afc5db6061cedcf87a754371b45ad0dc65cd5bee8d91139fce'>;
+  StorageHashBase<'ebc4c2460e7cdc1032d5b4a73228cba406b394a3ad2e01f889ff24074f90b6a6'>;
 export type ExecutionHash =
   ExecutionHashBase<'5d4a9630af31c8b03cc76d370b05b4ce8206d1e1e4f07b935e5a2ee4db750bc4'>;
 export type ProfileHash =
@@ -455,6 +455,7 @@ export namespace Models {
     readonly [RelationKeys]?: 'plan' | 'user';
   };
   export type public_Session = {
+    activeOrganizationId: FieldOutputTypes['public']['Session']['activeOrganizationId'];
     createdAt: FieldOutputTypes['public']['Session']['createdAt'];
     expiresAt: FieldOutputTypes['public']['Session']['expiresAt'];
     id: FieldOutputTypes['public']['Session']['id'];
@@ -1388,6 +1389,12 @@ type ContractBase = Omit<
             };
             readonly Session: {
               columns: {
+                readonly activeOrganizationId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
                 readonly createdAt: {
                   readonly dataType: 'pg/timestamp';
                   readonly codecId: 'pg/timestamp-string@1';
@@ -2748,6 +2755,10 @@ type ContractBase = Omit<
           };
           readonly Session: {
             readonly fields: {
+              readonly activeOrganizationId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
               readonly createdAt: {
                 readonly nullable: false;
                 readonly type: {
@@ -2812,6 +2823,7 @@ type ContractBase = Omit<
               readonly table: 'Session';
               readonly namespaceId: 'public';
               readonly fields: {
+                readonly activeOrganizationId: { readonly column: 'activeOrganizationId' };
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly expiresAt: { readonly column: 'expiresAt' };
                 readonly id: { readonly column: 'id' };

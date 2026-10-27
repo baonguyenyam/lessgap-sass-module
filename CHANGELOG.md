@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.9.1] - 2026-10-27
+
+🩹 **Every page answered 500 after the organization plugin landed.** Better Auth writes `Session.activeOrganizationId` and the database had no such column. This is a PATCH: `git pull`, `pnpm install`, `pnpm db:migrate`, then restart the server (Better Auth checks the schema once, at startup).
+
+### Fixed
+
+- **`Session.activeOrganizationId`** added to the contract, with migration `kit_session_active_organization` (one nullable column)
+- **A test compares the columns Better Auth writes with the contract** (`tests/unit/auth-schema.test.ts`), so a plugin field the contract lacks fails the suite instead of every page
+
 ## [2.9.0] - 2026-10-26
 
 ⚙️ **Settings is a section of its own, and every test lives in `tests/`.** Settings opens as a page, not a modal, with four sub-pages: General, Security, Backup and Logs. This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.

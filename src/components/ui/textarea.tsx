@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils"
 import { TextareaHTMLAttributes, forwardRef } from "react"
+import { fieldVariants } from "@/components/ui/field"
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   error?: string
@@ -11,11 +12,9 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       <div className="flex flex-col gap-1">
         <textarea
           ref={ref}
-          className={cn(
-            "flex min-h-24 w-full rounded-[var(--radius)] border border-border bg-secondary px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
-            error && "border-destructive focus-visible:ring-destructive",
-            className
-          )}
+          aria-invalid={error ? true : undefined}
+          // Same look as every field; height is free, so the size's fixed height is dropped.
+          className={cn(fieldVariants(), "h-auto min-h-24 py-2", className)}
           {...props}
         />
         {error && (
