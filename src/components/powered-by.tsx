@@ -22,7 +22,7 @@ import { Zap } from "lucide-react"
  * the OpenStarterKit brand colors stay hard-coded.
  */
 
-const HOMEPAGE_URL = "https://openstarterkit.dev"
+const HOMEPAGE_URL = "https://lessgap.com"
 
 /* OpenStarterKit brand gradient (Cobalt Deep), independent of the app theme.
    The flat brand blue #2563eb lives in the Tailwind classes below, where it

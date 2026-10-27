@@ -3,9 +3,25 @@
 All notable changes to lessGAP App are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/) and this project adheres to [Semantic Versioning](https://semver.org/).
 
-> 💡 **lessGAP App is built on [OpenStarterKit](https://github.com/openstarterkit/nextjs-saas-starter-kit) (MIT).** Entries up to and including 2.4.0 are the upstream kit's release history, kept so the "if you customised" notes still make sense; the release links at the bottom point at the upstream repository, where those versions were published.
+> 💡 **lessGAP App is built on [OpenStarterKit](https://github.com/baonguyenyam/lessgap-sass-module) (MIT).** Entries up to and including 2.4.0 are the upstream kit's release history, kept so the "if you customised" notes still make sense; the release links at the bottom point at the upstream repository, where those versions were published.
 
 ---
+
+## [2.18.0] - 2026-10-27
+
+**Cache Components and Partial Prefetching are on, step 1 of spec/adr/0022.** Nothing looks different yet: every page still renders on request, as before. This step clears what the new rendering model refuses, so the next steps can make pages instant one at a time. This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
+
+### Changed
+
+- `cacheComponents` and `partialPrefetching` are enabled in `next.config.ts`. Every page and layout carries `export const instant = false` until its route is converted. If you customised: add the same line to a new page, and run `pnpm build` after rendering changes, since that is where the new errors show
+- Server Components translate with `await getTranslations()` instead of the `useTranslations` hook (the landing sections, About, Contact, Changelog, the sign-in check-your-email page)
+- The copyright year comes from `currentYear()` (`src/lib/current-year.ts`), cached daily, instead of reading the clock during render
+- Database reads that run before a page has read any request (platform settings, the landing's plans, the development setup check) wait for the request with `io()`
+- `/api/health` and the demo reset call `connection()` instead of `export const dynamic = "force-dynamic"`
+
+### Fixed
+
+- The privacy, terms and cookie pages showed today's date as "Last updated" on every visit. They now show a fixed date; update it when you change the text
 
 ## [2.17.0] - 2026-10-27
 
@@ -338,7 +354,7 @@ Expect conflicts in `src/proxy.ts`, `src/components/landing/navbar.tsx`, `nav-li
 
 ## [2.3.5] - 2026-10-10
 
-📨 **Bring your own email provider.** Every email the kit sends now goes through one function, so moving from Resend to SMTP, Postmark or any other service means rewriting one file, and a new guide walks through two examples. Asked for in [#48](https://github.com/openstarterkit/nextjs-saas-starter-kit/issues/48). This is a PATCH: `git pull`, `npm install`. Nothing to migrate and nothing to configure: Resend stays the default and works as before.
+📨 **Bring your own email provider.** Every email the kit sends now goes through one function, so moving from Resend to SMTP, Postmark or any other service means rewriting one file, and a new guide walks through two examples. Asked for in [#48](https://github.com/baonguyenyam/lessgap-sass-module/issues/48). This is a PATCH: `git pull`, `npm install`. Nothing to migrate and nothing to configure: Resend stays the default and works as before.
 
 ### Added
 
@@ -863,7 +879,7 @@ We found it while checking whether the issuer format was worth reporting upstrea
 - **The example landing is smaller on purpose**: 6 feature cards instead of 9, 4 FAQ entries instead of 6, each covering a different area. They read better as something to rewrite than as a finished feature list to inherit
 - The dashboard and admin shells now use the same maximum width as the public pages, so cards stop stretching to the full width of a large screen
 - The waitlist copy no longer promises a weekly email, in the app and in the roadmap alike. A cadence written in a welcome email is one the subscriber keeps in their inbox: promise news, then send news
-- `SECURITY.md` and `.github/FUNDING.yml` are no longer part of the kit. They pointed at our security contact and our tip jar, which is wrong the moment the repository is yours. Reports about the kit itself go through [our security policy](https://github.com/openstarterkit/nextjs-saas-starter-kit/security/policy); for your app, write your own
+- `SECURITY.md` and `.github/FUNDING.yml` are no longer part of the kit. They pointed at our security contact and our tip jar, which is wrong the moment the repository is yours. Reports about the kit itself go through [our security policy](https://github.com/baonguyenyam/lessgap-sass-module/security/policy); for your app, write your own
 
 ### Fixed
 - **Unknown URLs rendered the sign-in redirect instead of a 404.** The proxy went from an allowlist of public routes to a denylist of private ones, so a typo like `/doc` reaches the router and your 404 page. Nothing is opened up: every private area already gates itself server-side
@@ -975,31 +991,31 @@ We found it while checking whether the issuer format was worth reporting upstrea
 - Production build: 0 TypeScript errors, 0 ESLint errors, 14 routes
 - Stack chosen best-of-breed with **no vendor lock-in**: every component is swappable
 
-[2.4.0]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v2.4.0
-[2.3.7]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v2.3.7
-[2.3.6]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v2.3.6
-[2.3.5]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v2.3.5
-[2.3.4]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v2.3.4
-[2.3.3]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v2.3.3
-[2.3.2]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v2.3.2
-[2.3.1]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v2.3.1
-[2.3.0]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v2.3.0
-[2.2.0]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v2.2.0
-[2.1.0]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v2.1.0
-[2.0.3]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v2.0.3
-[2.0.2]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v2.0.2
-[2.0.1]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v2.0.1
-[2.0.0]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v2.0.0
-[1.7.0]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v1.7.0
-[1.6.4]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v1.6.4
-[1.6.3]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v1.6.3
-[1.6.2]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v1.6.2
-[1.6.1]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v1.6.1
-[1.6.0]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v1.6.0
-[1.5.0]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v1.5.0
-[1.4.1]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v1.4.1
-[1.4.0]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v1.4.0
-[1.3.0]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v1.3.0
-[1.2.0]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v1.2.0
-[1.1.0]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v1.1.0
-[1.0.0]: https://github.com/openstarterkit/nextjs-saas-starter-kit/releases/tag/v1.0.0
+[2.4.0]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v2.4.0
+[2.3.7]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v2.3.7
+[2.3.6]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v2.3.6
+[2.3.5]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v2.3.5
+[2.3.4]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v2.3.4
+[2.3.3]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v2.3.3
+[2.3.2]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v2.3.2
+[2.3.1]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v2.3.1
+[2.3.0]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v2.3.0
+[2.2.0]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v2.2.0
+[2.1.0]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v2.1.0
+[2.0.3]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v2.0.3
+[2.0.2]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v2.0.2
+[2.0.1]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v2.0.1
+[2.0.0]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v2.0.0
+[1.7.0]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v1.7.0
+[1.6.4]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v1.6.4
+[1.6.3]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v1.6.3
+[1.6.2]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v1.6.2
+[1.6.1]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v1.6.1
+[1.6.0]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v1.6.0
+[1.5.0]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v1.5.0
+[1.4.1]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v1.4.1
+[1.4.0]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v1.4.0
+[1.3.0]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v1.3.0
+[1.2.0]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v1.2.0
+[1.1.0]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v1.1.0
+[1.0.0]: https://github.com/baonguyenyam/lessgap-sass-module/releases/tag/v1.0.0

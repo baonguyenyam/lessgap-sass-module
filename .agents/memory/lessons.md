@@ -2,6 +2,18 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-27 · prisma 8 · Every query is "randomness" to Cache Components
+- **Symptom:** with `cacheComponents: true`, `pnpm build` failed on `/en/about`: "encountered the unstable value `crypto.randomUUID()` while prerendering", pointing at a `PlatformSwitch` read; in dev the landing showed the same for `Plan` reads.
+- **Cause:** Prisma 8's statement runner mints a `randomUUID()` per query. A query that runs before the page has read any request data happens during the prerender, where randomness is refused like the clock.
+- **Fix:** `await io()` (from `next/cache`) before such a query, or cache the function with `"use cache"`.
+- **Rule:** promoted to `.agents/rules/nextjs-react.md`. Dev-only code paths (the setup probe) are not exercised by `pnpm build`: open the page in dev too.
+
+### 2026-10-27 · next-intl · `useTranslations` in a Server Component breaks the prerender
+- **Symptom:** `Error: Expected a suspended thenable. This is a bug in React.` prerendering `/en/contact` after enabling Cache Components.
+- **Cause:** the hook unwraps next-intl's async request config with `use()` inside a synchronous Server Component; while the config waits on request data during a prerender, React fails instead of suspending.
+- **Fix:** `async` component + `await getTranslations()` (nine files converted).
+- **Rule:** promoted to `.agents/rules/nextjs-react.md`.
+
 ### 2026-10-27 · next · Typed routes cannot see the public home at "/"
 - **Symptom:** with `typedRoutes: true`, `href="/"`, `redirect("/")` and `href="/#pricing"` failed the typecheck, while every other page passed.
 - **Cause:** the home page is `src/app/[locale]/(public)/page.tsx`, so the generated types know it only as `/${locale}`; the proxy serves the default language at "/" without a prefix.

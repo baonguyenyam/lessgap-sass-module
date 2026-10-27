@@ -150,6 +150,20 @@ Accepted by the owner on 2026-10-27, with the answers recorded under
   shows after the cache life), or always read per request?
 - **The navigation overlay:** remove it once prefetching makes it redundant?
 
+### Step 1 findings (2026-10-27)
+Two blockers the audit did not list, found by `pnpm build` and the dev overlay:
+
+- **Every Prisma 8 query mints a random id** (`crypto.randomUUID()` in the
+  ORM's statement runner), which Cache Components refuses in a prerender, just
+  like the clock. A query that runs before any request data has been read must
+  wait for the request (`await io()`), or be cached with `"use cache"`. In step
+  1 that is the platform settings read (`store.ts`), the landing's plans
+  (`plan-pricing.tsx`) and the dev-only setup probe (`setup-status.ts`); steps
+  2 and 3 cache the first two.
+- **Synchronous `useTranslations` in a Server Component** failed the prerender
+  with React's "Expected a suspended thenable". Server Components use
+  `await getTranslations()`; the hook stays for Client Components.
+
 ## Consequences
 - Public pages served as static shells; dashboard navigations show the shell
   and skeleton at once, with the data streaming in.

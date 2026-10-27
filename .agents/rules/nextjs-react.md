@@ -56,6 +56,18 @@ Follow the shape already used in `src/app/actions/projects.ts`, in this order:
   Link to the public home through `HOME` from `@/config/site` (typed routes
   see it as `/[locale]`). Cast with `as Route` only for a URL that is not ours
   (an OAuth provider, the demo) or a path built at runtime from the current one.
+- **Cache Components is on** ([ADR 0022](../../spec/adr/0022-cache-components-and-partial-prefetching.md)).
+  While a page prerenders, never read the clock or randomness (`new Date()`,
+  `Date.now()`, `Math.random()`, `crypto.randomUUID()`), and remember that
+  every Prisma 8 query does (it mints a query id). Either read request data
+  first (session, `searchParams`, `cookies()`), call `await io()` from
+  `next/cache` before it, or cache it with `"use cache"` + `cacheLife` (and a
+  `cacheTag` keyed by tenant for tenant data). A copyright year comes from
+  `currentYear()` in `@/lib/current-year`. Server Components translate with
+  `await getTranslations()`, never the `useTranslations` hook. Until a route
+  is converted (steps 3 and 4) its segments keep `export const instant = false`;
+  a new page copies that line. Run `pnpm build` after touching rendering: the
+  build is where these errors show.
 - View transitions: React's `<ViewTransition>` with `default="none"`, so only
   the named case animates (today: the skeleton fading out, `.skeleton-reveal`).
   Every animation has a `prefers-reduced-motion` override in `globals.css`.

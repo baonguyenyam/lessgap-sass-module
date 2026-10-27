@@ -354,7 +354,7 @@ CI runs lint, unit tests, the build and `pnpm audit --prod --audit-level high` o
 
 ## 🏷️ Attribution & the badge
 
-lessGAP App is built on [OpenStarterKit](https://github.com/openstarterkit/nextjs-saas-starter-kit), the open-source (MIT) Next.js SaaS app, whose optional "Built with" badge still lives in `src/components/powered-by.tsx`. This deployment disables it from `.env`:
+lessGAP App is built on [OpenStarterKit](https://github.com/baonguyenyam/lessgap-sass-module), the open-source (MIT) Next.js SaaS app, whose optional "Built with" badge still lives in `src/components/powered-by.tsx`. This deployment disables it from `.env`:
 
 ```bash
 NEXT_PUBLIC_REMOVE_BRANDING="true"
@@ -377,7 +377,7 @@ Built on [next-intl](https://next-intl.dev), with **no translation service and n
 
 ## 🔒 Security
 
-Found a vulnerability **in this project**? Please don't open a public issue: report it privately to [baonguyenyam@gmail.com](mailto:baonguyenyam@gmail.com). Issues in the upstream kit it is based on go through the [OpenStarterKit security policy](https://github.com/openstarterkit/nextjs-saas-starter-kit/security/policy).
+Found a vulnerability **in this project**? Please don't open a public issue: report it privately to [baonguyenyam@gmail.com](mailto:baonguyenyam@gmail.com). Issues in the upstream kit it is based on go through the [OpenStarterKit security policy](https://github.com/baonguyenyam/lessgap-sass-module/security/policy).
 
 Once this is your app, write your own policy: add a `SECURITY.md` to your repository, or one in a `.github` repository if you keep several projects under an organisation.
 

@@ -85,7 +85,7 @@ export function LogoMark({
 }
 
 /** Stand-in name for mockups, matching the alex@acme.io in the same screenshot. */
-const GENERIC_NAME = "Acme"
+const GENERIC_NAME = "less[GAP] App"
 
 export function LogoWordmark({ className, generic }: { className?: string; generic?: boolean }) {
   const name = generic ? GENERIC_NAME : siteConfig.name

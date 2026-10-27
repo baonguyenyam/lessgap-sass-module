@@ -19,7 +19,7 @@ import { isKitSite } from "@/config/kit"
 export const HOME = "/" as Route
 
 export const siteConfig = {
-  name: process.env.NEXT_PUBLIC_BRAND_NAME || (isKitSite ? "less[GAP] App" : "Acme"),
+  name: process.env.NEXT_PUBLIC_BRAND_NAME || (isKitSite ? "less[GAP] App" : "less[GAP] App"),
   tagline:
     process.env.NEXT_PUBLIC_BRAND_TAGLINE || (isKitSite ? "Ship your SaaS this weekend" : "Ship your product faster"),
 
@@ -30,7 +30,7 @@ export const siteConfig = {
    * text for the machine and the text for the reader need to differ. The
    * tagline keeps its job on the page (hero, footer, social image, emails).
    */
-  seoTitle: process.env.NEXT_PUBLIC_SEO_TITLE || (isKitSite ? "Next.js SaaS App | Free & Open Source" : null),
+  seoTitle: process.env.NEXT_PUBLIC_SEO_TITLE || (isKitSite ? "less[GAP] App" : null),
   /**
    * One sentence for the machines that summarise you, served in `/llms.txt`.
    *
@@ -46,7 +46,7 @@ export const siteConfig = {
    */
   llmsSummary: process.env.NEXT_PUBLIC_LLMS_SUMMARY || null,
 
-  version: "2.17.0",
+  version: "2.18.0",
   description:
     process.env.NEXT_PUBLIC_BRAND_DESCRIPTION ||
     (isKitSite
@@ -57,20 +57,20 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
 
   /** Shown as the contact address in the footer and pre-filled emails. */
-  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || (isKitSite ? "hello@openstarterkit.dev" : "hello@example.com"),
+  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || (isKitSite ? "hello@example.dev" : "hello@example.com"),
 
   links: {
     /** Public repository — footer/pricing/docs buttons hide when unset. */
     github:
       process.env.NEXT_PUBLIC_GITHUB_URL ||
-      (isKitSite ? "https://github.com/openstarterkit/nextjs-saas-starter-kit" : null),
+      (isKitSite ? "https://github.com/baonguyenyam/lessgap-sass-module" : null),
     /**
      * General GitHub presence (org/profile) — used by the footer icon and
      * "Open Source" link; hides when unset.
      */
-    githubOrg: process.env.NEXT_PUBLIC_GITHUB_ORG_URL || (isKitSite ? "https://github.com/openstarterkit" : null),
+    githubOrg: process.env.NEXT_PUBLIC_GITHUB_ORG_URL || (isKitSite ? "https://github.com/baonguyenyam" : null),
     /** X / Twitter profile — the footer icon hides when unset. */
-    x: process.env.NEXT_PUBLIC_X_URL || (isKitSite ? "https://x.com/openstarterkit" : null),
+    x: process.env.NEXT_PUBLIC_X_URL || (isKitSite ? "https://x.com/baonguyenyam" : null),
     /**
      * Live demo URL. When set, the sign-in link on the public pages points
      * here instead of the local /login and reads "Demo": useful when this
