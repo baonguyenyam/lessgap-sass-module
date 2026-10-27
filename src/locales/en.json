@@ -53,8 +53,10 @@
         "invalid": "Check your details: valid email and a password of at least 8 characters.",
         "exists": "An account with this email already exists. Sign in instead.",
         "rate": "Too many attempts. Try again in a few minutes.",
-        "generic": "Something went wrong. Try again."
-      }
+        "generic": "Something went wrong. Try again.",
+        "closed": "Sign-ups are closed right now."
+      },
+      "closedNotice": "New accounts cannot be created right now. If you already have one, sign in."
     },
     "login": {
       "title": "Welcome back",
@@ -84,7 +86,8 @@
         "Verification": "That sign-in link is invalid or has expired. Request a new one.",
         "generic": "Something went wrong. Try again.",
         "2fa": "This account uses two-factor authentication, so it signs in with a password and a code from your authenticator app.",
-        "two_factor_linking": "This account uses two-factor authentication, so a provider cannot attach itself to it here. Sign in with your password and a code, then connect the provider from Settings."
+        "two_factor_linking": "This account uses two-factor authentication, so a provider cannot attach itself to it here. Sign in with your password and a code, then connect the provider from Settings.",
+        "signup_closed": "Sign-ups are closed, so no new account was created. If you already have one, sign in with it."
       }
     },
     "twoFactor": {
@@ -115,14 +118,23 @@
       "subtitle": "The things you're working on. This is the example resource.",
       "newTitle": "New project",
       "newDescription": "Create a project you own.",
-      "emptyTitle": "No projects yet",
       "emptyBody": "Create your first project to get started.",
       "noDescription": "No description",
-      "updated": "Updated {date}",
       "searchPlaceholder": "Search projects...",
-      "noResultsTitle": "Nothing matched",
       "noResultsBody": "No project matches “{query}”. Try a shorter word, or clear the search.",
-      "clearSearch": "Clear search"
+      "colName": "Name",
+      "colUpdated": "Updated",
+      "colCreated": "Created",
+      "colActions": "Actions",
+      "description": "Description",
+      "open": "Open",
+      "edit": "Edit",
+      "delete": "Delete",
+      "editTitle": "Edit project",
+      "deleteConfirm": {
+        "title": "Delete the selected projects?",
+        "description": "They are removed for good. This cannot be undone."
+      }
     },
     "home": {
       "greeting": "Welcome back, {name}",
@@ -370,14 +382,6 @@
       "dangerDescription": "Deleting a project is permanent and cannot be undone.",
       "delete": "Delete project"
     },
-    "createProject": {
-      "created": "Project created",
-      "name": "Project name",
-      "description": "Description (optional)",
-      "descriptionPlaceholder": "What is this project about?",
-      "descriptionHint": "Optional. Up to {max} characters.",
-      "submit": "Create project"
-    },
     "projectEdit": {
       "updated": "Project updated",
       "name": "Project name",
@@ -420,50 +424,88 @@
       "backToDashboard": "Back to Dashboard",
       "openNavigation": "Open navigation",
       "members": "Members",
-      "roles": "Roles"
+      "roles": "Roles",
+      "users": "Users",
+      "newsletter": "Newsletter",
+      "platformSettings": "Settings"
     },
     "members": {
       "title": "Members",
       "subtitle": "People with access to {tenant}",
       "invite": {
-        "title": "Invite a member",
+        "title": "Invite member",
         "description": "They get an email to join with the role you pick.",
         "emailPlaceholder": "person@example.com",
-        "submit": "Invite"
+        "email": "Email"
       },
       "list": {
-        "title": "Members",
-        "count": "{count} people",
         "colMember": "Member",
         "colRole": "Role",
-        "update": "Update",
-        "remove": "Remove"
+        "remove": "Remove",
+        "colJoined": "Joined",
+        "colActions": "Actions",
+        "changeRole": "Change role",
+        "search": "Search by name or email…",
+        "empty": "No members match."
       },
       "invitations": {
-        "title": "Pending invitations"
+        "title": "Pending invitations",
+        "status": {
+          "pending": "Pending",
+          "accepted": "Accepted",
+          "rejected": "Declined",
+          "canceled": "Canceled"
+        }
+      },
+      "removeConfirm": {
+        "title": "Remove the selected members?",
+        "description": "They lose access to this workspace at once. You and the last owner are never removed."
+      },
+      "errors": {
+        "invalidEmail": "Enter a valid email address.",
+        "roleRequired": "Choose a role.",
+        "unknownRole": "That role does not exist in this workspace.",
+        "notFound": "That member is no longer in this workspace.",
+        "lastOwner": "The last owner cannot be given another role."
       }
     },
     "roles": {
       "title": "Roles",
       "subtitle": "Permission groups for this workspace.",
-      "builtin": {
-        "title": "Built-in roles",
-        "description": "Fixed by the platform; they cannot be edited."
-      },
       "custom": {
-        "title": "Custom roles",
-        "description": "Your own groups, created below.",
         "empty": "No custom roles yet.",
-        "members": "members",
         "delete": "Delete"
       },
       "create": {
         "title": "Create a role",
         "namePlaceholder": "role-name",
-        "submit": "Create role"
+        "description": "A group of permissions you can give to members.",
+        "name": "Name",
+        "nameHint": "Lowercase letters, digits and hyphens. It cannot be changed later."
       },
       "colRole": "Role",
-      "colPermissions": "Permissions"
+      "colPermissions": "Permissions",
+      "colMembers": "Members",
+      "colActions": "Actions",
+      "builtInTag": "Built-in",
+      "edit": "Edit permissions",
+      "editTitle": "Edit role",
+      "search": "Search roles…",
+      "kind": {
+        "label": "Type",
+        "builtIn": "Built-in",
+        "custom": "Custom"
+      },
+      "deleteConfirm": {
+        "title": "Delete the selected roles?",
+        "description": "Built-in roles and roles that still have members are kept."
+      },
+      "errors": {
+        "roleKey": "Use lowercase letters, digits and hyphens.",
+        "permissionsRequired": "Choose at least one permission.",
+        "builtIn": "That name belongs to a built-in role.",
+        "unknownPermission": "One of the permissions does not exist."
+      }
     }
   },
   "admin": {
@@ -476,39 +518,126 @@
     "revenueTitle": "Recurring revenue",
     "revenueSubtitle": "Monthly recurring revenue over the last 12 weeks.",
     "revenueTooltip": "MRR",
-    "usersTitle": "Users",
-    "usersCount": "{count, plural, one {# total user} other {# total users}}",
-    "searchPlaceholder": "Search by email...",
-    "search": "Search",
-    "free": "Free",
-    "joined": "Joined {date}",
-    "noUsers": "No users found.",
-    "colUser": "User",
-    "colPlan": "Plan",
-    "colStatus": "Status",
-    "colRole": "Role",
-    "colJoined": "Joined",
-    "page": "Page {page} of {total}",
-    "previous": "Previous",
-    "next": "Next",
     "waitlistTitle": "Waitlist",
-    "exportCsv": "Export CSV",
-    "colEmail": "Email",
-    "colSource": "Source",
-    "colRequested": "Requested",
-    "unsubscribed": "Unsubscribed",
-    "confirmed": "Confirmed",
-    "pending": "Pending",
-    "noSubscribers": "No subscribers yet. The signup form lives on the pricing page.",
-    "makeAdmin": "Make Admin",
-    "rolePromoted": "User promoted to admin. Their session picks it up within a minute.",
-    "roleFailed": "Failed to update role",
-    "removeAdmin": "Remove Admin",
-    "roleDemoted": "Admin rights removed. Their session picks it up within a minute."
+    "users": {
+      "title": "Users",
+      "subtitle": "Every account, with its plan and role.",
+      "search": "Search by email or name…",
+      "colUser": "User",
+      "colPlan": "Plan",
+      "colStatus": "Status",
+      "colRole": "Role",
+      "colJoined": "Joined",
+      "colActions": "Actions",
+      "free": "Free",
+      "empty": "No users match.",
+      "edit": "Edit",
+      "switchAs": "Switch as this user",
+      "copyEmail": "Copy email",
+      "copied": "Email copied",
+      "exportCsv": "Export CSV",
+      "setRole": {
+        "USER": "Make user",
+        "ADMIN": "Make admin"
+      },
+      "setRoleConfirm": {
+        "title": "Change the role of the selected users?",
+        "USER": "They lose access to the admin panel at their next request. ROOT accounts and your own are left as they are.",
+        "ADMIN": "They get access to the admin panel. ROOT accounts and your own are left as they are."
+      },
+      "drawer": {
+        "title": "Edit user",
+        "name": "Name",
+        "role": "Role",
+        "roleHint": "Only ROOT changes roles, and never to or from ROOT.",
+        "roleLocked": "You cannot change this role."
+      }
+    },
+    "waitlistSummary": "{confirmed} confirmed · {pending} pending confirmation",
+    "waitlistOpen": "Open the list",
+    "newsletter": {
+      "title": "Newsletter",
+      "subtitle": "Every address that asked to join, with its consent dates.",
+      "search": "Search by email…",
+      "colEmail": "Email",
+      "colSource": "Source",
+      "colStatus": "Status",
+      "colRequested": "Requested",
+      "colActions": "Actions",
+      "status": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "unsubscribed": "Unsubscribed"
+      },
+      "empty": "No subscribers match.",
+      "copyEmail": "Copy email",
+      "copied": "Email copied",
+      "unsubscribe": "Unsubscribe",
+      "unsubscribeConfirm": {
+        "title": "Unsubscribe the selected addresses?",
+        "description": "They stop receiving the newsletter and are removed from the mailing audience. They can sign up again themselves."
+      },
+      "exportSelected": "Export selected",
+      "exportAll": "Export all (CSV)"
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "How the whole system displays dates and lists, which language it speaks, and who may join.",
+      "tabsLabel": "Settings sections",
+      "tabs": {
+        "display": "Display",
+        "language": "Language",
+        "access": "Access"
+      },
+      "descriptions": {
+        "display": "Applies to every list and every date, for everyone.",
+        "language": "The language of the dashboard, the admin panel and the sign-in pages. The public site follows its URL.",
+        "access": "Who can create an account."
+      },
+      "fields": {
+        "display": {
+          "page_size": {
+            "label": "Rows per page",
+            "description": "How many rows a list shows before the next page. Anyone can change it for one list from the table footer."
+          },
+          "date_style": {
+            "label": "Date format",
+            "description": "How dates are written."
+          },
+          "hour_cycle": {
+            "label": "Time format",
+            "description": "12-hour or 24-hour clock."
+          },
+          "time_zone": {
+            "label": "Time zone",
+            "description": "Every date and time is shown in this zone."
+          }
+        },
+        "locale": {
+          "app": {
+            "label": "Language",
+            "description": "Strings not translated yet fall back to English."
+          }
+        },
+        "signup": {
+          "enabled": {
+            "label": "Open sign-ups",
+            "description": "When off, no new account can be created, by email or through Google or GitHub. Existing accounts still sign in."
+          }
+        }
+      },
+      "save": "Save changes",
+      "saved": "Settings saved",
+      "rootOnly": "Only ROOT can change these settings.",
+      "errors": {
+        "unknown": "That setting does not exist.",
+        "forbidden": "You are not allowed to change one of these settings.",
+        "invalid": "One of the values is not valid.",
+        "failed": "The settings could not be saved."
+      }
+    }
   },
   "switchAs": {
-    "button": "Switch as",
-    "failed": "Could not switch to this account",
     "banner": "You are using the app as {email}. Every change you make is real.",
     "back": "Switch back"
   },
@@ -1046,6 +1175,26 @@
     "messageTooShort": "Tell us a bit more (at least 10 characters)",
     "checkTheForm": "Check the form and try again",
     "tooManyMessages": "Too many messages from this connection. Try again in a few minutes.",
-    "contactSendFailed": "Something went wrong on our side. Email us directly at {email}."
+    "contactSendFailed": "Something went wrong on our side. Email us directly at {email}.",
+    "userNotFound": "That user no longer exists."
+  },
+  "dataTable": {
+    "all": "All {label}",
+    "bulkActions": "Bulk actions",
+    "selected": "{count, plural, one {# selected} other {# selected}}",
+    "clearSelection": "Clear",
+    "showing": "{from}–{to} of {total}",
+    "rowsPerPage": "Rows per page",
+    "page": "Page {page} of {pages}",
+    "previous": "Previous page",
+    "next": "Next page",
+    "selectAll": "Select all rows on this page",
+    "selectRow": "Select row",
+    "actionsFor": "Actions for {label}",
+    "cancel": "Cancel",
+    "done": "Done",
+    "failed": "Something went wrong. Nothing was changed.",
+    "save": "Save",
+    "saving": "Saving…"
   }
 }

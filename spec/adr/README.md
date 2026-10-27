@@ -42,3 +42,4 @@ Each rejected option and the reason it lost.
 | [0017](./0017-sentry-for-error-tracking.md) | Sentry for error tracking, `ErrorReport` table in the app | proposed |
 | [0018](./0018-cloudflare-r2-for-storage.md) | Cloudflare R2 for media, exports, snapshots and platform backups | accepted |
 | [0019](./0019-tenant-roles-are-permission-groups.md) | Tenant roles are permission groups: built-in owner/manager/staff plus custom roles via `dynamicAccessControl` | proposed |
+| [0020](./0020-application-stack.md) | One library per job: the application stack | accepted |

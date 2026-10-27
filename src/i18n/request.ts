@@ -3,6 +3,8 @@ import { hasLocale } from "next-intl"
 import { routing } from "./routing"
 import { isKitSite } from "@/config/kit"
 import { collapseMessages, type Messages } from "./collapse"
+import { getPlatformSettings } from "@/platform/settings/store"
+import { dateTimeFormats } from "@/platform/settings/registry"
 
 /**
  * Fills the gaps in `translated` with `source`, all the way down.
@@ -35,13 +37,20 @@ function withFallback(source: Messages, translated: Messages): Messages {
  */
 export default getRequestConfig(async ({ requestLocale }) => {
   const requested = await requestLocale
-  const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale
+  const settings = await getPlatformSettings()
+  // The public site carries its locale in the URL. Everything outside it (the
+  // dashboard, the admin panel, the sign-in pages) speaks the language chosen
+  // in the platform settings (`locale.app`, ROOT only).
+  const locale = hasLocale(routing.locales, requested) ? requested : settings["locale.app"]
+  // Every date on every page is shown in one time zone and one style, set by
+  // an administrator (`display.*`).
+  const shared = { timeZone: settings["display.time_zone"], formats: { dateTime: dateTimeFormats(settings) } }
 
   const source: Messages = (await import(`../locales/${routing.defaultLocale}.json`)).default
   if (locale === routing.defaultLocale) {
-    return { locale, messages: collapseMessages(source, isKitSite) as never }
+    return { locale, ...shared, messages: collapseMessages(source, isKitSite) as never }
   }
 
   const translated: Messages = (await import(`../locales/${locale}.json`)).default
-  return { locale, messages: collapseMessages(withFallback(source, translated), isKitSite) as never }
+  return { locale, ...shared, messages: collapseMessages(withFallback(source, translated), isKitSite) as never }
 })

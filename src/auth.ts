@@ -15,6 +15,7 @@ import { siteConfig } from "@/config/site"
 import { emailEnabled } from "@/lib/email-transport"
 import { enabledOAuthProviders, oauthCredentials } from "@/lib/oauth-providers"
 import { canSwitchAs, isRole } from "@/lib/roles"
+import { getPlatformSettings } from "@/platform/settings/store"
 import { tenantAc, tenantRoles } from "@/platform/tenancy/permissions"
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -299,6 +300,14 @@ export const auth = betterAuth({
      *     second factor to go around.
      */
     validateUserInfo: async ({ user, source }, ctx) => {
+      // Sign-ups closed by ROOT (`signup.enabled`, src/platform/settings): every
+      // way of creating an account passes here, the email form and every OAuth
+      // provider alike, so this one check closes them all. Signing in to an
+      // existing account is not affected.
+      if (source.action === "create-user" && !(await getPlatformSettings())["signup.enabled"]) {
+        return { error: "signup_closed", errorDescription: "Sign-ups are closed." }
+      }
+
       // The rule itself is in src/lib/account-linking.ts; this gathers the two
       // facts it needs and does as it is told.
       if (source.method !== "oauth" || source.action !== "link-account") return

@@ -1,121 +1,46 @@
-import { getCurrentUser } from "@/lib/auth"
-import { getFormatter, getTranslations } from "next-intl/server"
-import { redirect } from "next/navigation"
 import { and } from "@prisma/orm-postgres/orm-client"
+import { getTranslations } from "next-intl/server"
+import Link from "next/link"
+import { redirect } from "next/navigation"
+import { getCurrentUser } from "@/lib/auth"
 import { db8 } from "@/lib/db8"
+import { isRoot } from "@/lib/roles"
 import { toDate } from "@/lib/timestamps"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { UserRoleButton } from "@/components/admin/user-role-button"
-import { SwitchAsButton } from "@/components/admin/switch-as-button"
-import { isAdmin, isRoot } from "@/lib/roles"
-import { RevenueChart } from "@/components/admin/revenue-chart"
 import { mrrHistory, monthlyEquivalent } from "@/lib/metrics"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { RevenueChart } from "@/components/admin/revenue-chart"
 
-const ITEMS_PER_PAGE = 20
+/**
+ * Admin → Overview: the numbers. The lists live on their own pages
+ * (Users, Newsletter), each a DataTable.
+ */
+export default async function AdminPage() {
+  const t = await getTranslations("admin")
+  const user = await getCurrentUser()
+  if (!user || !isRoot(user.role)) redirect("/dashboard")
 
-// Takes the formatter instead of hardcoding "en-US": this runs at module
-// scope, so it cannot reach the request locale on its own.
-type Formatter = Awaited<ReturnType<typeof getFormatter>>
-
-function formatJoined(format: Formatter, date: string) {
-  return format.dateTime(toDate(date), {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  })
-}
-
-function UserAvatar({
-  image,
-  name,
-  email,
-}: {
-  image: string | null
-  name: string | null
-  email: string
-}) {
-  return image ? (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={image} alt="" className="h-8 w-8 shrink-0 rounded-full" />
-  ) : (
-    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/20 text-xs font-bold text-primary">
-      {name?.[0] ?? email[0].toUpperCase()}
-    </div>
-  )
-}
-
-async function getAdminData(page: number, search: string) {
   const { NewsletterSubscriber, Subscription, User } = db8.orm.public
-  const matching = search ? User.where((u) => u.email.ilike(`%${search}%`)) : User
+  const count = (n: { n: number }) => n.n
+  const [totalUsers, allSubscriptions, waitlistConfirmed, waitlistPending] = await Promise.all([
+    User.aggregate((a) => ({ n: a.count() })).then(count),
+    // Every subscription, not just the active ones: the chart needs the rows
+    // that have since churned to show the revenue they produced while they
+    // were running. The active-only figures are derived from the same result.
+    Subscription.include("plan").all(),
+    NewsletterSubscriber.where((n) => and(n.confirmedAt.isNotNull(), n.unsubscribedAt.isNull()))
+      .aggregate((a) => ({ n: a.count() }))
+      .then(count),
+    NewsletterSubscriber.where((n) => and(n.confirmedAt.isNull(), n.unsubscribedAt.isNull()))
+      .aggregate((a) => ({ n: a.count() }))
+      .then(count),
+  ])
 
-  const [totalUsers, allSubscriptions, users, waitlistConfirmed, waitlistPending, waitlistRecent] =
-    await Promise.all([
-      User.aggregate((a) => ({ n: a.count() })).then((r) => r.n),
-      // Every subscription, not just the active ones: the chart needs the rows
-      // that have since churned to show the revenue they produced while they
-      // were running. The active-only figures below are derived from the same
-      // result, so the page still makes a single query for all of them.
-      Subscription.include("plan").all(),
-      matching
-        .include("subscription", (s) => s.include("plan"))
-        .orderBy((u) => u.createdAt.desc())
-        .offset((page - 1) * ITEMS_PER_PAGE)
-        .limit(ITEMS_PER_PAGE)
-        .all(),
-      NewsletterSubscriber.where((n) => and(n.confirmedAt.isNotNull(), n.unsubscribedAt.isNull()))
-        .aggregate((a) => ({ n: a.count() }))
-        .then((r) => r.n),
-      NewsletterSubscriber.where((n) => and(n.confirmedAt.isNull(), n.unsubscribedAt.isNull()))
-        .aggregate((a) => ({ n: a.count() }))
-        .then((r) => r.n),
-      NewsletterSubscriber.orderBy((n) => n.createdAt.desc()).limit(8).all(),
-    ])
-
-  const totalFiltered = search ? users.length : totalUsers
-
-  const activeSubscriptions = allSubscriptions.filter((sub) => sub.status === "ACTIVE")
-  const mrr = activeSubscriptions.reduce((sum, sub) => sum + monthlyEquivalent(sub.plan), 0)
+  const active = allSubscriptions.filter((sub) => sub.status === "ACTIVE")
+  const mrr = active.reduce((sum, sub) => sum + monthlyEquivalent(sub.plan), 0)
   const revenue = mrrHistory(
     allSubscriptions.map((sub) => ({ ...sub, createdAt: toDate(sub.createdAt), updatedAt: toDate(sub.updatedAt) }))
   )
-
-  return {
-    totalUsers,
-    activeUsers: activeSubscriptions.length,
-    mrr,
-    revenue,
-    users,
-    totalPages: Math.ceil(totalFiltered / ITEMS_PER_PAGE),
-    waitlistConfirmed,
-    waitlistPending,
-    waitlistRecent,
-  }
-}
-
-export default async function AdminPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ page?: string; search?: string }>
-}) {
-  const t = await getTranslations("admin")
-  const format = await getFormatter()
-  const user = await getCurrentUser()
-  if (!user || !isRoot(user.role)) redirect("/dashboard")
-  const viewer = { id: user.id, role: user.role }
-
-  const params = await searchParams
-  // Guard against non-numeric ?page (e.g. ?page=abc → NaN), which would flow into
-  // Prisma's `skip` and throw a 500. Fall back to page 1 for anything invalid.
-  const parsedPage = Number.parseInt(params.page ?? "1", 10)
-  const page = Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage : 1
-  const search = params.search ?? ""
-
-  const { totalUsers, activeUsers, mrr, revenue, users, totalPages, waitlistConfirmed, waitlistPending, waitlistRecent } =
-    await getAdminData(page, search)
 
   return (
     <div className="space-y-6">
@@ -124,7 +49,6 @@ export default async function AdminPage({
         <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
       </div>
 
-      {/* Metrics */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Card>
           <CardHeader className="pb-2">
@@ -139,7 +63,7 @@ export default async function AdminPage({
             <CardDescription>{t("activeSubscriptions")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-green-600 dark:text-green-400">{activeUsers}</p>
+            <p className="text-3xl font-bold text-green-600 dark:text-green-400">{active.length}</p>
           </CardContent>
         </Card>
         <Card>
@@ -152,7 +76,6 @@ export default async function AdminPage({
         </Card>
       </div>
 
-      {/* Recurring revenue over time */}
       <Card>
         <CardHeader>
           <CardTitle>{t("revenueTitle")}</CardTitle>
@@ -163,263 +86,16 @@ export default async function AdminPage({
         </CardContent>
       </Card>
 
-      {/* Users Table */}
       <Card>
-        <CardHeader>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <CardTitle>{t("usersTitle")}</CardTitle>
-              <CardDescription>{t("usersCount", { count: totalUsers })}</CardDescription>
-            </div>
-            <form className="flex gap-2">
-              <div className="w-full sm:w-auto">
-                <Input
-                  type="text"
-                  name="search"
-                  defaultValue={search}
-                  placeholder={t("searchPlaceholder")}
-                  className="h-9 sm:w-64"
-                />
-              </div>
-              <Button type="submit" size="sm">
-                {t("search")}
-              </Button>
-            </form>
+        <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <CardTitle>{t("waitlistTitle")}</CardTitle>
+            <CardDescription>{t("waitlistSummary", { confirmed: waitlistConfirmed, pending: waitlistPending })}</CardDescription>
           </div>
+          <Button asChild variant="outline" size="sm">
+            <Link href="/admin/newsletter">{t("waitlistOpen")}</Link>
+          </Button>
         </CardHeader>
-        <CardContent>
-          {/* Below `md` a 6-column table is unreadable: stack each user as a card. */}
-          <div className="space-y-3 md:hidden">
-            {users.map((user) => (
-              <div key={user.id} className="rounded-xl border border-border p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex min-w-0 items-center gap-3">
-                    <UserAvatar image={user.image} name={user.name} email={user.email} />
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-foreground">{user.name ?? "-"}</p>
-                      <p className="truncate text-xs text-muted-foreground">{user.email}</p>
-                    </div>
-                  </div>
-                  <Badge variant={isAdmin(user.role) ? "default" : "outline"}>{user.role}</Badge>
-                </div>
-                <div className="mt-3 flex flex-wrap items-center gap-2">
-                  {user.subscription ? (
-                    <Badge variant={user.subscription.status === "ACTIVE" ? "success" : "secondary"}>
-                      {user.subscription.status}
-                    </Badge>
-                  ) : (
-                    <Badge variant="secondary">{t("free")}</Badge>
-                  )}
-                  <span className="text-sm text-muted-foreground">
-                    {user.subscription?.plan?.name ?? t("free")}
-                  </span>
-                  <span className="ml-auto text-xs text-muted-foreground">
-                    {t("joined", { date: formatJoined(format, user.createdAt) })}
-                  </span>
-                </div>
-                <div className="mt-3 flex gap-2 empty:hidden">
-                  <UserRoleButton userId={user.id} currentRole={user.role} viewer={viewer} />
-                  <SwitchAsButton userId={user.id} role={user.role} viewer={viewer} />
-                </div>
-              </div>
-            ))}
-            {users.length === 0 && (
-              <p className="py-8 text-center text-muted-foreground">{t("noUsers")}</p>
-            )}
-          </div>
-
-          <div className="hidden md:block">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="min-w-[180px]">{t("colUser")}</TableHead>
-                  <TableHead>{t("colPlan")}</TableHead>
-                  <TableHead>{t("colStatus")}</TableHead>
-                  <TableHead>{t("colRole")}</TableHead>
-                  <TableHead className="hidden lg:table-cell">{t("colJoined")}</TableHead>
-                  <TableHead></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {users.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        <UserAvatar image={user.image} name={user.name} email={user.email} />
-                        <div>
-                          <p className="text-sm font-medium text-foreground">{user.name ?? "-"}</p>
-                          <p className="text-xs text-muted-foreground">{user.email}</p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">{user.subscription?.plan?.name ?? t("free")}</span>
-                    </TableCell>
-                    <TableCell>
-                      {user.subscription ? (
-                        <Badge
-                          variant={user.subscription.status === "ACTIVE" ? "success" : "secondary"}
-                        >
-                          {user.subscription.status}
-                        </Badge>
-                      ) : (
-                        <Badge variant="secondary">{t("free")}</Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={isAdmin(user.role) ? "default" : "outline"}>
-                        {user.role}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden lg:table-cell">
-                      <span className="text-sm text-muted-foreground whitespace-nowrap">
-                        {formatJoined(format, user.createdAt)}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex justify-end gap-2">
-                        <UserRoleButton userId={user.id} currentRole={user.role} viewer={viewer} />
-                        <SwitchAsButton userId={user.id} role={user.role} viewer={viewer} />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {users.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
-                      {t("noUsers")}
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="mt-4 flex items-center justify-between">
-              <p className="text-sm text-muted-foreground">
-                {t("page", { page, total: totalPages })}
-              </p>
-              <div className="flex gap-2">
-                {page > 1 && (
-                  <a
-                    href={`/admin?page=${page - 1}${search ? `&search=${search}` : ""}`}
-                    className="inline-flex h-9 items-center rounded-[var(--radius)] border border-border px-4 text-sm hover:bg-muted"
-                  >
-                    {t("previous")}
-                  </a>
-                )}
-                {page < totalPages && (
-                  <a
-                    href={`/admin?page=${page + 1}${search ? `&search=${search}` : ""}`}
-                    className="inline-flex h-9 items-center rounded-[var(--radius)] border border-border px-4 text-sm hover:bg-muted"
-                  >
-                    {t("next")}
-                  </a>
-                )}
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Newsletter / waitlist */}
-      <Card>
-        <CardHeader>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <CardTitle>{t("waitlistTitle")}</CardTitle>
-              <CardDescription>
-                {waitlistConfirmed} confirmed · {waitlistPending} pending confirmation
-              </CardDescription>
-            </div>
-            {/* A file download from a route handler, not a page. `next/link`
-                would prefetch it, turning a CSV export into a background
-                request; the rule cannot tell a route handler from a page. */}
-            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-            <a
-              href="/api/admin/newsletter-export"
-              className="inline-flex h-9 items-center rounded-[var(--radius)] border border-border px-4 text-sm hover:bg-muted"
-            >
-              {t("exportCsv")}
-            </a>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {/* Same story as the users table above: stack into cards below `md`. */}
-          <div className="space-y-3 md:hidden">
-            {waitlistRecent.map((sub) => (
-              <div key={sub.id} className="rounded-xl border border-border p-4">
-                <p className="truncate text-sm font-medium text-foreground">{sub.email}</p>
-                <div className="mt-3 flex flex-wrap items-center gap-2">
-                  {sub.unsubscribedAt ? (
-                    <Badge variant="outline">{t("unsubscribed")}</Badge>
-                  ) : sub.confirmedAt ? (
-                    <Badge variant="success">{t("confirmed")}</Badge>
-                  ) : (
-                    <Badge variant="secondary">{t("pending")}</Badge>
-                  )}
-                  <span className="text-sm text-muted-foreground">{sub.source}</span>
-                  <span className="ml-auto text-xs text-muted-foreground">
-                    {formatJoined(format, sub.createdAt)}
-                  </span>
-                </div>
-              </div>
-            ))}
-            {waitlistRecent.length === 0 && (
-              <p className="py-8 text-center text-muted-foreground">
-                {t("noSubscribers")}
-              </p>
-            )}
-          </div>
-
-          <div className="hidden md:block">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="min-w-[220px]">{t("colEmail")}</TableHead>
-                  <TableHead>{t("colSource")}</TableHead>
-                  <TableHead>{t("colStatus")}</TableHead>
-                  <TableHead className="hidden lg:table-cell">{t("colRequested")}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {waitlistRecent.map((sub) => (
-                  <TableRow key={sub.id}>
-                    <TableCell>
-                      <span className="text-sm font-medium text-foreground">{sub.email}</span>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm text-muted-foreground">{sub.source}</span>
-                    </TableCell>
-                    <TableCell>
-                      {sub.unsubscribedAt ? (
-                        <Badge variant="outline">{t("unsubscribed")}</Badge>
-                      ) : sub.confirmedAt ? (
-                        <Badge variant="success">{t("confirmed")}</Badge>
-                      ) : (
-                        <Badge variant="secondary">{t("pending")}</Badge>
-                      )}
-                    </TableCell>
-                    <TableCell className="hidden lg:table-cell">
-                      <span className="text-sm text-muted-foreground whitespace-nowrap">
-                        {formatJoined(format, sub.createdAt)}
-                      </span>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {waitlistRecent.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={4} className="py-8 text-center text-muted-foreground">
-                      {t("noSubscribers")}
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
       </Card>
     </div>
   )

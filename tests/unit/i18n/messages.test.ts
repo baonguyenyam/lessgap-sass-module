@@ -276,3 +276,28 @@ describe("message files", () => {
     ).toEqual([])
   })
 })
+
+/**
+ * next-intl reads a dot in a key as nesting and refuses the whole message file
+ * when one contains it (INVALID_KEY), which takes every page down at runtime.
+ * Keys that mirror dotted identifiers, such as setting keys, are nested instead.
+ */
+describe("message key names", () => {
+  it("never contain a dot", async () => {
+    const { readdirSync, readFileSync } = await import("node:fs")
+    const { join } = await import("node:path")
+    const dir = join(process.cwd(), "src", "locales")
+    const offenders: string[] = []
+    const walk = (node: unknown, path: string, file: string) => {
+      if (!node || typeof node !== "object" || Array.isArray(node)) return
+      for (const [key, value] of Object.entries(node)) {
+        if (key.includes(".")) offenders.push(`${file}: ${path}${key}`)
+        walk(value, `${path}${key}.`, file)
+      }
+    }
+    for (const file of readdirSync(dir).filter((f) => f.endsWith(".json"))) {
+      walk(JSON.parse(readFileSync(join(dir, file), "utf8")), "", file)
+    }
+    expect(offenders).toEqual([])
+  })
+})

@@ -7,6 +7,7 @@ import { siteConfig } from "@/config/site"
 import { brandOverrideCss } from "@/config/brand"
 import { getLocale } from "next-intl/server"
 import { NextIntlClientProvider } from "next-intl"
+import { QueryProvider } from "@/components/query-provider"
 import "./globals.css"
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] })
@@ -71,7 +72,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             always render in the default locale, but their strings still live
             in the message files rather than in the components. */}
         <NextIntlClientProvider>
-          {children}
+          <QueryProvider>
+            {children}
+          </QueryProvider>
           {/* Inside the provider: the loader's screen-reader text is translated. */}
           <NavigationOverlay />
         </NextIntlClientProvider>

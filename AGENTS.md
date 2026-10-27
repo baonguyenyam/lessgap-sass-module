@@ -48,8 +48,11 @@ what arrives, every time, even when a form checked it first.
 a breadcrumb, an outline: build both from one value. Two copies of the same
 fact drift, and the copy nobody looks at drifts first.
 
-**Do not reformat.** There is no formatter here on purpose. Match the style of
-the file you are in.
+**One library per job** ([ADR 0020](spec/adr/0020-application-stack.md)):
+shadcn/ui components, React Hook Form + Zod for every form, TanStack Query for
+data fetched in the browser, Zustand for shared UI state, TanStack Table for
+every list, Prisma 8, Better Auth, Vitest, Playwright. Prettier owns
+formatting: run `pnpm format` and never hand-format against it.
 
 # How to work
 

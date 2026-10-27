@@ -16,6 +16,7 @@ import { Shield } from "lucide-react"
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser()
   const t = await getTranslations("admin")
+  const tNav = await getTranslations("dashboard.nav")
   if (!user) redirect("/login")
   // The admin area is ROOT-only by owner decision: platform staff get the
   // /platform console in phase 1, the kit's ADMIN role keeps no panel here.
@@ -41,7 +42,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-border bg-background px-4 md:px-6">
           <div className="flex min-w-0 items-center gap-3">
             <SidebarCollapseToggle />
-            <HeaderBreadcrumbs icon={<Shield className="h-4 w-4" />} base={{ name: t("badge"), href: "/admin" }} labels={{}} />
+            <HeaderBreadcrumbs icon={<Shield className="h-4 w-4" />} base={{ name: t("badge"), href: "/admin" }} labels={{ users: tNav("users"), newsletter: tNav("newsletter"), settings: tNav("platformSettings") }} />
           </div>
           <div className="flex items-center gap-1 md:hidden">
             <MobileNav variant="admin" />

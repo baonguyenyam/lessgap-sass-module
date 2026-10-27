@@ -2,67 +2,63 @@
 
 import { headers } from "next/headers"
 import { revalidatePath } from "next/cache"
-import { z } from "zod"
+import { getTranslations } from "next-intl/server"
 import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
+import { foldPermissions, tenantRoleSchema } from "@/lib/schemas/tenant"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { permissionsAreDeclared, ROLE_PERMISSIONS } from "@/platform/tenancy/permissions"
 
 const ROLES = "/dashboard/roles"
 
-const roleKeySchema = z
-  .string()
-  .regex(/^[a-z0-9][a-z0-9-]{0,30}$/, "Lowercase letters, digits and hyphens")
-
-/**
- * Form field convention: every permission checkbox is `name="perm"`
- * `value="resource.verb"`. This folds the values back into the
- * `Record<resource, verb[]>` the plugin stores.
- */
-function readPermissions(formData: FormData): Record<string, string[]> {
-  const permission: Record<string, string[]> = {}
-  for (const value of formData.getAll("perm")) {
-    const [resource, verb] = String(value).split(".")
-    if (!resource || !verb) continue
-    ;(permission[resource] ??= []).push(verb)
-  }
-  return permission
-}
-
-/**
- * Create a custom role group ("nhóm quyền"). Refuses built-in keys, malformed
- * keys and any permission the catalog does not declare (tests R2, R5).
- */
-export async function createTenantRole(formData: FormData) {
-  const ctx = await requireTenantContext("roles", "manage")
-  const role = roleKeySchema.parse(String(formData.get("role") ?? ""))
-  if (role in ROLE_PERMISSIONS) throw new Error("That name belongs to a built-in role")
-
-  const permission = readPermissions(formData)
-  if (Object.keys(permission).length === 0) throw new Error("Choose at least one permission")
-  if (!permissionsAreDeclared(permission)) throw new Error("Unknown permission selected")
-
-  await auth.api.createOrgRole({
-    headers: await headers(),
-    body: { organizationId: ctx.tenantId, role, permission },
-  })
-  revalidatePath(ROLES)
-}
-
-/** Delete a custom role. Built-ins are undeletable; a role with members is too (R3, R4). */
-export async function deleteTenantRole(formData: FormData) {
-  const ctx = await requireTenantContext("roles", "manage")
-  const role = String(formData.get("role") ?? "")
-  if (role in ROLE_PERMISSIONS) throw new Error("Built-in roles cannot be deleted")
-
-  const users = await db8.orm.public.Member.where({ organizationId: ctx.tenantId, role })
+async function memberCount(tenantId: string, role: string): Promise<number> {
+  return db8.orm.public.Member.where({ organizationId: tenantId, role })
     .aggregate((a) => ({ n: a.count() }))
     .then((r) => r.n)
-  if (users > 0) throw new Error("This role still has members — move them first")
+}
 
-  await auth.api.deleteOrgRole({
-    headers: await headers(),
-    body: { organizationId: ctx.tenantId, roleName: role },
-  })
+/**
+ * Create (`existing` null) or edit a custom role ("nhóm quyền"), from the roles
+ * drawer. Refuses built-in keys, malformed keys and any permission the catalog
+ * does not declare (tests R2, R5). An edit keeps the key and changes the
+ * permissions.
+ */
+export async function saveTenantRole(existing: string | null, values: unknown): Promise<{ error?: string }> {
+  const ctx = await requireTenantContext("roles", "manage")
+  const t = await getTranslations("dashboard.roles.errors")
+  const parsed = tenantRoleSchema({ roleKey: t("roleKey"), permissionsRequired: t("permissionsRequired") }).safeParse(values)
+  if (!parsed.success) return { error: parsed.error.issues[0].message }
+  const role = existing ?? parsed.data.role
+  if (role in ROLE_PERMISSIONS) return { error: t("builtIn") }
+
+  const permission = foldPermissions(parsed.data.permissions)
+  if (Object.keys(permission).length === 0 || !permissionsAreDeclared(permission)) return { error: t("unknownPermission") }
+
+  if (existing === null) {
+    await auth.api.createOrgRole({ headers: await headers(), body: { organizationId: ctx.tenantId, role, permission } })
+  } else {
+    await auth.api.updateOrgRole({
+      headers: await headers(),
+      body: { organizationId: ctx.tenantId, roleName: role, data: { permission } },
+    })
+  }
   revalidatePath(ROLES)
+  return {}
+}
+
+/**
+ * Delete custom roles, from a row or in bulk. Built-ins are undeletable, and so
+ * is a role that still has members (R3, R4): those are skipped.
+ */
+export async function deleteTenantRoles(roles: string[]): Promise<{ deleted: number }> {
+  const ctx = await requireTenantContext("roles", "manage")
+  let deleted = 0
+  for (const role of [...new Set(roles)].slice(0, 100)) {
+    if (role in ROLE_PERMISSIONS) continue
+    if ((await memberCount(ctx.tenantId, role)) > 0) continue
+    await auth.api.deleteOrgRole({ headers: await headers(), body: { organizationId: ctx.tenantId, roleName: role } })
+    deleted += 1
+  }
+  revalidatePath(ROLES)
+  return { deleted }
 }

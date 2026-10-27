@@ -31,6 +31,10 @@ vi.mock("@/auth", () => ({
 }))
 vi.mock("next/headers", () => ({ headers: async () => new Headers() }))
 vi.mock("@/lib/db8", async () => (await import("@tests/helpers/db8-mock")).createDb8Mock())
+const signupEnabled = vi.fn()
+vi.mock("@/platform/settings/store", () => ({
+  getPlatformSettings: async () => ({ "signup.enabled": signupEnabled() }),
+}))
 vi.mock("@/lib/rate-limit", () => ({
   checkRateLimit: () => allowRateLimit(),
   rateLimitKeyFromIp: async (scope: string) => `${scope}:test`,
@@ -49,6 +53,7 @@ const {
   signInWithMagicLink,
   verifyTwoFactorCode,
   verifyTwoFactorBackupCode,
+  registerUser,
 } = await import("@/app/actions/auth")
 const db = (await import("@/lib/db8")) as unknown as Db8Mock
 const findUnique = db.fn("User.first")
@@ -76,6 +81,7 @@ beforeEach(() => {
   allowRateLimit.mockReturnValue(true)
   signInEmail.mockResolvedValue({ token: "t", user: { id: "u1" } })
   findUnique.mockResolvedValue({ twoFactorEnabled: false })
+  signupEnabled.mockReturnValue(true)
 })
 
 describe("signInWithPassword", () => {
@@ -201,5 +207,17 @@ describe("verifyTwoFactorBackupCode", () => {
     expect(await redirectOf(() => verifyTwoFactorBackupCode(form({ code: "nope" })))).toBe(
       "/2fa?mode=backup&error=backup"
     )
+  })
+})
+
+describe("registerUser", () => {
+  const valid = { name: "Ada", email: "ada@example.com", password: "correct-horse-battery" }
+
+  // ROOT closed sign-ups in the platform settings: the form is disabled, and a
+  // direct POST is refused too, before anything reaches the auth library.
+  it("refuses when sign-ups are closed", async () => {
+    signupEnabled.mockReturnValue(false)
+    expect(await redirectOf(() => registerUser(form(valid)))).toBe("/signup?error=closed")
+    expect(findUnique).not.toHaveBeenCalled()
   })
 })

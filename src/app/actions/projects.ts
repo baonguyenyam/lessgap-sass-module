@@ -26,33 +26,6 @@ async function schema() {
   })
 }
 
-export async function createProject(
-  _prevState: ProjectState,
-  formData: FormData
-): Promise<ProjectState> {
-  const t = await getTranslations("errors")
-  const user = await getCurrentUser()
-  if (!user) return { error: t("unauthorized") }
-
-  const result = (await schema()).safeParse({
-    name: formData.get("name"),
-    description: formData.get("description") || undefined,
-  })
-  if (!result.success) {
-    return { error: result.error.issues[0].message }
-  }
-
-  await db8.orm.public.Project.create({
-    name: result.data.name,
-    description: result.data.description ?? null,
-    userId: user.id,
-  })
-
-  revalidatePath("/dashboard/projects")
-  revalidatePath("/dashboard")
-  return { success: true }
-}
-
 export async function updateProject(
   _prevState: ProjectState,
   formData: FormData
@@ -101,4 +74,42 @@ export async function deleteProject(formData: FormData): Promise<void> {
   revalidatePath("/dashboard/projects")
   revalidatePath("/dashboard")
   redirect("/dashboard/projects")
+}
+
+/**
+ * Creates (`id` null) or edits a project from the projects drawer. The form's
+ * values are parsed again here; editing only matches a project the caller
+ * owns, so another user's id changes nothing.
+ */
+export async function saveProject(id: string | null, values: unknown): Promise<{ error?: string }> {
+  const t = await getTranslations("errors")
+  const user = await getCurrentUser()
+  if (!user) return { error: t("unauthorized") }
+  const result = (await schema()).safeParse(values)
+  if (!result.success) return { error: result.error.issues[0].message }
+  const data = { name: result.data.name, description: result.data.description || null }
+
+  if (id === null) {
+    await db8.orm.public.Project.create({ ...data, userId: user.id })
+  } else {
+    const updated = await db8.orm.public.Project.where({ id, userId: user.id }).update(data)
+    if (!updated) return { error: t("projectNotFound") }
+  }
+  revalidatePath("/dashboard/projects")
+  revalidatePath("/dashboard")
+  return {}
+}
+
+/** Deletes the caller's own projects among `ids`; anything else is ignored. */
+export async function deleteProjects(ids: string[]): Promise<{ deleted: number }> {
+  const user = await getCurrentUser()
+  if (!user) throw new Error("Unauthorized")
+  const unique = [...new Set(ids)].slice(0, 500)
+  if (unique.length === 0) return { deleted: 0 }
+  const deleted = await db8.orm.public.Project.where({ userId: user.id })
+    .where((p) => p.id.in(unique))
+    .deleteAndCount()
+  revalidatePath("/dashboard/projects")
+  revalidatePath("/dashboard")
+  return { deleted }
 }

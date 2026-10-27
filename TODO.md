@@ -27,3 +27,9 @@ codebase-architecture
 postgresql-table-design
 database-migration
 auth-implementation-patterns
+
+
+
+
+https://studio-admin.arhamkhnz.com/auth/v2/login
+https://studio-admin.arhamkhnz.com/dashboard/invoice

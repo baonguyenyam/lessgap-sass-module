@@ -115,14 +115,10 @@
       "subtitle": "Những công việc bạn đang thực hiện. Đây là tài nguyên mẫu.",
       "newTitle": "Dự án mới",
       "newDescription": "Tạo một dự án do bạn sở hữu.",
-      "emptyTitle": "Chưa có dự án nào",
       "emptyBody": "Tạo dự án đầu tiên của bạn để bắt đầu.",
       "noDescription": "Không có mô tả",
-      "updated": "Đã cập nhật {date}",
       "searchPlaceholder": "Tìm kiếm dự án...",
-      "noResultsTitle": "Không tìm thấy kết quả",
-      "noResultsBody": "Không có dự án nào khớp với “{query}”. Thử từ khóa ngắn hơn hoặc xóa tìm kiếm.",
-      "clearSearch": "Xóa tìm kiếm"
+      "noResultsBody": "Không có dự án nào khớp với “{query}”. Thử từ khóa ngắn hơn hoặc xóa tìm kiếm."
     },
     "home": {
       "greeting": "Chào mừng trở lại, {name}",
@@ -370,14 +366,6 @@
       "dangerDescription": "Xóa dự án là vĩnh viễn và không thể hoàn tác.",
       "delete": "Xóa dự án"
     },
-    "createProject": {
-      "created": "Đã tạo dự án",
-      "name": "Tên dự án",
-      "description": "Mô tả (không bắt buộc)",
-      "descriptionPlaceholder": "Dự án này nói về điều gì?",
-      "descriptionHint": "Tùy chọn. Tối đa {max} ký tự.",
-      "submit": "Tạo dự án"
-    },
     "projectEdit": {
       "updated": "Đã cập nhật dự án",
       "name": "Tên dự án",
@@ -476,39 +464,9 @@
     "revenueTitle": "Doanh thu định kỳ",
     "revenueSubtitle": "Doanh thu định kỳ hàng tháng trong 12 tuần qua.",
     "revenueTooltip": "MRR",
-    "usersTitle": "Người dùng",
-    "usersCount": "{count, plural, one {# người dùng} other {# người dùng}}",
-    "searchPlaceholder": "Tìm kiếm theo email...",
-    "search": "Tìm kiếm",
-    "free": "Miễn phí",
-    "joined": "Tham gia {date}",
-    "noUsers": "Không tìm thấy người dùng nào.",
-    "colUser": "Người dùng",
-    "colPlan": "Gói",
-    "colStatus": "Trạng thái",
-    "colRole": "Vai trò",
-    "colJoined": "Đã tham gia",
-    "page": "Trang {page} / {total}",
-    "previous": "Trước",
-    "next": "Tiếp",
-    "waitlistTitle": "Danh sách chờ",
-    "exportCsv": "Xuất CSV",
-    "colEmail": "Email",
-    "colSource": "Nguồn",
-    "colRequested": "Đã yêu cầu",
-    "unsubscribed": "Đã hủy đăng ký",
-    "confirmed": "Đã xác nhận",
-    "pending": "Đang chờ",
-    "noSubscribers": "Chưa có người đăng ký. Biểu mẫu đăng ký nằm ở trang bảng giá.",
-    "makeAdmin": "Cấp quyền Admin",
-    "rolePromoted": "Người dùng đã được thăng cấp thành Admin. Phiên làm việc của họ sẽ cập nhật trong vòng một phút.",
-    "roleFailed": "Cập nhật vai trò thất bại",
-    "removeAdmin": "Gỡ quyền Admin",
-    "roleDemoted": "Đã gỡ quyền Admin. Phiên làm việc của họ sẽ cập nhật trong vòng một phút."
+    "waitlistTitle": "Danh sách chờ"
   },
   "switchAs": {
-    "button": "Chuyển sang vai trò",
-    "failed": "Không thể chuyển sang tài khoản này",
     "banner": "Bạn đang sử dụng ứng dụng dưới tên {email}. Mọi thay đổi bạn thực hiện đều là thật.",
     "back": "Chuyển lại"
   },

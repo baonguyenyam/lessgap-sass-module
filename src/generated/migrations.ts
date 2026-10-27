@@ -10,4 +10,5 @@ export const MIGRATIONS: readonly MigrationEdge[] = [
   { name: "20261026T1931_kit_session_switch_as", from: "6537a51315de601b1ef71dffb3c857257730401726744069f6f97681de139818", to: "261486cc3557069867398d8541b07c6ad27d09f8fb5df1f59384290842d32081" },
   { name: "20261026T2144_platform_tenants", from: "261486cc3557069867398d8541b07c6ad27d09f8fb5df1f59384290842d32081", to: "4e0598a39b7e69afc5db6061cedcf87a754371b45ad0dc65cd5bee8d91139fce" },
   { name: "20261027T1311_kit_session_active_organization", from: "4e0598a39b7e69afc5db6061cedcf87a754371b45ad0dc65cd5bee8d91139fce", to: "ebc4c2460e7cdc1032d5b4a73228cba406b394a3ad2e01f889ff24074f90b6a6" },
+  { name: "20261027T1334_platform_switches", from: "ebc4c2460e7cdc1032d5b4a73228cba406b394a3ad2e01f889ff24074f90b6a6", to: "6f7f000593f23a45c57052b1caa9bf22a4d5af7ab62e730b64c8fb57093c5d31" },
 ]

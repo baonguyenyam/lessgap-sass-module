@@ -14,11 +14,19 @@ function createDb() {
   return postgres({ contract, url: process.env.DATABASE_URL! })
 }
 
-const globalForDb = globalThis as typeof globalThis & { db8?: ReturnType<typeof createDb> }
+// In development the client survives hot reloads on `globalThis`, so the dev
+// server does not open a new pool on every edit. It is kept per contract hash:
+// a client built before a schema change has no accessor for a new model, and
+// reusing it fails with "Cannot read properties of undefined" until a restart.
+const contractHash = (contractJson as { storage: { storageHash: string } }).storage.storageHash
+const globalForDb = globalThis as typeof globalThis & { db8?: ReturnType<typeof createDb>; db8Hash?: string }
 
-export const db8 = globalForDb.db8 ?? createDb()
+export const db8 = globalForDb.db8 && globalForDb.db8Hash === contractHash ? globalForDb.db8 : createDb()
 
-if (process.env.NODE_ENV !== "production") globalForDb.db8 = db8
+if (process.env.NODE_ENV !== "production") {
+  globalForDb.db8 = db8
+  globalForDb.db8Hash = contractHash
+}
 
 /**
  * The scalar row of a model as `db8` returns it: `Row<"User">`. Timestamps are

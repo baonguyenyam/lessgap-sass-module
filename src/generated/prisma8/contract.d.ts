@@ -23,9 +23,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'ebc4c2460e7cdc1032d5b4a73228cba406b394a3ad2e01f889ff24074f90b6a6'>;
+  StorageHashBase<'6f7f000593f23a45c57052b1caa9bf22a4d5af7ab62e730b64c8fb57093c5d31'>;
 export type ExecutionHash =
-  ExecutionHashBase<'5d4a9630af31c8b03cc76d370b05b4ce8206d1e1e4f07b935e5a2ee4db750bc4'>;
+  ExecutionHashBase<'fd0b10e0df52eb8932288da873ff3533c2f0ec053b4acc33eb08117e218ae973'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -429,6 +429,13 @@ export namespace Models {
     subscriptions: public_Subscription[];
     readonly [RelationKeys]?: 'purchases' | 'subscriptions';
   };
+  export type public_PlatformSwitch = {
+    key: FieldOutputTypes['public']['PlatformSwitch']['key'];
+    updatedAt: FieldOutputTypes['public']['PlatformSwitch']['updatedAt'];
+    updatedById: FieldOutputTypes['public']['PlatformSwitch']['updatedById'];
+    value: FieldOutputTypes['public']['PlatformSwitch']['value'];
+    readonly [RelationKeys]?: never;
+  };
   export type public_Project = {
     createdAt: FieldOutputTypes['public']['Project']['createdAt'];
     description: FieldOutputTypes['public']['Project']['description'];
@@ -568,6 +575,7 @@ export declare const models: {
     NewsletterSubscriber: Models.public_NewsletterSubscriber;
     OrganizationRole: Models.public_OrganizationRole;
     Plan: Models.public_Plan;
+    PlatformSwitch: Models.public_PlatformSwitch;
     Project: Models.public_Project;
     Purchase: Models.public_Purchase;
     Session: Models.public_Session;
@@ -1195,6 +1203,43 @@ type ContractBase = Omit<
                   readonly unique: true;
                 },
               ];
+              foreignKeys: readonly [];
+            };
+            readonly PlatformSwitch: {
+              columns: {
+                readonly key: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly updatedById: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly value: {
+                  readonly dataType: 'pg/json';
+                  readonly codecId: 'pg/json@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: {
+                readonly columns: readonly ['key'];
+                readonly name: 'PlatformSwitch_pkey';
+              };
+              uniques: readonly [];
+              indexes: readonly [];
               foreignKeys: readonly [];
             };
             readonly Project: {
@@ -2078,6 +2123,10 @@ type ContractBase = Omit<
       readonly model: 'OrganizationRole';
     };
     readonly Plan: { readonly namespace: 'public' & NamespaceId; readonly model: 'Plan' };
+    readonly PlatformSwitch: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'PlatformSwitch';
+    };
     readonly Project: { readonly namespace: 'public' & NamespaceId; readonly model: 'Project' };
     readonly Purchase: { readonly namespace: 'public' & NamespaceId; readonly model: 'Purchase' };
     readonly Session: { readonly namespace: 'public' & NamespaceId; readonly model: 'Session' };
@@ -2599,6 +2648,41 @@ type ContractBase = Omit<
                 readonly stripePriceId: { readonly column: 'stripePriceId' };
                 readonly trialDays: { readonly column: 'trialDays' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
+              };
+            };
+          };
+          readonly PlatformSwitch: {
+            readonly fields: {
+              readonly key: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly updatedById: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly value: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
+              };
+            };
+            readonly relations: Record<string, never>;
+            readonly storage: {
+              readonly table: 'PlatformSwitch';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly key: { readonly column: 'key' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+                readonly updatedById: { readonly column: 'updatedById' };
+                readonly value: { readonly column: 'value' };
               };
             };
           };
@@ -3511,6 +3595,14 @@ type ContractBase = Omit<
           readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'Plan';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'PlatformSwitch';
             readonly field: 'updatedAt';
             readonly namespace: 'public';
           };

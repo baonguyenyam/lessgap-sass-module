@@ -8,6 +8,7 @@ import { AuthNotice } from "@/components/auth/auth-notice"
 import { Input } from "@/components/ui/input"
 import { siteConfig } from "@/config/site"
 import { emailEnabled } from "@/lib/email-transport"
+import { getPlatformSettings } from "@/platform/settings/store"
 
 export default async function SignupPage({
   searchParams,
@@ -28,6 +29,8 @@ export default async function SignupPage({
   if (!isDemo && siteConfig.links.demo) redirect(siteConfig.links.demo)
 
   const hasEmailService = emailEnabled()
+  // Closed by ROOT in the platform settings: the page stays, the form does not work.
+  const closed = !(await getPlatformSettings())["signup.enabled"]
 
   return (
     <div className="flex flex-col gap-4">
@@ -59,7 +62,8 @@ export default async function SignupPage({
             })}
           </AuthNotice>
         )}
-        {!isDemo && !hasEmailService && (
+        {closed && <AuthNotice>{t("closedNotice")}</AuthNotice>}
+        {!isDemo && !closed && !hasEmailService && (
           <AuthNotice>
             {t.rich("noEmailService", {
               code: (chunks) => <code>{chunks}</code>,
@@ -74,8 +78,8 @@ export default async function SignupPage({
         )}
 
         <form action={registerUser} className="flex flex-col gap-3">
-          <Input name="name" type="text" placeholder={t("namePlaceholder")} autoComplete="name" maxLength={100} disabled={isDemo} size="lg" />
-          <Input name="email" type="email" placeholder={t("emailPlaceholder")} autoComplete="email" required disabled={isDemo} size="lg" />
+          <Input name="name" type="text" placeholder={t("namePlaceholder")} autoComplete="name" maxLength={100} disabled={isDemo || closed} size="lg" />
+          <Input name="email" type="email" placeholder={t("emailPlaceholder")} autoComplete="email" required disabled={isDemo || closed} size="lg" />
           <Input
             name="password"
             type="password"
@@ -84,11 +88,11 @@ export default async function SignupPage({
             required
             minLength={8}
             maxLength={72}
-            disabled={isDemo}
+            disabled={isDemo || closed}
             size="lg"
           />
           <PendingButton
-            disabled={isDemo}
+            disabled={isDemo || closed}
             variant="primary"
             size="lg"
             className="w-full"

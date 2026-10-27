@@ -10,6 +10,9 @@ import {
   FolderKanban,
   KeyRound,
   LayoutGrid,
+  Mail,
+  SlidersHorizontal,
+  UserCog,
   Menu,
   Settings,
   Shield,
@@ -36,7 +39,12 @@ const menus = {
     { href: "/dashboard/billing", key: "billing", icon: CreditCard },
     { href: "/dashboard/settings", key: "settings", icon: Settings },
   ],
-  admin: [{ href: "/admin", key: "overview", icon: LayoutGrid }],
+  admin: [
+    { href: "/admin", key: "overview", icon: LayoutGrid },
+    { href: "/admin/users", key: "users", icon: UserCog },
+    { href: "/admin/newsletter", key: "newsletter", icon: Mail },
+    { href: "/admin/settings", key: "platformSettings", icon: SlidersHorizontal },
+  ],
 }
 
 /** Hamburger nav for the app areas below `md`, where the sidebar is hidden. */

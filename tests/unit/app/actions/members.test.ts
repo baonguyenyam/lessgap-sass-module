@@ -1,0 +1,67 @@
+import { beforeEach, describe, expect, it, vi } from "vitest"
+import type { Db8Mock } from "@tests/helpers/db8-mock"
+
+const api = { createInvitation: vi.fn(), updateMemberRole: vi.fn(), removeMember: vi.fn() }
+const ctx = { tenantId: "t1", user: { id: "u-me" }, member: { role: "owner" } }
+
+vi.mock("@/auth", () => ({ auth: { api } }))
+vi.mock("next/headers", () => ({ headers: async () => new Headers() }))
+vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }))
+vi.mock("next-intl/server", () => ({ getTranslations: async () => (key: string) => key }))
+vi.mock("@/platform/tenancy/require-member", () => ({ requireTenantContext: async () => ctx }))
+vi.mock("@/platform/tenancy/permissions", () => ({ TENANT_ROLE_KEYS: ["owner", "manager", "staff"] }))
+vi.mock("@/lib/db8", async () => (await import("@tests/helpers/db8-mock")).createDb8Mock())
+
+const { inviteMember, removeMembers, setMemberRole } = await import("@/app/actions/members")
+const db = (await import("@/lib/db8")) as unknown as Db8Mock
+
+beforeEach(() => {
+  db.reset()
+  Object.values(api).forEach((fn) => fn.mockReset())
+  db.fn("OrganizationRole.all").mockResolvedValue([{ role: "front-desk" }])
+  db.fn("Member.aggregate").mockResolvedValue({ n: 1 })
+})
+
+describe("inviteMember", () => {
+  it("parses the form again and refuses unknown roles", async () => {
+    await expect(inviteMember({ email: "nope", role: "staff" })).resolves.toEqual({ error: "invalidEmail" })
+    await expect(inviteMember({ email: "a@example.com", role: "god" })).resolves.toEqual({ error: "unknownRole" })
+    expect(api.createInvitation).not.toHaveBeenCalled()
+  })
+
+  it("invites with a built-in or custom role", async () => {
+    await expect(inviteMember({ email: "A@Example.com", role: "front-desk" })).resolves.toEqual({})
+    expect(api.createInvitation).toHaveBeenCalledWith(
+      expect.objectContaining({ body: { email: "a@example.com", role: "front-desk", organizationId: "t1" } })
+    )
+  })
+})
+
+describe("setMemberRole", () => {
+  it("never demotes the last owner", async () => {
+    db.fn("Member.first").mockResolvedValue({ id: "m1", role: "owner", userId: "u2" })
+    await expect(setMemberRole("m1", "staff")).resolves.toEqual({ error: "lastOwner" })
+    expect(api.updateMemberRole).not.toHaveBeenCalled()
+  })
+
+  it("changes a member's role inside the tenant only", async () => {
+    db.fn("Member.first").mockResolvedValue({ id: "m2", role: "staff", userId: "u2" })
+    await expect(setMemberRole("m2", "manager")).resolves.toEqual({})
+    expect(db.call("Member.first")?.chain).toEqual([["where", [{ id: "m2", organizationId: "t1" }]]])
+    expect(api.updateMemberRole).toHaveBeenCalledWith(expect.objectContaining({ body: { memberId: "m2", role: "manager" } }))
+  })
+})
+
+describe("removeMembers", () => {
+  it("skips the caller and the last owner, and removes the rest", async () => {
+    db.fn("Member.all").mockResolvedValue([
+      { id: "m-me", role: "owner", userId: "u-me" },
+      { id: "m-owner", role: "owner", userId: "u2" },
+      { id: "m-staff", role: "staff", userId: "u3" },
+    ])
+    db.fn("Member.aggregate").mockResolvedValue({ n: 1 })
+    await expect(removeMembers(["m-me", "m-owner", "m-staff"])).resolves.toEqual({ removed: 1 })
+    expect(api.removeMember).toHaveBeenCalledTimes(1)
+    expect(api.removeMember).toHaveBeenCalledWith(expect.objectContaining({ body: { memberIdOrEmail: "m-staff" } }))
+  })
+})

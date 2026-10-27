@@ -6,7 +6,9 @@ import { toDate } from "@/lib/timestamps"
 import { describeDiscount, getEntitlement, trialDaysFor, type DiscountSummary } from "@/lib/billing"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { InvoicesTable, INVOICE_STATUSES, type InvoiceRow } from "@/components/billing/invoices-table"
+import { offsetOf, parseTableQuery, type TableQuerySpec } from "@/lib/table-query"
+import { getPlatformSettings } from "@/platform/settings/store"
 import { ManageBillingButton } from "@/components/billing/manage-billing-button"
 import { SubscriptionStatusBadge } from "@/components/billing/subscription-status-badge"
 import { PlanCards, type PlanCardData } from "@/components/billing/plan-cards"
@@ -15,13 +17,13 @@ import { CheckoutStatusToast } from "@/components/billing/checkout-status-toast"
 
 // Invoice statuses come from Stripe as stable codes, like subscription ones;
 // their labels live in the message files under `dashboard.billing.invoiceStatus`.
-const INVOICE_STATUSES = ["draft", "open", "paid", "uncollectible", "void"]
 
 async function getInvoices(customerId: string | null) {
   if (!customerId || !process.env.STRIPE_SECRET_KEY) return []
   try {
     const { stripe } = await import("@/lib/stripe")
-    const invoices = await stripe.invoices.list({ customer: customerId, limit: 10 })
+    // The latest hundred, paged in the table; older ones are in the Customer Portal.
+    const invoices = await stripe.invoices.list({ customer: customerId, limit: 100 })
     return invoices.data
   } catch {
     return []
@@ -45,7 +47,11 @@ async function getDiscounts(stripeSubscriptionId: string | null): Promise<Discou
   }
 }
 
-export default async function BillingPage() {
+export default async function BillingPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}) {
   const t = await getTranslations("dashboard.billing")
   const format = await getFormatter()
   const currentUser = await requireUser()
@@ -101,6 +107,27 @@ export default async function BillingPage() {
     : t("checkoutDisabledStripe")
 
   const longDate = (date: Date) => format.dateTime(date, { year: "numeric", month: "long", day: "numeric" })
+  const invoiceSpec: TableQuerySpec = {
+    sortable: ["created"],
+    defaultDir: "desc",
+    filters: { status: INVOICE_STATUSES },
+    defaultPageSize: (await getPlatformSettings())["display.page_size"],
+  }
+  const invoiceQuery = parseTableQuery(await searchParams, invoiceSpec)
+  const matchingInvoices = invoices
+    .filter((invoice) => !invoiceQuery.filters.status || invoice.status === invoiceQuery.filters.status)
+    .sort((a, b) => (invoiceQuery.dir === "asc" ? 1 : -1) * ((a.created ?? 0) - (b.created ?? 0)))
+  const invoiceRows: InvoiceRow[] = matchingInvoices
+    .slice(offsetOf(invoiceQuery), offsetOf(invoiceQuery) + invoiceQuery.pageSize)
+    .map((invoice) => ({
+      id: invoice.id ?? String(invoice.created),
+      created: new Date((invoice.created ?? 0) * 1000).toISOString(),
+      total: invoice.total ?? 0,
+      currency: invoice.currency,
+      status: invoice.status,
+      hostedUrl: invoice.hosted_invoice_url ?? null,
+      pdfUrl: invoice.invoice_pdf ?? null,
+    }))
   const money = (amount: number, currency: string | null) =>
     format.number(amount / 100, { style: "currency", currency: (currency ?? "usd").toUpperCase() })
   const renewalDate = subscription?.currentPeriodEnd ? longDate(toDate(subscription.currentPeriodEnd)) : null
@@ -222,73 +249,13 @@ export default async function BillingPage() {
           <CardDescription>{t("invoiceHistoryHint")}</CardDescription>
         </CardHeader>
         <CardContent>
-          {invoices.length === 0 ? (
-            <p className="py-6 text-center text-sm text-muted-foreground">
-              {process.env.STRIPE_SECRET_KEY ? t("noInvoices") : t("noInvoicesStripe")}
-            </p>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{t("colDate")}</TableHead>
-                  <TableHead>{t("colAmount")}</TableHead>
-                  <TableHead>{t("colStatus")}</TableHead>
-                  <TableHead>{t("colInvoice")}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {invoices.map((invoice) => (
-                  <TableRow key={invoice.id}>
-                    <TableCell>
-                      {format.dateTime(new Date((invoice.created ?? 0) * 1000), {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </TableCell>
-                    {/* The invoice total in its own currency. The total, not what
-                        has been paid so far, which reads as zero on an open one. */}
-                    <TableCell>{money(invoice.total ?? 0, invoice.currency)}</TableCell>
-                    <TableCell>
-                      <Badge variant={invoice.status === "paid" ? "success" : "secondary"}>
-                        {invoice.status && INVOICE_STATUSES.includes(invoice.status)
-                          ? t(`invoiceStatus.${invoice.status}`)
-                          : invoice.status ?? t("statusUnknown")}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {invoice.hosted_invoice_url || invoice.invoice_pdf ? (
-                        <div className="flex gap-3">
-                          {invoice.hosted_invoice_url && (
-                            <a
-                              href={invoice.hosted_invoice_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-sm text-primary hover:underline"
-                            >
-                              {t("viewInvoice")}
-                            </a>
-                          )}
-                          {invoice.invoice_pdf && (
-                            <a
-                              href={invoice.invoice_pdf}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-sm text-primary hover:underline"
-                            >
-                              {t("downloadPdf")}
-                            </a>
-                          )}
-                        </div>
-                      ) : (
-                        <span className="text-sm text-muted-foreground">-</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
+          <InvoicesTable
+            rows={invoiceRows}
+            total={matchingInvoices.length}
+            query={invoiceQuery}
+            defaults={{ sort: invoiceSpec.sortable[0], dir: invoiceSpec.defaultDir, pageSize: invoiceSpec.defaultPageSize }}
+            emptyMessage={process.env.STRIPE_SECRET_KEY ? t("noInvoices") : t("noInvoicesStripe")}
+          />
         </CardContent>
       </Card>
     </div>

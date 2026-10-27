@@ -64,6 +64,16 @@ user                  User                @relation(fields: [userId], references
     @@index([unsubscribeToken], map: "NewsletterSubscriber_unsubscribeToken_key", unique: true)
   }
 
+  // Global settings, one row per key (spec/04-entitlements.md, "Platform
+  // switches"). Keys, types, defaults and who may change each live in
+  // src/lib/platform-settings.ts; a key with no row reads as its default.
+  model PlatformSwitch {
+    key         String             @id(map: "PlatformSwitch_pkey")
+    value       Json
+    updatedById String?
+    updatedAt   TimestampString(3) @default(now()) @onUpdate(now())
+  }
+
   model Plan {
     id             String                   @id(map: "Plan_pkey") @onCreate(cuid(2))
     name           String

@@ -11,6 +11,7 @@ import { checkRateLimit, rateLimitKeyFromIp } from "@/lib/rate-limit"
 import { BACKUP_CODE_LENGTH, normalizeBackupCode } from "@/lib/backup-codes"
 import { emailEnabled } from "@/lib/email-transport"
 import { settingsHref } from "@/lib/settings-pages"
+import { getPlatformSettings } from "@/platform/settings/store"
 
 // Every action here calls auth.api.* and then redirects OUTSIDE the try block.
 // redirect() works by throwing, so a redirect inside a try is caught by the
@@ -172,6 +173,7 @@ export async function registerUser(formData: FormData) {
   })
   if (!parsed.success) redirect("/signup?error=invalid")
   const { name, email, password } = parsed.data
+  if (!(await getPlatformSettings())["signup.enabled"]) redirect("/signup?error=closed")
   if (!(await checkRateLimit(`signup:${email}`, 3))) redirect("/signup?error=rate")
 
   const existing = await db8.orm.public.User.select("id").where({ email }).first()

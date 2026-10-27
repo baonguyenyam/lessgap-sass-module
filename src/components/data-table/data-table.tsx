@@ -1,0 +1,335 @@
+"use client"
+
+import { useMutation } from "@tanstack/react-query"
+import { createColumnHelper, rowSelectionFeature, tableFeatures, useTable, type ColumnDef, type RowData } from "@tanstack/react-table"
+import { ArrowDown, ArrowUp, ArrowUpDown, ChevronLeft, ChevronRight, Search, X } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { usePathname, useRouter } from "next/navigation"
+import { useEffect, useRef, useState, useTransition } from "react"
+import { toast } from "sonner"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { ConfirmDialog, type ConfirmCopy } from "@/components/data-table/confirm-dialog"
+import { PAGE_SIZES, offsetOf, pageCountOf, tableQueryHref, type TableQuery, type TableQueryPatch } from "@/lib/table-query"
+import { cn } from "@/lib/utils"
+
+/**
+ * Every list in the app (spec/adr/0020-application-stack.md). The server page parses the URL with
+ * `parseTableQuery`, runs the query and passes one page of rows; this renders
+ * them and turns every control into a new URL: search, filters, sort, page and
+ * page size are links, so a list can be shared, bookmarked and reloaded.
+ *
+ * Columns are TanStack Table v9 definitions built with `dataTableColumns<T>()`.
+ * Selection is the only state the table owns; bulk actions run through
+ * TanStack Query mutations and refresh the page when they succeed.
+ */
+export const dataTableFeatures = tableFeatures({ rowSelectionFeature })
+type Features = typeof dataTableFeatures
+
+/** The column helper for a table of `TData` rows. */
+export function dataTableColumns<TData extends RowData>() {
+  return createColumnHelper<Features, TData>()
+}
+
+export type DataTableColumns<TData extends RowData> = ColumnDef<Features, TData, any>[] // eslint-disable-line @typescript-eslint/no-explicit-any
+
+export type DataTableFilter = { key: string; label: string; options: { value: string; label: string }[] }
+
+export type BulkAction = {
+  label: string
+  variant?: "destructive"
+  /** Asked before running; the count of selected rows is passed as `{count}`. */
+  confirm?: ConfirmCopy
+  run: (ids: string[]) => Promise<unknown>
+}
+
+type DataTableProps<TData extends RowData> = {
+  columns: DataTableColumns<TData>
+  data: TData[]
+  total: number
+  query: TableQuery
+  /** The defaults the URL leaves out, the same ones the server parsed with. */
+  defaults: { sort: string; dir: "asc" | "desc"; pageSize: number }
+  getRowId: (row: TData) => string
+  /** Column ids that can be sorted; each is also the `sort` key in the URL. */
+  sortable?: string[]
+  searchPlaceholder?: string
+  filters?: DataTableFilter[]
+  bulkActions?: BulkAction[]
+  /** Buttons at the right of the toolbar, such as "New". */
+  actions?: React.ReactNode
+  emptyMessage: string
+}
+
+const ALL = "__all"
+
+export function DataTable<TData extends RowData>({
+  columns,
+  data,
+  total,
+  query,
+  defaults,
+  getRowId,
+  sortable = [],
+  searchPlaceholder,
+  filters = [],
+  bulkActions = [],
+  actions,
+  emptyMessage,
+}: DataTableProps<TData>) {
+  const t = useTranslations("dataTable")
+  const router = useRouter()
+  const pathname = usePathname()
+  const [pending, startTransition] = useTransition()
+  const selectable = bulkActions.length > 0
+
+  const allColumns = selectable ? [selectionColumn as DataTableColumns<TData>[number], ...columns] : columns
+  const table = useTable({
+    features: dataTableFeatures,
+    columns: allColumns,
+    data,
+    getRowId: (row) => getRowId(row),
+    enableRowSelection: selectable,
+  })
+  const selectedIds = table.getSelectedRowIds()
+
+  const go = (patch: TableQueryPatch) => {
+    startTransition(() => router.push(tableQueryHref(pathname, query, patch, defaults), { scroll: false }))
+  }
+
+  // A new page of rows is a new list: what was selected on the last one is not on screen.
+  useEffect(() => {
+    table.resetRowSelection()
+  }, [data, table])
+
+  // Search runs a moment after typing stops, not on every key.
+  const [search, setSearch] = useState(query.q)
+  const lastSearch = useRef(query.q)
+  useEffect(() => {
+    if (search === lastSearch.current) return
+    const timer = setTimeout(() => {
+      lastSearch.current = search
+      go({ q: search })
+    }, 300)
+    return () => clearTimeout(timer)
+  })
+
+  const [confirming, setConfirming] = useState<BulkAction | null>(null)
+  const bulk = useMutation({
+    mutationFn: ({ action, ids }: { action: BulkAction; ids: string[] }) => action.run(ids),
+    onSuccess: () => {
+      toast.success(t("done"))
+      table.resetRowSelection()
+      router.refresh()
+    },
+    onError: () => toast.error(t("failed")),
+  })
+  const runBulk = (action: BulkAction) => {
+    if (action.confirm) setConfirming(action)
+    else bulk.mutate({ action, ids: selectedIds })
+  }
+
+  const pages = pageCountOf(total, query.pageSize)
+  const from = total === 0 ? 0 : offsetOf(query) + 1
+  const to = Math.min(offsetOf(query) + data.length, total)
+
+  return (
+    <div className="space-y-3">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+        {searchPlaceholder && (
+          <div className="relative sm:w-72">
+            <Search aria-hidden className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              size="sm"
+              type="search"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder={searchPlaceholder}
+              aria-label={searchPlaceholder}
+              className="pl-9"
+            />
+          </div>
+        )}
+        {filters.map((filter) => (
+          <Select
+            key={filter.key}
+            value={query.filters[filter.key] ?? ALL}
+            onValueChange={(value) => go({ filters: { [filter.key]: value === ALL ? null : value } })}
+          >
+            <SelectTrigger size="sm" className="sm:w-44" aria-label={filter.label}>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={ALL}>{t("all", { label: filter.label })}</SelectItem>
+              {filter.options.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        ))}
+        {actions && <div className="flex gap-2 sm:ml-auto">{actions}</div>}
+      </div>
+
+      {selectable && selectedIds.length > 0 && (
+        <div
+          role="region"
+          aria-label={t("bulkActions")}
+          className="flex flex-wrap items-center gap-2 rounded-[var(--radius)] border border-primary/30 bg-primary/5 px-3 py-2 text-sm"
+        >
+          <span className="font-medium">{t("selected", { count: selectedIds.length })}</span>
+          {bulkActions.map((action) => (
+            <Button
+              key={action.label}
+              size="xs"
+              variant={action.variant === "destructive" ? "outline-destructive" : "outline"}
+              loading={bulk.isPending && bulk.variables?.action === action}
+              disabled={bulk.isPending}
+              onClick={() => runBulk(action)}
+            >
+              {action.label}
+            </Button>
+          ))}
+          <Button size="xs" variant="ghost" className="ml-auto" onClick={() => table.resetRowSelection()}>
+            <X className="h-3.5 w-3.5" />
+            {t("clearSelection")}
+          </Button>
+        </div>
+      )}
+
+      <div className={cn("rounded-[var(--radius)] border border-border transition-opacity", pending && "opacity-60")}>
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((group) => (
+              <TableRow key={group.id}>
+                {group.headers.map((header) => {
+                  const id = header.column.id
+                  const canSort = sortable.includes(id)
+                  const active = query.sort === id
+                  return (
+                    <TableHead
+                      key={header.id}
+                      aria-sort={active ? (query.dir === "asc" ? "ascending" : "descending") : undefined}
+                      className={cn(id === "select" && "w-10", id === "actions" && "w-12 text-right")}
+                    >
+                      {header.isPlaceholder ? null : canSort ? (
+                        <button
+                          type="button"
+                          className="-ml-1 inline-flex items-center gap-1 rounded px-1 hover:text-foreground"
+                          onClick={() => go({ sort: id, dir: active && query.dir === "asc" ? "desc" : "asc" })}
+                        >
+                          <table.FlexRender header={header} />
+                          {active ? (
+                            query.dir === "asc" ? <ArrowUp className="h-3.5 w-3.5" /> : <ArrowDown className="h-3.5 w-3.5" />
+                          ) : (
+                            <ArrowUpDown className="h-3.5 w-3.5 opacity-40" />
+                          )}
+                        </button>
+                      ) : (
+                        <table.FlexRender header={header} />
+                      )}
+                    </TableHead>
+                  )
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id} data-state={row.getIsSelected() ? "selected" : undefined}>
+                {row.getAllCells().map((cell) => (
+                  <TableCell key={cell.id} className={cn(cell.column.id === "actions" && "text-right")}>
+                    <table.FlexRender cell={cell} />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+            {data.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={allColumns.length} className="py-10 text-center text-muted-foreground">
+                  {emptyMessage}
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+        <span>{t("showing", { from, to, total })}</span>
+        <div className="flex items-center gap-2">
+          <span className="hidden sm:inline">{t("rowsPerPage")}</span>
+          <Select value={String(query.pageSize)} onValueChange={(value) => go({ pageSize: Number(value) })}>
+            <SelectTrigger size="sm" className="w-20" aria-label={t("rowsPerPage")}>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {PAGE_SIZES.map((size) => (
+                <SelectItem key={size} value={String(size)}>
+                  {size}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <span className="whitespace-nowrap px-1">{t("page", { page: query.page, pages })}</span>
+          <Button
+            size="icon"
+            variant="outline"
+            aria-label={t("previous")}
+            disabled={query.page <= 1}
+            onClick={() => go({ page: query.page - 1 })}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            size="icon"
+            variant="outline"
+            aria-label={t("next")}
+            disabled={query.page >= pages}
+            onClick={() => go({ page: query.page + 1 })}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
+      <ConfirmDialog
+        copy={confirming?.confirm ?? null}
+        count={selectedIds.length}
+        pending={bulk.isPending}
+        onCancel={() => setConfirming(null)}
+        onConfirm={() => {
+          if (confirming) bulk.mutate({ action: confirming, ids: selectedIds }, { onSettled: () => setConfirming(null) })
+        }}
+      />
+    </div>
+  )
+}
+
+/** The checkbox column, added in front when the table has bulk actions. */
+const selectionColumn: DataTableColumns<RowData>[number] = createColumnHelper<Features, RowData>().display({
+  id: "select",
+  header: ({ table }) => <SelectAll table={table} />,
+  cell: ({ row }) => <SelectRow checked={row.getIsSelected()} onChange={(value) => row.toggleSelected(value)} />,
+})
+
+function SelectAll({ table }: { table: { getIsAllPageRowsSelected: () => boolean; getIsSomePageRowsSelected: () => boolean; toggleAllPageRowsSelected: (value?: boolean) => void } }) {
+  const t = useTranslations("dataTable")
+  const all = table.getIsAllPageRowsSelected()
+  return (
+    <Checkbox
+      aria-label={t("selectAll")}
+      checked={all ? true : table.getIsSomePageRowsSelected() ? "indeterminate" : false}
+      onCheckedChange={(value) => table.toggleAllPageRowsSelected(value === true)}
+    />
+  )
+}
+
+function SelectRow({ checked, onChange }: { checked: boolean; onChange: (value: boolean) => void }) {
+  const t = useTranslations("dataTable")
+  return <Checkbox aria-label={t("selectRow")} checked={checked} onCheckedChange={(value) => onChange(value === true)} />
+}
