@@ -5,6 +5,14 @@ requirement is specified so agents read the source, not this summary. When a
 requirement becomes spec, ADR, rule or test, the pointer is updated and this
 file stays the index — not the place requirements are defined.
 
+## 2026-10-27 — Status surfaces use semantic colours
+
+Danger, warning, info, success and accent surfaces must use their matching
+semantic colour for the border as well as the background, text and icon; a
+neutral grey border is not suitable for a colour-coded status. Add a theme token
+when the status token is missing, support light and dark themes, and never rely
+on colour alone → `.agents/rules/ui-accessibility.md`.
+
 ## 2026-10-27 — Admin pages informed by earlier projects
 
 The owner wants these pages considered for this project after studying the

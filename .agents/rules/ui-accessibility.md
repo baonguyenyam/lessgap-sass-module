@@ -4,6 +4,12 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
 
 - Tailwind CSS 4. Use the design tokens in `globals.css` (`bg-background`,
   `text-muted-foreground`, …), not raw hex colours. Merge classes with `cn()`.
+- **Status surfaces use matching semantic colours** across their border, tint,
+  text and icon; do not leave a neutral grey border on a danger, warning, info,
+  success or accent surface. Use the corresponding semantic token (`destructive`,
+  `warning`, `info`, `success` or `accent`); if one is missing, add a theme token
+  that works in light and dark themes. Keep a text or icon label so colour is not
+  the only status signal, and preserve WCAG contrast.
 - **`src/components/ui/` is stock shadcn/ui** (spec/adr/0021: "radix-nova"
   style, copied from Studio Admin, attribution in `NOTICE`). Do not restyle a
   stock component; add one with `npx shadcn add <name>` and point `cn` at
