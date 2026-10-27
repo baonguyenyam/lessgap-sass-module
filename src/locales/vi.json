@@ -118,10 +118,8 @@
       "subtitle": "Những công việc bạn đang thực hiện. Đây là tài nguyên mẫu.",
       "newTitle": "Dự án mới",
       "newDescription": "Tạo một dự án do bạn sở hữu.",
-      "emptyBody": "Tạo dự án đầu tiên của bạn để bắt đầu.",
       "noDescription": "Không có mô tả",
       "searchPlaceholder": "Tìm kiếm dự án...",
-      "noResultsBody": "Không có dự án nào khớp với “{query}”. Thử từ khóa ngắn hơn hoặc xóa tìm kiếm.",
       "colName": "Tên",
       "colUpdated": "Cập nhật",
       "colCreated": "Ngày tạo",
@@ -134,6 +132,10 @@
       "deleteConfirm": {
         "title": "Xóa các dự án đã chọn?",
         "description": "Chúng sẽ bị xóa vĩnh viễn. Không thể hoàn tác."
+      },
+      "empty": {
+        "title": "Chưa có dự án",
+        "description": "Tạo dự án đầu tiên để bắt đầu."
       }
     },
     "home": {
@@ -409,7 +411,8 @@
         "paid": "Đã thanh toán",
         "uncollectible": "Không thể thu hồi",
         "void": "Vô hiệu"
-      }
+      },
+      "noInvoicesTitle": "Chưa có hóa đơn"
     },
     "projectDetail": {
       "subtitle": "Chỉnh sửa chi tiết hoặc xóa dự án này.",
@@ -491,7 +494,10 @@
         "colActions": "Thao tác",
         "changeRole": "Đổi vai trò",
         "search": "Tìm theo tên hoặc email…",
-        "empty": "Không có thành viên nào phù hợp.",
+        "empty": {
+          "title": "Hiện chỉ có bạn",
+          "description": "Mời mọi người cùng làm việc trong không gian này."
+        },
         "colStatus": "Trạng thái",
         "colLastActive": "Hoạt động gần nhất",
         "never": "Chưa có",
@@ -533,7 +539,6 @@
       "title": "Nhóm quyền",
       "subtitle": "Các nhóm quyền của không gian làm việc này.",
       "custom": {
-        "empty": "Chưa có nhóm quyền tự tạo.",
         "delete": "Xoá"
       },
       "create": {
@@ -565,6 +570,10 @@
         "permissionsRequired": "Chọn ít nhất một quyền.",
         "builtIn": "Tên này thuộc về một vai trò có sẵn.",
         "unknownPermission": "Một trong các quyền không tồn tại."
+      },
+      "empty": {
+        "title": "Chưa có vai trò",
+        "description": "Các vai trò có sẵn và vai trò tùy chỉnh của bạn sẽ hiện ở đây."
       }
     },
     "search": {
@@ -612,7 +621,10 @@
       "colJoined": "Ngày tham gia",
       "colActions": "Thao tác",
       "free": "Miễn phí",
-      "empty": "Không có người dùng nào phù hợp.",
+      "empty": {
+        "title": "Chưa có người dùng",
+        "description": "Tài khoản sẽ xuất hiện ở đây ngay khi có người đăng ký."
+      },
       "edit": "Sửa",
       "switchAs": "Chuyển sang người dùng này",
       "copyEmail": "Sao chép email",
@@ -651,7 +663,10 @@
         "confirmed": "Đã xác nhận",
         "unsubscribed": "Đã hủy đăng ký"
       },
-      "empty": "Không có người đăng ký nào phù hợp.",
+      "empty": {
+        "title": "Chưa có người đăng ký",
+        "description": "Địa chỉ sẽ xuất hiện ở đây khi có người đăng ký qua form."
+      },
       "copyEmail": "Sao chép email",
       "copied": "Đã sao chép email",
       "unsubscribe": "Hủy đăng ký",
@@ -1277,7 +1292,12 @@
     "failed": "Đã có lỗi. Chưa có gì bị thay đổi.",
     "save": "Lưu",
     "saving": "Đang lưu…",
-    "actions": "Thao tác"
+    "actions": "Thao tác",
+    "noResults": {
+      "title": "Không có kết quả",
+      "description": "Không có gì khớp với tìm kiếm hoặc bộ lọc này.",
+      "clear": "Xóa bộ lọc"
+    }
   },
   "ui": {
     "searchableSelect": {

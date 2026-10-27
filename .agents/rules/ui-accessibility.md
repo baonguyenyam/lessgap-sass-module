@@ -18,9 +18,17 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
   in client components: the stock Select up to 8 options, searchable from 9
   on. `NativeSelect` only in forms rendered on the server. Never a raw `Select`
   or a bare `<select>` elsewhere.
-- **Waiting for data:** a field that is loading shows a spinner in place of
-  its icon (`loading` on `OptionSelect`, the DataTable search while rows load),
-  never a frozen field with no sign of life.
+- **Waiting for data**, one answer per case: a page or section loading shows a
+  skeleton of its layout (`Skeleton`); a single field fetching its own data
+  shows a spinner inside it with `aria-busy` (`loading` on `OptionSelect`, the
+  DataTable search); a form being saved locks its fields and puts the spinner in
+  the submit button only. Never a frozen field with no sign of life, and never
+  a spinner in every field of a page.
+- **Empty blocks:** `EmptyState` (`components/layout/empty-state.tsx`): icon,
+  title, one sentence, the next step when there is one. Lists pass it to
+  `DataTable` as `empty` ("nothing yet"); the table shows its own "no results"
+  with "Clear filters" when a search or filter is active. Never a bare line of
+  grey text.
 - **Language files:** every string goes into `en.json` and, in the same change,
   into every other file in `src/locales/` with the same key; a test fails on a
   missing or stale key.

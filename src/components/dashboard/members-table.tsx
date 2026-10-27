@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { UserCheck, UserCog, UserMinus, UserPlus, UserX } from "lucide-react"
+import { UserCheck, UserCog, UserMinus, UserPlus, Users, UserX } from "lucide-react"
 import { useFormatter, useTranslations } from "next-intl"
 import { useMemo } from "react"
 import { useForm } from "react-hook-form"
@@ -176,7 +176,17 @@ export function MembersTable({ rows, total, query, defaults, roleOptions, canMan
         searchPlaceholder={t("list.search")}
         filters={[{ key: "role", label: t("list.colRole"), options: roleOptions.map((r) => ({ value: r, label: r })) }]}
         bulkActions={bulkActions}
-        emptyMessage={t("list.empty")}
+        empty={{
+          icon: Users,
+          title: t("list.empty.title"),
+          description: t("list.empty.description"),
+          action: canManage ? (
+            <Button onClick={() => openDrawer(INVITE)}>
+              <UserPlus />
+              {t("invite.title")}
+            </Button>
+          ) : undefined,
+        }}
         actions={
           canManage ? (
             <Button onClick={() => openDrawer(INVITE)}>

@@ -9,7 +9,17 @@ import {
   type ColumnDef,
   type RowData,
 } from "@tanstack/react-table"
-import { ArrowDown, ArrowUp, ArrowUpDown, ChevronLeft, ChevronRight, Search, X, type LucideIcon } from "lucide-react"
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  SearchX,
+  X,
+  type LucideIcon,
+} from "lucide-react"
 import { useTranslations } from "next-intl"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useMemo, useRef, useState, useTransition } from "react"
@@ -19,6 +29,7 @@ import { Spinner } from "@/components/ui/spinner"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { OptionSelect } from "@/components/form/option-select"
+import { EmptyState } from "@/components/layout/empty-state"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ConfirmDialog, type ConfirmCopy } from "@/components/data-table/confirm-dialog"
 import {
@@ -77,7 +88,12 @@ type DataTableProps<TData extends RowData> = {
   bulkActions?: BulkAction[]
   /** Buttons at the right of the toolbar, such as "New". */
   actions?: React.ReactNode
-  emptyMessage: string
+  /**
+   * What the list shows when it has no rows at all. When a search or a filter
+   * is active the table shows its own "no results" state instead, with a way
+   * to clear them, so every list says it the same way.
+   */
+  empty: { icon: LucideIcon; title: string; description?: string; action?: React.ReactNode }
 }
 
 const ALL = "__all"
@@ -94,7 +110,7 @@ export function DataTable<TData extends RowData>({
   filters = [],
   bulkActions = [],
   actions,
-  emptyMessage,
+  empty,
 }: DataTableProps<TData>) {
   const t = useTranslations("dataTable")
   const router = useRouter()
@@ -156,6 +172,15 @@ export function DataTable<TData extends RowData>({
   const runBulk = (action: BulkAction) => {
     if (action.confirm) setConfirming(action)
     else bulk.mutate({ action, ids: selectedIds })
+  }
+
+  // A search or a filter is narrowing the list: an empty page means "no
+  // results", not "nothing here yet".
+  const narrowed = query.q !== "" || Object.keys(query.filters).length > 0
+  const clearFilters = () => {
+    setSearch("")
+    lastSearch.current = ""
+    go({ q: "", filters: Object.fromEntries(Object.keys(query.filters).map((key) => [key, null])) })
   }
 
   const pages = pageCountOf(total, query.pageSize)
@@ -278,9 +303,22 @@ export function DataTable<TData extends RowData>({
               </TableRow>
             ))}
             {data.length === 0 && (
-              <TableRow>
-                <TableCell colSpan={allColumns.length} className="py-10 text-center text-muted-foreground">
-                  {emptyMessage}
+              <TableRow className="hover:bg-transparent">
+                <TableCell colSpan={allColumns.length} className="p-0">
+                  {narrowed ? (
+                    <EmptyState
+                      icon={SearchX}
+                      title={t("noResults.title")}
+                      description={t("noResults.description")}
+                      action={
+                        <Button variant="outline" onClick={clearFilters}>
+                          {t("noResults.clear")}
+                        </Button>
+                      }
+                    />
+                  ) : (
+                    <EmptyState {...empty} />
+                  )}
                 </TableCell>
               </TableRow>
             )}

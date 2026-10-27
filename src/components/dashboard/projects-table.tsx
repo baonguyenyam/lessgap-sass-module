@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { FolderOpen, Pencil, Plus, Trash2 } from "lucide-react"
+import { FolderKanban, FolderOpen, Pencil, Plus, Trash2 } from "lucide-react"
 import { useFormatter, useNow, useTranslations } from "next-intl"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -131,7 +131,17 @@ export function ProjectsTable({
         sortable={["name", "updatedAt", "createdAt"]}
         searchPlaceholder={t("searchPlaceholder")}
         bulkActions={bulkActions}
-        emptyMessage={query.q ? t("noResultsBody", { query: query.q }) : t("emptyBody")}
+        empty={{
+          icon: FolderKanban,
+          title: t("empty.title"),
+          description: t("empty.description"),
+          action: (
+            <Button onClick={() => openDrawer(DRAWER)}>
+              <Plus />
+              {t("newTitle")}
+            </Button>
+          ),
+        }}
         actions={
           <Button onClick={() => openDrawer(DRAWER)}>
             <Plus className="h-4 w-4" />

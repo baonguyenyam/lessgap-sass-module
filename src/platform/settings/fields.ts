@@ -5,6 +5,25 @@ import { PAGE_SIZES } from "@/lib/table-query"
 import type { SettingField } from "@/components/admin/settings-form"
 import { APP_LOCALES, canEditSetting, type SettingKey } from "@/platform/settings/registry"
 
+/**
+ * Zones the runtime still lists under their old IANA name. The value stays the
+ * one the runtime accepts; the label leads with today's name, so a search for
+ * "Ho Chi Minh" or "Kyiv" finds them.
+ */
+const RENAMED_ZONES: Record<string, string> = {
+  "Asia/Saigon": "Asia/Ho_Chi_Minh",
+  "Asia/Calcutta": "Asia/Kolkata",
+  "Asia/Katmandu": "Asia/Kathmandu",
+  "Asia/Rangoon": "Asia/Yangon",
+  "Europe/Kiev": "Europe/Kyiv",
+  "Atlantic/Faeroe": "Atlantic/Faroe",
+}
+
+export function timeZoneLabel(zone: string): string {
+  const current = RENAMED_ZONES[zone]
+  return current ? `${current} (${zone})` : zone
+}
+
 /** The tabs of Admin → Settings, in order, and the settings each holds. */
 export const SETTINGS_TABS = [
   {
@@ -31,7 +50,10 @@ export async function settingFields(keys: readonly SettingKey[], role: Role): Pr
       value: cycle,
       label: new Intl.DateTimeFormat("en-US", { timeStyle: "short", hourCycle: cycle, timeZone: "UTC" }).format(sample),
     })),
-    "display.time_zone": Intl.supportedValuesOf("timeZone").map((zone) => ({ value: zone, label: zone })),
+    "display.time_zone": Intl.supportedValuesOf("timeZone").map((zone) => ({
+      value: zone,
+      label: timeZoneLabel(zone),
+    })),
     "locale.app": APP_LOCALES.map((locale) => ({ value: locale, label: languageName(locale) })),
   }
 

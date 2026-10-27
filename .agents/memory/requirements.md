@@ -5,6 +5,24 @@ requirement is specified so agents read the source, not this summary. When a
 requirement becomes spec, ADR, rule or test, the pointer is updated and this
 file stays the index — not the place requirements are defined.
 
+## 2026-10-27 — Loading and empty states, everywhere the same
+
+1. **While data loads, show it the same way everywhere**, three cases:
+   - a page or a section waiting for its data → a skeleton of its layout
+     (stock `Skeleton`), not a spinner in every field;
+   - one field fetching its own data (options, search, an availability check)
+     → a spinner inside that field, `aria-busy`, the field disabled until it
+     can be used (`OptionSelect` / `SearchableSelect` `loading`, the DataTable
+     search);
+   - a form being saved → its fields locked and the spinner only in the submit
+     button.
+   → UI rules "Waiting for data".
+2. **Every empty block looks the same**: icon, title, one sentence, and the
+   next step when there is one (`EmptyState` on the stock shadcn `Empty`). A
+   list distinguishes "nothing yet" (its own state) from "no results" (the
+   DataTable's, with "Clear filters") → `src/components/layout/empty-state.tsx`,
+   `DataTable` `empty` prop (required), UI rules.
+
 ## 2026-10-27 — Searchable selects, loading fields, consistent language files
 
 1. **Long selects have search**: every list is picked through `OptionSelect`

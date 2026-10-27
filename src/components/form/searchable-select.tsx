@@ -97,7 +97,9 @@ export function SearchableSelect({
             {options.map((option) => (
               <CommandItem
                 key={option.value}
-                value={option.label}
+                // Matched as typed and with "_" and "/" read as spaces, so "ho chi"
+                // finds Asia/Ho_Chi_Minh.
+                value={`${option.label} ${option.label.replace(/[_/]/g, " ")}`}
                 onSelect={() => {
                   onValueChange(option.value)
                   setOpen(false)

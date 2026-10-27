@@ -244,7 +244,7 @@ export default async function BillingPage({
               dir: invoiceSpec.defaultDir,
               pageSize: invoiceSpec.defaultPageSize,
             }}
-            emptyMessage={process.env.STRIPE_SECRET_KEY ? t("noInvoices") : t("noInvoicesStripe")}
+            emptyDescription={process.env.STRIPE_SECRET_KEY ? t("noInvoices") : t("noInvoicesStripe")}
           />
         </CardContent>
       </Card>

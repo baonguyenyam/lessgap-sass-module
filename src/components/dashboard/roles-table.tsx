@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Pencil, Plus, Trash2 } from "lucide-react"
+import { KeyRound, Pencil, Plus, Trash2 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useMemo } from "react"
 import { useForm } from "react-hook-form"
@@ -132,7 +132,7 @@ export function RolesTable({
           },
         ]}
         bulkActions={bulkActions}
-        emptyMessage={t("custom.empty")}
+        empty={{ icon: KeyRound, title: t("empty.title"), description: t("empty.description") }}
         actions={
           canManage ? (
             <Button onClick={() => openDrawer(DRAWER)}>

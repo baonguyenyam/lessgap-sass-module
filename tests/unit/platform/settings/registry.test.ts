@@ -68,3 +68,11 @@ describe("dateTimeFormats", () => {
     )
   })
 })
+
+describe("timeZoneLabel", () => {
+  it("leads with today's name for zones the runtime lists under an old one", async () => {
+    const { timeZoneLabel } = await import("@/platform/settings/fields")
+    expect(timeZoneLabel("Asia/Saigon")).toBe("Asia/Ho_Chi_Minh (Asia/Saigon)")
+    expect(timeZoneLabel("Europe/Paris")).toBe("Europe/Paris")
+  })
+})

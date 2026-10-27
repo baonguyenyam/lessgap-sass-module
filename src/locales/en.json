@@ -118,10 +118,8 @@
       "subtitle": "The things you're working on. This is the example resource.",
       "newTitle": "New project",
       "newDescription": "Create a project you own.",
-      "emptyBody": "Create your first project to get started.",
       "noDescription": "No description",
       "searchPlaceholder": "Search projects...",
-      "noResultsBody": "No project matches “{query}”. Try a shorter word, or clear the search.",
       "colName": "Name",
       "colUpdated": "Updated",
       "colCreated": "Created",
@@ -134,6 +132,10 @@
       "deleteConfirm": {
         "title": "Delete the selected projects?",
         "description": "They are removed for good. This cannot be undone."
+      },
+      "empty": {
+        "title": "No projects yet",
+        "description": "Create your first project to get started."
       }
     },
     "home": {
@@ -409,7 +411,8 @@
         "paid": "Paid",
         "uncollectible": "Uncollectible",
         "void": "Void"
-      }
+      },
+      "noInvoicesTitle": "No invoices yet"
     },
     "projectDetail": {
       "subtitle": "Edit the details or delete this project.",
@@ -491,7 +494,10 @@
         "colActions": "Actions",
         "changeRole": "Change role",
         "search": "Search by name or email…",
-        "empty": "No members match.",
+        "empty": {
+          "title": "Only you so far",
+          "description": "Invite people to work with you in this workspace."
+        },
         "colStatus": "Status",
         "colLastActive": "Last active",
         "never": "Never",
@@ -533,7 +539,6 @@
       "title": "Roles",
       "subtitle": "Permission groups for this workspace.",
       "custom": {
-        "empty": "No custom roles yet.",
         "delete": "Delete"
       },
       "create": {
@@ -565,6 +570,10 @@
         "permissionsRequired": "Choose at least one permission.",
         "builtIn": "That name belongs to a built-in role.",
         "unknownPermission": "One of the permissions does not exist."
+      },
+      "empty": {
+        "title": "No roles",
+        "description": "The built-in roles and your custom ones appear here."
       }
     },
     "search": {
@@ -612,7 +621,10 @@
       "colJoined": "Joined",
       "colActions": "Actions",
       "free": "Free",
-      "empty": "No users match.",
+      "empty": {
+        "title": "No users yet",
+        "description": "Accounts appear here as soon as people sign up."
+      },
       "edit": "Edit",
       "switchAs": "Switch as this user",
       "copyEmail": "Copy email",
@@ -651,7 +663,10 @@
         "confirmed": "Confirmed",
         "unsubscribed": "Unsubscribed"
       },
-      "empty": "No subscribers match.",
+      "empty": {
+        "title": "No subscribers yet",
+        "description": "Addresses appear here when people join from the signup form."
+      },
       "copyEmail": "Copy email",
       "copied": "Email copied",
       "unsubscribe": "Unsubscribe",
@@ -1277,7 +1292,12 @@
     "failed": "Something went wrong. Nothing was changed.",
     "save": "Save",
     "saving": "Saving…",
-    "actions": "Actions"
+    "actions": "Actions",
+    "noResults": {
+      "title": "No results",
+      "description": "Nothing matches this search or these filters.",
+      "clear": "Clear filters"
+    }
   },
   "ui": {
     "searchableSelect": {

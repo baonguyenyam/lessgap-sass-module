@@ -14,6 +14,17 @@ Read before every task. Format and rules: [README.md](./README.md). Newest first
 - **Fix:** `--shadow-*: 0 0 #0000` in `globals.css`.
 - **Rule:** to switch off a box-shadow token, use a transparent shadow.
 
+### 2026-10-27 · agents · Two agents built the same component in parallel
+- **Symptom:** while one agent wrote a searchable select inside `option-select.tsx`, another committed `src/components/ui/searchable-select.tsx` doing the same job.
+- **Fix:** kept one (`src/components/form/searchable-select.tsx`, out of `ui/`, which is stock shadcn only), and `OptionSelect` uses it.
+- **Rule:** before adding a component, `git log --oneline -5` and search `src/components` (and `en.json` keys) for one that already does the job.
+
+### 2026-10-27 · intl · The runtime lists some time zones under their old names
+- **Symptom:** a search for "Ho Chi Minh" found no time zone.
+- **Cause:** `Intl.supportedValuesOf("timeZone")` returns `Asia/Saigon`, not `Asia/Ho_Chi_Minh` (likewise Calcutta, Kiev, Rangoon, Katmandu).
+- **Fix:** `timeZoneLabel` in `src/platform/settings/fields.ts` shows today's name first; the stored value stays the runtime's.
+- **Rule:** never compare stored zones against modern IANA names; label them.
+
 ### 2026-10-27 · shadcn · Stock radix-nova components need their providers and wrappers
 - **Symptom:** "`Tooltip` must be used within `TooltipProvider`" on every app page after the stock sidebar landed; "Cannot read properties of undefined (reading 'subscribe')" from `CommandInput`.
 - **Cause:** the stock Tooltip no longer brings its own provider, and the stock `CommandDialog` does not wrap its children in `<Command>`. Studio Admin does both in its own code.

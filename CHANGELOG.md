@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 - **`OptionSelect`** (`src/components/form/option-select.tsx`): the one way to pick from a list. Up to eight options it is the standard select; from nine on it has a search box (`SearchableSelect`), so the time zone, the roles of a large workspace and long filters are found by typing. Used by every settings form, every table filter and every drawer
 - **Loading states in fields**: a select still loading its options shows a spinner, and the table search shows one while new rows arrive
+- **Time zones are found by today's name**: the runtime still lists a few under old names (`Asia/Saigon`), so the list shows `Asia/Ho_Chi_Minh (Asia/Saigon)` and a search for "ho chi minh" finds it
 - **A test that every language file has exactly the keys of `en.json`**
 
 ### Changed

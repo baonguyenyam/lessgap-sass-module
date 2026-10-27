@@ -1,6 +1,6 @@
 "use client"
 
-import { Copy, Download, MailX } from "lucide-react"
+import { Copy, Download, Mail, MailX } from "lucide-react"
 import { useFormatter, useTranslations } from "next-intl"
 import { useMemo, type ReactNode } from "react"
 import { toast } from "sonner"
@@ -143,7 +143,7 @@ export function NewsletterTable({
         },
       ]}
       bulkActions={bulkActions}
-      emptyMessage={t("empty")}
+      empty={{ icon: Mail, title: t("empty.title"), description: t("empty.description") }}
       actions={
         <>
           {toolbar}

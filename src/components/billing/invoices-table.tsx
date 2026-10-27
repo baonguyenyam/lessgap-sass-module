@@ -1,6 +1,6 @@
 "use client"
 
-import { ExternalLink, FileDown } from "lucide-react"
+import { ExternalLink, FileDown, Receipt } from "lucide-react"
 import { useFormatter, useTranslations } from "next-intl"
 import { useMemo } from "react"
 import { DataTable, dataTableColumns } from "@/components/data-table/data-table"
@@ -26,13 +26,13 @@ export function InvoicesTable({
   total,
   query,
   defaults,
-  emptyMessage,
+  emptyDescription,
 }: {
   rows: InvoiceRow[]
   total: number
   query: TableQuery
   defaults: { sort: string; dir: "asc" | "desc"; pageSize: number }
-  emptyMessage: string
+  emptyDescription: string
 }) {
   const t = useTranslations("dashboard.billing")
   const format = useFormatter()
@@ -110,7 +110,7 @@ export function InvoicesTable({
           options: INVOICE_STATUSES.map((s) => ({ value: s, label: t(`invoiceStatus.${s}`) })),
         },
       ]}
-      emptyMessage={emptyMessage}
+      empty={{ icon: Receipt, title: t("noInvoicesTitle"), description: emptyDescription }}
     />
   )
 }

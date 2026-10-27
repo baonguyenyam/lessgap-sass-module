@@ -1,6 +1,6 @@
 "use client"
 
-import { Copy, Download, LogIn, Pencil, UserCog } from "lucide-react"
+import { Copy, Download, LogIn, Pencil, UserCog, Users } from "lucide-react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useFormatter, useTranslations } from "next-intl"
 import { useMemo, useTransition } from "react"
@@ -156,7 +156,7 @@ export function UsersTable({
         searchPlaceholder={t("search")}
         filters={[{ key: "role", label: t("colRole"), options: ROLES.map((role) => ({ value: role, label: role })) }]}
         bulkActions={bulkActions}
-        emptyMessage={t("empty")}
+        empty={{ icon: Users, title: t("empty.title"), description: t("empty.description") }}
       />
       <EditUserDrawer rows={rows} viewer={viewer} />
     </>
