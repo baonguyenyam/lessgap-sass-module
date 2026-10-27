@@ -1,3 +1,4 @@
+import { UserPlus } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { getTranslations } from "next-intl/server"
@@ -96,6 +97,7 @@ export default async function SignupPage({ searchParams }: { searchParams: Promi
             disabled={isDemo || closed}
           />
           <PendingButton disabled={isDemo || closed} variant="default" size="lg" className="w-full">
+            <UserPlus />
             {t("submit")}
           </PendingButton>
         </form>

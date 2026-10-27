@@ -1,5 +1,6 @@
 "use client"
 
+import { Check, X } from "lucide-react"
 import { useMutation } from "@tanstack/react-query"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
@@ -100,10 +101,11 @@ export function FormDrawer<TValues extends FieldValues>({
             </div>
             <SheetFooter className="mt-0 grid grid-cols-2 gap-2 border-t px-6 py-4 sm:flex sm:flex-row sm:justify-end">
               <Button type="button" variant="outline" onClick={close} disabled={mutation.isPending}>
+                <X />
                 {t("cancel")}
               </Button>
               <Button type="submit" disabled={mutation.isPending} className="sm:min-w-24">
-                {mutation.isPending && <Spinner />}
+                {mutation.isPending ? <Spinner /> : <Check />}
                 {mutation.isPending ? t("saving") : t("save")}
               </Button>
             </SheetFooter>

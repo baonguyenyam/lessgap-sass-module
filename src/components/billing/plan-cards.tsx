@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl"
 
 import { useState } from "react"
 import Link from "next/link"
-import { Check } from "lucide-react"
+import { ArrowRight, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -108,6 +108,7 @@ function ContactTierCard({ card, onYearly }: { card: ContactCardData; onYearly: 
           trigger={
             <Button variant="outline" className="w-full">
               {card.ctaLabel}
+              <ArrowRight />
             </Button>
           }
         />
@@ -227,7 +228,10 @@ export function PlanCards({
               <CardFooter>
                 {ctaHref ? (
                   <Button asChild className="w-full">
-                    <Link href={ctaHref}>{`Choose ${base.name}`}</Link>
+                    <Link href={ctaHref}>
+                      {`Choose ${base.name}`}
+                      <ArrowRight />
+                    </Link>
                   </Button>
                 ) : (
                   <UpgradeButton
@@ -264,7 +268,10 @@ export function PlanCards({
               <CardFooter>
                 {ctaHref ? (
                   <Button asChild className="w-full">
-                    <Link href={ctaHref}>{`Get ${plan.name}`}</Link>
+                    <Link href={ctaHref}>
+                      {`Get ${plan.name}`}
+                      <ArrowRight />
+                    </Link>
                   </Button>
                 ) : (
                   <UpgradeButton

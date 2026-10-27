@@ -1,5 +1,6 @@
 "use client"
 
+import { Check } from "lucide-react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useTranslations } from "next-intl"
@@ -114,7 +115,7 @@ export function SettingsForm({ fields, values }: { fields: SettingField[]; value
         )}
         {fields.some((f) => f.editable) ? (
           <Button type="submit" disabled={mutation.isPending}>
-            {mutation.isPending && <Spinner />}
+            {mutation.isPending ? <Spinner /> : <Check />}
             {t("save")}
           </Button>
         ) : (

@@ -1,5 +1,6 @@
 "use client"
 
+import { Check } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 import { useActionState, useEffect } from "react"
@@ -74,7 +75,7 @@ export function ProfileForm({ name, email, image, avatarProvider }: ProfileFormP
       </div>
 
       <Button type="submit" className="w-full sm:w-auto" disabled={isPending}>
-        {isPending && <Spinner />}
+        {isPending ? <Spinner /> : <Check />}
         {t("save")}
       </Button>
     </form>

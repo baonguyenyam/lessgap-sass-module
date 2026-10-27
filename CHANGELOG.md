@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 - **A flat UI: no shadows anywhere.** Surfaces are told apart by a border or a ring. The Tailwind shadow scale is flattened in `globals.css`, so the stock components follow without being restyled, and a test fails on a `shadow-*` class outside `src/components/ui/`. The `shadow-soft`, `shadow-soft-lg` and `shadow-glow` tokens are gone; the signed-in page gets a border against the sidebar instead
 - **Drawers open at the width their content needs**: `FormDrawer` takes `size` (`sm`, `md`, `lg`, `xl`) and is full width on a phone. The header and the buttons stay put while the fields scroll, the buttons sit side by side at the bottom right, and a form can lay its fields out in columns (member invitation: email and role on one line; role permissions: two columns of resources)
 - The app header no longer draws a divider between the sidebar button and the breadcrumbs, and the edge of the sidebar no longer draws a line on hover (clicking it still folds the sidebar)
+- **Every button and menu item has an icon, and menus are grouped.** A row's actions menu opens with an "Actions" label, keeps destructive items last in their own red group, and `RowAction` / `BulkAction` now require `icon`, so a table action without one fails the type check. Save, Cancel, delete, download, sign-in and call-to-action buttons all carry a lucide icon
 - **Settings, Security: less to read, one size of control.** Every button is the default size and every field the same width, the email and password forms put the field and its button on one line, the explanations are cut to one short line each, and turning two-factor off sits next to its status
 
 ### Fixed
@@ -27,6 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 - **Focus rings in drawers are no longer cut off**: the fields sat flush against the scrolling edge, which clipped the ring
 - A drawer's width setting had no effect: the Sheet's own `max-w-sm` outranked it
 - The page next to the sidebar now has all four corners rounded: the sticky header covered the top two
+- The sign-in page's demo and dev buttons used emoji for icons; they use lucide icons like every other button
 
 ## [2.11.0] - 2026-10-27
 

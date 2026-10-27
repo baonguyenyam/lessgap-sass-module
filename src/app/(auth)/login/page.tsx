@@ -1,4 +1,4 @@
-import { Play, ShieldCheck, Wrench } from "lucide-react"
+import { LogIn, Mail, Play, ShieldCheck, Wrench } from "lucide-react"
 import Link from "next/link"
 import { GithubIcon } from "@/components/icons/github"
 import { redirect } from "next/navigation"
@@ -164,6 +164,7 @@ export default async function LoginPage({
                 required
               />
               <PendingButton variant="default" size="lg" className="w-full">
+                <LogIn />
                 {t("submit")}
               </PendingButton>
               {hasMagicLink && (
@@ -177,6 +178,7 @@ export default async function LoginPage({
                   size="lg"
                   className="w-full"
                 >
+                  <Mail />
                   {t("magicLink")}
                 </PendingButton>
               )}

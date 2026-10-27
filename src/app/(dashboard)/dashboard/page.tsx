@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react"
 import { requireUser } from "@/lib/auth"
 import { getFormatter, getTranslations } from "next-intl/server"
 import Link from "next/link"
@@ -65,7 +66,10 @@ export default async function DashboardPage() {
               <CardDescription>{t("projectsCount", { count: projectCount })}</CardDescription>
             </div>
             <Button asChild variant="outline">
-              <Link href="/dashboard/projects">{projectCount === 0 ? t("projectsCreate") : t("projectsViewAll")}</Link>
+              <Link href="/dashboard/projects">
+                {projectCount === 0 ? t("projectsCreate") : t("projectsViewAll")}
+                <ArrowRight />
+              </Link>
             </Button>
           </div>
         </CardHeader>
@@ -117,7 +121,10 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline">
-              <Link href={isKitSite ? "/pricing" : "/dashboard/billing"}>{t("upsellCta")}</Link>
+              <Link href={isKitSite ? "/pricing" : "/dashboard/billing"}>
+                {t("upsellCta")}
+                <ArrowRight />
+              </Link>
             </Button>
           </CardContent>
         </Card>

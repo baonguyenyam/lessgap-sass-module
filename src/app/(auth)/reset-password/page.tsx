@@ -1,3 +1,4 @@
+import { KeyRound } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { getTranslations } from "next-intl/server"
@@ -60,6 +61,7 @@ export default async function ResetPasswordPage({
                 maxLength={72}
               />
               <PendingButton variant="default" size="lg" className="w-full">
+                <KeyRound />
                 {t("submit")}
               </PendingButton>
             </form>

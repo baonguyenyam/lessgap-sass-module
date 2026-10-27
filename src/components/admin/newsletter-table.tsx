@@ -136,7 +136,10 @@ export function NewsletterTable({
           {/* A file download from a route handler, not a page: `next/link`
               would prefetch it, and the rule cannot tell the two apart. */}
           {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-          <a href="/api/admin/newsletter-export">{t("exportAll")}</a>
+          <a href="/api/admin/newsletter-export">
+            <Download />
+            {t("exportAll")}
+          </a>
         </Button>
       }
     />

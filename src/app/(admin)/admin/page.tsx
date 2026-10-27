@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react"
 import { and } from "@prisma/orm-postgres/orm-client"
 import { getTranslations } from "next-intl/server"
 import Link from "next/link"
@@ -95,7 +96,10 @@ export default async function AdminPage() {
             </CardDescription>
           </div>
           <Button asChild variant="outline">
-            <Link href="/admin/newsletter">{t("waitlistOpen")}</Link>
+            <Link href="/admin/newsletter">
+              {t("waitlistOpen")}
+              <ArrowRight />
+            </Link>
           </Button>
         </CardHeader>
       </Card>

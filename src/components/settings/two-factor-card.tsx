@@ -1,6 +1,6 @@
 "use client"
 
-import { Check, Copy, Download, RefreshCw, ShieldCheck, ShieldOff } from "lucide-react"
+import { Check, Copy, Download, RefreshCw, ShieldCheck, ShieldOff, X } from "lucide-react"
 import { useActionState, useState } from "react"
 import { useTranslations } from "next-intl"
 
@@ -106,6 +106,7 @@ export function TwoFactorCard({
                   <AlertDialogFooter>
                     <AlertDialogCancel asChild>
                       <Button type="button" variant="outline">
+                        <X />
                         {t("cancel")}
                       </Button>
                     </AlertDialogCancel>

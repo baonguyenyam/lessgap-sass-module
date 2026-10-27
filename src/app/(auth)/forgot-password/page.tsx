@@ -1,3 +1,4 @@
+import { Send } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { getTranslations } from "next-intl/server"
@@ -69,6 +70,7 @@ export default async function ForgotPasswordPage({ searchParams }: { searchParam
               disabled={formDisabled}
             />
             <PendingButton disabled={formDisabled} variant="default" size="lg" className="w-full">
+              <Send />
               {t("submit")}
             </PendingButton>
           </form>

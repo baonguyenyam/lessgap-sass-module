@@ -1,5 +1,6 @@
 "use client"
 
+import { X } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
@@ -45,6 +46,7 @@ export function ConfirmDialog({
             <AlertDialogFooter>
               <AlertDialogCancel asChild>
                 <Button variant="outline" disabled={pending}>
+                  <X />
                   {t("cancel")}
                 </Button>
               </AlertDialogCancel>

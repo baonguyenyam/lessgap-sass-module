@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl"
 
 import * as React from "react"
-import { LogOut } from "lucide-react"
+import { LogOut, X } from "lucide-react"
 import { signOutAction } from "@/app/actions/auth"
 import { Button } from "@/components/ui/button"
 import {
@@ -50,6 +50,7 @@ export function SignOutDialog({
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline" disabled={pending}>
+              <X />
               Cancel
             </Button>
           </DialogClose>

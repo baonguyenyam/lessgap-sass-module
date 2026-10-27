@@ -1,6 +1,6 @@
 "use client"
 
-import { Trash2 } from "lucide-react"
+import { Trash2, X } from "lucide-react"
 import { useState } from "react"
 import { useTranslations } from "next-intl"
 
@@ -68,6 +68,7 @@ export function DeleteAccount({ email }: { email: string }) {
           <AlertDialogFooter>
             <AlertDialogCancel asChild>
               <Button type="button" variant="outline">
+                <X />
                 {t("cancel")}
               </Button>
             </AlertDialogCancel>

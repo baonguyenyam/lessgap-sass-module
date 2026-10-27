@@ -1,3 +1,4 @@
+import { ShieldCheck } from "lucide-react"
 import Link from "next/link"
 import { getTranslations } from "next-intl/server"
 
@@ -65,6 +66,7 @@ export default async function TwoFactorPage({
           className={backup ? "" : "text-center font-mono text-lg tracking-[0.4em]"}
         />
         <PendingButton variant="default" size="lg" className="w-full">
+          <ShieldCheck />
           {t("submit")}
         </PendingButton>
       </form>
