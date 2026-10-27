@@ -30,7 +30,7 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 - **Tests:** none new.
 - **Checks:** CI green on a PR.
 - **Done when:** CI runs `pnpm install --frozen-lockfile`, `pnpm typecheck`, lint, test, build, audit.
-- [ ] done (prepared on 2026-10-26; first PR exposed the missing build database, see Findings)
+- [x] done (CI run 67 passed with an isolated migrated PostgreSQL service for build prerender)
 
 ### 0.2 — Local database and integration test layer
 - **Goal:** `pnpm test:integration` runs against a real, migrated PostgreSQL locally and in CI.
@@ -38,7 +38,7 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 - **Tests:** one smoke integration test that inserts and reads a kit `User`.
 - **Checks:** `pnpm test:integration` locally and in CI.
 - **Done when:** the CI integration job is green and fails if the test is broken on purpose.
-- [ ] done
+- [x] done (local integration test and CI run 67 passed)
 
 ### 0.3 — Migration checks (M1, M2)
 - **Goal:** CI proves migrations apply on an empty database and match the contract.
@@ -158,4 +158,4 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 - Decisions 0-A…0-D recorded above.
 
 ## Findings
-- **2026-10-27 — CI build needs a migrated database:** the first PR run passed integration, migration, type-check, lint and unit tests, but `pnpm build` failed while prerendering `/en/pricing` with `CONTRACT.MARKER_READ_FAILED` because the build job's placeholder `DATABASE_URL` had no PostgreSQL service. Per owner approval, task 0.1 now provisions an isolated PostgreSQL service and applies Prisma 8 migrations before building. Verify the complete CI workflow before marking tasks 0.1 and 0.2 done.
+- **Resolved 2026-10-27 — CI build needs a migrated database:** the first PR run exposed `CONTRACT.MARKER_READ_FAILED` while prerendering `/en/pricing` because the build job had no PostgreSQL service. Per owner approval, task 0.1 now provisions an isolated PostgreSQL service and applies Prisma 8 migrations before building; CI run 67 passes.
