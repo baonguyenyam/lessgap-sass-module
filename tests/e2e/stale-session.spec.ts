@@ -52,7 +52,7 @@ test("settings works when the session is old, and a device can still be ended", 
     await context.addCookies(cookies.filter((c) => !c.name.includes("session_data")))
 
     // 1. The page renders. It used to throw "Session is not fresh" here.
-    await page.goto("/dashboard/settings/security")
+    await page.goto("/dashboard/account/security")
     await expect(page.getByRole("heading", { name: /settings/i })).toBeVisible()
     await expect(page.getByText("Safari on iOS")).toBeVisible()
     await expect(page.getByText("203.0.113.7")).toBeVisible()

@@ -81,10 +81,14 @@ export function ContactDialog({
           {/* flex-1 only in the row layout: in the mobile column it would
               zero the flex-basis and squash the buttons' height. */}
           <Button onClick={copyEmail} className="sm:flex-1">
+            {copied ? <Check /> : <Copy />}
             {copied ? t("copiedShort") : t("copy")}
           </Button>
           <Button asChild variant="outline" className="sm:flex-1">
-            <a href={mailto}>Open mail app</a>
+            <a href={mailto}>
+              <Mail />
+              Open mail app
+            </a>
           </Button>
         </div>
       </DialogContent>

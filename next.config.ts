@@ -46,6 +46,15 @@ const nextConfig: NextConfig = {
     "/sitemap.xml": ["./content/blog/**"],
     "/llms.txt": ["./content/blog/**"],
   },
+  // Account pages lived under /dashboard/settings until 2.12.0; links in sent
+  // emails and bookmarks keep working. The query string is carried over.
+  async redirects() {
+    return [
+      { source: "/dashboard/settings/security", destination: "/dashboard/account/security", permanent: true },
+      { source: "/dashboard/settings/backup", destination: "/dashboard/account/backup", permanent: true },
+      { source: "/dashboard/settings/logs", destination: "/dashboard/account/activity", permanent: true },
+    ]
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }]
   },

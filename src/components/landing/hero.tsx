@@ -1,15 +1,16 @@
 import Link from "next/link"
 import {
   ArrowRight,
-  Sparkles,
-  LayoutGrid,
-  FolderKanban,
-  CreditCard,
-  Settings,
   ChevronsUpDown,
-  PanelLeftClose,
-  Shield,
+  CreditCard,
+  FolderKanban,
+  LayoutGrid,
   type LucideIcon,
+  PanelLeftClose,
+  Play,
+  Settings,
+  Shield,
+  Sparkles,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
@@ -108,7 +109,10 @@ export function Hero() {
             </a>
           </Button>
           <Button asChild variant="outline" size="xl">
-            <Link href={siteConfig.links.demo ?? "/login"}>Live demo</Link>
+            <Link href={siteConfig.links.demo ?? "/login"}>
+              <Play />
+              Live demo
+            </Link>
           </Button>
         </div>
 

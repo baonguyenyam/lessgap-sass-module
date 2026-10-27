@@ -1,12 +1,16 @@
 import { describe, expect, it } from "vitest"
 
-import { SETTINGS_PAGES, settingsHref, settingsMessage } from "@/lib/settings-pages"
+import { ACCOUNT_PAGES, SETTINGS_PAGES, accountHref, settingsMessage } from "@/lib/settings-pages"
 
-describe("settings pages", () => {
-  it("puts every page under the settings URL, general first", () => {
-    expect(SETTINGS_PAGES[0]).toEqual({ key: "general", href: "/dashboard/settings" })
-    for (const page of SETTINGS_PAGES) expect(page.href.startsWith("/dashboard/settings")).toBe(true)
-    expect(settingsHref("security")).toBe("/dashboard/settings/security")
+describe("account and settings pages", () => {
+  it("puts every account page under the account URL, profile first", () => {
+    expect(ACCOUNT_PAGES[0]).toEqual({ key: "profile", href: "/dashboard/account" })
+    for (const page of ACCOUNT_PAGES) expect(page.href.startsWith("/dashboard/account")).toBe(true)
+    expect(accountHref("security")).toBe("/dashboard/account/security")
+  })
+
+  it("opens settings on the preferences", () => {
+    expect(SETTINGS_PAGES[0]).toEqual({ key: "preferences", href: "/dashboard/settings" })
   })
 })
 

@@ -1,5 +1,6 @@
 "use client"
 
+import { Sparkles } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 import { useState } from "react"
@@ -51,7 +52,7 @@ export function UpgradeButton({
 
   return (
     <Button onClick={handleClick} disabled={disabled || loading} variant={variant} className={className}>
-      {loading && <Spinner />}
+      {loading ? <Spinner /> : <Sparkles />}
       {children ?? t("upgrade")}
     </Button>
   )

@@ -10,7 +10,7 @@ import { passwordSchema } from "@/lib/password"
 import { checkRateLimit, rateLimitKeyFromIp } from "@/lib/rate-limit"
 import { BACKUP_CODE_LENGTH, normalizeBackupCode } from "@/lib/backup-codes"
 import { emailEnabled } from "@/lib/email-transport"
-import { settingsHref } from "@/lib/settings-pages"
+import { accountHref } from "@/lib/settings-pages"
 import { getPlatformSettings } from "@/platform/settings/store"
 
 // Every action here calls auth.api.* and then redirects OUTSIDE the try block.
@@ -158,7 +158,7 @@ export async function verifyTwoFactorBackupCode(formData: FormData) {
   // just spent a backup code has one fewer way back in and does not necessarily
   // know it; this puts them in front of the button that makes more, with the
   // reason written above it.
-  redirect(`${settingsHref("security")}?ok=backup-used`)
+  redirect(`${accountHref("security")}?ok=backup-used`)
 }
 
 // ─── Sign up ──────────────────────────────────────────────────────────────────

@@ -83,18 +83,18 @@ afterEach(() => {
 describe("changeEmail", () => {
   it("hands a valid address to the library, lowercased and trimmed", async () => {
     expect(await redirectOf(() => changeEmail(form("  NEW@Example.COM  ")))).toBe(
-      "/dashboard/settings/security?ok=email-sent"
+      "/dashboard/account/security?ok=email-sent"
     )
     expect(changeEmailApi).toHaveBeenCalledWith(
       expect.objectContaining({
-        body: { newEmail: "new@example.com", callbackURL: "/dashboard/settings/security" },
+        body: { newEmail: "new@example.com", callbackURL: "/dashboard/account/security" },
       })
     )
   })
 
   it("refuses something that is not an address, without calling out", async () => {
     expect(await redirectOf(() => changeEmail(form("not-an-email")))).toBe(
-      "/dashboard/settings/security?error=email-invalid"
+      "/dashboard/account/security?error=email-invalid"
     )
     expect(changeEmailApi).not.toHaveBeenCalled()
   })
@@ -102,27 +102,27 @@ describe("changeEmail", () => {
   /** Otherwise you get an email about nothing. */
   it("refuses the address the account already has, whatever its case", async () => {
     expect(await redirectOf(() => changeEmail(form("OLD@example.com")))).toBe(
-      "/dashboard/settings/security?error=email-same"
+      "/dashboard/account/security?error=email-same"
     )
     expect(changeEmailApi).not.toHaveBeenCalled()
   })
 
   it("refuses on a demo deployment, where accounts are shared and reset nightly", async () => {
     process.env.DEMO_MODE = "true"
-    expect(await redirectOf(() => changeEmail(form("new@example.com")))).toBe("/dashboard/settings/security?error=demo")
+    expect(await redirectOf(() => changeEmail(form("new@example.com")))).toBe("/dashboard/account/security?error=demo")
     expect(changeEmailApi).not.toHaveBeenCalled()
   })
 
   it("stops before the library when the caller is over the limit", async () => {
     allowRateLimit.mockReturnValue(false)
-    expect(await redirectOf(() => changeEmail(form("new@example.com")))).toBe("/dashboard/settings/security?error=rate")
+    expect(await redirectOf(() => changeEmail(form("new@example.com")))).toBe("/dashboard/account/security?error=rate")
     expect(changeEmailApi).not.toHaveBeenCalled()
   })
 
   it("keeps one generic outcome when the library refuses", async () => {
     changeEmailApi.mockRejectedValue(new APIError("BAD_REQUEST", { message: "nope" }))
     expect(await redirectOf(() => changeEmail(form("new@example.com")))).toBe(
-      "/dashboard/settings/security?error=email-change"
+      "/dashboard/account/security?error=email-change"
     )
   })
 
@@ -160,9 +160,7 @@ describe("deleteAccount", () => {
   it("refuses the last admin before touching the subscription", async () => {
     findUser.mockResolvedValue({ email: "me@example.com", role: "ADMIN", subscription: live })
     countUsers.mockResolvedValue({ n: 1 })
-    expect(await redirectOf(() => deleteAccount(confirm("me@example.com")))).toBe(
-      "/dashboard/settings?error=last-admin"
-    )
+    expect(await redirectOf(() => deleteAccount(confirm("me@example.com")))).toBe("/dashboard/account?error=last-admin")
     expect(cancelSubscription).not.toHaveBeenCalled()
     expect(deleteUser).not.toHaveBeenCalled()
   })
@@ -171,7 +169,7 @@ describe("deleteAccount", () => {
     getCurrentUser.mockResolvedValue({ id: "u1", email: "me@example.com", role: "ROOT" })
     findUser.mockResolvedValue({ email: "me@example.com", role: "ROOT", subscription: live })
     countUsers.mockResolvedValue({ n: 1 })
-    expect(await redirectOf(() => deleteAccount(confirm("me@example.com")))).toBe("/dashboard/settings?error=last-root")
+    expect(await redirectOf(() => deleteAccount(confirm("me@example.com")))).toBe("/dashboard/account?error=last-root")
     expect(cancelSubscription).not.toHaveBeenCalled()
     expect(deleteUser).not.toHaveBeenCalled()
   })
@@ -189,7 +187,7 @@ describe("deleteAccount", () => {
     cancelSubscription.mockRejectedValue(Object.assign(new Error("down"), { code: "api_error" }))
     vi.spyOn(console, "error").mockImplementation(() => {})
     expect(await redirectOf(() => deleteAccount(confirm("me@example.com")))).toBe(
-      "/dashboard/settings?error=subscription"
+      "/dashboard/account?error=subscription"
     )
     expect(deleteUser).not.toHaveBeenCalled()
   })

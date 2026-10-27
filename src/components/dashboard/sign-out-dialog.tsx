@@ -45,13 +45,13 @@ export function SignOutDialog({
             </span>
           </div>
           <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription>You&apos;ll be signed out of your account and returned to the homepage.</DialogDescription>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline" disabled={pending}>
               <X />
-              Cancel
+              {t("cancel")}
             </Button>
           </DialogClose>
           <Button variant="destructive" onClick={() => startTransition(async () => signOutAction())} disabled={pending}>

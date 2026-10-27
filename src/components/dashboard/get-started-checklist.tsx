@@ -20,7 +20,7 @@ export async function GetStartedChecklist({
 }) {
   const t = await getTranslations("dashboard.home")
   const items: ChecklistItem[] = [
-    { label: t("checklistName"), done: hasName, href: "/dashboard/settings" },
+    { label: t("checklistName"), done: hasName, href: "/dashboard/account" },
     { label: t("checklistProject"), done: hasProject, href: "/dashboard/projects" },
     { label: t("checklistBilling"), done: hasBilling, href: "/dashboard/billing" },
   ]

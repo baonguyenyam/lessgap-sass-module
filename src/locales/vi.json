@@ -154,7 +154,7 @@
     },
     "settings": {
       "title": "Cài đặt",
-      "subtitle": "Quản lý tùy chọn tài khoản của bạn.",
+      "subtitle": "Giao diện và ngôn ngữ của ứng dụng.",
       "profileTitle": "Hồ sơ",
       "profileDescription": "Cập nhật tên hiển thị và xem chi tiết tài khoản.",
       "methodsTitle": "Phương thức đăng nhập",
@@ -262,10 +262,7 @@
       },
       "nav": {
         "label": "Các mục cài đặt",
-        "general": "Tổng quan",
-        "security": "Bảo mật",
-        "backup": "Sao lưu",
-        "logs": "Nhật ký"
+        "preferences": "Tuỳ chọn"
       },
       "backup": {
         "title": "Sao lưu dữ liệu",
@@ -291,6 +288,23 @@
         "unknownDevice": "thiết bị không xác định",
         "thisDevice": "Thiết bị này",
         "ended": "Đã kết thúc"
+      },
+      "preferences": {
+        "languageTitle": "Ngôn ngữ",
+        "languageDescription": "Ngôn ngữ của khu vực đã đăng nhập, trên trình duyệt này.",
+        "themeTitle": "Giao diện",
+        "themeDescription": "Sáng, tối, hoặc theo hệ thống."
+      }
+    },
+    "account": {
+      "title": "Tài khoản",
+      "subtitle": "Hồ sơ, cách đăng nhập và dữ liệu của bạn.",
+      "nav": {
+        "label": "Các mục tài khoản",
+        "profile": "Hồ sơ",
+        "security": "Bảo mật",
+        "backup": "Sao lưu",
+        "activity": "Hoạt động"
       }
     },
     "billing": {
@@ -377,7 +391,9 @@
     "signOut": {
       "title": "Đăng xuất?",
       "pending": "Đang đăng xuất…",
-      "confirm": "Đăng xuất"
+      "confirm": "Đăng xuất",
+      "cancel": "Huỷ",
+      "description": "Bạn sẽ được đăng xuất và quay về trang chủ."
     },
     "userMenu": {
       "open": "Mở menu tài khoản"
@@ -393,7 +409,8 @@
       "backToDashboard": "Quay lại Bảng điều khiển",
       "openNavigation": "Mở điều hướng",
       "members": "Thành viên",
-      "roles": "Nhóm quyền"
+      "roles": "Nhóm quyền",
+      "account": "Tài khoản"
     },
     "members": {
       "title": "Thành viên",

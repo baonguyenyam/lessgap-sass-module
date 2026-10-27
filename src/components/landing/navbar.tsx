@@ -1,3 +1,4 @@
+import { LayoutDashboard, LogIn } from "lucide-react"
 import { getTranslations } from "next-intl/server"
 import Link from "next/link"
 import { getCurrentUser } from "@/lib/auth"
@@ -44,7 +45,10 @@ export async function Navbar() {
           <ThemeToggle />
           {user ? (
             <Button asChild className="hidden xl:inline-flex">
-              <Link href="/dashboard">Dashboard</Link>
+              <Link href="/dashboard">
+                <LayoutDashboard />
+                Dashboard
+              </Link>
             </Button>
           ) : (
             <>
@@ -52,6 +56,7 @@ export async function Navbar() {
                 <Link href={siteConfig.links.demo ?? "/login"}>
                   {/* Where the link goes decides the word: the demo has no
                       account of yours to sign in to. */}
+                  <LogIn />
                   {siteConfig.links.demo ? t("demo") : t("signIn")}
                 </Link>
               </Button>

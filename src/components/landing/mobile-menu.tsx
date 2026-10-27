@@ -5,7 +5,17 @@ import { useTranslations } from "next-intl"
 import { Fragment } from "react"
 import Link from "next/link"
 import { usePathname } from "@/i18n/navigation"
-import { Menu } from "lucide-react"
+import {
+  CircleHelp,
+  History,
+  LayoutDashboard,
+  LayoutGrid,
+  LogIn,
+  type LucideIcon,
+  Menu,
+  Rocket,
+  Tag,
+} from "lucide-react"
 import { GithubIcon } from "@/components/icons/github"
 import { cn } from "@/lib/utils"
 import {
@@ -16,7 +26,14 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { sections, useActiveSection } from "@/components/landing/use-active-section"
+import { sections, useActiveSection, type SectionId } from "@/components/landing/use-active-section"
+
+const SECTION_ICONS: Record<SectionId, LucideIcon> = { features: LayoutGrid, pricing: Tag, faq: CircleHelp }
+
+function SectionIcon({ id }: { id: SectionId }) {
+  const Icon = SECTION_ICONS[id]
+  return <Icon />
+}
 
 export function MobileMenu({
   signInHref,
@@ -70,23 +87,33 @@ export function MobileMenu({
                 onClick={(e) => scrollToSection(e, id)}
                 className={cn(current === id && "bg-primary/10 font-medium text-primary")}
               >
+                <SectionIcon id={id} />
                 {t(id)}
               </Link>
             </DropdownMenuItem>
           </Fragment>
         ))}
         <DropdownMenuItem asChild>
-          <Link href="/changelog">Changelog</Link>
+          <Link href="/changelog">
+            <History />
+            Changelog
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         {isAuthenticated ? (
           <DropdownMenuItem asChild>
-            <Link href="/dashboard">Dashboard</Link>
+            <Link href="/dashboard">
+              <LayoutDashboard />
+              Dashboard
+            </Link>
           </DropdownMenuItem>
         ) : (
           <>
             <DropdownMenuItem asChild>
-              <Link href={signInHref}>{signInToDemo ? t("demo") : t("signIn")}</Link>
+              <Link href={signInHref}>
+                <LogIn />
+                {signInToDemo ? t("demo") : t("signIn")}
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               {starHref ? (
@@ -100,6 +127,7 @@ export function MobileMenu({
                   onClick={(e) => scrollToSection(e, "pricing")}
                   className="font-semibold text-primary"
                 >
+                  <Rocket />
                   {t("getStarted")}
                 </Link>
               )}

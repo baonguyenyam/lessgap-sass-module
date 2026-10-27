@@ -55,7 +55,7 @@ test("a user can turn on 2FA, and then needs a code to sign in", async ({ browse
   await page.getByRole("button", { name: /create account|sign up/i }).click()
   await page.waitForURL("**/dashboard", { timeout: 20_000 })
 
-  await page.goto("/dashboard/settings/security")
+  await page.goto("/dashboard/account/security")
   await page.locator("#enable-password").fill(password)
   await page.getByRole("button", { name: /turn on/i }).click()
 

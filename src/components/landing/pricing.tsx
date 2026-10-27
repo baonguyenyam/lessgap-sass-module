@@ -1,4 +1,5 @@
 import { Check, Plus } from "lucide-react"
+import { GithubIcon } from "@/components/icons/github"
 import { jsonLdScript } from "@/lib/json-ld"
 import { softwareApplicationJsonLd } from "@/lib/pricing-jsonld"
 import { Button } from "@/components/ui/button"
@@ -88,6 +89,7 @@ export function Pricing({ heading = "h2", withJsonLd = false }: { heading?: "h1"
               <CardFooter className="flex-col gap-3 px-8 pb-8">
                 <Button asChild variant="outline" size="lg" className="w-full">
                   <a href={siteConfig.links.github ?? "#"} target="_blank" rel="noopener noreferrer">
+                    <GithubIcon className="h-4 w-4" />
                     {t("getOnGithub")}
                   </a>
                 </Button>

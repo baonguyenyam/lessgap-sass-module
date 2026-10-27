@@ -13,7 +13,7 @@ import { stripe } from "@/lib/stripe"
 import { checkRateLimit } from "@/lib/rate-limit"
 import { emailEnabled } from "@/lib/email-transport"
 import { enabledOAuthProviders } from "@/lib/oauth-providers"
-import { settingsHref } from "@/lib/settings-pages"
+import { accountHref } from "@/lib/settings-pages"
 
 // Account-management actions behind a session: link/unlink OAuth providers
 // and set or change the password. Outcomes surface as query params on the
@@ -21,8 +21,8 @@ import { settingsHref } from "@/lib/settings-pages"
 
 // Where each form lives (src/lib/settings-pages.ts): sign-in methods, email and
 // password on Security, deleting the account on General.
-const SETTINGS = settingsHref("security")
-const GENERAL = settingsHref("general")
+const SETTINGS = accountHref("security")
+const GENERAL = accountHref("profile")
 
 // A subscription in any of these still bills, or is about to: deleting the
 // account under it would leave Stripe charging a customer who no longer exists

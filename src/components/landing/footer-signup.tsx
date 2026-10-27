@@ -1,5 +1,6 @@
 "use client"
 
+import { Send } from "lucide-react"
 import { useState } from "react"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
@@ -68,6 +69,7 @@ export function FooterSignup({ disabled = false }: { disabled?: boolean }) {
             className="min-w-0 flex-1"
           />
           <Button type="submit" disabled={disabled || state === "sending"} className="shrink-0">
+            <Send />
             {state === "sending" ? tw("sending") : t("cta")}
           </Button>
         </form>

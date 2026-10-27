@@ -1,5 +1,6 @@
 "use client"
 
+import { Send } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 import { useState } from "react"
@@ -87,6 +88,7 @@ export function WaitlistForm({
           className="w-full"
           disabled={disabled || state === "sending"}
         >
+          <Send />
           {state === "sending" ? t("sending") : (cta ?? t("cta"))}
         </Button>
       </form>

@@ -170,7 +170,7 @@
     },
     "settings": {
       "title": "Settings",
-      "subtitle": "Manage your account preferences.",
+      "subtitle": "How the app looks and which language it speaks.",
       "profileTitle": "Profile",
       "profileDescription": "Update your display name and view account details.",
       "methodsTitle": "Sign-in methods",
@@ -278,10 +278,7 @@
       },
       "nav": {
         "label": "Settings sections",
-        "general": "General",
-        "security": "Security",
-        "backup": "Backup",
-        "logs": "Logs"
+        "preferences": "Preferences"
       },
       "backup": {
         "title": "Back up your data",
@@ -307,6 +304,23 @@
         "unknownDevice": "an unknown device",
         "thisDevice": "This device",
         "ended": "Ended"
+      },
+      "preferences": {
+        "languageTitle": "Language",
+        "languageDescription": "The language of the signed-in area, in this browser.",
+        "themeTitle": "Appearance",
+        "themeDescription": "Light, dark, or the same as your system."
+      }
+    },
+    "account": {
+      "title": "Account",
+      "subtitle": "Your profile, how you sign in, and your data.",
+      "nav": {
+        "label": "Account sections",
+        "profile": "Profile",
+        "security": "Security",
+        "backup": "Backup",
+        "activity": "Activity"
       }
     },
     "billing": {
@@ -393,7 +407,9 @@
     "signOut": {
       "title": "Sign out?",
       "pending": "Signing out…",
-      "confirm": "Sign out"
+      "confirm": "Sign out",
+      "cancel": "Cancel",
+      "description": "You will be signed out and returned to the homepage."
     },
     "userMenu": {
       "open": "Open account menu",
@@ -420,7 +436,8 @@
         "account": "Account",
         "admin": "Administration",
         "back": "Back"
-      }
+      },
+      "account": "Account"
     },
     "members": {
       "title": "Members",

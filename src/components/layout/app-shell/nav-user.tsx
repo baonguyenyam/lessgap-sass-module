@@ -1,6 +1,6 @@
 "use client"
 
-import { CreditCard, EllipsisVertical, LogOut, Settings } from "lucide-react"
+import { CreditCard, EllipsisVertical, LogOut, Settings, UserRound } from "lucide-react"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
@@ -66,6 +66,12 @@ export function NavUser({ name, email, image }: NavUserProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
+              <DropdownMenuItem asChild>
+                <Link href="/dashboard/account">
+                  <UserRound />
+                  {tNav("account")}
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/dashboard/settings">
                   <Settings />

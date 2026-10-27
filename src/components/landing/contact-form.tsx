@@ -1,5 +1,6 @@
 "use client"
 
+import { Send } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 import { useActionState } from "react"
@@ -91,6 +92,7 @@ export function ContactForm({ disabled = false }: { disabled?: boolean }) {
           .
         </p>
         <Button type="submit" variant="gradient" disabled={disabled || pending}>
+          <Send />
           {pending ? t("sending") : t("submit")}
         </Button>
       </div>

@@ -7,7 +7,7 @@ import { AppShell } from "@/components/layout/app-shell/app-shell"
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser()
   const tNav = await getTranslations("dashboard.nav")
-  const tSettings = await getTranslations("dashboard.settings.nav")
+  const tAccount = await getTranslations("dashboard.account.nav")
 
   return (
     <AppShell
@@ -22,10 +22,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
           members: tNav("members"),
           roles: tNav("roles"),
           billing: tNav("billing"),
+          account: tNav("account"),
           settings: tNav("settings"),
-          security: tSettings("security"),
-          backup: tSettings("backup"),
-          logs: tSettings("logs"),
+          security: tAccount("security"),
+          backup: tAccount("backup"),
+          activity: tAccount("activity"),
         },
       }}
     >

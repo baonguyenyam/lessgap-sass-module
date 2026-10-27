@@ -1,22 +1,27 @@
 /**
- * The settings area: one page per concern, in the order the sub-navigation
- * shows them. The layout, the breadcrumbs and every action that redirects
- * back to a settings page read their URLs from here.
+ * Two sections, each with its own vertical tabs. Account is the person: the
+ * profile, how they sign in, their data and its history. Settings is how the
+ * app behaves for them. The layouts, the breadcrumbs and every action that
+ * redirects back to one of these pages read their URLs from here.
  */
-export const SETTINGS_BASE = "/dashboard/settings"
+export const ACCOUNT_BASE = "/dashboard/account"
 
-export const SETTINGS_PAGES = [
-  { key: "general", href: SETTINGS_BASE },
-  { key: "security", href: `${SETTINGS_BASE}/security` },
-  { key: "backup", href: `${SETTINGS_BASE}/backup` },
-  { key: "logs", href: `${SETTINGS_BASE}/logs` },
+export const ACCOUNT_PAGES = [
+  { key: "profile", href: ACCOUNT_BASE },
+  { key: "security", href: `${ACCOUNT_BASE}/security` },
+  { key: "backup", href: `${ACCOUNT_BASE}/backup` },
+  { key: "activity", href: `${ACCOUNT_BASE}/activity` },
 ] as const
 
-export type SettingsPageKey = (typeof SETTINGS_PAGES)[number]["key"]
+export type AccountPageKey = (typeof ACCOUNT_PAGES)[number]["key"]
 
-export function settingsHref(key: SettingsPageKey): string {
-  return SETTINGS_PAGES.find((page) => page.key === key)!.href
+export function accountHref(key: AccountPageKey): string {
+  return ACCOUNT_PAGES.find((page) => page.key === key)!.href
 }
+
+export const SETTINGS_BASE = "/dashboard/settings"
+
+export const SETTINGS_PAGES = [{ key: "preferences", href: SETTINGS_BASE }] as const
 
 /**
  * Result codes the account actions put in the query string (`?ok=` or

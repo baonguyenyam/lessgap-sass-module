@@ -9,6 +9,7 @@ import {
   Shield,
   SlidersHorizontal,
   UserCog,
+  UserRound,
   Users,
   type LucideIcon,
 } from "lucide-react"
@@ -56,6 +57,7 @@ export function navGroups(area: NavArea, { showAdmin }: { showAdmin: boolean }):
       key: "account",
       items: [
         { key: "billing", href: "/dashboard/billing", icon: CreditCard },
+        { key: "account", href: "/dashboard/account", icon: UserRound },
         { key: "settings", href: "/dashboard/settings", icon: Settings },
         ...(showAdmin ? [{ key: "adminPanel", href: "/admin", icon: Shield }] : []),
       ],

@@ -97,7 +97,8 @@ Most SaaS boilerplates either cost a few hundred dollars or ship as a barebones 
 /2fa                 → Second factor, when the account has one
 /dashboard           → User overview + plan status
 /dashboard/billing   → Subscription management + invoice history
-/dashboard/settings  → Profile, sign-in methods, password, two-factor & active sessions
+/dashboard/account   → Profile, sign-in methods, password, two-factor, active sessions, backup, activity
+/dashboard/settings  → Preferences: language and theme
 /admin               → Admin panel (ADMIN role required)
 ```
 

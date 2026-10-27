@@ -5,7 +5,7 @@ import { redirect } from "next/navigation"
 import { auth } from "@/auth"
 import { getCurrentUser } from "@/lib/auth"
 import { db8 } from "@/lib/db8"
-import { settingsHref } from "@/lib/settings-pages"
+import { accountHref } from "@/lib/settings-pages"
 
 /**
  * Ending sessions from Settings.
@@ -28,7 +28,7 @@ import { settingsHref } from "@/lib/settings-pages"
  * (src/components/settings/active-sessions.tsx).
  */
 
-const SETTINGS = settingsHref("security")
+const SETTINGS = accountHref("security")
 
 export async function revokeSession(formData: FormData) {
   const currentUser = await getCurrentUser()

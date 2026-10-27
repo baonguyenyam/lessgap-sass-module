@@ -94,11 +94,14 @@ test.describe("accessibility", () => {
 
     await scan(page, "dashboard")
 
-    // Every settings page: each has its own forms and its own contrast to get wrong.
-    for (const path of ["", "/security", "/backup", "/logs"]) {
-      await page.goto(`/dashboard/settings${path}`)
-      await scan(page, `settings${path}`)
+    // Every account page: each has its own forms and its own contrast to get wrong.
+    for (const path of ["", "/security", "/backup", "/activity"]) {
+      await page.goto(`/dashboard/account${path}`)
+      await scan(page, `account${path}`)
     }
+
+    await page.goto("/dashboard/settings")
+    await scan(page, "settings")
 
     await page.goto("/dashboard/projects")
     await scan(page, "projects")

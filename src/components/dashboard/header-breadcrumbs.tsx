@@ -50,11 +50,6 @@ export function HeaderBreadcrumbs({
 
   return (
     <div className="hidden min-w-0 items-center gap-2 md:flex">
-      {/* A thin rule between the sidebar toggle and the trail: the command on
-          one side, where you are on the other. The negative margin takes back
-          the toggle button's own padding, so the rule sits as far from its
-          icon as from the trail's (12px each side). */}
-      <span className="mr-1 -ml-[9px] h-5 w-px shrink-0 bg-border" aria-hidden="true" />
       {icon && (
         <span className="flex shrink-0 items-center text-muted-foreground" aria-hidden="true">
           {icon}
