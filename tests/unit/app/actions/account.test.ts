@@ -109,17 +109,13 @@ describe("changeEmail", () => {
 
   it("refuses on a demo deployment, where accounts are shared and reset nightly", async () => {
     process.env.DEMO_MODE = "true"
-    expect(await redirectOf(() => changeEmail(form("new@example.com")))).toBe(
-      "/dashboard/settings/security?error=demo"
-    )
+    expect(await redirectOf(() => changeEmail(form("new@example.com")))).toBe("/dashboard/settings/security?error=demo")
     expect(changeEmailApi).not.toHaveBeenCalled()
   })
 
   it("stops before the library when the caller is over the limit", async () => {
     allowRateLimit.mockReturnValue(false)
-    expect(await redirectOf(() => changeEmail(form("new@example.com")))).toBe(
-      "/dashboard/settings/security?error=rate"
-    )
+    expect(await redirectOf(() => changeEmail(form("new@example.com")))).toBe("/dashboard/settings/security?error=rate")
     expect(changeEmailApi).not.toHaveBeenCalled()
   })
 
@@ -175,9 +171,7 @@ describe("deleteAccount", () => {
     getCurrentUser.mockResolvedValue({ id: "u1", email: "me@example.com", role: "ROOT" })
     findUser.mockResolvedValue({ email: "me@example.com", role: "ROOT", subscription: live })
     countUsers.mockResolvedValue({ n: 1 })
-    expect(await redirectOf(() => deleteAccount(confirm("me@example.com")))).toBe(
-      "/dashboard/settings?error=last-root"
-    )
+    expect(await redirectOf(() => deleteAccount(confirm("me@example.com")))).toBe("/dashboard/settings?error=last-root")
     expect(cancelSubscription).not.toHaveBeenCalled()
     expect(deleteUser).not.toHaveBeenCalled()
   })

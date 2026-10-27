@@ -77,7 +77,9 @@ export async function setUserRoles(userIds: string[], nextRole: Role): Promise<{
   const ids = [...new Set(userIds)].filter((id) => id !== viewer.id).slice(0, 500)
   if (ids.length === 0) return { changed: 0 }
 
-  const users = await db8.orm.public.User.select("id", "role").where((u) => u.id.in(ids)).all()
+  const users = await db8.orm.public.User.select("id", "role")
+    .where((u) => u.id.in(ids))
+    .all()
   const eligible = users.filter((u) => canChangeRole(viewer.role, u.role, nextRole)).map((u) => u.id)
   if (eligible.length === 0) return { changed: 0 }
 

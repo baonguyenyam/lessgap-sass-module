@@ -24,12 +24,7 @@ const usageSchema = z.object({
  * Stripe customer yet, so instrumented code stays safe in keyless installs
  * and demo mode.
  */
-export async function recordUsage(
-  userId: string,
-  eventName: string,
-  value = 1,
-  opts?: { identifier?: string }
-) {
+export async function recordUsage(userId: string, eventName: string, value = 1, opts?: { identifier?: string }) {
   const parsed = usageSchema.parse({ userId, eventName, value, identifier: opts?.identifier })
 
   if (!process.env.STRIPE_SECRET_KEY) {

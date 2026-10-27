@@ -65,12 +65,7 @@ const examplePlans: {
     // A free trial, to show the pattern: offered once per customer at checkout.
     // Remove the line and the plan has none.
     trialDays: 14,
-    features: [
-      "Everything in Starter",
-      "Unlimited projects",
-      "Advanced analytics",
-      "Priority support",
-    ],
+    features: ["Everything in Starter", "Unlimited projects", "Advanced analytics", "Priority support"],
   },
   {
     slug: "pro-yearly",

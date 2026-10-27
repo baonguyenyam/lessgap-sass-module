@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus } from "lucide-react"
-import { useFormatter, useTranslations } from "next-intl"
+import { useFormatter, useNow, useTranslations } from "next-intl"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useMemo } from "react"
@@ -36,6 +36,8 @@ export function ProjectsTable({
 }) {
   const t = useTranslations("dashboard.projects")
   const format = useFormatter()
+  // A clock next-intl owns, so "2 minutes ago" is the same on the server and in the browser.
+  const now = useNow({ updateInterval: 60_000 })
   const router = useRouter()
   const openDrawer = useDrawer((s) => s.open)
 
@@ -52,7 +54,10 @@ export function ProjectsTable({
         header: t("colName"),
         cell: ({ row }) => (
           <div className="min-w-0">
-            <Link href={`/dashboard/projects/${row.original.id}`} className="font-medium text-foreground hover:underline">
+            <Link
+              href={`/dashboard/projects/${row.original.id}`}
+              className="font-medium text-foreground hover:underline"
+            >
               {row.original.name}
             </Link>
             <p className="truncate text-xs text-muted-foreground">{row.original.description || t("noDescription")}</p>
@@ -63,14 +68,18 @@ export function ProjectsTable({
         id: "updatedAt",
         header: t("colUpdated"),
         cell: ({ row }) => (
-          <span className="whitespace-nowrap text-muted-foreground">{format.relativeTime(new Date(row.original.updatedAt))}</span>
+          <span className="whitespace-nowrap text-muted-foreground">
+            {format.relativeTime(new Date(row.original.updatedAt), now)}
+          </span>
         ),
       }),
       col.accessor("createdAt", {
         id: "createdAt",
         header: t("colCreated"),
         cell: ({ row }) => (
-          <span className="whitespace-nowrap text-muted-foreground">{format.dateTime(new Date(row.original.createdAt), "date")}</span>
+          <span className="whitespace-nowrap text-muted-foreground">
+            {format.dateTime(new Date(row.original.createdAt), "date")}
+          </span>
         ),
       }),
       col.display({
@@ -82,13 +91,18 @@ export function ProjectsTable({
             actions={[
               { label: t("open"), onSelect: () => router.push(`/dashboard/projects/${row.original.id}`) },
               { label: t("edit"), onSelect: () => openDrawer(DRAWER, row.original.id) },
-              { label: t("delete"), variant: "destructive", confirm: deleteConfirm, run: () => deleteProjects([row.original.id]) },
+              {
+                label: t("delete"),
+                variant: "destructive",
+                confirm: deleteConfirm,
+                run: () => deleteProjects([row.original.id]),
+              },
             ]}
           />
         ),
       }),
     ])
-  }, [t, format, router, openDrawer]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [t, format, now, router, openDrawer]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const bulkActions: BulkAction[] = [
     { label: t("delete"), variant: "destructive", confirm: deleteConfirm, run: (ids) => deleteProjects(ids) },

@@ -12,7 +12,9 @@ const defaults = { sort: "createdAt", dir: "desc" as const, pageSize: 20 }
 
 describe("parseTableQuery", () => {
   it("reads every part of a valid URL", () => {
-    expect(parseTableQuery({ q: " ada ", page: "3", size: "50", sort: "email", dir: "asc", role: "ADMIN" }, spec)).toEqual({
+    expect(
+      parseTableQuery({ q: " ada ", page: "3", size: "50", sort: "email", dir: "asc", role: "ADMIN" }, spec)
+    ).toEqual({
       q: "ada",
       page: 3,
       pageSize: 50,
@@ -52,12 +54,16 @@ describe("tableQueryHref", () => {
   it("goes back to page 1 when the matching rows change", () => {
     expect(tableQueryHref("/admin/users", current, { q: "bob" }, defaults)).toBe("/admin/users?q=bob&role=USER")
     expect(tableQueryHref("/admin/users", current, { filters: { role: null } }, defaults)).toBe("/admin/users?q=ada")
-    expect(tableQueryHref("/admin/users", current, { pageSize: 50 }, defaults)).toBe("/admin/users?q=ada&role=USER&size=50")
+    expect(tableQueryHref("/admin/users", current, { pageSize: 50 }, defaults)).toBe(
+      "/admin/users?q=ada&role=USER&size=50"
+    )
   })
 
   it("leaves defaults out of the URL", () => {
     expect(tableQueryHref("/x", parseTableQuery({}, spec), {}, defaults)).toBe("/x")
-    expect(tableQueryHref("/x", parseTableQuery({}, spec), { sort: "email", dir: "asc" }, defaults)).toBe("/x?sort=email&dir=asc")
+    expect(tableQueryHref("/x", parseTableQuery({}, spec), { sort: "email", dir: "asc" }, defaults)).toBe(
+      "/x?sort=email&dir=asc"
+    )
   })
 })
 

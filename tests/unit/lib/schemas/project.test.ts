@@ -1,11 +1,6 @@
 import { describe, it, expect } from "vitest"
 
-import {
-  projectSchema,
-  PROJECT_NAME_MAX,
-  PROJECT_DESCRIPTION_MAX,
-  type ProjectMessages,
-} from "@/lib/schemas/project"
+import { projectSchema, PROJECT_NAME_MAX, PROJECT_DESCRIPTION_MAX, type ProjectMessages } from "@/lib/schemas/project"
 
 const messages: ProjectMessages = {
   nameRequired: "name-required",

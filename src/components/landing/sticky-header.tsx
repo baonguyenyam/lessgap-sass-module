@@ -22,8 +22,7 @@ export function StickyHeader({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    const publish = () =>
-      document.documentElement.style.setProperty("--header-h", `${el.offsetHeight}px`)
+    const publish = () => document.documentElement.style.setProperty("--header-h", `${el.offsetHeight}px`)
     publish()
     const observer = new ResizeObserver(publish)
     observer.observe(el)

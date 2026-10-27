@@ -26,13 +26,16 @@ async function memberCount(tenantId: string, role: string): Promise<number> {
 export async function saveTenantRole(existing: string | null, values: unknown): Promise<{ error?: string }> {
   const ctx = await requireTenantContext("roles", "manage")
   const t = await getTranslations("dashboard.roles.errors")
-  const parsed = tenantRoleSchema({ roleKey: t("roleKey"), permissionsRequired: t("permissionsRequired") }).safeParse(values)
+  const parsed = tenantRoleSchema({ roleKey: t("roleKey"), permissionsRequired: t("permissionsRequired") }).safeParse(
+    values
+  )
   if (!parsed.success) return { error: parsed.error.issues[0].message }
   const role = existing ?? parsed.data.role
   if (role in ROLE_PERMISSIONS) return { error: t("builtIn") }
 
   const permission = foldPermissions(parsed.data.permissions)
-  if (Object.keys(permission).length === 0 || !permissionsAreDeclared(permission)) return { error: t("unknownPermission") }
+  if (Object.keys(permission).length === 0 || !permissionsAreDeclared(permission))
+    return { error: t("unknownPermission") }
 
   if (existing === null) {
     await auth.api.createOrgRole({ headers: await headers(), body: { organizationId: ctx.tenantId, role, permission } })

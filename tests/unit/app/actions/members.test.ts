@@ -48,7 +48,9 @@ describe("setMemberRole", () => {
     db.fn("Member.first").mockResolvedValue({ id: "m2", role: "staff", userId: "u2" })
     await expect(setMemberRole("m2", "manager")).resolves.toEqual({})
     expect(db.call("Member.first")?.chain).toEqual([["where", [{ id: "m2", organizationId: "t1" }]]])
-    expect(api.updateMemberRole).toHaveBeenCalledWith(expect.objectContaining({ body: { memberId: "m2", role: "manager" } }))
+    expect(api.updateMemberRole).toHaveBeenCalledWith(
+      expect.objectContaining({ body: { memberId: "m2", role: "manager" } })
+    )
   })
 })
 

@@ -180,7 +180,7 @@ export function PlanCards({
               aria-pressed={interval === value}
               onClick={() => setInterval(value)}
               className={cn(
-                "inline-flex items-center justify-center whitespace-nowrap rounded-[calc(var(--radius)-2px)] px-3 py-1.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                "inline-flex items-center justify-center rounded-[calc(var(--radius)-2px)] px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
                 interval === value && "bg-background text-foreground shadow-soft"
               )}
             >
@@ -197,8 +197,7 @@ export function PlanCards({
           const base = (tier.monthly ?? tier.yearly)!
           const active = (interval === "YEAR" ? tier.yearly : tier.monthly) ?? base
           const isCurrent =
-            currentPlanId != null &&
-            (tier.monthly?.id === currentPlanId || tier.yearly?.id === currentPlanId)
+            currentPlanId != null && (tier.monthly?.id === currentPlanId || tier.yearly?.id === currentPlanId)
           // Yearly prices are shown as their monthly equivalent.
           const monthlyPrice = active.interval === "YEAR" ? Math.round(active.price / 12) : active.price
           return (
@@ -210,9 +209,7 @@ export function PlanCards({
                 </div>
                 {base.description && <CardDescription>{base.description}</CardDescription>}
                 <div key={active.id} className="animate-price-swap pt-2">
-                  <span className="text-4xl font-extrabold text-foreground">
-                    {formatPrice(monthlyPrice)}
-                  </span>
+                  <span className="text-4xl font-extrabold text-foreground">{formatPrice(monthlyPrice)}</span>
                   <span className="ml-1.5 text-sm text-muted-foreground">/ month</span>
                   {tier.monthly && tier.yearly && (
                     <p className="mt-1 text-xs text-muted-foreground">
@@ -220,9 +217,7 @@ export function PlanCards({
                     </p>
                   )}
                   {active.trialDays ? (
-                    <p className="mt-1 text-xs font-medium text-primary">
-                      {t("trial", { days: active.trialDays })}
-                    </p>
+                    <p className="mt-1 text-xs font-medium text-primary">{t("trial", { days: active.trialDays })}</p>
                   ) : null}
                 </div>
               </CardHeader>
@@ -259,9 +254,7 @@ export function PlanCards({
                 </div>
                 {plan.description && <CardDescription>{plan.description}</CardDescription>}
                 <div className="pt-2">
-                  <span className="text-4xl font-extrabold text-foreground">
-                    {formatPrice(plan.price)}
-                  </span>
+                  <span className="text-4xl font-extrabold text-foreground">{formatPrice(plan.price)}</span>
                   <span className="ml-1.5 text-sm text-muted-foreground">one time</span>
                 </div>
               </CardHeader>
@@ -287,17 +280,10 @@ export function PlanCards({
           )
         })}
 
-        {contactCard && (
-          <ContactTierCard
-            card={contactCard}
-            onYearly={hasBothIntervals && interval === "YEAR"}
-          />
-        )}
+        {contactCard && <ContactTierCard card={contactCard} onYearly={hasBothIntervals && interval === "YEAR"} />}
       </div>
 
-      {checkoutDisabled && disabledNote && (
-        <p className="text-sm text-muted-foreground">{disabledNote}</p>
-      )}
+      {checkoutDisabled && disabledNote && <p className="text-sm text-muted-foreground">{disabledNote}</p>}
     </div>
   )
 }

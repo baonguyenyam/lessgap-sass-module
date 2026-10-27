@@ -44,7 +44,7 @@ describe("deliver", () => {
     await deliver(
       "audience-remove",
       async () => ({ error: { name: "rate_limit_exceeded", statusCode: 429, message: "Too many requests" } }),
-      "remove the contact by hand",
+      "remove the contact by hand"
     )
     expect(log.mock.calls[0][1]).toMatchObject({ todo: "remove the contact by hand" })
   })
@@ -55,7 +55,7 @@ describe("deliver", () => {
     await expect(
       deliver("welcome", async () => {
         throw new Error("RESEND_API_KEY is not set")
-      }),
+      })
     ).rejects.toThrow("RESEND_API_KEY is not set")
     expect(log).not.toHaveBeenCalled()
   })
@@ -64,7 +64,7 @@ describe("deliver", () => {
 describe("maskAddresses", () => {
   it("masks every address and leaves the rest of the sentence alone", () => {
     expect(maskAddresses("from a@b.io to c.d+e@f-g.co.uk, retry later")).toBe(
-      "from [address] to [address], retry later",
+      "from [address] to [address], retry later"
     )
   })
 

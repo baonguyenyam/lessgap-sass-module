@@ -51,12 +51,7 @@ export function MobileMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon-lg"
-          aria-label={t("openMenu")}
-          className="xl:hidden"
-        >
+        <Button variant="ghost" size="icon-lg" aria-label={t("openMenu")} className="xl:hidden">
           <Menu size={24} />
         </Button>
       </DropdownMenuTrigger>
@@ -65,7 +60,7 @@ export function MobileMenu({
       <DropdownMenuContent
         align="end"
         collisionPadding={12}
-        className="max-h-[var(--radix-dropdown-menu-content-available-height)] w-60 overflow-y-auto overflow-x-hidden xl:hidden"
+        className="max-h-[var(--radix-dropdown-menu-content-available-height)] w-60 overflow-x-hidden overflow-y-auto xl:hidden"
       >
         {sections.map(({ id }) => (
           <Fragment key={id}>
@@ -73,9 +68,7 @@ export function MobileMenu({
               <Link
                 href={`/#${id}`}
                 onClick={(e) => scrollToSection(e, id)}
-                className={cn(
-                  current === id && "bg-primary/10 font-medium text-primary"
-                )}
+                className={cn(current === id && "bg-primary/10 font-medium text-primary")}
               >
                 {t(id)}
               </Link>
@@ -97,12 +90,7 @@ export function MobileMenu({
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               {starHref ? (
-                <a
-                  href={starHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-semibold text-primary"
-                >
+                <a href={starHref} target="_blank" rel="noreferrer" className="font-semibold text-primary">
                   <GithubIcon className="h-4 w-4" />
                   {tCommon("starOnGitHub")}
                 </a>

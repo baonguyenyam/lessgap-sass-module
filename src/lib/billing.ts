@@ -29,8 +29,7 @@ export async function getEntitlement(userId: string): Promise<Entitlement> {
   // that block a new checkout): a CANCELED or INCOMPLETE row is history, not
   // an entitlement — those users are free and can check out again.
   const liveSubscription =
-    subscription &&
-    (CHECKOUT_BLOCKING_STATUSES as readonly string[]).includes(subscription.status)
+    subscription && (CHECKOUT_BLOCKING_STATUSES as readonly string[]).includes(subscription.status)
       ? (subscription as SubscriptionWithPlan)
       : null
 

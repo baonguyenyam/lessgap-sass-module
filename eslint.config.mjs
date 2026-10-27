@@ -1,6 +1,6 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+import { defineConfig, globalIgnores } from "eslint/config"
+import nextVitals from "eslint-config-next/core-web-vitals"
+import nextTs from "eslint-config-next/typescript"
 
 // Prisma 8 only: nothing may bring Prisma 7 back (AGENTS.md, .agents/rules/database.md).
 const PRISMA_7 = [
@@ -74,6 +74,6 @@ const eslintConfig = defineConfig([
       ],
     },
   },
-]);
+])
 
-export default eslintConfig;
+export default eslintConfig

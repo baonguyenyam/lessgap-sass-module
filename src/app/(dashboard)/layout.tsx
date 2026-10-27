@@ -42,6 +42,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
               base={{ name: tNav("dashboard"), href: "/dashboard" }}
               labels={{
                 projects: tNav("projects"),
+                members: tNav("members"),
+                roles: tNav("roles"),
                 billing: tNav("billing"),
                 settings: tNav("settings"),
                 security: tSettings("security"),
@@ -54,7 +56,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <MobileNav variant="dashboard" showAdminLink={isRoot(user.role)} />
             <Logo animated wordmarkClassName="text-base font-bold text-foreground" />
           </div>
-          <div className="flex items-center gap-3 ml-auto">
+          <div className="ml-auto flex items-center gap-3">
             <ThemeToggle />
             {/* Who you are, top right, where most apps keep it: the avatar opens
                 Settings, Billing and Sign out, on every screen size. */}

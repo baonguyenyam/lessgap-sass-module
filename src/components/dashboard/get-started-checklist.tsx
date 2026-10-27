@@ -33,18 +33,10 @@ export async function GetStartedChecklist({
         <div className="flex items-start justify-between gap-4">
           <div>
             <CardTitle className="text-base">{t("checklistTitle")}</CardTitle>
-            <CardDescription>
-              {t("checklistProgress", { done: doneCount, total: items.length })}
-            </CardDescription>
+            <CardDescription>{t("checklistProgress", { done: doneCount, total: items.length })}</CardDescription>
           </div>
           <form action={dismissOnboarding}>
-            <Button
-              type="submit"
-              variant="ghost"
-              size="sm"
-              className="h-8 w-8 p-0"
-              aria-label={t("checklistDismiss")}
-            >
+            <Button type="submit" variant="ghost" size="icon" aria-label={t("checklistDismiss")}>
               <X className="h-4 w-4" />
             </Button>
           </form>

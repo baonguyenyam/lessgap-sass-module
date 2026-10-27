@@ -235,7 +235,6 @@ export const auth = betterAuth({
   // already ships this variable, so no new one appears in .env.example.
   baseURL: process.env.NEXT_PUBLIC_APP_URL,
 
-
   // Better Auth's models are named in camelCase; the tables the Prisma
   // migrations created are PascalCase. `modelName` maps each, the column
   // names already match one-to-one.
@@ -321,10 +320,7 @@ export const auth = betterAuth({
       // the sign-in page. Whoever presses "Continue with Google" on the way in
       // has no such cookie, and that is the whole distinction.
       let hasOwnSession = false
-      const token = await ctx.getSignedCookie(
-        ctx.context.authCookies.sessionToken.name,
-        ctx.context.secret
-      )
+      const token = await ctx.getSignedCookie(ctx.context.authCookies.sessionToken.name, ctx.context.secret)
       if (token) {
         const active = await ctx.context.internalAdapter.findSession(token)
         hasOwnSession = active?.session?.userId === existing.id
@@ -411,7 +407,6 @@ export const auth = betterAuth({
     // way around it. See `validateUserInfo` below.
     accountLinking: { enabled: true },
   },
-
 
   emailVerification: {
     // The 1.x sign-up flow sent a magic link and let the click double as

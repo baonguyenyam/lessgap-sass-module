@@ -12,7 +12,10 @@ export async function SwitchAsBanner({ email }: { email?: string | null }) {
   const t = await getTranslations("switchAs")
 
   return (
-    <div role="status" className="flex flex-wrap items-center justify-center gap-3 bg-destructive px-4 py-2 text-sm text-white">
+    <div
+      role="status"
+      className="flex flex-wrap items-center justify-center gap-3 bg-destructive px-4 py-2 text-sm text-white"
+    >
       <span>{t("banner", { email: email ?? "" })}</span>
       <form action={stopSwitchAs}>
         <Button type="submit" variant="secondary" size="sm">

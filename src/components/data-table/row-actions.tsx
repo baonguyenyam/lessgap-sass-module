@@ -66,7 +66,11 @@ export function RowActions({ actions, label }: { actions: RowAction[]; label: st
           ))}
           {normal.length > 0 && destructive.length > 0 && <DropdownMenuSeparator />}
           {destructive.map((action) => (
-            <DropdownMenuItem key={action.label} className="text-destructive focus:text-destructive" onSelect={() => select(action)}>
+            <DropdownMenuItem
+              key={action.label}
+              className="text-destructive focus:text-destructive"
+              onSelect={() => select(action)}
+            >
               {action.label}
             </DropdownMenuItem>
           ))}

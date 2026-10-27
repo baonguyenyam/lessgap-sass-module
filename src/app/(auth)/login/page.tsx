@@ -24,9 +24,7 @@ export default async function LoginPage({
   // the library built-ins such as an expired magic link. The
   // code arrives in the query string, so an unknown one must fall back rather
   // than throw.
-  const errorMessage = error
-    ? (t.has(`errors.${error}`) ? t(`errors.${error}`) : t("errors.generic"))
-    : null
+  const errorMessage = error ? (t.has(`errors.${error}`) ? t(`errors.${error}`) : t("errors.generic")) : null
 
   // Demo deployments disable real OAuth (no personal data collected) and
   // offer one-click sign-in to shared fixture accounts instead.
@@ -52,9 +50,7 @@ export default async function LoginPage({
             <LogoMark className="h-12 w-12 rounded-2xl ring-1 ring-primary/15" iconClassName="h-7 w-7" />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("title")}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {isDemo ? t("subtitleDemo") : t("subtitle")}
-          </p>
+          <p className="mt-1 text-sm text-muted-foreground">{isDemo ? t("subtitleDemo") : t("subtitle")}</p>
         </div>
 
         <div className="flex flex-col gap-3">
@@ -69,17 +65,24 @@ export default async function LoginPage({
                 if (url) redirect(url)
               }}
             >
-              <PendingButton
-                disabled={isDemo}
-                variant="outline"
-                size="lg"
-                className="w-full"
-              >
+              <PendingButton disabled={isDemo} variant="outline" size="lg" className="w-full">
                 <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
-                  <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z"/>
-                  <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z"/>
-                  <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z"/>
-                  <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58Z"/>
+                  <path
+                    fill="#4285F4"
+                    d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58Z"
+                  />
                 </svg>
                 {t("google")}
               </PendingButton>
@@ -97,12 +100,7 @@ export default async function LoginPage({
                 if (url) redirect(url)
               }}
             >
-              <PendingButton
-                disabled={isDemo}
-                variant="outline"
-                size="lg"
-                className="w-full"
-              >
+              <PendingButton disabled={isDemo} variant="outline" size="lg" className="w-full">
                 <GithubIcon className="h-[18px] w-[18px]" />
                 {t("github")}
               </PendingButton>
@@ -156,8 +154,22 @@ export default async function LoginPage({
             )}
 
             <form action={signInWithPassword} className="flex flex-col gap-3">
-              <Input name="email" type="email" placeholder={t("emailPlaceholder")} autoComplete="email" required size="lg" />
-              <Input name="password" type="password" placeholder={t("passwordPlaceholder")} autoComplete="current-password" required size="lg" />
+              <Input
+                name="email"
+                type="email"
+                placeholder={t("emailPlaceholder")}
+                autoComplete="email"
+                required
+                size="lg"
+              />
+              <Input
+                name="password"
+                type="password"
+                placeholder={t("passwordPlaceholder")}
+                autoComplete="current-password"
+                required
+                size="lg"
+              />
               <PendingButton variant="primary" size="lg" className="w-full">
                 {t("submit")}
               </PendingButton>
@@ -183,9 +195,7 @@ export default async function LoginPage({
                 would answer "does this address exist, and does it have 2FA" to
                 anyone who asked, so the line is addressed to the room. */}
             {hasMagicLink && (
-              <p className="mt-3 text-center text-xs text-muted-foreground">
-                {t("magicLinkTwoFactorNote")}
-              </p>
+              <p className="mt-3 text-center text-xs text-muted-foreground">{t("magicLinkTwoFactorNote")}</p>
             )}
 
             <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
@@ -243,18 +253,21 @@ export default async function LoginPage({
                 </PendingButton>
               </form>
 
-              <p className="text-center text-xs text-muted-foreground">
-                {t("demoAccounts")}
-              </p>
+              <p className="text-center text-xs text-muted-foreground">{t("demoAccounts")}</p>
             </div>
           </>
         )}
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
           By signing in, you agree to our{" "}
-          <Link href="/terms" className="underline underline-offset-4 hover:text-foreground">Terms</Link>
-          {" "}and{" "}
-          <Link href="/privacy" className="underline underline-offset-4 hover:text-foreground">Privacy Policy</Link>.
+          <Link href="/terms" className="underline underline-offset-4 hover:text-foreground">
+            Terms
+          </Link>{" "}
+          and{" "}
+          <Link href="/privacy" className="underline underline-offset-4 hover:text-foreground">
+            Privacy Policy
+          </Link>
+          .
         </p>
 
         {process.env.NODE_ENV === "development" && (

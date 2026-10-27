@@ -83,7 +83,11 @@ export function tableQueryHref(
     else delete filters[key]
   }
   const resetsPage =
-    patch.q !== undefined || patch.filters !== undefined || patch.sort !== undefined || patch.dir !== undefined || patch.pageSize !== undefined
+    patch.q !== undefined ||
+    patch.filters !== undefined ||
+    patch.sort !== undefined ||
+    patch.dir !== undefined ||
+    patch.pageSize !== undefined
   const next = {
     q: patch.q ?? current.q,
     sort: patch.sort ?? current.sort,

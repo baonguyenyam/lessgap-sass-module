@@ -36,7 +36,7 @@ export const TENANT_PERMISSIONS = {
 export const tenantAc = createAccessControl(TENANT_PERMISSIONS)
 
 const EVERYTHING = Object.fromEntries(
-  Object.entries(TENANT_PERMISSIONS).map(([resource, verbs]) => [resource, [...verbs]]),
+  Object.entries(TENANT_PERMISSIONS).map(([resource, verbs]) => [resource, [...verbs]])
 )
 
 /**
@@ -73,14 +73,14 @@ export const ROLE_PERMISSIONS: Record<string, Record<string, readonly string[]>>
 }
 
 export const tenantRoles = Object.fromEntries(
-  Object.entries(ROLE_PERMISSIONS).map(([key, grants]) => [key, tenantAc.newRole({ ...grants })]),
+  Object.entries(ROLE_PERMISSIONS).map(([key, grants]) => [key, tenantAc.newRole({ ...grants })])
 )
 
 export const TENANT_ROLE_KEYS = Object.keys(ROLE_PERMISSIONS)
 
 /** Every `resource:verb` pair the catalog declares, for form UIs. */
-export const DECLARED_PERMISSIONS: string[] = Object.entries(TENANT_PERMISSIONS).flatMap(
-  ([resource, verbs]) => verbs.map((verb) => `${resource}.${verb}`),
+export const DECLARED_PERMISSIONS: string[] = Object.entries(TENANT_PERMISSIONS).flatMap(([resource, verbs]) =>
+  verbs.map((verb) => `${resource}.${verb}`)
 )
 
 /**
@@ -93,8 +93,8 @@ export function permissionsAreDeclared(permission: Record<string, string[]>): bo
     ([resource, verbs]) =>
       resource in TENANT_PERMISSIONS &&
       verbs.every((verb) =>
-        (TENANT_PERMISSIONS[resource as keyof typeof TENANT_PERMISSIONS] as readonly string[]).includes(verb),
-      ),
+        (TENANT_PERMISSIONS[resource as keyof typeof TENANT_PERMISSIONS] as readonly string[]).includes(verb)
+      )
   )
 }
 
@@ -107,7 +107,7 @@ export async function memberCan(
   organizationId: string,
   roleKey: string,
   resource: keyof typeof TENANT_PERMISSIONS,
-  verb: string,
+  verb: string
 ): Promise<boolean> {
   const grants = ROLE_PERMISSIONS[roleKey]
   if (grants) return grants[resource]?.includes(verb) ?? false

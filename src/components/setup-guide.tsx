@@ -35,7 +35,7 @@ export async function SetupGuide({ step }: { step: SetupStep }) {
       command:
         step === "database-unreachable"
           ? null
-          : 'node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'base64url\'))"',
+          : "node -e \"console.log(require('crypto').randomBytes(32).toString('base64url'))\"",
     },
     {
       title: t("step2Title"),
@@ -61,9 +61,7 @@ export async function SetupGuide({ step }: { step: SetupStep }) {
           return (
             <li
               key={s.title}
-              className={
-                state === "current" ? currentStepClass : "rounded-lg border border-border p-5 opacity-70"
-              }
+              className={state === "current" ? currentStepClass : "rounded-lg border border-border p-5 opacity-70"}
             >
               <div className="flex items-center gap-3">
                 <span
@@ -80,9 +78,7 @@ export async function SetupGuide({ step }: { step: SetupStep }) {
                 <h2 className="font-semibold">{s.title}</h2>
               </div>
               <p className="mt-2 text-sm text-muted-foreground">{s.body}</p>
-              {"note" in s && s.note && (
-                <p className="mt-2 text-xs text-muted-foreground">{s.note}</p>
-              )}
+              {"note" in s && s.note && <p className="mt-2 text-xs text-muted-foreground">{s.note}</p>}
               {state === "current" && s.command && (
                 // The same block the docs use, so the command can be copied
                 // instead of retyped. With a label it grows a header bar, and

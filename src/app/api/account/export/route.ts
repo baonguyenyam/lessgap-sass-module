@@ -16,7 +16,17 @@ export async function GET() {
 
   const { Account, NewsletterSubscriber, Project, Purchase, Session, Subscription, User } = db8.orm.public
   const userId = currentUser.id
-  const user = await User.select("id", "email", "name", "image", "role", "emailVerified", "twoFactorEnabled", "createdAt", "updatedAt")
+  const user = await User.select(
+    "id",
+    "email",
+    "name",
+    "image",
+    "role",
+    "emailVerified",
+    "twoFactorEnabled",
+    "createdAt",
+    "updatedAt"
+  )
     .where({ id: userId })
     .first()
   if (!user) return new Response("Unauthorized", { status: 401 })
@@ -25,7 +35,14 @@ export async function GET() {
     Account.select("providerId", "createdAt").where({ userId }).all(),
     Session.select("createdAt", "expiresAt", "ipAddress", "userAgent").where({ userId }).all(),
     Project.select("id", "name", "description", "createdAt", "updatedAt").where({ userId }).all(),
-    Subscription.select("status", "currentPeriodStart", "currentPeriodEnd", "cancelAtPeriodEnd", "trialEndsAt", "createdAt")
+    Subscription.select(
+      "status",
+      "currentPeriodStart",
+      "currentPeriodEnd",
+      "cancelAtPeriodEnd",
+      "trialEndsAt",
+      "createdAt"
+    )
       .include("plan", (p) => p.select("name"))
       .where({ userId })
       .first(),
@@ -33,11 +50,16 @@ export async function GET() {
       .include("plan", (p) => p.select("name"))
       .where({ userId })
       .all(),
-    NewsletterSubscriber.select("source", "createdAt", "confirmedAt", "unsubscribedAt").where({ email: user.email }).first(),
+    NewsletterSubscriber.select("source", "createdAt", "confirmedAt", "unsubscribedAt")
+      .where({ email: user.email })
+      .first(),
   ])
 
   const exportedAt = new Date()
-  const file = buildAccountExport({ user, accounts, sessions, projects, subscription, purchases, newsletter }, exportedAt)
+  const file = buildAccountExport(
+    { user, accounts, sessions, projects, subscription, purchases, newsletter },
+    exportedAt
+  )
 
   return new Response(JSON.stringify(file, null, 2) + "\n", {
     headers: {

@@ -50,13 +50,17 @@ export function NewsletterTable({
       }),
       col.accessor("status", {
         header: t("colStatus"),
-        cell: ({ row }) => <Badge variant={STATUS_VARIANT[row.original.status]}>{t(`status.${row.original.status}`)}</Badge>,
+        cell: ({ row }) => (
+          <Badge variant={STATUS_VARIANT[row.original.status]}>{t(`status.${row.original.status}`)}</Badge>
+        ),
       }),
       col.accessor("createdAt", {
         id: "createdAt",
         header: t("colRequested"),
         cell: ({ row }) => (
-          <span className="whitespace-nowrap text-muted-foreground">{format.dateTime(new Date(row.original.createdAt), "date")}</span>
+          <span className="whitespace-nowrap text-muted-foreground">
+            {format.dateTime(new Date(row.original.createdAt), "date")}
+          </span>
         ),
       }),
       col.display({
@@ -92,7 +96,12 @@ export function NewsletterTable({
 
   const bulkActions: BulkAction[] = [
     { label: t("exportSelected"), run: async (ids) => downloadCsv(rows.filter((r) => ids.includes(r.id))) },
-    { label: t("unsubscribe"), variant: "destructive", confirm: unsubscribeConfirm, run: (ids) => unsubscribeSubscribers(ids) },
+    {
+      label: t("unsubscribe"),
+      variant: "destructive",
+      confirm: unsubscribeConfirm,
+      run: (ids) => unsubscribeSubscribers(ids),
+    },
   ]
 
   return (
@@ -105,7 +114,13 @@ export function NewsletterTable({
       getRowId={(row) => row.id}
       sortable={["email", "createdAt"]}
       searchPlaceholder={t("search")}
-      filters={[{ key: "status", label: t("colStatus"), options: NEWSLETTER_STATUSES.map((s) => ({ value: s, label: t(`status.${s}`) })) }]}
+      filters={[
+        {
+          key: "status",
+          label: t("colStatus"),
+          options: NEWSLETTER_STATUSES.map((s) => ({ value: s, label: t(`status.${s}`) })),
+        },
+      ]}
       bulkActions={bulkActions}
       emptyMessage={t("empty")}
       actions={
@@ -122,7 +137,10 @@ export function NewsletterTable({
 
 function downloadCsv(rows: SubscriberRow[]) {
   const esc = (value: string) => `"${value.replace(/"/g, '""')}"`
-  const lines = ["email,source,status,requested_at", ...rows.map((r) => [r.email, r.source, r.status, r.createdAt].map(esc).join(","))]
+  const lines = [
+    "email,source,status,requested_at",
+    ...rows.map((r) => [r.email, r.source, r.status, r.createdAt].map(esc).join(",")),
+  ]
   const url = URL.createObjectURL(new Blob([lines.join("\n") + "\n"], { type: "text/csv;charset=utf-8" }))
   Object.assign(document.createElement("a"), { href: url, download: "newsletter-selected.csv" }).click()
   URL.revokeObjectURL(url)

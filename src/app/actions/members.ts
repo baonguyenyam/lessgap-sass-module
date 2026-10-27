@@ -26,7 +26,9 @@ async function listRoleKeys(tenantId: string): Promise<string[]> {
 export async function inviteMember(values: unknown): Promise<{ error?: string }> {
   const ctx = await requireTenantContext("members", "invite")
   const t = await getTranslations("dashboard.members.errors")
-  const parsed = inviteMemberSchema({ invalidEmail: t("invalidEmail"), roleRequired: t("roleRequired") }).safeParse(values)
+  const parsed = inviteMemberSchema({ invalidEmail: t("invalidEmail"), roleRequired: t("roleRequired") }).safeParse(
+    values
+  )
   if (!parsed.success) return { error: parsed.error.issues[0].message }
   if (!(await listRoleKeys(ctx.tenantId)).includes(parsed.data.role)) return { error: t("unknownRole") }
 
@@ -66,7 +68,9 @@ export async function removeMembers(memberIds: string[]): Promise<{ removed: num
   const ids = [...new Set(memberIds)].slice(0, 200)
   if (ids.length === 0) return { removed: 0 }
 
-  const targets = await db8.orm.public.Member.where({ organizationId: ctx.tenantId }).where((m) => m.id.in(ids)).all()
+  const targets = await db8.orm.public.Member.where({ organizationId: ctx.tenantId })
+    .where((m) => m.id.in(ids))
+    .all()
   let owners = await ownerCount(ctx.tenantId)
   let removed = 0
   for (const target of targets) {

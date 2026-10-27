@@ -49,9 +49,9 @@ describe("softwareApplicationJsonLd", () => {
       price: "19.00",
       billingDuration: "P1M",
     })
-    expect(
-      offersOf([{ name: "Yearly", price: 19000, interval: "YEAR" }])[0].priceSpecification
-    ).toMatchObject({ billingDuration: "P1Y" })
+    expect(offersOf([{ name: "Yearly", price: 19000, interval: "YEAR" }])[0].priceSpecification).toMatchObject({
+      billingDuration: "P1Y",
+    })
   })
 
   // A one-off payment recurs over no period at all, so declaring one would
@@ -59,12 +59,10 @@ describe("softwareApplicationJsonLd", () => {
   // module has no period for: silence beats a guess.
   it("omits the recurrence for a one-off price and for an unknown interval", () => {
     expect(offersOf([{ name: "Lifetime", price: 9900 }])[0]).not.toHaveProperty("priceSpecification")
-    expect(
-      offersOf([{ name: "Lifetime", price: 9900, interval: "ONE_TIME" }])[0]
-    ).not.toHaveProperty("priceSpecification")
-    expect(offersOf([{ name: "Weekly", price: 500, interval: "WEEK" }])[0]).not.toHaveProperty(
+    expect(offersOf([{ name: "Lifetime", price: 9900, interval: "ONE_TIME" }])[0]).not.toHaveProperty(
       "priceSpecification"
     )
+    expect(offersOf([{ name: "Weekly", price: 500, interval: "WEEK" }])[0]).not.toHaveProperty("priceSpecification")
   })
 
   // The currency is a parameter because this kit never stores one: the amount
@@ -80,9 +78,7 @@ describe("softwareApplicationJsonLd", () => {
   it("links an offer to the pricing page unless it carries a URL of its own", () => {
     expect(offersOf([monthly])[0].url).toBe(`${siteConfig.url}/pricing`)
     expect(offersOf([monthly], { path: "/plans" })[0].url).toBe(`${siteConfig.url}/plans`)
-    expect(offersOf([{ ...monthly, url: "https://example.com/pro" }])[0].url).toBe(
-      "https://example.com/pro"
-    )
+    expect(offersOf([{ ...monthly, url: "https://example.com/pro" }])[0].url).toBe("https://example.com/pro")
   })
 
   it("keeps one offer per plan, in order", () => {

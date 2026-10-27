@@ -70,9 +70,7 @@ describe("startTwoFactorSetup", () => {
 
   it("asks for the authenticator flavour explicitly, not the default", async () => {
     await startTwoFactorSetup({}, form({ password: "pw" }))
-    expect(enableTwoFactor).toHaveBeenCalledWith(
-      expect.objectContaining({ body: { password: "pw", method: "totp" } })
-    )
+    expect(enableTwoFactor).toHaveBeenCalledWith(expect.objectContaining({ body: { password: "pw", method: "totp" } }))
   })
 
   it("refuses on a demo deployment without touching the library", async () => {

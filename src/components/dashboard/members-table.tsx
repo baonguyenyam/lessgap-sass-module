@@ -39,7 +39,11 @@ export function MembersTable({ rows, total, query, defaults, roleOptions, canMan
   const format = useFormatter()
   const openDrawer = useDrawer((s) => s.open)
 
-  const removeConfirm = { title: t("removeConfirm.title"), description: t("removeConfirm.description"), confirmLabel: t("list.remove") }
+  const removeConfirm = {
+    title: t("removeConfirm.title"),
+    description: t("removeConfirm.description"),
+    confirmLabel: t("list.remove"),
+  }
 
   const columns = useMemo(() => {
     const col = dataTableColumns<MemberRow>()
@@ -56,13 +60,17 @@ export function MembersTable({ rows, total, query, defaults, roleOptions, canMan
       col.accessor("role", {
         id: "role",
         header: t("list.colRole"),
-        cell: ({ row }) => <Badge variant={row.original.role === "owner" ? "default" : "outline"}>{row.original.role}</Badge>,
+        cell: ({ row }) => (
+          <Badge variant={row.original.role === "owner" ? "default" : "outline"}>{row.original.role}</Badge>
+        ),
       }),
       col.accessor("createdAt", {
         id: "createdAt",
         header: t("list.colJoined"),
         cell: ({ row }) => (
-          <span className="whitespace-nowrap text-muted-foreground">{format.dateTime(new Date(row.original.createdAt), "date")}</span>
+          <span className="whitespace-nowrap text-muted-foreground">
+            {format.dateTime(new Date(row.original.createdAt), "date")}
+          </span>
         ),
       }),
       col.display({
@@ -74,7 +82,12 @@ export function MembersTable({ rows, total, query, defaults, roleOptions, canMan
               label={row.original.email}
               actions={[
                 { label: t("list.changeRole"), onSelect: () => openDrawer(ROLE, row.original.id) },
-                { label: t("list.remove"), variant: "destructive", confirm: removeConfirm, run: () => removeMembers([row.original.id]) },
+                {
+                  label: t("list.remove"),
+                  variant: "destructive",
+                  confirm: removeConfirm,
+                  run: () => removeMembers([row.original.id]),
+                },
               ]}
             />
           ) : null,
@@ -115,7 +128,15 @@ export function MembersTable({ rows, total, query, defaults, roleOptions, canMan
   )
 }
 
-function RoleSelect({ value, onChange, roleOptions }: { value: string; onChange: (value: string) => void; roleOptions: string[] }) {
+function RoleSelect({
+  value,
+  onChange,
+  roleOptions,
+}: {
+  value: string
+  onChange: (value: string) => void
+  roleOptions: string[]
+}) {
   return (
     <Select value={value} onValueChange={onChange}>
       <FormControl>
@@ -145,7 +166,13 @@ function InviteDrawer({ roleOptions }: { roleOptions: string[] }) {
   if (!open) return null
 
   return (
-    <FormDrawer kind={INVITE} title={t("invite.title")} description={t("invite.description")} form={form} onSubmit={inviteMember}>
+    <FormDrawer
+      kind={INVITE}
+      title={t("invite.title")}
+      description={t("invite.description")}
+      form={form}
+      onSubmit={inviteMember}
+    >
       <FormField
         control={form.control}
         name="email"

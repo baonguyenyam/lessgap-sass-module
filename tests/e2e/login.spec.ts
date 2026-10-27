@@ -41,7 +41,10 @@ test("an existing user can sign in with email and password", async ({ browser })
   // with the same name, so input[name=password] alone matches two elements.
   await page.locator('input[name="email"]').fill(email)
   await page.locator('input[name="password"][type="password"]').fill("not the password")
-  await page.getByRole("button", { name: /sign in|log in/i }).first().click()
+  await page
+    .getByRole("button", { name: /sign in|log in/i })
+    .first()
+    .click()
   // Waiting for the error parameter, not just for /login: the URL is already
   // /login, so a looser pattern matches before the navigation happens and the
   // fields below get refilled on a page that is about to be replaced.
@@ -50,7 +53,10 @@ test("an existing user can sign in with email and password", async ({ browser })
   // Then the right one.
   await page.locator('input[name="email"]').fill(email)
   await page.locator('input[name="password"][type="password"]').fill(password)
-  await page.getByRole("button", { name: /sign in|log in/i }).first().click()
+  await page
+    .getByRole("button", { name: /sign in|log in/i })
+    .first()
+    .click()
 
   await page.waitForURL("**/dashboard", { timeout: 20_000 })
   await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible()

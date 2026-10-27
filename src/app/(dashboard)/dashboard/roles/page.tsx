@@ -81,7 +81,9 @@ export default async function RolesPage({
         total={filtered.length}
         query={query}
         defaults={{ sort: spec.sortable[0], dir: spec.defaultDir, pageSize: spec.defaultPageSize }}
-        catalog={Object.fromEntries(Object.entries(TENANT_PERMISSIONS).map(([resource, verbs]) => [resource, [...verbs]]))}
+        catalog={Object.fromEntries(
+          Object.entries(TENANT_PERMISSIONS).map(([resource, verbs]) => [resource, [...verbs]])
+        )}
         canManage={ctx.member.role === "owner"}
       />
     </div>

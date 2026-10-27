@@ -33,10 +33,8 @@ export function SectionNav({ items, label }: { items: SectionNavItem[]; label: s
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex h-9 items-center whitespace-nowrap rounded-[var(--radius)] px-3 text-sm font-medium transition-colors",
-                  active
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  "flex h-9 items-center rounded-[var(--radius)] px-3 text-sm font-medium whitespace-nowrap transition-colors",
+                  active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
               >
                 {item.label}

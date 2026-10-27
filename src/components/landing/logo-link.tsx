@@ -8,13 +8,7 @@ import { usePathname } from "@/i18n/navigation"
  * same-URL <Link> would do nothing) it smooth-scrolls back to the top and
  * clears any section #hash left by the anchor nav.
  */
-export function LogoLink({
-  className,
-  children,
-}: {
-  className?: string
-  children: React.ReactNode
-}) {
+export function LogoLink({ className, children }: { className?: string; children: React.ReactNode }) {
   const pathname = usePathname()
 
   return (

@@ -50,16 +50,13 @@ const kitFeatures: Feature[] = [
 
 const features = isKitSite ? kitFeatures : productFeatures
 
-
 export function Features() {
   const t = useTranslations("features")
   return (
     <section id="features" className="py-24">
       <div className="mx-auto max-w-6xl px-6 lg:px-12">
         <Reveal className={isKitSite ? "mb-10 text-center" : "mb-14 text-center"}>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            {t("title")}
-          </h2>
+          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">{t("title")}</h2>
           <p className="mt-4 text-lg text-muted-foreground">{t("subtitle")}</p>
         </Reveal>
 

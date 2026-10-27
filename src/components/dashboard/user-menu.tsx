@@ -32,7 +32,14 @@ interface UserMenuProps {
   inHeader?: boolean
 }
 
-export function UserMenu({ name, email, image, side = "bottom", hideDetails = false, inHeader = false }: UserMenuProps) {
+export function UserMenu({
+  name,
+  email,
+  image,
+  side = "bottom",
+  hideDetails = false,
+  inHeader = false,
+}: UserMenuProps) {
   const t = useTranslations("dashboard.userMenu")
   const initial = name?.[0]?.toUpperCase() ?? email?.[0]?.toUpperCase() ?? "U"
   const [signOutOpen, setSignOutOpen] = React.useState(false)
@@ -56,7 +63,7 @@ export function UserMenu({ name, email, image, side = "bottom", hideDetails = fa
           </Avatar>
           {inHeader && (
             <>
-              <div className="hidden min-w-0 max-w-48 md:block">
+              <div className="hidden max-w-48 min-w-0 md:block">
                 <p className="truncate text-sm font-medium text-foreground">{name ?? "User"}</p>
                 <p className="truncate text-xs text-muted-foreground">{email}</p>
               </div>

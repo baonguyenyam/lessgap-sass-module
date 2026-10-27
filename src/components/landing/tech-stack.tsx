@@ -3,12 +3,7 @@
 import type { CSSProperties } from "react"
 import { Reveal } from "@/components/landing/reveal"
 import { cn } from "@/lib/utils"
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipProvider,
-} from "@/components/ui/tooltip"
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
 
 /** Brand color shown on hover. Monochrome marks (Next.js, Prisma, Resend) use
  *  the theme foreground so they stay visible in both light and dark mode. */
@@ -69,12 +64,7 @@ const stack: { name: string; path: string }[] = [
 export function TechStack({ className }: { className?: string }) {
   return (
     <TooltipProvider delayDuration={0}>
-      <Reveal
-        className={cn(
-          "flex flex-wrap items-center justify-center gap-x-10 gap-y-6",
-          className
-        )}
-      >
+      <Reveal className={cn("flex flex-wrap items-center justify-center gap-x-10 gap-y-6", className)}>
         {stack.map(({ name, path }) => (
           <Tooltip key={name}>
             <TooltipTrigger asChild>
@@ -82,15 +72,9 @@ export function TechStack({ className }: { className?: string }) {
                 tabIndex={0}
                 aria-label={name}
                 style={{ "--brand": brandColor[name] } as CSSProperties}
-                className="rounded-md text-muted-foreground/70 outline-none transition-colors duration-300 hover:text-[var(--brand)] focus-visible:text-[var(--brand)] focus-visible:ring-2 focus-visible:ring-ring"
+                className="rounded-md text-muted-foreground/70 transition-colors duration-300 outline-none hover:text-[var(--brand)] focus-visible:text-[var(--brand)] focus-visible:ring-2 focus-visible:ring-ring"
               >
-                <svg
-                  role="img"
-                  aria-label={name}
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="h-7 w-7 shrink-0"
-                >
+                <svg role="img" aria-label={name} viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7 shrink-0">
                   <path d={path} />
                 </svg>
               </span>

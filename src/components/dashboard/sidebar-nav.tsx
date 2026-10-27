@@ -43,9 +43,7 @@ const menus = {
 function linkClass(active: boolean) {
   return cn(
     "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors sidebar-collapsed:justify-center sidebar-collapsed:px-2",
-    active
-      ? "bg-primary/10 text-primary"
-      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+    active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground"
   )
 }
 
@@ -67,9 +65,7 @@ export function SidebarNav({
   // redirects, which is what this hook exists to avoid.
   const pathname = useRenderedPathname()
   const isActive = (item: { href: string; exact?: boolean }) =>
-    item.exact
-      ? pathname === item.href
-      : pathname === item.href || pathname.startsWith(`${item.href}/`)
+    item.exact ? pathname === item.href : pathname === item.href || pathname.startsWith(`${item.href}/`)
 
   return (
     <>

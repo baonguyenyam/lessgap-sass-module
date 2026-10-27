@@ -44,11 +44,7 @@ export function Reveal({ children, className, delay = 0, as = "div" }: RevealPro
     <Comp
       ref={ref as React.Ref<never>}
       style={visible ? { animationDelay: `${delay}ms` } : undefined}
-      className={cn(
-        "transition-none",
-        visible ? "animate-fade-in-up" : "opacity-0",
-        className
-      )}
+      className={cn("transition-none", visible ? "animate-fade-in-up" : "opacity-0", className)}
     >
       {children}
     </Comp>

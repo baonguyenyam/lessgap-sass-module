@@ -6,11 +6,7 @@ import { nowTs, toDate } from "@/lib/timestamps"
 import { sendNewsletterWelcomeEmail, syncNewsletterContact } from "@/lib/email"
 import { siteConfig } from "@/config/site"
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: "newsletter" })
   return {
@@ -26,11 +22,7 @@ const CONFIRM_WINDOW_MS = 7 * 24 * 60 * 60 * 1000
  * idempotent (clicking twice is fine) and re-activates a previously
  * unsubscribed address. Expired or unknown tokens get a way to start over.
  */
-export default async function NewsletterConfirmPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ token?: string }>
-}) {
+export default async function NewsletterConfirmPage({ searchParams }: { searchParams: Promise<{ token?: string }> }) {
   const { token } = await searchParams
   const t = await getTranslations("newsletter")
 
@@ -67,34 +59,28 @@ export default async function NewsletterConfirmPage({
 
   return (
     <section className="flex min-h-[60vh] items-center py-24">
-      <div className="mx-auto max-w-xl px-6 lg:px-12 text-center">
+      <div className="mx-auto max-w-xl px-6 text-center lg:px-12">
         {state === "confirmed" && (
           <>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              {t("confirmedHeading")}
-            </h1>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">{t("confirmedHeading")}</h1>
             <p className="mt-4 text-muted-foreground">{t("confirmedBody")}</p>
           </>
         )}
         {state === "expired" && (
           <>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              {t("expiredHeading")}
-            </h1>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">{t("expiredHeading")}</h1>
             <p className="mt-4 text-muted-foreground">{t("expiredBody")}</p>
           </>
         )}
         {state === "invalid" && (
           <>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              {t("invalidHeading")}
-            </h1>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">{t("invalidHeading")}</h1>
             <p className="mt-4 text-muted-foreground">{t("invalidBody")}</p>
           </>
         )}
         <Link
           href="/pricing"
-          className="mt-8 inline-block rounded-full px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft [background-image:var(--gradient-brand)]"
+          className="mt-8 inline-block rounded-full [background-image:var(--gradient-brand)] px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft"
         >
           {state === "confirmed" ? t("backToSite") : t("backToPricing")}
         </Link>

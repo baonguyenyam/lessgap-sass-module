@@ -5,11 +5,7 @@ import { settingsMessage } from "@/lib/settings-pages"
  * The result of an account action, which arrives as `?ok=` or `?error=` on the
  * settings page the form lives on. An unknown code shows nothing.
  */
-export async function SettingsMessage({
-  searchParams,
-}: {
-  searchParams: Promise<{ ok?: string; error?: string }>
-}) {
+export async function SettingsMessage({ searchParams }: { searchParams: Promise<{ ok?: string; error?: string }> }) {
   const { ok, error } = await searchParams
   const message = settingsMessage(error ?? ok)
   if (!message) return null

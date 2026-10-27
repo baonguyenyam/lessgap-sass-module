@@ -89,9 +89,7 @@ export default async function proxy(req: NextRequest) {
   const isProtectedRoute = PROTECTED_ROUTES.some((r) => pathname.startsWith(r))
 
   const session =
-    isAuthRoute || isAdminRoute || isProtectedRoute
-      ? await auth.api.getSession({ headers: req.headers })
-      : null
+    isAuthRoute || isAdminRoute || isProtectedRoute ? await auth.api.getSession({ headers: req.headers }) : null
   const isLoggedIn = !!session
   const isRootUser = isRoot(session?.user?.role)
 

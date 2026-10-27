@@ -65,12 +65,7 @@ export function MobileNav({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon-lg"
-          aria-label={t("openNavigation")}
-          className="md:hidden"
-        >
+        <Button variant="ghost" size="icon-lg" aria-label={t("openNavigation")} className="md:hidden">
           <Menu size={24} />
         </Button>
       </DropdownMenuTrigger>

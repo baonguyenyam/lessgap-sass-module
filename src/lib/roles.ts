@@ -54,7 +54,7 @@ export function canChangeRole(actor: Role, current: Role, next: Role): boolean {
  */
 export function canSwitchAs(
   actor: { id: string; role: Role; switched: boolean },
-  target: { id: string; role: Role },
+  target: { id: string; role: Role }
 ): boolean {
   if (!isRoot(actor.role) || actor.switched) return false
   return actor.id !== target.id && !isRoot(target.role)

@@ -34,7 +34,7 @@ describe("proxy: the session is read only where it is used", () => {
     async (path) => {
       await run(path)
       expect(getSession).not.toHaveBeenCalled()
-    },
+    }
   )
 
   it.each(["/login", "/2fa", "/dashboard", "/dashboard/settings", "/admin", "/api/billing/portal"])(
@@ -43,7 +43,7 @@ describe("proxy: the session is read only where it is used", () => {
       getSession.mockResolvedValue(null)
       await run(path)
       expect(getSession).toHaveBeenCalledOnce()
-    },
+    }
   )
 })
 

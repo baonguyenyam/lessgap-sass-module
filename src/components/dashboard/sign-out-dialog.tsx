@@ -45,9 +45,7 @@ export function SignOutDialog({
             </span>
           </div>
           <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription>
-            You&apos;ll be signed out of your account and returned to the homepage.
-          </DialogDescription>
+          <DialogDescription>You&apos;ll be signed out of your account and returned to the homepage.</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
@@ -55,11 +53,7 @@ export function SignOutDialog({
               Cancel
             </Button>
           </DialogClose>
-          <Button
-            variant="destructive"
-            onClick={() => startTransition(async () => signOutAction())}
-            disabled={pending}
-          >
+          <Button variant="destructive" onClick={() => startTransition(async () => signOutAction())} disabled={pending}>
             {pending ? t("pending") : t("confirm")}
           </Button>
         </DialogFooter>

@@ -29,7 +29,7 @@ describe("jsonLdScript", () => {
   })
 
   it("leaves anything without a left angle bracket untouched", () => {
-    const data = { headline: "Ampersands & quotes \" and > are fine" }
+    const data = { headline: 'Ampersands & quotes " and > are fine' }
     expect(jsonLdScript(data)).toBe(JSON.stringify(data))
   })
 })

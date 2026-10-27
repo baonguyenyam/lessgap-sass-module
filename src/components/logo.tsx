@@ -55,10 +55,7 @@ export function LogoMark({
         // `--primary` is #1d4ed8 and the brand blue is #2563eb.
         generic
           ? "bg-black text-white dark:ring-1 dark:ring-white/15"
-          : cn(
-              isKitSite ? "bg-[#2563eb]" : "bg-primary",
-              "text-white dark:bg-primary/10 dark:text-primary"
-            ),
+          : cn(isKitSite ? "bg-[#2563eb]" : "bg-primary", "text-white dark:bg-primary/10 dark:text-primary"),
         className
       )}
     >
@@ -78,11 +75,7 @@ export function LogoMark({
         <svg
           viewBox="0 0 24 24"
           aria-hidden="true"
-          className={cn(
-            "h-[18px] w-[18px]",
-            animated && "origin-center animate-spin-mark",
-            iconClassName
-          )}
+          className={cn("h-[18px] w-[18px]", animated && "origin-center animate-spin-mark", iconClassName)}
         >
           <path d={neutralMarkPath} fill="currentColor" fillRule="evenodd" />
         </svg>

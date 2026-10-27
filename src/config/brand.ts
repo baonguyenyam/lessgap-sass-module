@@ -52,9 +52,7 @@ export const brand = {
   isCustom: Boolean(primary || gradient),
   primary,
   primary2,
-  gradient:
-    gradient ||
-    (primary ? `linear-gradient(135deg, ${primary} 0%, ${primary2 ?? primary} 100%)` : null),
+  gradient: gradient || (primary ? `linear-gradient(135deg, ${primary} 0%, ${primary2 ?? primary} 100%)` : null),
 }
 
 /**
@@ -107,9 +105,5 @@ export const emailAccent = brand.primary ?? (isKitSite ? "#2563eb" : "#0a0a0a")
 /** Open Graph accent bar + glow, kept visible on the dark OG card. */
 export const ogBrand = {
   bar: brand.gradient ?? (isKitSite ? KIT_GRADIENT : "linear-gradient(90deg, #737373, #d4d4d4)"),
-  glow: brand.primary
-    ? `${brand.primary}40`
-    : isKitSite
-      ? "rgba(37,99,235,0.25)"
-      : "rgba(163,163,163,0.18)",
+  glow: brand.primary ? `${brand.primary}40` : isKitSite ? "rgba(37,99,235,0.25)" : "rgba(163,163,163,0.18)",
 }

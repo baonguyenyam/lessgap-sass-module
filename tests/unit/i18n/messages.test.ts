@@ -162,9 +162,7 @@ function lookup(view: Node, fullKey: string): unknown {
  */
 function leaves(node: unknown, prefix = ""): string[] {
   if (typeof node === "string" || Array.isArray(node)) return [prefix]
-  return Object.entries(node as Node).flatMap(([k, v]) =>
-    leaves(v, prefix ? `${prefix}.${k}` : k)
-  )
+  return Object.entries(node as Node).flatMap(([k, v]) => leaves(v, prefix ? `${prefix}.${k}` : k))
 }
 
 const { usages, dynamic } = scan()
@@ -211,12 +209,8 @@ describe("message keys", () => {
     for (const locale of routing.locales) {
       if (locale === routing.defaultLocale) continue
       const file = path.join(SRC, "locales", `${locale}.json`)
-      const strays = leaves(JSON.parse(fs.readFileSync(file, "utf8"))).filter(
-        (key) => !source.has(key)
-      )
-      expect(strays, `keys in ${locale}.json that en.json does not have:\n${strays.join("\n")}`).toEqual(
-        []
-      )
+      const strays = leaves(JSON.parse(fs.readFileSync(file, "utf8"))).filter((key) => !source.has(key))
+      expect(strays, `keys in ${locale}.json that en.json does not have:\n${strays.join("\n")}`).toEqual([])
     }
   })
 
@@ -254,9 +248,7 @@ describe("message keys", () => {
  * returns lists and email bodies untouched.
  */
 describe("message files", () => {
-  const locales = fs
-    .readdirSync(path.join(SRC, "locales"))
-    .filter((f) => f.endsWith(".json"))
+  const locales = fs.readdirSync(path.join(SRC, "locales")).filter((f) => f.endsWith(".json"))
 
   it.each(locales)("%s carries no template literal", (file) => {
     const messages = JSON.parse(fs.readFileSync(path.join(SRC, "locales", file), "utf8"))
@@ -270,10 +262,7 @@ describe("message files", () => {
         Object.entries(node).forEach(([k, v]) => walk(v, at ? `${at}.${k}` : k))
     }
     walk(messages, "")
-    expect(
-      found,
-      `template literal syntax in ${file}, rendered literally on screen:\n${found.join("\n")}`
-    ).toEqual([])
+    expect(found, `template literal syntax in ${file}, rendered literally on screen:\n${found.join("\n")}`).toEqual([])
   })
 })
 

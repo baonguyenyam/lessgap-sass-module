@@ -32,7 +32,10 @@ export default async function MembersPage({
   const settings = await getPlatformSettings()
   const { Invitation, Member, OrganizationRole, User } = db8.orm.public
 
-  const customRoles = await OrganizationRole.select("role").where({ organizationId: ctx.tenantId }).orderBy((r) => r.role.asc()).all()
+  const customRoles = await OrganizationRole.select("role")
+    .where({ organizationId: ctx.tenantId })
+    .orderBy((r) => r.role.asc())
+    .all()
   const roleOptions = [...TENANT_ROLE_KEYS, ...customRoles.map((r) => r.role)]
 
   const spec: TableQuerySpec = {
@@ -46,7 +49,11 @@ export default async function MembersPage({
   const inTenant = Member.where({ organizationId: ctx.tenantId })
   // Name and address live on the user: find the matching users first.
   const userIds = query.q
-    ? (await User.select("id").where((u) => or(u.email.ilike(`%${query.q}%`), u.name.ilike(`%${query.q}%`))).all()).map((u) => u.id)
+    ? (
+        await User.select("id")
+          .where((u) => or(u.email.ilike(`%${query.q}%`), u.name.ilike(`%${query.q}%`)))
+          .all()
+      ).map((u) => u.id)
     : null
   const searched = userIds ? inTenant.where((m) => m.userId.in(userIds.length ? userIds : [""])) : inTenant
   const matching = query.filters.role ? searched.where({ role: query.filters.role }) : searched
@@ -59,7 +66,9 @@ export default async function MembersPage({
       .offset(offsetOf(query))
       .limit(query.pageSize)
       .all(),
-    Invitation.where({ organizationId: ctx.tenantId, status: "pending" }).orderBy((i) => i.createdAt.desc()).all(),
+    Invitation.where({ organizationId: ctx.tenantId, status: "pending" })
+      .orderBy((i) => i.createdAt.desc())
+      .all(),
   ])
 
   const rows: MemberRow[] = members.map((m) => ({

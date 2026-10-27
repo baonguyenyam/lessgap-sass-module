@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest"
 
-import { checkResetTarget, isLocalHost, parseAllowHosts, toDirectUrl, withoutNeonPooler } from "#scripts/db-reset-guard.mjs"
+import {
+  checkResetTarget,
+  isLocalHost,
+  parseAllowHosts,
+  toDirectUrl,
+  withoutNeonPooler,
+} from "#scripts/db-reset-guard.mjs"
 
 const NEON = "postgresql://user:secret@ep-old-rain-b5v5edey-pooler.c-7.us-east-2.aws.neon.tech/neondb?sslmode=require"
 
@@ -9,7 +15,7 @@ describe("isLocalHost", () => {
     "treats %s as local",
     (host) => {
       expect(isLocalHost(host)).toBe(true)
-    },
+    }
   )
 
   it.each(["ep-old-rain.neon.tech", "localhost.example.com", "db.example.com"])("treats %s as remote", (host) => {

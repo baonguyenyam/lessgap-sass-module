@@ -45,10 +45,7 @@ export default async function LandingPage() {
   // waitlist for a paid one.
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLdScript(organizationJsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(organizationJsonLd) }} />
       <Hero />
       <Features />
       {/* The kit's own site only: a recorded run from clone to dashboard. */}

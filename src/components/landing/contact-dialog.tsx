@@ -61,9 +61,7 @@ export function ContactDialog({
             </span>
           </div>
           <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription>
-            Questions, feedback, ideas - we read everything and reply fast.
-          </DialogDescription>
+          <DialogDescription>Questions, feedback, ideas - we read everything and reply fast.</DialogDescription>
         </DialogHeader>
 
         <button
@@ -71,9 +69,7 @@ export function ContactDialog({
           onClick={copyEmail}
           className="group flex w-full items-center justify-between gap-3 rounded-2xl border border-border bg-muted/40 px-4 py-3 text-left transition-colors hover:border-primary/40 hover:bg-primary/5"
         >
-          <span className="font-mono text-sm font-medium text-foreground">
-            {siteConfig.contactEmail}
-          </span>
+          <span className="font-mono text-sm font-medium text-foreground">{siteConfig.contactEmail}</span>
           {copied ? (
             <Check className="h-4 w-4 shrink-0 text-primary" />
           ) : (

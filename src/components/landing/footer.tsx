@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button"
 function XIcon() {
   return (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
     </svg>
   )
 }
@@ -47,24 +47,14 @@ export function Footer() {
             <div className="mt-4 flex items-center gap-2">
               {orgUrl && (
                 <Button asChild variant="outline" size="icon" className="text-muted-foreground">
-                  <a
-                    href={orgUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={t("github")}
-                  >
+                  <a href={orgUrl} target="_blank" rel="noopener noreferrer" aria-label={t("github")}>
                     <GithubIcon />
                   </a>
                 </Button>
               )}
               {siteConfig.links.x && (
                 <Button asChild variant="outline" size="icon" className="text-muted-foreground">
-                  <a
-                    href={siteConfig.links.x}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="X / Twitter"
-                  >
+                  <a href={siteConfig.links.x} target="_blank" rel="noopener noreferrer" aria-label="X / Twitter">
                     <XIcon />
                   </a>
                 </Button>
@@ -78,12 +68,24 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-muted-foreground">
               {/* `/#` instead of bare `#`: the footer renders on every public
                   page, but the sections only exist on the home page. */}
-              <li><Link href="/#features" className="transition-colors hover:text-foreground">{t("features")}</Link></li>
+              <li>
+                <Link href="/#features" className="transition-colors hover:text-foreground">
+                  {t("features")}
+                </Link>
+              </li>
               {/* The pricing page, not the home section the top menu scrolls
                   to: a link from every page is what tells search engines the
                   page matters, and a fragment only ever counts as the home. */}
-              <li><Link href="/pricing" className="transition-colors hover:text-foreground">{t("pricing")}</Link></li>
-              <li><Link href="/changelog" className="transition-colors hover:text-foreground">{t("changelog")}</Link></li>
+              <li>
+                <Link href="/pricing" className="transition-colors hover:text-foreground">
+                  {t("pricing")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/changelog" className="transition-colors hover:text-foreground">
+                  {t("changelog")}
+                </Link>
+              </li>
               <li>
                 <Link href={siteConfig.links.demo ?? "/login"} className="transition-colors hover:text-foreground">
                   Demo
@@ -95,8 +97,16 @@ export function Footer() {
           <div>
             <h4 className="mb-4 text-sm font-semibold text-foreground">{t("about")}</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/about" className="transition-colors hover:text-foreground">{t("aboutLink")}</Link></li>
-              <li><Link href="/#faq" className="transition-colors hover:text-foreground">{t("faq")}</Link></li>
+              <li>
+                <Link href="/about" className="transition-colors hover:text-foreground">
+                  {t("aboutLink")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/#faq" className="transition-colors hover:text-foreground">
+                  {t("faq")}
+                </Link>
+              </li>
               <li>
                 {/* The kit's own site collects nothing through the site: its
                     contact is the copyable-email dialog, as it was before the
@@ -111,7 +121,9 @@ export function Footer() {
                     }
                   />
                 ) : (
-                  <Link href="/contact" className="transition-colors hover:text-foreground">{t("contact")}</Link>
+                  <Link href="/contact" className="transition-colors hover:text-foreground">
+                    {t("contact")}
+                  </Link>
                 )}
               </li>
               {isKitSite && orgUrl && (
@@ -132,12 +144,20 @@ export function Footer() {
           <div>
             <h4 className="mb-4 text-sm font-semibold text-foreground">{t("legal")}</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/privacy" className="transition-colors hover:text-foreground">{t("privacy")}</Link></li>
+              <li>
+                <Link href="/privacy" className="transition-colors hover:text-foreground">
+                  {t("privacy")}
+                </Link>
+              </li>
               {/* The kit's own site sells nothing and has no accounts, so no
                   terms; its cookie disclosure is a section of the (real)
                   privacy policy. Your app keeps the dedicated pages. */}
               {!isKitSite && (
-                <li><Link href="/terms" className="transition-colors hover:text-foreground">{t("terms")}</Link></li>
+                <li>
+                  <Link href="/terms" className="transition-colors hover:text-foreground">
+                    {t("terms")}
+                  </Link>
+                </li>
               )}
               <li>
                 <Link

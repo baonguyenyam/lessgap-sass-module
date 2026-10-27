@@ -46,7 +46,7 @@ export async function deliver(
   kind: string,
   send: () => Promise<ResendOutcome>,
   whenRefused?: string,
-  provider = "Resend",
+  provider = "Resend"
 ): Promise<boolean> {
   const { error } = await send()
   if (!error) return true

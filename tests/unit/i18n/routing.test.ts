@@ -97,10 +97,7 @@ describe("routes the proxy skips stay outside the locale prefix", () => {
         }
       }
     }
-    expect(
-      offenders,
-      `usePathname va preso da @/i18n/navigation:\n${offenders.join("\n")}`
-    ).toEqual([])
+    expect(offenders, `usePathname va preso da @/i18n/navigation:\n${offenders.join("\n")}`).toEqual([])
   })
 
   it("still has the matcher exclusion that makes the rule necessary", async () => {

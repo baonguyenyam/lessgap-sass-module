@@ -18,7 +18,7 @@ describe("the migration manifest", () => {
     const onDisk = readMigrationGraph(path.join(process.cwd(), "migrations", "app"))
     expect(
       [...MIGRATIONS],
-      "src/generated/migrations.ts is out of date: run node scripts/generate-migration-manifest.mjs",
+      "src/generated/migrations.ts is out of date: run node scripts/generate-migration-manifest.mjs"
     ).toEqual(onDisk)
   })
 
@@ -28,7 +28,7 @@ describe("the migration manifest", () => {
   it("reaches the current contract", () => {
     expect(
       MIGRATIONS.map((edge) => edge.to),
-      "the contract changed but no migration reaches it: run pnpm db:plan --name <owner>_<change>",
+      "the contract changed but no migration reaches it: run pnpm db:plan --name <owner>_<change>"
     ).toContain(contractJson.storage.storageHash)
   })
 

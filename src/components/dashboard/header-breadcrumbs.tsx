@@ -54,8 +54,12 @@ export function HeaderBreadcrumbs({
           one side, where you are on the other. The negative margin takes back
           the toggle button's own padding, so the rule sits as far from its
           icon as from the trail's (12px each side). */}
-      <span className="-ml-[9px] mr-1 h-5 w-px shrink-0 bg-border" aria-hidden="true" />
-      {icon && <span className="flex shrink-0 items-center text-muted-foreground" aria-hidden="true">{icon}</span>}
+      <span className="mr-1 -ml-[9px] h-5 w-px shrink-0 bg-border" aria-hidden="true" />
+      {icon && (
+        <span className="flex shrink-0 items-center text-muted-foreground" aria-hidden="true">
+          {icon}
+        </span>
+      )}
       <BreadcrumbTrail trail={trail} className="min-w-0" />
     </div>
   )

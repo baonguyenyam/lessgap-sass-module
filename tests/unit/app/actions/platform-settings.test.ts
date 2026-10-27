@@ -25,7 +25,9 @@ describe("savePlatformSettings", () => {
 
   it("lets an admin save display settings, parsed", async () => {
     as("ADMIN")
-    await expect(savePlatformSettings({ "display.page_size": "50", "display.time_zone": "Asia/Ho_Chi_Minh" })).resolves.toEqual({})
+    await expect(
+      savePlatformSettings({ "display.page_size": "50", "display.time_zone": "Asia/Ho_Chi_Minh" })
+    ).resolves.toEqual({})
     expect(save).toHaveBeenCalledWith({ "display.page_size": 50, "display.time_zone": "Asia/Ho_Chi_Minh" }, "ADMIN-1")
   })
 

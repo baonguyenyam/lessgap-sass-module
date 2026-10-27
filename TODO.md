@@ -33,3 +33,5 @@ auth-implementation-patterns
 
 https://studio-admin.arhamkhnz.com/auth/v2/login
 https://studio-admin.arhamkhnz.com/dashboard/invoice
+
+Phải tận dụng khuôn mẫu chuẩn của shadcn hoặc https://shadcnuikit.com/ cho dự án này

@@ -35,7 +35,7 @@ export function BackToTop() {
       aria-label={t("backToTop")}
       onClick={scrollToTop}
       className={cn(
-        "fixed bottom-6 right-6 z-40 bg-background/80 shadow-soft backdrop-blur transition-all duration-300 hover:border-primary/40 hover:text-primary",
+        "fixed right-6 bottom-6 z-40 bg-background/80 shadow-soft backdrop-blur transition-all duration-300 hover:border-primary/40 hover:text-primary",
         visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"
       )}
     >

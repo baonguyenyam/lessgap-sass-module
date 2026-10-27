@@ -33,14 +33,7 @@ export function SidebarCollapseToggle() {
 
   const label = collapsed ? t("expand") : t("collapse")
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      aria-label={label}
-      title={label}
-      onClick={toggle}
-      className="hidden md:flex"
-    >
+    <Button variant="ghost" size="icon" aria-label={label} title={label} onClick={toggle} className="hidden md:flex">
       {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
     </Button>
   )

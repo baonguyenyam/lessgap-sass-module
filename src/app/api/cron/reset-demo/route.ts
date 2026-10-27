@@ -25,18 +25,12 @@ export const maxDuration = 60
  */
 export async function GET(request: Request) {
   if (process.env.DEMO_MODE !== "true") {
-    return NextResponse.json(
-      { error: "Not a demo deployment: refusing to wipe data." },
-      { status: 403 },
-    )
+    return NextResponse.json({ error: "Not a demo deployment: refusing to wipe data." }, { status: 403 })
   }
 
   const secret = process.env.CRON_SECRET
   if (!secret) {
-    return NextResponse.json(
-      { error: "CRON_SECRET is not set: refusing to run unauthenticated." },
-      { status: 500 },
-    )
+    return NextResponse.json({ error: "CRON_SECRET is not set: refusing to run unauthenticated." }, { status: 500 })
   }
 
   if (request.headers.get("authorization") !== `Bearer ${secret}`) {

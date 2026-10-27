@@ -2,6 +2,40 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-27 · spec · ADR numbers collide when agents work in parallel
+- **Symptom:** a new ADR was written as 0017 while another agent had already added 0017, 0018 and 0019; a global `sed` renaming "ADR 0017" then rewrote references to the *other* 0017.
+- **Cause:** the number was chosen from an old listing, and the rename matched text, not files.
+- **Fix:** renumbered to 0020 and restored the other references by hand.
+- **Rule:** run `ls spec/adr` right before choosing a number. When renumbering, change only links to the renamed file (`0017-application-stack.md`), never a bare "ADR 0017".
+
+### 2026-10-27 · next-intl · A message key cannot contain a dot
+- **Symptom:** every page logged `INVALID_KEY: Namespace keys cannot contain the character "."` after adding `admin.settings.fields["display.page_size"]`.
+- **Cause:** next-intl reads a dot as nesting and refuses the whole message file.
+- **Fix:** nest instead (`fields.display.page_size.label`); `t(`${key}.label`)` still resolves.
+- **Rule:** `tests/unit/i18n/messages.test.ts` now fails on a dotted key.
+
+### 2026-10-27 · tanstack table v9 · Resetting selection in an effect that depends on `table` loops
+- **Symptom:** `Maximum update depth exceeded` from `DataTable` (`table_resetRowSelection` → `onRowSelectionChange`).
+- **Cause:** `useTable` returns a new object each render; an effect on `[data, table]` reset the selection, which re-rendered, which ran the effect again. A new column array on every render made it worse.
+- **Fix:** reset only when `data` actually changed (a ref holds the last rows), and `useMemo` the columns.
+- **Rule:** keep TanStack Table inputs stable and never write table state from an effect without a guard. Read `node_modules/@tanstack/react-table/skills/` first: v9 is not v8.
+
+### 2026-10-27 · next-intl · `relativeTime` needs one `now` for server and browser
+- **Symptom:** hydration mismatch, "39 seconds ago" vs "29 seconds ago", and `ENVIRONMENT_FALLBACK: The now parameter wasn't provided`.
+- **Fix:** `now: new Date()` in `src/i18n/request.ts`, and `format.relativeTime(date, useNow())` in client components.
+- **Rule:** every relative time passes `now`.
+
+### 2026-10-27 · prisma 8 · The dev client outlived a schema change
+- **Symptom:** `Cannot read properties of undefined (reading 'select')` on `db8.orm.public.PlatformSwitch` right after adding the model, until the dev server restarted.
+- **Cause:** `src/lib/db8.ts` keeps the client on `globalThis` across hot reloads; that client was built from the old contract.
+- **Fix:** the cached client is now keyed by the contract's storage hash and rebuilt when it changes.
+- **Rule:** nothing to remember any more; if a new model is "undefined" in dev, check that `pnpm db:emit` ran.
+
+### 2026-10-27 · roles · The admin panel is ROOT only
+- **Symptom:** the dev login account (ADMIN) was redirected from every `/admin` page.
+- **Cause:** commit `8d80372` made `/admin` ROOT only in the proxy, the admin layout and the sidebar (system ROOT, tenant admins inside tenants).
+- **Rule:** admin pages and admin actions check `isRoot`. Verifying them in a browser needs a ROOT session; the dev login is ADMIN.
+
 ### 2026-10-27 · better auth · A plugin's fields must be in the contract, and the check runs once
 - **Symptom:** every page answered 500 with `BetterAuthError: Database schema mismatch — Missing columns Session.activeOrganizationId`.
 - **Cause:** the organization plugin writes `Session.activeOrganizationId`; the `platform_tenants` migration added its tables but not that column. Better Auth checks the schema once when the server starts and keeps the result, so even after the migration the running `pnpm dev` kept failing until restarted.

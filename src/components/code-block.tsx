@@ -123,7 +123,7 @@ export function CodeBlock({
       // Always visible, never revealed on hover: a button that appears only
       // under the pointer is invisible on a touchscreen and unfindable for
       // anyone who does not already know it is there.
-      className="shrink-0 rounded-md border border-border bg-background/90 px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="shrink-0 rounded-md border border-border bg-background/90 px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
       {copied ? t("copied") : t("copy")}
     </button>

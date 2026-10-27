@@ -58,8 +58,7 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ received: true })
 }
 
-const longDate = (date: Date) =>
-  date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
+const longDate = (date: Date) => date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
 
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   if (session.mode === "payment") {
@@ -69,10 +68,9 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   if (!session.subscription || !session.metadata?.userId) return
 
-  const subscription = await stripe.subscriptions.retrieve(
-    session.subscription as string,
-    { expand: ["items.data.price.product"] }
-  )
+  const subscription = await stripe.subscriptions.retrieve(session.subscription as string, {
+    expand: ["items.data.price.product"],
+  })
 
   const item = subscription.items.data[0]
   const priceId = item?.price.id
@@ -135,9 +133,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 // finds the existing row, so the grant and the email both happen exactly once.
 async function handleOneTimeCheckout(session: Stripe.Checkout.Session) {
   const paymentIntentId =
-    typeof session.payment_intent === "string"
-      ? session.payment_intent
-      : session.payment_intent?.id
+    typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent?.id
   const userId = session.metadata?.userId
   const planId = session.metadata?.planId
   // A payment session without our metadata wasn't created by /api/checkout
@@ -184,9 +180,7 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
 
   const item = subscription.items.data[0]
   const priceId = item?.price.id
-  const plan = priceId
-    ? await db8.orm.public.Plan.where({ stripePriceId: priceId }).first()
-    : null
+  const plan = priceId ? await db8.orm.public.Plan.where({ stripePriceId: priceId }).first() : null
 
   const { currentPeriodStart, currentPeriodEnd, trialEndsAt } = subscriptionDates(subscription)
 
@@ -204,9 +198,7 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     const user = await db8.orm.public.User.select("email", "name").where({ id: existing.userId }).first()
     if (user && emailEnabled()) {
       const { sendSubscriptionCancelledEmail } = await import("@/lib/email")
-      await sendSubscriptionCancelledEmail(user.email, user.name ?? "", longDate(currentPeriodEnd)).catch(
-        console.error
-      )
+      await sendSubscriptionCancelledEmail(user.email, user.name ?? "", longDate(currentPeriodEnd)).catch(console.error)
     }
   }
 }
@@ -233,8 +225,7 @@ async function handleChargeRefunded(charge: Stripe.Charge) {
   // the purchase (and the access it grants) intact.
   if (!charge.refunded) return
 
-  const paymentIntentId =
-    typeof charge.payment_intent === "string" ? charge.payment_intent : charge.payment_intent?.id
+  const paymentIntentId = typeof charge.payment_intent === "string" ? charge.payment_intent : charge.payment_intent?.id
   if (!paymentIntentId) return
 
   await db8.orm.public.Purchase.where({ stripePaymentIntentId: paymentIntentId }).updateAndCount({

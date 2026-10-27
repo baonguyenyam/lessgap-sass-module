@@ -27,7 +27,9 @@ const slugify = (text: string) =>
 
 /** The member row linking `userId` to their first tenant, oldest first. */
 export async function getMembership(userId: string): Promise<Member | null> {
-  return db8.orm.public.Member.where({ userId }).orderBy((m) => m.createdAt.asc()).first()
+  return db8.orm.public.Member.where({ userId })
+    .orderBy((m) => m.createdAt.asc())
+    .first()
 }
 
 /**
@@ -70,7 +72,7 @@ export async function ensureTenant(user: CurrentUser): Promise<TenantMembership>
  */
 export async function requireTenantContext(
   resource?: keyof typeof TENANT_PERMISSIONS,
-  verb?: string,
+  verb?: string
 ): Promise<TenantMembership> {
   const user = await requireUser()
   const ctx = await ensureTenant(user)

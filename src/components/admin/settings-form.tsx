@@ -38,7 +38,9 @@ export function SettingsForm({ fields, values }: { fields: SettingField[]; value
   const schema = z.object(Object.fromEntries(fields.map((f) => [toName(f.key), PLATFORM_SETTINGS[f.key].schema])))
   const form = useForm<Record<string, unknown>>({
     resolver: zodResolver(schema) as never,
-    defaultValues: Object.fromEntries(fields.map((f) => [toName(f.key), f.kind === "select" ? String(values[f.key]) : values[f.key]])),
+    defaultValues: Object.fromEntries(
+      fields.map((f) => [toName(f.key), f.kind === "select" ? String(values[f.key]) : values[f.key]])
+    ),
   })
 
   const mutation = useMutation({
@@ -73,7 +75,11 @@ export function SettingsForm({ fields, values }: { fields: SettingField[]; value
                     <FormDescription>{setting.description}</FormDescription>
                   </div>
                   <FormControl>
-                    <Switch checked={field.value === true} onCheckedChange={field.onChange} disabled={!setting.editable} />
+                    <Switch
+                      checked={field.value === true}
+                      onCheckedChange={field.onChange}
+                      disabled={!setting.editable}
+                    />
                   </FormControl>
                 </FormItem>
               ) : (

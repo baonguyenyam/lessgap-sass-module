@@ -7,18 +7,9 @@ import { LogoMark } from "@/components/logo"
 /** Inline ring spinner for buttons and compact pending states. */
 export function Spinner({ className }: { className?: string }) {
   return (
-    <svg
-      className={cn("h-4 w-4 animate-spin", className)}
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden="true"
-    >
+    <svg className={cn("h-4 w-4 animate-spin", className)} viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-      <path
-        className="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12h4Z"
-      />
+      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12h4Z" />
     </svg>
   )
 }
@@ -28,8 +19,7 @@ export function Spinner({ className }: { className?: string }) {
  * Used by the route-group `loading.tsx` files; drop it anywhere a section
  * of the app is waiting on data.
  */
-const ARC_MASK =
-  "radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px))"
+const ARC_MASK = "radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px))"
 
 export function BrandLoader({
   label,
@@ -58,8 +48,7 @@ export function BrandLoader({
               aria-hidden="true"
               className="absolute inset-0 animate-spin rounded-full will-change-transform"
               style={{
-                background:
-                  "conic-gradient(from 0deg, transparent 50%, var(--primary-2) 82%, var(--primary) 100%)",
+                background: "conic-gradient(from 0deg, transparent 50%, var(--primary-2) 82%, var(--primary) 100%)",
                 mask: ARC_MASK,
                 WebkitMask: ARC_MASK,
                 animationDuration: "800ms",

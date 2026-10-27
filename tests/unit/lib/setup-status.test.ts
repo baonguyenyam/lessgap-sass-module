@@ -18,9 +18,9 @@ afterEach(() => {
 describe("stepFromError", () => {
   it("reads a connection failure as the address being wrong", () => {
     // What Prisma 8 throws for a host that does not answer and for a URL that is not one.
-    expect(
-      stepFromError({ code: "CONTRACT.MARKER_READ_FAILED", cause: { name: "SqlConnectionError" } })
-    ).toBe("database-unreachable")
+    expect(stepFromError({ code: "CONTRACT.MARKER_READ_FAILED", cause: { name: "SqlConnectionError" } })).toBe(
+      "database-unreachable"
+    )
     expect(stepFromError({ code: "RUNTIME.BINDING_INVALID" })).toBe("database-unreachable")
   })
 

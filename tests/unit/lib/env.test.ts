@@ -2,8 +2,7 @@ import { describe, it, expect, vi } from "vitest"
 import { parseEnv, validateEnv } from "@/lib/env"
 
 const DB = "postgresql://user:pass@localhost:5432/db"
-const base = (extra: Record<string, string> = {}) =>
-  ({ DATABASE_URL: DB, ...extra })
+const base = (extra: Record<string, string> = {}) => ({ DATABASE_URL: DB, ...extra })
 
 describe("parseEnv", () => {
   it("accepts the minimum a fresh clone needs: a database and nothing else", () => {
@@ -12,9 +11,7 @@ describe("parseEnv", () => {
 
   it("rejects a missing or non-postgres DATABASE_URL", () => {
     expect(() => parseEnv({})).toThrow(/DATABASE_URL/)
-    expect(() => parseEnv({ DATABASE_URL: "mysql://localhost/db" })).toThrow(
-      /postgres/,
-    )
+    expect(() => parseEnv({ DATABASE_URL: "mysql://localhost/db" })).toThrow(/postgres/)
   })
 
   // .env.example ships 31 variables as VAR="". Treating a blank as a value
@@ -31,16 +28,16 @@ describe("parseEnv", () => {
           EMAIL_FROM: "",
           DEMO_MODE: "",
           KIT_SITE: "",
-        }),
-      ),
+        })
+      )
     ).not.toThrow()
   })
 
   it("does not let a blank satisfy a pairing rule", () => {
     // A real key with a blank webhook secret is still half-configured.
-    expect(() =>
-      parseEnv(base({ STRIPE_SECRET_KEY: "sk_test_1", STRIPE_WEBHOOK_SECRET: "" })),
-    ).toThrow(/STRIPE_WEBHOOK_SECRET is required/)
+    expect(() => parseEnv(base({ STRIPE_SECRET_KEY: "sk_test_1", STRIPE_WEBHOOK_SECRET: "" }))).toThrow(
+      /STRIPE_WEBHOOK_SECRET is required/
+    )
   })
 
   // A switch that reads "yes" as off would leave someone wondering why the
@@ -75,9 +72,9 @@ describe("key formats", () => {
   })
 
   it("catches a webhook secret that is not one", () => {
-    expect(() =>
-      parseEnv(base({ STRIPE_SECRET_KEY: "sk_test_1", STRIPE_WEBHOOK_SECRET: "sk_test_2" })),
-    ).toThrow(/whsec_/)
+    expect(() => parseEnv(base({ STRIPE_SECRET_KEY: "sk_test_1", STRIPE_WEBHOOK_SECRET: "sk_test_2" }))).toThrow(
+      /whsec_/
+    )
   })
 
   it("catches a price id that is a product id", () => {
@@ -93,8 +90,8 @@ describe("key formats", () => {
           STRIPE_PRO_PRICE_ID: "price_1",
           RESEND_API_KEY: "re_1",
           EMAIL_FROM: "hello@example.com",
-        }),
-      ),
+        })
+      )
     ).not.toThrow()
   })
 })
@@ -102,15 +99,11 @@ describe("key formats", () => {
 // These are the configurations that look fine and break in production.
 describe("half-configured integrations", () => {
   it("refuses a Stripe key without a webhook secret", () => {
-    expect(() => parseEnv(base({ STRIPE_SECRET_KEY: "sk_test_1" }))).toThrow(
-      /STRIPE_WEBHOOK_SECRET is required/,
-    )
+    expect(() => parseEnv(base({ STRIPE_SECRET_KEY: "sk_test_1" }))).toThrow(/STRIPE_WEBHOOK_SECRET is required/)
   })
 
   it("explains why, so the message is actionable", () => {
-    expect(() => parseEnv(base({ STRIPE_SECRET_KEY: "sk_test_1" }))).toThrow(
-      /no payment would ever be recorded/,
-    )
+    expect(() => parseEnv(base({ STRIPE_SECRET_KEY: "sk_test_1" }))).toThrow(/no payment would ever be recorded/)
   })
 
   it("refuses a Resend key without a sender address", () => {
@@ -124,9 +117,7 @@ describe("half-configured integrations", () => {
   })
 
   it("accepts a complete OAuth pair", () => {
-    expect(() =>
-      parseEnv(base({ GOOGLE_CLIENT_ID: "id", GOOGLE_CLIENT_SECRET: "secret" })),
-    ).not.toThrow()
+    expect(() => parseEnv(base({ GOOGLE_CLIENT_ID: "id", GOOGLE_CLIENT_SECRET: "secret" }))).not.toThrow()
   })
 })
 
@@ -176,8 +167,8 @@ describe("validateEnv", () => {
   })
 
   it("still stops the boot for a half-configured service, database or not", () => {
-    expect(() =>
-      validateEnv({ NODE_ENV: "development", STRIPE_SECRET_KEY: "sk_test_x" }),
-    ).toThrow(/STRIPE_WEBHOOK_SECRET/)
+    expect(() => validateEnv({ NODE_ENV: "development", STRIPE_SECRET_KEY: "sk_test_x" })).toThrow(
+      /STRIPE_WEBHOOK_SECRET/
+    )
   })
 })

@@ -5,9 +5,7 @@ import type Stripe from "stripe"
 // a real client just to read the constant below.
 vi.mock("@/lib/db8", () => ({ db8: {} }))
 
-const { CHECKOUT_BLOCKING_STATUSES, trialDaysFor, subscriptionDates, describeDiscount } = await import(
-  "@/lib/billing"
-)
+const { CHECKOUT_BLOCKING_STATUSES, trialDaysFor, subscriptionDates, describeDiscount } = await import("@/lib/billing")
 
 describe("CHECKOUT_BLOCKING_STATUSES", () => {
   it("lists the statuses Stripe still manages", () => {

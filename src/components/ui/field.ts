@@ -9,7 +9,7 @@ import { cva, type VariantProps } from "class-variance-authority"
  * `md` (40px) for forms, `lg` (48px, pill) on the auth pages. A button next to a field takes the same size name.
  */
 export const fieldVariants = cva(
-  "flex w-full rounded-[var(--radius)] border border-border bg-secondary text-sm text-foreground placeholder:text-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-visible:ring-destructive",
+  "flex w-full rounded-[var(--radius)] border border-border bg-secondary text-sm text-foreground transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-visible:ring-destructive",
   {
     variants: {
       size: {

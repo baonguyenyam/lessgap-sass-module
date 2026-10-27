@@ -47,18 +47,9 @@ export function TwoFactorCard({
   isDemo: boolean
 }) {
   const t = useTranslations("dashboard.settings.twoFactor")
-  const [setupState, setupAction, setupPending] = useActionState<SetupState, FormData>(
-    startTwoFactorSetup,
-    {}
-  )
-  const [confirmState, confirmAction, confirmPending] = useActionState<SetupState, FormData>(
-    confirmTwoFactorSetup,
-    {}
-  )
-  const [codesState, codesAction, codesPending] = useActionState<SetupState, FormData>(
-    regenerateBackupCodes,
-    {}
-  )
+  const [setupState, setupAction, setupPending] = useActionState<SetupState, FormData>(startTwoFactorSetup, {})
+  const [confirmState, confirmAction, confirmPending] = useActionState<SetupState, FormData>(confirmTwoFactorSetup, {})
+  const [codesState, codesAction, codesPending] = useActionState<SetupState, FormData>(regenerateBackupCodes, {})
 
   const error = setupState.error ?? confirmState.error ?? codesState.error
   const codes = setupState.setup?.backupCodes ?? codesState.backupCodes
@@ -106,7 +97,8 @@ export function TwoFactorCard({
                   name="password"
                   type="password"
                   autoComplete="current-password"
-                  className="h-9 w-full sm:w-56"
+                  size="sm"
+                  className="w-full sm:w-56"
                   required
                 />
                 <Button type="submit" variant="outline" size="sm" disabled={codesPending}>
@@ -174,7 +166,7 @@ export function TwoFactorCard({
 
           <div>
             <p className="text-xs text-muted-foreground">{t("manualEntry")}</p>
-            <code className="mt-1 inline-block break-all rounded-md bg-muted px-2 py-1 font-mono text-xs">
+            <code className="mt-1 inline-block rounded-md bg-muted px-2 py-1 font-mono text-xs break-all">
               {setupState.setup.secret}
             </code>
             {/* Base32 has no 0, 1, 8 or 9 in it, so the ambiguity people expect
@@ -194,7 +186,8 @@ export function TwoFactorCard({
                 inputMode="numeric"
                 autoComplete="one-time-code"
                 placeholder="123456"
-                className="h-9 w-40 font-mono tracking-widest"
+                size="sm"
+                className="w-40 font-mono tracking-widest"
                 required
               />
             </div>
@@ -222,7 +215,8 @@ export function TwoFactorCard({
                 name="password"
                 type="password"
                 autoComplete="current-password"
-                className="h-9 w-full sm:w-56"
+                size="sm"
+                className="w-full sm:w-56"
                 required
               />
               <Button type="submit" size="sm" disabled={setupPending}>

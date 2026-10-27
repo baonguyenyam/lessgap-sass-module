@@ -24,9 +24,15 @@ beforeEach(() => {
 
 describe("saveTenantRole", () => {
   it("refuses built-in names, bad keys and undeclared permissions", async () => {
-    await expect(saveTenantRole(null, { role: "owner", permissions: ["projects.view"] })).resolves.toEqual({ error: "builtIn" })
-    await expect(saveTenantRole(null, { role: "Front Desk", permissions: ["projects.view"] })).resolves.toEqual({ error: "roleKey" })
-    await expect(saveTenantRole(null, { role: "desk", permissions: ["billing.manage"] })).resolves.toEqual({ error: "unknownPermission" })
+    await expect(saveTenantRole(null, { role: "owner", permissions: ["projects.view"] })).resolves.toEqual({
+      error: "builtIn",
+    })
+    await expect(saveTenantRole(null, { role: "Front Desk", permissions: ["projects.view"] })).resolves.toEqual({
+      error: "roleKey",
+    })
+    await expect(saveTenantRole(null, { role: "desk", permissions: ["billing.manage"] })).resolves.toEqual({
+      error: "unknownPermission",
+    })
     expect(api.createOrgRole).not.toHaveBeenCalled()
   })
 
@@ -37,7 +43,9 @@ describe("saveTenantRole", () => {
     )
     await expect(saveTenantRole("desk", { role: "renamed", permissions: ["projects.edit"] })).resolves.toEqual({})
     expect(api.updateOrgRole).toHaveBeenCalledWith(
-      expect.objectContaining({ body: { organizationId: "t1", roleName: "desk", data: { permission: { projects: ["edit"] } } } })
+      expect.objectContaining({
+        body: { organizationId: "t1", roleName: "desk", data: { permission: { projects: ["edit"] } } },
+      })
     )
   })
 })
@@ -46,6 +54,8 @@ describe("deleteTenantRoles", () => {
   it("skips built-ins and roles that still have members", async () => {
     db.fn("Member.aggregate").mockResolvedValueOnce({ n: 2 }).mockResolvedValueOnce({ n: 0 })
     await expect(deleteTenantRoles(["owner", "busy", "empty"])).resolves.toEqual({ deleted: 1 })
-    expect(api.deleteOrgRole).toHaveBeenCalledWith(expect.objectContaining({ body: { organizationId: "t1", roleName: "empty" } }))
+    expect(api.deleteOrgRole).toHaveBeenCalledWith(
+      expect.objectContaining({ body: { organizationId: "t1", roleName: "empty" } })
+    )
   })
 })

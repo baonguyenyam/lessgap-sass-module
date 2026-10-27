@@ -39,7 +39,9 @@ export async function signInWithPassword(formData: FormData) {
   // library moved that responsibility here, and losing it would have made
   // sign-in quietly case sensitive for anyone who types their address with a
   // capital letter.
-  const email = String(formData.get("email") ?? "").trim().toLowerCase()
+  const email = String(formData.get("email") ?? "")
+    .trim()
+    .toLowerCase()
   const password = String(formData.get("password") ?? "")
   // Set inside the try, acted on outside it, because redirect() throws.
   let needsSecondFactor = false

@@ -83,8 +83,8 @@ export default async function BillingPage({
   const planRows =
     entitlement.kind === "free"
       ? await (isDemo ? selfServe.where((p) => p.interval.neq("ONE_TIME")) : selfServe)
-        .orderBy((p) => p.price.asc())
-        .all()
+          .orderBy((p) => p.price.asc())
+          .all()
       : []
   // Same rule as the checkout route, so a card only shows the trial a checkout
   // from it would really carry: a free user whose subscription was cancelled
@@ -102,9 +102,7 @@ export default async function BillingPage({
     trialDays: trialDaysFor(p, hasHadSubscription),
   }))
   const checkoutDisabled = isDemo || !process.env.STRIPE_SECRET_KEY
-  const disabledNote = isDemo
-    ? t("checkoutDisabledDemo")
-    : t("checkoutDisabledStripe")
+  const disabledNote = isDemo ? t("checkoutDisabledDemo") : t("checkoutDisabledStripe")
 
   const longDate = (date: Date) => format.dateTime(date, { year: "numeric", month: "long", day: "numeric" })
   const invoiceSpec: TableQuerySpec = {
@@ -133,9 +131,7 @@ export default async function BillingPage({
   const renewalDate = subscription?.currentPeriodEnd ? longDate(toDate(subscription.currentPeriodEnd)) : null
   // trialEndsAt stays set after a trial is over, so the status decides.
   const trialEndDate =
-    subscription?.status === "TRIALING" && subscription.trialEndsAt
-      ? longDate(toDate(subscription.trialEndsAt))
-      : null
+    subscription?.status === "TRIALING" && subscription.trialEndsAt ? longDate(toDate(subscription.trialEndsAt)) : null
   const purchaseDate = purchase ? longDate(toDate(purchase.createdAt)) : null
 
   const discountLines = discounts.map((d) => {
@@ -177,9 +173,7 @@ export default async function BillingPage({
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="space-y-1">
-              <p className="font-semibold text-lg">
-                {purchase?.plan.name ?? subscription?.plan.name ?? t("free")}
-              </p>
+              <p className="text-lg font-semibold">{purchase?.plan.name ?? subscription?.plan.name ?? t("free")}</p>
               {purchase && <Badge variant="success">{t("lifetimeAccess")}</Badge>}
               {!purchase && subscription && <SubscriptionStatusBadge status={subscription.status} />}
               {!purchase && subscription?.cancelAtPeriodEnd && (
@@ -209,18 +203,12 @@ export default async function BillingPage({
             </div>
           </div>
           {purchase && subscription && (
-            <p className="text-sm text-muted-foreground">
-              {t("alsoSubscribed", { plan: subscription.plan.name })}
-            </p>
+            <p className="text-sm text-muted-foreground">{t("alsoSubscribed", { plan: subscription.plan.name })}</p>
           )}
           {(subscription || (purchase && user?.stripeCustomerId)) && (
             <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center">
               <ManageBillingButton className="w-full sm:w-auto" />
-              {subscription && !purchase && (
-                <p className="text-sm text-muted-foreground">
-                  {t("portalHint")}
-                </p>
-              )}
+              {subscription && !purchase && <p className="text-sm text-muted-foreground">{t("portalHint")}</p>}
             </div>
           )}
         </CardContent>
@@ -230,9 +218,7 @@ export default async function BillingPage({
         <div className="space-y-4">
           <div>
             <h2 className="text-lg font-semibold">{t("availablePlans")}</h2>
-            <p className="text-sm text-muted-foreground">
-              {t("availablePlansHint")}
-            </p>
+            <p className="text-sm text-muted-foreground">{t("availablePlansHint")}</p>
           </div>
           <PlanCards
             plans={plans}
@@ -253,7 +239,11 @@ export default async function BillingPage({
             rows={invoiceRows}
             total={matchingInvoices.length}
             query={invoiceQuery}
-            defaults={{ sort: invoiceSpec.sortable[0], dir: invoiceSpec.defaultDir, pageSize: invoiceSpec.defaultPageSize }}
+            defaults={{
+              sort: invoiceSpec.sortable[0],
+              dir: invoiceSpec.defaultDir,
+              pageSize: invoiceSpec.defaultPageSize,
+            }}
             emptyMessage={process.env.STRIPE_SECRET_KEY ? t("noInvoices") : t("noInvoicesStripe")}
           />
         </CardContent>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { ASSIGNABLE_ROLES, ROLES, canChangeRole, canSwitchAs, isAdmin, isRole, isRoot} from "@/lib/roles"
+import { ASSIGNABLE_ROLES, ROLES, canChangeRole, canSwitchAs, isAdmin, isRole, isRoot } from "@/lib/roles"
 
 describe("isAdmin / isRoot", () => {
   it.each([

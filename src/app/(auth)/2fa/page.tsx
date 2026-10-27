@@ -27,11 +27,7 @@ export default async function TwoFactorPage({
   const t = await getTranslations("auth.twoFactor")
   const backup = mode === "backup"
 
-  const errorMessage = error
-    ? t.has(`errors.${error}`)
-      ? t(`errors.${error}`)
-      : t("errors.generic")
-    : null
+  const errorMessage = error ? (t.has(`errors.${error}`) ? t(`errors.${error}`) : t("errors.generic")) : null
 
   return (
     <div className="rounded-3xl border border-border bg-card/80 p-8 shadow-[var(--shadow-soft-lg)] backdrop-blur-xl">
@@ -39,12 +35,8 @@ export default async function TwoFactorPage({
         <div className="mb-4 flex justify-center">
           <LogoMark className="h-12 w-12 rounded-2xl ring-1 ring-primary/15" iconClassName="h-7 w-7" />
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">
-          {backup ? t("backupTitle") : t("title")}
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {backup ? t("backupSubtitle") : t("subtitle")}
-        </p>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">{backup ? t("backupTitle") : t("title")}</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{backup ? t("backupSubtitle") : t("subtitle")}</p>
       </div>
 
       {errorMessage && (
@@ -53,10 +45,7 @@ export default async function TwoFactorPage({
         </p>
       )}
 
-      <form
-        action={backup ? verifyTwoFactorBackupCode : verifyTwoFactorCode}
-        className="flex flex-col gap-3"
-      >
+      <form action={backup ? verifyTwoFactorBackupCode : verifyTwoFactorCode} className="flex flex-col gap-3">
         <label htmlFor="code" className="sr-only">
           {backup ? t("backupLabel") : t("codeLabel")}
         </label>

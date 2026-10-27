@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest"
-import {
-  BACKUP_CODE_ALPHABET,
-  BACKUP_CODE_COUNT,
-  generateBackupCodes,
-  normalizeBackupCode,
-} from "@/lib/backup-codes"
+import { BACKUP_CODE_ALPHABET, BACKUP_CODE_COUNT, generateBackupCodes, normalizeBackupCode } from "@/lib/backup-codes"
 
 /**
  * The alphabet is the whole point of this module, so it is what gets asserted.

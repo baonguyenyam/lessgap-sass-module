@@ -64,10 +64,7 @@ async function renderQr(totpURI: string): Promise<string> {
  * authenticator to the account. It also means an OAuth-only user has to set a
  * password first, which the card says in as many words.
  */
-export async function startTwoFactorSetup(
-  _prev: SetupState,
-  formData: FormData
-): Promise<SetupState> {
+export async function startTwoFactorSetup(_prev: SetupState, formData: FormData): Promise<SetupState> {
   const currentUser = await getCurrentUser()
   if (!currentUser) redirect("/login")
 
@@ -109,10 +106,7 @@ export async function startTwoFactorSetup(
  * Better Auth flips `twoFactorEnabled` and marks the row verified inside this
  * call, and issues a new session while it is at it.
  */
-export async function confirmTwoFactorSetup(
-  _prev: SetupState,
-  formData: FormData
-): Promise<SetupState> {
+export async function confirmTwoFactorSetup(_prev: SetupState, formData: FormData): Promise<SetupState> {
   const currentUser = await getCurrentUser()
   if (!currentUser) redirect("/login")
 
@@ -134,10 +128,7 @@ export async function confirmTwoFactorSetup(
  * moment this returns, which is the point: it is what you do after using one,
  * or after losing the piece of paper.
  */
-export async function regenerateBackupCodes(
-  _prev: SetupState,
-  formData: FormData
-): Promise<SetupState> {
+export async function regenerateBackupCodes(_prev: SetupState, formData: FormData): Promise<SetupState> {
   const currentUser = await getCurrentUser()
   if (!currentUser) redirect("/login")
   if (process.env.DEMO_MODE === "true") return { error: "demo" }

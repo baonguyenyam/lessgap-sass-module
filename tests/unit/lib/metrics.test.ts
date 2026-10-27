@@ -57,9 +57,7 @@ describe("mrrHistory", () => {
       sub({ status: "CANCELED", updatedAt: daysAgo(10) }),
       sub({ status: "PAST_DUE", updatedAt: daysAgo(3) }),
     ]
-    const activeOnly = subs
-      .filter((s) => s.status === "ACTIVE")
-      .reduce((sum, s) => sum + monthlyEquivalent(s.plan), 0)
+    const activeOnly = subs.filter((s) => s.status === "ACTIVE").reduce((sum, s) => sum + monthlyEquivalent(s.plan), 0)
 
     const points = mrrHistory(subs, { weeks: 4, now: NOW })
 

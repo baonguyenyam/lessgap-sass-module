@@ -22,8 +22,6 @@ describe("cn", () => {
   })
 
   it("accepts arrays and objects, as the variant helpers pass them through", () => {
-    expect(cn(["flex", "gap-2"], { hidden: false, "items-center": true })).toBe(
-      "flex gap-2 items-center",
-    )
+    expect(cn(["flex", "gap-2"], { hidden: false, "items-center": true })).toBe("flex gap-2 items-center")
   })
 })

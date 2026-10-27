@@ -1,15 +1,7 @@
 "use client"
 
 import { useFormatter } from "next-intl"
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts"
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 
 import type { MrrPoint } from "@/lib/metrics"
 
@@ -24,8 +16,7 @@ import type { MrrPoint } from "@/lib/metrics"
 export function RevenueChart({ data, label }: { data: MrrPoint[]; label: string }) {
   const format = useFormatter()
 
-  const shortDate = (iso: string) =>
-    format.dateTime(new Date(iso), { month: "short", day: "numeric" })
+  const shortDate = (iso: string) => format.dateTime(new Date(iso), { month: "short", day: "numeric" })
 
   const money = (cents: number) =>
     format.number(cents / 100, { style: "currency", currency: "USD", maximumFractionDigits: 0 })

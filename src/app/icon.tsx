@@ -25,35 +25,33 @@ export const contentType = "image/png"
 
 export default function Icon() {
   return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: 7,
-          backgroundColor: brand.primary ?? (isKitSite ? OSK_BLUE : "#0a0a0a"),
-        }}
-      >
-        {isKitSite ? (
-          // White on the brand tile, matching the logo in the page. It used to
-          // be a royal-blue bolt on a navy tile, kept from the v1.2 icon, which
-          // left the tab showing a different blue from the site.
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="#ffffff">
-            <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
-          </svg>
-        ) : (
-          // The same head as LogoMark, a size down from the bolt so the solid
-          // shape keeps some tile around it. The socket is a hole here too,
-          // Satori hands the path to resvg, which honours fill-rule.
-          <svg width="18" height="18" viewBox="0 0 24 24">
-            <path d={neutralMarkPath} fill="#ffffff" fillRule="evenodd" />
-          </svg>
-        )}
-      </div>
-    ),
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 7,
+        backgroundColor: brand.primary ?? (isKitSite ? OSK_BLUE : "#0a0a0a"),
+      }}
+    >
+      {isKitSite ? (
+        // White on the brand tile, matching the logo in the page. It used to
+        // be a royal-blue bolt on a navy tile, kept from the v1.2 icon, which
+        // left the tab showing a different blue from the site.
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#ffffff">
+          <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
+        </svg>
+      ) : (
+        // The same head as LogoMark, a size down from the bolt so the solid
+        // shape keeps some tile around it. The socket is a hole here too,
+        // Satori hands the path to resvg, which honours fill-rule.
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path d={neutralMarkPath} fill="#ffffff" fillRule="evenodd" />
+        </svg>
+      )}
+    </div>,
     size
   )
 }

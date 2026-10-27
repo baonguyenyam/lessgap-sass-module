@@ -361,7 +361,7 @@ export async function removeNewsletterContact(email: string) {
     () => resend.contacts.remove({ email, audienceId }),
     // The one refusal that needs a person: this contact unsubscribed, and a
     // broadcast sent from Resend would still reach them.
-    "this person unsubscribed: remove the contact from the Resend audience by hand before the next broadcast",
+    "this person unsubscribed: remove the contact from the Resend audience by hand before the next broadcast"
   )
 }
 

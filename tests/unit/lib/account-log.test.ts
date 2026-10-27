@@ -27,12 +27,32 @@ describe("buildAccountLog", () => {
     const log = buildAccountLog({
       ...base,
       sessions: [
-        { id: "s1", createdAt: at("2026-05-01T00:00:00Z"), expiresAt: at("2026-07-01T00:00:00Z"), userAgent: "UA", ipAddress: "1.2.3.4", switchedBy: null },
-        { id: "s2", createdAt: at("2026-04-01T00:00:00Z"), expiresAt: at("2026-04-08T00:00:00Z"), userAgent: null, ipAddress: null, switchedBy: "root-1" },
+        {
+          id: "s1",
+          createdAt: at("2026-05-01T00:00:00Z"),
+          expiresAt: at("2026-07-01T00:00:00Z"),
+          userAgent: "UA",
+          ipAddress: "1.2.3.4",
+          switchedBy: null,
+        },
+        {
+          id: "s2",
+          createdAt: at("2026-04-01T00:00:00Z"),
+          expiresAt: at("2026-04-08T00:00:00Z"),
+          userAgent: null,
+          ipAddress: null,
+          switchedBy: "root-1",
+        },
       ],
       currentSessionId: "s1",
     })
-    expect(log[0]).toMatchObject({ kind: "signed-in", active: true, current: true, switched: false, ipAddress: "1.2.3.4" })
+    expect(log[0]).toMatchObject({
+      kind: "signed-in",
+      active: true,
+      current: true,
+      switched: false,
+      ipAddress: "1.2.3.4",
+    })
     expect(log[1]).toMatchObject({ kind: "signed-in", active: false, current: false, switched: true })
   })
 

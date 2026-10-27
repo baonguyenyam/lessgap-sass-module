@@ -59,16 +59,16 @@ export function Hero() {
     : { head: words.join(" "), accent: taglineLast }
 
   return (
-    <section className="relative overflow-hidden pb-24 pt-16 md:pb-32 md:pt-24">
+    <section className="relative overflow-hidden pt-16 pb-24 md:pt-24 md:pb-32">
       {/* Decorative background layers */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-grid" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[600px] bg-glow" />
+      <div aria-hidden className="bg-grid pointer-events-none absolute inset-0 -z-10" />
+      <div aria-hidden className="bg-glow pointer-events-none absolute inset-x-0 top-0 -z-10 h-[600px]" />
 
-      <div className="mx-auto max-w-5xl px-6 lg:px-12 text-center">
+      <div className="mx-auto max-w-5xl px-6 text-center lg:px-12">
         {/* Announcement pill: the current version, then what is new in it.
             The badge reads `version` from src/config/site.ts, so it moves with
             your releases; swap the sentence for whatever you are shipping. */}
-        <div className="mb-7 inline-flex animate-fade-in-up items-center gap-2 rounded-full border border-border bg-card/70 py-1.5 pl-2 pr-4 text-sm font-medium shadow-soft backdrop-blur">
+        <div className="mb-7 inline-flex animate-fade-in-up items-center gap-2 rounded-full border border-border bg-card/70 py-1.5 pr-4 pl-2 text-sm font-medium shadow-soft backdrop-blur">
           <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
             <Sparkles className="h-3 w-3" /> v{siteConfig.version}
           </span>
@@ -82,14 +82,11 @@ export function Hero() {
             themes, between medium (thin on a white page) and semibold; Geist
             is variable, so the weight is exact. The longer line is 1032px of
             1056: if you change the words, check it still fits at 5.25rem. */}
-        <h1
-          className="animate-fade-in-up text-foreground"
-          style={{ animationDelay: "60ms" }}
-        >
-          <span className="block text-3xl font-[550] leading-[1.05] tracking-tighter sm:text-4xl md:text-5xl xl:-mx-16 xl:text-[length:5.25rem] xl:leading-none">
+        <h1 className="animate-fade-in-up text-foreground" style={{ animationDelay: "60ms" }}>
+          <span className="block text-3xl leading-[1.05] font-[550] tracking-tighter sm:text-4xl md:text-5xl xl:-mx-16 xl:text-[length:5.25rem] xl:leading-none">
             {headline.head}
           </span>
-          <span className="block text-3xl font-[550] leading-[1.05] tracking-tighter text-gradient-brand sm:text-4xl md:text-5xl xl:-mx-16 xl:text-[length:5.25rem] xl:leading-none">
+          <span className="text-gradient-brand block text-3xl leading-[1.05] font-[550] tracking-tighter sm:text-4xl md:text-5xl xl:-mx-16 xl:text-[length:5.25rem] xl:leading-none">
             {headline.accent}
           </span>
         </h1>
@@ -118,10 +115,7 @@ export function Hero() {
         {/* The kit's own site has no line here (the pill above says it);
             a clone shows its own from hero.$product.trust. */}
         {t.has("trust") && (
-          <p
-            className="mt-5 animate-fade-in-up text-sm text-muted-foreground"
-            style={{ animationDelay: "240ms" }}
-          >
+          <p className="mt-5 animate-fade-in-up text-sm text-muted-foreground" style={{ animationDelay: "240ms" }}>
             {t("trust")}
           </p>
         )}
@@ -226,7 +220,9 @@ export function Hero() {
                 <div className="space-y-4 p-5">
                   <div>
                     <p className="text-base font-bold text-foreground">Welcome back, Alex 👋</p>
-                    <p className="text-xs text-muted-foreground">Here&apos;s what&apos;s happening with your account.</p>
+                    <p className="text-xs text-muted-foreground">
+                      Here&apos;s what&apos;s happening with your account.
+                    </p>
                   </div>
 
                   {/* Stat cards */}

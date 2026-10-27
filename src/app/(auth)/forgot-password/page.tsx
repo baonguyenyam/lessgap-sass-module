@@ -9,11 +9,7 @@ import { Input } from "@/components/ui/input"
 import { siteConfig } from "@/config/site"
 import { emailEnabled } from "@/lib/email-transport"
 
-export default async function ForgotPasswordPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ sent?: string }>
-}) {
+export default async function ForgotPasswordPage({ searchParams }: { searchParams: Promise<{ sent?: string }> }) {
   const { sent } = await searchParams
   const t = await getTranslations("auth.forgotPassword")
 
@@ -43,12 +39,7 @@ export default async function ForgotPasswordPage({
             {t("demoNotice")}{" "}
             {t.rich("demoNoticeExtra", {
               resend: (chunks) => (
-                <a
-                  href="https://resend.com"
-                  className="underline underline-offset-2"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a href="https://resend.com" className="underline underline-offset-2" target="_blank" rel="noreferrer">
                   {chunks}
                 </a>
               ),
@@ -69,13 +60,16 @@ export default async function ForgotPasswordPage({
           </p>
         ) : (
           <form action={requestPasswordReset} className="flex flex-col gap-3">
-            <Input name="email" type="email" placeholder={t("emailPlaceholder")} autoComplete="email" required disabled={formDisabled} size="lg" />
-            <PendingButton
+            <Input
+              name="email"
+              type="email"
+              placeholder={t("emailPlaceholder")}
+              autoComplete="email"
+              required
               disabled={formDisabled}
-              variant="primary"
               size="lg"
-              className="w-full"
-            >
+            />
+            <PendingButton disabled={formDisabled} variant="primary" size="lg" className="w-full">
               {t("submit")}
             </PendingButton>
           </form>

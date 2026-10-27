@@ -1,11 +1,18 @@
 "use client"
 
 import { useMutation } from "@tanstack/react-query"
-import { createColumnHelper, rowSelectionFeature, tableFeatures, useTable, type ColumnDef, type RowData } from "@tanstack/react-table"
+import {
+  createColumnHelper,
+  rowSelectionFeature,
+  tableFeatures,
+  useTable,
+  type ColumnDef,
+  type RowData,
+} from "@tanstack/react-table"
 import { ArrowDown, ArrowUp, ArrowUpDown, ChevronLeft, ChevronRight, Search, X } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useRef, useState, useTransition } from "react"
+import { useEffect, useMemo, useRef, useState, useTransition } from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -13,7 +20,14 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ConfirmDialog, type ConfirmCopy } from "@/components/data-table/confirm-dialog"
-import { PAGE_SIZES, offsetOf, pageCountOf, tableQueryHref, type TableQuery, type TableQueryPatch } from "@/lib/table-query"
+import {
+  PAGE_SIZES,
+  offsetOf,
+  pageCountOf,
+  tableQueryHref,
+  type TableQuery,
+  type TableQueryPatch,
+} from "@/lib/table-query"
 import { cn } from "@/lib/utils"
 
 /**
@@ -86,7 +100,12 @@ export function DataTable<TData extends RowData>({
   const [pending, startTransition] = useTransition()
   const selectable = bulkActions.length > 0
 
-  const allColumns = selectable ? [selectionColumn as DataTableColumns<TData>[number], ...columns] : columns
+  // Stable inputs (TanStack Table v9): a new column array on every render
+  // would rebuild the row models each time.
+  const allColumns = useMemo(
+    () => (selectable ? [selectionColumn as DataTableColumns<TData>[number], ...columns] : columns),
+    [selectable, columns]
+  )
   const table = useTable({
     features: dataTableFeatures,
     columns: allColumns,
@@ -100,8 +119,13 @@ export function DataTable<TData extends RowData>({
     startTransition(() => router.push(tableQueryHref(pathname, query, patch, defaults), { scroll: false }))
   }
 
-  // A new page of rows is a new list: what was selected on the last one is not on screen.
+  // A new page of rows is a new list: what was selected on the last one is not
+  // on screen. Only when the rows change, never on a plain re-render, or the
+  // reset re-renders, which resets again.
+  const shownData = useRef(data)
   useEffect(() => {
+    if (shownData.current === data) return
+    shownData.current = data
     table.resetRowSelection()
   }, [data, table])
 
@@ -141,7 +165,10 @@ export function DataTable<TData extends RowData>({
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
         {searchPlaceholder && (
           <div className="relative sm:w-72">
-            <Search aria-hidden className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search
+              aria-hidden
+              className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+            />
             <Input
               size="sm"
               type="search"
@@ -224,7 +251,11 @@ export function DataTable<TData extends RowData>({
                         >
                           <table.FlexRender header={header} />
                           {active ? (
-                            query.dir === "asc" ? <ArrowUp className="h-3.5 w-3.5" /> : <ArrowDown className="h-3.5 w-3.5" />
+                            query.dir === "asc" ? (
+                              <ArrowUp className="h-3.5 w-3.5" />
+                            ) : (
+                              <ArrowDown className="h-3.5 w-3.5" />
+                            )
                           ) : (
                             <ArrowUpDown className="h-3.5 w-3.5 opacity-40" />
                           )}
@@ -275,7 +306,7 @@ export function DataTable<TData extends RowData>({
               ))}
             </SelectContent>
           </Select>
-          <span className="whitespace-nowrap px-1">{t("page", { page: query.page, pages })}</span>
+          <span className="px-1 whitespace-nowrap">{t("page", { page: query.page, pages })}</span>
           <Button
             size="icon"
             variant="outline"
@@ -303,7 +334,8 @@ export function DataTable<TData extends RowData>({
         pending={bulk.isPending}
         onCancel={() => setConfirming(null)}
         onConfirm={() => {
-          if (confirming) bulk.mutate({ action: confirming, ids: selectedIds }, { onSettled: () => setConfirming(null) })
+          if (confirming)
+            bulk.mutate({ action: confirming, ids: selectedIds }, { onSettled: () => setConfirming(null) })
         }}
       />
     </div>
@@ -317,7 +349,15 @@ const selectionColumn: DataTableColumns<RowData>[number] = createColumnHelper<Fe
   cell: ({ row }) => <SelectRow checked={row.getIsSelected()} onChange={(value) => row.toggleSelected(value)} />,
 })
 
-function SelectAll({ table }: { table: { getIsAllPageRowsSelected: () => boolean; getIsSomePageRowsSelected: () => boolean; toggleAllPageRowsSelected: (value?: boolean) => void } }) {
+function SelectAll({
+  table,
+}: {
+  table: {
+    getIsAllPageRowsSelected: () => boolean
+    getIsSomePageRowsSelected: () => boolean
+    toggleAllPageRowsSelected: (value?: boolean) => void
+  }
+}) {
   const t = useTranslations("dataTable")
   const all = table.getIsAllPageRowsSelected()
   return (
@@ -331,5 +371,7 @@ function SelectAll({ table }: { table: { getIsAllPageRowsSelected: () => boolean
 
 function SelectRow({ checked, onChange }: { checked: boolean; onChange: (value: boolean) => void }) {
   const t = useTranslations("dataTable")
-  return <Checkbox aria-label={t("selectRow")} checked={checked} onCheckedChange={(value) => onChange(value === true)} />
+  return (
+    <Checkbox aria-label={t("selectRow")} checked={checked} onCheckedChange={(value) => onChange(value === true)} />
+  )
 }

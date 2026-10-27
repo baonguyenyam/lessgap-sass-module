@@ -56,29 +56,23 @@ async function scan(page: Page, label: string) {
     height: Math.min(Math.max(height, viewport?.height ?? 720), 16_000),
   })
 
-  const results = await new AxeBuilder({ page })
-    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
-    .analyze()
+  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze()
 
   if (viewport) await page.setViewportSize(viewport)
 
-  const blocking = results.violations.filter(
-    (v) => v.impact === "serious" || v.impact === "critical"
-  )
-  const minor = results.violations.filter(
-    (v) => v.impact !== "serious" && v.impact !== "critical"
-  )
+  const blocking = results.violations.filter((v) => v.impact === "serious" || v.impact === "critical")
+  const minor = results.violations.filter((v) => v.impact !== "serious" && v.impact !== "critical")
 
   for (const v of results.violations) {
-    const where = v.nodes.map((n) => n.target.join(" ")).slice(0, 3).join(" | ")
+    const where = v.nodes
+      .map((n) => n.target.join(" "))
+      .slice(0, 3)
+      .join(" | ")
     console.log(`[a11y] ${label} · ${v.impact} · ${v.id}: ${v.help} (${v.nodes.length}) → ${where}`)
   }
   if (minor.length) console.log(`[a11y] ${label}: ${minor.length} minor/moderate, not blocking`)
 
-  expect(
-    blocking,
-    `${label}: ${blocking.map((v) => `${v.id} (${v.nodes.length})`).join(", ")}`
-  ).toEqual([])
+  expect(blocking, `${label}: ${blocking.map((v) => `${v.id} (${v.nodes.length})`).join(", ")}`).toEqual([])
 }
 
 test.describe("accessibility", () => {

@@ -107,7 +107,7 @@ export function SetupVideo() {
               onClick={toggle}
               aria-label={playing ? t("pause") : t("play")}
               className={cn(
-                "group absolute inset-0 flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
+                "group absolute inset-0 flex items-center justify-center transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-inset",
                 playing ? "bg-transparent" : "bg-black/10 hover:bg-black/20"
               )}
             >

@@ -27,11 +27,7 @@ export function localizedPath(path: string, locale: string): string {
  * @param locale the locale being rendered
  * @param translated locales this page is genuinely written in
  */
-export function localeAlternates(
-  path: string,
-  locale: string,
-  translated: readonly string[]
-): Metadata["alternates"] {
+export function localeAlternates(path: string, locale: string, translated: readonly string[]): Metadata["alternates"] {
   const url = (target: string) => `${siteConfig.url}${localizedPath(path, target)}`
 
   if (!translated.includes(locale)) {

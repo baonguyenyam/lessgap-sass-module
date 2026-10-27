@@ -33,9 +33,7 @@ export default function ContactPage() {
           <div className="mt-10">
             <ContactForm disabled={process.env.DEMO_MODE === "true"} />
             {process.env.DEMO_MODE === "true" && (
-              <p className="mt-3 text-center text-xs text-muted-foreground">
-                {t("formsDisabled")}
-              </p>
+              <p className="mt-3 text-center text-xs text-muted-foreground">{t("formsDisabled")}</p>
             )}
           </div>
         )}

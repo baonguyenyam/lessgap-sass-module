@@ -17,10 +17,7 @@ async function profileSchema() {
   })
 }
 
-export async function updateProfile(
-  _prevState: ProfileState,
-  formData: FormData
-): Promise<ProfileState> {
+export async function updateProfile(_prevState: ProfileState, formData: FormData): Promise<ProfileState> {
   const t = await getTranslations("errors")
   const user = await getCurrentUser()
   if (!user) return { error: t("unauthorized") }

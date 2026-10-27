@@ -48,13 +48,8 @@ vi.mock("next/navigation", () => ({
   },
 }))
 
-const {
-  signInWithPassword,
-  signInWithMagicLink,
-  verifyTwoFactorCode,
-  verifyTwoFactorBackupCode,
-  registerUser,
-} = await import("@/app/actions/auth")
+const { signInWithPassword, signInWithMagicLink, verifyTwoFactorCode, verifyTwoFactorBackupCode, registerUser } =
+  await import("@/app/actions/auth")
 const db = (await import("@/lib/db8")) as unknown as Db8Mock
 const findUnique = db.fn("User.first")
 
@@ -86,16 +81,12 @@ beforeEach(() => {
 
 describe("signInWithPassword", () => {
   it("goes to the dashboard when the account has no second factor", async () => {
-    expect(await redirectOf(() => signInWithPassword(form({ email: "a@b.co", password: "pw" })))).toBe(
-      "/dashboard"
-    )
+    expect(await redirectOf(() => signInWithPassword(form({ email: "a@b.co", password: "pw" })))).toBe("/dashboard")
   })
 
   it("goes to /2fa when the library asks for a second factor instead of opening a session", async () => {
     signInEmail.mockResolvedValue({ twoFactorRedirect: true })
-    expect(await redirectOf(() => signInWithPassword(form({ email: "a@b.co", password: "pw" })))).toBe(
-      "/2fa"
-    )
+    expect(await redirectOf(() => signInWithPassword(form({ email: "a@b.co", password: "pw" })))).toBe("/2fa")
   })
 
   it("keeps one generic error for every credential failure", async () => {
@@ -107,17 +98,13 @@ describe("signInWithPassword", () => {
 
   it("lowercases and trims the address before handing it over", async () => {
     await redirectOf(() => signInWithPassword(form({ email: "  A@B.CO  ", password: "pw" })))
-    expect(signInEmail).toHaveBeenCalledWith(
-      expect.objectContaining({ body: { email: "a@b.co", password: "pw" } })
-    )
+    expect(signInEmail).toHaveBeenCalledWith(expect.objectContaining({ body: { email: "a@b.co", password: "pw" } }))
   })
 })
 
 describe("signInWithMagicLink", () => {
   it("sends the link when the account has no second factor", async () => {
-    expect(await redirectOf(() => signInWithMagicLink(form({ email: "a@b.co" })))).toBe(
-      "/verify-request"
-    )
+    expect(await redirectOf(() => signInWithMagicLink(form({ email: "a@b.co" })))).toBe("/verify-request")
     expect(signInMagicLink).toHaveBeenCalled()
   })
 
@@ -155,16 +142,12 @@ describe("verifyTwoFactorCode", () => {
 
   it("says the same thing for a wrong code and an expired challenge", async () => {
     verifyTOTP.mockRejectedValue(new APIError("BAD_REQUEST", { message: "invalid" }))
-    expect(await redirectOf(() => verifyTwoFactorCode(form({ code: "000000" })))).toBe(
-      "/2fa?error=code"
-    )
+    expect(await redirectOf(() => verifyTwoFactorCode(form({ code: "000000" })))).toBe("/2fa?error=code")
   })
 
   it("stops before the library when the caller is over the limit", async () => {
     allowRateLimit.mockReturnValue(false)
-    expect(await redirectOf(() => verifyTwoFactorCode(form({ code: "123456" })))).toBe(
-      "/2fa?error=rate"
-    )
+    expect(await redirectOf(() => verifyTwoFactorCode(form({ code: "123456" })))).toBe("/2fa?error=rate")
     expect(verifyTOTP).not.toHaveBeenCalled()
   })
 })

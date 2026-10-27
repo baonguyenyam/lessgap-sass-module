@@ -21,8 +21,7 @@ import { z } from "zod"
  * wrong would break the boot for anyone who copies that file, which is step
  * one of the setup guide.
  */
-const blankAsUnset = <T extends z.ZodTypeAny>(schema: T) =>
-  z.preprocess((v) => (v === "" ? undefined : v), schema)
+const blankAsUnset = <T extends z.ZodTypeAny>(schema: T) => z.preprocess((v) => (v === "" ? undefined : v), schema)
 
 const optional = blankAsUnset(z.string().min(1).optional())
 
@@ -35,7 +34,7 @@ const prefixed = (prefix: string, label: string) =>
       .string()
       .min(1)
       .refine((v) => v.startsWith(prefix), { message: `${label} should start with "${prefix}"` })
-      .optional(),
+      .optional()
   )
 
 export const envSchema = z
@@ -47,7 +46,7 @@ export const envSchema = z
       .string()
       .min(1, "DATABASE_URL is required")
       .refine((v) => /^postgres(ql)?:\/\//.test(v), {
-        message: 'DATABASE_URL should be a postgres connection string (postgresql://...)',
+        message: "DATABASE_URL should be a postgres connection string (postgresql://...)",
       }),
     DIRECT_URL: optional,
 
@@ -107,14 +106,30 @@ export const envSchema = z
     requireTogether(
       "STRIPE_SECRET_KEY",
       "STRIPE_WEBHOOK_SECRET",
-      "checkout would succeed but no payment would ever be recorded",
+      "checkout would succeed but no payment would ever be recorded"
     )
     requireTogether("RESEND_API_KEY", "EMAIL_FROM", "every email would fail without a sender address")
     requireTogether("BREVO_API_KEY", "EMAIL_FROM", "every email would fail without a sender address")
-    requireTogether("GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "with one key alone the Google button stays hidden, with no word why")
-    requireTogether("GOOGLE_CLIENT_SECRET", "GOOGLE_CLIENT_ID", "with one key alone the Google button stays hidden, with no word why")
-    requireTogether("GITHUB_CLIENT_ID", "GITHUB_CLIENT_SECRET", "with one key alone the GitHub button stays hidden, with no word why")
-    requireTogether("GITHUB_CLIENT_SECRET", "GITHUB_CLIENT_ID", "with one key alone the GitHub button stays hidden, with no word why")
+    requireTogether(
+      "GOOGLE_CLIENT_ID",
+      "GOOGLE_CLIENT_SECRET",
+      "with one key alone the Google button stays hidden, with no word why"
+    )
+    requireTogether(
+      "GOOGLE_CLIENT_SECRET",
+      "GOOGLE_CLIENT_ID",
+      "with one key alone the Google button stays hidden, with no word why"
+    )
+    requireTogether(
+      "GITHUB_CLIENT_ID",
+      "GITHUB_CLIENT_SECRET",
+      "with one key alone the GitHub button stays hidden, with no word why"
+    )
+    requireTogether(
+      "GITHUB_CLIENT_SECRET",
+      "GITHUB_CLIENT_ID",
+      "with one key alone the GitHub button stays hidden, with no word why"
+    )
 
     if (env.NODE_ENV === "production" && !env.AUTH_SECRET) {
       ctx.addIssue({
@@ -161,9 +176,7 @@ export function validateEnv(source: EnvSource = process.env): void {
   if (source.NODE_ENV !== "production" && !source.DATABASE_URL) {
     // Checked with a placeholder in its place, so every other rule still runs.
     parseEnv({ ...source, DATABASE_URL: "postgresql://unset" })
-    console.warn(
-      "[env] DATABASE_URL is not set. Starting anyway: open the app and the page lists the steps left.",
-    )
+    console.warn("[env] DATABASE_URL is not set. Starting anyway: open the app and the page lists the steps left.")
     return
   }
 

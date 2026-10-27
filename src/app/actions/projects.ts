@@ -26,10 +26,7 @@ async function schema() {
   })
 }
 
-export async function updateProject(
-  _prevState: ProjectState,
-  formData: FormData
-): Promise<ProjectState> {
+export async function updateProject(_prevState: ProjectState, formData: FormData): Promise<ProjectState> {
   const t = await getTranslations("errors")
   const user = await getCurrentUser()
   if (!user) return { error: t("unauthorized") }

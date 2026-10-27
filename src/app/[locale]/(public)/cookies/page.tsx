@@ -16,9 +16,7 @@ export default function CookiesPage() {
   return (
     <section className="py-24">
       <div className="mx-auto max-w-3xl px-6 lg:px-12">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          Cookie Policy
-        </h1>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Cookie Policy</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
         </p>
@@ -27,33 +25,33 @@ export default function CookiesPage() {
           <div className="rounded-2xl border border-dashed border-border bg-muted/30 p-5">
             <p className="font-medium text-foreground">This is a placeholder.</p>
             <p className="mt-1">
-              It describes what this {isKitSite ? "app" : "app"} stores out of the box. If
-              you add analytics or any third-party tracking, update this page accordingly.
+              It describes what this {isKitSite ? "app" : "app"} stores out of the box. If you add analytics or any
+              third-party tracking, update this page accordingly.
             </p>
           </div>
 
           <div>
             <h2 className="mb-2 text-lg font-semibold text-foreground">1. What we store</h2>
             <p>
-              We only use <strong className="text-foreground">technical cookies</strong>, strictly
-              necessary to operate the service: a session cookie that keeps you signed in. It is
-              set only when you sign in and removed when you sign out.
+              We only use <strong className="text-foreground">technical cookies</strong>, strictly necessary to operate
+              the service: a session cookie that keeps you signed in. It is set only when you sign in and removed when
+              you sign out.
             </p>
           </div>
 
           <div>
             <h2 className="mb-2 text-lg font-semibold text-foreground">2. Local storage</h2>
             <p>
-              Your theme preference (light/dark mode) is saved in your browser&apos;s local
-              storage. It never leaves your device and contains no personal data.
+              Your theme preference (light/dark mode) is saved in your browser&apos;s local storage. It never leaves
+              your device and contains no personal data.
             </p>
           </div>
 
           <div>
             <h2 className="mb-2 text-lg font-semibold text-foreground">3. No tracking</h2>
             <p>
-              We do not use advertising, profiling, or third-party tracking cookies. Because we
-              only use cookies that are strictly necessary, no consent banner is required.
+              We do not use advertising, profiling, or third-party tracking cookies. Because we only use cookies that
+              are strictly necessary, no consent banner is required.
             </p>
           </div>
 

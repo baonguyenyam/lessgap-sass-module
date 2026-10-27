@@ -63,7 +63,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
+      <body className="flex min-h-full flex-col">
         <script dangerouslySetInnerHTML={{ __html: `${themeInit};${sidebarInit}` }} />
         {brandCss && <style dangerouslySetInnerHTML={{ __html: brandCss }} />}
         {/* Sits at the root, not inside `[locale]`, so that client components
@@ -72,9 +72,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             always render in the default locale, but their strings still live
             in the message files rather than in the components. */}
         <NextIntlClientProvider>
-          <QueryProvider>
-            {children}
-          </QueryProvider>
+          <QueryProvider>{children}</QueryProvider>
           {/* Inside the provider: the loader's screen-reader text is translated. */}
           <NavigationOverlay />
         </NextIntlClientProvider>

@@ -1,11 +1,6 @@
 import { useTranslations } from "next-intl"
 import { siteConfig } from "@/config/site"
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion"
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 import { Reveal } from "@/components/landing/reveal"
 import { jsonLdScript } from "@/lib/json-ld"
 
@@ -18,7 +13,6 @@ type Faq = { question: string; answer: string }
  * below is true of the kit as it ships, so nothing here oversells until you
  * change it.
  */
-
 
 /**
  * `withJsonLd` emits the FAQPage structured data that can earn an expandable
@@ -51,17 +45,10 @@ export function FAQ({ withJsonLd = false }: { withJsonLd?: boolean }) {
 
   return (
     <section id="faq" className="py-24">
-      {withJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }}
-        />
-      )}
+      {withJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }} />}
       <div className="mx-auto max-w-3xl px-6 lg:px-12">
         <Reveal className="mb-16 text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            {t("title")}
-          </h2>
+          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">{t("title")}</h2>
         </Reveal>
 
         <Reveal>

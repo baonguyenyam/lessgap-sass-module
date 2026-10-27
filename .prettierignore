@@ -1,0 +1,17 @@
+# Generated or vendored: never formatted by hand, rewritten by their tools.
+.next/
+coverage/
+node_modules/
+pnpm-lock.yaml
+migrations/
+src/generated/
+.agents/skills/
+.claude/skills/
+.cursor/skills/
+.devin/skills/
+playwright-report/
+test-results/
+# Prose: Markdown keeps its own line breaks and table layout, and the
+# changelog parser reads CHANGELOG.md as written.
+*.md
+*.mdx

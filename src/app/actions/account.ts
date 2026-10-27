@@ -66,8 +66,7 @@ export async function unlinkProvider(formData: FormData) {
 
   // Lock-out guard: after unlinking there must still be a way in — another
   // provider, a password, or the magic link (which needs Resend configured).
-  const remainingMethods =
-    oauthAccounts.length - 1 + (hasPassword ? 1 : 0) + (emailEnabled() ? 1 : 0)
+  const remainingMethods = oauthAccounts.length - 1 + (hasPassword ? 1 : 0) + (emailEnabled() ? 1 : 0)
   if (remainingMethods < 1) redirect(`${SETTINGS}?error=last-method`)
 
   await db8.orm.public.Account.where({ id: accountId }).delete()
@@ -135,7 +134,9 @@ export async function deleteAccount(formData: FormData) {
 
   // The address has to be typed back, so no single click can destroy an
   // account and no stray form submission can either.
-  const typed = String(formData.get("confirm") ?? "").trim().toLowerCase()
+  const typed = String(formData.get("confirm") ?? "")
+    .trim()
+    .toLowerCase()
   if (typed !== user.email.toLowerCase()) redirect(`${GENERAL}?error=confirm`)
 
   // The last administrator cannot remove themselves, or the deployment is left
@@ -207,9 +208,11 @@ export async function changeEmail(formData: FormData) {
   // with it until the reset.
   if (process.env.DEMO_MODE === "true") redirect(`${SETTINGS}?error=demo`)
 
-  const parsed = z
-    .email()
-    .safeParse(String(formData.get("email") ?? "").trim().toLowerCase())
+  const parsed = z.email().safeParse(
+    String(formData.get("email") ?? "")
+      .trim()
+      .toLowerCase()
+  )
   if (!parsed.success) redirect(`${SETTINGS}?error=email-invalid`)
 
   // Asking to move to the address you already have is a no-op that would

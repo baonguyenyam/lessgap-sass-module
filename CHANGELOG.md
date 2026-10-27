@@ -7,6 +7,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.10.0] - 2026-10-27
+
+🧩 **One way to build every screen.** Every list is a data table with search, filters, sorting, pagination, bulk actions and a row menu; create and edit happen in a drawer; fields share one size scale; section sub-pages use vertical tabs; and ROOT has a settings page for the whole system. This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (one new table, `PlatformSwitch`), then restart the server.
+
+### Added
+
+- **`DataTable`** (`src/components/data-table/`, TanStack Table v9): search, filters, sort and page size in the URL and applied on the server, a checkbox column with bulk actions, a row actions menu, confirmation before anything destructive. Used by Admin → Users, Admin → Newsletter, Projects, Members, Roles and the invoices on Billing
+- **Edit in a drawer**: `FormDrawer` (Sheet + React Hook Form + Zod + a TanStack Query mutation) for users, projects, member invitations and roles, and role permissions
+- **Admin → Settings** (`PlatformSwitch`, spec/04-entitlements.md): rows per page, date and time format and time zone for every page; and, ROOT only, the language of the dashboard and admin panel (English or Vietnamese) and whether sign-ups are open. Closed sign-ups refuse the email form and every OAuth provider
+- **Admin → Users** and **Admin → Newsletter** as their own pages: edit a name, change roles in bulk (ROOT), Switch As from the row menu, export the selected rows, unsubscribe in bulk
+- **Field size scale** (`src/components/ui/field.ts`: `sm`, `md`, `lg`) shared by Input, Textarea, Select and the new `NativeSelect`, and matched by Button; `SectionNav` for vertical tabs
+- **TanStack Query, Zustand, Prettier** (spec/adr/0020-application-stack.md: one library per job). `pnpm format` formats; `pnpm lint` now also checks formatting
+- Tests that fail on a field sized by hand, a bare `<select>`, a dotted message key, and a test file outside `tests/`
+
+### Changed
+
+- **The repository is formatted by Prettier**, once, in this release
+- **Selects no longer put their arrow against the border**; fields beside buttons are the same height everywhere, the sign-in pages included
+- **Settings uses vertical tabs**, as will every section with sub-pages
+- **Admin → Overview** keeps the numbers and the revenue chart; the lists moved to their own pages
+- **Dates everywhere follow the platform time zone and format**, and the dev Prisma client is rebuilt automatically after a schema change
+
+### Removed
+
+- The users table and newsletter list from the admin overview, the inline "Make admin" and "Switch as" buttons (now in the row menu), the projects dialog and search box (now the table and its drawer)
+
 ## [2.9.1] - 2026-10-27
 
 🩹 **Every page answered 500 after the organization plugin landed.** Better Auth writes `Session.activeOrganizationId` and the database had no such column. This is a PATCH: `git pull`, `pnpm install`, `pnpm db:migrate`, then restart the server (Better Auth checks the schema once, at startup).

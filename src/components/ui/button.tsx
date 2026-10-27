@@ -6,23 +6,22 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { ButtonHTMLAttributes, forwardRef } from "react"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-semibold transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 active:translate-y-0",
+  "inline-flex items-center justify-center gap-2 rounded-full font-semibold whitespace-nowrap transition-all duration-200 ease-out focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none active:translate-y-0 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         primary:
           "bg-primary text-primary-foreground shadow-soft hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]",
         gradient:
-          "relative overflow-hidden text-primary-foreground shadow-soft [background-image:var(--gradient-brand)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]",
+          "relative overflow-hidden [background-image:var(--gradient-brand)] text-primary-foreground shadow-soft hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         outline:
-          "border border-border bg-background/60 backdrop-blur-sm text-foreground hover:bg-accent hover:-translate-y-0.5",
-        ghost: "bg-transparent hover:bg-accent text-foreground",
-        destructive: "bg-destructive text-white hover:opacity-90 hover:-translate-y-0.5",
+          "border border-border bg-background/60 text-foreground backdrop-blur-sm hover:-translate-y-0.5 hover:bg-accent",
+        ghost: "bg-transparent text-foreground hover:bg-accent",
+        destructive: "bg-destructive text-white hover:-translate-y-0.5 hover:opacity-90",
         "outline-primary":
           "border border-primary/40 bg-transparent text-primary hover:-translate-y-0.5 hover:bg-primary/5 hover:shadow-soft",
-        "outline-destructive":
-          "border border-destructive/30 bg-transparent text-destructive hover:bg-destructive/5",
+        "outline-destructive": "border border-destructive/30 bg-transparent text-destructive hover:bg-destructive/5",
       },
       size: {
         xs: "h-8 px-3 text-xs",
@@ -38,9 +37,7 @@ const buttonVariants = cva(
   }
 )
 
-interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   loading?: boolean
   asChild?: boolean
 }
@@ -56,7 +53,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn("group/btn", buttonVariants({ variant, size }), className)}
         {...props}
       >
-        {asChild ? children : (
+        {asChild ? (
+          children
+        ) : (
           <>
             {variant === "gradient" && (
               <span

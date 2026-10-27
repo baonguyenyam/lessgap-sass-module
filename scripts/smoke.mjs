@@ -18,9 +18,7 @@
 
 const args = process.argv.slice(2)
 const baseUrl = (args.find((a) => !a.startsWith("--")) ?? "http://localhost:3000").replace(/\/$/, "")
-const expectVersion = args.includes("--expect-version")
-  ? args[args.indexOf("--expect-version") + 1]
-  : null
+const expectVersion = args.includes("--expect-version") ? args[args.indexOf("--expect-version") + 1] : null
 const skipSeo = args.includes("--skip-seo")
 
 const results = []
@@ -69,10 +67,7 @@ await check("/api/health responds with the running version", async () => {
 if (expectVersion) {
   await check(`serves the version being released (${expectVersion})`, () => {
     expect(health, "health endpoint did not answer, cannot compare versions")
-    expect(
-      health.version === expectVersion,
-      `deployment serves ${health.version}, expected ${expectVersion}`,
-    )
+    expect(health.version === expectVersion, `deployment serves ${health.version}, expected ${expectVersion}`)
     return "match"
   })
 }
@@ -88,13 +83,13 @@ if (health && Object.hasOwn(health, "schema")) {
   if (health.schema?.aligned === null) {
     warn(
       "the database schema could not be checked",
-      "the deployment could not ask its database; check it directly with npm run check:deploy",
+      "the deployment could not ask its database; check it directly with npm run check:deploy"
     )
   } else {
     await check("the database has every migration this build ships", () => {
       expect(
         health.schema?.aligned === true,
-        `${health.schema?.pending} migration(s) not applied: run pnpm db:migrate against this database, then run the smoke again`,
+        `${health.schema?.pending} migration(s) not applied: run pnpm db:migrate against this database, then run the smoke again`
       )
       return "aligned"
     })
@@ -129,7 +124,7 @@ if (!skipSeo && !isDemo) {
     expect(response.status === 200, `expected 200, got ${response.status}`)
     expect(
       response.headers.get("content-type")?.includes("text/plain"),
-      `content-type is ${response.headers.get("content-type")}`,
+      `content-type is ${response.headers.get("content-type")}`
     )
     const body = await response.text()
     expect(/^Sitemap:\s*https?:\/\/\S+/m.test(body), "no Sitemap: line")
@@ -164,7 +159,7 @@ if (!skipSeo) {
     expect(response.status === 200, `expected 200, got ${response.status}`)
     expect(
       response.headers.get("content-type")?.includes("text/plain"),
-      `content-type is ${response.headers.get("content-type")}`,
+      `content-type is ${response.headers.get("content-type")}`
     )
     const body = await response.text()
     expect(/^#\s+\S/m.test(body), "no H1 heading")
@@ -185,10 +180,7 @@ await check("an unknown route is a 404, not a redirect", async () => {
 // Regression guard: the dashboard must stay behind auth.
 await check("/dashboard redirects an anonymous visitor to sign in", async () => {
   const response = await get("/dashboard")
-  expect(
-    response.status === 307 || response.status === 302,
-    `expected a redirect, got ${response.status}`,
-  )
+  expect(response.status === 307 || response.status === 302, `expected a redirect, got ${response.status}`)
   const location = response.headers.get("location") ?? ""
   expect(location.includes("/login"), `redirects to "${location}" instead of /login`)
   return `${response.status} → /login`

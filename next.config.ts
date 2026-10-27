@@ -1,8 +1,8 @@
-import type { NextConfig } from "next";
-import createNextIntlPlugin from "next-intl/plugin";
+import type { NextConfig } from "next"
+import createNextIntlPlugin from "next-intl/plugin"
 
 // Points next-intl at the request config that loads the message files.
-const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts")
 
 // Security headers applied to every route. These are safe, high-value defaults
 // for an auth + payments app. A full Content-Security-Policy is intentionally
@@ -22,7 +22,7 @@ const securityHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   // Drop browser features we don't use.
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
-];
+]
 
 const nextConfig: NextConfig = {
   // The indicator `next dev` draws in a corner of the page. Bottom left, its
@@ -47,8 +47,8 @@ const nextConfig: NextConfig = {
     "/llms.txt": ["./content/blog/**"],
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [{ source: "/:path*", headers: securityHeaders }]
   },
-};
+}
 
-export default withNextIntl(nextConfig);
+export default withNextIntl(nextConfig)

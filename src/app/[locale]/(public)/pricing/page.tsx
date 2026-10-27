@@ -30,11 +30,7 @@ export default async function PricingPage() {
   // hand, belong here: this is the page a price should be read from.
   return (
     <>
-      {isKitSite ? (
-        <Pricing heading="h1" withJsonLd />
-      ) : (
-        <PlanPricing heading="h1" withJsonLd />
-      )}
+      {isKitSite ? <Pricing heading="h1" withJsonLd /> : <PlanPricing heading="h1" withJsonLd />}
       <FAQ />
     </>
   )

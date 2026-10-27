@@ -33,10 +33,10 @@ export default async function DashboardPage() {
   // the wrong one otherwise.
   const renewalDate = subscription?.currentPeriodEnd
     ? format.dateTime(toDate(subscription.currentPeriodEnd), {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    })
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
     : null
 
   return (
@@ -65,9 +65,7 @@ export default async function DashboardPage() {
               <CardDescription>{t("projectsCount", { count: projectCount })}</CardDescription>
             </div>
             <Button asChild size="sm" variant="outline">
-              <Link href="/dashboard/projects">
-                {projectCount === 0 ? t("projectsCreate") : t("projectsViewAll")}
-              </Link>
+              <Link href="/dashboard/projects">{projectCount === 0 ? t("projectsCreate") : t("projectsViewAll")}</Link>
             </Button>
           </div>
         </CardHeader>
@@ -79,9 +77,7 @@ export default async function DashboardPage() {
             <CardDescription>{t("currentPlan")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">
-              {lifetime?.plan.name ?? subscription?.plan.name ?? t("planFree")}
-            </p>
+            <p className="text-2xl font-bold">{lifetime?.plan.name ?? subscription?.plan.name ?? t("planFree")}</p>
           </CardContent>
         </Card>
 
@@ -105,7 +101,7 @@ export default async function DashboardPage() {
             <CardDescription>{t("nextBilling")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{lifetime ? t("none") : renewalDate ?? t("none")}</p>
+            <p className="text-2xl font-bold">{lifetime ? t("none") : (renewalDate ?? t("none"))}</p>
           </CardContent>
         </Card>
       </div>
@@ -116,23 +112,16 @@ export default async function DashboardPage() {
       {entitlement.kind === "free" && (
         <Card className="border-primary/30 bg-primary/5">
           <CardHeader>
-            <CardTitle className="text-base">
-              {t("upsellTitle")}
-            </CardTitle>
-            <CardDescription>
-              {t("upsellBody")}
-            </CardDescription>
+            <CardTitle className="text-base">{t("upsellTitle")}</CardTitle>
+            <CardDescription>{t("upsellBody")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline">
-              <Link href={isKitSite ? "/pricing" : "/dashboard/billing"}>
-                {t("upsellCta")}
-              </Link>
+              <Link href={isKitSite ? "/pricing" : "/dashboard/billing"}>{t("upsellCta")}</Link>
             </Button>
           </CardContent>
         </Card>
       )}
-
     </div>
   )
 }

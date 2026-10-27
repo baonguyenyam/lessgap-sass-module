@@ -80,9 +80,7 @@ export function ContactForm({ disabled = false }: { disabled?: boolean }) {
         />
       </div>
 
-      {state.status === "error" && state.error && (
-        <p className="text-sm text-destructive">{state.error}</p>
-      )}
+      {state.status === "error" && state.error && <p className="text-sm text-destructive">{state.error}</p>}
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-xs text-muted-foreground">

@@ -27,10 +27,7 @@ export const PROJECT_DESCRIPTION_MAX = 280
 export function projectSchema(m: ProjectMessages) {
   return z.object({
     name: z.string().min(1, m.nameRequired).max(PROJECT_NAME_MAX, m.nameTooLong),
-    description: z
-      .string()
-      .max(PROJECT_DESCRIPTION_MAX, m.descriptionTooLong)
-      .optional(),
+    description: z.string().max(PROJECT_DESCRIPTION_MAX, m.descriptionTooLong).optional(),
   })
 }
 

@@ -9,8 +9,6 @@ import { WaitlistForm } from "@/components/landing/waitlist-form"
 import { useTranslations } from "next-intl"
 import { siteConfig } from "@/config/site"
 
-
-
 function CheckIcon() {
   return (
     <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -33,13 +31,7 @@ function PlusIcon() {
  * page this block sits under the hero and stays an h2, on /pricing it is the
  * page's own heading and must be the h1. Same styling either way.
  */
-export function Pricing({
-  heading = "h2",
-  withJsonLd = false,
-}: {
-  heading?: "h1" | "h2"
-  withJsonLd?: boolean
-}) {
+export function Pricing({ heading = "h2", withJsonLd = false }: { heading?: "h1" | "h2"; withJsonLd?: boolean }) {
   const t = useTranslations("pricing")
   const Heading = heading
   const freeFeatures = t.raw("freeFeatures") as string[]
@@ -59,20 +51,14 @@ export function Pricing({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: jsonLdScript(
-              softwareApplicationJsonLd([{ name: t("freeTitle"), price: 0 }])
-            ),
+            __html: jsonLdScript(softwareApplicationJsonLd([{ name: t("freeTitle"), price: 0 }])),
           }}
         />
       )}
       <div className="mx-auto max-w-6xl px-6 lg:px-12">
         <Reveal className="mb-16 text-center">
-          <Heading className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            {t("title")}
-          </Heading>
-          <p className="mt-4 text-lg text-muted-foreground">
-            {t("subtitle")}
-          </p>
+          <Heading className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">{t("title")}</Heading>
+          <p className="mt-4 text-lg text-muted-foreground">{t("subtitle")}</p>
         </Reveal>
 
         <div className="mx-auto grid max-w-4xl grid-cols-1 items-stretch gap-6 md:grid-cols-2">
@@ -101,17 +87,11 @@ export function Pricing({
 
               <CardFooter className="flex-col gap-3 px-8 pb-8">
                 <Button asChild variant="outline" size="lg" className="w-full">
-                  <a
-                    href={siteConfig.links.github ?? "#"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a href={siteConfig.links.github ?? "#"} target="_blank" rel="noopener noreferrer">
                     {t("getOnGithub")}
                   </a>
                 </Button>
-                <p className="text-center text-xs text-muted-foreground">
-                  {t("noSignup")}
-                </p>
+                <p className="text-center text-xs text-muted-foreground">{t("noSignup")}</p>
               </CardFooter>
             </Card>
           </Reveal>
@@ -142,9 +122,7 @@ export function Pricing({
                   {proFeatures.map((feature, i) => (
                     <li key={feature} className="flex items-start gap-3 text-sm">
                       {i === 0 ? <PlusIcon /> : <CheckIcon />}
-                      <span className={i === 0 ? "font-medium text-foreground" : "text-foreground"}>
-                        {feature}
-                      </span>
+                      <span className={i === 0 ? "font-medium text-foreground" : "text-foreground"}>{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -161,11 +139,7 @@ export function Pricing({
                   // what we will actually do. Same wording on the confirm page
                   // and in the welcome email: change all three together.
                   note={t("waitlistNote")}
-                  disabledNote={
-                    isDemo
-                      ? t("formsDisabled")
-                      : "The waitlist opens shortly - check back soon."
-                  }
+                  disabledNote={isDemo ? t("formsDisabled") : "The waitlist opens shortly - check back soon."}
                 />
               </CardFooter>
             </Card>

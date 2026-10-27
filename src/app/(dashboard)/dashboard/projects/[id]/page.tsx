@@ -9,11 +9,7 @@ import { Button } from "@/components/ui/button"
 import { ProjectEditForm } from "@/components/dashboard/project-edit-form"
 import { deleteProject } from "@/app/actions/projects"
 
-export default async function ProjectDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
+export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const t = await getTranslations("dashboard.projectDetail")
   const format = await getFormatter()
   const user = await requireUser()

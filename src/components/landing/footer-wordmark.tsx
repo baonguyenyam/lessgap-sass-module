@@ -29,7 +29,7 @@ export function FooterWordmark() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none mt-10 hidden select-none overflow-hidden text-foreground md:block [--wordmark-from:0.14] [--wordmark-to:0] dark:[--wordmark-from:0.045] dark:[--wordmark-to:0]"
+      className="pointer-events-none mt-10 hidden overflow-hidden text-foreground select-none [--wordmark-from:0.14] [--wordmark-to:0] md:block dark:[--wordmark-from:0.045] dark:[--wordmark-to:0]"
     >
       <svg viewBox="0 18 1000 92" className="block w-full" preserveAspectRatio="xMidYMin meet">
         <defs>
@@ -38,7 +38,15 @@ export function FooterWordmark() {
             <stop offset="100%" stopColor="currentColor" style={{ stopOpacity: "var(--wordmark-to)" }} />
           </linearGradient>
         </defs>
-        <text x="12" y="124" textLength="976" lengthAdjust="spacing" fontSize="128" fontWeight="800" fill={`url(#${id})`}>
+        <text
+          x="12"
+          y="124"
+          textLength="976"
+          lengthAdjust="spacing"
+          fontSize="128"
+          fontWeight="800"
+          fill={`url(#${id})`}
+        >
           {siteConfig.name}
         </text>
       </svg>

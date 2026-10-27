@@ -49,10 +49,7 @@ export async function POST(req: NextRequest) {
   // A user with a live subscription changes plans through the Customer Portal
   // (which handles proration); a second checkout would create a second
   // subscription in Stripe.
-  if (
-    user.subscription &&
-    (CHECKOUT_BLOCKING_STATUSES as readonly string[]).includes(user.subscription.status)
-  ) {
+  if (user.subscription && (CHECKOUT_BLOCKING_STATUSES as readonly string[]).includes(user.subscription.status)) {
     return NextResponse.json(
       { error: "You already have a subscription. Use the billing portal to change plans." },
       { status: 400 }

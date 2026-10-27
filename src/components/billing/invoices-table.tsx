@@ -42,14 +42,19 @@ export function InvoicesTable({
       col.accessor("created", {
         id: "created",
         header: t("colDate"),
-        cell: ({ row }) => <span className="whitespace-nowrap">{format.dateTime(new Date(row.original.created), "date")}</span>,
+        cell: ({ row }) => (
+          <span className="whitespace-nowrap">{format.dateTime(new Date(row.original.created), "date")}</span>
+        ),
       }),
       col.accessor("total", {
         header: t("colAmount"),
         // The invoice total in its own currency: the total, not what has been
         // paid so far, which reads as zero on an open one.
         cell: ({ row }) =>
-          format.number(row.original.total / 100, { style: "currency", currency: (row.original.currency ?? "usd").toUpperCase() }),
+          format.number(row.original.total / 100, {
+            style: "currency",
+            currency: (row.original.currency ?? "usd").toUpperCase(),
+          }),
       }),
       col.accessor("status", {
         header: t("colStatus"),
@@ -57,7 +62,9 @@ export function InvoicesTable({
           const status = row.original.status
           return (
             <Badge variant={status === "paid" ? "success" : "secondary"}>
-              {status && (INVOICE_STATUSES as readonly string[]).includes(status) ? t(`invoiceStatus.${status}`) : status ?? t("statusUnknown")}
+              {status && (INVOICE_STATUSES as readonly string[]).includes(status)
+                ? t(`invoiceStatus.${status}`)
+                : (status ?? t("statusUnknown"))}
             </Badge>
           )
         },
@@ -68,8 +75,10 @@ export function InvoicesTable({
         cell: ({ row }) => {
           const actions: RowAction[] = []
           const { hostedUrl, pdfUrl } = row.original
-          if (hostedUrl) actions.push({ label: t("viewInvoice"), onSelect: () => window.open(hostedUrl, "_blank", "noopener") })
-          if (pdfUrl) actions.push({ label: t("downloadPdf"), onSelect: () => window.open(pdfUrl, "_blank", "noopener") })
+          if (hostedUrl)
+            actions.push({ label: t("viewInvoice"), onSelect: () => window.open(hostedUrl, "_blank", "noopener") })
+          if (pdfUrl)
+            actions.push({ label: t("downloadPdf"), onSelect: () => window.open(pdfUrl, "_blank", "noopener") })
           return <RowActions label={format.dateTime(new Date(row.original.created), "date")} actions={actions} />
         },
       }),
@@ -85,7 +94,13 @@ export function InvoicesTable({
       defaults={defaults}
       getRowId={(row) => row.id}
       sortable={["created"]}
-      filters={[{ key: "status", label: t("colStatus"), options: INVOICE_STATUSES.map((s) => ({ value: s, label: t(`invoiceStatus.${s}`) })) }]}
+      filters={[
+        {
+          key: "status",
+          label: t("colStatus"),
+          options: INVOICE_STATUSES.map((s) => ({ value: s, label: t(`invoiceStatus.${s}`) })),
+        },
+      ]}
       emptyMessage={emptyMessage}
     />
   )

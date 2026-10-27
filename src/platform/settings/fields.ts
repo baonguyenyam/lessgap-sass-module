@@ -7,7 +7,11 @@ import { APP_LOCALES, canEditSetting, type SettingKey } from "@/platform/setting
 
 /** The tabs of Admin → Settings, in order, and the settings each holds. */
 export const SETTINGS_TABS = [
-  { segment: null, key: "display", settings: ["display.page_size", "display.date_style", "display.hour_cycle", "display.time_zone"] },
+  {
+    segment: null,
+    key: "display",
+    settings: ["display.page_size", "display.date_style", "display.hour_cycle", "display.time_zone"],
+  },
   { segment: "language", key: "language", settings: ["locale.app"] },
   { segment: "access", key: "access", settings: ["signup.enabled"] },
 ] as const satisfies readonly { segment: string | null; key: string; settings: readonly SettingKey[] }[]

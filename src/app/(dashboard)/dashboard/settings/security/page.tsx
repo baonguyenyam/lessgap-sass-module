@@ -91,7 +91,9 @@ export default async function SecuritySettingsPage({
               rather than a field you save. Its own form, because the profile
               form cannot contain another one. */}
           <div className="border-b border-border pb-4">
-            <Label htmlFor="new-email" className="font-medium">{t("email.label")}</Label>
+            <Label htmlFor="new-email" className="font-medium">
+              {t("email.label")}
+            </Label>
             <p className="mt-1 max-w-prose text-xs text-muted-foreground">{t("email.hint")}</p>
             <form action={changeEmail} className="mt-2 flex flex-wrap items-center gap-2">
               <Input
@@ -99,10 +101,11 @@ export default async function SecuritySettingsPage({
                 name="email"
                 type="email"
                 placeholder={t("email.placeholder")}
-                className="h-9 w-full sm:w-64"
+                size="sm"
+                className="w-full sm:w-64"
                 required
               />
-              <PendingButton variant="outline" size="xs">
+              <PendingButton variant="outline" size="sm">
                 {t("email.submit")}
               </PendingButton>
             </form>
@@ -140,11 +143,7 @@ export default async function SecuritySettingsPage({
                 {hasPassword ? t("changePassword") : t("setPassword")}
               </PendingButton>
             </form>
-            {!hasPassword && (
-              <p className="mt-2 text-xs text-muted-foreground">
-                {t("passwordHint")}
-              </p>
-            )}
+            {!hasPassword && <p className="mt-2 text-xs text-muted-foreground">{t("passwordHint")}</p>}
           </div>
         </CardContent>
       </Card>
@@ -176,7 +175,6 @@ export default async function SecuritySettingsPage({
           <ActiveSessions />
         </CardContent>
       </Card>
-
     </div>
   )
 }

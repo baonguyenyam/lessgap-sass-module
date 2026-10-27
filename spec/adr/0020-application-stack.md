@@ -40,3 +40,21 @@ was deliberately no formatter.
   the server without one.
 - **Prettier only on changed files:** no large diff now, but the repository
   would stay half-formatted for years.
+
+## Migration status (2026-10-27)
+
+Done: every list is a `DataTable` (admin users, admin newsletter, projects,
+members, roles, billing invoices); every drawer form (`FormDrawer`) and the
+platform settings forms use React Hook Form + Zod; TanStack Query runs every
+browser-side mutation of those; Zustand holds the drawer state; Prettier
+formats the repository and `pnpm lint` checks it.
+
+Still plain server-action forms, to move to React Hook Form area by area
+(button-only forms such as sign out, dismiss, end session and switch back need
+no form library):
+
+- [ ] Auth: `src/app/(auth)/login`, `signup`, `forgot-password`, `reset-password`, `2fa`
+- [ ] Settings → Security: change email, set/change password (`settings/security/page.tsx`), `two-factor-card.tsx`
+- [ ] Settings → General: `profile-form.tsx`, `delete-account.tsx`
+- [ ] Project detail: `project-edit-form.tsx`
+- [ ] Public site: `contact-form.tsx`, `waitlist-form.tsx`, `footer-signup.tsx`

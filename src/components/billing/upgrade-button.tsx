@@ -49,13 +49,7 @@ export function UpgradeButton({
   }
 
   return (
-    <Button
-      onClick={handleClick}
-      loading={loading}
-      disabled={disabled}
-      variant={variant}
-      className={className}
-    >
+    <Button onClick={handleClick} loading={loading} disabled={disabled} variant={variant} className={className}>
       {children ?? t("upgrade")}
     </Button>
   )

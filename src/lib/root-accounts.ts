@@ -20,9 +20,7 @@ export function parseRootEmails(value: string | undefined): string[] {
 }
 
 /** Promotes the users listed in ROOT_EMAILS to ROOT. Returns how many rows changed. */
-export async function grantRootFromConfig(
-  env: Record<string, string | undefined> = process.env,
-): Promise<number> {
+export async function grantRootFromConfig(env: Record<string, string | undefined> = process.env): Promise<number> {
   const emails = parseRootEmails(env.ROOT_EMAILS)
   if (emails.length === 0) return 0
   return db8.orm.public.User.where((u) => and(u.email.in(emails), u.role.neq("ROOT"))).updateAndCount({

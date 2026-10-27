@@ -90,7 +90,9 @@ export default async function AdminPage() {
         <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <CardTitle>{t("waitlistTitle")}</CardTitle>
-            <CardDescription>{t("waitlistSummary", { confirmed: waitlistConfirmed, pending: waitlistPending })}</CardDescription>
+            <CardDescription>
+              {t("waitlistSummary", { confirmed: waitlistConfirmed, pending: waitlistPending })}
+            </CardDescription>
           </div>
           <Button asChild variant="outline" size="sm">
             <Link href="/admin/newsletter">{t("waitlistOpen")}</Link>

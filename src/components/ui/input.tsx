@@ -8,23 +8,19 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size">
   size?: FieldSize
 }
 
-const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, error, size, ...props }, ref) => {
-    return (
-      <div className="flex flex-col gap-1">
-        <input
-          ref={ref}
-          aria-invalid={error ? true : undefined}
-          className={cn(fieldVariants({ size }), "py-2", className)}
-          {...props}
-        />
-        {error && (
-          <p className="text-xs text-destructive">{error}</p>
-        )}
-      </div>
-    )
-  }
-)
+const Input = forwardRef<HTMLInputElement, InputProps>(({ className, error, size, ...props }, ref) => {
+  return (
+    <div className="flex flex-col gap-1">
+      <input
+        ref={ref}
+        aria-invalid={error ? true : undefined}
+        className={cn(fieldVariants({ size }), "py-2", className)}
+        {...props}
+      />
+      {error && <p className="text-xs text-destructive">{error}</p>}
+    </div>
+  )
+})
 
 Input.displayName = "Input"
 

@@ -39,7 +39,9 @@ const url = toDirectUrl(configured)
 const { hostname, pathname } = new URL(url)
 const database = decodeURIComponent(pathname.replace(/^\//, "")) || "postgres"
 
-const baseline = readMigrationGraph(path.join(import.meta.dirname, "..", "migrations", "app")).find((e) => e.from === null)
+const baseline = readMigrationGraph(path.join(import.meta.dirname, "..", "migrations", "app")).find(
+  (e) => e.from === null
+)
 if (!baseline) fail("no baseline migration in migrations/app")
 
 const client = new pg.Client({ connectionString: url, connectionTimeoutMillis: 10_000 })
@@ -53,7 +55,9 @@ let legacyPresent = false
 try {
   const { rows: legacy } = await client.query(`SELECT to_regclass('"_prisma_migrations"') IS NOT NULL AS present`)
   legacyPresent = legacy[0]?.present === true
-  const { rows: markerTable } = await client.query(`SELECT to_regclass('prisma_contract.marker') IS NOT NULL AS present`)
+  const { rows: markerTable } = await client.query(
+    `SELECT to_regclass('prisma_contract.marker') IS NOT NULL AS present`
+  )
   if (markerTable[0]?.present) {
     const { rows } = await client.query(`SELECT core_hash FROM prisma_contract.marker WHERE space = 'app'`)
     if (rows.length > 0) {
@@ -66,7 +70,7 @@ try {
   if (!legacyPresent) {
     fail(
       `${database} on ${hostname} has no "_prisma_migrations" table: it is not a Prisma 7 database. ` +
-        "An empty database is set up with: pnpm db:migrate",
+        "An empty database is set up with: pnpm db:migrate"
     )
   }
 } finally {
@@ -93,7 +97,9 @@ if (dropLegacy && legacyPresent) {
 
 console.log(`\n✔ ${database} on ${hostname} now runs on Prisma 8.`)
 if (!dropLegacy && legacyPresent) {
-  console.log(`  Prisma 7's "_prisma_migrations" table was kept; drop it with --drop-legacy-table when you no longer need it.`)
+  console.log(
+    `  Prisma 7's "_prisma_migrations" table was kept; drop it with --drop-legacy-table when you no longer need it.`
+  )
 }
 
 function step(title) {
@@ -108,5 +114,6 @@ function fail(message) {
 function prisma(...rest) {
   const result = spawnSync("pnpm", ["exec", "prisma", ...rest, "--db", url, "--yes"], { stdio: "inherit" })
   if (result.error) fail(`could not start pnpm: ${result.error.message}`)
-  if (result.status !== 0) fail(`prisma ${rest.join(" ")} failed (exit ${result.status}). Its own error is printed above.`)
+  if (result.status !== 0)
+    fail(`prisma ${rest.join(" ")} failed (exit ${result.status}). Its own error is printed above.`)
 }

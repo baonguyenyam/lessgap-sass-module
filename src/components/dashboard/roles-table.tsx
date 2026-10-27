@@ -40,7 +40,11 @@ export function RolesTable({
 }) {
   const t = useTranslations("dashboard.roles")
   const openDrawer = useDrawer((s) => s.open)
-  const deleteConfirm = { title: t("deleteConfirm.title"), description: t("deleteConfirm.description"), confirmLabel: t("custom.delete") }
+  const deleteConfirm = {
+    title: t("deleteConfirm.title"),
+    description: t("deleteConfirm.description"),
+    confirmLabel: t("custom.delete"),
+  }
 
   const columns = useMemo(() => {
     const col = dataTableColumns<RoleRow>()
@@ -51,14 +55,18 @@ export function RolesTable({
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
             <Badge variant={row.original.builtIn ? "default" : "outline"}>{row.original.role}</Badge>
-            {row.original.builtIn && <span className="text-xs text-muted-foreground">{t("builtInTag")}</span>}
+            {row.original.builtIn && (
+              <span className="text-xs whitespace-nowrap text-muted-foreground">{t("builtInTag")}</span>
+            )}
           </div>
         ),
       }),
       col.accessor("permissions", {
         header: t("colPermissions"),
         cell: ({ row }) => (
-          <span className="line-clamp-2 max-w-md text-xs text-muted-foreground">{row.original.permissions.join(", ")}</span>
+          <span className="line-clamp-2 max-w-md text-xs text-muted-foreground">
+            {row.original.permissions.join(", ")}
+          </span>
         ),
       }),
       col.accessor("members", {
@@ -74,7 +82,12 @@ export function RolesTable({
           if (!canManage || role.builtIn) return null
           const actions: RowAction[] = [{ label: t("edit"), onSelect: () => openDrawer(DRAWER, role.role) }]
           if (role.members === 0) {
-            actions.push({ label: t("custom.delete"), variant: "destructive", confirm: deleteConfirm, run: () => deleteTenantRoles([role.role]) })
+            actions.push({
+              label: t("custom.delete"),
+              variant: "destructive",
+              confirm: deleteConfirm,
+              run: () => deleteTenantRoles([role.role]),
+            })
           }
           return <RowActions label={role.role} actions={actions} />
         },
@@ -83,7 +96,14 @@ export function RolesTable({
   }, [t, canManage, openDrawer]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const bulkActions: BulkAction[] = canManage
-    ? [{ label: t("custom.delete"), variant: "destructive", confirm: deleteConfirm, run: (ids) => deleteTenantRoles(ids) }]
+    ? [
+        {
+          label: t("custom.delete"),
+          variant: "destructive",
+          confirm: deleteConfirm,
+          run: (ids) => deleteTenantRoles(ids),
+        },
+      ]
     : []
 
   return (
@@ -97,7 +117,16 @@ export function RolesTable({
         getRowId={(row) => row.id}
         sortable={["role", "members"]}
         searchPlaceholder={t("search")}
-        filters={[{ key: "kind", label: t("kind.label"), options: [{ value: "builtIn", label: t("kind.builtIn") }, { value: "custom", label: t("kind.custom") }] }]}
+        filters={[
+          {
+            key: "kind",
+            label: t("kind.label"),
+            options: [
+              { value: "builtIn", label: t("kind.builtIn") },
+              { value: "custom", label: t("kind.custom") },
+            ],
+          },
+        ]}
         bulkActions={bulkActions}
         emptyMessage={t("custom.empty")}
         actions={
@@ -161,7 +190,9 @@ function RoleForm({ role, catalog }: { role: RoleRow | null; catalog: Catalog })
             <div className="space-y-3">
               {Object.entries(catalog).map(([resource, verbs]) => (
                 <fieldset key={resource} className="rounded-[var(--radius)] border border-border p-3">
-                  <legend className="px-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{resource}</legend>
+                  <legend className="px-1 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                    {resource}
+                  </legend>
                   <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                     {verbs.map((verb) => {
                       const key = `${resource}.${verb}`
@@ -171,7 +202,9 @@ function RoleForm({ role, catalog }: { role: RoleRow | null; catalog: Catalog })
                           <Checkbox
                             checked={checked}
                             onCheckedChange={(next) =>
-                              field.onChange(next === true ? [...field.value, key] : field.value.filter((k) => k !== key))
+                              field.onChange(
+                                next === true ? [...field.value, key] : field.value.filter((k) => k !== key)
+                              )
                             }
                           />
                           {verb}

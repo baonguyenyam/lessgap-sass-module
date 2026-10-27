@@ -28,5 +28,4 @@ import { routing } from "./routing"
  * matching the moment a prefix appears, which is how the navbar kept showing
  * on the Italian docs while it was correctly hidden on the English ones.
  */
-export const { Link, redirect, usePathname, useRouter, getPathname } =
-  createNavigation(routing)
+export const { Link, redirect, usePathname, useRouter, getPathname } = createNavigation(routing)

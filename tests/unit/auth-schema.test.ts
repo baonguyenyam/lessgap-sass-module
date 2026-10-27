@@ -32,7 +32,10 @@ describe("the Better Auth schema", () => {
   it("is declared in full in prisma/contract.prisma", async () => {
     const { auth } = await import("@/auth")
     const { getSchema } = await import("better-auth/db")
-    const expected = getSchema(auth.options as never) as Record<string, { fields: Record<string, { fieldName?: string }> }>
+    const expected = getSchema(auth.options as never) as Record<
+      string,
+      { fields: Record<string, { fieldName?: string }> }
+    >
 
     const missing: string[] = []
     for (const [table, { fields }] of Object.entries(expected)) {

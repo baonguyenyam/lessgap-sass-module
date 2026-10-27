@@ -28,7 +28,7 @@ export type MigrationEdge = { name: string; from: string | null; to: string }
 export function pendingMigrations(
   edges: readonly MigrationEdge[],
   marker: string | null,
-  target: string,
+  target: string
 ): MigrationEdge[] | null {
   if (marker === target) return []
 

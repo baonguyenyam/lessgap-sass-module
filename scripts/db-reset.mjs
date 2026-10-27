@@ -51,12 +51,16 @@ const client = new pg.Client({ connectionString: url })
 try {
   await client.connect()
 } catch (error) {
-  fail("connecting to the database", error, "check the URL, the password and that the database is reachable from this machine")
+  fail(
+    "connecting to the database",
+    error,
+    "check the URL, the password and that the database is reachable from this machine"
+  )
 }
 try {
   const { rows } = await client.query(
     `SELECT nspname FROM pg_namespace
-     WHERE nspname = 'public' OR nspname ILIKE 'prisma%' OR nspname ILIKE '\\_prisma%'`,
+     WHERE nspname = 'public' OR nspname ILIKE 'prisma%' OR nspname ILIKE '\\_prisma%'`
   )
   for (const { nspname } of rows) {
     await client.query(`DROP SCHEMA IF EXISTS "${nspname.replaceAll('"', '""')}" CASCADE`)
@@ -76,7 +80,11 @@ try {
 step("2/3 Building the schema")
 const prisma = (...rest) => run("pnpm", ["exec", "prisma", ...rest, "--db", url, "--yes"])
 if (!existsSync("migrations/app") || readdirSync("migrations/app").every((name) => name.startsWith("."))) {
-  fail("rebuilding the schema", new Error("no migrations in migrations/app"), "plan the baseline first: pnpm db:plan --name kit_baseline")
+  fail(
+    "rebuilding the schema",
+    new Error("no migrations in migrations/app"),
+    "plan the baseline first: pnpm db:plan --name kit_baseline"
+  )
 }
 console.log("Applying every migration (prisma db migrate)…")
 prisma("db", "migrate")

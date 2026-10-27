@@ -24,8 +24,7 @@ import { BrandLoader } from "@/components/ui/spinner"
 
 /** Paths whose links get the overlay. The public pages are static and fast. */
 const APP_PATHS = ["/dashboard", "/admin"]
-const isAppPath = (pathname: string) =>
-  APP_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`))
+const isAppPath = (pathname: string) => APP_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`))
 /** Below this a page change reads as instant, and an overlay would only flicker. */
 const SHOW_AFTER_MS = 120
 /** A navigation that never lands (offline, an error) must not lock the page. */
@@ -83,7 +82,7 @@ export function LoadingOverlay({ label, animate = true }: { label?: string; anim
       data-loading-overlay
       className={cn(
         "fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-[2px]",
-        animate && "animate-in fade-in-0 duration-200"
+        animate && "animate-in duration-200 fade-in-0"
       )}
     >
       {/* The label in white: it sits on the dim, in light mode as in dark. */}
@@ -131,8 +130,16 @@ function isAppNavigation(event: MouseEvent, anchor: HTMLAnchorElement): boolean 
 function LinkNavigationOverlay() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const visible = useSyncExternalStore(subscribe, () => linkVisible, () => false)
-  const boundaryShown = useSyncExternalStore(subscribe, () => boundaries > 0, () => false)
+  const visible = useSyncExternalStore(
+    subscribe,
+    () => linkVisible,
+    () => false
+  )
+  const boundaryShown = useSyncExternalStore(
+    subscribe,
+    () => boundaries > 0,
+    () => false
+  )
 
   // Links: started on the click, in the capture phase so a handler that stops
   // propagation further down cannot hide it from us.

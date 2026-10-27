@@ -2,7 +2,14 @@ import { existsSync } from "node:fs"
 import { join } from "node:path"
 import { describe, expect, it } from "vitest"
 
-import { APP_LOCALES, PLATFORM_SETTINGS, SETTING_KEYS, canEditSetting, parseSettingValue, readSettings } from "@/platform/settings/registry"
+import {
+  APP_LOCALES,
+  PLATFORM_SETTINGS,
+  SETTING_KEYS,
+  canEditSetting,
+  parseSettingValue,
+  readSettings,
+} from "@/platform/settings/registry"
 
 describe("readSettings", () => {
   it("is every default when nothing is stored", () => {
@@ -45,7 +52,8 @@ describe("parseSettingValue", () => {
 
 describe("APP_LOCALES", () => {
   it("has a message file for every language offered", () => {
-    for (const locale of APP_LOCALES) expect(existsSync(join(process.cwd(), "src", "locales", `${locale}.json`))).toBe(true)
+    for (const locale of APP_LOCALES)
+      expect(existsSync(join(process.cwd(), "src", "locales", `${locale}.json`))).toBe(true)
   })
 })
 

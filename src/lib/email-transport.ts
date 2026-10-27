@@ -65,7 +65,7 @@ export async function sendEmail(email: OutgoingEmail): Promise<boolean> {
       subject: email.subject,
       html: email.html,
       replyTo: email.replyTo,
-    }),
+    })
   )
 }
 
@@ -106,7 +106,11 @@ async function sendWithBrevo(email: OutgoingEmail): Promise<ResendOutcome> {
   if (response.ok) return { error: null }
   const body = (await response.json().catch(() => null)) as { code?: string; message?: string } | null
   return {
-    error: { name: body?.code ?? "brevo_error", message: body?.message ?? response.statusText, statusCode: response.status },
+    error: {
+      name: body?.code ?? "brevo_error",
+      message: body?.message ?? response.statusText,
+      statusCode: response.status,
+    },
   }
 }
 

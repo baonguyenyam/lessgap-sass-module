@@ -105,11 +105,7 @@ export async function rateLimitKeyFromIp(scope: string): Promise<string> {
  * left is the speed bump, which is what the kit had before you configured
  * anything.
  */
-export async function checkRateLimit(
-  key: string,
-  max = MAX_ATTEMPTS,
-  windowMs = WINDOW_MS
-): Promise<boolean> {
+export async function checkRateLimit(key: string, max = MAX_ATTEMPTS, windowMs = WINDOW_MS): Promise<boolean> {
   const shared = sharedStore()
   if (shared) {
     try {

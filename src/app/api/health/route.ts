@@ -43,6 +43,6 @@ export async function GET() {
       schema,
       timestamp: new Date().toISOString(),
     },
-    { headers: { "cache-control": "no-store" } },
+    { headers: { "cache-control": "no-store" } }
   )
 }

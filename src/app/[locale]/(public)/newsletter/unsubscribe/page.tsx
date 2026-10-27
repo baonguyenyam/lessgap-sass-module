@@ -6,11 +6,7 @@ import { nowTs } from "@/lib/timestamps"
 import { removeNewsletterContact } from "@/lib/email"
 import { siteConfig } from "@/config/site"
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: "newsletter" })
   return {
@@ -49,25 +45,21 @@ export default async function NewsletterUnsubscribePage({
 
   return (
     <section className="flex min-h-[60vh] items-center py-24">
-      <div className="mx-auto max-w-xl px-6 lg:px-12 text-center">
+      <div className="mx-auto max-w-xl px-6 text-center lg:px-12">
         {done ? (
           <>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              {t("unsubscribedHeading")}
-            </h1>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">{t("unsubscribedHeading")}</h1>
             <p className="mt-4 text-muted-foreground">{t("unsubscribedBody")}</p>
           </>
         ) : (
           <>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              {t("unknownHeading")}
-            </h1>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">{t("unknownHeading")}</h1>
             <p className="mt-4 text-muted-foreground">{t("unknownBody")}</p>
           </>
         )}
         <Link
           href="/"
-          className="mt-8 inline-block rounded-full px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft [background-image:var(--gradient-brand)]"
+          className="mt-8 inline-block rounded-full [background-image:var(--gradient-brand)] px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft"
         >
           {t("backToSite")}
         </Link>

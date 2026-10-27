@@ -80,7 +80,10 @@ test("a user can turn on 2FA, and then needs a code to sign in", async ({ browse
   await returning.goto("/login")
   await returning.locator('input[name="email"]').fill(email)
   await returning.locator('input[name="password"][type="password"]').fill(password)
-  await returning.getByRole("button", { name: /sign in|log in/i }).first().click()
+  await returning
+    .getByRole("button", { name: /sign in|log in/i })
+    .first()
+    .click()
 
   // The assertion this whole file is for.
   await returning.waitForURL("**/2fa", { timeout: 20_000 })
@@ -101,7 +104,10 @@ test("a user can turn on 2FA, and then needs a code to sign in", async ({ browse
   await lostPhone.goto("/login")
   await lostPhone.locator('input[name="email"]').fill(email)
   await lostPhone.locator('input[name="password"][type="password"]').fill(password)
-  await lostPhone.getByRole("button", { name: /sign in|log in/i }).first().click()
+  await lostPhone
+    .getByRole("button", { name: /sign in|log in/i })
+    .first()
+    .click()
   await lostPhone.waitForURL("**/2fa", { timeout: 20_000 })
 
   await lostPhone.getByRole("link", { name: /backup code/i }).click()

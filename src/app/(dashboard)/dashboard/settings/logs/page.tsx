@@ -83,7 +83,13 @@ export default async function LogsSettingsPage() {
                 )}
               </div>
               <time dateTime={event.at.toISOString()} className="text-xs text-muted-foreground">
-                {format.dateTime(event.at, { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+                {format.dateTime(event.at, {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </time>
             </li>
           ))}

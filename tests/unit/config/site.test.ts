@@ -30,14 +30,11 @@ describe("declared version", () => {
   })
 
   const lockPath = path.join(ROOT, "package-lock.json")
-  it.runIf(fs.existsSync(lockPath))(
-    "matches in package-lock.json, which npm will not update on its own",
-    () => {
-      const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"))
-      expect(lock.version).toBe(pkg.version)
-      // The lockfile repeats it inside the root package entry, and that copy
-      // is the one npm actually reads back.
-      expect(lock.packages[""].version).toBe(pkg.version)
-    }
-  )
+  it.runIf(fs.existsSync(lockPath))("matches in package-lock.json, which npm will not update on its own", () => {
+    const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"))
+    expect(lock.version).toBe(pkg.version)
+    // The lockfile repeats it inside the root package entry, and that copy
+    // is the one npm actually reads back.
+    expect(lock.packages[""].version).toBe(pkg.version)
+  })
 })

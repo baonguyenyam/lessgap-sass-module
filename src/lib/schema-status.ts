@@ -35,7 +35,7 @@ export function createSchemaStatus(
   edges: readonly MigrationEdge[],
   target: string,
   read: MarkerReader,
-  timeoutMs = 2000,
+  timeoutMs = 2000
 ): () => Promise<SchemaStatus> {
   // Aligned is remembered for the life of the instance, which keeps the
   // endpoint at one query per instance: a deploy cannot un-apply a migration.
@@ -73,7 +73,10 @@ export function isUndefinedTable(error: unknown): boolean {
     seen.add(value)
     const e = value as Record<string, unknown>
     if (e.code === "42P01" || e.code === "3F000" || e.originalCode === "42P01") return true
-    if (typeof e.message === "string" && (e.message.includes("42P01") || /"?prisma_contract(\.marker)?"? does not exist/.test(e.message))) {
+    if (
+      typeof e.message === "string" &&
+      (e.message.includes("42P01") || /"?prisma_contract(\.marker)?"? does not exist/.test(e.message))
+    ) {
       return true
     }
     return visit(e.meta) || visit(e.cause)
@@ -86,7 +89,9 @@ async function readMarkerFromDatabase(): Promise<string | null> {
   try {
     const plan = db8.raw.sql`
       SELECT core_hash FROM prisma_contract.marker WHERE space = 'app'
-    `.returnsRow({ core_hash: "pg/text@1" }).build()
+    `
+      .returnsRow({ core_hash: "pg/text@1" })
+      .build()
     const rows = await db8.query(plan)
     return rows[0]?.core_hash ?? null
   } catch (error) {

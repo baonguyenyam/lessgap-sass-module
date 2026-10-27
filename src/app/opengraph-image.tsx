@@ -14,35 +14,31 @@ export const contentType = "image/png"
 
 export default function Image() {
   return new ImageResponse(
-    (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        padding: "80px",
+        backgroundColor: "#0a0a0a",
+        backgroundImage: `radial-gradient(circle at 20% 0%, ${ogBrand.glow}, transparent 55%)`,
+        color: "#f8fafc",
+        fontSize: 32,
+      }}
+    >
       <div
         style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          padding: "80px",
-          backgroundColor: "#0a0a0a",
-          backgroundImage: `radial-gradient(circle at 20% 0%, ${ogBrand.glow}, transparent 55%)`,
-          color: "#f8fafc",
-          fontSize: 32,
+          width: 96,
+          height: 12,
+          borderRadius: 6,
+          backgroundImage: ogBrand.bar,
         }}
-      >
-        <div
-          style={{
-            width: 96,
-            height: 12,
-            borderRadius: 6,
-            backgroundImage: ogBrand.bar,
-          }}
-        />
-        <div style={{ marginTop: 48, fontSize: 84, fontWeight: 700, letterSpacing: "-0.03em" }}>
-          {siteConfig.name}
-        </div>
-        <div style={{ marginTop: 24, fontSize: 40, color: "#94a3b8" }}>{siteConfig.tagline}</div>
-      </div>
-    ),
+      />
+      <div style={{ marginTop: 48, fontSize: 84, fontWeight: 700, letterSpacing: "-0.03em" }}>{siteConfig.name}</div>
+      <div style={{ marginTop: 24, fontSize: 40, color: "#94a3b8" }}>{siteConfig.tagline}</div>
+    </div>,
     size
   )
 }

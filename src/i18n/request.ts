@@ -19,8 +19,12 @@ function withFallback(source: Messages, translated: Messages): Messages {
   for (const [key, value] of Object.entries(translated)) {
     const base = out[key]
     const mergeable =
-      value && typeof value === "object" && !Array.isArray(value) &&
-      base && typeof base === "object" && !Array.isArray(base)
+      value &&
+      typeof value === "object" &&
+      !Array.isArray(value) &&
+      base &&
+      typeof base === "object" &&
+      !Array.isArray(base)
     out[key] = mergeable ? withFallback(base as Messages, value as Messages) : value
   }
   return out
@@ -44,7 +48,13 @@ export default getRequestConfig(async ({ requestLocale }) => {
   const locale = hasLocale(routing.locales, requested) ? requested : settings["locale.app"]
   // Every date on every page is shown in one time zone and one style, set by
   // an administrator (`display.*`).
-  const shared = { timeZone: settings["display.time_zone"], formats: { dateTime: dateTimeFormats(settings) } }
+  // `now` is fixed per request and handed to the browser with the messages, so
+  // a relative time ("2 minutes ago") renders the same on both sides.
+  const shared = {
+    timeZone: settings["display.time_zone"],
+    formats: { dateTime: dateTimeFormats(settings) },
+    now: new Date(),
+  }
 
   const source: Messages = (await import(`../locales/${routing.defaultLocale}.json`)).default
   if (locale === routing.defaultLocale) {

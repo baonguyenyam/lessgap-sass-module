@@ -47,12 +47,7 @@ export default async function GeneralSettingsPage({
           <CardDescription>{t("profileDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
-          <ProfileForm
-            name={user.name}
-            email={user.email}
-            image={user.image}
-            avatarProvider={avatarProvider}
-          />
+          <ProfileForm name={user.name} email={user.email} image={user.image} avatarProvider={avatarProvider} />
         </CardContent>
       </Card>
 
@@ -72,7 +67,6 @@ export default async function GeneralSettingsPage({
               })}
             </span>
           </div>
-
         </CardContent>
       </Card>
 

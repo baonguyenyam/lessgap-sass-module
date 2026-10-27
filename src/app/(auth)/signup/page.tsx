@@ -10,11 +10,7 @@ import { siteConfig } from "@/config/site"
 import { emailEnabled } from "@/lib/email-transport"
 import { getPlatformSettings } from "@/platform/settings/store"
 
-export default async function SignupPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ error?: string }>
-}) {
+export default async function SignupPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams
   const t = await getTranslations("auth.signup")
   // An unknown code must not throw: the query string is user controlled, so a
@@ -50,12 +46,7 @@ export default async function SignupPage({
             {t("demoNotice")}{" "}
             {t.rich("demoNoticeExtra", {
               resend: (chunks) => (
-                <a
-                  href="https://resend.com"
-                  className="underline underline-offset-2"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a href="https://resend.com" className="underline underline-offset-2" target="_blank" rel="noreferrer">
                   {chunks}
                 </a>
               ),
@@ -78,8 +69,24 @@ export default async function SignupPage({
         )}
 
         <form action={registerUser} className="flex flex-col gap-3">
-          <Input name="name" type="text" placeholder={t("namePlaceholder")} autoComplete="name" maxLength={100} disabled={isDemo || closed} size="lg" />
-          <Input name="email" type="email" placeholder={t("emailPlaceholder")} autoComplete="email" required disabled={isDemo || closed} size="lg" />
+          <Input
+            name="name"
+            type="text"
+            placeholder={t("namePlaceholder")}
+            autoComplete="name"
+            maxLength={100}
+            disabled={isDemo || closed}
+            size="lg"
+          />
+          <Input
+            name="email"
+            type="email"
+            placeholder={t("emailPlaceholder")}
+            autoComplete="email"
+            required
+            disabled={isDemo || closed}
+            size="lg"
+          />
           <Input
             name="password"
             type="password"
@@ -91,12 +98,7 @@ export default async function SignupPage({
             disabled={isDemo || closed}
             size="lg"
           />
-          <PendingButton
-            disabled={isDemo || closed}
-            variant="primary"
-            size="lg"
-            className="w-full"
-          >
+          <PendingButton disabled={isDemo || closed} variant="primary" size="lg" className="w-full">
             {t("submit")}
           </PendingButton>
         </form>
@@ -114,10 +116,14 @@ export default async function SignupPage({
         <p className="mt-6 text-center text-xs text-muted-foreground">
           {t.rich("legal", {
             terms: (chunks) => (
-              <Link href="/terms" className="underline underline-offset-4 hover:text-foreground">{chunks}</Link>
+              <Link href="/terms" className="underline underline-offset-4 hover:text-foreground">
+                {chunks}
+              </Link>
             ),
             privacy: (chunks) => (
-              <Link href="/privacy" className="underline underline-offset-4 hover:text-foreground">{chunks}</Link>
+              <Link href="/privacy" className="underline underline-offset-4 hover:text-foreground">
+                {chunks}
+              </Link>
             ),
           })}
         </p>

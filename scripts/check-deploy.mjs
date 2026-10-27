@@ -47,7 +47,9 @@ const more = (text) => console.log(`  ${"".padEnd(LABEL)}${text}`)
 
 const url = process.env.DATABASE_URL
 if (!url) {
-  console.error('\nDATABASE_URL is not set. Put it in .env.local, or run:\n  DATABASE_URL="postgresql://..." pnpm check:deploy\n')
+  console.error(
+    '\nDATABASE_URL is not set. Put it in .env.local, or run:\n  DATABASE_URL="postgresql://..." pnpm check:deploy\n'
+  )
   process.exit(2)
 }
 
@@ -76,7 +78,7 @@ const reportRowCounts = async () => {
   } = await client.query(
     `SELECT (SELECT count(*) FROM "User")::int AS users,
             (SELECT count(*) FROM "Account")::int AS accounts,
-            (SELECT count(*) FROM "Session")::int AS sessions`,
+            (SELECT count(*) FROM "Session")::int AS sessions`
   )
   line("rows", `${counts.users} users, ${counts.accounts} accounts, ${counts.sessions} sessions`)
 }
@@ -150,7 +152,7 @@ try {
   try {
     const { rows: columns } = await client.query(
       `SELECT column_name, is_nullable, column_default FROM information_schema.columns
-        WHERE table_schema = current_schema() AND table_name = 'Account'`,
+        WHERE table_schema = current_schema() AND table_name = 'Account'`
     )
     const shape = accountTableShape(columns.map((c) => c.column_name))
 
@@ -179,7 +181,7 @@ try {
       const { rows: dupes } = await client.query(
         `SELECT "providerId", "accountId", count(*)::int AS rows FROM "Account"
           GROUP BY "providerId", "accountId" HAVING count(*) > 1
-          ORDER BY rows DESC LIMIT 20`,
+          ORDER BY rows DESC LIMIT 20`
       )
       if (dupes.length > 0) {
         line(accountProblems ? "" : "account table", `${dupes.length} duplicate (providerId, accountId) pair(s):`)

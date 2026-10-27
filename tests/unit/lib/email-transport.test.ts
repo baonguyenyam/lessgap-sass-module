@@ -135,7 +135,7 @@ describe("Brevo", () => {
     process.env.BREVO_API_KEY = "xkeysib-test"
     process.env.EMAIL_FROM = "Acme <hello@acme.test>"
     fetchMock.mockResolvedValue(
-      new Response(JSON.stringify({ code: "unauthorized", message: "Key not found" }), { status: 401 }),
+      new Response(JSON.stringify({ code: "unauthorized", message: "Key not found" }), { status: 401 })
     )
     const log = vi.spyOn(console, "error").mockImplementation(() => {})
     const { sendEmail } = await import("@/lib/email-transport")
