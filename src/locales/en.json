@@ -278,7 +278,9 @@
       },
       "nav": {
         "label": "Settings sections",
-        "preferences": "Preferences"
+        "general": "General",
+        "localization": "Localization",
+        "display": "Display"
       },
       "backup": {
         "title": "Back up your data",
@@ -307,9 +309,29 @@
       },
       "preferences": {
         "languageTitle": "Language",
-        "languageDescription": "The language of the signed-in area, in this browser.",
+        "languageDescription": "Your own language, time zone and date format. They override your workspace's.",
         "themeTitle": "Appearance",
         "themeDescription": "Light, dark, or the same as your system."
+      },
+      "tenant": {
+        "generalTitle": "Workspace",
+        "generalDescription": "The name and URL slug of this workspace.",
+        "name": "Name",
+        "slug": "Slug",
+        "slugHint": "Lowercase letters, digits and dashes.",
+        "localizationTitle": "Localization",
+        "localizationDescription": "Language, time zone and date format for everyone in this workspace.",
+        "displayTitle": "Display",
+        "displayDescription": "How lists are shown across this workspace.",
+        "readOnly": "Only members allowed to manage settings can change this.",
+        "save": "Save",
+        "saved": "Settings saved.",
+        "errors": {
+          "invalidName": "Enter a name of up to 80 characters.",
+          "invalidSlug": "Use lowercase letters, digits and single dashes, up to 48 characters.",
+          "slugTaken": "That slug is already taken.",
+          "failed": "Something went wrong. Nothing was changed."
+        }
       }
     },
     "account": {
@@ -320,7 +342,20 @@
         "profile": "Profile",
         "security": "Security",
         "backup": "Backup",
-        "activity": "Activity"
+        "activity": "Activity",
+        "preferences": "Preferences",
+        "notifications": "Notifications"
+      },
+      "notifications": {
+        "title": "Email notifications",
+        "description": "Choose which emails you get.",
+        "productUpdates": "Product updates",
+        "productUpdatesHint": "New features and changes to the app.",
+        "tips": "Tips",
+        "tipsHint": "Occasional advice on getting more out of your workspace.",
+        "alwaysSent": "Security and billing emails are always sent.",
+        "saved": "Saved.",
+        "failed": "That could not be saved."
       }
     },
     "billing": {
@@ -456,7 +491,16 @@
         "colActions": "Actions",
         "changeRole": "Change role",
         "search": "Search by name or email…",
-        "empty": "No members match."
+        "empty": "No members match.",
+        "colStatus": "Status",
+        "colLastActive": "Last active",
+        "never": "Never",
+        "suspend": "Suspend",
+        "reactivate": "Reactivate",
+        "status": {
+          "active": "Active",
+          "suspended": "Suspended"
+        }
       },
       "invitations": {
         "title": "Pending invitations",
@@ -465,7 +509,9 @@
           "accepted": "Accepted",
           "rejected": "Declined",
           "canceled": "Canceled"
-        }
+        },
+        "revoke": "Revoke the invitation for {email}",
+        "revoked": "Invitation revoked."
       },
       "removeConfirm": {
         "title": "Remove the selected members?",
@@ -477,6 +523,10 @@
         "unknownRole": "That role does not exist in this workspace.",
         "notFound": "That member is no longer in this workspace.",
         "lastOwner": "The last owner cannot be given another role."
+      },
+      "suspendConfirm": {
+        "title": "Suspend the selected members?",
+        "description": "They keep their seat but lose access until reactivated. Owners and you are skipped."
       }
     },
     "roles": {
@@ -523,6 +573,21 @@
       "description": "Go to any page by name.",
       "placeholder": "Type a page name…",
       "empty": "No page matches."
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "subtitle": "The people on this workspace's mailing list.",
+      "add": "Add subscriber",
+      "addTitle": "Add a subscriber",
+      "addDescription": "We email them a link; they join the list once they confirm.",
+      "email": "Email",
+      "send": "Send invitation",
+      "cancel": "Cancel",
+      "added": "Confirmation email sent.",
+      "errors": {
+        "invalidEmail": "Enter a valid email address.",
+        "exists": "That address is already on the list."
+      }
     }
   },
   "admin": {

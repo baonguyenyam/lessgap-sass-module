@@ -23,9 +23,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'6f7f000593f23a45c57052b1caa9bf22a4d5af7ab62e730b64c8fb57093c5d31'>;
+  StorageHashBase<'004a91fb8116703322e94ba8acc304b66126f9826a2a97be90f2d694527f1ebc'>;
 export type ExecutionHash =
-  ExecutionHashBase<'fd0b10e0df52eb8932288da873ff3533c2f0ec053b4acc33eb08117e218ae973'>;
+  ExecutionHashBase<'c99ae2930b64cbf43fa9ad405878aa7e80fbb3ced58b8b2d1c5e59875ebb260d'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -384,6 +384,7 @@ export namespace Models {
     id: FieldOutputTypes['public']['Member']['id'];
     organizationId: FieldOutputTypes['public']['Member']['organizationId'];
     role: FieldOutputTypes['public']['Member']['role'];
+    status: FieldOutputTypes['public']['Member']['status'];
     updatedAt: FieldOutputTypes['public']['Member']['updatedAt'];
     userId: FieldOutputTypes['public']['Member']['userId'];
     tenant: public_Tenant;
@@ -397,9 +398,11 @@ export namespace Models {
     email: FieldOutputTypes['public']['NewsletterSubscriber']['email'];
     id: FieldOutputTypes['public']['NewsletterSubscriber']['id'];
     source: FieldOutputTypes['public']['NewsletterSubscriber']['source'];
+    tenantId: FieldOutputTypes['public']['NewsletterSubscriber']['tenantId'];
     unsubscribeToken: FieldOutputTypes['public']['NewsletterSubscriber']['unsubscribeToken'];
     unsubscribedAt: FieldOutputTypes['public']['NewsletterSubscriber']['unsubscribedAt'];
-    readonly [RelationKeys]?: never;
+    tenant: public_Tenant | null;
+    readonly [RelationKeys]?: 'tenant';
   };
   export type public_OrganizationRole = {
     createdAt: FieldOutputTypes['public']['OrganizationRole']['createdAt'];
@@ -510,7 +513,18 @@ export namespace Models {
     invitations: public_Invitation[];
     members: public_Member[];
     roles: public_OrganizationRole[];
-    readonly [RelationKeys]?: 'invitations' | 'members' | 'roles';
+    settings: public_TenantSetting[];
+    subscribers: public_NewsletterSubscriber[];
+    readonly [RelationKeys]?: 'invitations' | 'members' | 'roles' | 'settings' | 'subscribers';
+  };
+  export type public_TenantSetting = {
+    key: FieldOutputTypes['public']['TenantSetting']['key'];
+    tenantId: FieldOutputTypes['public']['TenantSetting']['tenantId'];
+    updatedAt: FieldOutputTypes['public']['TenantSetting']['updatedAt'];
+    updatedById: FieldOutputTypes['public']['TenantSetting']['updatedById'];
+    value: FieldOutputTypes['public']['TenantSetting']['value'];
+    tenant: public_Tenant;
+    readonly [RelationKeys]?: 'tenant';
   };
   export type public_TwoFactor = {
     backupCodes: FieldOutputTypes['public']['TwoFactor']['backupCodes'];
@@ -544,6 +558,7 @@ export namespace Models {
     projects: public_Project[];
     purchases: public_Purchase[];
     sessions: public_Session[];
+    settings: public_UserSetting[];
     subscription: public_Subscription | null;
     twoFactors: public_TwoFactor[];
     readonly [RelationKeys]?:
@@ -553,8 +568,17 @@ export namespace Models {
       | 'projects'
       | 'purchases'
       | 'sessions'
+      | 'settings'
       | 'subscription'
       | 'twoFactors';
+  };
+  export type public_UserSetting = {
+    key: FieldOutputTypes['public']['UserSetting']['key'];
+    updatedAt: FieldOutputTypes['public']['UserSetting']['updatedAt'];
+    userId: FieldOutputTypes['public']['UserSetting']['userId'];
+    value: FieldOutputTypes['public']['UserSetting']['value'];
+    user: public_User;
+    readonly [RelationKeys]?: 'user';
   };
   export type public_Verification = {
     createdAt: FieldOutputTypes['public']['Verification']['createdAt'];
@@ -581,8 +605,10 @@ export declare const models: {
     Session: Models.public_Session;
     Subscription: Models.public_Subscription;
     Tenant: Models.public_Tenant;
+    TenantSetting: Models.public_TenantSetting;
     TwoFactor: Models.public_TwoFactor;
     User: Models.public_User;
+    UserSetting: Models.public_UserSetting;
     Verification: Models.public_Verification;
   };
 };
@@ -876,6 +902,16 @@ type ContractBase = Omit<
                   readonly nullable: false;
                   readonly many: false;
                 };
+                readonly status: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'active'>;
+                  };
+                  readonly many: false;
+                };
                 readonly updatedAt: {
                   readonly dataType: 'pg/timestamp';
                   readonly codecId: 'pg/timestamp-string@1';
@@ -985,6 +1021,12 @@ type ContractBase = Omit<
                   };
                   readonly many: false;
                 };
+                readonly tenantId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
                 readonly unsubscribeToken: {
                   readonly dataType: 'pg/text';
                   readonly codecId: 'pg/text@1';
@@ -1011,9 +1053,15 @@ type ContractBase = Omit<
                   readonly unique: true;
                 },
                 {
-                  readonly name: 'NewsletterSubscriber_email_key';
-                  readonly columns: readonly ['email'];
+                  readonly name: 'NewsletterSubscriber_tenantId_email_key';
+                  readonly columns: readonly ['tenantId', 'email'];
                   readonly unique: true;
+                },
+                {
+                  readonly name: 'NewsletterSubscriber_tenantId_idx_c93ed4f1';
+                  readonly prefix: 'NewsletterSubscriber_tenantId_idx';
+                  readonly columns: readonly ['tenantId'];
+                  readonly unique: false;
                 },
                 {
                   readonly name: 'NewsletterSubscriber_unsubscribeToken_key';
@@ -1021,7 +1069,21 @@ type ContractBase = Omit<
                   readonly unique: true;
                 },
               ];
-              foreignKeys: readonly [];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'NewsletterSubscriber';
+                    readonly columns: readonly ['tenantId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Tenant';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'NewsletterSubscriber_tenantId_fkey';
+                },
+              ];
             };
             readonly OrganizationRole: {
               columns: {
@@ -1795,6 +1857,70 @@ type ContractBase = Omit<
               ];
               foreignKeys: readonly [];
             };
+            readonly TenantSetting: {
+              columns: {
+                readonly key: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly tenantId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly updatedById: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly value: {
+                  readonly dataType: 'pg/json';
+                  readonly codecId: 'pg/json@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: {
+                readonly columns: readonly ['tenantId', 'key'];
+                readonly name: 'TenantSetting_pkey';
+              };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'TenantSetting_tenantId_idx_c93ed4f1';
+                  readonly prefix: 'TenantSetting_tenantId_idx';
+                  readonly columns: readonly ['tenantId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'TenantSetting';
+                    readonly columns: readonly ['tenantId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Tenant';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'TenantSetting_tenantId_fkey';
+                },
+              ];
+            };
             readonly TwoFactor: {
               columns: {
                 readonly backupCodes: {
@@ -2004,6 +2130,64 @@ type ContractBase = Omit<
               ];
               foreignKeys: readonly [];
             };
+            readonly UserSetting: {
+              columns: {
+                readonly key: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly userId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly value: {
+                  readonly dataType: 'pg/json';
+                  readonly codecId: 'pg/json@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: {
+                readonly columns: readonly ['userId', 'key'];
+                readonly name: 'UserSetting_pkey';
+              };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'UserSetting_userId_idx_a489d58a';
+                  readonly prefix: 'UserSetting_userId_idx';
+                  readonly columns: readonly ['userId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'UserSetting';
+                    readonly columns: readonly ['userId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'User';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'UserSetting_userId_fkey';
+                },
+              ];
+            };
             readonly Verification: {
               columns: {
                 readonly createdAt: {
@@ -2135,8 +2319,16 @@ type ContractBase = Omit<
       readonly model: 'Subscription';
     };
     readonly Tenant: { readonly namespace: 'public' & NamespaceId; readonly model: 'Tenant' };
+    readonly TenantSetting: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'TenantSetting';
+    };
     readonly TwoFactor: { readonly namespace: 'public' & NamespaceId; readonly model: 'TwoFactor' };
     readonly User: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
+    readonly UserSetting: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'UserSetting';
+    };
     readonly Verification: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'Verification';
@@ -2365,6 +2557,10 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
+              readonly status: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
               readonly updatedAt: {
                 readonly nullable: false;
                 readonly type: {
@@ -2409,6 +2605,7 @@ type ContractBase = Omit<
                 readonly id: { readonly column: 'id' };
                 readonly organizationId: { readonly column: 'organizationId' };
                 readonly role: { readonly column: 'role' };
+                readonly status: { readonly column: 'status' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
                 readonly userId: { readonly column: 'userId' };
               };
@@ -2448,6 +2645,10 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
+              readonly tenantId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
               readonly unsubscribeToken: {
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
@@ -2461,7 +2662,20 @@ type ContractBase = Omit<
                 };
               };
             };
-            readonly relations: Record<string, never>;
+            readonly relations: {
+              readonly tenant: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Tenant';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['tenantId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
             readonly storage: {
               readonly table: 'NewsletterSubscriber';
               readonly namespaceId: 'public';
@@ -2472,6 +2686,7 @@ type ContractBase = Omit<
                 readonly email: { readonly column: 'email' };
                 readonly id: { readonly column: 'id' };
                 readonly source: { readonly column: 'source' };
+                readonly tenantId: { readonly column: 'tenantId' };
                 readonly unsubscribeToken: { readonly column: 'unsubscribeToken' };
                 readonly unsubscribedAt: { readonly column: 'unsubscribedAt' };
               };
@@ -3138,6 +3353,28 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['organizationId'];
                 };
               };
+              readonly settings: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'TenantSetting';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['tenantId'];
+                };
+              };
+              readonly subscribers: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'NewsletterSubscriber';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['tenantId'];
+                };
+              };
             };
             readonly storage: {
               readonly table: 'Tenant';
@@ -3158,6 +3395,59 @@ type ContractBase = Omit<
                 readonly timeZone: { readonly column: 'timeZone' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
                 readonly verticalKey: { readonly column: 'verticalKey' };
+              };
+            };
+          };
+          readonly TenantSetting: {
+            readonly fields: {
+              readonly key: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly tenantId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly updatedById: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly value: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
+              };
+            };
+            readonly relations: {
+              readonly tenant: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Tenant';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['tenantId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'TenantSetting';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly key: { readonly column: 'key' };
+                readonly tenantId: { readonly column: 'tenantId' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+                readonly updatedById: { readonly column: 'updatedById' };
+                readonly value: { readonly column: 'value' };
               };
             };
           };
@@ -3377,6 +3667,17 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['userId'];
                 };
               };
+              readonly settings: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'UserSetting';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['userId'];
+                };
+              };
               readonly subscription: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -3417,6 +3718,51 @@ type ContractBase = Omit<
                 readonly stripeCustomerId: { readonly column: 'stripeCustomerId' };
                 readonly twoFactorEnabled: { readonly column: 'twoFactorEnabled' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
+              };
+            };
+          };
+          readonly UserSetting: {
+            readonly fields: {
+              readonly key: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly userId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly value: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
+              };
+            };
+            readonly relations: {
+              readonly user: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['userId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'UserSetting';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly key: { readonly column: 'key' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+                readonly userId: { readonly column: 'userId' };
+                readonly value: { readonly column: 'value' };
               };
             };
           };
@@ -3692,6 +4038,14 @@ type ContractBase = Omit<
           };
         },
         {
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'TenantSetting';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
           readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'TwoFactor';
@@ -3720,6 +4074,14 @@ type ContractBase = Omit<
           readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'User';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'UserSetting';
             readonly field: 'updatedAt';
             readonly namespace: 'public';
           };

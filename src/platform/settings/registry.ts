@@ -67,6 +67,20 @@ export const PLATFORM_SETTINGS = {
 >
 
 export type SettingKey = keyof typeof PLATFORM_SETTINGS
+
+/** The platform settings a tenant admin may set for their own tenant. */
+export const TENANT_SETTING_KEYS = [
+  "locale.app",
+  "display.time_zone",
+  "display.date_style",
+  "display.hour_cycle",
+  "display.page_size",
+] as const satisfies readonly SettingKey[]
+
+export type TenantSettingKey = (typeof TENANT_SETTING_KEYS)[number]
+
+export const isTenantSettingKey = (key: string): key is TenantSettingKey =>
+  (TENANT_SETTING_KEYS as readonly string[]).includes(key)
 export type PlatformSettings = { [K in SettingKey]: z.output<(typeof PLATFORM_SETTINGS)[K]["schema"]> }
 export const SETTING_KEYS = Object.keys(PLATFORM_SETTINGS) as SettingKey[]
 

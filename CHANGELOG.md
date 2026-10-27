@@ -7,6 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.13.0] - 2026-10-27
+
+**Each workspace sets its own language, time and display.** Settings gains General, Localization and Display tabs for the workspace: its name and slug, its language, time zone and date and time format, and the list page size. A workspace's values override the platform's for everyone in it; the public site keeps the platform's. This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (one new table, `TenantSetting`), then restart the server.
+
+### Added
+
+- **Settings → General, Localization, Display**, editable by members whose role can manage settings and read-only for the rest. Values are stored per workspace in `TenantSetting` (one row per key, `src/platform/settings/tenant-store.ts`); `TENANT_SETTING_KEYS` in the settings registry lists what a workspace may set
+- **Account → Preferences and Notifications.** Each person can set their own language, time zone and date and time format (stored in the new `UserSetting` table, over their workspace's values, which are over the platform's) and their theme, and turn product-update and tip emails off; security and billing emails are always sent. Preferences moved here from Settings, which now opens on the workspace's General tab. Run `pnpm db:migrate` for the `UserSetting` table too
+- **Members page manages people properly**: suspend and reactivate members (owners and yourself are protected; a suspended member keeps the seat but is granted nothing), see when each member was last active, and revoke pending invitations. `Member` gains `status`
+- **Each workspace has its own newsletter list** at `/dashboard/newsletter`: search, filter by status, export to CSV, unsubscribe, and add an address (it joins once the person confirms by email). `NewsletterSubscriber` gains `tenantId` (null is the platform's list, which `/admin/newsletter` and the public signup keep to) and an address is unique per list. A new `newsletter` permission (view, manage) is granted to owners and managers. Run `pnpm db:migrate`
+- Every signed-in page formats dates, picks its language and sizes its lists from the workspace's settings (`getViewerSettings()`), falling back to the platform's
+
 ## [2.12.0] - 2026-10-27
 
 **A flat UI, drawers that fit what they hold, and a language switch in the header.** No shadows anywhere, a quieter app header and sidebar edge, edit drawers that open at the width their form needs with fields that keep their focus ring, and a shorter Security page. This is a MINOR: `git pull`. Nothing to migrate.
@@ -21,6 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 - **Drawers open at the width their content needs**: `FormDrawer` takes `size` (`sm`, `md`, `lg`, `xl`) and is full width on a phone. The header and the buttons stay put while the fields scroll, the buttons sit side by side at the bottom right, and a form can lay its fields out in columns (member invitation: email and role on one line; role permissions: two columns of resources)
 - The app header no longer draws a divider between the sidebar button and the breadcrumbs, and the edge of the sidebar no longer draws a line on hover (clicking it still folds the sidebar)
 - **Every button and menu item has an icon, and menus are grouped.** A row's actions menu opens with an "Actions" label, keeps destructive items last in their own red group, and `RowAction` / `BulkAction` now require `icon`, so a table action without one fails the type check. Save, Cancel, delete, download, sign-in and call-to-action buttons all carry a lucide icon, on the marketing site too (navbar, hero, pricing, the contact, waitlist and footer forms, the mobile menu)
+- **Account and Settings are two pages.** Account (`/dashboard/account`) holds Profile, Security, Backup and Activity (was Logs); Settings (`/dashboard/settings`) is now Preferences: language and theme for this browser. Both are in the sidebar and the avatar menu. The old `/dashboard/settings/security`, `/backup` and `/logs` URLs redirect, query string included, so links in emails already sent keep working. Server actions redirect with `accountHref()` from `src/lib/settings-pages.ts`
 - **Settings, Security: less to read, one size of control.** Every button is the default size and every field the same width, the email and password forms put the field and its button on one line, the explanations are cut to one short line each, and turning two-factor off sits next to its status
 
 ### Fixed

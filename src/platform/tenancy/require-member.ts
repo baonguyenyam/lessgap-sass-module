@@ -76,7 +76,8 @@ export async function requireTenantContext(
 ): Promise<TenantMembership> {
   const user = await requireUser()
   const ctx = await ensureTenant(user)
-  if (resource && verb && !(await memberCan(ctx.tenantId, ctx.member.role, resource, verb))) {
+  const suspended = ctx.member.status === "suspended"
+  if (resource && verb && (suspended || !(await memberCan(ctx.tenantId, ctx.member.role, resource, verb)))) {
     throw new Error("Forbidden")
   }
   return ctx

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation"
 import { db8 } from "@/lib/db8"
 import { permissionKeys } from "@/lib/schemas/tenant"
 import { offsetOf, parseTableQuery, type TableQuerySpec } from "@/lib/table-query"
-import { getPlatformSettings } from "@/platform/settings/store"
+import { getViewerSettings } from "@/platform/settings/tenant-store"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { ROLE_PERMISSIONS, TENANT_PERMISSIONS } from "@/platform/tenancy/permissions"
 import { RolesTable, type RoleRow } from "@/components/dashboard/roles-table"
@@ -26,7 +26,7 @@ export default async function RolesPage({
     redirect("/dashboard")
   }
   const t = await getTranslations("dashboard.roles")
-  const settings = await getPlatformSettings()
+  const settings = await getViewerSettings()
   const { Member, OrganizationRole } = db8.orm.public
 
   const spec: TableQuerySpec = {

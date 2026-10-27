@@ -10,6 +10,8 @@ export const ACCOUNT_PAGES = [
   { key: "profile", href: ACCOUNT_BASE },
   { key: "security", href: `${ACCOUNT_BASE}/security` },
   { key: "backup", href: `${ACCOUNT_BASE}/backup` },
+  { key: "preferences", href: `${ACCOUNT_BASE}/preferences` },
+  { key: "notifications", href: `${ACCOUNT_BASE}/notifications` },
   { key: "activity", href: `${ACCOUNT_BASE}/activity` },
 ] as const
 
@@ -21,7 +23,11 @@ export function accountHref(key: AccountPageKey): string {
 
 export const SETTINGS_BASE = "/dashboard/settings"
 
-export const SETTINGS_PAGES = [{ key: "preferences", href: SETTINGS_BASE }] as const
+export const SETTINGS_PAGES = [
+  { key: "general", href: SETTINGS_BASE },
+  { key: "localization", href: `${SETTINGS_BASE}/localization` },
+  { key: "display", href: `${SETTINGS_BASE}/display` },
+] as const
 
 /**
  * Result codes the account actions put in the query string (`?ok=` or

@@ -2,7 +2,7 @@
 
 import { Copy, Download, MailX } from "lucide-react"
 import { useFormatter, useTranslations } from "next-intl"
-import { useMemo } from "react"
+import { useMemo, type ReactNode } from "react"
 import { toast } from "sonner"
 import { unsubscribeSubscribers } from "@/app/actions/newsletter-admin"
 import { DataTable, dataTableColumns, type BulkAction } from "@/components/data-table/data-table"
@@ -23,11 +23,20 @@ export function NewsletterTable({
   total,
   query,
   defaults,
+  unsubscribe = unsubscribeSubscribers,
+  exportHref = "/api/admin/newsletter-export",
+  canManage = true,
+  toolbar,
 }: {
   rows: SubscriberRow[]
   total: number
   query: TableQuery
   defaults: { sort: string; dir: "asc" | "desc"; pageSize: number }
+  /** Defaults to the platform list; a workspace passes its own. */
+  unsubscribe?: (ids: string[]) => Promise<unknown>
+  exportHref?: string
+  canManage?: boolean
+  toolbar?: ReactNode
 }) {
   const t = useTranslations("admin.newsletter")
   const format = useFormatter()
@@ -78,7 +87,7 @@ export function NewsletterTable({
                   icon: Copy,
                   onSelect: () => navigator.clipboard.writeText(sub.email).then(() => toast.success(t("copied"))),
                 },
-                ...(sub.status === "unsubscribed"
+                ...(sub.status === "unsubscribed" || !canManage
                   ? []
                   : [
                       {
@@ -86,7 +95,7 @@ export function NewsletterTable({
                         icon: MailX,
                         variant: "destructive" as const,
                         confirm: unsubscribeConfirm,
-                        run: () => unsubscribeSubscribers([sub.id]),
+                        run: () => unsubscribe([sub.id]),
                       },
                     ]),
               ]}
@@ -95,7 +104,7 @@ export function NewsletterTable({
         },
       }),
     ])
-  }, [t, format]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [t, format, canManage, unsubscribe]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const bulkActions: BulkAction[] = [
     {
@@ -103,13 +112,17 @@ export function NewsletterTable({
       icon: Download,
       run: async (ids) => downloadCsv(rows.filter((r) => ids.includes(r.id))),
     },
-    {
-      label: t("unsubscribe"),
-      icon: MailX,
-      variant: "destructive",
-      confirm: unsubscribeConfirm,
-      run: (ids) => unsubscribeSubscribers(ids),
-    },
+    ...(canManage
+      ? [
+          {
+            label: t("unsubscribe"),
+            icon: MailX,
+            variant: "destructive" as const,
+            confirm: unsubscribeConfirm,
+            run: (ids: string[]) => unsubscribe(ids),
+          },
+        ]
+      : []),
   ]
 
   return (
@@ -132,15 +145,18 @@ export function NewsletterTable({
       bulkActions={bulkActions}
       emptyMessage={t("empty")}
       actions={
-        <Button asChild variant="outline">
-          {/* A file download from a route handler, not a page: `next/link`
+        <>
+          {toolbar}
+          <Button asChild variant="outline">
+            {/* A file download from a route handler, not a page: `next/link`
               would prefetch it, and the rule cannot tell the two apart. */}
-          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-          <a href="/api/admin/newsletter-export">
-            <Download />
-            {t("exportAll")}
-          </a>
-        </Button>
+            {}
+            <a href={exportHref}>
+              <Download />
+              {t("exportAll")}
+            </a>
+          </Button>
+        </>
       }
     />
   )

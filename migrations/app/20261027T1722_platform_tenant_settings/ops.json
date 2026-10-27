@@ -1,0 +1,625 @@
+[
+  {
+    "id": "dropIndex.NewsletterSubscriber.NewsletterSubscriber_email_key",
+    "label": "Drop index \"NewsletterSubscriber_email_key\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "NewsletterSubscriber_email_key",
+        "table": "NewsletterSubscriber"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"NewsletterSubscriber_email_key\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"NewsletterSubscriber_email_key\""
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "index \"NewsletterSubscriber_email_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop index \"NewsletterSubscriber_email_key\"",
+        "sql": "DROP INDEX \"public\".\"NewsletterSubscriber_email_key\"",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"NewsletterSubscriber_email_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"NewsletterSubscriber_email_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"NewsletterSubscriber_email_key\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.TenantSetting",
+    "label": "Create table \"TenantSetting\"",
+    "summary": "Creates table \"TenantSetting\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "TenantSetting"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"TenantSetting\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TenantSetting\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"TenantSetting\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"TenantSetting\"",
+        "sql": "CREATE TABLE \"public\".\"TenantSetting\" (\n  \"key\" text NOT NULL,\n  \"tenantId\" text NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"updatedById\" text,\n  \"value\" json NOT NULL,\n  CONSTRAINT \"TenantSetting_pkey\" PRIMARY KEY (\"tenantId\", \"key\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"TenantSetting\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"TenantSetting\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"TenantSetting\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.UserSetting",
+    "label": "Create table \"UserSetting\"",
+    "summary": "Creates table \"UserSetting\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "UserSetting"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"UserSetting\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"UserSetting\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"UserSetting\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"UserSetting\"",
+        "sql": "CREATE TABLE \"public\".\"UserSetting\" (\n  \"key\" text NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"userId\" text NOT NULL,\n  \"value\" json NOT NULL,\n  CONSTRAINT \"UserSetting_pkey\" PRIMARY KEY (\"userId\", \"key\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"UserSetting\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"UserSetting\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"UserSetting\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "column.public.Member.status",
+    "label": "Add column \"status\" to \"Member\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "status",
+        "table": "Member"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"status\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Member",
+          "status"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"status\" on \"Member\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"status\"",
+        "sql": "ALTER TABLE \"public\".\"Member\" ADD COLUMN \"status\" text DEFAULT 'active' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"status\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Member",
+          "status"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"status\" on \"Member\""
+        }
+      },
+      {
+        "description": "verify column \"status\" has type \"text\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Member",
+          "status",
+          "text"
+        ]
+      },
+      {
+        "description": "verify column \"status\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "Member",
+          "status",
+          "NO"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.NewsletterSubscriber.tenantId",
+    "label": "Add column \"tenantId\" to \"NewsletterSubscriber\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "tenantId",
+        "table": "NewsletterSubscriber"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"tenantId\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "NewsletterSubscriber",
+          "tenantId"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"tenantId\" on \"NewsletterSubscriber\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"tenantId\"",
+        "sql": "ALTER TABLE \"public\".\"NewsletterSubscriber\" ADD COLUMN \"tenantId\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"tenantId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "NewsletterSubscriber",
+          "tenantId"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"tenantId\" on \"NewsletterSubscriber\""
+        }
+      },
+      {
+        "description": "verify column \"tenantId\" has type \"text\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "NewsletterSubscriber",
+          "tenantId",
+          "text"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.NewsletterSubscriber.NewsletterSubscriber_tenantId_email_key",
+    "label": "Create index \"NewsletterSubscriber_tenantId_email_key\" on \"NewsletterSubscriber\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "NewsletterSubscriber_tenantId_email_key",
+        "table": "NewsletterSubscriber"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"NewsletterSubscriber_tenantId_email_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"NewsletterSubscriber_tenantId_email_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"NewsletterSubscriber_tenantId_email_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"NewsletterSubscriber_tenantId_email_key\"",
+        "sql": "CREATE UNIQUE INDEX \"NewsletterSubscriber_tenantId_email_key\" ON \"public\".\"NewsletterSubscriber\" (\"tenantId\", \"email\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"NewsletterSubscriber_tenantId_email_key\" exists on \"NewsletterSubscriber\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"NewsletterSubscriber_tenantId_email_key\"",
+          "i",
+          "I",
+          "\"public\".\"NewsletterSubscriber\"",
+          "btree",
+          "[\"tenantId\",\"email\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.NewsletterSubscriber.NewsletterSubscriber_tenantId_idx_c93ed4f1",
+    "label": "Create index \"NewsletterSubscriber_tenantId_idx_c93ed4f1\" on \"NewsletterSubscriber\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "NewsletterSubscriber_tenantId_idx_c93ed4f1",
+        "table": "NewsletterSubscriber"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"NewsletterSubscriber_tenantId_idx_c93ed4f1\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"NewsletterSubscriber_tenantId_idx_c93ed4f1\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"NewsletterSubscriber_tenantId_idx_c93ed4f1\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"NewsletterSubscriber_tenantId_idx_c93ed4f1\"",
+        "sql": "CREATE INDEX \"NewsletterSubscriber_tenantId_idx_c93ed4f1\" ON \"public\".\"NewsletterSubscriber\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"NewsletterSubscriber_tenantId_idx_c93ed4f1\" exists on \"NewsletterSubscriber\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"NewsletterSubscriber_tenantId_idx_c93ed4f1\"",
+          "i",
+          "I",
+          "\"public\".\"NewsletterSubscriber\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.TenantSetting.TenantSetting_tenantId_idx_c93ed4f1",
+    "label": "Create index \"TenantSetting_tenantId_idx_c93ed4f1\" on \"TenantSetting\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "TenantSetting_tenantId_idx_c93ed4f1",
+        "table": "TenantSetting"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"TenantSetting_tenantId_idx_c93ed4f1\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TenantSetting_tenantId_idx_c93ed4f1\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"TenantSetting_tenantId_idx_c93ed4f1\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"TenantSetting_tenantId_idx_c93ed4f1\"",
+        "sql": "CREATE INDEX \"TenantSetting_tenantId_idx_c93ed4f1\" ON \"public\".\"TenantSetting\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"TenantSetting_tenantId_idx_c93ed4f1\" exists on \"TenantSetting\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"TenantSetting_tenantId_idx_c93ed4f1\"",
+          "i",
+          "I",
+          "\"public\".\"TenantSetting\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.UserSetting.UserSetting_userId_idx_a489d58a",
+    "label": "Create index \"UserSetting_userId_idx_a489d58a\" on \"UserSetting\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "UserSetting_userId_idx_a489d58a",
+        "table": "UserSetting"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"UserSetting_userId_idx_a489d58a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"UserSetting_userId_idx_a489d58a\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"UserSetting_userId_idx_a489d58a\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"UserSetting_userId_idx_a489d58a\"",
+        "sql": "CREATE INDEX \"UserSetting_userId_idx_a489d58a\" ON \"public\".\"UserSetting\" (\"userId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"UserSetting_userId_idx_a489d58a\" exists on \"UserSetting\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"UserSetting_userId_idx_a489d58a\"",
+          "i",
+          "I",
+          "\"public\".\"UserSetting\"",
+          "btree",
+          "[\"userId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.NewsletterSubscriber.NewsletterSubscriber_tenantId_fkey",
+    "label": "Add foreign key \"NewsletterSubscriber_tenantId_fkey\" on \"NewsletterSubscriber\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "NewsletterSubscriber_tenantId_fkey",
+        "table": "NewsletterSubscriber"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"NewsletterSubscriber_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "NewsletterSubscriber_tenantId_fkey",
+          "public",
+          "\"public\".\"NewsletterSubscriber\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"NewsletterSubscriber_tenantId_fkey\" on \"NewsletterSubscriber\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"NewsletterSubscriber_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"NewsletterSubscriber\"\nADD CONSTRAINT \"NewsletterSubscriber_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"NewsletterSubscriber_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "NewsletterSubscriber_tenantId_fkey",
+          "public",
+          "\"public\".\"NewsletterSubscriber\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.TenantSetting.TenantSetting_tenantId_fkey",
+    "label": "Add foreign key \"TenantSetting_tenantId_fkey\" on \"TenantSetting\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "TenantSetting_tenantId_fkey",
+        "table": "TenantSetting"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"TenantSetting_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "TenantSetting_tenantId_fkey",
+          "public",
+          "\"public\".\"TenantSetting\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"TenantSetting_tenantId_fkey\" on \"TenantSetting\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"TenantSetting_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"TenantSetting\"\nADD CONSTRAINT \"TenantSetting_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"TenantSetting_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "TenantSetting_tenantId_fkey",
+          "public",
+          "\"public\".\"TenantSetting\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.UserSetting.UserSetting_userId_fkey",
+    "label": "Add foreign key \"UserSetting_userId_fkey\" on \"UserSetting\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "UserSetting_userId_fkey",
+        "table": "UserSetting"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"UserSetting_userId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "UserSetting_userId_fkey",
+          "public",
+          "\"public\".\"UserSetting\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"UserSetting_userId_fkey\" on \"UserSetting\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"UserSetting_userId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"UserSetting\"\nADD CONSTRAINT \"UserSetting_userId_fkey\"\nFOREIGN KEY (\"userId\")\nREFERENCES \"public\".\"User\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"UserSetting_userId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "UserSetting_userId_fkey",
+          "public",
+          "\"public\".\"UserSetting\"",
+          "f",
+          "[\"userId\"]",
+          "\"public\".\"User\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  }
+]

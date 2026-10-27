@@ -24,6 +24,7 @@ onboardingDismissedAt TimestampString(3)?
     twoFactors            TwoFactor[]
     members               Member[]
     invitations           Invitation[]
+    settings              UserSetting[]
 
     @@index([email], map: "User_email_key", unique: true)
     @@index([stripeCustomerId], map: "User_stripeCustomerId_key", unique: true)
@@ -58,9 +59,12 @@ user                  User                @relation(fields: [userId], references
     confirmToken     String
     unsubscribeToken String
     unsubscribedAt   TimestampString(3)?
+    // The workspace whose list this is; null for the platform's own list.
+    tenantId         String?
+    tenant           Tenant?             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "NewsletterSubscriber_tenantId_fkey")
 
     @@index([confirmToken], map: "NewsletterSubscriber_confirmToken_key", unique: true)
-    @@index([email], map: "NewsletterSubscriber_email_key", unique: true)
+    @@index([tenantId, email], map: "NewsletterSubscriber_tenantId_email_key", unique: true)
     @@index([unsubscribeToken], map: "NewsletterSubscriber_unsubscribeToken_key", unique: true)
   }
 
@@ -217,10 +221,37 @@ trialEndsAt          TimestampString(3)?
     members          Member[]
     invitations      Invitation[]
     roles            OrganizationRole[]
+    settings         TenantSetting[]
+    subscribers      NewsletterSubscriber[]
 
     @@index([slug], map: "Tenant_slug_key", unique: true)
     @@index([stripeCustomerId], map: "Tenant_stripeCustomerId_key", unique: true)
     @@index([stripeAccountId], map: "Tenant_stripeAccountId_key", unique: true)
+  }
+
+  // A tenant's own value for a platform setting (display, language); a key
+  // without a row falls back to the platform value. Tenant-owned.
+  model TenantSetting {
+    tenantId    String
+    key         String
+    value       Json
+    updatedById String?
+    updatedAt   TimestampString(3) @default(now()) @onUpdate(now())
+    tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "TenantSetting_tenantId_fkey")
+
+    @@id([tenantId, key], map: "TenantSetting_pkey")
+  }
+
+  // One person's own value for a display or language setting, or a
+  // notification choice; outranks their workspace's and the platform's.
+  model UserSetting {
+    userId    String
+    key       String
+    value     Json
+    updatedAt TimestampString(3) @default(now()) @onUpdate(now())
+    user      User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "UserSetting_userId_fkey")
+
+    @@id([userId, key], map: "UserSetting_pkey")
   }
 
   model Member {
@@ -228,6 +259,8 @@ trialEndsAt          TimestampString(3)?
     organizationId String
     userId         String
     role           String
+    // "active" or "suspended": a suspended member keeps the seat but is granted nothing.
+    status         String            @default("active")
     createdAt      TimestampString(3) @default(now())
     updatedAt      TimestampString(3) @default(now()) @onUpdate(now())
     tenant         Tenant            @relation(fields: [organizationId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Member_organizationId_fkey")

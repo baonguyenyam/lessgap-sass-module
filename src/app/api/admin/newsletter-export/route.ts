@@ -15,7 +15,9 @@ export async function GET() {
     return new Response("Forbidden", { status: 403 })
   }
 
-  const subs = await db8.orm.public.NewsletterSubscriber.orderBy((s) => s.createdAt.asc()).all()
+  const subs = await db8.orm.public.NewsletterSubscriber.where((s) => s.tenantId.isNull())
+    .orderBy((s) => s.createdAt.asc())
+    .all()
 
   const esc = (value: string) => `"${value.replace(/"/g, '""')}"`
   const lines = ["email,source,requested_at,confirmed_at,unsubscribed_at"]

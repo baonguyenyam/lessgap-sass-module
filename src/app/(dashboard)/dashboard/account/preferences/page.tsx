@@ -1,13 +1,18 @@
 import { getTranslations } from "next-intl/server"
 import { requireUser } from "@/lib/auth"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { LanguagePreference, ThemePreference } from "@/components/settings/preferences"
-import { APP_LOCALES } from "@/platform/settings/registry"
+import { SettingsForm } from "@/components/admin/settings-form"
+import { ThemePreference } from "@/components/settings/preferences"
+import { saveUserSettingsAction } from "@/app/actions/user-settings"
+import { settingFields } from "@/platform/settings/fields"
+import { getViewerSettings } from "@/platform/settings/tenant-store"
+import { USER_SETTING_KEYS } from "@/platform/settings/user"
 
-/** Settings → Preferences: the language and the look of the app, for this browser. */
+/** Account → Preferences: this person's language, time and look, over their workspace's. */
 export default async function PreferencesPage() {
-  await requireUser()
+  const user = await requireUser()
   const t = await getTranslations("dashboard.settings.preferences")
+  const [fields, values] = await Promise.all([settingFields(USER_SETTING_KEYS, user.role), getViewerSettings()])
 
   return (
     <>
@@ -17,7 +22,11 @@ export default async function PreferencesPage() {
           <CardDescription>{t("languageDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
-          <LanguagePreference locales={APP_LOCALES} />
+          <SettingsForm
+            fields={fields.map((field) => ({ ...field, editable: true }))}
+            values={values}
+            save={saveUserSettingsAction}
+          />
         </CardContent>
       </Card>
       <Card>

@@ -34,7 +34,18 @@ const toName = (key: string) => key.replaceAll(".", "__")
  * Zod schemas). The server action checks permission and parses every value
  * again; a field the viewer may not change is shown disabled.
  */
-export function SettingsForm({ fields, values }: { fields: SettingField[]; values: Record<string, unknown> }) {
+export function SettingsForm({
+  fields,
+  values,
+  save = savePlatformSettings,
+  readOnlyNote,
+}: {
+  fields: SettingField[]
+  values: Record<string, unknown>
+  /** Where the values go; the platform settings unless a tenant page says otherwise. */
+  save?: (values: Record<string, unknown>) => Promise<{ error?: string }>
+  readOnlyNote?: string
+}) {
   const t = useTranslations("admin.settings")
   const router = useRouter()
   const schema = z.object(Object.fromEntries(fields.map((f) => [toName(f.key), PLATFORM_SETTINGS[f.key].schema])))
@@ -48,7 +59,7 @@ export function SettingsForm({ fields, values }: { fields: SettingField[]; value
   const mutation = useMutation({
     mutationFn: () => {
       const editable = fields.filter((f) => f.editable)
-      return savePlatformSettings(Object.fromEntries(editable.map((f) => [f.key, form.getValues(toName(f.key))])))
+      return save(Object.fromEntries(editable.map((f) => [f.key, form.getValues(toName(f.key))])))
     },
     onSuccess: (result) => {
       if (result.error) {
@@ -119,7 +130,7 @@ export function SettingsForm({ fields, values }: { fields: SettingField[]; value
             {t("save")}
           </Button>
         ) : (
-          <p className="text-sm text-muted-foreground">{t("rootOnly")}</p>
+          <p className="text-sm text-muted-foreground">{readOnlyNote ?? t("rootOnly")}</p>
         )}
       </form>
     </Form>

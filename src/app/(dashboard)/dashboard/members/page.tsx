@@ -4,12 +4,13 @@ import { redirect } from "next/navigation"
 import { db8 } from "@/lib/db8"
 import { offsetOf, parseTableQuery, type TableQuerySpec } from "@/lib/table-query"
 import { toDate } from "@/lib/timestamps"
-import { getPlatformSettings } from "@/platform/settings/store"
+import { getViewerSettings } from "@/platform/settings/tenant-store"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { TENANT_ROLE_KEYS } from "@/platform/tenancy/permissions"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MembersTable, type MemberRow } from "@/components/dashboard/members-table"
+import { RevokeInvitation } from "@/components/dashboard/revoke-invitation"
 
 /**
  * Dashboard → Members: the tenant's sub-users ("user con") and pending
@@ -29,8 +30,8 @@ export default async function MembersPage({
     redirect("/dashboard")
   }
   const t = await getTranslations("dashboard.members")
-  const settings = await getPlatformSettings()
-  const { Invitation, Member, OrganizationRole, User } = db8.orm.public
+  const settings = await getViewerSettings()
+  const { Invitation, Member, OrganizationRole, Session, User } = db8.orm.public
 
   const customRoles = await OrganizationRole.select("role")
     .where({ organizationId: ctx.tenantId })
@@ -71,13 +72,27 @@ export default async function MembersPage({
       .all(),
   ])
 
+  // Latest session activity per member; sessions end on sign-out, so this is best effort.
+  const sessions = members.length
+    ? await Session.select("userId", "updatedAt")
+        .where((s) => s.userId.in(members.map((m) => m.userId)))
+        .all()
+    : []
+  const lastActive = new Map<string, number>()
+  for (const s of sessions) {
+    const at = toDate(s.updatedAt).getTime()
+    if (at > (lastActive.get(s.userId) ?? 0)) lastActive.set(s.userId, at)
+  }
+
   const rows: MemberRow[] = members.map((m) => ({
     id: m.id,
     userId: m.userId,
     name: m.user?.name ?? "",
     email: m.user?.email ?? "",
     role: m.role,
+    status: m.status === "suspended" ? "suspended" : "active",
     createdAt: toDate(m.createdAt).toISOString(),
+    lastActiveAt: lastActive.has(m.userId) ? new Date(lastActive.get(m.userId)!).toISOString() : null,
   }))
   const canManage = ctx.member.role === "owner" || ctx.member.role === "manager"
 
@@ -108,6 +123,7 @@ export default async function MembersPage({
                   <span className="min-w-0 truncate">{i.email}</span>
                   <Badge variant="secondary">{i.role}</Badge>
                   <span className="ml-auto text-xs text-muted-foreground">{t(`invitations.status.${i.status}`)}</span>
+                  {canManage && <RevokeInvitation id={i.id} email={i.email} />}
                 </li>
               ))}
             </ul>

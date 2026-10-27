@@ -262,7 +262,9 @@
       },
       "nav": {
         "label": "Các mục cài đặt",
-        "preferences": "Tuỳ chọn"
+        "general": "Chung",
+        "localization": "Ngôn ngữ & giờ",
+        "display": "Hiển thị"
       },
       "backup": {
         "title": "Sao lưu dữ liệu",
@@ -291,9 +293,29 @@
       },
       "preferences": {
         "languageTitle": "Ngôn ngữ",
-        "languageDescription": "Ngôn ngữ của khu vực đã đăng nhập, trên trình duyệt này.",
+        "languageDescription": "Ngôn ngữ, múi giờ và định dạng ngày của riêng bạn, ưu tiên hơn cài đặt của workspace.",
         "themeTitle": "Giao diện",
         "themeDescription": "Sáng, tối, hoặc theo hệ thống."
+      },
+      "tenant": {
+        "generalTitle": "Workspace",
+        "generalDescription": "Tên và slug URL của workspace này.",
+        "name": "Tên",
+        "slug": "Slug",
+        "slugHint": "Chữ thường, số và dấu gạch ngang.",
+        "localizationTitle": "Ngôn ngữ & giờ",
+        "localizationDescription": "Ngôn ngữ, múi giờ và định dạng ngày cho mọi người trong workspace.",
+        "displayTitle": "Hiển thị",
+        "displayDescription": "Cách hiển thị danh sách trong workspace.",
+        "readOnly": "Chỉ thành viên có quyền quản lý cài đặt mới thay đổi được.",
+        "save": "Lưu",
+        "saved": "Đã lưu cài đặt.",
+        "errors": {
+          "invalidName": "Nhập tên tối đa 80 ký tự.",
+          "invalidSlug": "Dùng chữ thường, số và dấu gạch ngang đơn, tối đa 48 ký tự.",
+          "slugTaken": "Slug này đã có người dùng.",
+          "failed": "Đã có lỗi. Chưa có gì thay đổi."
+        }
       }
     },
     "account": {
@@ -304,7 +326,20 @@
         "profile": "Hồ sơ",
         "security": "Bảo mật",
         "backup": "Sao lưu",
-        "activity": "Hoạt động"
+        "activity": "Hoạt động",
+        "preferences": "Tuỳ chọn",
+        "notifications": "Thông báo"
+      },
+      "notifications": {
+        "title": "Thông báo qua email",
+        "description": "Chọn những email bạn muốn nhận.",
+        "productUpdates": "Cập nhật sản phẩm",
+        "productUpdatesHint": "Tính năng mới và thay đổi của ứng dụng.",
+        "tips": "Mẹo",
+        "tipsHint": "Thỉnh thoảng gợi ý cách dùng workspace hiệu quả hơn.",
+        "alwaysSent": "Email về bảo mật và thanh toán luôn được gửi.",
+        "saved": "Đã lưu.",
+        "failed": "Không lưu được."
       }
     },
     "billing": {
@@ -410,7 +445,8 @@
       "openNavigation": "Mở điều hướng",
       "members": "Thành viên",
       "roles": "Nhóm quyền",
-      "account": "Tài khoản"
+      "account": "Tài khoản",
+      "newsletter": "Newsletter"
     },
     "members": {
       "title": "Thành viên",
@@ -427,10 +463,25 @@
         "colMember": "Thành viên",
         "colRole": "Vai trò",
         "update": "Cập nhật",
-        "remove": "Xoá"
+        "remove": "Xoá",
+        "colStatus": "Trạng thái",
+        "colLastActive": "Hoạt động gần nhất",
+        "never": "Chưa có",
+        "suspend": "Tạm khoá",
+        "reactivate": "Mở khoá",
+        "status": {
+          "active": "Đang hoạt động",
+          "suspended": "Tạm khoá"
+        }
       },
       "invitations": {
-        "title": "Lời mời đang chờ"
+        "title": "Lời mời đang chờ",
+        "revoke": "Thu hồi lời mời của {email}",
+        "revoked": "Đã thu hồi lời mời."
+      },
+      "suspendConfirm": {
+        "title": "Tạm khoá các thành viên đã chọn?",
+        "description": "Họ vẫn giữ chỗ nhưng mất quyền truy cập cho đến khi được mở khoá. Owner và chính bạn sẽ được bỏ qua."
       }
     },
     "roles": {
@@ -454,6 +505,21 @@
       },
       "colRole": "Vai trò",
       "colPermissions": "Quyền"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "subtitle": "Danh sách nhận thư của workspace này.",
+      "add": "Thêm người nhận",
+      "addTitle": "Thêm người nhận",
+      "addDescription": "Họ sẽ nhận email xác nhận và vào danh sách sau khi bấm xác nhận.",
+      "email": "Email",
+      "send": "Gửi lời mời",
+      "cancel": "Huỷ",
+      "added": "Đã gửi email xác nhận.",
+      "errors": {
+        "invalidEmail": "Nhập địa chỉ email hợp lệ.",
+        "exists": "Địa chỉ này đã có trong danh sách."
+      }
     }
   },
   "admin": {

@@ -50,6 +50,7 @@ export function navGroups(area: NavArea, { showAdmin }: { showAdmin: boolean }):
       key: "workspace",
       items: [
         { key: "members", href: "/dashboard/members", icon: Users },
+        { key: "newsletter", href: "/dashboard/newsletter", icon: Mail },
         { key: "roles", href: "/dashboard/roles", icon: KeyRound },
       ],
     },

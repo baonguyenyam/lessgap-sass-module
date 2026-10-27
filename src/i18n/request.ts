@@ -5,6 +5,7 @@ import { routing } from "./routing"
 import { isKitSite } from "@/config/kit"
 import { collapseMessages, type Messages } from "./collapse"
 import { getPlatformSettings } from "@/platform/settings/store"
+import { getViewerSettings } from "@/platform/settings/tenant-store"
 import { dateTimeFormats } from "@/platform/settings/registry"
 import { APP_LOCALE_COOKIE, isAppLocale } from "./app-locale"
 
@@ -43,7 +44,8 @@ function withFallback(source: Messages, translated: Messages): Messages {
  */
 export default getRequestConfig(async ({ requestLocale }) => {
   const requested = await requestLocale
-  const settings = await getPlatformSettings()
+  // The public site follows the platform; the signed-in area follows the tenant.
+  const settings = hasLocale(routing.locales, requested) ? await getPlatformSettings() : await getViewerSettings()
   // The public site carries its locale in the URL. Everything outside it (the
   // dashboard, the admin panel, the sign-in pages) speaks the language picked
   // from the header, or else the platform default (`locale.app`, ROOT only).

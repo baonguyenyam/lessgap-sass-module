@@ -49,7 +49,9 @@ export async function POST(req: Request) {
 
   try {
     const subscribers = db8.orm.public.NewsletterSubscriber
-    const existing = await subscribers.where({ email }).first()
+    // The platform's own list; a workspace's subscribers are not touched here.
+    const platformList = subscribers.where((s) => s.tenantId.isNull())
+    const existing = await platformList.where({ email }).first()
 
     if (!existing) {
       const sub = await subscribers.create({
@@ -62,13 +64,13 @@ export async function POST(req: Request) {
     } else if (!existing.confirmedAt || existing.unsubscribedAt) {
       // Unconfirmed or previously unsubscribed and asking again: rotate the
       // token (old links die) and restart the 7-day confirmation window.
-      const sub = await subscribers.where({ email }).update({ confirmToken: token(), createdAt: nowTs() })
+      const sub = await platformList.where({ email }).update({ confirmToken: token(), createdAt: nowTs() })
       if (sub) await sendNewsletterConfirmEmail(email, confirmUrl(sub.confirmToken))
     } else if (await isNewsletterContactUnsubscribed(email)) {
       // Confirmed here, but unsubscribed on Resend through the link of a
       // Broadcast, which never reaches the database. Record it, then the same
       // path as any returning address: confirming clears it on both sides.
-      const sub = await subscribers
+      const sub = await platformList
         .where({ email })
         .update({ unsubscribedAt: nowTs(), confirmToken: token(), createdAt: nowTs() })
       if (sub) await sendNewsletterConfirmEmail(email, confirmUrl(sub.confirmToken))

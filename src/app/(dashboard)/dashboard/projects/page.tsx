@@ -4,7 +4,7 @@ import { requireUser } from "@/lib/auth"
 import { db8 } from "@/lib/db8"
 import { offsetOf, parseTableQuery, type TableQuerySpec } from "@/lib/table-query"
 import { toDate } from "@/lib/timestamps"
-import { getPlatformSettings } from "@/platform/settings/store"
+import { getViewerSettings } from "@/platform/settings/tenant-store"
 import { ProjectsTable, type ProjectRow } from "@/components/dashboard/projects-table"
 
 /** Dashboard → Projects: the caller's projects, searched and paged on the server. */
@@ -15,7 +15,7 @@ export default async function ProjectsPage({
 }) {
   const t = await getTranslations("dashboard.projects")
   const user = await requireUser()
-  const settings = await getPlatformSettings()
+  const settings = await getViewerSettings()
 
   const spec: TableQuerySpec = {
     sortable: ["updatedAt", "name", "createdAt"],

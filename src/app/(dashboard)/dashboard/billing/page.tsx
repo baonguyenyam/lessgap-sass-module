@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { InvoicesTable, INVOICE_STATUSES, type InvoiceRow } from "@/components/billing/invoices-table"
 import { offsetOf, parseTableQuery, type TableQuerySpec } from "@/lib/table-query"
-import { getPlatformSettings } from "@/platform/settings/store"
+import { getViewerSettings } from "@/platform/settings/tenant-store"
 import { ManageBillingButton } from "@/components/billing/manage-billing-button"
 import { SubscriptionStatusBadge } from "@/components/billing/subscription-status-badge"
 import { PlanCards, type PlanCardData } from "@/components/billing/plan-cards"
@@ -109,7 +109,7 @@ export default async function BillingPage({
     sortable: ["created"],
     defaultDir: "desc",
     filters: { status: INVOICE_STATUSES },
-    defaultPageSize: (await getPlatformSettings())["display.page_size"],
+    defaultPageSize: (await getViewerSettings())["display.page_size"],
   }
   const invoiceQuery = parseTableQuery(await searchParams, invoiceSpec)
   const matchingInvoices = invoices

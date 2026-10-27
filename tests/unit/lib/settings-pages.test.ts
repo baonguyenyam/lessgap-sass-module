@@ -9,8 +9,8 @@ describe("account and settings pages", () => {
     expect(accountHref("security")).toBe("/dashboard/account/security")
   })
 
-  it("opens settings on the preferences", () => {
-    expect(SETTINGS_PAGES[0]).toEqual({ key: "preferences", href: "/dashboard/settings" })
+  it("opens settings on the workspace's general page", () => {
+    expect(SETTINGS_PAGES[0]).toEqual({ key: "general", href: "/dashboard/settings" })
   })
 })
 

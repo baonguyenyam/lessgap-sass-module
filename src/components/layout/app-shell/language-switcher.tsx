@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useLocale, useTranslations } from "next-intl"
 import { Check, Languages } from "lucide-react"
 import { setAppLocale } from "@/app/actions/locale"
+import { saveUserSettingsAction } from "@/app/actions/user-settings"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Spinner } from "@/components/ui/spinner"
@@ -23,6 +24,7 @@ export function LanguageSwitcher({ locales }: { locales: readonly string[] }) {
     if (locale === current) return
     startTransition(async () => {
       await setAppLocale(locale)
+      await saveUserSettingsAction({ "locale.app": locale }).catch(() => {})
       router.refresh()
     })
   }

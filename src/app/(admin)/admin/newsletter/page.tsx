@@ -29,7 +29,8 @@ export default async function AdminNewsletterPage({
   const query = parseTableQuery(await searchParams, spec)
 
   const { NewsletterSubscriber } = db8.orm.public
-  const searched = query.q ? NewsletterSubscriber.where((s) => s.email.ilike(`%${query.q}%`)) : NewsletterSubscriber
+  const platformList = NewsletterSubscriber.where((s) => s.tenantId.isNull())
+  const searched = query.q ? platformList.where((s) => s.email.ilike(`%${query.q}%`)) : platformList
   const status = query.filters.status
   const matching =
     status === "pending"

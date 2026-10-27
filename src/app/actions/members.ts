@@ -85,3 +85,40 @@ export async function removeMembers(memberIds: string[]): Promise<{ removed: num
   revalidatePath(MEMBERS)
   return { removed }
 }
+
+/**
+ * Suspend or reactivate members. Needs `members.manage`. Never the caller and
+ * never an owner; a suspended member keeps the seat but is granted nothing.
+ */
+export async function setMembersSuspended(memberIds: string[], suspended: boolean): Promise<{ changed: number }> {
+  const ctx = await requireTenantContext("members", "manage")
+  const ids = [...new Set(memberIds)].slice(0, 200)
+  if (ids.length === 0) return { changed: 0 }
+
+  const inTenant = db8.orm.public.Member.where({ organizationId: ctx.tenantId })
+  const targets = await inTenant.where((m) => m.id.in(ids)).all()
+  const allowed = targets.filter((m) => m.userId !== ctx.user.id && m.role !== "owner").map((m) => m.id)
+  if (allowed.length === 0) return { changed: 0 }
+
+  const changed = await inTenant
+    .where((m) => m.id.in(allowed))
+    .updateAndCount({ status: suspended ? "suspended" : "active" })
+  revalidatePath(MEMBERS)
+  return { changed }
+}
+
+/** Withdraw a pending invitation of this workspace. Needs `members.invite`. */
+export async function cancelMemberInvitation(invitationId: string): Promise<{ error?: string }> {
+  const ctx = await requireTenantContext("members", "invite")
+  const t = await getTranslations("dashboard.members.errors")
+  const invite = await db8.orm.public.Invitation.where({
+    id: invitationId,
+    organizationId: ctx.tenantId,
+    status: "pending",
+  }).first()
+  if (!invite) return { error: t("notFound") }
+
+  await auth.api.cancelInvitation({ headers: await headers(), body: { invitationId } })
+  revalidatePath(MEMBERS)
+  return {}
+}

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import type { Db8Mock } from "@tests/helpers/db8-mock"
 
-const api = { createInvitation: vi.fn(), updateMemberRole: vi.fn(), removeMember: vi.fn() }
+const api = { createInvitation: vi.fn(), updateMemberRole: vi.fn(), removeMember: vi.fn(), cancelInvitation: vi.fn() }
 const ctx = { tenantId: "t1", user: { id: "u-me" }, member: { role: "owner" } }
 
 vi.mock("@/auth", () => ({ auth: { api } }))
@@ -12,7 +12,8 @@ vi.mock("@/platform/tenancy/require-member", () => ({ requireTenantContext: asyn
 vi.mock("@/platform/tenancy/permissions", () => ({ TENANT_ROLE_KEYS: ["owner", "manager", "staff"] }))
 vi.mock("@/lib/db8", async () => (await import("@tests/helpers/db8-mock")).createDb8Mock())
 
-const { inviteMember, removeMembers, setMemberRole } = await import("@/app/actions/members")
+const { cancelMemberInvitation, inviteMember, removeMembers, setMemberRole, setMembersSuspended } =
+  await import("@/app/actions/members")
 const db = (await import("@/lib/db8")) as unknown as Db8Mock
 
 beforeEach(() => {
@@ -65,5 +66,41 @@ describe("removeMembers", () => {
     await expect(removeMembers(["m-me", "m-owner", "m-staff"])).resolves.toEqual({ removed: 1 })
     expect(api.removeMember).toHaveBeenCalledTimes(1)
     expect(api.removeMember).toHaveBeenCalledWith(expect.objectContaining({ body: { memberIdOrEmail: "m-staff" } }))
+  })
+})
+
+describe("setMembersSuspended", () => {
+  it("never suspends the caller or an owner, and stays inside the tenant", async () => {
+    db.fn("Member.all").mockResolvedValue([
+      { id: "m-me", role: "manager", userId: "u-me" },
+      { id: "m-owner", role: "owner", userId: "u2" },
+      { id: "m-staff", role: "staff", userId: "u3" },
+    ])
+    db.fn("Member.updateAndCount").mockResolvedValue(1)
+    await expect(setMembersSuspended(["m-me", "m-owner", "m-staff"], true)).resolves.toEqual({ changed: 1 })
+    const update = db.call("Member.updateAndCount")
+    expect(update?.chain[0]).toEqual(["where", [{ organizationId: "t1" }]])
+    expect(update?.args).toEqual([{ status: "suspended" }])
+  })
+
+  it("does nothing when only protected members are picked", async () => {
+    db.fn("Member.all").mockResolvedValue([{ id: "m-owner", role: "owner", userId: "u2" }])
+    await expect(setMembersSuspended(["m-owner"], true)).resolves.toEqual({ changed: 0 })
+    expect(db.call("Member.updateAndCount")).toBeUndefined()
+  })
+})
+
+describe("cancelMemberInvitation", () => {
+  it("only cancels a pending invitation of this tenant", async () => {
+    db.fn("Invitation.first").mockResolvedValue(null)
+    await expect(cancelMemberInvitation("i-other")).resolves.toEqual({ error: "notFound" })
+    expect(api.cancelInvitation).not.toHaveBeenCalled()
+
+    db.fn("Invitation.first").mockResolvedValue({ id: "i1" })
+    await expect(cancelMemberInvitation("i1")).resolves.toEqual({})
+    expect(db.call("Invitation.first")?.chain).toEqual([
+      ["where", [{ id: "i1", organizationId: "t1", status: "pending" }]],
+    ])
+    expect(api.cancelInvitation).toHaveBeenCalledWith(expect.objectContaining({ body: { invitationId: "i1" } }))
   })
 })

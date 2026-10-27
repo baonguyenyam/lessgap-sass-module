@@ -8,6 +8,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const user = await requireUser()
   const tNav = await getTranslations("dashboard.nav")
   const tAccount = await getTranslations("dashboard.account.nav")
+  const tSettingsNav = await getTranslations("dashboard.settings.nav")
 
   return (
     <AppShell
@@ -20,10 +21,15 @@ export default async function DashboardLayout({ children }: { children: React.Re
         labels: {
           projects: tNav("projects"),
           members: tNav("members"),
+          newsletter: tNav("newsletter"),
           roles: tNav("roles"),
           billing: tNav("billing"),
           account: tNav("account"),
           settings: tNav("settings"),
+          preferences: tAccount("preferences"),
+          notifications: tAccount("notifications"),
+          localization: tSettingsNav("localization"),
+          display: tSettingsNav("display"),
           security: tAccount("security"),
           backup: tAccount("backup"),
           activity: tAccount("activity"),

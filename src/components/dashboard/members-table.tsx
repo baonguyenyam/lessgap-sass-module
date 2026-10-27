@@ -1,12 +1,12 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { UserCog, UserMinus, UserPlus } from "lucide-react"
+import { UserCheck, UserCog, UserMinus, UserPlus, UserX } from "lucide-react"
 import { useFormatter, useTranslations } from "next-intl"
 import { useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { inviteMember, removeMembers, setMemberRole } from "@/app/actions/members"
+import { inviteMember, removeMembers, setMemberRole, setMembersSuspended } from "@/app/actions/members"
 import { DataTable, dataTableColumns, type BulkAction } from "@/components/data-table/data-table"
 import { FormDrawer } from "@/components/data-table/form-drawer"
 import { RowActions } from "@/components/data-table/row-actions"
@@ -19,7 +19,16 @@ import { inviteMemberSchema, type InviteMemberInput } from "@/lib/schemas/tenant
 import type { TableQuery } from "@/lib/table-query"
 import { useDrawer } from "@/stores/drawer"
 
-export type MemberRow = { id: string; userId: string; name: string; email: string; role: string; createdAt: string }
+export type MemberRow = {
+  id: string
+  userId: string
+  name: string
+  email: string
+  role: string
+  status: "active" | "suspended"
+  createdAt: string
+  lastActiveAt: string | null
+}
 
 const INVITE = "member-invite"
 const ROLE = "member-role"
@@ -44,6 +53,11 @@ export function MembersTable({ rows, total, query, defaults, roleOptions, canMan
     description: t("removeConfirm.description"),
     confirmLabel: t("list.remove"),
   }
+  const suspendConfirm = {
+    title: t("suspendConfirm.title"),
+    description: t("suspendConfirm.description"),
+    confirmLabel: t("list.suspend"),
+  }
 
   const columns = useMemo(() => {
     const col = dataTableColumns<MemberRow>()
@@ -64,6 +78,22 @@ export function MembersTable({ rows, total, query, defaults, roleOptions, canMan
           <Badge variant={row.original.role === "owner" ? "default" : "outline"}>{row.original.role}</Badge>
         ),
       }),
+      col.accessor("status", {
+        header: t("list.colStatus"),
+        cell: ({ row }) => (
+          <Badge variant={row.original.status === "suspended" ? "destructive" : "secondary"}>
+            {t(`list.status.${row.original.status}`)}
+          </Badge>
+        ),
+      }),
+      col.accessor("lastActiveAt", {
+        header: t("list.colLastActive"),
+        cell: ({ row }) => (
+          <span className="whitespace-nowrap text-muted-foreground">
+            {row.original.lastActiveAt ? format.relativeTime(new Date(row.original.lastActiveAt)) : t("list.never")}
+          </span>
+        ),
+      }),
       col.accessor("createdAt", {
         id: "createdAt",
         header: t("list.colJoined"),
@@ -82,6 +112,24 @@ export function MembersTable({ rows, total, query, defaults, roleOptions, canMan
               label={row.original.email}
               actions={[
                 { label: t("list.changeRole"), icon: UserCog, onSelect: () => openDrawer(ROLE, row.original.id) },
+                ...(row.original.role === "owner"
+                  ? []
+                  : row.original.status === "suspended"
+                    ? [
+                        {
+                          label: t("list.reactivate"),
+                          icon: UserCheck,
+                          run: () => setMembersSuspended([row.original.id], false),
+                        },
+                      ]
+                    : [
+                        {
+                          label: t("list.suspend"),
+                          icon: UserX,
+                          confirm: suspendConfirm,
+                          run: () => setMembersSuspended([row.original.id], true),
+                        },
+                      ]),
                 {
                   label: t("list.remove"),
                   icon: UserMinus,
@@ -98,6 +146,13 @@ export function MembersTable({ rows, total, query, defaults, roleOptions, canMan
 
   const bulkActions: BulkAction[] = canManage
     ? [
+        { label: t("list.reactivate"), icon: UserCheck, run: (ids) => setMembersSuspended(ids, false) },
+        {
+          label: t("list.suspend"),
+          icon: UserX,
+          confirm: suspendConfirm,
+          run: (ids) => setMembersSuspended(ids, true),
+        },
         {
           label: t("list.remove"),
           icon: UserMinus,

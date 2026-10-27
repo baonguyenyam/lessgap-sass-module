@@ -23,6 +23,7 @@ export async function unsubscribeSubscribers(ids: string[]): Promise<{ changed: 
   const targets = await NewsletterSubscriber.select("id", "email")
     .where((s) => s.id.in(unique))
     .where((s) => s.unsubscribedAt.isNull())
+    .where((s) => s.tenantId.isNull())
     .all()
   if (targets.length === 0) return { changed: 0 }
 

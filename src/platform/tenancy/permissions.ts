@@ -30,6 +30,7 @@ export const TENANT_PERMISSIONS = {
   customers: ["view", "manage"],
   chatbot: ["view", "manage"],
   notifications: ["manage"],
+  newsletter: ["view", "manage"],
   reports: ["view"],
 } as const
 
@@ -64,6 +65,7 @@ export const ROLE_PERMISSIONS: Record<string, Record<string, readonly string[]>>
     customers: ["view", "manage"],
     chatbot: ["view", "manage"],
     notifications: ["manage"],
+    newsletter: ["view", "manage"],
     reports: ["view"],
   },
   staff: {
