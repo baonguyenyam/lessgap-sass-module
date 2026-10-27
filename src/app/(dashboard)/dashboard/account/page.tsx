@@ -76,7 +76,7 @@ export default async function GeneralSettingsPage({
 
       {/* Same shape as the danger zone on a project: its own card with a
           destructive title, rather than a box nested inside another section. */}
-      <Card className="border-destructive/20 bg-destructive/5">
+      <Card className="border-destructive bg-destructive/5">
         <CardHeader>
           <CardTitle className="text-base text-destructive">{t("dangerZone.title")}</CardTitle>
           <CardDescription>{t("dangerZone.blurb")}</CardDescription>
