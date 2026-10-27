@@ -15,6 +15,11 @@ decisions: Cache Components and Partial Prefetching (a migration of every
 route, which the Next docs say needs per-route decisions), React Compiler (a
 new dependency), anything marked experimental (`authInterrupts`,
 `useOffline`).
+The Cache Components and Partial Prefetching plan is
+[ADR 0022](../../spec/adr/0022-cache-components-and-partial-prefetching.md)
+(accepted 2026-10-27): all four steps, one PR each; tenant settings may be
+cached on the server keyed by tenant id; the session is not cached in the
+browser; the navigation overlay goes once prefetching covers it.
 
 ## 2026-10-27 — Empty lists are a block of their own; every page loads as a skeleton
 

@@ -44,3 +44,4 @@ Each rejected option and the reason it lost.
 | [0019](./0019-tenant-roles-are-permission-groups.md) | Tenant roles are permission groups: built-in owner/manager/staff plus custom roles via `dynamicAccessControl` | proposed |
 | [0020](./0020-application-stack.md) | One library per job: the application stack | accepted |
 | [0021](./0021-standard-shadcn-and-studio-admin.md) | Standard shadcn/ui components and the Studio Admin app shell | accepted |
+| [0022](./0022-cache-components-and-partial-prefetching.md) | Adopt Cache Components and Partial Prefetching, site surface first | accepted |
