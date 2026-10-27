@@ -1,3 +1,4 @@
+import type { Route } from "next"
 import { getTranslations } from "next-intl/server"
 import { SectionLayout, SectionNav } from "@/components/layout/section-nav"
 import { SETTINGS_TABS } from "@/platform/settings/fields"
@@ -6,7 +7,7 @@ import { SETTINGS_TABS } from "@/platform/settings/fields"
 export default async function PlatformSettingsLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations("admin.settings")
   const items = SETTINGS_TABS.map((tab) => ({
-    href: tab.segment ? `/admin/settings/${tab.segment}` : "/admin/settings",
+    href: (tab.segment ? `/admin/settings/${tab.segment}` : "/admin/settings") as Route,
     label: t(`tabs.${tab.key}`),
     segment: tab.segment,
   }))

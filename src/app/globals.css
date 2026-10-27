@@ -388,6 +388,21 @@ body {
   pointer-events: none;
 }
 
+/* View transitions (React <ViewTransition>). A page skeleton fades out as the
+   page's content arrives (PageSkeleton); nothing else animates, and clicks
+   during the fade reach the live page instead of the snapshot. */
+::view-transition {
+  pointer-events: none;
+}
+::view-transition-old(.skeleton-reveal) {
+  animation: 180ms ease-out both skeleton-reveal-out;
+}
+@keyframes skeleton-reveal-out {
+  to {
+    opacity: 0;
+  }
+}
+
 /* Respect reduced-motion: disable decorative animations */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -396,5 +411,11 @@ body {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
   }
 }

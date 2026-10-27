@@ -12,6 +12,7 @@ import { BACKUP_CODE_LENGTH, normalizeBackupCode } from "@/lib/backup-codes"
 import { emailEnabled } from "@/lib/email-transport"
 import { accountHref } from "@/lib/settings-pages"
 import { getPlatformSettings } from "@/platform/settings/store"
+import { HOME } from "@/config/site"
 
 // Every action here calls auth.api.* and then redirects OUTSIDE the try block.
 // redirect() works by throwing, so a redirect inside a try is caught by the
@@ -20,7 +21,7 @@ import { getPlatformSettings } from "@/platform/settings/store"
 // Signs out via POST (CSRF-safe) and redirects home.
 export async function signOutAction() {
   await auth.api.signOut({ headers: await headers() })
-  redirect("/")
+  redirect(HOME)
 }
 
 const emailSchema = z.email()

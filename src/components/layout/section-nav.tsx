@@ -1,11 +1,12 @@
 "use client"
 
+import type { Route } from "next"
 import Link from "next/link"
 import { useSelectedLayoutSegment } from "next/navigation"
 import { cn } from "@/lib/utils"
 
 export type SectionNavItem = {
-  href: string
+  href: Route
   label: string
   /** The route segment under the layout that renders the nav; null for its index page. */
   segment: string | null

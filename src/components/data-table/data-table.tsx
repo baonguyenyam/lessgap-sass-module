@@ -1,5 +1,6 @@
 "use client"
 
+import type { Route } from "next"
 import { useMutation } from "@tanstack/react-query"
 import {
   createColumnHelper,
@@ -135,7 +136,7 @@ export function DataTable<TData extends RowData>({
   const selectedIds = table.getSelectedRowIds()
 
   const go = (patch: TableQueryPatch) => {
-    startTransition(() => router.push(tableQueryHref(pathname, query, patch, defaults), { scroll: false }))
+    startTransition(() => router.push(tableQueryHref(pathname, query, patch, defaults) as Route, { scroll: false }))
   }
 
   // A new page of rows is a new list: what was selected on the last one is not

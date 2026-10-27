@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server"
 import { db8 } from "@/lib/db8"
 import { nowTs } from "@/lib/timestamps"
 import { removeNewsletterContact } from "@/lib/email"
-import { siteConfig } from "@/config/site"
+import { HOME, siteConfig } from "@/config/site"
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -58,7 +58,7 @@ export default async function NewsletterUnsubscribePage({
           </>
         )}
         <Link
-          href="/"
+          href={HOME}
           className="mt-8 inline-block rounded-full [background-image:var(--gradient-brand)] px-6 py-2.5 text-sm font-semibold text-primary-foreground"
         >
           {t("backToSite")}

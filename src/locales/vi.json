@@ -1274,6 +1274,12 @@
     "contactSendFailed": "Đã có lỗi xảy ra. Hãy gửi email trực tiếp cho chúng tôi tại {email}.",
     "userNotFound": "Người dùng này không còn tồn tại."
   },
+  "errorPage": {
+    "title": "Đã xảy ra lỗi",
+    "description": "Không tải được trang này. Hãy thử lại; nếu lỗi vẫn còn, gửi mã tham chiếu bên dưới cho người quản lý ứng dụng.",
+    "retry": "Thử lại",
+    "reference": "Mã tham chiếu: {digest}"
+  },
   "dataTable": {
     "all": "{label}: Tất cả",
     "bulkActions": "Thao tác hàng loạt",

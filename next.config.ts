@@ -29,6 +29,10 @@ const nextConfig: NextConfig = {
   // default, puts it on top of the dashboard's account menu, where it reads as
   // part of the app. Development only: production builds never show it.
   devIndicators: { position: "bottom-right" },
+  // Links, redirects and router calls are checked against the routes that
+  // exist: a typo or a deleted page fails the typecheck instead of a click.
+  // `pnpm typecheck` runs `next typegen` first so the route types are fresh.
+  typedRoutes: true,
   // The /docs pages render the repo's docs/*.md at request time (the navbar
   // session check makes them dynamic), so the files must ship with the
   // serverless bundle.

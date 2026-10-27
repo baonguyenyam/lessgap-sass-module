@@ -1,3 +1,4 @@
+import type { Route } from "next"
 import Link from "next/link"
 import { getTranslations } from "next-intl/server"
 import { ArrowRight, Check, X } from "lucide-react"
@@ -5,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { dismissOnboarding } from "@/app/actions/onboarding"
 
-type ChecklistItem = { label: string; done: boolean; href: string }
+type ChecklistItem = { label: string; done: boolean; href: Route }
 
 // Server component: the items are derived live from the DB by the dashboard
 // page, only the dismissal is persisted (User.onboardingDismissedAt).

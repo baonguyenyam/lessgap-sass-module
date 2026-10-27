@@ -17,7 +17,9 @@ export const ACCOUNT_PAGES = [
 
 export type AccountPageKey = (typeof ACCOUNT_PAGES)[number]["key"]
 
-export function accountHref(key: AccountPageKey): string {
+export type AccountHref = (typeof ACCOUNT_PAGES)[number]["href"]
+
+export function accountHref(key: AccountPageKey): AccountHref {
   return ACCOUNT_PAGES.find((page) => page.key === key)!.href
 }
 

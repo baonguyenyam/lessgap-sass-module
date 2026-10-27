@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "@/i18n/navigation"
+import { HOME } from "@/config/site"
 
 /**
  * Logo link: navigates home, but when already on the home page (where a
@@ -13,7 +14,7 @@ export function LogoLink({ className, children }: { className?: string; children
 
   return (
     <Link
-      href="/"
+      href={HOME}
       className={className}
       onClick={(e) => {
         if (pathname === "/") {

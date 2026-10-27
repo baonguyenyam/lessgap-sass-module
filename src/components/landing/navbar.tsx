@@ -1,3 +1,4 @@
+import type { Route } from "next"
 import { LayoutDashboard, LogIn } from "lucide-react"
 import { getTranslations } from "next-intl/server"
 import Link from "next/link"
@@ -67,7 +68,7 @@ export async function Navbar() {
                     {tCommon("starOnGitHub")}
                   </a>
                 ) : (
-                  <Link href="/#pricing">{t("getStarted")}</Link>
+                  <Link href={"/#pricing" as Route}>{t("getStarted")}</Link>
                 )}
               </Button>
             </>

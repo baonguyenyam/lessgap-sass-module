@@ -1,5 +1,6 @@
 "use server"
 
+import type { Route } from "next"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { APIError } from "better-auth/api"
@@ -14,6 +15,7 @@ import { checkRateLimit } from "@/lib/rate-limit"
 import { emailEnabled } from "@/lib/email-transport"
 import { enabledOAuthProviders } from "@/lib/oauth-providers"
 import { accountHref } from "@/lib/settings-pages"
+import { HOME } from "@/config/site"
 
 // Account-management actions behind a session: link/unlink OAuth providers
 // and set or change the password. Outcomes surface as query params on the
@@ -39,7 +41,7 @@ export async function linkProvider(formData: FormData) {
     body: { provider, callbackURL: SETTINGS },
     headers: await headers(),
   })
-  if (url) redirect(url)
+  if (url) redirect(url as Route)
   redirect(`${SETTINGS}?error=unlink`)
 }
 
@@ -183,7 +185,7 @@ export async function deleteAccount(formData: FormData) {
   // The session rows go with the user (onDelete: Cascade), so this only clears
   // the cookie that now points at nothing.
   await auth.api.signOut({ headers: await headers() })
-  redirect("/")
+  redirect(HOME)
 }
 
 /**

@@ -1,3 +1,4 @@
+import type { Route } from "next"
 import * as React from "react"
 import Link from "next/link"
 import type { Crumb } from "@/lib/breadcrumb"
@@ -29,7 +30,7 @@ export function BreadcrumbTrail({ trail, className }: { trail: Crumb[]; classNam
                   <BreadcrumbPage>{crumb.name}</BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink asChild>
-                    <Link href={crumb.href}>{crumb.name}</Link>
+                    <Link href={crumb.href as Route}>{crumb.name}</Link>
                   </BreadcrumbLink>
                 )}
               </BreadcrumbItem>

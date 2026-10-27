@@ -1,3 +1,4 @@
+import type { Route } from "next"
 import { LogIn, Mail, Play, ShieldCheck, Wrench } from "lucide-react"
 import Link from "next/link"
 import { GithubIcon } from "@/components/icons/github"
@@ -63,7 +64,7 @@ export default async function LoginPage({
                   body: { provider: "google", callbackURL: "/dashboard" },
                   headers: await headers(),
                 })
-                if (url) redirect(url)
+                if (url) redirect(url as Route)
               }}
             >
               <PendingButton disabled={isDemo} variant="outline" size="lg" className="w-full">
@@ -98,7 +99,7 @@ export default async function LoginPage({
                   body: { provider: "github", callbackURL: "/dashboard" },
                   headers: await headers(),
                 })
-                if (url) redirect(url)
+                if (url) redirect(url as Route)
               }}
             >
               <PendingButton disabled={isDemo} variant="outline" size="lg" className="w-full">

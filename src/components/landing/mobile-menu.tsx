@@ -1,5 +1,6 @@
 "use client"
 
+import type { Route } from "next"
 import { useTranslations } from "next-intl"
 
 import { Fragment } from "react"
@@ -41,7 +42,7 @@ export function MobileMenu({
   starHref,
   isAuthenticated,
 }: {
-  signInHref: string
+  signInHref: Route
   /** The link goes to the demo, so it reads "Demo" rather than "Sign in". */
   signInToDemo?: boolean
   /** Set only on the kit's own site: see the comment in `navbar.tsx`. */
@@ -83,7 +84,7 @@ export function MobileMenu({
           <Fragment key={id}>
             <DropdownMenuItem asChild>
               <Link
-                href={`/#${id}`}
+                href={`/#${id}` as Route}
                 onClick={(e) => scrollToSection(e, id)}
                 className={cn(current === id && "bg-primary/10 font-medium text-primary")}
               >
@@ -123,7 +124,7 @@ export function MobileMenu({
                 </a>
               ) : (
                 <Link
-                  href="/#pricing"
+                  href={"/#pricing" as Route}
                   onClick={(e) => scrollToSection(e, "pricing")}
                   className="font-semibold text-primary"
                 >

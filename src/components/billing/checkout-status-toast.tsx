@@ -1,5 +1,6 @@
 "use client"
 
+import type { Route } from "next"
 import { useTranslations } from "next-intl"
 
 import { Suspense, useEffect, useRef } from "react"
@@ -31,7 +32,7 @@ function CheckoutStatusToastInner() {
     }
 
     // Strip the params so a refresh or back-navigation doesn't re-toast.
-    router.replace(pathname, { scroll: false })
+    router.replace(pathname as Route, { scroll: false })
   }, [success, canceled, pathname, router, t])
 
   return null

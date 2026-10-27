@@ -8,7 +8,15 @@
  * (see `.env.example`), so you can rebrand from
  * config without editing code. The kit ships with neutral placeholders.
  */
+import type { Route } from "next"
 import { isKitSite } from "@/config/kit"
+
+/**
+ * The public home page. Typed routes list it as `/[locale]`, but the proxy
+ * serves the default language without a prefix, so "/" is a real page the
+ * generated types cannot see. Link to it through this constant.
+ */
+export const HOME = "/" as Route
 
 export const siteConfig = {
   name: process.env.NEXT_PUBLIC_BRAND_NAME || (isKitSite ? "less[GAP] App" : "Acme"),
@@ -68,7 +76,7 @@ export const siteConfig = {
      * here instead of the local /login and reads "Demo": useful when this
      * deployment is a marketing site and the demo runs elsewhere.
      */
-    demo: process.env.NEXT_PUBLIC_DEMO_URL || null,
+    demo: (process.env.NEXT_PUBLIC_DEMO_URL as Route | undefined) || null,
   },
 
   /**

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
 import { Home } from "lucide-react"
-import { siteConfig } from "@/config/site"
+import { HOME, siteConfig } from "@/config/site"
 
 export default function NotFound() {
   const t = useTranslations("notFound")
@@ -14,7 +14,7 @@ export default function NotFound() {
 
   useEffect(() => {
     if (secondsLeft <= 0) {
-      router.push("/")
+      router.push(HOME)
       return
     }
 
@@ -47,7 +47,7 @@ export default function NotFound() {
         {/* Action Buttons */}
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Link
-            href="/"
+            href={HOME}
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-primary/95 sm:w-auto"
           >
             <Home className="h-4 w-4" />

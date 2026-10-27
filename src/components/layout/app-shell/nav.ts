@@ -1,3 +1,4 @@
+import type { Route } from "next"
 import {
   ArrowLeft,
   CreditCard,
@@ -19,7 +20,7 @@ import {
  * dialog and the mobile sheet all read it. Labels are keys under
  * `dashboard.nav`; group labels under `dashboard.nav.groups`.
  */
-export type NavItem = { key: string; href: string; icon: LucideIcon; exact?: boolean }
+export type NavItem = { key: string; href: Route; icon: LucideIcon; exact?: boolean }
 export type NavGroup = { key: string; items: NavItem[] }
 export type NavArea = "dashboard" | "admin"
 
@@ -60,7 +61,7 @@ export function navGroups(area: NavArea, { showAdmin }: { showAdmin: boolean }):
         { key: "billing", href: "/dashboard/billing", icon: CreditCard },
         { key: "account", href: "/dashboard/account", icon: UserRound },
         { key: "settings", href: "/dashboard/settings", icon: Settings },
-        ...(showAdmin ? [{ key: "adminPanel", href: "/admin", icon: Shield }] : []),
+        ...(showAdmin ? [{ key: "adminPanel", href: "/admin", icon: Shield } satisfies NavItem] : []),
       ],
     },
   ]

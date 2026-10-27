@@ -1274,6 +1274,12 @@
     "contactSendFailed": "Something went wrong on our side. Email us directly at {email}.",
     "userNotFound": "That user no longer exists."
   },
+  "errorPage": {
+    "title": "Something went wrong",
+    "description": "This page could not be loaded. Try again; if it keeps happening, send the reference below to whoever runs this app.",
+    "retry": "Try again",
+    "reference": "Reference: {digest}"
+  },
   "dataTable": {
     "all": "{label}: All",
     "bulkActions": "Bulk actions",

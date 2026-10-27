@@ -1,5 +1,6 @@
 "use client"
 
+import type { Route } from "next"
 import { useTranslations } from "next-intl"
 
 import { Fragment } from "react"
@@ -23,7 +24,7 @@ export function NavLinks() {
     <nav className="hidden items-center gap-1 xl:flex">
       {sections.map(({ id }) => (
         <Fragment key={id}>
-          <Link href={`/#${id}`} className={linkClass(current === id)}>
+          <Link href={`/#${id}` as Route} className={linkClass(current === id)}>
             {t(id)}
           </Link>
         </Fragment>

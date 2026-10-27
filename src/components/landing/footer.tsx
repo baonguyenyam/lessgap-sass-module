@@ -1,3 +1,4 @@
+import type { Route } from "next"
 import Link from "next/link"
 import { GithubIcon } from "@/components/icons/github"
 import { PoweredBy } from "@/components/powered-by"
@@ -69,7 +70,7 @@ export function Footer() {
               {/* `/#` instead of bare `#`: the footer renders on every public
                   page, but the sections only exist on the home page. */}
               <li>
-                <Link href="/#features" className="transition-colors hover:text-foreground">
+                <Link href={"/#features" as Route} className="transition-colors hover:text-foreground">
                   {t("features")}
                 </Link>
               </li>
@@ -103,7 +104,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/#faq" className="transition-colors hover:text-foreground">
+                <Link href={"/#faq" as Route} className="transition-colors hover:text-foreground">
                   {t("faq")}
                 </Link>
               </li>

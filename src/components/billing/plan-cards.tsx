@@ -1,5 +1,6 @@
 "use client"
 
+import type { Route } from "next"
 import { useTranslations } from "next-intl"
 
 import { useState } from "react"
@@ -136,7 +137,7 @@ export function PlanCards({
   disabledNote?: string
   // When set, cards link here instead of starting a checkout: used on public
   // pages (demo landing) where the visitor has no session yet.
-  ctaHref?: string
+  ctaHref?: Route
   contactCard?: ContactCardData
 }) {
   const t = useTranslations("billing.plans")
