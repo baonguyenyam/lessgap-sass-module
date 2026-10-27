@@ -156,8 +156,8 @@ export default async function LoginPage({
             )}
 
             <form action={signInWithPassword} className="flex flex-col gap-3">
-              <Input name="email" type="email" placeholder={t("emailPlaceholder")} autoComplete="email" required className="h-12 rounded-full px-4" />
-              <Input name="password" type="password" placeholder={t("passwordPlaceholder")} autoComplete="current-password" required className="h-12 rounded-full px-4" />
+              <Input name="email" type="email" placeholder={t("emailPlaceholder")} autoComplete="email" required size="lg" />
+              <Input name="password" type="password" placeholder={t("passwordPlaceholder")} autoComplete="current-password" required size="lg" />
               <PendingButton variant="primary" size="lg" className="w-full">
                 {t("submit")}
               </PendingButton>

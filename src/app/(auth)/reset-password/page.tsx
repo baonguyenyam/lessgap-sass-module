@@ -58,7 +58,7 @@ export default async function ResetPasswordPage({
                 required
                 minLength={8}
                 maxLength={72}
-                className="h-12 rounded-full px-4"
+                size="lg"
               />
               <PendingButton variant="primary" size="lg" className="w-full">
                 {t("submit")}

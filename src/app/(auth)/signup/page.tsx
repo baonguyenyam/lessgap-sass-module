@@ -74,8 +74,8 @@ export default async function SignupPage({
         )}
 
         <form action={registerUser} className="flex flex-col gap-3">
-          <Input name="name" type="text" placeholder={t("namePlaceholder")} autoComplete="name" maxLength={100} disabled={isDemo} className="h-12 rounded-full px-4" />
-          <Input name="email" type="email" placeholder={t("emailPlaceholder")} autoComplete="email" required disabled={isDemo} className="h-12 rounded-full px-4" />
+          <Input name="name" type="text" placeholder={t("namePlaceholder")} autoComplete="name" maxLength={100} disabled={isDemo} size="lg" />
+          <Input name="email" type="email" placeholder={t("emailPlaceholder")} autoComplete="email" required disabled={isDemo} size="lg" />
           <Input
             name="password"
             type="password"
@@ -85,7 +85,7 @@ export default async function SignupPage({
             minLength={8}
             maxLength={72}
             disabled={isDemo}
-            className="h-12 rounded-full px-4"
+            size="lg"
           />
           <PendingButton
             disabled={isDemo}

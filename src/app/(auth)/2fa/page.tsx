@@ -73,7 +73,8 @@ export default async function TwoFactorPage({
           // The shape of one code, so that "enter one, not the list" is visible
           // before it has to be said in an error message.
           placeholder={backup ? "ABCDE-FGHJK" : "123456"}
-          className={`h-12 rounded-full px-4 ${backup ? "" : "text-center font-mono text-lg tracking-[0.4em]"}`}
+          size="lg"
+          className={backup ? "" : "text-center font-mono text-lg tracking-[0.4em]"}
         />
         <PendingButton variant="primary" size="lg" className="w-full">
           {t("submit")}

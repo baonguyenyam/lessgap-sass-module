@@ -69,7 +69,7 @@ export default async function ForgotPasswordPage({
           </p>
         ) : (
           <form action={requestPasswordReset} className="flex flex-col gap-3">
-            <Input name="email" type="email" placeholder={t("emailPlaceholder")} autoComplete="email" required disabled={formDisabled} className="h-12 rounded-full px-4" />
+            <Input name="email" type="email" placeholder={t("emailPlaceholder")} autoComplete="email" required disabled={formDisabled} size="lg" />
             <PendingButton
               disabled={formDisabled}
               variant="primary"
