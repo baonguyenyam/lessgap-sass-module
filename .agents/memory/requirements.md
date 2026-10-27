@@ -5,6 +5,17 @@ requirement is specified so agents read the source, not this summary. When a
 requirement becomes spec, ADR, rule or test, the pointer is updated and this
 file stays the index — not the place requirements are defined.
 
+## 2026-10-27 — Use the stable features of the installed Next.js
+
+The owner asked for the best stable features of the current Next.js (16.4)
+wherever they help. Adopted: typed routes, `error.tsx` boundaries with
+`retry()`, `loading.tsx` skeletons, React view transitions for the skeleton
+reveal → `.agents/rules/nextjs-react.md`. Not adopted without the owner's
+decisions: Cache Components and Partial Prefetching (a migration of every
+route, which the Next docs say needs per-route decisions), React Compiler (a
+new dependency), anything marked experimental (`authInterrupts`,
+`useOffline`).
+
 ## 2026-10-27 — Empty lists are a block of their own; every page loads as a skeleton
 
 1. **An empty list is not drawn as a table.** No header row, no pagination,

@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.17.0] - 2026-10-27
+
+**Typed links, a real error page, and a softer page load.** This release puts features of the installed Next.js 16.4 to work. It is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
+
+### Added
+
+- **Typed routes** (`typedRoutes`): every `href`, `redirect()` and `router.push()` is checked against the pages that exist, so a typo or a deleted page fails `pnpm typecheck` instead of a click. `pnpm typecheck` now runs `next typegen` first. If you customised: type your own route constants as `Route` from `next`, and link to the home page through `HOME` from `@/config/site`
+- **An error page inside the app**: a page under `/dashboard` or `/admin` that fails shows "Something went wrong" in the same block as the empty states, with "Try again" (it reloads only that page) and a reference that matches the server log. The sidebar and header stay. Before this, an error replaced the whole screen with the framework's default page
+- **The page skeleton fades out** as the content arrives (React view transitions), instead of vanishing. Off when the system asks for reduced motion
+
 ## [2.16.0] - 2026-10-27
 
 **Empty lists are a block of their own, and every page loads as a skeleton.** This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.

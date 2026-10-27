@@ -81,3 +81,9 @@ describe("page loading", () => {
     expect(readFileSync(loading, "utf8")).toContain("<PageSkeleton")
   })
 })
+
+describe("page errors", () => {
+  it.each(["src/app/(dashboard)/dashboard", "src/app/(admin)/admin"])("%s catches errors with RouteError", (dir) => {
+    expect(readFileSync(join(ROOT, dir, "error.tsx"), "utf8")).toContain("<RouteError")
+  })
+})

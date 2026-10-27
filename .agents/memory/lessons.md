@@ -2,6 +2,12 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-27 · next · Typed routes cannot see the public home at "/"
+- **Symptom:** with `typedRoutes: true`, `href="/"`, `redirect("/")` and `href="/#pricing"` failed the typecheck, while every other page passed.
+- **Cause:** the home page is `src/app/[locale]/(public)/page.tsx`, so the generated types know it only as `/${locale}`; the proxy serves the default language at "/" without a prefix.
+- **Fix:** `HOME` in `src/config/site.ts` (`"/" as Route`); anchors on the home page cast with `as Route`.
+- **Rule:** link to the home through `HOME`. If `tsc` reports odd route errors, run `npx next typegen` (`pnpm typecheck` does it first).
+
 ### 2026-10-27 · shadcn · A Sheet ignores a plain `sm:max-w-*` override
 - **Symptom:** `FormDrawer` passed `sm:max-w-md` but every drawer opened at `max-w-sm`.
 - **Cause:** the stock `SheetContent` sets `data-[side=right]:sm:max-w-sm`; the attribute selector gives it higher specificity, and `cn` does not merge classes with different variants.
