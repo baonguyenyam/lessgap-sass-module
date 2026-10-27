@@ -7,6 +7,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.15.0] - 2026-10-27
+
+**Empty lists explain themselves.** Every empty block now has the same shape: an icon, a title, one sentence and, where there is one, the next step. This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
+
+### Added
+
+- **`EmptyState`** (`src/components/layout/empty-state.tsx`) on the stock shadcn `Empty`: the one way to show an empty block
+- **"No results" with "Clear filters"**: when a search or filter leaves a table empty, it says so and offers to clear them, instead of showing the list's "nothing yet" message
+
+### Changed
+
+- `DataTable` takes `empty` (`{ icon, title, description?, action? }`) in place of `emptyMessage`. Projects offers "New project" and Members offers "Invite member" right in the empty table. If you customised: pass `empty` to your own tables
+- The rule for loading is written down: a skeleton for a page or section, a spinner inside a field only when that field fetches its own data, and on submit the spinner in the button with the fields locked
+
 ## [2.14.0] - 2026-10-27
 
 **Long lists can be searched, loading fields say so, and the language files agree.** This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
