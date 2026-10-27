@@ -50,7 +50,7 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 
 ### 0.4 — Ownership in the contract
 - **Goal:** decide and apply how owners are separated in `prisma/contract.prisma`: commented sections per owner (default), or a Postgres namespace per module. Record it in an ADR.
-- **Files:** `prisma/contract.prisma` (section headers), ADR, `spec/12-migrations-and-data.md`.
+- **Files:** `prisma/contract.prisma` (section headers), `migrations/app/refs/db.json` (current contract ref), ADR, `spec/12-migrations-and-data.md`.
 - **Tests:** M2 (reordering sections must plan no migration).
 - **Checks:** `pnpm db:emit`, `pnpm db:plan --name noop` reports nothing to plan, M1, M2.
 - **Done when:** the ADR is accepted and the contract follows it.
@@ -58,11 +58,11 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 
 ### 0.5 — Tenancy audit skeleton (T5)
 - **Goal:** CI fails on any Prisma model that is not classified.
-- **Files:** `src/platform/tenancy/models.ts` (classification list; kit models as `identity` or `global` with reasons), `scripts/audit-tenancy.mjs`, unit test, CI step.
+- **Files:** `src/platform/tenancy/models.ts` (classification list; kit models as `identity` or `global` with reasons), `scripts/audit-tenancy.mjs`, `tests/unit/scripts/audit-tenancy.test.mjs`, `package.json`, CI step.
 - **Tests:** T5 (a fixture schema with an unclassified model fails).
 - **Checks:** `pnpm audit:tenancy`.
 - **Done when:** adding a model without classifying it breaks CI.
-- [ ] done
+- [x] done (`pnpm audit:tenancy`, fixture test, typecheck and lint pass)
 
 ### 0.6 — Platform conventions: errors, action wrapper, logger, money, time
 - **Goal:** the shared helpers in [conventions.md](../13-conventions.md) exist with tests.

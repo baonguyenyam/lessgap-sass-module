@@ -60,6 +60,9 @@ jobs:
       - name: Check migration graph
         run: pnpm exec prisma migration check
 
+      - name: Audit tenancy model classifications
+        run: pnpm audit:tenancy
+
       - name: Type-check
         run: pnpm typecheck
 
