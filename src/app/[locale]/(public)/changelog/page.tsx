@@ -72,7 +72,7 @@ export default function ChangelogPage() {
                   banner sits above the navbar and makes it taller. */}
               <div className="md:sticky md:top-[116px] md:self-start">
                 <div className="flex items-center gap-2.5">
-                  <span className="inline-block rounded-full [background-image:var(--gradient-brand)] px-4 py-1.5 text-lg font-bold tracking-tight text-primary-foreground shadow-soft">
+                  <span className="inline-block rounded-full [background-image:var(--gradient-brand)] px-4 py-1.5 text-lg font-bold tracking-tight text-primary-foreground">
                     v{release.version}
                   </span>
                   {i === 0 && <Badge variant="secondary">{t("latest")}</Badge>}
@@ -83,7 +83,7 @@ export default function ChangelogPage() {
               </div>
 
               <div className="relative border-l border-border pb-2 pl-8 md:pl-10">
-                <span className="absolute top-2.5 -left-[5px] h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_0_4px_var(--background)]" />
+                <span className="absolute top-2.5 -left-[5px] h-2.5 w-2.5 rounded-full bg-primary ring-4 ring-background" />
                 <article className="prose max-w-none prose-headings:tracking-tight prose-h3:mt-6 prose-h3:text-base prose-code:before:content-none prose-code:after:content-none">
                   <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                     {release.body}

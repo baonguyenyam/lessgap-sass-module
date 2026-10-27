@@ -70,7 +70,8 @@ export function AppSidebar({ area, showAdmin, user }: { area: NavArea; showAdmin
       <SidebarFooter>
         <NavUser {...user} />
       </SidebarFooter>
-      <SidebarRail />
+      {/* Still folds the sidebar on click, without drawing a line on hover. */}
+      <SidebarRail className="hover:after:bg-transparent" />
     </Sidebar>
   )
 }

@@ -174,10 +174,10 @@
       "profileTitle": "Profile",
       "profileDescription": "Update your display name and view account details.",
       "methodsTitle": "Sign-in methods",
-      "methodsDescription": "Connect multiple ways to sign in to the same account.",
+      "methodsDescription": "Ways to sign in to this account.",
       "email": {
         "label": "Email address",
-        "hint": "The address you sign in with. Changing it takes two confirmations: one from this address, then one from the new one. The account moves only after both, so a mistyped address cannot lock you out.",
+        "hint": "Confirmed from both the current and the new address before it changes.",
         "placeholder": "new@example.com",
         "submit": "Change email"
       },
@@ -188,35 +188,34 @@
       "passwordSet": "Set",
       "passwordNotSet": "Not set",
       "currentPasswordPlaceholder": "Current password",
-      "newPasswordPlaceholder": "New password (min 8 characters)",
-      "setPasswordPlaceholder": "Set a password (min 8 characters)",
+      "newPasswordPlaceholder": "New password (8+ characters)",
+      "setPasswordPlaceholder": "New password (8+ characters)",
       "changePassword": "Change password",
       "setPassword": "Set password",
-      "passwordHint": "With a password set you can sign in even without your OAuth providers.",
+      "passwordHint": "Lets you sign in without Google or GitHub.",
       "twoFactor": {
         "title": "Two-factor authentication",
-        "description": "A code from your authenticator app, on top of your password.",
+        "description": "Ask for a code from an authenticator app at sign-in.",
         "status": "Two-factor authentication",
         "on": "On",
-        "blurb": "Pair an authenticator app. After that, signing in with your password also asks for a six digit code.",
-        "passwordLabel": "Your account password",
+        "passwordLabel": "Current password",
         "turnOn": "Turn on",
         "turnOff": "Turn off",
         "turnOffTitle": "Turn off two-factor authentication?",
-        "turnOffDescription": "The secret is deleted rather than parked, so turning it back on later pairs a new authenticator from scratch.",
+        "turnOffDescription": "Turning it back on later means pairing your app again.",
         "cancel": "Cancel",
-        "scan": "Scan this with your authenticator app.",
-        "manualEntry": "Cannot scan it? In your app, choose to add an account by entering a key, and type this in:",
+        "scan": "Scan with an authenticator app: Google Authenticator, 1Password, Bitwarden or Authy.",
+        "manualEntry": "Cannot scan it? Enter this key instead:",
         "codeLabel": "Code from the app",
         "confirm": "Confirm",
         "regenerate": "New backup codes",
         "codesTitle": "Backup codes",
-        "codesWarning": "Shown once. Save them now: each one signs you in if you lose your phone, and leaving this page means generating a new set.",
+        "codesWarning": "Shown once. Each code signs you in one time if you lose your phone.",
         "copy": "Copy",
         "copied": "Copied",
         "download": "Download",
-        "needsPassword": "Set a password first. A second factor is added to a password, so an account that only signs in with Google or GitHub has nothing to add it to.",
-        "demo": "Two-factor authentication is off on the demo. The accounts here are shared and reset every night, so a second factor would lock the next visitor out.",
+        "needsPassword": "Set a password first to turn on two-factor authentication.",
+        "demo": "Not available on the demo.",
         "errors": {
           "password": "That password is wrong.",
           "code": "That code is wrong or has expired. Codes change every 30 seconds.",
@@ -224,24 +223,16 @@
           "demo": "Not available on the demo.",
           "generic": "Something went wrong. Try again."
         },
-        "apps": "Any authenticator app works: Google Authenticator, 1Password, Bitwarden, Authy.",
-        "codesStore": "Keep them somewhere other than the phone holding your authenticator: one lost thing should not take both.",
-        "regenerateHint": "Used one, or lost the list? A new set replaces the old one, and the old codes stop working immediately.",
-        "passwordWhy": "The one you sign in with. We ask for it here so that somebody who finds your screen unlocked cannot pair their own authenticator to your account: a second factor set up by someone else protects them, not you.",
-        "passwordWhyShort": "The one you sign in with. It confirms it is you, and not somebody who found your screen unlocked.",
-        "keyShape": "Letters and the digits 2 to 7 only: a round character is always the letter O, never a zero, and there is no 1 to mistake for I or L. Spaces do not matter.",
-        "codesShape": "Upper case, without the characters that look like each other: no O or zero, no I or one. Spaces and the dash are forgiven when you type one back in.",
-        "codesHowToUse": "You get ten because each one is spent when you use it. At sign-in you enter a single code, not the list: that one stops working from then on, and next time you take another."
+        "regenerateHint": "Replaces your backup codes; the old ones stop working."
       },
       "sessions": {
         "title": "Active sessions",
-        "description": "Every device signed in to this account right now.",
-        "blurb": "One row per sign-in, with the device and address it came from. If you do not recognise one, end it.",
+        "description": "Devices signed in to your account.",
         "thisDevice": "This device",
         "unknownDevice": "Unknown device",
         "revoke": "End session",
         "revokeOthers": "End all other sessions ({count})",
-        "caveat": "A session you end here can survive on the other device for up to a minute, because the session is cached in a cookie for that long. Changing your password ends every other session at once, with no such delay."
+        "caveat": "An ended session can stay active on its device for up to a minute."
       },
       "accountTitle": "Account",
       "accountDescription": "Account information and metadata.",
@@ -625,7 +616,7 @@
         "locale": {
           "app": {
             "label": "Language",
-            "description": "Strings not translated yet fall back to English."
+            "description": "The default language. Anyone can switch it from the header."
           }
         },
         "signup": {
@@ -1218,5 +1209,8 @@
     "morePages": "More pages",
     "breadcrumb": "Breadcrumb",
     "more": "More"
+  },
+  "language": {
+    "label": "Change language"
   }
 }

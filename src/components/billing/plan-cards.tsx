@@ -181,7 +181,7 @@ export function PlanCards({
               onClick={() => setInterval(value)}
               className={cn(
                 "inline-flex items-center justify-center rounded-[calc(var(--radius)-2px)] px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
-                interval === value && "bg-background text-foreground shadow-soft"
+                interval === value && "bg-background text-foreground"
               )}
             >
               {value === "MONTH" ? "Monthly" : "Yearly"}

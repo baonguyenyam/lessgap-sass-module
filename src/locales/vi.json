@@ -158,10 +158,10 @@
       "profileTitle": "Hồ sơ",
       "profileDescription": "Cập nhật tên hiển thị và xem chi tiết tài khoản.",
       "methodsTitle": "Phương thức đăng nhập",
-      "methodsDescription": "Kết nối nhiều cách để đăng nhập vào cùng một tài khoản.",
+      "methodsDescription": "Các cách đăng nhập vào tài khoản này.",
       "email": {
         "label": "Địa chỉ email",
-        "hint": "Địa chỉ bạn dùng để đăng nhập. Việc thay đổi cần hai bước xác nhận: một từ địa chỉ này, sau đó một từ địa chỉ mới. Tài khoản chỉ chuyển đổi sau cả hai bước, đảm bảo bạn không bị khóa tài khoản nếu nhập sai.",
+        "hint": "Cần xác nhận từ cả địa chỉ hiện tại và địa chỉ mới trước khi đổi.",
         "placeholder": "moi@example.com",
         "submit": "Thay đổi email"
       },
@@ -173,34 +173,33 @@
       "passwordNotSet": "Chưa thiết lập",
       "currentPasswordPlaceholder": "Mật khẩu hiện tại",
       "newPasswordPlaceholder": "Mật khẩu mới (tối thiểu 8 ký tự)",
-      "setPasswordPlaceholder": "Thiết lập mật khẩu (tối thiểu 8 ký tự)",
+      "setPasswordPlaceholder": "Mật khẩu mới (tối thiểu 8 ký tự)",
       "changePassword": "Đổi mật khẩu",
       "setPassword": "Thiết lập mật khẩu",
-      "passwordHint": "Khi đã thiết lập mật khẩu, bạn có thể đăng nhập ngay cả khi không dùng các nhà cung cấp OAuth.",
+      "passwordHint": "Cho phép đăng nhập mà không cần Google hay GitHub.",
       "twoFactor": {
         "title": "Xác thực hai yếu tố",
-        "description": "Mã từ ứng dụng xác thực bổ sung bên cạnh mật khẩu của bạn.",
+        "description": "Yêu cầu mã từ ứng dụng xác thực khi đăng nhập.",
         "status": "Xác thực hai yếu tố",
         "on": "Bật",
-        "blurb": "Ghép nối ứng dụng xác thực. Sau đó, việc đăng nhập bằng mật khẩu sẽ yêu cầu thêm mã gồm 6 chữ số.",
-        "passwordLabel": "Mật khẩu tài khoản của bạn",
+        "passwordLabel": "Mật khẩu hiện tại",
         "turnOn": "Bật",
         "turnOff": "Tắt",
         "turnOffTitle": "Tắt xác thực hai yếu tố?",
-        "turnOffDescription": "Mã khóa bí mật sẽ bị xóa hoàn toàn chứ không lưu trữ, nên khi bật lại sau này bạn sẽ phải ghép nối ứng dụng xác thực mới từ đầu.",
+        "turnOffDescription": "Nếu bật lại sau này, bạn sẽ phải ghép nối lại ứng dụng.",
         "cancel": "Hủy",
-        "scan": "Quét mã này bằng ứng dụng xác thực của bạn.",
-        "manualEntry": "Không thể quét? Trong ứng dụng của bạn, chọn thêm tài khoản bằng cách nhập khóa và điền mã này:",
+        "scan": "Quét bằng ứng dụng xác thực: Google Authenticator, 1Password, Bitwarden hoặc Authy.",
+        "manualEntry": "Không quét được? Nhập khóa này:",
         "codeLabel": "Mã từ ứng dụng",
         "confirm": "Xác nhận",
         "regenerate": "Mã dự phòng mới",
         "codesTitle": "Mã dự phòng",
-        "codesWarning": "Chỉ hiển thị một lần. Hãy lưu lại ngay: mỗi mã có thể dùng để đăng nhập nếu bạn mất điện thoại, và việc rời khỏi trang này sẽ tạo ra một bộ mã mới.",
+        "codesWarning": "Chỉ hiển thị một lần. Mỗi mã đăng nhập được một lần nếu bạn mất điện thoại.",
         "copy": "Sao chép",
         "copied": "Đã sao chép",
         "download": "Tải về",
-        "needsPassword": "Hãy thiết lập mật khẩu trước. Yếu tố xác thực thứ hai được thêm vào mật khẩu, nên tài khoản chỉ đăng nhập bằng Google hoặc GitHub sẽ không thể thiết lập.",
-        "demo": "Xác thực hai yếu tố bị tắt trên bản demo. Các tài khoản ở đây dùng chung và được đặt lại mỗi đêm, nên yếu tố thứ hai sẽ khóa người truy cập tiếp theo.",
+        "needsPassword": "Hãy đặt mật khẩu trước khi bật xác thực hai yếu tố.",
+        "demo": "Không khả dụng trên bản demo.",
         "errors": {
           "password": "Mật khẩu đó không đúng.",
           "code": "Mã đó không đúng hoặc đã hết hạn. Mã thay đổi mỗi 30 giây.",
@@ -208,24 +207,16 @@
           "demo": "Không khả dụng trên bản demo.",
           "generic": "Đã có lỗi xảy ra. Thử lại sau."
         },
-        "apps": "Mọi ứng dụng xác thực đều hoạt động: Google Authenticator, 1Password, Bitwarden, Authy.",
-        "codesStore": "Lưu trữ chúng ở nơi khác ngoài chiếc điện thoại chứa ứng dụng xác thực của bạn: mất một thiết bị không nên làm mất cả hai.",
-        "regenerateHint": "Đã dùng một mã hoặc làm mất danh sách? Bộ mã mới sẽ thay thế bộ mã cũ, và các mã cũ sẽ ngừng hoạt động ngay lập tức.",
-        "passwordWhy": "Mật khẩu bạn dùng để đăng nhập. Chúng tôi yêu cầu ở đây để người khác khi thấy màn hình của bạn mở khóa không thể tự ghép nối ứng dụng xác thực của họ vào tài khoản của bạn.",
-        "passwordWhyShort": "Mật khẩu bạn dùng để đăng nhập. Điều này xác nhận đó là bạn, chứ không phải ai đó sử dụng máy khi bạn để mở màn hình.",
-        "keyShape": "Chỉ gồm các chữ cái và các chữ số từ 2 đến 7: ký tự tròn luôn là chữ O, không bao giờ là số 0, và không có số 1 để tránh nhầm lẫn với I hoặc L. Khoảng trắng không ảnh hưởng.",
-        "codesShape": "Chữ in hoa, không chứa các ký tự dễ nhầm lẫn: không có O hoặc số 0, không có I hoặc số 1. Khoảng trắng và dấu gạch ngang sẽ được chấp nhận khi bạn nhập lại.",
-        "codesHowToUse": "Bạn nhận được 10 mã vì mỗi mã sẽ bị tiêu hủy sau khi dùng. Khi đăng nhập, bạn nhập một mã duy nhất chứ không phải toàn bộ danh sách: mã đó sẽ ngừng hoạt động từ lúc đó, và lần tới bạn dùng một mã khác."
+        "regenerateHint": "Thay bộ mã dự phòng; mã cũ sẽ ngừng hoạt động."
       },
       "sessions": {
         "title": "Phiên hoạt động",
-        "description": "Mọi thiết bị đang đăng nhập vào tài khoản này lúc này.",
-        "blurb": "Mỗi hàng tương ứng với một lần đăng nhập, cùng với thiết bị và địa chỉ khởi tạo. Nếu không nhận ra phiên nào, hãy kết thúc nó.",
+        "description": "Các thiết bị đang đăng nhập vào tài khoản của bạn.",
         "thisDevice": "Thiết bị này",
         "unknownDevice": "Thiết bị không xác định",
         "revoke": "Kết thúc phiên",
         "revokeOthers": "Kết thúc tất cả các phiên khác ({count})",
-        "caveat": "Một phiên bạn kết thúc ở đây có thể duy trì trên thiết bị khác tối đa một phút do phiên được lưu trong bộ nhớ cache của cookie. Việc đổi mật khẩu sẽ kết thúc tất cả các phiên khác ngay lập tức mà không có độ trễ này."
+        "caveat": "Phiên đã kết thúc có thể vẫn hoạt động trên thiết bị đó tối đa một phút."
       },
       "accountTitle": "Tài khoản",
       "accountDescription": "Thông tin tài khoản và dữ liệu hệ thống.",
@@ -458,7 +449,16 @@
     "revenueTitle": "Doanh thu định kỳ",
     "revenueSubtitle": "Doanh thu định kỳ hàng tháng trong 12 tuần qua.",
     "revenueTooltip": "MRR",
-    "waitlistTitle": "Danh sách chờ"
+    "waitlistTitle": "Danh sách chờ",
+    "settings": {
+      "fields": {
+        "locale": {
+          "app": {
+            "description": "Ngôn ngữ mặc định. Mỗi người có thể đổi ở thanh tiêu đề."
+          }
+        }
+      }
+    }
   },
   "switchAs": {
     "banner": "Bạn đang sử dụng ứng dụng dưới tên {email}. Mọi thay đổi bạn thực hiện đều là thật.",
@@ -998,5 +998,8 @@
     "checkTheForm": "Kiểm tra lại biểu mẫu và thử lại",
     "tooManyMessages": "Quá nhiều tin nhắn từ kết nối này. Thử lại sau vài phút.",
     "contactSendFailed": "Đã có lỗi xảy ra. Hãy gửi email trực tiếp cho chúng tôi tại {email}."
+  },
+  "language": {
+    "label": "Đổi ngôn ngữ"
   }
 }

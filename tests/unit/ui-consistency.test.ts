@@ -40,4 +40,11 @@ describe("UI consistency", () => {
     const offenders = files.filter((file) => /<select\b/.test(readFileSync(file, "utf8"))).map((f) => relative(ROOT, f))
     expect(offenders, "use NativeSelect (server forms) or Select (client components)").toEqual([])
   })
+
+  it("casts no shadows", () => {
+    const offenders = files
+      .filter((file) => /(^|[\s"'`:])shadow-(?!none\b)/m.test(readFileSync(file, "utf8")))
+      .map((f) => relative(ROOT, f))
+    expect(offenders, "the UI is flat: separate surfaces with a border or a ring").toEqual([])
+  })
 })

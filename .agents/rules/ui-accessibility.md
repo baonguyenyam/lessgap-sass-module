@@ -22,6 +22,12 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
   filters, sort and pagination in the URL, applied on the server; a checkbox
   column with bulk actions; an actions column; create and edit in a `Sheet`
   drawer, not a separate page.
+- **Drawers are `FormDrawer`** with a `size` that fits the content: `sm` one
+  field, `md` a short form, `lg` long text, `xl` a grid of options. Put fields
+  side by side with a grid in its children when they belong on one line.
+- **No shadows.** Separate surfaces with a border or a ring. The shadow scale
+  is flattened in `globals.css`; a test fails on `shadow-*` outside
+  `src/components/ui/`.
 - **Forms:** React Hook Form with `zodResolver` and a schema from
   `src/lib/schemas/`; the server action parses the same schema again.
 - Icons from `lucide-react`. Toasts through `sonner`.

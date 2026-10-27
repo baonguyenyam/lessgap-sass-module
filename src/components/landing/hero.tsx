@@ -68,7 +68,7 @@ export function Hero() {
         {/* Announcement pill: the current version, then what is new in it.
             The badge reads `version` from src/config/site.ts, so it moves with
             your releases; swap the sentence for whatever you are shipping. */}
-        <div className="mb-7 inline-flex animate-fade-in-up items-center gap-2 rounded-full border border-border bg-card/70 py-1.5 pr-4 pl-2 text-sm font-medium shadow-soft backdrop-blur">
+        <div className="mb-7 inline-flex animate-fade-in-up items-center gap-2 rounded-full border border-border bg-card/70 py-1.5 pr-4 pl-2 text-sm font-medium backdrop-blur">
           <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
             <Sparkles className="h-3 w-3" /> v{siteConfig.version}
           </span>
@@ -144,7 +144,7 @@ export function Hero() {
           className="mx-auto mt-16 max-w-4xl animate-fade-in-up text-left xl:mx-[-3.394rem] xl:max-w-none xl:[zoom:1.1786]"
           style={{ animationDelay: "320ms" }}
         >
-          <PreviewThemeFrame className="overflow-hidden rounded-2xl border border-border bg-background shadow-[var(--shadow-soft-lg)] ring-1 ring-white/10 transition-colors md:animate-float">
+          <PreviewThemeFrame className="overflow-hidden rounded-2xl border border-border bg-background ring-1 ring-white/10 transition-colors md:animate-float">
             {/* Browser chrome */}
             <div className="flex items-center gap-2 border-b border-border bg-card px-4 py-3">
               <span className="h-3 w-3 rounded-full bg-red-400" />

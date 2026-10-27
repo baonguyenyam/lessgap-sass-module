@@ -58,8 +58,6 @@ export async function ActiveSessions() {
 
   return (
     <div className="space-y-4 text-sm">
-      <p className="text-muted-foreground">{t("blurb")}</p>
-
       <ul className="divide-y divide-border">
         {ordered.map((session) => {
           const isCurrent = session.id === currentId
@@ -88,7 +86,7 @@ export async function ActiveSessions() {
               {!isCurrent && (
                 <form action={revokeSession}>
                   <input type="hidden" name="sessionId" value={session.id} />
-                  <PendingButton variant="outline" size="sm">
+                  <PendingButton variant="outline">
                     {t("revoke")}
                   </PendingButton>
                 </form>
@@ -100,7 +98,7 @@ export async function ActiveSessions() {
 
       {others > 0 && (
         <form action={revokeOtherSessions}>
-          <PendingButton variant="destructive" size="sm">
+          <PendingButton variant="destructive">
             {t("revokeOthers", { count: others })}
           </PendingButton>
         </form>

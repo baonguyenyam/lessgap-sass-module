@@ -58,11 +58,11 @@ export default async function SecuritySettingsPage({
           <CardTitle>{t("methodsTitle")}</CardTitle>
           <CardDescription>{t("methodsDescription")}</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-3 text-sm">
+        <CardContent className="space-y-4 text-sm">
           {providerRows.map(([provider, label]) => {
             const accountId = linked.get(provider)
             return (
-              <div key={provider} className="flex items-center justify-between border-b border-border pb-3">
+              <div key={provider} className="flex items-center justify-between gap-2 border-b border-border pb-4">
                 <div className="flex items-center gap-2">
                   <span className="font-medium">{label}</span>
                   {accountId && <Badge variant="secondary">{t("connected")}</Badge>}
@@ -70,14 +70,14 @@ export default async function SecuritySettingsPage({
                 {accountId ? (
                   <form action={unlinkProvider}>
                     <input type="hidden" name="accountId" value={accountId} />
-                    <PendingButton variant="outline" size="sm">
+                    <PendingButton variant="outline">
                       {t("disconnect")}
                     </PendingButton>
                   </form>
                 ) : (
                   <form action={linkProvider}>
                     <input type="hidden" name="provider" value={provider} />
-                    <PendingButton variant="outline" size="sm">
+                    <PendingButton variant="outline">
                       {t("connect")}
                     </PendingButton>
                   </form>
@@ -90,12 +90,9 @@ export default async function SecuritySettingsPage({
               name: it is a credential, and changing it is a two-step round trip
               rather than a field you save. Its own form, because the profile
               form cannot contain another one. */}
-          <div className="border-b border-border pb-4">
-            <Label htmlFor="new-email" className="font-medium">
-              {t("email.label")}
-            </Label>
-            <p className="mt-1 max-w-prose text-xs text-muted-foreground">{t("email.hint")}</p>
-            <form action={changeEmail} className="mt-2 flex flex-wrap items-center gap-2">
+          <div className="space-y-2 border-b border-border pb-4">
+            <Label htmlFor="new-email">{t("email.label")}</Label>
+            <form action={changeEmail} className="flex flex-wrap items-center gap-2">
               <Input
                 id="new-email"
                 name="email"
@@ -106,10 +103,11 @@ export default async function SecuritySettingsPage({
               />
               <PendingButton variant="outline">{t("email.submit")}</PendingButton>
             </form>
+            <p className="text-xs text-muted-foreground">{t("email.hint")}</p>
           </div>
 
-          <div className="pt-1">
-            <div className="mb-3 flex items-center gap-2">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
               <span className="font-medium">{t("password")}</span>
               {hasPassword ? (
                 <Badge variant="secondary">{t("passwordSet")}</Badge>
@@ -117,12 +115,14 @@ export default async function SecuritySettingsPage({
                 <Badge variant="outline">{t("passwordNotSet")}</Badge>
               )}
             </div>
-            <form action={updatePassword} className="flex flex-col gap-2 sm:max-w-sm">
+            <form action={updatePassword} className="flex flex-wrap items-center gap-2">
               {hasPassword && (
                 <Input
                   name="currentPassword"
                   type="password"
+                  aria-label={t("currentPasswordPlaceholder")}
                   placeholder={t("currentPasswordPlaceholder")}
+                  className="w-full sm:w-64"
                   autoComplete="current-password"
                   required
                 />
@@ -130,17 +130,19 @@ export default async function SecuritySettingsPage({
               <Input
                 name="password"
                 type="password"
+                aria-label={hasPassword ? t("newPasswordPlaceholder") : t("setPasswordPlaceholder")}
                 placeholder={hasPassword ? t("newPasswordPlaceholder") : t("setPasswordPlaceholder")}
+                className="w-full sm:w-64"
                 autoComplete="new-password"
                 required
                 minLength={8}
                 maxLength={72}
               />
-              <PendingButton variant="default" size="sm" className="self-start">
+              <PendingButton variant="outline">
                 {hasPassword ? t("changePassword") : t("setPassword")}
               </PendingButton>
             </form>
-            {!hasPassword && <p className="mt-2 text-xs text-muted-foreground">{t("passwordHint")}</p>}
+            {!hasPassword && <p className="text-xs text-muted-foreground">{t("passwordHint")}</p>}
           </div>
         </CardContent>
       </Card>

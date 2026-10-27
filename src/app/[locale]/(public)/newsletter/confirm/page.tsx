@@ -80,7 +80,7 @@ export default async function NewsletterConfirmPage({ searchParams }: { searchPa
         )}
         <Link
           href="/pricing"
-          className="mt-8 inline-block rounded-full [background-image:var(--gradient-brand)] px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft"
+          className="mt-8 inline-block rounded-full [background-image:var(--gradient-brand)] px-6 py-2.5 text-sm font-semibold text-primary-foreground"
         >
           {state === "confirmed" ? t("backToSite") : t("backToPricing")}
         </Link>

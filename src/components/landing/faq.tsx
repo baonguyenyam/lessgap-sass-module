@@ -54,11 +54,7 @@ export function FAQ({ withJsonLd = false }: { withJsonLd?: boolean }) {
         <Reveal>
           <Accordion type="single" collapsible className="w-full space-y-3">
             {items.map((faq, i) => (
-              <AccordionItem
-                key={i}
-                value={`item-${i}`}
-                className="rounded-2xl border border-border bg-card px-5 shadow-soft transition-shadow data-[state=open]:shadow-[var(--shadow-soft-lg)]"
-              >
+              <AccordionItem key={i} value={`item-${i}`} className="rounded-2xl border border-border bg-card px-5">
                 <AccordionTrigger className="text-base">{faq.question}</AccordionTrigger>
                 <AccordionContent>{faq.answer}</AccordionContent>
               </AccordionItem>

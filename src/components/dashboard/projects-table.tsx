@@ -160,6 +160,7 @@ function ProjectForm({ project }: { project: ProjectRow | null }) {
       kind={DRAWER}
       title={project ? t("editTitle") : t("newTitle")}
       description={project ? project.name : t("newDescription")}
+      size="lg"
       form={form}
       onSubmit={(values) => saveProject(project?.id ?? null, values)}
     >
@@ -183,7 +184,7 @@ function ProjectForm({ project }: { project: ProjectRow | null }) {
           <FormItem>
             <FormLabel>{t("description")}</FormLabel>
             <FormControl>
-              <Textarea {...field} value={field.value ?? ""} maxLength={PROJECT_DESCRIPTION_MAX} rows={4} />
+              <Textarea {...field} value={field.value ?? ""} maxLength={PROJECT_DESCRIPTION_MAX} rows={6} />
             </FormControl>
             <FormMessage />
           </FormItem>

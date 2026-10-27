@@ -55,7 +55,7 @@ export function RevenueChart({ data, label }: { data: MrrPoint[]; label: string 
             content={({ active, payload, label: at }) => {
               if (!active || !payload?.length) return null
               return (
-                <div className="rounded-[var(--radius)] border border-border bg-card px-3 py-2 shadow-soft">
+                <div className="rounded-[var(--radius)] border border-border bg-card px-3 py-2">
                   <p className="text-xs text-muted-foreground">{shortDate(String(at))}</p>
                   <p className="text-sm font-semibold text-foreground">
                     {money(Number(payload[0].value))} <span className="font-normal text-muted-foreground">{label}</span>

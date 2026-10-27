@@ -173,30 +173,32 @@ function InviteDrawer({ roleOptions }: { roleOptions: string[] }) {
       form={form}
       onSubmit={inviteMember}
     >
-      <FormField
-        control={form.control}
-        name="email"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>{t("invite.email")}</FormLabel>
-            <FormControl>
-              <Input {...field} type="email" placeholder={t("invite.emailPlaceholder")} autoComplete="off" />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="role"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>{t("list.colRole")}</FormLabel>
-            <RoleSelect value={field.value} onChange={field.onChange} roleOptions={roleOptions} />
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <div className="grid gap-5 sm:grid-cols-[minmax(0,1fr)_10rem] sm:gap-3">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("invite.email")}</FormLabel>
+              <FormControl>
+                <Input {...field} type="email" placeholder={t("invite.emailPlaceholder")} autoComplete="off" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="role"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("list.colRole")}</FormLabel>
+              <RoleSelect value={field.value} onChange={field.onChange} roleOptions={roleOptions} />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
     </FormDrawer>
   )
 }
@@ -219,6 +221,7 @@ function RoleForm({ member, roleOptions }: { member: MemberRow; roleOptions: str
       kind={ROLE}
       title={t("list.changeRole")}
       description={member.email}
+      size="sm"
       form={form}
       onSubmit={({ role }) => setMemberRole(member.id, role)}
     >

@@ -102,7 +102,7 @@ export function Pricing({ heading = "h2", withJsonLd = false }: { heading?: "h1"
               change the two together. No figure until the launch price is
               announced. */}
           <Reveal delay={100}>
-            <Card className="border-gradient-brand relative flex h-full flex-col overflow-hidden shadow-[var(--shadow-glow)]">
+            <Card className="border-gradient-brand relative flex h-full flex-col overflow-hidden">
               <CardHeader className="pt-8">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-2xl">{t("proTitle")}</CardTitle>

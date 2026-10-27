@@ -87,7 +87,7 @@ export function SetupVideo() {
         </Reveal>
 
         <Reveal delay={100}>
-          <div className="relative overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-glow)]">
+          <div className="relative overflow-hidden rounded-2xl border border-border">
             <video
               ref={videoRef}
               className="block aspect-[8/5] w-full bg-secondary"

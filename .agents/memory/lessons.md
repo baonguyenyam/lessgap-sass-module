@@ -2,6 +2,18 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-27 · shadcn · A Sheet ignores a plain `sm:max-w-*` override
+- **Symptom:** `FormDrawer` passed `sm:max-w-md` but every drawer opened at `max-w-sm`.
+- **Cause:** the stock `SheetContent` sets `data-[side=right]:sm:max-w-sm`; the attribute selector gives it higher specificity, and `cn` does not merge classes with different variants.
+- **Fix:** `form-drawer.tsx` overrides with the same prefix, `data-[side=right]:sm:max-w-*`.
+- **Rule:** to override a stock class, repeat its full variant chain, then check the result in the browser.
+
+### 2026-10-27 · tailwind · A flattened shadow must be transparent, not `none`
+- **Symptom (avoided):** setting `--shadow-*: none` would drop focus rings with the shadows.
+- **Cause:** Tailwind composes `box-shadow` from ring and shadow variables in one comma list; `none` inside a list makes the whole declaration invalid.
+- **Fix:** `--shadow-*: 0 0 #0000` in `globals.css`.
+- **Rule:** to switch off a box-shadow token, use a transparent shadow.
+
 ### 2026-10-27 · shadcn · Stock radix-nova components need their providers and wrappers
 - **Symptom:** "`Tooltip` must be used within `TooltipProvider`" on every app page after the stock sidebar landed; "Cannot read properties of undefined (reading 'subscribe')" from `CommandInput`.
 - **Cause:** the stock Tooltip no longer brings its own provider, and the stock `CommandDialog` does not wrap its children in `<Command>`. Studio Admin does both in its own code.

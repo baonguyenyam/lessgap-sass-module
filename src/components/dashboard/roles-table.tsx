@@ -164,6 +164,7 @@ function RoleForm({ role, catalog }: { role: RoleRow | null; catalog: Catalog })
       kind={DRAWER}
       title={role ? t("editTitle") : t("create.title")}
       description={role ? role.role : t("create.description")}
+      size="xl"
       form={form}
       onSubmit={(values) => saveTenantRole(role?.role ?? null, values)}
     >
@@ -187,9 +188,9 @@ function RoleForm({ role, catalog }: { role: RoleRow | null; catalog: Catalog })
         render={({ field }) => (
           <FormItem>
             <FormLabel>{t("colPermissions")}</FormLabel>
-            <div className="space-y-3">
+            <div className="grid gap-3 sm:grid-cols-2">
               {Object.entries(catalog).map(([resource, verbs]) => (
-                <fieldset key={resource} className="rounded-[var(--radius)] border border-border p-3">
+                <fieldset key={resource} className="rounded-lg border border-border p-3">
                   <legend className="px-1 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                     {resource}
                   </legend>

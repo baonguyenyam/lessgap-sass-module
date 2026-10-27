@@ -1,3 +1,4 @@
+import { cookies } from "next/headers"
 import { getRequestConfig } from "next-intl/server"
 import { hasLocale } from "next-intl"
 import { routing } from "./routing"
@@ -5,6 +6,7 @@ import { isKitSite } from "@/config/kit"
 import { collapseMessages, type Messages } from "./collapse"
 import { getPlatformSettings } from "@/platform/settings/store"
 import { dateTimeFormats } from "@/platform/settings/registry"
+import { APP_LOCALE_COOKIE, isAppLocale } from "./app-locale"
 
 /**
  * Fills the gaps in `translated` with `source`, all the way down.
@@ -43,9 +45,14 @@ export default getRequestConfig(async ({ requestLocale }) => {
   const requested = await requestLocale
   const settings = await getPlatformSettings()
   // The public site carries its locale in the URL. Everything outside it (the
-  // dashboard, the admin panel, the sign-in pages) speaks the language chosen
-  // in the platform settings (`locale.app`, ROOT only).
-  const locale = hasLocale(routing.locales, requested) ? requested : settings["locale.app"]
+  // dashboard, the admin panel, the sign-in pages) speaks the language picked
+  // from the header, or else the platform default (`locale.app`, ROOT only).
+  const picked = hasLocale(routing.locales, requested) ? null : (await cookies()).get(APP_LOCALE_COOKIE)?.value
+  const locale = hasLocale(routing.locales, requested)
+    ? requested
+    : isAppLocale(picked)
+      ? picked
+      : settings["locale.app"]
   // Every date on every page is shown in one time zone and one style, set by
   // an administrator (`display.*`).
   // `now` is fixed per request and handed to the browser with the messages, so

@@ -7,6 +7,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.12.0] - 2026-10-27
+
+**A flat UI, and drawers that fit what they hold.** No shadows anywhere, a quieter app header and sidebar edge, and edit drawers that open at the width their form needs with fields that keep their focus ring. This is a MINOR: `git pull`. Nothing to migrate.
+
+### Changed
+
+- **A flat UI: no shadows anywhere.** Surfaces are told apart by a border or a ring. The Tailwind shadow scale is flattened in `globals.css`, so the stock components follow without being restyled, and a test fails on a `shadow-*` class outside `src/components/ui/`. The `shadow-soft`, `shadow-soft-lg` and `shadow-glow` tokens are gone; the signed-in page gets a border against the sidebar instead
+- **Drawers open at the width their content needs**: `FormDrawer` takes `size` (`sm`, `md`, `lg`, `xl`) and is full width on a phone. The header and the buttons stay put while the fields scroll, the buttons sit side by side at the bottom right, and a form can lay its fields out in columns (member invitation: email and role on one line; role permissions: two columns of resources)
+- The app header no longer draws a divider between the sidebar button and the breadcrumbs, and the edge of the sidebar no longer draws a line on hover (clicking it still folds the sidebar)
+
+### Fixed
+
+- **Focus rings in drawers are no longer cut off**: the fields sat flush against the scrolling edge, which clipped the ring
+- A drawer's width setting had no effect: the Sheet's own `max-w-sm` outranked it
+
 ## [2.11.0] - 2026-10-27
 
 **Standard shadcn/ui, and the Studio Admin app shell.** The UI components are stock shadcn (the "radix-nova" style), and the dashboard, admin panel and sign-in pages use the layout of Studio Admin, an MIT-licensed shadcn dashboard (credited in `NOTICE`). This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
