@@ -1,5 +1,6 @@
 "use client"
 
+import { Trash2 } from "lucide-react"
 import { useState } from "react"
 import { useTranslations } from "next-intl"
 
@@ -39,7 +40,10 @@ export function DeleteAccount({ email }: { email: string }) {
   return (
     <AlertDialog onOpenChange={() => setTyped("")}>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">{t("trigger")}</Button>
+        <Button variant="destructive">
+          <Trash2 />
+          {t("trigger")}
+        </Button>
       </AlertDialogTrigger>
 
       <AlertDialogContent>
@@ -68,6 +72,7 @@ export function DeleteAccount({ email }: { email: string }) {
               </Button>
             </AlertDialogCancel>
             <Button type="submit" variant="destructive" disabled={!matches}>
+              <Trash2 />
               {t("confirm")}
             </Button>
           </AlertDialogFooter>

@@ -1,5 +1,6 @@
 "use client"
 
+import { Copy, Download, MailX } from "lucide-react"
 import { useFormatter, useTranslations } from "next-intl"
 import { useMemo } from "react"
 import { toast } from "sonner"
@@ -74,6 +75,7 @@ export function NewsletterTable({
               actions={[
                 {
                   label: t("copyEmail"),
+                  icon: Copy,
                   onSelect: () => navigator.clipboard.writeText(sub.email).then(() => toast.success(t("copied"))),
                 },
                 ...(sub.status === "unsubscribed"
@@ -81,6 +83,7 @@ export function NewsletterTable({
                   : [
                       {
                         label: t("unsubscribe"),
+                        icon: MailX,
                         variant: "destructive" as const,
                         confirm: unsubscribeConfirm,
                         run: () => unsubscribeSubscribers([sub.id]),
@@ -95,9 +98,14 @@ export function NewsletterTable({
   }, [t, format]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const bulkActions: BulkAction[] = [
-    { label: t("exportSelected"), run: async (ids) => downloadCsv(rows.filter((r) => ids.includes(r.id))) },
+    {
+      label: t("exportSelected"),
+      icon: Download,
+      run: async (ids) => downloadCsv(rows.filter((r) => ids.includes(r.id))),
+    },
     {
       label: t("unsubscribe"),
+      icon: MailX,
       variant: "destructive",
       confirm: unsubscribeConfirm,
       run: (ids) => unsubscribeSubscribers(ids),

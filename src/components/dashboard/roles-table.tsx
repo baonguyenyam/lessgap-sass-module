@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Plus } from "lucide-react"
+import { Pencil, Plus, Trash2 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useMemo } from "react"
 import { useForm } from "react-hook-form"
@@ -80,10 +80,13 @@ export function RolesTable({
         cell: ({ row }) => {
           const role = row.original
           if (!canManage || role.builtIn) return null
-          const actions: RowAction[] = [{ label: t("edit"), onSelect: () => openDrawer(DRAWER, role.role) }]
+          const actions: RowAction[] = [
+            { label: t("edit"), icon: Pencil, onSelect: () => openDrawer(DRAWER, role.role) },
+          ]
           if (role.members === 0) {
             actions.push({
               label: t("custom.delete"),
+              icon: Trash2,
               variant: "destructive",
               confirm: deleteConfirm,
               run: () => deleteTenantRoles([role.role]),
@@ -99,6 +102,7 @@ export function RolesTable({
     ? [
         {
           label: t("custom.delete"),
+          icon: Trash2,
           variant: "destructive",
           confirm: deleteConfirm,
           run: (ids) => deleteTenantRoles(ids),

@@ -1,5 +1,6 @@
 "use client"
 
+import { ExternalLink, FileDown } from "lucide-react"
 import { useFormatter, useTranslations } from "next-intl"
 import { useMemo } from "react"
 import { DataTable, dataTableColumns } from "@/components/data-table/data-table"
@@ -76,9 +77,17 @@ export function InvoicesTable({
           const actions: RowAction[] = []
           const { hostedUrl, pdfUrl } = row.original
           if (hostedUrl)
-            actions.push({ label: t("viewInvoice"), onSelect: () => window.open(hostedUrl, "_blank", "noopener") })
+            actions.push({
+              label: t("viewInvoice"),
+              icon: ExternalLink,
+              onSelect: () => window.open(hostedUrl, "_blank", "noopener"),
+            })
           if (pdfUrl)
-            actions.push({ label: t("downloadPdf"), onSelect: () => window.open(pdfUrl, "_blank", "noopener") })
+            actions.push({
+              label: t("downloadPdf"),
+              icon: FileDown,
+              onSelect: () => window.open(pdfUrl, "_blank", "noopener"),
+            })
           return <RowActions label={format.dateTime(new Date(row.original.created), "date")} actions={actions} />
         },
       }),

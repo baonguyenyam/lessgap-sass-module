@@ -1,3 +1,4 @@
+import { Undo2 } from "lucide-react"
 import { getTranslations } from "next-intl/server"
 import { stopSwitchAs } from "@/app/actions/switch-as"
 import { getSwitchedBy } from "@/lib/auth"
@@ -19,6 +20,7 @@ export async function SwitchAsBanner({ email }: { email?: string | null }) {
       <span>{t("banner", { email: email ?? "" })}</span>
       <form action={stopSwitchAs}>
         <Button type="submit" variant="secondary">
+          <Undo2 />
           {t("back")}
         </Button>
       </form>

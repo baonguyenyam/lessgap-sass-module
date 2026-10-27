@@ -1,3 +1,4 @@
+import { Play, ShieldCheck, Wrench } from "lucide-react"
 import Link from "next/link"
 import { GithubIcon } from "@/components/icons/github"
 import { redirect } from "next/navigation"
@@ -225,7 +226,8 @@ export default async function LoginPage({
               >
                 <input type="hidden" name="role" value="user" />
                 <PendingButton variant="default" size="lg" className="w-full">
-                  <span>▶</span> {t("exploreUser")}
+                  <Play />
+                  {t("exploreUser")}
                 </PendingButton>
               </form>
 
@@ -241,7 +243,8 @@ export default async function LoginPage({
               >
                 <input type="hidden" name="role" value="admin" />
                 <PendingButton variant="outline" size="lg" className="w-full">
-                  <span>🛡</span> {t("exploreAdmin")}
+                  <ShieldCheck />
+                  {t("exploreAdmin")}
                 </PendingButton>
               </form>
 
@@ -284,7 +287,8 @@ export default async function LoginPage({
             >
               <input type="hidden" name="password" value="dev" />
               <Button type="submit" variant="outline" size="lg" className="w-full border-dashed">
-                <span>🔧</span> Dev Login (Admin)
+                <Wrench />
+                Dev Login (Admin)
               </Button>
             </form>
           </>

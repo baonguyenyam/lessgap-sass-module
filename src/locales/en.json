@@ -1194,7 +1194,8 @@
     "done": "Done",
     "failed": "Something went wrong. Nothing was changed.",
     "save": "Save",
-    "saving": "Saving…"
+    "saving": "Saving…",
+    "actions": "Actions"
   },
   "ui": {
     "close": "Close",

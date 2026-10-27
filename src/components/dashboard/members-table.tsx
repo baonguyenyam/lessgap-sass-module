@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { UserPlus } from "lucide-react"
+import { UserCog, UserMinus, UserPlus } from "lucide-react"
 import { useFormatter, useTranslations } from "next-intl"
 import { useMemo } from "react"
 import { useForm } from "react-hook-form"
@@ -81,9 +81,10 @@ export function MembersTable({ rows, total, query, defaults, roleOptions, canMan
             <RowActions
               label={row.original.email}
               actions={[
-                { label: t("list.changeRole"), onSelect: () => openDrawer(ROLE, row.original.id) },
+                { label: t("list.changeRole"), icon: UserCog, onSelect: () => openDrawer(ROLE, row.original.id) },
                 {
                   label: t("list.remove"),
+                  icon: UserMinus,
                   variant: "destructive",
                   confirm: removeConfirm,
                   run: () => removeMembers([row.original.id]),
@@ -96,7 +97,15 @@ export function MembersTable({ rows, total, query, defaults, roleOptions, canMan
   }, [t, format, canManage, viewerUserId, openDrawer]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const bulkActions: BulkAction[] = canManage
-    ? [{ label: t("list.remove"), variant: "destructive", confirm: removeConfirm, run: (ids) => removeMembers(ids) }]
+    ? [
+        {
+          label: t("list.remove"),
+          icon: UserMinus,
+          variant: "destructive",
+          confirm: removeConfirm,
+          run: (ids) => removeMembers(ids),
+        },
+      ]
     : []
 
   return (

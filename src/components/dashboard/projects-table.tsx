@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Plus } from "lucide-react"
+import { FolderOpen, Pencil, Plus, Trash2 } from "lucide-react"
 import { useFormatter, useNow, useTranslations } from "next-intl"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -89,10 +89,15 @@ export function ProjectsTable({
           <RowActions
             label={row.original.name}
             actions={[
-              { label: t("open"), onSelect: () => router.push(`/dashboard/projects/${row.original.id}`) },
-              { label: t("edit"), onSelect: () => openDrawer(DRAWER, row.original.id) },
+              {
+                label: t("open"),
+                icon: FolderOpen,
+                onSelect: () => router.push(`/dashboard/projects/${row.original.id}`),
+              },
+              { label: t("edit"), icon: Pencil, onSelect: () => openDrawer(DRAWER, row.original.id) },
               {
                 label: t("delete"),
+                icon: Trash2,
                 variant: "destructive",
                 confirm: deleteConfirm,
                 run: () => deleteProjects([row.original.id]),
@@ -105,7 +110,13 @@ export function ProjectsTable({
   }, [t, format, now, router, openDrawer]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const bulkActions: BulkAction[] = [
-    { label: t("delete"), variant: "destructive", confirm: deleteConfirm, run: (ids) => deleteProjects(ids) },
+    {
+      label: t("delete"),
+      icon: Trash2,
+      variant: "destructive",
+      confirm: deleteConfirm,
+      run: (ids) => deleteProjects(ids),
+    },
   ]
 
   return (

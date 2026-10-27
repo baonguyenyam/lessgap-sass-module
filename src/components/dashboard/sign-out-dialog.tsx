@@ -54,6 +54,7 @@ export function SignOutDialog({
             </Button>
           </DialogClose>
           <Button variant="destructive" onClick={() => startTransition(async () => signOutAction())} disabled={pending}>
+            <LogOut />
             {pending ? t("pending") : t("confirm")}
           </Button>
         </DialogFooter>

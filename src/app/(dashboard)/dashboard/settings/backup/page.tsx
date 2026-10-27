@@ -1,3 +1,4 @@
+import { Download } from "lucide-react"
 import { getTranslations } from "next-intl/server"
 import { requireUser } from "@/lib/auth"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -29,6 +30,7 @@ export default async function BackupSettingsPage() {
             would prefetch it. */}
         <Button asChild variant="default">
           <a href="/api/account/export" download>
+            <Download />
             {t("download")}
           </a>
         </Button>

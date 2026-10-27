@@ -1,3 +1,4 @@
+import { KeyRound, Link2, Mail, Unlink } from "lucide-react"
 import { requireUser } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { getTranslations } from "next-intl/server"
@@ -70,12 +71,18 @@ export default async function SecuritySettingsPage({
                 {accountId ? (
                   <form action={unlinkProvider}>
                     <input type="hidden" name="accountId" value={accountId} />
-                    <PendingButton variant="outline">{t("disconnect")}</PendingButton>
+                    <PendingButton variant="outline">
+                      <Unlink />
+                      {t("disconnect")}
+                    </PendingButton>
                   </form>
                 ) : (
                   <form action={linkProvider}>
                     <input type="hidden" name="provider" value={provider} />
-                    <PendingButton variant="outline">{t("connect")}</PendingButton>
+                    <PendingButton variant="outline">
+                      <Link2 />
+                      {t("connect")}
+                    </PendingButton>
                   </form>
                 )}
               </div>
@@ -97,7 +104,10 @@ export default async function SecuritySettingsPage({
                 className="w-full sm:w-64"
                 required
               />
-              <PendingButton variant="outline">{t("email.submit")}</PendingButton>
+              <PendingButton variant="outline">
+                <Mail />
+                {t("email.submit")}
+              </PendingButton>
             </form>
             <p className="text-xs text-muted-foreground">{t("email.hint")}</p>
           </div>
@@ -134,7 +144,10 @@ export default async function SecuritySettingsPage({
                 minLength={8}
                 maxLength={72}
               />
-              <PendingButton variant="outline">{hasPassword ? t("changePassword") : t("setPassword")}</PendingButton>
+              <PendingButton variant="outline">
+                <KeyRound />
+                {hasPassword ? t("changePassword") : t("setPassword")}
+              </PendingButton>
             </form>
             {!hasPassword && <p className="text-xs text-muted-foreground">{t("passwordHint")}</p>}
           </div>

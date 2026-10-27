@@ -31,6 +31,12 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
 - **Forms:** React Hook Form with `zodResolver` and a schema from
   `src/lib/schemas/`; the server action parses the same schema again.
 - Icons from `lucide-react`. Toasts through `sonner`.
+- **Every button carries an icon** (lucide, before the label), and so does every
+  dropdown item; icon-only buttons need an `aria-label`. `RowAction` and
+  `BulkAction` require `icon`, so the type checker enforces it in tables.
+- **Menus are grouped:** a `DropdownMenuLabel`, related items in a
+  `DropdownMenuGroup`, and destructive items last, in their own group after a
+  separator, with `variant="destructive"`. No emoji anywhere in the UI.
 - Both light and dark themes must look right; check anything you add in both.
 - Mobile first; check the layout at phone width.
 - Target WCAG 2.1 AA:

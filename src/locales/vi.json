@@ -1001,5 +1001,8 @@
   },
   "language": {
     "label": "Đổi ngôn ngữ"
+  },
+  "dataTable": {
+    "actions": "Thao tác"
   }
 }

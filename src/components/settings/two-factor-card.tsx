@@ -1,5 +1,6 @@
 "use client"
 
+import { Check, Copy, Download, RefreshCw, ShieldCheck, ShieldOff } from "lucide-react"
 import { useActionState, useState } from "react"
 import { useTranslations } from "next-intl"
 
@@ -81,7 +82,10 @@ export function TwoFactorCard({
 
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="outline">{t("turnOff")}</Button>
+                <Button variant="outline">
+                  <ShieldOff />
+                  {t("turnOff")}
+                </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -106,6 +110,7 @@ export function TwoFactorCard({
                       </Button>
                     </AlertDialogCancel>
                     <Button type="submit" variant="destructive">
+                      <ShieldOff />
                       {t("turnOff")}
                     </Button>
                   </AlertDialogFooter>
@@ -130,6 +135,7 @@ export function TwoFactorCard({
                 required
               />
               <Button type="submit" variant="outline" disabled={codesPending}>
+                <RefreshCw />
                 {t("regenerate")}
               </Button>
             </div>
@@ -176,6 +182,7 @@ export function TwoFactorCard({
               />
             </div>
             <Button type="submit" disabled={confirmPending}>
+              <Check />
               {t("confirm")}
             </Button>
           </form>
@@ -197,6 +204,7 @@ export function TwoFactorCard({
                 required
               />
               <Button type="submit" disabled={setupPending}>
+                <ShieldCheck />
                 {t("turnOn")}
               </Button>
             </div>
@@ -247,9 +255,11 @@ function BackupCodes({ codes }: { codes: string[] }) {
       </ul>
       <div className="mt-3 flex gap-2">
         <Button type="button" variant="outline" onClick={copy}>
+          {copied ? <Check /> : <Copy />}
           {copied ? t("copied") : t("copy")}
         </Button>
         <Button type="button" variant="outline" onClick={download}>
+          <Download />
           {t("download")}
         </Button>
       </div>

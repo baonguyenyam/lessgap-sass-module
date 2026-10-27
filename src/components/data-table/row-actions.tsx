@@ -1,7 +1,7 @@
 "use client"
 
 import { useMutation } from "@tanstack/react-query"
-import { MoreHorizontal } from "lucide-react"
+import { MoreHorizontal, type LucideIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -10,7 +10,9 @@ import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
@@ -23,11 +25,12 @@ import { ConfirmDialog, type ConfirmCopy } from "@/components/data-table/confirm
  */
 export type RowAction = {
   label: string
+  icon: LucideIcon
   variant?: "destructive"
   confirm?: ConfirmCopy
 } & ({ onSelect: () => void; run?: never } | { run: () => Promise<unknown>; onSelect?: never })
 
-/** The "⋯" menu at the end of a row. Destructive items come last, after a separator. */
+/** The "⋯" menu at the end of a row: every item has an icon, and destructive ones come last, in their own group. */
 export function RowActions({ actions, label }: { actions: RowAction[]; label: string }) {
   const t = useTranslations("dataTable")
   const router = useRouter()
@@ -58,22 +61,29 @@ export function RowActions({ actions, label }: { actions: RowAction[]; label: st
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="min-w-40">
-          {normal.map((action) => (
-            <DropdownMenuItem key={action.label} onSelect={() => select(action)}>
-              {action.label}
-            </DropdownMenuItem>
-          ))}
+        <DropdownMenuContent align="end" className="min-w-44">
+          <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">{t("actions")}</DropdownMenuLabel>
+          {normal.length > 0 && (
+            <DropdownMenuGroup>
+              {normal.map((action) => (
+                <DropdownMenuItem key={action.label} onSelect={() => select(action)}>
+                  <action.icon />
+                  {action.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuGroup>
+          )}
           {normal.length > 0 && destructive.length > 0 && <DropdownMenuSeparator />}
-          {destructive.map((action) => (
-            <DropdownMenuItem
-              key={action.label}
-              className="text-destructive focus:text-destructive"
-              onSelect={() => select(action)}
-            >
-              {action.label}
-            </DropdownMenuItem>
-          ))}
+          {destructive.length > 0 && (
+            <DropdownMenuGroup>
+              {destructive.map((action) => (
+                <DropdownMenuItem key={action.label} variant="destructive" onSelect={() => select(action)}>
+                  <action.icon />
+                  {action.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuGroup>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
       <ConfirmDialog

@@ -9,7 +9,7 @@ import {
   type ColumnDef,
   type RowData,
 } from "@tanstack/react-table"
-import { ArrowDown, ArrowUp, ArrowUpDown, ChevronLeft, ChevronRight, Search, X } from "lucide-react"
+import { ArrowDown, ArrowUp, ArrowUpDown, ChevronLeft, ChevronRight, Search, X, type LucideIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useMemo, useRef, useState, useTransition } from "react"
@@ -55,6 +55,7 @@ export type DataTableFilter = { key: string; label: string; options: { value: st
 
 export type BulkAction = {
   label: string
+  icon: LucideIcon
   variant?: "destructive"
   /** Asked before running; the count of selected rows is passed as `{count}`. */
   confirm?: ConfirmCopy
@@ -217,12 +218,12 @@ export function DataTable<TData extends RowData>({
               disabled={bulk.isPending}
               onClick={() => runBulk(action)}
             >
-              {bulk.isPending && bulk.variables?.action === action && <Spinner />}
+              {bulk.isPending && bulk.variables?.action === action ? <Spinner /> : <action.icon />}
               {action.label}
             </Button>
           ))}
           <Button size="sm" variant="ghost" className="ml-auto" onClick={() => table.resetRowSelection()}>
-            <X className="h-3.5 w-3.5" />
+            <X />
             {t("clearSelection")}
           </Button>
         </div>

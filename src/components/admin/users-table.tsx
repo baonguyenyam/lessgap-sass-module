@@ -1,5 +1,6 @@
 "use client"
 
+import { Copy, Download, LogIn, Pencil, UserCog } from "lucide-react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useFormatter, useTranslations } from "next-intl"
 import { useMemo, useTransition } from "react"
@@ -101,12 +102,17 @@ export function UsersTable({
         header: () => <span className="sr-only">{t("colActions")}</span>,
         cell: ({ row }) => {
           const user = row.original
-          const actions: RowAction[] = [{ label: t("edit"), onSelect: () => openDrawer(DRAWER, user.id) }]
+          const actions: RowAction[] = [{ label: t("edit"), icon: Pencil, onSelect: () => openDrawer(DRAWER, user.id) }]
           if (canSwitchAs({ ...viewer, switched: false }, user)) {
-            actions.push({ label: t("switchAs"), onSelect: () => startTransition(() => startSwitchAs(user.id)) })
+            actions.push({
+              label: t("switchAs"),
+              icon: LogIn,
+              onSelect: () => startTransition(() => startSwitchAs(user.id)),
+            })
           }
           actions.push({
             label: t("copyEmail"),
+            icon: Copy,
             onSelect: () => navigator.clipboard.writeText(user.email).then(() => toast.success(t("copied"))),
           })
           return <RowActions actions={actions} label={user.email} />
@@ -118,6 +124,7 @@ export function UsersTable({
   const bulkActions: BulkAction[] = [
     {
       label: t("exportCsv"),
+      icon: Download,
       run: async (ids) => downloadCsv(rows.filter((r) => ids.includes(r.id))),
     },
   ]
@@ -125,6 +132,7 @@ export function UsersTable({
     for (const role of ASSIGNABLE_ROLES) {
       bulkActions.push({
         label: t(`setRole.${role}`),
+        icon: UserCog,
         confirm: {
           title: t("setRoleConfirm.title"),
           description: t(`setRoleConfirm.${role}`),

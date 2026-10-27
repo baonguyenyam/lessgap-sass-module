@@ -1,3 +1,4 @@
+import { Trash2 } from "lucide-react"
 import { requireUser } from "@/lib/auth"
 import { notFound } from "next/navigation"
 import { getFormatter, getTranslations } from "next-intl/server"
@@ -69,6 +70,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <form action={deleteProject}>
             <input type="hidden" name="id" value={project.id} />
             <Button type="submit" variant="destructive">
+              <Trash2 />
               {t("delete")}
             </Button>
           </form>
