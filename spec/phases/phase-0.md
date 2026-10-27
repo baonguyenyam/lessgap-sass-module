@@ -25,12 +25,12 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 ## Tasks
 
 ### 0.1 — CI on pnpm
-- **Goal:** CI installs with the committed lockfile and type-checks.
-- **Files:** `.github/workflows/ci.yml`, `package.json` (`packageManager`, `typecheck` script), `.gitignore` (`.env.example` tracked).
+- **Goal:** CI installs with the committed lockfile, type-checks, and builds with a migrated PostgreSQL service available for prerendered settings and plans.
+- **Files:** `.github/workflows/ci.yml` (build database service and migration step), `package.json` (`packageManager`, `typecheck` script), `.gitignore` (`.env.example` tracked).
 - **Tests:** none new.
 - **Checks:** CI green on a PR.
 - **Done when:** CI runs `pnpm install --frozen-lockfile`, `pnpm typecheck`, lint, test, build, audit.
-- [x] done (prepared on 2026-10-26; verify on the first PR)
+- [ ] done (prepared on 2026-10-26; first PR exposed the missing build database, see Findings)
 
 ### 0.2 — Local database and integration test layer
 - **Goal:** `pnpm test:integration` runs against a real, migrated PostgreSQL locally and in CI.
@@ -158,4 +158,4 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 - Decisions 0-A…0-D recorded above.
 
 ## Findings
-- **2026-10-27 — CI build needs a migrated database:** the first PR run passed integration, migration, type-check, lint and unit tests, but `pnpm build` failed while prerendering `/en/pricing` with `CONTRACT.MARKER_READ_FAILED` because the build job's placeholder `DATABASE_URL` has no PostgreSQL service. **Proposed change:** amend task 0.1 so the CI build job provisions an isolated PostgreSQL service and applies the Prisma 8 migrations before building. Keep task 0.2 open until the complete CI workflow passes.
+- **2026-10-27 — CI build needs a migrated database:** the first PR run passed integration, migration, type-check, lint and unit tests, but `pnpm build` failed while prerendering `/en/pricing` with `CONTRACT.MARKER_READ_FAILED` because the build job's placeholder `DATABASE_URL` had no PostgreSQL service. Per owner approval, task 0.1 now provisions an isolated PostgreSQL service and applies Prisma 8 migrations before building. Verify the complete CI workflow before marking tasks 0.1 and 0.2 done.

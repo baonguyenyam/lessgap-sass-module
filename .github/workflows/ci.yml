@@ -18,6 +18,17 @@ jobs:
   build:
     name: Lint & Build
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: build
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/build
 
     steps:
       - uses: actions/checkout@v7
@@ -34,6 +45,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Migrate build database
+        run: pnpm db:migrate
 
       # Prisma 8: emit the contract artefacts from prisma/contract.prisma (also
       # done by postinstall) and fail if the committed ones are stale, then
@@ -57,14 +71,11 @@ jobs:
       - name: Test
         run: pnpm test
 
-      # `next build` type-checks and compiles. The env values below are
-      # build-time placeholders, not real secrets: the build constructs clients
-      # (Prisma adapter, Auth.js) at module load but never connects to a DB or
-      # authenticates, so any well-formed value works here.
+      # The build prerenders pages that read platform settings and plans, so it
+      # needs the migrated service database above.
       - name: Build
         run: pnpm build
         env:
-          DATABASE_URL: postgresql://user:pass@localhost:5432/db
           AUTH_SECRET: ci-build-placeholder-not-a-real-secret
           NEXT_PUBLIC_APP_URL: http://localhost:3000
 
