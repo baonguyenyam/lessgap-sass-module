@@ -52,7 +52,6 @@ export default async function BillingPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
-  throw new Error("temporary check of the error boundary")
   const t = await getTranslations("dashboard.billing")
   const format = await getFormatter()
   const currentUser = await requireUser()
