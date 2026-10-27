@@ -25,9 +25,9 @@ export function NotificationSwitches({ values }: { values: Record<NotificationKe
   }
 
   return (
-    <div className="divide-y rounded-lg border">
+    <div className="divide-y">
       {rows.map((row) => (
-        <div key={row.key} className="flex items-start justify-between gap-6 p-4">
+        <div key={row.key} className="flex items-start justify-between gap-6 py-4">
           <div className="space-y-1">
             <Label htmlFor={row.key}>{row.label}</Label>
             <p className="text-sm text-muted-foreground">{row.hint}</p>
