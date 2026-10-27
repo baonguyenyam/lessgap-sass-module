@@ -1,17 +1,9 @@
 #!/usr/bin/env -S node
-import type { Contract as End } from '../../snapshots/004a91fb8116703322e94ba8acc304b66126f9826a2a97be90f2d694527f1ebc/contract';
-import endContract from '../../snapshots/004a91fb8116703322e94ba8acc304b66126f9826a2a97be90f2d694527f1ebc/contract.json' with { type: 'json' };
 import type { Contract as Start } from '../../snapshots/6f7f000593f23a45c57052b1caa9bf22a4d5af7ab62e730b64c8fb57093c5d31/contract';
 import startContract from '../../snapshots/6f7f000593f23a45c57052b1caa9bf22a4d5af7ab62e730b64c8fb57093c5d31/contract.json' with { type: 'json' };
-import {
-  Migration,
-  MigrationCLI,
-  col,
-  fn,
-  lit,
-  primaryKey,
-  sql,
-} from '@prisma/orm-postgres/migration';
+import type { Contract as End } from '../../snapshots/da3af3cf3aabe9ca22f6e8d350842c076001db582c8665c3bd8046b9a2a7dcbc/contract';
+import endContract from '../../snapshots/da3af3cf3aabe9ca22f6e8d350842c076001db582c8665c3bd8046b9a2a7dcbc/contract.json' with { type: 'json' };
+import { Migration, MigrationCLI, col, fn, primaryKey, sql } from '@prisma/orm-postgres/migration';
 
 export default class M extends Migration<Start, End> {
   override readonly startContractJson = startContract;
@@ -54,15 +46,6 @@ export default class M extends Migration<Start, End> {
           col('value', 'json', { notNull: true, codecRef: { codecId: 'pg/json@1' } }),
         ],
         constraints: [primaryKey(['userId', 'key'], { name: 'UserSetting_pkey' })],
-      }),
-      this.addColumn({
-        schema: 'public',
-        table: 'Member',
-        column: col('status', 'text', {
-          notNull: true,
-          default: lit('active'),
-          codecRef: { codecId: 'pg/text@1' },
-        }),
       }),
       this.addColumn({
         schema: 'public',
