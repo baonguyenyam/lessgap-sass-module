@@ -58,7 +58,7 @@ out of scope, even when it looks small: write it down under "Later" instead.
 - RLS helper (`SET LOCAL app.tenant_id` in a transaction) and the first policy.
 - Dashboard moves under `/t/[slug]`; tenant switcher; invitations by email.
 - Platform console skeleton at `/platform`: tenants list, tenant detail, suspend and reactivate, impersonation with reason and audit.
-- Ops pages in the console: `/platform/jobs`, `/platform/emails`, `/platform/errors` ([operations](./16-operations.md#the-ops-pages)).
+- Ops pages in the console: `/platform/jobs`, `/platform/emails` (Email Audit Logs), `/platform/errors` ([operations](./16-operations.md#the-ops-pages)).
 - `AuditLog` writer.
 - Remove `Project` from the product surface.
 
@@ -90,7 +90,8 @@ out of scope, even when it looks small: write it down under "Later" instead.
 
 **Scope**
 - Proxy host resolution and rewrite to `/sites/[host]`; reserved slugs; dev host map.
-- `Site`, `SiteSettings`, `Page`, `Media`; dashboard pages for business info, hours, pages, appearance, sections.
+- `Site`, `SiteSettings`, `Page`, `Media`; tenant dashboard pages for Company profile, hours, pages, appearance and sections.
+- Platform-console page for platform-wide Upload rules (allowed file types and maximum size); the server enforces the rules before signing an upload and after it completes. Cloudflare R2 remains the fixed storage provider (ADR 0018).
 - Theme registry, theme manifest type, one shared theme built to the full contract with fixtures.
 - Per-host `robots.txt`, `sitemap.xml`, LocalBusiness JSON-LD; cache tags and revalidation on save.
 - Custom domains: Vercel wrapper, `Domain` lifecycle, verification job, primary and redirects.
@@ -107,7 +108,7 @@ out of scope, even when it looks small: write it down under "Later" instead.
 **Read:** [modules.md](./07-modules.md) (`catalog`, `team`), [sites-themes-verticals.md](./06-sites-themes-verticals.md#verticals).
 
 **Scope**
-- `catalog` and `team` modules, site sections for both.
+- `catalog` and `team` modules, site sections for both. The tenant dashboard's Teams page manages `StaffMember` records; staff may exist without a login, and this is separate from tenant membership and roles.
 - Vertical definitions for `nail_salon`, `barber`, `restaurant`, `dental`, `generic`; sample data marked and removable.
 - Onboarding wizard (self-service and staff-created).
 - A second shared theme, to prove the theme contract holds for two designs.
@@ -126,7 +127,7 @@ out of scope, even when it looks small: write it down under "Later" instead.
 - Reservations for restaurants.
 - Customers module with consent records, export and delete.
 - `notify` with email templates; SMS behind its feature with consent and STOP handling; reminders job.
-- `/platform/emails/templates`: per-locale preview and send-test for every template (templates stay code).
+- Standalone `/platform/emails/templates` page (not a Settings tab): per-locale preview and send-test for every template (templates stay code).
 - Dental vertical's PHI restrictions applied.
 
 **Exit criteria**

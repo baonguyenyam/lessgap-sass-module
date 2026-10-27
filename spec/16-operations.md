@@ -235,11 +235,12 @@ each thing a human watches; nothing operational is read-only-through-psql.
 | `/platform/tenants` | list, detail, create, suspend, reactivate, impersonate | 1 |
 | `/platform/audit` | `AuditLog` search by actor, tenant, action | 1 |
 | `/platform/jobs` | due/running/failed jobs, retry, run-now, per-kind silence | 1 |
-| `/platform/emails` | `EmailMessage` search by tenant, kind, status; payload preview, resend | 1 |
+| `/platform/emails` (Email Audit Logs) | `EmailMessage` search by tenant, kind, status; payload preview, resend | 1 |
 | `/platform/errors` | `ErrorReport` groups by digest, occurrences, resolve, link to Sentry issue when known | 1 |
 | `/platform/switches`, `/platform/plans`, `/platform/overrides` | configuration | 2 |
 | `/platform/modules` | per-tenant module state, purge/export status | 2 |
-| `/platform/emails/templates` | template list, per-locale preview, send-test (templates stay code — same argument as themes, ADR 0005) | 5 |
+| `/platform/emails/templates` | standalone template page, per-locale preview, send-test (templates stay code — same argument as themes, ADR 0005) | 5 |
+| `/platform/settings/uploads` | platform-wide allowed file types and maximum upload size; server checks the policy before signing and after upload; storage remains Cloudflare R2 (ADR 0018) | 3 |
 | `/platform/domains` | domain rows vs Vercel reconciliation report | 8 |
 | `/platform/backups` | `TenantSnapshot` list per tenant, request snapshot, restore-to-new, nightly-dump status | 8 |
 | `/platform/usage` | usage counters, job throughput, error rate, queue depth | 8 |

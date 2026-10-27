@@ -116,9 +116,9 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - [ ] done
 
 ### 1.13 — Ops pages in the platform console
-- **Goal:** `/platform/jobs`, `/platform/emails`, `/platform/errors` — the operations surface from [operations.md](../16-operations.md#the-ops-pages).
+- **Goal:** `/platform/jobs`, `/platform/emails` (Email Audit Logs), `/platform/errors` — the operations surface from [operations.md](../16-operations.md#the-ops-pages).
 - **Files:** `src/app/(platform)/platform/jobs/*`, `src/app/(platform)/platform/emails/*`, `src/app/(platform)/platform/errors/*`, console nav, translations.
-- **Tests:** pages refuse non-staff (T10 pattern); retry and run-now actions re-scope through `requirePlatformRole`; resolving a digest sets `resolvedAt` and a recurrence clears it.
+- **Tests:** pages refuse non-staff (T10 pattern); email logs search by tenant, kind and status and offer payload preview/resend; retry and run-now actions re-scope through `requirePlatformRole`; resolving a digest sets `resolvedAt` and a recurrence clears it.
 - **Checks:** `pnpm test`, `pnpm test:integration`; E2E walk of the three pages.
 - **Done when:** a failed job and a masked error are visible and actionable in the console without psql or Vercel logs.
 - [ ] done

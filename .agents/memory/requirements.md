@@ -5,6 +5,42 @@ requirement is specified so agents read the source, not this summary. When a
 requirement becomes spec, ADR, rule or test, the pointer is updated and this
 file stays the index — not the place requirements are defined.
 
+## 2026-10-27 — Admin pages informed by earlier projects
+
+The owner wants these pages considered for this project after studying the
+logic of the earlier projects: Upload rules, Email templates (a standalone
+page, not a tab), Company profile, Teams and Email Audit Logs. Learn their
+logic only; never reuse their code. The references already named in project
+memory are `vnbca.org`, `bellav-2026` and `platform.madelab.io`. The owner
+confirmed the ownership split on 2026-10-27: Upload rules, Email templates and
+Email Audit Logs belong in the ROOT/platform console; Company profile and
+Teams belong in each tenant's dashboard. “Teams” means tenant staff management
+(`StaffMember`, optionally linked to a login), not platform user groups or
+roles. → current request; phase placement in `spec/roadmap.md` and page
+behavior in `spec/16-operations.md` / `spec/07-modules.md`.
+
+Reference research (logic only): the app.madelab.io admin exposes Email
+Templates as its own navigation page with a template list, preview, test send
+and a link to Email Logs. Email Logs has search, status and time-range filters,
+page-size selection, pagination, and delivery columns such as recipient,
+subject, sender, status, message id and error. Settings separates Company Info
+and Media Settings into tabs; media settings include a size limit, allowed
+file categories and storage provider. Bellav's admin guide distinguishes user
+groups (org teams, with membership management) from roles and permissions, and
+lists profile and media as separate admin modules. Platform documentation
+records validating MIME type and size at upload and storing media in R2.
+Upload rules are a platform-wide policy for tenant uploads. The project has
+already chosen Cloudflare R2 as its storage provider (ADR 0018); the reference
+provider selector must not be carried over. The upload page governs file types
+and size, while enforcement remains server-side before signing and after
+upload. Do not copy source code or copy-specific branding.
+
+The exact allowed file types and maximum size have not been chosen; settle
+those defaults in the Phase 3 brief. Future phase briefs are written when the
+prior phase closes, per `spec/phases/README.md`; do not create phases 3–5 briefs
+early. Phase 1 task 1.13 and the roadmap/operations/module specs now record the
+confirmed destinations.
+
 ## 2026-10-27 — Database backup and migrate in the admin panel
 
 1. `/admin` gets a Database page (ROOT only) with exactly two tools: back up

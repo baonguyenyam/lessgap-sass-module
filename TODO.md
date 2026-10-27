@@ -45,5 +45,13 @@ Các select dài nên có search, các fields khi đang đợi dữ liệu thì 
 
 Các fie ngôn ngữ luôn phải nhất quán với nhau 
 
+=== 
 
-Ghi nhơ mọi thứu vào AI 
+Tham khảo các dự án cũ (không học code chỉ học logic) Nên có các trang:
+- Upload rules
+- Email templates (trang riêng ko nên nằm trong tab) 
+- Company profile
+- Teams
+- Email Audit Logs
+
+Ghi nhơ mọi thứ vào AI 

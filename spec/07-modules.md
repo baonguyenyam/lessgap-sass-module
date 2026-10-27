@@ -29,7 +29,7 @@ The phase column refers to [roadmap.md](./roadmap.md).
   primary domain, status), `SiteSettings` (name, tagline, phone, email,
   address, geo, hours by weekday, holiday closures, social links, policies),
   `Page` (key, title, SEO fields, body per language for free-text pages).
-- **Dashboard:** Business info; Hours and closures; Pages and SEO; Appearance
+- **Dashboard:** Company profile; Hours and closures; Pages and SEO; Appearance
   (tokens the theme exposes); Sections (show or hide optional ones); Languages.
 - **Site:** every theme page reads `SiteData`. LocalBusiness JSON-LD built from
   the same settings the page shows (AGENTS.md rule).
@@ -59,7 +59,9 @@ The phase column refers to [roadmap.md](./roadmap.md).
 
 - **Data:** `StaffMember` (display name, photo, bio, services they perform,
   working hours, optional link to a `Member` login).
-- A staff member does not need a login. Linking one lets them see their own calendar.
+- **Dashboard:** the tenant's Teams page manages staff profiles; a staff member
+  does not need a login and is separate from tenant membership and roles.
+- Linking a staff member to a `Member` lets them see their own calendar.
 
 ## booking
 
