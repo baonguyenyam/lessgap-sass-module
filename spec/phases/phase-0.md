@@ -158,4 +158,4 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 - Decisions 0-A…0-D recorded above.
 
 ## Findings
-_none yet_
+- **2026-10-27 — CI build needs a migrated database:** the first PR run passed integration, migration, type-check, lint and unit tests, but `pnpm build` failed while prerendering `/en/pricing` with `CONTRACT.MARKER_READ_FAILED` because the build job's placeholder `DATABASE_URL` has no PostgreSQL service. **Proposed change:** amend task 0.1 so the CI build job provisions an isolated PostgreSQL service and applies the Prisma 8 migrations before building. Keep task 0.2 open until the complete CI workflow passes.
