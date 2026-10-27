@@ -62,7 +62,11 @@ Follow the shape already used in `src/app/actions/projects.ts`, in this order:
   every Prisma 8 query does (it mints a query id). Either read request data
   first (session, `searchParams`, `cookies()`), call `await io()` from
   `next/cache` before it, or cache it with `"use cache"` + `cacheLife` (and a
-  `cacheTag` keyed by tenant for tenant data). A copyright year comes from
+  `cacheTag` keyed by tenant for tenant data). Settings reads go
+  through the cached stores (`getPlatformSettings`, `getTenantSettings`,
+  `getUserSettingRows`); a new writer of `PlatformSwitch`, `TenantSetting` or
+  `UserSetting` must call `updateTag` with the tag from
+  `src/platform/settings/cache-tags.ts`, from a server action. A copyright year comes from
   `currentYear()` in `@/lib/current-year`. Server Components translate with
   `await getTranslations()`, never the `useTranslations` hook. Until a route
   is converted (steps 3 and 4) its segments keep `export const instant = false`;

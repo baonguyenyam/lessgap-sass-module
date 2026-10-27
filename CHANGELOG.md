@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.19.0] - 2026-10-27
+
+**A settings change shows everywhere at once, step 2 of spec/adr/0022.** This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
+
+### Changed
+
+- Platform, workspace and personal settings are cached on the server with `"use cache"`, each under its own tag (one per workspace, one per person, one for the platform), and saving expires that tag. A change used to reach other server instances only after up to 30 seconds; now the next request reads it. The cache also refreshes on its own every minute as a backstop for hosts that do not share tag expiry. If you customised: anything else that writes `PlatformSwitch`, `TenantSetting` or `UserSetting` must call `updateTag` with the tag from `src/platform/settings/cache-tags.ts`
+- The platform settings are no longer read at request time only: the public pages can now include them in a prerendered shell (used from step 3)
+
 ## [2.18.0] - 2026-10-27
 
 **Cache Components and Partial Prefetching are on, step 1 of spec/adr/0022.** Nothing looks different yet: every page still renders on request, as before. This step clears what the new rendering model refuses, so the next steps can make pages instant one at a time. This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.

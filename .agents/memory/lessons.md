@@ -2,6 +2,11 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-27 · browser checks · A streamed page holds a hidden second copy
+- **Symptom:** checking a settings page in dev, `document.querySelectorAll('button[role=combobox]')` returned two selects, one empty, and the empty one looked like a bug in the new settings cache.
+- **Cause:** with Cache Components the streamed HTML keeps a hidden `<div hidden id="S:0">` copy of the page until React swaps it in; the server values were right.
+- **Rule:** when reading the page from a script, filter to visible elements (`el.offsetParent`), and confirm a save in the database before blaming a cache.
+
 ### 2026-10-27 · prisma 8 · Every query is "randomness" to Cache Components
 - **Symptom:** with `cacheComponents: true`, `pnpm build` failed on `/en/about`: "encountered the unstable value `crypto.randomUUID()` while prerendering", pointing at a `PlatformSwitch` read; in dev the landing showed the same for `Plan` reads.
 - **Cause:** Prisma 8's statement runner mints a `randomUUID()` per query. A query that runs before the page has read any request data happens during the prerender, where randomness is refused like the clock.

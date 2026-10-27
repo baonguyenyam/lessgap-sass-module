@@ -164,6 +164,18 @@ Two blockers the audit did not list, found by `pnpm build` and the dev overlay:
   with React's "Expected a suspended thenable". Server Components use
   `await getTranslations()`; the hook stays for Client Components.
 
+### Step 2 done (2026-10-27)
+Platform, tenant and user setting rows are read through `"use cache"`
+functions (`store.ts`, `tenant-store.ts`), tagged `platform-settings`,
+`tenant-settings:<tenantId>` and `user-settings:<userId>`
+(`src/platform/settings/cache-tags.ts`), with `cacheLife("minutes")` as a
+backstop for instances that do not share tag expiry. Each save function calls
+`updateTag` on its own tag. A failed read throws out of the cache, so the
+fallback values are never cached. The user's rows are cached on the server
+keyed by the user id; that is not the browser session cache the owner
+declined. Membership (`getMembership`) is still read per request; step 4
+decides on it.
+
 ## Consequences
 - Public pages served as static shells; dashboard navigations show the shell
   and skeleton at once, with the data streaming in.
