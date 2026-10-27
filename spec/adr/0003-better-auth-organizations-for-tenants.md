@@ -1,6 +1,6 @@
 # 0003. Tenants are Better Auth organizations
 
-**Status:** proposed
+**Status:** accepted
 **Date:** 2026-10-26
 
 ## Context

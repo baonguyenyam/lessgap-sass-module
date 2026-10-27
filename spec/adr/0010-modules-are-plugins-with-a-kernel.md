@@ -1,6 +1,6 @@
 # 0010. Modules are plugins on a kernel
 
-**Status:** proposed
+**Status:** accepted
 **Date:** 2026-10-26
 
 ## Context

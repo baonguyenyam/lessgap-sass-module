@@ -1,6 +1,6 @@
 # 0008. A jobs table processed by cron before a queue service
 
-**Status:** proposed
+**Status:** accepted
 **Date:** 2026-10-26
 
 ## Context

@@ -1,6 +1,6 @@
 # 0004. Vercel for Platforms for subdomains and custom domains
 
-**Status:** proposed
+**Status:** accepted
 **Date:** 2026-10-26
 
 ## Context

@@ -35,6 +35,6 @@ tasks small enough for one agent session and one pull request each.
 
 | Phase | Brief | Status |
 | --- | --- | --- |
-| 0 | [phase-0.md](./phase-0.md) | draft |
+| 0 | [phase-0.md](./phase-0.md) | approved |
 | 1 | [phase-1.md](./phase-1.md) | draft |
 | 2–8 | written when the previous phase closes | — |

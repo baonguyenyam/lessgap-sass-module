@@ -1,6 +1,6 @@
 # 0002. Shared database, tenantId on every tenant row, RLS as second line
 
-**Status:** proposed
+**Status:** accepted
 **Date:** 2026-10-26
 
 ## Context

@@ -2,6 +2,12 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-27 · vitest · Global setup and worker setup have separate environments
+- **Symptom:** the integration database migration succeeded, then the test worker rejected its own `DATABASE_URL` as if it were the production database.
+- **Cause:** global setup changed `DATABASE_URL` to the isolated test URL, and the worker ran the same safety check after inheriting that value.
+- **Fix:** keep the database identity guard and migration in `global-setup.ts`; let `setup.ts` only set the worker's `DATABASE_URL`.
+- **Rule:** keep once-per-run database checks in Vitest `globalSetup`; worker `setupFiles` must not repeat checks against environment values already rewritten for tests.
+
 ### 2026-10-27 · vitest · bcrypt tests time out under the full suite
 - **Symptom:** `password.test.ts > accepts the right password and rejects the wrong one` failed once in the full run and passed alone and on the rerun.
 - **Cause:** bcrypt at cost 12 is deliberately slow; with 70 test files in parallel workers, two hashes in one test passed the 5 s default.

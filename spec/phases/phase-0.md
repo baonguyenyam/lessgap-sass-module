@@ -1,6 +1,6 @@
 # Phase 0 — Foundation
 
-**Status:** draft
+**Status:** approved
 **Roadmap:** [roadmap.md#phase-0--foundation](../roadmap.md)
 **Read first:** [README](../README.md), [architecture](../01-architecture.md), [testing](../11-testing.md), [migrations-and-data](../12-migrations-and-data.md), [conventions](../13-conventions.md), [environments-and-release](../14-environments-and-release.md), [module-system](../15-module-system.md), [operations](../16-operations.md), ADR [0010](../adr/0010-modules-are-plugins-with-a-kernel.md), [0011](../adr/0011-independent-project-kit-as-reference.md), [0012](../adr/0012-temporal-for-dates-and-time-zones.md), [0017](../adr/0017-sentry-for-error-tracking.md), [0018](../adr/0018-cloudflare-r2-for-storage.md)
 
@@ -17,7 +17,7 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 ## Decisions needed before starting
 | # | Question | Options | Decision |
 |---|---|---|---|
-| 0-A | Accept ADRs 0002–0008 and 0010 as written? | accept / amend | |
+| 0-A | Accept ADRs 0002–0008 and 0010 as written? | accept / amend | **Accept**, 2026-10-27 |
 | 0-B | Date-time library for `src/platform/time.ts` | Temporal polyfill / date-fns-tz | **Temporal polyfill** ([ADR 0012](../adr/0012-temporal-for-dates-and-time-zones.md)), 2026-10-26 |
 | 0-C | Languages | — | **English (default) and Vietnamese**, everywhere; Italian removed (task 0.12), 2026-10-26 |
 | 0-D | Relationship to the kit | mergeable fork / independent | **Independent project; kit is a reference** ([ADR 0011](../adr/0011-independent-project-kit-as-reference.md)), 2026-10-26 |
@@ -34,7 +34,7 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 
 ### 0.2 — Local database and integration test layer
 - **Goal:** `pnpm test:integration` runs against a real, migrated PostgreSQL locally and in CI.
-- **Files:** `docker-compose.yml` (Postgres 17 with pgvector), `vitest.integration.config.mts`, `tests/integration/setup.ts` (refuses when `DATABASE_URL_TEST` equals `DATABASE_URL`; runs `migrate deploy`), `tests/helpers/db.ts` (`resetDatabase`), `package.json` scripts `test:integration`, `db:up`, `db:down`, CI job with a `postgres` service.
+- **Files:** `docker-compose.yml` (Postgres 17 with pgvector), `vitest.integration.config.mts`, `tests/integration/global-setup.ts` (refuses when `DATABASE_URL_TEST` points to the same database as `DATABASE_URL`; runs the Prisma 8 migration command against `DATABASE_URL_TEST`), `tests/integration/setup.ts` (sets `DATABASE_URL` to the test database for workers), `tests/helpers/db.ts` (`resetDatabase`), `tests/integration/db-smoke.test.ts`, `.env.example` (`DATABASE_URL_TEST`), `package.json` scripts `test:integration`, `db:up`, `db:down`, CI job with a `postgres` service.
 - **Tests:** one smoke integration test that inserts and reads a kit `User`.
 - **Checks:** `pnpm test:integration` locally and in CI.
 - **Done when:** the CI integration job is green and fails if the test is broken on purpose.

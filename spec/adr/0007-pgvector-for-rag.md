@@ -1,6 +1,6 @@
 # 0007. pgvector in the main database for the chatbot
 
-**Status:** proposed
+**Status:** accepted
 **Date:** 2026-10-26
 
 ## Context

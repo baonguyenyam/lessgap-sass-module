@@ -9,7 +9,7 @@ out of scope, even when it looks small: write it down under "Later" instead.
 
 | Phase | Name | Sellable after it? | Status |
 | --- | --- | --- | --- |
-| 0 | Foundation | no | not started |
+| 0 | Foundation | no | in progress |
 | 1 | Tenancy core | no | not started |
 | 2 | Plans, entitlements, platform billing | no | not started |
 | 3 | Site engine and domains | yes: brochure sites | not started |

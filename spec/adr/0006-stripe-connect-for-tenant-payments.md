@@ -1,6 +1,6 @@
 # 0006. Stripe Connect for tenant payments
 
-**Status:** proposed
+**Status:** accepted
 **Date:** 2026-10-26
 
 ## Context
