@@ -2,6 +2,12 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-27 · Intl · `timeZoneName` cannot accompany `dateStyle` and `timeStyle`
+- **Symptom:** formatting a Temporal instant threw `TypeError: Invalid option : option` in the time-zone formatter.
+- **Cause:** this runtime's `Intl.DateTimeFormat` rejects `timeZoneName` when date/time styles are supplied.
+- **Fix:** specify the year, month, day, hour and minute fields individually alongside `timeZoneName`.
+- **Rule:** use explicit date/time component options when the output needs a zone abbreviation; verify Intl option combinations in the supported runtime.
+
 ### 2026-10-27 · vitest · Global setup and worker setup have separate environments
 - **Symptom:** the integration database migration succeeded, then the test worker rejected its own `DATABASE_URL` as if it were the production database.
 - **Cause:** global setup changed `DATABASE_URL` to the isolated test URL, and the worker ran the same safety check after inheriting that value.

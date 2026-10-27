@@ -55,3 +55,10 @@ Tham khảo các dự án cũ (không học code chỉ học logic) Nên có cá
 - Email Audit Logs
 
 Ghi nhơ mọi thứ vào AI 
+
+
+====
+
+20261026T1841_kit_baseline ko nên ghi tên các file theo dạng này (co sngayf tháng) nên là 000001_xxx
+
+Ghi rule này vào AI 

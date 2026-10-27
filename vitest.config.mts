@@ -20,11 +20,18 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text-summary", "text", "html"],
-      // Coverage is reported over src/lib, the layer these tests are about.
+      // Coverage is reported over pure library and platform convention logic.
       // Measuring it over all of src/ would mix in React components and route
       // handlers that unit tests were never meant to cover, and produce a
       // number that says nothing about either.
-      include: ["src/lib/**/*.ts"],
+      include: [
+        "src/lib/**/*.ts",
+        "src/platform/action.ts",
+        "src/platform/errors.ts",
+        "src/platform/log.ts",
+        "src/platform/money.ts",
+        "src/platform/time.ts",
+      ],
       // Thin wrappers around external services: covering them means asserting
       // against a mock of Prisma, Stripe or Resend, which proves the mock works.
       exclude: ["src/lib/db8.ts", "src/lib/stripe.ts", "src/lib/email.ts"],
