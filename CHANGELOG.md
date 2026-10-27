@@ -7,6 +7,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.14.0] - 2026-10-27
+
+**Long lists can be searched, loading fields say so, and the language files agree.** This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
+
+### Added
+
+- **`OptionSelect`** (`src/components/form/option-select.tsx`): the one way to pick from a list. Up to eight options it is the standard select; from nine on it has a search box (`SearchableSelect`), so the time zone, the roles of a large workspace and long filters are found by typing. Used by every settings form, every table filter and every drawer
+- **Loading states in fields**: a select still loading its options shows a spinner, and the table search shows one while new rows arrive
+- **A test that every language file has exactly the keys of `en.json`**
+
+### Changed
+
+- **`vi.json` is complete again**: the 170 strings added since the last translation pass are translated into Vietnamese, the 10 that nothing reads any more are gone, and its keys follow the same order as `en.json`
+- `SearchableSelect` moved from `src/components/ui/` to `src/components/form/`: `ui/` holds only stock shadcn components (spec/adr/0021)
+
 ## [2.13.0] - 2026-10-27
 
 **Each workspace sets its own language, time and display.** Settings gains General, Localization and Display tabs for the workspace: its name and slug, its language, time zone and date and time format, and the list page size. A workspace's values override the platform's for everyone in it; the public site keeps the platform's. This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (one new table, `TenantSetting`), then restart the server.
