@@ -62,8 +62,7 @@ export const siteConfig = {
   links: {
     /** Public repository — footer/pricing/docs buttons hide when unset. */
     github:
-      process.env.NEXT_PUBLIC_GITHUB_URL ||
-      (isKitSite ? "https://github.com/baonguyenyam/lessgap-sass-module" : null),
+      process.env.NEXT_PUBLIC_GITHUB_URL || (isKitSite ? "https://github.com/baonguyenyam/lessgap-sass-module" : null),
     /**
      * General GitHub presence (org/profile) — used by the footer icon and
      * "Open Source" link; hides when unset.
