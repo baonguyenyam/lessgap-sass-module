@@ -1,6 +1,8 @@
 import { defineConfig, globalIgnores } from "eslint/config"
 import nextVitals from "eslint-config-next/core-web-vitals"
 import nextTs from "eslint-config-next/typescript"
+import { existsSync, readdirSync } from "node:fs"
+import path from "node:path"
 
 // Prisma 8 only: nothing may bring Prisma 7 back (AGENTS.md, .agents/rules/database.md).
 const PRISMA_7 = [
@@ -25,6 +27,119 @@ const ID_PATTERNS = [{ group: ["uniku", "uniku/*"], message: "Make identifiers w
 const NO_RANDOM_UUID = {
   selector: "CallExpression[callee.property.name='randomUUID']",
   message: "Make identifiers with @/lib/ids (newTimeId for a UUID).",
+}
+
+const BASE_RESTRICTED_IMPORTS = {
+  paths: [...PRISMA_7, ...ID_LIBRARIES],
+  patterns: [...NO_PARENT, ...PRISMA_7_PATTERNS, ...ID_PATTERNS],
+}
+
+function moduleImportPattern(prefix, moduleKey, message, allowedPaths, allowTypeImports = false) {
+  const modulePath = `${prefix}/modules/${moduleKey}`
+  return {
+    regex: `^${modulePath}(?:$|/(?!${allowedPaths}$).+)$`,
+    message,
+    ...(allowTypeImports ? { allowTypeImports: true } : {}),
+  }
+}
+
+function moduleKeysOnDisk() {
+  const modulesDirectory = path.resolve("src/modules")
+  if (!existsSync(modulesDirectory)) return []
+  return readdirSync(modulesDirectory, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && existsSync(path.join(modulesDirectory, entry.name, "module.ts")))
+    .map((entry) => entry.name)
+    .sort()
+}
+
+/** Creates the module, theme and kernel import boundaries for the current registry. */
+export function moduleBoundaryOverrides(moduleKeys = moduleKeysOnDisk()) {
+  const moduleRules = moduleKeys.map((moduleKey) => ({
+    files: [`src/modules/${moduleKey}/**/*`],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          ...BASE_RESTRICTED_IMPORTS,
+          patterns: [
+            ...BASE_RESTRICTED_IMPORTS.patterns,
+            ...moduleKeys
+              .filter((otherKey) => otherKey !== moduleKey)
+              .flatMap((otherKey) => [
+                moduleImportPattern(
+                  "@",
+                  otherKey,
+                  "Import another module only through its server public index or typed events.",
+                  "(?:server|server/index(?:\\.ts)?|events(?:\\.ts)?)"
+                ),
+                moduleImportPattern(
+                  "#src",
+                  otherKey,
+                  "Import another module only through its server public index or typed events.",
+                  "(?:server|server/index(?:\\.ts)?|events(?:\\.ts)?)"
+                ),
+              ]),
+          ],
+        },
+      ],
+    },
+  }))
+
+  const themeRules = {
+    files: ["src/themes/**/*"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          ...BASE_RESTRICTED_IMPORTS,
+          patterns: [
+            ...BASE_RESTRICTED_IMPORTS.patterns,
+            ...moduleKeys.flatMap((moduleKey) => [
+              moduleImportPattern(
+                "@",
+                moduleKey,
+                "Themes may import module site blocks and types only.",
+                "site(?:/.*)?",
+                true
+              ),
+              moduleImportPattern(
+                "#src",
+                moduleKey,
+                "Themes may import module site blocks and types only.",
+                "site(?:/.*)?",
+                true
+              ),
+            ]),
+          ],
+        },
+      ],
+    },
+  }
+
+  const platformRules = {
+    files: ["src/platform/**/*"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          ...BASE_RESTRICTED_IMPORTS,
+          patterns: [
+            ...BASE_RESTRICTED_IMPORTS.patterns,
+            {
+              regex: "^@/modules/(?!registry(?:\\.ts)?$).+$",
+              message: "The platform kernel may import modules only through the generated registry.",
+            },
+            {
+              regex: "^#src/modules/(?!registry(?:\\.ts)?$).+$",
+              message: "The platform kernel may import modules only through the generated registry.",
+            },
+          ],
+        },
+      ],
+    },
+  }
+
+  return [...moduleRules, themeRules, platformRules]
 }
 
 const eslintConfig = defineConfig([
@@ -74,6 +189,7 @@ const eslintConfig = defineConfig([
       ],
     },
   },
+  ...moduleBoundaryOverrides(),
 ])
 
 export default eslintConfig

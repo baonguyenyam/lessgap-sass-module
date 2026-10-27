@@ -90,11 +90,11 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 
 ### 0.9 — Boundary lint
 - **Goal:** imports across module internals, from themes into services, and from the kernel into modules fail lint.
-- **Files:** `eslint.config.mjs` (`no-restricted-imports` overrides per path), a fixture test.
+- **Files:** `eslint.config.mjs` (`no-restricted-imports` overrides per path), `tests/unit/eslint/module-boundaries.test.mjs` (fixture test), `.agents/memory/lessons.md`.
 - **Tests:** fixture files that violate each rule produce lint errors.
 - **Checks:** `pnpm lint`.
 - **Done when:** the three boundaries in module-system.md are enforced.
-- [ ] done
+- [x] done (`pnpm lint` and boundary fixture tests pass for all three import rules)
 
 ### 0.10 — Factories and test helpers
 - **Goal:** `tests/factories/` with kit factories (`createUser`), the pattern that phase 1 extends with tenants.

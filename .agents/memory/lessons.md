@@ -2,6 +2,12 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-27 · ESLint · Use explicit regex exceptions for import boundaries
+- **Symptom:** an allowed module public path was still rejected by `no-restricted-imports`, and `Linter.verify` fixtures reported no matching config.
+- **Cause:** the rule's grouped patterns did not provide the whitelist behavior assumed, and ESLint 10's flat `Linter` needs matching `files` extensions plus a `filename` option.
+- **Fix:** use a regex with a negative lookahead for the public module paths; give fixture linting `.ts`/`.tsx` patterns and `verify(..., { filename })`.
+- **Rule:** exercise real allowed and denied import examples against the installed ESLint version before relying on pattern semantics.
+
 ### 2026-10-27 · Shell · Remove only generated fixtures by exact path
 - **Symptom:** the shell policy rejected `rm -rf` while cleaning up the module generated for the scaffold check.
 - **Cause:** broad recursive deletion commands are blocked by the command guard.
