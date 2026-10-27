@@ -23,7 +23,7 @@ export function EmptyState({
   className?: string
 }) {
   return (
-    <Empty className={cn("min-h-64 border md:p-12", className)}>
+    <Empty className={cn("min-h-64 border border-border md:p-12", className)}>
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <Icon />

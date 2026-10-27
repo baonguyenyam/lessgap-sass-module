@@ -81,7 +81,7 @@ export function FormDrawer<TValues extends FieldValues>({
   return (
     <Sheet open={open} onOpenChange={(next) => !next && !mutation.isPending && close()}>
       <SheetContent className={cn("gap-0 data-[side=right]:w-full", WIDTHS[size])}>
-        <SheetHeader className="gap-1 border-b px-6 py-4 pr-12">
+        <SheetHeader className="gap-1 border-b border-border px-6 py-4 pr-12">
           <SheetTitle>{title}</SheetTitle>
           {description && <SheetDescription className="truncate">{description}</SheetDescription>}
         </SheetHeader>
@@ -99,7 +99,7 @@ export function FormDrawer<TValues extends FieldValues>({
                 </Alert>
               )}
             </div>
-            <SheetFooter className="mt-0 grid grid-cols-2 gap-2 border-t px-6 py-4 sm:flex sm:flex-row sm:justify-end">
+            <SheetFooter className="mt-0 grid grid-cols-2 gap-2 border-t border-border px-6 py-4 sm:flex sm:flex-row sm:justify-end">
               <Button type="button" variant="outline" onClick={close} disabled={mutation.isPending}>
                 <X />
                 {t("cancel")}

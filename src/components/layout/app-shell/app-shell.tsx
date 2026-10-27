@@ -38,9 +38,9 @@ export async function AppShell({
       {/* min-w-0: a wide table scrolls inside its card instead of widening the page.
           md:border: the UI has no shadows, so the border sets the page apart from the sidebar.
           md:overflow-clip: rounds the sticky header's corners too; clip, not hidden, so sticky still works. */}
-      <SidebarInset className="min-w-0 md:overflow-clip md:border">
+      <SidebarInset className="min-w-0 md:overflow-clip md:border md:border-border">
         <SwitchAsBanner email={user.email} />
-        <header className="sticky top-0 z-40 flex h-12 shrink-0 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur-md">
+        <header className="sticky top-0 z-40 flex h-12 shrink-0 items-center gap-2 border-b border-border bg-background/80 px-4 backdrop-blur-md">
           <SidebarTrigger className="-ml-1" />
           <HeaderBreadcrumbs {...breadcrumbs} />
           <div className="ml-auto flex items-center gap-2">

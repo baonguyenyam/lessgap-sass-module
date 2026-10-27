@@ -11,7 +11,7 @@ import { useTheme, type Theme } from "@/hooks/use-theme"
 import { languageName } from "@/i18n/language-name"
 
 const OPTION =
-  "flex cursor-pointer items-center gap-3 rounded-lg border p-3 text-sm font-medium transition-colors hover:bg-muted/50 has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5"
+  "flex cursor-pointer items-center gap-3 rounded-lg border border-border p-3 text-sm font-medium transition-colors hover:bg-muted/50 has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5"
 
 /** The same choice as the header's language switch, as a list. */
 export function LanguagePreference({ locales }: { locales: readonly string[] }) {
