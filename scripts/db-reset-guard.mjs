@@ -15,6 +15,8 @@
  *  4. Everything else → refused, with the host named so the fix is obvious.
  */
 
+import { toDirectUrl, withoutNeonPooler } from "#src/lib/database-url.ts"
+
 const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1", "[::1]", "db", "postgres"])
 
 /** Whether a hostname is this machine or a local Docker service. */
@@ -31,28 +33,8 @@ export function parseAllowHosts(value) {
     .filter(Boolean)
 }
 
-/** `ep-x-pooler.region.aws.neon.tech` → `ep-x.region.aws.neon.tech`; other hosts unchanged. */
-export function withoutNeonPooler(hostname) {
-  return hostname.replace(/^(ep-[a-z0-9-]+?)-pooler(\.|$)/, "$1$2")
-}
-
-/**
- * The URL schema changes should use. Neon's `-pooler` hosts go through
- * PgBouncer in transaction mode, which breaks the session-level work Prisma
- * does while building a schema, so they are switched to the direct host of
- * the same endpoint. Any other URL is returned as it is.
- */
-export function toDirectUrl(url) {
-  try {
-    const parsed = new URL(url)
-    const direct = withoutNeonPooler(parsed.hostname)
-    if (direct === parsed.hostname) return url
-    parsed.hostname = direct
-    return parsed.toString()
-  } catch {
-    return url
-  }
-}
+// Shared with the admin panel's backup and migrate (spec/adr/0023).
+export { toDirectUrl, withoutNeonPooler }
 
 /**
  * @param {{ url: string | undefined, env: Record<string, string | undefined> }} input

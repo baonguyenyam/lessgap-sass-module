@@ -167,6 +167,7 @@ hope, not a backup — every layer has a drill.
 | Layer | What | Mechanism | Where it lands | Tested by |
 | --- | --- | --- | --- | --- |
 | Database | whole platform | Neon PITR within the plan's window + nightly `pg_dump` by a scheduled GitHub Action | `platform-backups/` in R2, 30-day lifecycle | restore drill, phase 8 |
+| Database (manual) | whole platform, data only | ROOT presses "Back up now" at `/admin/database` ([ADR 0023](./adr/0023-database-backup-and-migrate-from-admin.md)); restored from a terminal by the ADR's procedure | `platform-backups/` in R2 | restore rehearsal before the nightly schedule |
 | Tenant | one tenant's rows | `TenantSnapshot` job: every tenant-owned table per the classification list → one gzipped JSON bundle | `snapshots/<tenantId>/` in R2 | O5, O6 |
 | Member/module | a person's or module's data | kit account export (exists); `ModuleExport` per module (phase 2, test L9) | `exports/` in R2 | L9 |
 

@@ -5,6 +5,18 @@ requirement is specified so agents read the source, not this summary. When a
 requirement becomes spec, ADR, rule or test, the pointer is updated and this
 file stays the index — not the place requirements are defined.
 
+## 2026-10-27 — Database backup and migrate in the admin panel
+
+1. `/admin` gets a Database page (ROOT only) with exactly two tools: back up
+   the database and apply pending migrations. No restore in the panel, no
+   per-tenant snapshot, no schedule yet. Reference projects are studied for
+   their logic only, never their code → [ADR 0023](../../spec/adr/0023-database-backup-and-migrate-from-admin.md).
+2. Backups go to R2 (`platform-backups/`) and download through a short-lived
+   signed link; manual for now, nightly only after a restore has been
+   rehearsed.
+3. Migrate works in every environment, production included, behind a typed
+   confirmation, a lock and an automatic backup first.
+
 ## 2026-10-27 — Use the stable features of the installed Next.js
 
 The owner asked for the best stable features of the current Next.js (16.4)

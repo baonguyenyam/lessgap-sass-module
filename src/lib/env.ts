@@ -87,6 +87,13 @@ export const envSchema = z
     // demo, so this is not a half-done configuration worth stopping a boot for.
     CRON_SECRET: optional,
 
+    // Cloudflare R2 (spec/adr/0018): database backups now, media later.
+    R2_ACCOUNT_ID: optional,
+    R2_ACCESS_KEY_ID: optional,
+    R2_SECRET_ACCESS_KEY: optional,
+    R2_ENDPOINT: optional,
+    R2_BUCKET: optional,
+
     // Accounts the seeds promote to ROOT (src/lib/root-accounts.ts), comma separated.
     ROOT_EMAILS: optional,
 
@@ -130,6 +137,18 @@ export const envSchema = z
       "GITHUB_CLIENT_ID",
       "with one key alone the GitHub button stays hidden, with no word why"
     )
+
+    // R2: any one of these set means storage was meant to be on, and a backup
+    // would fail only when someone presses the button.
+    if (env.R2_ACCESS_KEY_ID || env.R2_SECRET_ACCESS_KEY || env.R2_BUCKET) {
+      const why = "R2 storage needs the key, the secret, the bucket and the account id (or an endpoint)"
+      for (const name of ["R2_ACCESS_KEY_ID", "R2_SECRET_ACCESS_KEY", "R2_BUCKET"] as const) {
+        if (!env[name]) ctx.addIssue({ code: "custom", path: [name], message: `${name} is required: ${why}` })
+      }
+      if (!env.R2_ACCOUNT_ID && !env.R2_ENDPOINT) {
+        ctx.addIssue({ code: "custom", path: ["R2_ACCOUNT_ID"], message: `R2_ACCOUNT_ID or R2_ENDPOINT is required: ${why}` })
+      }
+    }
 
     if (env.NODE_ENV === "production" && !env.AUTH_SECRET) {
       ctx.addIssue({

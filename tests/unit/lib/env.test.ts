@@ -54,6 +54,16 @@ describe("parseEnv", () => {
     expect(() => parseEnv(base({ STRIPE_AUTOMATIC_TAX: "on" }))).toThrow(/STRIPE_AUTOMATIC_TAX/)
   })
 
+  it("refuses a half-configured R2 bucket and accepts a complete one", () => {
+    expect(() => parseEnv({ ...base, R2_BUCKET: "app" })).toThrow(/R2_ACCESS_KEY_ID is required/)
+    expect(() =>
+      parseEnv({ ...base, R2_BUCKET: "app", R2_ACCESS_KEY_ID: "k", R2_SECRET_ACCESS_KEY: "s" })
+    ).toThrow(/R2_ACCOUNT_ID or R2_ENDPOINT/)
+    expect(() =>
+      parseEnv({ ...base, R2_BUCKET: "app", R2_ACCESS_KEY_ID: "k", R2_SECRET_ACCESS_KEY: "s", R2_ACCOUNT_ID: "a" })
+    ).not.toThrow()
+  })
+
   it("reports every problem at once, not one per restart", () => {
     let message = ""
     try {
