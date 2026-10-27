@@ -1,7 +1,7 @@
 "use client"
 
 import { useMutation } from "@tanstack/react-query"
-import { CircleCheck, CircleHelp, DatabaseZap, X } from "lucide-react"
+import { CircleCheck, CircleHelp, DatabaseZap, CircleDot, Check, X } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -32,12 +32,14 @@ const CONFIRM_WORD = "MIGRATE"
  */
 export function DatabaseMigrations({
   status,
-  pending,
+  pendingCount,
+  migrations,
   backupFirst,
 }: {
   status: MigrationStatus["state"]
-  /** The pending migrations, oldest first, already worded for people. */
-  pending: { name: string; label: string; date: string | null }[]
+  /** The number of migrations waiting to be applied. */
+  pendingCount: number
+  migrations: { name: string; status: "applied" | "pending" | "unknown" }[]
   /** Whether a backup is taken before migrating (storage configured). */
   backupFirst: boolean
 }) {
@@ -59,43 +61,48 @@ export function DatabaseMigrations({
     onError: () => toast.error(t("failed")),
   })
 
-  if (status === "current") {
-    return <EmptyState icon={CircleCheck} title={t("current.title")} description={t("current.description")} />
-  }
-
-  if (status === "unknown") {
-    return (
-      <Alert variant="destructive">
-        <CircleHelp />
-        <AlertTitle>{t("unknown.title")}</AlertTitle>
-        <AlertDescription>{t("unknown.description")}</AlertDescription>
-      </Alert>
-    )
-  }
-
   return (
     <div className="space-y-4">
-      <p className="text-sm text-muted-foreground">{t("behind", { count: pending.length })}</p>
+      {status === "current" && (
+        <EmptyState icon={CircleCheck} title={t("current.title")} description={t("current.description")} />
+      )}
+      {status === "unknown" && (
+        <Alert variant="destructive">
+          <CircleHelp />
+          <AlertTitle>{t("unknown.title")}</AlertTitle>
+          <AlertDescription>{t("unknown.description")}</AlertDescription>
+        </Alert>
+      )}
+      {status === "behind" && <p className="text-sm text-muted-foreground">{t("behind", { count: pendingCount })}</p>}
       <ol className="divide-y rounded-[var(--radius)] border">
-        {pending.map((migration) => (
+        {migrations.map((migration) => (
           <li key={migration.name} className="flex items-center justify-between gap-4 px-4 py-3 text-sm">
-            <span className="font-medium">{migration.label}</span>
-            <span className="shrink-0 font-mono text-xs text-muted-foreground">{migration.date ?? migration.name}</span>
+            <span className="flex min-w-0 items-center gap-2">
+              {migration.status === "applied" ? (
+                <Check className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+              ) : (
+                <CircleDot className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+              )}
+              <span className="truncate font-mono text-xs font-medium">{migration.name}</span>
+              <span className="shrink-0 text-xs text-muted-foreground">{t(`state.${migration.status}`)}</span>
+            </span>
           </li>
         ))}
       </ol>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <Button onClick={() => setOpen(true)}>
-          <DatabaseZap />
-          {t("apply", { count: pending.length })}
-        </Button>
-        <p className="text-sm text-muted-foreground">{backupFirst ? t("backupFirst") : t("noBackup")}</p>
-      </div>
+      {status === "behind" && (
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <Button onClick={() => setOpen(true)}>
+            <DatabaseZap />
+            {t("apply", { count: pendingCount })}
+          </Button>
+          <p className="text-sm text-muted-foreground">{backupFirst ? t("backupFirst") : t("noBackup")}</p>
+        </div>
+      )}
 
       <AlertDialog open={open} onOpenChange={(next) => !apply.isPending && setOpen(next)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t("confirm.title", { count: pending.length })}</AlertDialogTitle>
+            <AlertDialogTitle>{t("confirm.title", { count: pendingCount })}</AlertDialogTitle>
             <AlertDialogDescription>
               {backupFirst ? t("confirm.description") : t("confirm.descriptionNoBackup")}
             </AlertDialogDescription>
@@ -119,7 +126,7 @@ export function DatabaseMigrations({
             </AlertDialogCancel>
             <Button onClick={() => apply.mutate()} disabled={typed !== CONFIRM_WORD || apply.isPending}>
               {apply.isPending ? <Spinner /> : <DatabaseZap />}
-              {t("apply", { count: pending.length })}
+              {t("apply", { count: pendingCount })}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

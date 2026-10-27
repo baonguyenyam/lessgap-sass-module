@@ -468,6 +468,8 @@
       "users": "Người dùng",
       "newsletter": "Newsletter",
       "database": "Cơ sở dữ liệu",
+      "databaseMigrations": "Migration",
+      "databaseBackups": "Bản sao lưu",
       "platformSettings": "Cài đặt",
       "groups": {
         "main": "Tổng quan",
@@ -679,11 +681,14 @@
       "exportAll": "Xuất tất cả (CSV)"
     },
     "database": {
-      "title": "Cơ sở dữ liệu",
-      "subtitle": "Cập nhật cấu trúc cơ sở dữ liệu và giữ các bản sao lưu.",
       "migrations": {
         "title": "Migration",
         "subtitle": "Các thay đổi cấu trúc cơ sở dữ liệu đi kèm mỗi bản phát hành, chạy theo thứ tự.",
+        "state": {
+          "applied": "Đã chạy",
+          "pending": "Chưa chạy",
+          "unknown": "Không xác định"
+        },
         "current": {
           "title": "Cơ sở dữ liệu đã mới nhất",
           "description": "Khớp với phiên bản ứng dụng đang chạy. Không có gì cần chạy."

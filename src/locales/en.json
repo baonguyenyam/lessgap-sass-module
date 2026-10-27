@@ -468,6 +468,8 @@
       "users": "Users",
       "newsletter": "Newsletter",
       "database": "Database",
+      "databaseMigrations": "Migrations",
+      "databaseBackups": "Backups",
       "platformSettings": "Settings",
       "groups": {
         "main": "Overview",
@@ -679,11 +681,14 @@
       "exportAll": "Export all (CSV)"
     },
     "database": {
-      "title": "Database",
-      "subtitle": "Bring the database up to date and keep backups of it.",
       "migrations": {
         "title": "Migrations",
         "subtitle": "Changes to the database structure that ship with each release, applied in order.",
+        "state": {
+          "applied": "Applied",
+          "pending": "Pending",
+          "unknown": "Unknown"
+        },
         "current": {
           "title": "The database is up to date",
           "description": "It matches the version of the app that is running. Nothing to apply."

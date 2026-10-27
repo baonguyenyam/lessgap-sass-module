@@ -30,6 +30,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           users: tNav("users"),
           newsletter: tNav("newsletter"),
           database: tNav("database"),
+          migrations: tNav("databaseMigrations"),
+          backups: tNav("databaseBackups"),
           settings: tNav("platformSettings"),
         },
       }}
