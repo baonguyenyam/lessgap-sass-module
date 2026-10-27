@@ -74,11 +74,11 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 
 ### 0.7 — Module kernel skeleton
 - **Goal:** `defineModule`, manifest schema, generated registry, `isModuleActive` stub (registered + platform switch only until phases 1–2).
-- **Files:** `src/platform/modules/define.ts`, `src/platform/modules/manifest-schema.ts`, `src/platform/modules/runtime.ts`, `scripts/generate-module-registry.mjs`, `src/modules/registry.ts` (generated, empty), `src/modules/README.md` pointing to the spec.
+- **Files:** `src/platform/modules/define.ts`, `src/platform/modules/manifest-schema.ts`, `src/platform/modules/runtime.ts`, `scripts/generate-module-registry.mjs`, `src/modules/registry.ts` (generated, empty), `src/modules/README.md` pointing to the spec, tests in `tests/unit/platform/modules/` and `tests/unit/scripts/generate-module-registry.test.mjs`.
 - **Tests:** manifest schema accepts a valid manifest and rejects each invalid field; dependency graph with a cycle is rejected; registry generation is deterministic.
 - **Checks:** `pnpm test`.
 - **Done when:** an example manifest in a test fixture validates and loads.
-- [ ] done
+- [x] done (`pnpm test` passed; registry generation is deterministic)
 
 ### 0.8 — Scaffolder and module checks
 - **Goal:** `pnpm new:module <key>` and `pnpm modules:check`.
