@@ -1,3 +1,4 @@
+import { io } from "next/cache"
 import { cache } from "react"
 import { db8 } from "@/lib/db8"
 import { nowTs } from "@/lib/timestamps"
@@ -17,6 +18,10 @@ const TTL_MS = 30_000
 let cached: { at: number; settings: PlatformSettings } | null = null
 
 async function load(): Promise<PlatformSettings> {
+  // Read at request time, never while a page prerenders: the clock below and
+  // the ORM's query ids are values Cache Components refuses in a prerender.
+  // Step 2 of spec/adr/0022 replaces this cache with `"use cache"` and a tag.
+  await io()
   if (cached && Date.now() - cached.at < TTL_MS) return cached.settings
   try {
     const rows = await db8.orm.public.PlatformSwitch.select("key", "value").all()

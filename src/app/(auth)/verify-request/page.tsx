@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
 import { LogoMark } from "@/components/logo"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
@@ -8,8 +8,8 @@ export const instant = false
 
 // Landing page after a magic link (or signup verification) email is sent.
 // Configured as pages.verifyRequest in src/auth.ts.
-export default function VerifyRequestPage() {
-  const t = useTranslations("auth.verifyRequest")
+export default async function VerifyRequestPage() {
+  const t = await getTranslations("auth.verifyRequest")
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col text-center">

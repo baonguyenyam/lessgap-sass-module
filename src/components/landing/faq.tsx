@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
 import { siteConfig } from "@/config/site"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 import { Reveal } from "@/components/landing/reveal"
@@ -20,8 +20,8 @@ type Faq = { question: string; answer: string }
  * everywhere this section appears, and repeating the markup across pages
  * gives search engines the same FAQ under several URLs.
  */
-export function FAQ({ withJsonLd = false }: { withJsonLd?: boolean }) {
-  const t = useTranslations("faq")
+export async function FAQ({ withJsonLd = false }: { withJsonLd?: boolean }) {
+  const t = await getTranslations("faq")
   // The list itself differs per deployment, so it comes from the messages
   // rather than a constant sized to whichever branch happens to be longer.
   //

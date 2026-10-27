@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge"
 import { Reveal } from "@/components/landing/reveal"
 import { WaitlistForm } from "@/components/landing/waitlist-form"
-import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
 import { siteConfig } from "@/config/site"
 
 function CheckIcon() {
@@ -32,8 +32,8 @@ function PlusIcon() {
  * page this block sits under the hero and stays an h2, on /pricing it is the
  * page's own heading and must be the h1. Same styling either way.
  */
-export function Pricing({ heading = "h2", withJsonLd = false }: { heading?: "h1" | "h2"; withJsonLd?: boolean }) {
-  const t = useTranslations("pricing")
+export async function Pricing({ heading = "h2", withJsonLd = false }: { heading?: "h1" | "h2"; withJsonLd?: boolean }) {
+  const t = await getTranslations("pricing")
   const Heading = heading
   const freeFeatures = t.raw("freeFeatures") as string[]
   const proFeatures = t.raw("proFeatures") as string[]

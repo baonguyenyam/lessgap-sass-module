@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { siteConfig } from "@/config/site"
 import { pageMetadata } from "@/lib/metadata"
-import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
 import { isKitSite } from "@/config/kit"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
@@ -21,8 +21,8 @@ export const metadata: Metadata = pageMetadata({
  * own. Replace the text there, and the dashed note disappears on its own once
  * KIT_SITE is set.
  */
-export default function AboutPage() {
-  const t = useTranslations("about")
+export default async function AboutPage() {
+  const t = await getTranslations("about")
   return (
     <section className="py-24">
       <div className="mx-auto max-w-3xl px-6 lg:px-12">

@@ -1,3 +1,4 @@
+import { io } from "next/cache"
 import { getTranslations } from "next-intl/server"
 import { and } from "@prisma/orm-postgres/orm-client"
 import { db8 } from "@/lib/db8"
@@ -30,6 +31,9 @@ export async function PlanPricing({
   // heading of /pricing. The styling does not change.
   const Heading = heading
 
+  // At request time: an ORM query mints ids that Cache Components refuses while
+  // a page prerenders. Step 3 of spec/adr/0022 caches the plans instead.
+  await io()
   // Metered plans stay docs-only; one-time plans (Lifetime) live on the
   // billing page, the landing shows the classic recurring triad.
   const planRows = await db8.orm.public.Plan.where((p) =>

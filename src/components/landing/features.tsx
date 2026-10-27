@@ -13,7 +13,7 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Reveal } from "@/components/landing/reveal"
 import { TechStack } from "@/components/landing/tech-stack"
-import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
 import { isKitSite } from "@/config/kit"
 
 type Feature = { icon: LucideIcon; key: string }
@@ -50,8 +50,8 @@ const kitFeatures: Feature[] = [
 
 const features = isKitSite ? kitFeatures : productFeatures
 
-export function Features() {
-  const t = useTranslations("features")
+export async function Features() {
+  const t = await getTranslations("features")
   return (
     <section id="features" className="py-24">
       <div className="mx-auto max-w-6xl px-6 lg:px-12">

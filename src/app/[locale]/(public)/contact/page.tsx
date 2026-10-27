@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
 import type { Metadata } from "next"
 import { ContactForm } from "@/components/landing/contact-form"
 import { siteConfig } from "@/config/site"
@@ -15,8 +15,8 @@ export const metadata: Metadata = pageMetadata({
   path: "/contact",
 })
 
-export default function ContactPage() {
-  const t = useTranslations("contact")
+export default async function ContactPage() {
+  const t = await getTranslations("contact")
   return (
     <section className="py-24">
       <div className="mx-auto max-w-2xl px-6 lg:px-12">

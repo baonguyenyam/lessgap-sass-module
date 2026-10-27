@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
 import type { Metadata } from "next"
 import ReactMarkdown, { type Components } from "react-markdown"
 import remarkGfm from "remark-gfm"
@@ -48,8 +48,8 @@ function formatDate(iso: string | null) {
 // Renders the repo root CHANGELOG.md as a release timeline. The version is
 // the visual anchor of each entry: big brand-gradient pill, date beneath,
 // body subordinate on the timeline rail.
-export default function ChangelogPage() {
-  const t = useTranslations("changelog")
+export default async function ChangelogPage() {
+  const t = await getTranslations("changelog")
   const { intro, releases } = getChangelog()
 
   return (

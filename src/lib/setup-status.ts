@@ -8,6 +8,8 @@
  * setup step: a visitor must never read installation instructions, and
  * `/api/health` and `npm run check:deploy` are what report it there.
  */
+import { io } from "next/cache"
+
 export type SetupStep = "database-url" | "database-unreachable" | "migrations"
 
 /**
@@ -28,6 +30,9 @@ export function stepFromError(error: unknown): SetupStep {
 export async function pendingSetup(): Promise<SetupStep | null> {
   if (process.env.NODE_ENV === "production") return null
   if (!process.env.DATABASE_URL) return "database-url"
+  // At request time: the probe query mints ids that Cache Components refuses
+  // while a page prerenders (spec/adr/0022). Development only, see above.
+  await io()
   try {
     // Imported here: a malformed DATABASE_URL throws while the client is built.
     const { db8 } = await import("@/lib/db8")

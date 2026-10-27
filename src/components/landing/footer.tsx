@@ -7,7 +7,7 @@ import { ContactDialog } from "@/components/landing/contact-dialog"
 import { Logo } from "@/components/logo"
 import { LogoLink } from "@/components/landing/logo-link"
 import { siteConfig } from "@/config/site"
-import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
 import { isKitSite } from "@/config/kit"
 import { emailEnabled } from "@/lib/email-transport"
 import { FooterSignup } from "@/components/landing/footer-signup"
@@ -23,7 +23,7 @@ function XIcon() {
 }
 
 export async function Footer() {
-  const t = useTranslations("footer")
+  const t = await getTranslations("footer")
   const orgUrl = siteConfig.links.githubOrg ?? siteConfig.links.github
   // The footer signup collects addresses from every page on its own, so it
   // stays off until WAITLIST_ENABLED="true": set it once your real privacy

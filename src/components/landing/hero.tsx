@@ -12,7 +12,7 @@ import {
   Shield,
   Sparkles,
 } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
 import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/logo"
 import { PreviewThemeFrame, PreviewThemeToggle } from "@/components/landing/hero-preview-theme"
@@ -48,9 +48,9 @@ const mockStats = [
 // Decorative revenue bars (% heights) for the mock chart
 const mockBars = [38, 52, 45, 63, 58, 74, 69, 85, 78, 92, 88, 100]
 
-export function Hero() {
-  const t = useTranslations("hero")
-  const tm = useTranslations("hero.mock")
+export async function Hero() {
+  const t = await getTranslations("hero")
+  const tm = await getTranslations("hero.mock")
   // Explicit split when the message provides one, otherwise derive it from
   // the tagline with the last word gradient-accented.
   const words = siteConfig.tagline.split(" ")
