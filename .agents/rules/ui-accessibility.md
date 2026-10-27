@@ -28,6 +28,10 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
 - **No shadows.** Separate surfaces with a border or a ring. The shadow scale
   is flattened in `globals.css`; a test fails on `shadow-*` outside
   `src/components/ui/`.
+- **Avoid card inside card.** Prefer one clear surface with sections, headings,
+  and dividers. Nest a card only when the inner surface represents a distinct
+  interactive or semantic group; avoid decorative layers that add borders and
+  padding without clarifying the content (for example, account notifications).
 - **Forms:** React Hook Form with `zodResolver` and a schema from
   `src/lib/schemas/`; the server action parses the same schema again.
 - Icons from `lucide-react`. Toasts through `sonner`.

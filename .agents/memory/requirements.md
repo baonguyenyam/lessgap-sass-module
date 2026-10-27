@@ -25,7 +25,9 @@ file stays the index — not the place requirements are defined.
    move), AGENTS.md "One library per job".
 2. **Everything consistent; the best component everywhere.** Fields share one
    size scale, a select never puts its arrow against the border, a button
-   beside a field has the same height → `.agents/rules/ui-accessibility.md`,
+  beside a field has the same height; avoid nesting cards/surface containers
+  (for example on `/dashboard/account/notifications`) unless the inner surface
+  has a clear functional reason → `.agents/rules/ui-accessibility.md`,
    `src/components/ui/field.ts`, `tests/unit/ui-consistency.test.ts`.
 3. **Vertical tabs, not horizontal**, for the sub-pages of a section →
    `SectionNav` / `SectionLayout` in `src/components/ui/section-nav.tsx`.

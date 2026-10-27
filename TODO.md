@@ -35,3 +35,8 @@ https://studio-admin.arhamkhnz.com/auth/v2/login
 https://studio-admin.arhamkhnz.com/dashboard/invoice
 
 Phải tận dụng khuôn mẫu chuẩn của shadcn hoặc https://shadcnuikit.com/ cho dự án này
+
+
+
+Các select quá dài hoặc cần gọi db thì nên có search, call api để giảm tải và hài hoà UI, các select khi chọn thì hiện tại dropdown lại đè lên select nhìn hơi lạ
+hạn chế card trong card (ví dụ http://localhost:3000/dashboard/account/notifications) => ghi nhớ vào qui tắc của AI
