@@ -86,9 +86,7 @@ export async function ActiveSessions() {
               {!isCurrent && (
                 <form action={revokeSession}>
                   <input type="hidden" name="sessionId" value={session.id} />
-                  <PendingButton variant="outline">
-                    {t("revoke")}
-                  </PendingButton>
+                  <PendingButton variant="outline">{t("revoke")}</PendingButton>
                 </form>
               )}
             </li>
@@ -98,9 +96,7 @@ export async function ActiveSessions() {
 
       {others > 0 && (
         <form action={revokeOtherSessions}>
-          <PendingButton variant="destructive">
-            {t("revokeOthers", { count: others })}
-          </PendingButton>
+          <PendingButton variant="destructive">{t("revokeOthers", { count: others })}</PendingButton>
         </form>
       )}
 

@@ -9,18 +9,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ## [2.12.0] - 2026-10-27
 
-**A flat UI, and drawers that fit what they hold.** No shadows anywhere, a quieter app header and sidebar edge, and edit drawers that open at the width their form needs with fields that keep their focus ring. This is a MINOR: `git pull`. Nothing to migrate.
+**A flat UI, drawers that fit what they hold, and a language switch in the header.** No shadows anywhere, a quieter app header and sidebar edge, edit drawers that open at the width their form needs with fields that keep their focus ring, and a shorter Security page. This is a MINOR: `git pull`. Nothing to migrate.
+
+### Added
+
+- **Language switch in the app header**, next to the theme switch. The choice is kept per browser in the `app_locale` cookie for a year and outranks the platform default (`locale.app`), which now only applies to people who have not picked one. The public site still takes its language from the URL
 
 ### Changed
 
 - **A flat UI: no shadows anywhere.** Surfaces are told apart by a border or a ring. The Tailwind shadow scale is flattened in `globals.css`, so the stock components follow without being restyled, and a test fails on a `shadow-*` class outside `src/components/ui/`. The `shadow-soft`, `shadow-soft-lg` and `shadow-glow` tokens are gone; the signed-in page gets a border against the sidebar instead
 - **Drawers open at the width their content needs**: `FormDrawer` takes `size` (`sm`, `md`, `lg`, `xl`) and is full width on a phone. The header and the buttons stay put while the fields scroll, the buttons sit side by side at the bottom right, and a form can lay its fields out in columns (member invitation: email and role on one line; role permissions: two columns of resources)
 - The app header no longer draws a divider between the sidebar button and the breadcrumbs, and the edge of the sidebar no longer draws a line on hover (clicking it still folds the sidebar)
+- **Settings, Security: less to read, one size of control.** Every button is the default size and every field the same width, the email and password forms put the field and its button on one line, the explanations are cut to one short line each, and turning two-factor off sits next to its status
 
 ### Fixed
 
 - **Focus rings in drawers are no longer cut off**: the fields sat flush against the scrolling edge, which clipped the ring
 - A drawer's width setting had no effect: the Sheet's own `max-w-sm` outranked it
+- The page next to the sidebar now has all four corners rounded: the sticky header covered the top two
 
 ## [2.11.0] - 2026-10-27
 
