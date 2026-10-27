@@ -27,7 +27,11 @@ file stays the index — not the place requirements are defined.
    size scale, a select never puts its arrow against the border, a button
   beside a field has the same height; avoid nesting cards/surface containers
   (for example on `/dashboard/account/notifications`) unless the inner surface
-  has a clear functional reason → `.agents/rules/ui-accessibility.md`,
+  has a clear functional reason; long or database-backed selects need search,
+  with remote options loaded through an API to avoid fetching the full dataset;
+  fields waiting for asynchronous data need a visible loading state; select
+  menus should open offset from the trigger instead of covering it →
+  `.agents/rules/ui-accessibility.md`,
    `src/components/ui/field.ts`, `tests/unit/ui-consistency.test.ts`.
 3. **Vertical tabs, not horizontal**, for the sub-pages of a section →
    `SectionNav` / `SectionLayout` in `src/components/ui/section-nav.tsx`.

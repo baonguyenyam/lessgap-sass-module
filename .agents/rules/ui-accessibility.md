@@ -16,6 +16,14 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
   inside, not a `loading` prop.
 - **Selects:** `Select` in client components; `NativeSelect` in forms
   rendered on the server. Never a bare `<select>`: its arrow sits against the border.
+  Use a searchable combobox when options are long or come from database records;
+  fetch remote matches through an API instead of loading the whole dataset into
+  the page. Select menus open below/away from their trigger so the menu does not
+  cover the selected control.
+- **Async fields show their loading state.** While a field's options or value
+  are being fetched, show a localized loading indicator or skeleton, prevent
+  invalid interaction, and keep the field's layout stable. Do not render an
+  empty-looking field that appears ready while data is still pending.
 - **Sub-pages of a section use vertical tabs:** `SectionLayout` + `SectionNav`
   from `src/components/ui/section-nav.tsx`, rendered by the section's layout.
 - **Every list is a `DataTable`** (`src/components/data-table/`): search,
