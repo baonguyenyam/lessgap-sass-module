@@ -82,7 +82,7 @@ export function SettingsForm({
             name={toName(setting.key)}
             render={({ field }) =>
               setting.kind === "switch" ? (
-                <FormItem className="flex items-start justify-between gap-6 rounded-[var(--radius)] border border-border p-4">
+                <FormItem className="flex-row items-start justify-between gap-6 py-4">
                   <div className="space-y-1">
                     <FormLabel>{setting.label}</FormLabel>
                     <FormDescription>{setting.description}</FormDescription>

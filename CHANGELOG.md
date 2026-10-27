@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ### Changed
 
+- Admin Settings now uses the same content width as Account pages, and the Access switch sits directly in the card content like the notification preferences.
 - The migrations list uses the shared table with search, sorting and pagination.
 - Admin → Database → Migrations now lists every migration in the build and marks each one as applied, pending or unknown.
 - Database migrations and backups now have separate pages under Admin → Database. The existing `/admin/database` address opens Migrations.
