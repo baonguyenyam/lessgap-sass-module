@@ -16,7 +16,7 @@ export default defineConfig({
     // Every test lives under tests/ (spec/adr/0016-tests-live-in-tests.md):
     // tests/unit mirrors src/, and tests/unit/scripts holds the plain ESM tests
     // of the pure helpers the deploy checks in scripts/ are built on.
-    include: ["tests/unit/**/*.test.ts", "tests/unit/**/*.test.mjs"],
+    include: ["tests/unit/**/*.test.ts", "tests/unit/**/*.test.mjs", "tests/contract/**/*.test.ts"],
     coverage: {
       provider: "v8",
       reporter: ["text-summary", "text", "html"],

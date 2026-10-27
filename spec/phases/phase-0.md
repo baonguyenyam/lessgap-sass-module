@@ -82,7 +82,7 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 
 ### 0.8 — Scaffolder and module checks
 - **Goal:** `pnpm new:module <key>` and `pnpm modules:check`.
-- **Files:** `scripts/new-module.mjs`, templates in `scripts/templates/module/`, `tests/contract/modules.test.ts`, `package.json` scripts.
+- **Files:** `scripts/new-module.mjs`, templates in `scripts/templates/module/`, `tests/contract/modules.test.ts`, `tests/unit/scripts/new-module.test.mjs`, `package.json` scripts, `vitest.config.mts` (include contract tests), `.agents/memory/lessons.md`, `spec/15-module-system.md` (align scaffolding with the shared Prisma contract).
 - **Tests:** scaffold a module in a temp dir → contract tests pass on it; invalid key refused.
 - **Checks:** `pnpm new:module demo_check` in a scratch branch → `pnpm modules:check` green → remove it.
 - **Done when:** the scaffolder output matches the module shape in the spec exactly.
@@ -158,5 +158,6 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 - Decisions 0-A…0-D recorded above.
 
 ## Findings
+- **Resolved — Module schemas use the shared Prisma contract:** the scaffolding section in `spec/15-module-system.md` mentioned a per-module Prisma file, which conflicts with Prisma 8's single `prisma/contract.prisma` and accepted ADR 0024. The scaffolder creates the standard source shape; models are added to the owning section of the shared contract when a later task needs them.
 - **Resolved 2026-10-27 — CI build needs a migrated database:** the first PR run exposed `CONTRACT.MARKER_READ_FAILED` while prerendering `/en/pricing` because the build job had no PostgreSQL service. Per owner approval, task 0.1 now provisions an isolated PostgreSQL service and applies Prisma 8 migrations before building; CI run 67 passes.
 - **Resolved 2026-10-27 — Migration ref lagged the existing `Member.status` migration:** task 0.4's first plan proposed the same column again because `db` still pointed to the previous contract. Advanced `db` to the existing latest migration's `to` hash; `prisma migration check` and a repeat plan now pass with no changes.

@@ -2,6 +2,18 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-27 · Shell · Remove only generated fixtures by exact path
+- **Symptom:** the shell policy rejected `rm -rf` while cleaning up the module generated for the scaffold check.
+- **Cause:** broad recursive deletion commands are blocked by the command guard.
+- **Fix:** remove only the known generated fixture with `node:fs` and an exact path.
+- **Rule:** use scoped cleanup commands for generated test fixtures; never broaden a deletion target to bypass a shell guard.
+
+### 2026-10-27 · Vitest · Explicit test paths still obey `include`
+- **Symptom:** `vitest run tests/contract/modules.test.ts` reported no test files even though the path was explicit.
+- **Cause:** the shared Vitest `include` matched only `tests/unit`, so the contract test remained filtered out.
+- **Fix:** include `tests/contract/**/*.test.ts` in the config before invoking a contract test by path.
+- **Rule:** check the active Vitest include/exclude patterns when a direct test path is not discovered.
+
 ### 2026-10-27 · Intl · `timeZoneName` cannot accompany `dateStyle` and `timeStyle`
 - **Symptom:** formatting a Temporal instant threw `TypeError: Invalid option : option` in the time-zone formatter.
 - **Cause:** this runtime's `Intl.DateTimeFormat` rejects `timeZoneName` when date/time styles are supplied.

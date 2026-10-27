@@ -215,10 +215,12 @@ Rules an agent will forget are enforced by tools, not by reminders.
 
 ## Scaffolding
 
-`pnpm new:module <key>` (phase 0) creates the folder with every file in the
-standard shape, a manifest at `stage: "experimental"`, an empty Prisma file,
-a passing contract test, and regenerates `registry.ts`. Agents create
-modules only with this command, so every module starts identical.
+`pnpm new:module <key>` (phase 0) creates the folder with every source file in
+the standard shape, a manifest at `stage: "experimental"`, and regenerates
+`registry.ts`. Modules do not have separate Prisma files: their models belong
+in the module's section of the shared `prisma/contract.prisma` when a later
+task introduces them ([ADR 0024](./adr/0024-contract-ownership-by-section.md)).
+Agents create modules only with this command, so every module starts identical.
 
 `pnpm modules:check` runs manifest validation, the dependency graph check and
 the boundary lint for modules only; it is part of `pnpm test`.

@@ -19,7 +19,7 @@
     "lint": "eslint && prettier --check .",
     "format": "prettier --write .",
     "typecheck": "next typegen && tsc --noEmit",
-    "test": "vitest run",
+    "test": "pnpm modules:check && vitest run",
     "test:integration": "vitest run --config vitest.integration.config.mts",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -38,6 +38,8 @@
     "db:status": "prisma migration status",
     "db:verify": "prisma db verify",
     "audit:tenancy": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/audit-tenancy.mjs",
+    "new:module": "node scripts/new-module.mjs",
+    "modules:check": "node scripts/generate-module-registry.mjs && vitest run tests/contract/modules.test.ts",
     "db:adopt": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/db-adopt.mjs"
   },
   "dependencies": {
