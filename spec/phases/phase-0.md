@@ -98,7 +98,7 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 
 ### 0.10 — Factories and test helpers
 - **Goal:** `tests/factories/` with kit factories (`createUser`), the pattern that phase 1 extends with tenants.
-- **Files:** `tests/factories/index.ts`, `tests/factories/user.ts`.
+- **Files:** `tests/factories/index.ts`, `tests/factories/user.ts`, `tests/integration/db-smoke.test.ts` (use the factory).
 - **Tests:** factory produces a valid row in the integration database.
 - **Checks:** `pnpm test:integration`.
 - **Done when:** factories are used by the 0.2 smoke test.
