@@ -39,7 +39,7 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - **Tests:** T5 passes with the new models classified; factory `createTenant`, `createMember`.
 - **Checks:** M1, M2, audit, `pnpm build`.
 - **Done when:** a tenant and member can be created through the plugin API in an integration test.
-- [ ] done
+- [x] done (the plugin, the `Tenant`/`Member`/`Invitation`/`OrganizationRole` tables, `platformRole` and the built-in roles were already in place from 2026-10-26; this change adds `createTenant` and `createMember` in `tests/factories/tenant.ts`, both through `auth.api`, and `tests/integration/tenants.test.ts`: owner as first member, a member with a built-in role, a duplicate slug refused. T5 (`pnpm audit:tenancy`) and `db verify --strict` pass. Shipped differently: the models live in the single `prisma/contract.prisma` (ADR 0024), not `prisma/schema/*.prisma`.)
 
 ### 1.3 — Permissions registry
 - **Goal:** one file declaring every `<module>.<verb>` permission (from manifests + kernel) and the built-in roles' grants; custom roles validate against it.
