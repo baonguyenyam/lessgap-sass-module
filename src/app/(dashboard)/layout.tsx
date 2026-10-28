@@ -6,6 +6,7 @@ import { LayoutGrid } from "lucide-react"
 import { AppShell } from "@/components/layout/app-shell/app-shell"
 import { tenantPath } from "@/lib/tenant-paths"
 import { toDate } from "@/lib/timestamps"
+import { isModuleActive } from "@/platform/modules/runtime"
 import { getEntitlements } from "@/platform/entitlements"
 import { TENANT_SLUG_HEADER } from "@/platform/request-context"
 import { ensureTenant, listMemberTenants } from "@/platform/tenancy/require-member"
@@ -27,6 +28,15 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const current = tenants.find((t) => t.slug === slug)
   const tenant = current ? { slug: current.slug, name: current.name } : { slug, name: slug }
   const entitlements = await getEntitlements({ tenantId: current?.id ?? "" })
+  // Sidebar module gates (task 2.10): a module's items disappear when it is
+  // disabled for the tenant, the same way its routes 404 (L2).
+  const enabledModules = new Set<string>()
+  if (
+    current &&
+    (await isModuleActive({ tenantId: current.id, actor: { kind: "member", userId: user.id, role: "" } }, "newsletter"))
+  ) {
+    enabledModules.add("newsletter")
+  }
 
   const pastDueUntil = current?.status === "PAST_DUE" && current.graceUntil ? toDate(current.graceUntil) : null
 
@@ -44,6 +54,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         tenant={tenant}
         tenants={tenants.map(({ slug, name }) => ({ slug, name }))}
         customRoles={entitlements.has("roles.custom")}
+        enabledModules={enabledModules}
         breadcrumbs={{
           icon: <LayoutGrid className="h-4 w-4" />,
           base: { name: tNav("dashboard"), href: tenantPath(slug) },

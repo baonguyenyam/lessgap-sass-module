@@ -11,6 +11,7 @@ import { byStatus, tenantSubscribers } from "@/platform/newsletter/tenant-list"
 import { getViewerSettings } from "@/platform/settings/tenant-store"
 import { memberCan } from "@/platform/tenancy/permissions"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
+import { requireModuleRoute } from "@/platform/modules/runtime"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -25,6 +26,11 @@ export default async function NewsletterPage({
   let ctx
   try {
     ctx = await requireTenantContext("newsletter", "view")
+    // A disabled module's routes 404 the same as a non-member's (L2).
+    await requireModuleRoute(
+      { tenantId: ctx.tenantId, actor: { kind: "member", userId: ctx.user.id, role: ctx.member.role } },
+      "newsletter"
+    )
   } catch {
     notFound()
   }

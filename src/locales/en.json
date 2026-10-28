@@ -304,6 +304,36 @@
           "slugTaken": "That slug is already taken.",
           "failed": "Something went wrong. Nothing was changed."
         }
+      },
+      "modules": {
+        "title": "Modules",
+        "subtitle": "Features your workspace can turn on and off.",
+        "purgeHint": "Deletion scheduled — data is removed after the grace period.",
+        "status": {
+          "enabled": "Enabled",
+          "disabled": "Disabled",
+          "purgeScheduled": "Deletion scheduled"
+        },
+        "stage": {
+          "experimental": "Experimental",
+          "beta": "Beta",
+          "stable": "Stable",
+          "deprecated": "Deprecated"
+        },
+        "actions": {
+          "enable": "Enable",
+          "disable": "Disable",
+          "export": "Export data",
+          "delete": "Delete data",
+          "cancel": "Cancel deletion",
+          "confirmDelete": "Confirm delete",
+          "typeName": "Type {name} to confirm"
+        },
+        "errors": {
+          "dependency": "A module that depends on this one is still enabled, or a dependency is missing.",
+          "stillEnabled": "Disable the module before deleting its data.",
+          "nameMismatch": "The typed name does not match."
+        }
       }
     },
     "account": {
@@ -439,7 +469,8 @@
       },
       "account": "Account",
       "switchWorkspace": "Switch workspace",
-      "pastDueBanner": "A payment failed — access continues until {date}. Update billing to keep working."
+      "pastDueBanner": "A payment failed — access continues until {date}. Update billing to keep working.",
+      "modules": "Modules"
     },
     "members": {
       "title": "Members",
@@ -824,6 +855,17 @@
         "reasonRequired": "A reason is required.",
         "badExpiry": "That is not a valid date.",
         "notFound": "Override not found."
+      }
+    },
+    "modules": {
+      "title": "Modules",
+      "subtitle": "The registered module catalog.",
+      "empty": "No modules registered.",
+      "columns": {
+        "key": "Key",
+        "name": "Name",
+        "stage": "Stage",
+        "version": "Version"
       }
     }
   },

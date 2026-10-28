@@ -26,6 +26,7 @@ export async function AppShell({
   tenant = null,
   tenants = [],
   customRoles = true,
+  enabledModules,
   children,
 }: {
   area: NavArea
@@ -36,6 +37,7 @@ export async function AppShell({
   tenants?: TenantOption[]
   /** The tenant's `roles.custom` feature: shows or hides the roles entry. */
   customRoles?: boolean
+  enabledModules?: ReadonlySet<string>
   breadcrumbs: React.ComponentProps<typeof HeaderBreadcrumbs>
   children: React.ReactNode
 }) {
@@ -50,6 +52,7 @@ export async function AppShell({
         tenant={tenant}
         tenants={tenants}
         customRoles={customRoles}
+        enabledModules={enabledModules}
       />
       {/* min-w-0: a wide table scrolls inside its card instead of widening the page.
           md:border: the UI has no shadows, so the border sets the page apart from the sidebar.

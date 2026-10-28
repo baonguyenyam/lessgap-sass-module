@@ -422,6 +422,34 @@ trialEndsAt          TimestampString(3)?
     @@rls
   }
 
+  model ModulePurge {
+    id         String             @id(map: "ModulePurge_pkey") @onCreate(cuid(2))
+    tenantId   String
+    moduleKey  String
+    status     String             @default("scheduled")
+    runAfter   TimestampString(3)
+    counts     Json?
+    error      String?
+    canceledAt TimestampString(3)?
+    createdAt  TimestampString(3) @default(now())
+    updatedAt  TimestampString(3) @onCreate(now()) @onUpdate(now())
+    tenant     Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "ModulePurge_tenantId_fkey")
+
+    @@index([tenantId, moduleKey], map: "ModulePurge_tenantId_moduleKey_idx")
+  }
+
+  model ModuleExport {
+    id        String             @id(map: "ModuleExport_pkey") @onCreate(cuid(2))
+    tenantId  String
+    moduleKey String
+    files     Json               @default(json`{}`)
+    expiresAt TimestampString(3)
+    createdAt TimestampString(3) @default(now())
+    tenant    Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "ModuleExport_tenantId_fkey")
+
+    @@index([tenantId], map: "ModuleExport_tenantId_idx")
+  }
+
   policy_all tenant_module_isolation {
     target    = TenantModule
     using     = sql`"tenantId" = current_setting('app.tenant_id', true)`

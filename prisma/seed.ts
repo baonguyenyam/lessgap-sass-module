@@ -121,6 +121,13 @@ async function main() {
       })
     }
 
+    // The module availability switch (task 2.10): `module.<key>` is the
+    // platform-side gate; the tenant still enables it under Settings → Modules.
+    await db8.orm.public.PlatformSwitch.upsert({
+      conflictOn: { key: "module.newsletter" },
+      create: { key: "module.newsletter", value: true, updatedById: "seed" },
+      update: { value: true },
+    })
     console.log(`Seed complete: ${examplePlans.length} example plans upserted`)
     const roots = await grantRootFromConfig()
     if (roots > 0) console.log(`ROOT granted to ${roots} account(s) from ROOT_EMAILS`)

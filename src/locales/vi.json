@@ -304,6 +304,36 @@
           "slugTaken": "Slug này đã có người dùng.",
           "failed": "Đã có lỗi. Chưa có gì thay đổi."
         }
+      },
+      "modules": {
+        "title": "Tiện ích",
+        "subtitle": "Các tính năng workspace có thể bật và tắt.",
+        "purgeHint": "Đã lên lịch xoá — dữ liệu sẽ bị xoá sau thời gian gia hạn.",
+        "status": {
+          "enabled": "Đã bật",
+          "disabled": "Đã tắt",
+          "purgeScheduled": "Đã lên lịch xoá"
+        },
+        "stage": {
+          "experimental": "Thử nghiệm",
+          "beta": "Beta",
+          "stable": "Ổn định",
+          "deprecated": "Ngừng dùng"
+        },
+        "actions": {
+          "enable": "Bật",
+          "disable": "Tắt",
+          "export": "Xuất dữ liệu",
+          "delete": "Xoá dữ liệu",
+          "cancel": "Huỷ xoá",
+          "confirmDelete": "Xác nhận xoá",
+          "typeName": "Nhập {name} để xác nhận"
+        },
+        "errors": {
+          "dependency": "Một tiện ích phụ thuộc vào nó vẫn đang bật, hoặc thiếu phụ thuộc.",
+          "stillEnabled": "Hãy tắt tiện ích trước khi xoá dữ liệu.",
+          "nameMismatch": "Tên nhập vào không khớp."
+        }
       }
     },
     "account": {
@@ -439,7 +469,8 @@
       },
       "account": "Tài khoản",
       "switchWorkspace": "Chuyển không gian làm việc",
-      "pastDueBanner": "Thanh toán thất bại — truy cập tiếp tục đến {date}. Cập nhật thanh toán để tiếp tục."
+      "pastDueBanner": "Thanh toán thất bại — truy cập tiếp tục đến {date}. Cập nhật thanh toán để tiếp tục.",
+      "modules": "Tiện ích"
     },
     "members": {
       "title": "Thành viên",
@@ -824,6 +855,17 @@
         "reasonRequired": "Cần có lý do.",
         "badExpiry": "Ngày không hợp lệ.",
         "notFound": "Không tìm thấy ghi đè."
+      }
+    },
+    "modules": {
+      "title": "Tiện ích",
+      "subtitle": "Danh mục tiện ích đã đăng ký.",
+      "empty": "Chưa có tiện ích nào.",
+      "columns": {
+        "key": "Khoá",
+        "name": "Tên",
+        "stage": "Giai đoạn",
+        "version": "Phiên bản"
       }
     }
   },

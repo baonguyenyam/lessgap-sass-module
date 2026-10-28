@@ -1,0 +1,53 @@
+import { getTranslations } from "next-intl/server"
+import { requirePlatformRole } from "@/platform/staff"
+import { moduleRegistry } from "@/modules/registry"
+import { Badge } from "@/components/ui/badge"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+
+/**
+ * The module catalog (task 2.10, spec/15): every registered module, its stage
+ * and version. Per-tenant operations — enable, disable, export, delete — run
+ * on the tenant's own Settings → Modules page or from the tenant detail.
+ */
+export default async function PlatformModulesPage() {
+  await requirePlatformRole()
+  const t = await getTranslations("platform.modules")
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
+        <p className="text-muted-foreground">{t("subtitle")}</p>
+      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t("columns.key")}</TableHead>
+            <TableHead>{t("columns.name")}</TableHead>
+            <TableHead>{t("columns.stage")}</TableHead>
+            <TableHead>{t("columns.version")}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {Object.entries(moduleRegistry).map(([key, m]) => (
+            <TableRow key={key}>
+              <TableCell className="font-mono text-sm">{key}</TableCell>
+              <TableCell className="font-medium">{m.name}</TableCell>
+              <TableCell>
+                <Badge variant={m.stage === "stable" ? "default" : "secondary"}>{m.stage}</Badge>
+              </TableCell>
+              <TableCell className="font-mono text-sm">{m.version}</TableCell>
+            </TableRow>
+          ))}
+          {Object.keys(moduleRegistry).length === 0 && (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center text-muted-foreground">
+                {t("empty")}
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
+  )
+}

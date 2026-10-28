@@ -97,6 +97,15 @@ export async function enableModule(
       firstEnabledAt: row.firstEnabledAt ?? now,
     })
     return { firstTime: row.firstEnabledAt === null }
+  }).then(async (result) => {
+    // The manifest hook runs once per fresh enable — a module can seed or
+    // sync here, but never on re-enable (spec/15, "Lifecycle").
+    if (result.firstTime) {
+      const hook = (manifest as { lifecycle?: { onEnable?: unknown } }).lifecycle?.onEnable as
+        ((ctx: TenantContext) => Promise<void>) | undefined
+      if (hook) await hook(ctx)
+    }
+    return result
   })
 }
 
@@ -111,7 +120,12 @@ export async function disableModule(
 ): Promise<void> {
   const dependants = dependantsOf(key, registry, await enabledModules(ctx))
   if (dependants.length > 0) throw new AppError("conflict", { field: `dependants:${dependants.join(",")}` })
-  await tenantDb(ctx, (db) =>
+  const changed = await tenantDb(ctx, (db) =>
     db.TenantModule.where({ moduleKey: key, enabled: true }).updateAndCount({ enabled: false, disabledAt: nowTs() })
   )
+  if (changed > 0) {
+    const hook = (registry[key] as { lifecycle?: { onDisable?: unknown } }).lifecycle?.onDisable as
+      ((ctx: TenantContext) => Promise<void>) | undefined
+    if (hook) await hook(ctx)
+  }
 }

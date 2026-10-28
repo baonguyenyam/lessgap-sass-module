@@ -1,6 +1,7 @@
 import type { Route } from "next"
 import { DASHBOARD, tenantPath } from "@/lib/tenant-paths"
 import {
+  Boxes,
   ArrowLeft,
   Building2,
   CreditCard,
@@ -36,7 +37,12 @@ export type NavArea = "dashboard" | "admin" | "platform"
  */
 export function navGroups(
   area: NavArea,
-  { showAdmin, slug, customRoles = true }: { showAdmin: boolean; slug: string; customRoles?: boolean }
+  {
+    showAdmin,
+    slug,
+    customRoles = true,
+    enabledModules,
+  }: { showAdmin: boolean; slug: string; customRoles?: boolean; enabledModules?: ReadonlySet<string> }
 ): NavGroup[] {
   const t = (page = "") => tenantPath(slug, page)
   if (area === "admin") {
@@ -62,6 +68,7 @@ export function navGroups(
         items: [
           { key: "tenants", href: "/platform/tenants", icon: Building2 },
           { key: "plans", href: "/platform/plans", icon: CreditCard },
+          { key: "modules", href: "/platform/modules", icon: Boxes },
           { key: "jobs", href: "/platform/jobs", icon: ListChecks },
           { key: "emails", href: "/platform/emails", icon: Mail },
           { key: "errors", href: "/platform/errors", icon: TriangleAlert },
@@ -80,7 +87,10 @@ export function navGroups(
       key: "workspace",
       items: [
         { key: "members", href: t("members"), icon: Users },
-        { key: "newsletter", href: t("newsletter"), icon: Mail },
+        // A disabled module's routes are hidden, same as its pages (L2).
+        ...(enabledModules && !enabledModules.has("newsletter")
+          ? []
+          : [{ key: "newsletter", href: t("newsletter"), icon: Mail } satisfies NavItem]),
         ...(customRoles ? [{ key: "roles", href: t("roles"), icon: KeyRound } satisfies NavItem] : []),
       ],
     },

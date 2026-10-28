@@ -40,6 +40,26 @@ export const JOBS: JobRegistry = {
       await db8.orm.public.EmailMessage.where((m) => m.createdAt.lt(cutoff)).deleteAndCount()
     },
   },
+  // Module purge (task 2.10, spec/15): after the 7-day grace, calls the
+  // module's onPurge in batches until zero rows remain. Idempotent.
+  "platform.module.purge": {
+    handler: async (payload) => {
+      const { runModulePurge } = await import("@/platform/modules/lifecycle")
+      const purgeId = (payload as { purgeId?: string }).purgeId
+      if (!purgeId) throw new Error("platform.module.purge without a purge id")
+      await runModulePurge(purgeId)
+    },
+  },
+  // Module export (task 2.10, spec/15): writes the module's own rows into the
+  // ModuleExport row's files; the link lives for 7 days.
+  "platform.module.export": {
+    handler: async (payload) => {
+      const { runModuleExport } = await import("@/platform/modules/lifecycle")
+      const exportId = (payload as { exportId?: string }).exportId
+      if (!exportId) throw new Error("platform.module.export without an export id")
+      await runModuleExport(exportId)
+    },
+  },
   // Tenant deletion (task 1.14): the console action enqueues one row per
   // tenant; the purge itself lives in src/platform/tenancy/delete-tenant.ts.
   // Idempotent — deleting a missing tenant is a no-op.

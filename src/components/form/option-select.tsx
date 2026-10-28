@@ -47,7 +47,7 @@ function PlainSelect({
 }: OptionSelectProps) {
   return (
     <Select value={value} onValueChange={onValueChange} disabled={disabled || loading}>
-      <SelectTrigger {...aria} id={id} aria-busy={loading || undefined} className={cn("w-full", className)}>
+      <SelectTrigger {...aria} id={id} aria-busy={loading || undefined} className={cn(className)}>
         <SelectValue placeholder={placeholder} />
         {loading && <Spinner className="ml-auto" />}
       </SelectTrigger>

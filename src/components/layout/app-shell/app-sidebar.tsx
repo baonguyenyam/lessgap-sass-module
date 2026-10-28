@@ -34,6 +34,7 @@ export function AppSidebar({
   tenant,
   tenants,
   customRoles,
+  enabledModules,
 }: {
   area: NavArea
   showAdmin: boolean
@@ -42,6 +43,7 @@ export function AppSidebar({
   tenant: TenantOption | null
   tenants: TenantOption[]
   customRoles: boolean
+  enabledModules?: ReadonlySet<string>
 }) {
   const t = useTranslations("dashboard.nav")
   const pathname = usePathname()
@@ -71,7 +73,7 @@ export function AppSidebar({
         {area === "dashboard" && tenant && <TenantSwitcher current={tenant} tenants={tenants} />}
       </SidebarHeader>
       <SidebarContent>
-        {navGroups(area, { showAdmin, slug: tenant?.slug ?? "", customRoles }).map((group) => (
+        {navGroups(area, { showAdmin, slug: tenant?.slug ?? "", customRoles, enabledModules }).map((group) => (
           <SidebarGroup key={group.key}>
             <SidebarGroupLabel>{t(`groups.${group.key}`)}</SidebarGroupLabel>
             <SidebarGroupContent>
