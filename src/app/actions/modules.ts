@@ -15,7 +15,7 @@ import type { TenantContext } from "@/platform/tenancy/context"
  * (`/t/<slug>/settings/modules`) and for staff (`/platform/modules`).
  */
 
-async function memberCtx(key: string): Promise<TenantContext> {
+async function memberCtx(): Promise<TenantContext> {
   const ctx = await requireTenantContext("settings", "manage")
   return { tenantId: ctx.tenantId, actor: { kind: "member", userId: ctx.user.id, role: ctx.member.role } }
 }
@@ -37,7 +37,7 @@ async function guard(fn: () => Promise<{ error?: string } | void>): Promise<{ er
 export async function setModuleEnabled(key: string, enabled: boolean, tenantId?: string) {
   const t = await getTranslations("dashboard.settings.modules.errors")
   return guard(async () => {
-    const ctx = tenantId ? await staffCtx(tenantId) : await memberCtx(key)
+    const ctx = tenantId ? await staffCtx(tenantId) : await memberCtx()
     if (enabled) await enableModule(ctx, key)
     else await disableModule(ctx, key)
     revalidatePath("/t")
@@ -46,7 +46,7 @@ export async function setModuleEnabled(key: string, enabled: boolean, tenantId?:
 
 export async function requestModuleDataExport(key: string, tenantId?: string) {
   return guard(async () => {
-    const ctx = tenantId ? await staffCtx(tenantId) : await memberCtx(key)
+    const ctx = tenantId ? await staffCtx(tenantId) : await memberCtx()
     await requestModuleExport(ctx, key)
   })
 }
@@ -54,7 +54,7 @@ export async function requestModuleDataExport(key: string, tenantId?: string) {
 export async function scheduleModuleDataPurge(key: string, typedName: string, tenantId?: string) {
   const t = await getTranslations("dashboard.settings.modules.errors")
   return guard(async () => {
-    const ctx = tenantId ? await staffCtx(tenantId) : await memberCtx(key)
+    const ctx = tenantId ? await staffCtx(tenantId) : await memberCtx()
     const result = await scheduleModulePurge(ctx, key, typedName)
     if (result.error === "name_mismatch") return { error: t("nameMismatch") }
     return result
@@ -63,7 +63,7 @@ export async function scheduleModuleDataPurge(key: string, typedName: string, te
 
 export async function cancelModuleDataPurge(key: string, tenantId?: string) {
   return guard(async () => {
-    const ctx = tenantId ? await staffCtx(tenantId) : await memberCtx(key)
+    const ctx = tenantId ? await staffCtx(tenantId) : await memberCtx()
     await cancelModulePurge(ctx, key)
     revalidatePath("/t")
   })

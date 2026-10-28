@@ -1,7 +1,7 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest"
 import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
-import { getMembership, resolveTenantMember } from "@/platform/tenancy/require-member"
+import { resolveTenantMember } from "@/platform/tenancy/require-member"
 import { getEntitlements } from "@/platform/entitlements"
 import { AppError } from "@/platform/errors"
 import { toTs } from "@/lib/timestamps"
@@ -49,7 +49,6 @@ async function provisionPaid(graceDays = 2) {
     currentPeriodEnd: toTs(new Date(Date.now() + 30 * 86400000)),
     cancelAtPeriodEnd: false,
   })
-  const member = await getMembership(user.id)
   return { userId: user.id, tenant, plan, sub, slug: tenant.slug }
 }
 

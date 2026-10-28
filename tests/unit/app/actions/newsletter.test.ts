@@ -7,7 +7,12 @@ vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }))
 vi.mock("next-intl/server", () => ({ getTranslations: async () => (key: string) => key }))
 vi.mock("@/lib/email", () => ({ sendNewsletterConfirmEmail }))
 vi.mock("@/config/site", () => ({ siteConfig: { url: "https://example.com" } }))
-vi.mock("@/platform/tenancy/require-member", () => ({ requireTenantContext: async () => ({ tenantId: "t1" }) }))
+vi.mock("@/platform/tenancy/require-member", () => ({
+  requireTenantContext: async () => ({ tenantId: "t1", user: { id: "u1" }, member: { role: "owner" } }),
+}))
+// The module gate is covered by the lifecycle tests; these tests exercise the
+// action's own logic on an enabled module.
+vi.mock("@/platform/modules/runtime", () => ({ requireModule: vi.fn() }))
 vi.mock("@/lib/db8", async () => (await import("@tests/helpers/db8-mock")).createDb8Mock())
 
 const { addTenantSubscriber, unsubscribeTenantSubscribers } = await import("@/app/actions/newsletter")

@@ -85,7 +85,6 @@ export function ModuleActions({
         <div className="flex items-center gap-2">
           <Input
             aria-label={t("actions.typeName", { name: moduleName })}
-            className="h-8 w-48"
             value={typed}
             onChange={(e) => setTyped(e.target.value)}
           />

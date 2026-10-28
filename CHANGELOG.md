@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.39.0] - 2026-10-28
+
+**Modules get a lifecycle: enable, disable, export, delete.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` — one migration adds `ModulePurge` and `ModuleExport`.
+
+### Added
+
+- **Settings → Modules** (`/t/<slug>/settings/modules`): a tenant owner sees every registered module — enabled, disabled with its data kept, or deletion scheduled — and can enable, disable, export, delete (7-day grace, typed-name confirm) and cancel. Staff mirror the same operations from `/platform/modules`
+- **Module lifecycle runtime**: `enableModule`/`disableModule` run the manifest's `onEnable`/`onDisable` hooks; `scheduleModulePurge`/`cancelModulePurge`/`runModulePurge` drive the 7-day-grace delete through the `platform.module.purge` job — the only writer of module data deletions — and `requestModuleExport`/`runModuleExport` produce a tenant's own rows as files for 7 days
+- **The newsletter module** is the first real one through the lifecycle (`src/modules/newsletter/module.ts`, decision 2-A): its nav item and routes hide when disabled, its `onPurge` deletes only this tenant's rows in batches, its `onExport` is a JSON dump
+
 ## [2.38.0] - 2026-10-28
 
 **A failed payment starts a grace period, not a dead end.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` — one migration adds `Plan.gracePeriodDays` and `Tenant.graceUntil`.

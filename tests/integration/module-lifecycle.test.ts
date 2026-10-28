@@ -1,14 +1,8 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest"
 import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
-import { getMembership } from "@/platform/tenancy/require-member"
-import { systemContext, type TenantContext } from "@/platform/tenancy/context"
-import {
-  disableModule,
-  enableModule,
-  isModuleActive,
-  requireModule,
-} from "@/platform/modules/runtime"
+import type { TenantContext } from "@/platform/tenancy/context"
+import { disableModule, enableModule, isModuleActive, requireModule } from "@/platform/modules/runtime"
 import {
   cancelModulePurge,
   describeModuleData,
@@ -46,7 +40,11 @@ function memberCtx(tenantId: string, userId = "u1"): TenantContext {
 
 async function provision(subscribers = 0) {
   const { user } = await auth.api.signUpEmail({
-    body: { email: `mod-${Date.now()}-${Math.random()}@example.test`, password: "correct horse battery staple", name: "M" },
+    body: {
+      email: `mod-${Date.now()}-${Math.random()}@example.test`,
+      password: "correct horse battery staple",
+      name: "M",
+    },
   })
   const tenant = await auth.api.createOrganization({
     body: { name: "ModCo", slug: `mod-${Date.now()}`, userId: user.id },
