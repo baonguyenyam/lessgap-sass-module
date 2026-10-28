@@ -4,7 +4,7 @@ import { db8 } from "@/lib/db8"
 import { newTimeId } from "@/lib/ids"
 import { nowTs, toTs } from "@/lib/timestamps"
 import { deleteTenant } from "@/platform/tenancy/delete-tenant"
-import { resetDatabase } from "@tests/helpers/db"
+import { resetDatabase, activateTenant } from "@tests/helpers/db"
 
 // Task 1.14, T9: after deletion no tenant-owned table holds a row with the
 // tenant's id — and the tenant-identity tables (member, invitation, role) are
@@ -47,6 +47,7 @@ describe("tenant deletion (T9)", () => {
     const userId = await signUp()
     const slug = `purge-${Date.now()}-${++seq}`
     const tenant = await auth.api.createOrganization({ body: { name: "Purge Me", slug, userId } })
+    await activateTenant(tenant.id)
     const plan = await Plan.create({ name: "Purge Plan", slug, price: 100, interval: "MONTH" })
     const addOn = await AddOn.create({ key: slug, name: "Purge Add-on", stripePriceId: `price_${slug}` })
 
@@ -136,6 +137,7 @@ describe("tenant deletion (T9)", () => {
     const userId = await signUp()
     const slug = `job-${Date.now()}-${++seq}`
     const tenant = await auth.api.createOrganization({ body: { name: "Job Me", slug, userId } })
+    await activateTenant(tenant.id)
 
     const { JOBS } = await import("@/platform/jobs/registry")
     await JOBS["platform.tenant.delete"].handler(

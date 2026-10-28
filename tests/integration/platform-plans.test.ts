@@ -3,7 +3,7 @@ import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
 import { nowTs, toTs } from "@/lib/timestamps"
 import { getEntitlements } from "@/platform/entitlements"
-import { resetDatabase } from "@tests/helpers/db"
+import { resetDatabase, activateTenant } from "@tests/helpers/db"
 
 // Task 2.5: an edited plan changes what its tenants resolve on their next
 // read — no cache of the old map survives, and the save knows how many
@@ -29,6 +29,7 @@ describe("platform plans", () => {
     const tenant = await auth.api.createOrganization({
       body: { name: "Planned", slug: `pp-${Date.now()}`, userId: user.id },
     })
+    await activateTenant(tenant.id)
     const plan = await Plan.create({
       name: "Cap Plan",
       slug: `cap-${Date.now()}`,

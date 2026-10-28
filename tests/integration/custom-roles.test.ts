@@ -1,7 +1,7 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest"
 import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
-import { resetDatabase } from "@tests/helpers/db"
+import { resetDatabase, activateTenant } from "@tests/helpers/db"
 
 // Task 1.3: a custom role created through the plugin may only use declared permissions.
 async function signedInOwner() {
@@ -16,6 +16,7 @@ async function signedInOwner() {
     body: { name: "Roles Tenant", slug: `roles-${Date.now()}` },
     headers: session,
   })
+  await activateTenant(tenant.id)
   return { session, tenantId: tenant!.id, userId: response.user.id }
 }
 

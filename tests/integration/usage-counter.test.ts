@@ -4,7 +4,7 @@ import { db8 } from "@/lib/db8"
 import { nowTs, toTs } from "@/lib/timestamps"
 import { AppError } from "@/platform/errors"
 import { consumeLimit } from "@/platform/entitlements/usage"
-import { resetDatabase } from "@tests/helpers/db"
+import { resetDatabase, activateTenant } from "@tests/helpers/db"
 
 // Task 2.3, roadmap exit criterion: concurrent consumeLimit calls on the same
 // period bucket never take the total past the limit — the conditional UPDATE
@@ -25,6 +25,7 @@ async function tenantWithLimit(limit: number) {
   const tenant = await auth.api.createOrganization({
     body: { name: "Capped", slug: `cap-${Date.now()}`, userId: user.id },
   })
+  await activateTenant(tenant.id)
   const plan = await Plan.create({
     name: "Cap Plan",
     slug: `plan-${Date.now()}`,

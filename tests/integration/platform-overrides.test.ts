@@ -3,7 +3,7 @@ import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
 import { toTs } from "@/lib/timestamps"
 import { getEntitlements } from "@/platform/entitlements"
-import { resetDatabase } from "@tests/helpers/db"
+import { resetDatabase, activateTenant } from "@tests/helpers/db"
 
 // Task 2.6: an override visibly flips a tenant's ent.has, names staff and
 // reason in the audit row, and an expired override stops applying without
@@ -29,6 +29,7 @@ describe("tenant overrides", () => {
     const tenant = await auth.api.createOrganization({
       body: { name: "Overridden", slug: `ov-${Date.now()}`, userId: user.id },
     })
+    await activateTenant(tenant.id)
 
     expect((await getEntitlements({ tenantId: tenant.id })).has("roles.custom")).toBe(true)
 

@@ -4,7 +4,7 @@ import { db8 } from "@/lib/db8"
 import { getEntitlements } from "@/platform/entitlements"
 import { FEATURES } from "@/platform/entitlements/registry"
 import { memberCan } from "@/platform/tenancy/permissions"
-import { resetDatabase } from "@tests/helpers/db"
+import { resetDatabase, activateTenant } from "@tests/helpers/db"
 
 // Task 1.8b: custom roles through the plugin, gated by `roles.custom` and
 // capped by `roles.max`. Outside Next, "use cache" helpers would throw.
@@ -25,6 +25,7 @@ async function signedInOwner() {
     body: { name: "Roles Tenant", slug: `roles-${Date.now()}-${seq}` },
     headers: session,
   })
+  await activateTenant(tenant.id)
   return { session, tenantId: tenant!.id }
 }
 

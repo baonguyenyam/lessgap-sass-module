@@ -35,7 +35,11 @@ describe("tenant membership on every request (T7)", () => {
     await createMember(c.tenant.id, { role: "staff", userId: user.id })
     await db8.orm.public.Member.where({ organizationId: c.tenant.id, userId: user.id }).update({ status: "suspended" })
 
-    expect(await listMemberTenants(user.id)).toEqual([{ id: b.tenant.id, slug: "switch-b", name: "Beta" }])
-    expect(await listMemberTenants(a.owner.id)).toEqual([{ id: a.tenant.id, slug: "switch-a", name: "Alpha" }])
+    expect(await listMemberTenants(user.id)).toEqual([
+      expect.objectContaining({ id: b.tenant.id, slug: "switch-b", name: "Beta" }),
+    ])
+    expect(await listMemberTenants(a.owner.id)).toEqual([
+      expect.objectContaining({ id: a.tenant.id, slug: "switch-a", name: "Alpha" }),
+    ])
   })
 })

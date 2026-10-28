@@ -2,7 +2,7 @@ import { afterAll, beforeEach, describe, expect, it, vi } from "vitest"
 import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
-import { resetDatabase } from "@tests/helpers/db"
+import { resetDatabase, activateTenant } from "@tests/helpers/db"
 import type { PlatformRole } from "@/platform/tenancy/context"
 
 // Task 1.11, T8: tenant impersonation — reason required, banner session fields,
@@ -26,6 +26,7 @@ async function tenantWithOwner() {
     headers: owner.session,
     body: { name: "Impersonable", slug: `imp-${Date.now()}-${++seq}` },
   })
+  await activateTenant(tenant.id)
   await db8.orm.public.Tenant.where({ id: tenant.id }).update({ status: "ACTIVE" })
   return { owner, tenantId: tenant!.id }
 }

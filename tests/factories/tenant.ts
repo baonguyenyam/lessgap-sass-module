@@ -25,6 +25,12 @@ export async function createTenant(
     },
   })
   const tenant = (await db8.orm.public.Tenant.where({ id: created!.id }).first())!
+  // createOrganization lands PROVISIONING (the signup wizard flips it in the
+  // real flow); a fixture tenant is ready to serve its members.
+  if (tenant.status === "PROVISIONING") {
+    await db8.orm.public.Tenant.where({ id: tenant.id }).update({ status: "ACTIVE" })
+    return { tenant: { ...tenant, status: "ACTIVE" as const }, owner }
+  }
   return { tenant, owner }
 }
 

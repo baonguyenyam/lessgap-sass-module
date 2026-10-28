@@ -16,3 +16,9 @@ export async function resetDatabase() {
     await pool.end()
   }
 }
+
+/** createOrganization lands PROVISIONING; tests that resolve the tenant flip it. */
+export async function activateTenant(id: string) {
+  const { db8 } = await import("@/lib/db8")
+  await db8.orm.public.Tenant.where({ id }).update({ status: "ACTIVE" })
+}

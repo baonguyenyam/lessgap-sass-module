@@ -3,7 +3,7 @@ import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
 import { toTs } from "@/lib/timestamps"
 import { findInvitation, tenantRoleKeys } from "@/platform/tenancy/invitations"
-import { resetDatabase } from "@tests/helpers/db"
+import { resetDatabase, activateTenant } from "@tests/helpers/db"
 
 // Task 1.8: invitations through the organization plugin, with real sessions.
 // Every email is replaced (they render with next-intl, which needs a request,
@@ -28,6 +28,7 @@ async function tenantWithOwner() {
     body: { name: "Invite Tenant", slug: `invite-${Date.now()}-${++seq}` },
     headers: owner.session,
   })
+  await activateTenant(tenant.id)
   return { owner, tenantId: tenant!.id }
 }
 

@@ -1,7 +1,7 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest"
 import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
-import { resetDatabase } from "@tests/helpers/db"
+import { resetDatabase, activateTenant } from "@tests/helpers/db"
 import { runTenantPerUserBackfill } from "@/platform/backfills/tenant-per-user"
 
 /**
@@ -63,6 +63,7 @@ describe("backfill tenant-per-user (M4)", () => {
       const tenant = await auth.api.createOrganization({
         body: { name: "Already", slug: `already-${Date.now()}`, userId: withTenant },
       })
+      await activateTenant(tenant.id)
       const without = await signUp()
 
       const dry = await runTenantPerUserBackfill({ apply: false, log })

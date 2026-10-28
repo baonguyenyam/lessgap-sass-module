@@ -26,6 +26,8 @@ export const MODEL_CLASSIFICATION = {
   Invitation: { kind: "identity", reason: "Better Auth tenant invitations." },
   Job: { kind: "platform-private", reason: "Platform job queue; a tenant id is the job's scope, run by the system." },
   Member: { kind: "identity", reason: "Better Auth tenant membership records." },
+  ModuleExport: { kind: "tenant-owned", reason: "A tenant's own module data export; expires after 7 days." },
+  ModulePurge: { kind: "tenant-owned", reason: "A scheduled or finished module deletion for one tenant." },
   NewsletterSubscriber: {
     kind: "tenant-owned",
     reason: "Subscriber rows may belong to a tenant; a null tenantId is the platform list.",
