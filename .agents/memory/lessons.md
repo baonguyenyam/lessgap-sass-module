@@ -318,3 +318,11 @@ Read before every task. Format and rules: [README.md](./README.md). Newest first
 - **Cause:** `timestamp(3)` columns are UTC by convention; node-postgres parses and serialises them in local time.
 - **Fix:** `src/lib/kysely.ts` pins both directions to UTC.
 - **Rule:** any new `pg` connection reuses the same type parser settings (or goes through `@/lib/kysely`).
+
+### 2026-10-28 · better-auth · internalAdapter returns only declared fields
+- **Symptom:** `impersonateStart` always answered FORBIDDEN for real staff.
+- **Cause:** `platformRole` is a column on User but not a `user.additionalFields`
+  entry, so `internalAdapter.findUserById` never returns it.
+- **Fix:** read it through `db8.orm.public.User.select("platformRole")` instead.
+- **Rule:** inside Better Auth endpoints, columns the config does not declare are
+  invisible to `internalAdapter` — use db8 for anything beyond the declared fields.

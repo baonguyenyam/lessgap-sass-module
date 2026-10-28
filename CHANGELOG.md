@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.26.0] - 2026-10-28
+
+**Platform staff can open a tenant's dashboard as its owner.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` — two nullable columns join `Session`.
+
+### Added
+
+- **Tenant impersonation** (task 1.11): from a tenant's detail page, support and admin staff open its dashboard as the owner. A written reason is required, shown on the banner the whole time, recorded on the audit row at start and stop, and attached to every mutation made while impersonating — those rows name the staff member, not the owner. The session ends itself after 60 minutes or immediately with "End impersonation", which lands back on the console. Suspended and canceled tenants cannot be impersonated
+
 ## [2.25.0] - 2026-10-28
 
 **Platform staff get their own console at `/platform`.** This is a MINOR: `git pull`, `pnpm install`; no migration.
