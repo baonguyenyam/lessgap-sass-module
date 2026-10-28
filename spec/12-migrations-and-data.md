@@ -66,15 +66,26 @@ Declared in the contract (`@@rls` and a policy block per operation, see the
 `prisma-8` skill, `contract.md`), so the planner writes it into the migration
 and `db verify` checks it. The resulting SQL is equivalent to:
 
-```sql
-ALTER TABLE "Appointment" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "Appointment" FORCE ROW LEVEL SECURITY;
-CREATE POLICY "Appointment_tenant_isolation" ON "Appointment"
-  USING ("tenantId" = current_setting('app.tenant_id', true))
-  WITH CHECK ("tenantId" = current_setting('app.tenant_id', true));
+```prisma
+model Appointment {
+  // …
+  @@rls
+}
+
+policy_all appointment_tenant_isolation {
+  target    = Appointment
+  using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+}
 ```
 
-Test M3 fails when a tenant-owned table lacks it.
+The planner emits `ENABLE ROW LEVEL SECURITY` and one `CREATE POLICY … FOR ALL
+TO PUBLIC`. No `FORCE`: the owner (migrations, maintenance) and the
+`platform` role bypass the policy, the `app` role does not. `TenantSetting`
+is the first table with it (phase 1, task 1.5).
+
+Test M3 (`tests/unit/platform/tenancy/tenant-db.test.ts`) fails when a
+tenant-owned table lacks it, unless the table is on its recorded pending list.
 
 ## Database roles
 

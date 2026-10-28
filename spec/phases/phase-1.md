@@ -60,7 +60,7 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - **Files:** `src/platform/tenancy/tenant-db.ts`, `src/platform/tenancy/rls.ts`, tests; first tenant-owned table used for tests only (`TenantNote`, test-only model or a real small model such as `TenantSetting`).
 - **Tests:** T4 (unit), T1, T2, T3 (integration with `withTwoTenants`), M3.
 - **Checks:** `pnpm test`, `pnpm test:integration`; measure query overhead and record it in Findings.
-- [ ] done
+- [x] done (`tenantDb(ctx, fn)` runs `fn` in one transaction with `app.tenant_id` set and hands it collections narrowed to the tenant: creates get the tenant id, data naming another tenant throws `forbidden`. `TenantSetting` has `@@rls` and a `policy_all` in the contract (migration `platform_tenant_setting_rls`); the settings store reads it through the platform client and writes through `tenantDb`. T4 unit, T1, T2, T3 (app role, raw SQL) and an upsert in integration with `withTwoTenants`; M3 checks every tenant-owned model has RLS or a recorded pending reason. Overhead in Findings.)
 
 ### 1.6 — Tenant settings and module enablement storage
 - **Goal:** `TenantModule` (as in data-model.md) and `isModuleActive` using it (entitlements arrive in phase 2). `ModulePurge` and `ModuleExport` and the Settings → Modules page are phase 2.
@@ -135,6 +135,8 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - Query overhead of `tenantDb` recorded in Findings.
 
 ## Findings
+- 2026-10-28, task 1.5: **query overhead of `tenantDb`** on the local PostgreSQL (docker, same machine): a plain ORM read 2.02 ms, the same read through `tenantDb` 4.80 ms, mean of 100 runs — about 2.8 ms for `BEGIN`, `set_config` and `COMMIT`. Batch several reads into one `tenantDb` call where a page needs many. Re-measure against Neon in phase 8.
+- 2026-10-28, task 1.5: **`NewsletterSubscriber` has no RLS yet.** The platform's own list (`tenantId` null) shares the table with tenant lists, and about ten readers (public confirm and unsubscribe pages, the signup API, the admin pages, the account export) use the default client with no tenant. Enabling the policy first needs those readers on the platform client, a change of its own; M3 carries it as the one pending table so no new table can skip RLS.
 - 2026-10-28, task 1.3: Better Auth's organization plugin authorises its own endpoints against the statements `ac` (custom roles), `member`, `invitation` and `organization`, which the product catalog never declared, so creating a custom role answered "You are not allowed to create a role" even for an owner. The plugin statements are now derived from the catalog (`withPluginGrants`), so the catalog stays the only list people edit.
 - 2026-10-28, task 1.1: Prisma 8 rejects a migration whose `from` equals its `to` (`MIGRATION.CHECK_NOOP_SELF_EDGE`) unless an operation carries an `invariantId`, and the runner takes such an edge only when the target ref requires that invariant, so `pnpm db:migrate` would never apply it. Database roles are cluster objects with no contract counterpart, so they live in `scripts/db-roles.mjs` (`pnpm db:roles`), run once per database, by CI after M1 and by the integration setup.
 - 2026-10-26: Switch As (ADR 0015) already gives ROOT a session as another

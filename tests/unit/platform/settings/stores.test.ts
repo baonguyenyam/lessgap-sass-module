@@ -9,6 +9,15 @@ vi.mock("next/cache", () => cacheApi)
 vi.mock("@/lib/db8", async () => (await import("@tests/helpers/db8-mock")).createDb8Mock())
 vi.mock("@/lib/auth", () => ({ getCurrentUser: async () => null }))
 vi.mock("@/platform/tenancy/require-member", () => ({ getMembership: async () => null }))
+// Task 1.5: tenant settings are read through the platform client and written
+// through tenantDb; both stand on the same db8 stand-in here.
+vi.mock("@/platform/db", async () => ({ platformDb: (await import("@/lib/db8")).db8 }))
+vi.mock("@/platform/tenancy/tenant-db", async () => {
+  const { db8 } = await import("@/lib/db8")
+  return {
+    tenantDb: (_ctx: unknown, fn: (db: unknown) => unknown) => fn({ TenantSetting: db8.orm.public.TenantSetting }),
+  }
+})
 
 const db = (await import("@/lib/db8")) as unknown as Db8Mock
 const { getPlatformSettings, saveSettings } = await import("@/platform/settings/store")

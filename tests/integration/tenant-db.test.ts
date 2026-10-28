@@ -21,6 +21,22 @@ describe("tenantDb isolation", () => {
     expect(seenByA.map((row) => [row.tenantId, row.value])).toEqual([[a.tenant.id, 50]])
   })
 
+  it("upserts inside the tenant, as the settings store does", async () => {
+    const { a } = await withTwoTenants()
+    const save = (value: number) =>
+      tenantDb(ctx(a.tenant.id), (db) =>
+        db.TenantSetting.upsert({
+          conflictOn: { tenantId: a.tenant.id, key: "display.page_size" },
+          create: { key: "display.page_size", value: value as never } as never,
+          update: { value: value as never },
+        })
+      )
+    await save(20)
+    await save(50)
+    const rows = await db8.orm.public.TenantSetting.where({ tenantId: a.tenant.id }).all()
+    expect(rows.map((row) => row.value)).toEqual([50])
+  })
+
   it("T2: a tenant cannot change or delete another tenant's row", async () => {
     const { a, b } = await withTwoTenants()
     await tenantDb(ctx(b.tenant.id), (db) => db.TenantSetting.create({ key: "k", value: 1 as never }))
