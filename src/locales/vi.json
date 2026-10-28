@@ -334,6 +334,39 @@
           "stillEnabled": "Hãy tắt tiện ích trước khi xoá dữ liệu.",
           "nameMismatch": "Tên nhập vào không khớp."
         }
+      },
+      "site": {
+        "title": "Trang web",
+        "subtitle": "Nội dung trang công khai của bạn.",
+        "profile": "Hồ sơ doanh nghiệp",
+        "hours": "Giờ mở cửa",
+        "appearance": "Giao diện",
+        "fields": {
+          "name": "Tên doanh nghiệp",
+          "tagline": "Khẩu hiệu",
+          "phone": "Điện thoại",
+          "email": "Email",
+          "address": "Địa chỉ",
+          "accentColor": "Màu chủ đạo"
+        },
+        "days": {
+          "mon": "T2",
+          "tue": "T3",
+          "wed": "T4",
+          "thu": "T5",
+          "fri": "T6",
+          "sat": "T7",
+          "sun": "CN"
+        },
+        "hoursPlaceholder": "09:00-17:00",
+        "hoursHint": "Để trống nếu đóng cửa",
+        "save": "Lưu",
+        "saving": "Đang lưu…",
+        "saved": "Đã lưu.",
+        "errors": {
+          "nameRequired": "Cần tên doanh nghiệp.",
+          "hoursInvalid": "Giờ cho {day} phải dạng 09:00-17:00."
+        }
       }
     },
     "account": {
@@ -470,7 +503,8 @@
       "account": "Tài khoản",
       "switchWorkspace": "Chuyển không gian làm việc",
       "pastDueBanner": "Thanh toán thất bại — truy cập tiếp tục đến {date}. Cập nhật thanh toán để tiếp tục.",
-      "modules": "Tiện ích"
+      "modules": "Tiện ích",
+      "site": "Trang web"
     },
     "members": {
       "title": "Thành viên",

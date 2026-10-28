@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.42.0] - 2026-10-28
+
+**Tenants edit their site content from the dashboard.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **Settings → Site** (`/t/<slug>/settings/site`): company profile (name, tagline, phone, email, address), opening hours (`HH:MM-HH:MM` or closed, per day) and the accent colour — saving creates the `Site` row on first use and audits `site.settings.saved`
+
 ## [2.41.0] - 2026-10-28
 
 **A tenant's site has a schema: `Site`, `SiteSettings`, `Page`, `Media`.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` — one migration adds the four site tables.

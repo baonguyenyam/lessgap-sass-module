@@ -66,7 +66,7 @@ set upload rules and rollouts from the console.
 - **Tests:** integration — edits persist and audit; unit — hours validation.
 - **Checks:** `pnpm test`, `pnpm test:integration`.
 - **Done when:** a tenant's site settings save from the dashboard.
-- [ ] done
+- [x] done (`/t/<slug>/settings/site` — `saveSiteSettings` upserts `Site` (created on first save, `themeKey: "main"`) and `SiteSettings` (profile, hours, appearance JSON) under `settings.manage`, audits `site.settings.saved`, and `updateTag("site:<tenant>")` so the site revalidates. `src/lib/hours.ts` `parseHours` validates `HH:MM-HH:MM` or `closed` per day (unit `hours.test.ts`); `SiteSettingsForm` renders the five profile fields, seven hour rows and the accent colour. `site` joins the tenant settings nav; translations en+vi. Integration `site-settings.test.ts` — saves and audits, refuses a blank name and bad hours.)
 
 ### 3.4 — Upload rules + Media through R2
 - **Goal:** platform console sets upload rules (allowed types, max size —

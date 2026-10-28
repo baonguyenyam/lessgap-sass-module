@@ -2,6 +2,7 @@ import type { Route } from "next"
 import { DASHBOARD, tenantPath } from "@/lib/tenant-paths"
 import {
   Boxes,
+  Globe,
   ArrowLeft,
   Building2,
   CreditCard,
@@ -100,6 +101,7 @@ export function navGroups(
         { key: "billing", href: t("billing"), icon: CreditCard },
         { key: "account", href: "/dashboard/account", icon: UserRound },
         { key: "settings", href: t("settings"), icon: SlidersHorizontal },
+        { key: "site", href: `${t("settings")}/site` as Route, icon: Globe },
         ...(showAdmin ? [{ key: "adminPanel", href: "/admin", icon: Shield } satisfies NavItem] : []),
       ],
     },

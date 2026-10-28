@@ -334,6 +334,39 @@
           "stillEnabled": "Disable the module before deleting its data.",
           "nameMismatch": "The typed name does not match."
         }
+      },
+      "site": {
+        "title": "Site",
+        "subtitle": "What your public site says about the business.",
+        "profile": "Company profile",
+        "hours": "Opening hours",
+        "appearance": "Appearance",
+        "fields": {
+          "name": "Business name",
+          "tagline": "Tagline",
+          "phone": "Phone",
+          "email": "Email",
+          "address": "Address",
+          "accentColor": "Accent colour"
+        },
+        "days": {
+          "mon": "Mon",
+          "tue": "Tue",
+          "wed": "Wed",
+          "thu": "Thu",
+          "fri": "Fri",
+          "sat": "Sat",
+          "sun": "Sun"
+        },
+        "hoursPlaceholder": "09:00-17:00",
+        "hoursHint": "Leave empty for closed",
+        "save": "Save",
+        "saving": "Saving…",
+        "saved": "Saved.",
+        "errors": {
+          "nameRequired": "Business name is required.",
+          "hoursInvalid": "Hours for {day} must look like 09:00-17:00."
+        }
       }
     },
     "account": {
@@ -470,7 +503,8 @@
       "account": "Account",
       "switchWorkspace": "Switch workspace",
       "pastDueBanner": "A payment failed — access continues until {date}. Update billing to keep working.",
-      "modules": "Modules"
+      "modules": "Modules",
+      "site": "Site"
     },
     "members": {
       "title": "Members",
