@@ -29,6 +29,7 @@ export const MODEL_CLASSIFICATION = {
   Session: { kind: "identity", reason: "Better Auth login sessions." },
   Subscription: { kind: "identity", reason: "Legacy kit subscriptions are linked to their User." },
   Tenant: { kind: "platform-private", reason: "Platform-managed tenant directory and lifecycle state." },
+  TenantModule: { kind: "tenant-owned", reason: "Which modules one tenant has turned on." },
   TenantSetting: { kind: "tenant-owned", reason: "Settings belong to one tenant." },
   TwoFactor: { kind: "identity", reason: "Better Auth two-factor credentials." },
   User: { kind: "identity", reason: "Better Auth user accounts." },

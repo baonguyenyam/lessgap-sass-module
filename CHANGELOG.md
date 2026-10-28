@@ -9,13 +9,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ## [2.21.0] - 2026-10-28
 
-**Phase 1 begins: database roles, and custom roles work again.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (row-level security on `TenantSetting`); `pnpm db:roles` is a one-time step when you split database users.
+**Phase 1 begins: database roles, and custom roles work again.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (row-level security on `TenantSetting`, a new `TenantModule` table); `pnpm db:roles` is a one-time step when you split database users.
 
 ### Added
 
 - **`pnpm db:roles`** (task 1.1): creates the `app` (RLS enforced) and `platform` (bypasses RLS) database roles with their grants, safely re-runnable. New optional variables `DATABASE_URL_PLATFORM` and `DATABASE_URL_MIGRATE`; unset, `DATABASE_URL` keeps doing every job. Migrations, `pnpm db:reset`, backups and the admin panel's migrate use `DATABASE_URL_MIGRATE` when it is set. Steps in spec/14, "Database roles"
 - `src/platform/db.ts`, the platform client for cross-tenant reads
 - **`tenantDb(ctx, fn)`**, the scoped client for tenant-owned data (task 1.5): one transaction with `app.tenant_id` set, every collection narrowed to the tenant. `TenantSetting` now has row-level security (migration `platform_tenant_setting_rls`: run `pnpm db:migrate`)
+- **Module enablement per tenant** (task 1.6): a `TenantModule` table (migration `platform_tenant_modules`) and `isModuleActive`, `enableModule`, `disableModule`, `requireModule`, `requireModuleRoute`. A module is active when it is registered, switched on for the platform (`module.<key>`), enabled by the tenant and its dependencies are active; a module others depend on cannot be disabled
 
 ### Fixed
 

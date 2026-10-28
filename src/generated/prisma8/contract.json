@@ -64,6 +64,10 @@
       "model": "Tenant",
       "namespace": "public"
     },
+    "TenantModule": {
+      "model": "TenantModule",
+      "namespace": "public"
+    },
     "TenantSetting": {
       "model": "TenantSetting",
       "namespace": "public"
@@ -2137,6 +2141,21 @@
                   "namespace": "public"
                 }
               },
+              "modules": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "tenantId"
+                  ]
+                },
+                "to": {
+                  "model": "TenantModule",
+                  "namespace": "public"
+                }
+              },
               "roles": {
                 "cardinality": "1:N",
                 "on": {
@@ -2233,6 +2252,149 @@
               },
               "namespaceId": "public",
               "table": "Tenant"
+            }
+          },
+          "TenantModule": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "disabledAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "enabled": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "enabledAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "firstEnabledAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "moduleKey": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "settings": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              }
+            },
+            "relations": {
+              "tenant": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "tenantId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tenant",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "disabledAt": {
+                  "column": "disabledAt"
+                },
+                "enabled": {
+                  "column": "enabled"
+                },
+                "enabledAt": {
+                  "column": "enabledAt"
+                },
+                "firstEnabledAt": {
+                  "column": "firstEnabledAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "moduleKey": {
+                  "column": "moduleKey"
+                },
+                "settings": {
+                  "column": "settings"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "TenantModule"
             }
           },
           "TenantSetting": {
@@ -2967,6 +3129,18 @@
             }
           },
           "policy": {
+            "tenant_module_isolation": {
+              "kind": "policy",
+              "name": "tenant_module_isolation_c516f4ff",
+              "namespaceId": "public",
+              "operation": "all",
+              "permissive": true,
+              "prefix": "tenant_module_isolation",
+              "roles": [],
+              "tableName": "TenantModule",
+              "using": "\"tenantId\" = current_setting('app.tenant_id', true)",
+              "withCheck": "\"tenantId\" = current_setting('app.tenant_id', true)"
+            },
             "tenant_setting_isolation": {
               "kind": "policy",
               "name": "tenant_setting_isolation_c516f4ff",
@@ -2981,6 +3155,11 @@
             }
           },
           "rls": {
+            "TenantModule": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "TenantModule"
+            },
             "TenantSetting": {
               "kind": "rls",
               "namespaceId": "public",
@@ -4850,6 +5029,136 @@
               },
               "uniques": []
             },
+            "TenantModule": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "disabledAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "enabled": {
+                  "codecId": "pg/bool@1",
+                  "dataType": "pg/bool",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nullable": false
+                },
+                "enabledAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "firstEnabledAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "moduleKey": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "settings": {
+                  "codecId": "pg/json@1",
+                  "dataType": "pg/json",
+                  "nullable": true
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "TenantModule_tenantId_idx_c93ed4f1"
+                  },
+                  "name": "TenantModule_tenantId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "tenantId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "TenantModule"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tenant"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "tenantId"
+                  ],
+                  "name": "TenantModule_tenantId_idx_c93ed4f1",
+                  "prefix": "TenantModule_tenantId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "tenantId",
+                    "moduleKey"
+                  ],
+                  "name": "TenantModule_tenantId_moduleKey_key",
+                  "unique": true
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "TenantModule_pkey"
+              },
+              "uniques": []
+            },
             "TenantSetting": {
               "columns": {
                 "key": {
@@ -5396,10 +5705,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "380db2a5812355eca8175dd24a64a1cff5f2e49d0b34ac36ad06b14704761259"
+    "storageHash": "79c32f893fd0351a810ad8b9c40b6ed3d263f58e6fd0560db7ffdc884de250b7"
   },
   "execution": {
-    "executionHash": "365acb882aef04183b863bd6d1994bcdc8bdf98856af732e8cb42ebda635ef2e",
+    "executionHash": "180d13e7bafa43cae99813a4c6d906b963e094c98ebcb58f80c337319be669d9",
     "mutations": {
       "defaults": [
         {
@@ -5719,6 +6028,28 @@
           },
           "ref": {
             "entry": "Tenant",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "TenantModule",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onUpdate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "TenantModule",
             "field": "updatedAt",
             "namespace": "public"
           }

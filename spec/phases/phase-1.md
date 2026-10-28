@@ -67,7 +67,7 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - **Files:** `prisma/schema/platform.prisma`, migration, `src/platform/modules/runtime.ts`, tests.
 - **Tests:** enable/disable is idempotent; disabling a dependency is refused; disabled module's routes 404 (integration with a fixture module).
 - **Checks:** `pnpm test`, `pnpm test:integration`, `pnpm modules:check`.
-- [ ] done
+- [x] done (`TenantModule` with RLS from the start, migration `platform_tenant_modules`; `isModuleActive(ctx, key)` = registered + platform switch `module.<key>` (`getPlatformSwitches`) + enabled + every `dependsOn` active, cycle-safe; `requireModule` (actions, `module_inactive`) and `requireModuleRoute` (routes, 404); `enableModule` / `disableModule` idempotent through `tenantDb`, enabling before a dependency and disabling a dependency both refused with `conflict`. Unit tests for the rule; integration with a fixture registry for idempotence, dependencies, the 404 and tenant separation. Entitlements are treated as granted until phase 2.)
 
 ### 1.7 — Dashboard under /t/[slug] and tenant switcher
 - **Goal:** move the dashboard routes, land users on their last or only tenant, switch tenants.

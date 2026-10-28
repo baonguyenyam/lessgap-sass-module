@@ -23,9 +23,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'380db2a5812355eca8175dd24a64a1cff5f2e49d0b34ac36ad06b14704761259'>;
+  StorageHashBase<'79c32f893fd0351a810ad8b9c40b6ed3d263f58e6fd0560db7ffdc884de250b7'>;
 export type ExecutionHash =
-  ExecutionHashBase<'365acb882aef04183b863bd6d1994bcdc8bdf98856af732e8cb42ebda635ef2e'>;
+  ExecutionHashBase<'180d13e7bafa43cae99813a4c6d906b963e094c98ebcb58f80c337319be669d9'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -582,10 +582,26 @@ export namespace Models {
     verticalKey: FieldOutputTypes['public']['Tenant']['verticalKey'];
     invitations: public_Invitation[];
     members: public_Member[];
+    modules: public_TenantModule[];
     roles: public_OrganizationRole[];
     settings: public_TenantSetting[];
     subscribers: public_NewsletterSubscriber[];
-    readonly [RelationKeys]?: 'invitations' | 'members' | 'roles' | 'settings' | 'subscribers';
+    readonly [RelationKeys]?:
+      'invitations' | 'members' | 'modules' | 'roles' | 'settings' | 'subscribers';
+  };
+  export type public_TenantModule = {
+    createdAt: FieldOutputTypes['public']['TenantModule']['createdAt'];
+    disabledAt: FieldOutputTypes['public']['TenantModule']['disabledAt'];
+    enabled: FieldOutputTypes['public']['TenantModule']['enabled'];
+    enabledAt: FieldOutputTypes['public']['TenantModule']['enabledAt'];
+    firstEnabledAt: FieldOutputTypes['public']['TenantModule']['firstEnabledAt'];
+    id: FieldOutputTypes['public']['TenantModule']['id'];
+    moduleKey: FieldOutputTypes['public']['TenantModule']['moduleKey'];
+    settings: FieldOutputTypes['public']['TenantModule']['settings'];
+    tenantId: FieldOutputTypes['public']['TenantModule']['tenantId'];
+    updatedAt: FieldOutputTypes['public']['TenantModule']['updatedAt'];
+    tenant: public_Tenant;
+    readonly [RelationKeys]?: 'tenant';
   };
   export type public_TenantSetting = {
     key: FieldOutputTypes['public']['TenantSetting']['key'];
@@ -678,6 +694,7 @@ export declare const models: {
     Session: Models.public_Session;
     Subscription: Models.public_Subscription;
     Tenant: Models.public_Tenant;
+    TenantModule: Models.public_TenantModule;
     TenantSetting: Models.public_TenantSetting;
     TwoFactor: Models.public_TwoFactor;
     User: Models.public_User;
@@ -2253,6 +2270,111 @@ type ContractBase = Omit<
               ];
               foreignKeys: readonly [];
             };
+            readonly TenantModule: {
+              columns: {
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly disabledAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly enabled: {
+                  readonly dataType: 'pg/bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', false>;
+                  };
+                  readonly many: false;
+                };
+                readonly enabledAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly firstEnabledAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly moduleKey: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly settings: {
+                  readonly dataType: 'pg/json';
+                  readonly codecId: 'pg/json@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly tenantId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id']; readonly name: 'TenantModule_pkey' };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'TenantModule_tenantId_idx_c93ed4f1';
+                  readonly prefix: 'TenantModule_tenantId_idx';
+                  readonly columns: readonly ['tenantId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'TenantModule_tenantId_moduleKey_key';
+                  readonly columns: readonly ['tenantId', 'moduleKey'];
+                  readonly unique: true;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'TenantModule';
+                    readonly columns: readonly ['tenantId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Tenant';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'TenantModule_tenantId_fkey';
+                },
+              ];
+            };
             readonly TenantSetting: {
               columns: {
                 readonly key: {
@@ -2732,6 +2854,10 @@ type ContractBase = Omit<
       readonly model: 'Subscription';
     };
     readonly Tenant: { readonly namespace: 'public' & NamespaceId; readonly model: 'Tenant' };
+    readonly TenantModule: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'TenantModule';
+    };
     readonly TenantSetting: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'TenantSetting';
@@ -4025,6 +4151,17 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['organizationId'];
                 };
               };
+              readonly modules: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'TenantModule';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['tenantId'];
+                };
+              };
               readonly roles: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -4078,6 +4215,100 @@ type ContractBase = Omit<
                 readonly timeZone: { readonly column: 'timeZone' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
                 readonly verticalKey: { readonly column: 'verticalKey' };
+              };
+            };
+          };
+          readonly TenantModule: {
+            readonly fields: {
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly disabledAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly enabled: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly enabledAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly firstEnabledAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly moduleKey: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly settings: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
+              };
+              readonly tenantId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly tenant: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Tenant';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['tenantId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'TenantModule';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly disabledAt: { readonly column: 'disabledAt' };
+                readonly enabled: { readonly column: 'enabled' };
+                readonly enabledAt: { readonly column: 'enabledAt' };
+                readonly firstEnabledAt: { readonly column: 'firstEnabledAt' };
+                readonly id: { readonly column: 'id' };
+                readonly moduleKey: { readonly column: 'moduleKey' };
+                readonly settings: { readonly column: 'settings' };
+                readonly tenantId: { readonly column: 'tenantId' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
               };
             };
           };
@@ -4756,6 +4987,22 @@ type ContractBase = Omit<
           readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'Tenant';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'TenantModule';
+            readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'TenantModule';
             readonly field: 'updatedAt';
             readonly namespace: 'public';
           };

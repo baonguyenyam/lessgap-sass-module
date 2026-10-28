@@ -288,6 +288,7 @@ trialEndsAt          TimestampString(3)?
     invitations      Invitation[]
     roles            OrganizationRole[]
     settings         TenantSetting[]
+    modules          TenantModule[]
     subscribers      NewsletterSubscriber[]
 
     @@index([slug], map: "Tenant_slug_key", unique: true)
@@ -307,6 +308,32 @@ trialEndsAt          TimestampString(3)?
 
     @@id([tenantId, key], map: "TenantSetting_pkey")
     @@rls
+  }
+
+  // Which modules a tenant has turned on (spec/09-data-model.md,
+  // spec/15-module-system.md "Lifecycle"; phase 1, task 1.6). Disabling keeps
+  // the row and the module's data; firstEnabledAt records that onEnable ran.
+  model TenantModule {
+    id             String              @id(map: "TenantModule_pkey") @onCreate(cuid(2))
+    tenantId       String
+    moduleKey      String
+    enabled        Boolean             @default(false)
+    settings       Json?
+    enabledAt      TimestampString(3)?
+    disabledAt     TimestampString(3)?
+    firstEnabledAt TimestampString(3)?
+    createdAt      TimestampString(3)  @default(now())
+    updatedAt      TimestampString(3)  @default(now()) @onUpdate(now())
+    tenant         Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "TenantModule_tenantId_fkey")
+
+    @@index([tenantId, moduleKey], map: "TenantModule_tenantId_moduleKey_key", unique: true)
+    @@rls
+  }
+
+  policy_all tenant_module_isolation {
+    target    = TenantModule
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
   }
 
   // Tenant isolation (spec/02-tenancy.md, line 2): a row is visible and

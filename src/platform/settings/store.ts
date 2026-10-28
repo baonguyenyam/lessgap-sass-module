@@ -38,6 +38,20 @@ async function load(): Promise<PlatformSettings> {
 export const getPlatformSettings = cache(load)
 
 /**
+ * Every stored switch by key, including the ones the settings registry does
+ * not type, such as `module.<key>` (spec/15-module-system.md). Same cache and
+ * the same fallback: nothing is on when the database cannot be read.
+ */
+export const getPlatformSwitches = cache(async (): Promise<Record<string, unknown>> => {
+  try {
+    return Object.fromEntries((await readRows()).map((row) => [row.key, row.value]))
+  } catch (error) {
+    console.error("[platform-settings] read failed, no switches on:", error)
+    return {}
+  }
+})
+
+/**
  * Stores the given values (already validated and authorised by the caller).
  * Called from a server action: `updateTag` makes the next read wait for the
  * new values instead of serving the cached ones.
