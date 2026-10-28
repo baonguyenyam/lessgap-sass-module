@@ -36,7 +36,10 @@ export async function createMember(
   const user = options.userId
     ? (await db8.orm.public.User.where({ id: options.userId }).first())!
     : await createUser({ name: "Tenant Member" })
-  await auth.api.addMember({ body: { userId: user.id, organizationId: tenantId, role: options.role ?? "staff" } })
+  // The plugin's types know only its default role names; the configured
+  // tenant roles (owner, manager, staff, custom) are accepted at runtime.
+  const role = (options.role ?? "staff") as "member"
+  await auth.api.addMember({ body: { userId: user.id, organizationId: tenantId, role } })
   const member = (await db8.orm.public.Member.where({ organizationId: tenantId, userId: user.id }).first())!
   return { member, user }
 }
