@@ -1,0 +1,138 @@
+# Phase 3 — Site engine and domains
+
+**Status:** draft
+**Roadmap:** [roadmap.md#phase-3--site-engine-and-domains](../roadmap.md)
+**Read first:** [architecture.md](../01-architecture.md), [domains.md](../03-domains.md), [sites-themes-verticals.md](../06-sites-themes-verticals.md), ADR 0004, 0005, 0018.
+
+## Goal
+
+Every tenant has a live site at `<slug>.<sites-domain>`: the proxy resolves
+the host to a tenant and rewrites to `/sites/[host]`, a `Site` with its
+`SiteSettings`, `Page` and `Media` rows renders through the shared theme, and
+the dashboard edits publish inside ten seconds via cache tags. Tenants can
+attach custom domains — `Domain` rows with a lifecycle and a verification
+job — with a provider abstraction that works on both our hosts: Vercel for
+test and preview, DigitalOcean for production (decision 3-A). Platform staff
+set upload rules and rollouts from the console.
+
+## Out of scope
+
+- Tenant-authored page content editing (visual builder) — the schema and
+  rendering land here; the editor is a later phase.
+- Second theme and verticals — phase 4 proves the theme contract with two
+  designs.
+- The onboarding wizard — phase 4; `ensureTenant` keeps activating directly.
+
+## Decisions needed before starting
+| # | Question | Options | Decision |
+|---|---|---|---|
+| 3-A | Production host for domains | Vercel / DigitalOcean | **DigitalOcean production, Vercel test/preview** — the domains layer is a `DomainProvider` interface with a Vercel implementation (test) and a self-managed DigitalOcean one (production wildcard + per-domain verification) |
+| 3-B | `Site` vs direct `Tenant` fields | One `Site` per tenant vs fields on `Tenant` | **One `Site` row per tenant** (`tenantId` unique) — spec/09 keeps site data off the tenant row |
+| 3-C | Theme shape | Registry of key→module | **Theme manifest + registry** per spec/06; one shared theme `main` built to the full contract |
+
+## Tasks
+
+### 3.1 — Host resolution: proxy → `/sites/[host]`
+- **Goal:** `resolveHost(host)` in `src/platform/tenancy/host.ts` (spec/03):
+  platform hosts → marketing/app surface, `<slug>.<sites-domain>` → tenant by
+  slug (active only), else `Domain` by hostname → its tenant; proxy rewrites
+  tenant hosts to `/sites/[host]`; reserved slugs (`www`, `app`, `api`,
+  `admin`, `mail`, …); dev host map `<slug>.localhost:3000`.
+- **Files:** `src/platform/tenancy/host.ts`, `src/proxy.ts` (or middleware),
+  `src/app/[locale]/(site)/sites/[host]/*` skeleton, `src/config/sites.ts`.
+- **Tests:** unit — every row of the resolution table in domains.md (platform
+  host, slug subdomain, custom domain, suspended → 404, reserved slug,
+  localhost dev map); integration — a `/sites/[host]` page renders the tenant.
+- **Checks:** `pnpm test`, `pnpm test:integration`.
+- **Done when:** `localhost` tenant subdomains resolve and proxy rewrites.
+- [ ] done
+
+### 3.2 — `Site`, `SiteSettings`, `Page`, `Media` schema
+- **Goal:** contract models per spec/09 — `Site` (one per tenant), `SiteSettings`
+  (company profile, hours, appearance), `Page`, `Media` (R2-backed rows) —
+  tenant-owned with RLS; `deleteTenant` covers them.
+- **Files:** `prisma/contract.prisma`, `migrations/app/<ts>_platform_site_schema`,
+  `src/platform/tenancy/models.ts`, `src/platform/tenancy/delete-tenant.ts`.
+- **Tests:** integration — T9 tenant deletion covers the new models.
+- **Checks:** `pnpm db:emit`, `pnpm db:plan`, `pnpm db:migrate`, `pnpm audit:tenancy`.
+- **Done when:** models exist tenant-owned, deletion verified.
+- [ ] done
+
+### 3.3 — Tenant dashboard: company profile, hours, pages, appearance
+- **Goal:** `/t/<slug>/settings/site` pages for the `SiteSettings` fields —
+  company profile, opening hours, page list, appearance — writes audited.
+- **Files:** `src/app/(dashboard)/t/[slug]/settings/site/*`, actions, nav,
+  translations.
+- **Tests:** integration — edits persist and audit; unit — hours validation.
+- **Checks:** `pnpm test`, `pnpm test:integration`.
+- **Done when:** a tenant's site settings save from the dashboard.
+- [ ] done
+
+### 3.4 — Upload rules + Media through R2
+- **Goal:** platform console sets upload rules (allowed types, max size —
+  `upload.types`, `upload.max_mb` platform settings); the server enforces them
+  before signing an upload and after it completes; `Media` rows record files
+  in R2 (ADR 0018).
+- **Files:** `/platform/settings` entries or a dedicated section,
+  `src/platform/media/*`, upload route, settings registry.
+- **Tests:** unit — rule enforcement before sign and after upload; integration —
+  console edit takes effect.
+- **Checks:** `pnpm test`, `pnpm test:integration`.
+- **Done when:** an over-limit upload refuses both at sign-time and after.
+- [ ] done
+
+### 3.5 — Theme registry + one shared theme
+- **Goal:** theme manifest type per spec/06, `src/themes/` registry, one
+  shared theme `main` built to the full contract with fixtures.
+- **Files:** `src/themes/main/*`, `src/themes/registry.ts`, theme manifest
+  schema, `tests/contract/themes.test.ts`.
+- **Tests:** contract test — the theme satisfies the manifest schema; unit —
+  fixtures render.
+- **Checks:** `pnpm test`, `pnpm modules:check`.
+- **Done when:** `/sites/[host]` renders `main` with the site's settings.
+- [ ] done
+
+### 3.6 — Per-host robots, sitemap, JSON-LD, publish cache
+- **Goal:** `robots.txt` and `sitemap.xml` per host (suspended → empty;
+  custom domain redirects to primary), LocalBusiness JSON-LD from
+  `SiteSettings`, `updateTag` on every site-settings write so an edit is live
+  within 10 seconds.
+- **Files:** `src/app/(site|sites)/*`, `src/lib/structured-data.ts` reuse,
+  cache tags.
+- **Tests:** unit — per-host robots/sitemap rules; E2E — edit hours, live ≤10s.
+- **Checks:** `pnpm test`, E2E.
+- **Done when:** the publish-latency E2E is green.
+- [ ] done
+
+### 3.7 — `Domain` lifecycle + verification job + provider abstraction
+- **Goal:** `Domain` model (hostname, tenantId, status, verification state,
+  `isPrimary`), `DomainProvider` interface with `VercelDomainProvider` (test
+  environments) and `DigitalOceanDomainProvider` (production) selected by env;
+  tenant adds a domain → `pending` → `platform.domain.verify` job checks DNS
+  and updates status → primary selection redirects all others (308).
+- **Files:** `prisma/contract.prisma` (`Domain`), `src/platform/domains/*`,
+  `JOBS` `platform.domain.verify`, `/t/<slug>/settings/domains`,
+  `/platform/tenants/[slug]` domain section, translations.
+- **Tests:** unit — provider selection, primary-redirect logic; integration —
+  lifecycle pending→active; E2E — dev custom host redirect works.
+- **Checks:** `pnpm test`, `pnpm test:integration`, E2E.
+- **Done when:** both providers exist behind one interface and the lifecycle
+  is green on a dev host.
+- [ ] done
+
+## Exit criteria
+
+- E2E: a tenant created in the console is served at `<slug>.<sites-domain>`;
+  editing hours shows on the site within 10 seconds.
+- E2E with a dev custom host: primary domain redirect works; subdomain
+  redirects to it.
+- Accessibility E2E passes on the shared theme's fixture site.
+- Unit: host resolution for every row of the table in domains.md.
+- `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm test:integration`,
+  `pnpm modules:check`, `pnpm audit:tenancy` all green.
+
+## Findings
+
+- Decision 3-A (user): production = DigitalOcean, test/preview = Vercel — the
+  `DomainProvider` abstraction is the phase's key interface, not an
+  afterthought.
