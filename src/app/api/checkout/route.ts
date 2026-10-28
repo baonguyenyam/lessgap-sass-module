@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { stripe } from "@/lib/stripe"
 import { db8 } from "@/lib/db8"
-import { CHECKOUT_BLOCKING_STATUSES, trialDaysFor } from "@/lib/billing"
+import { CHECKOUT_BLOCKING_STATUSES, checkoutLineItems, trialDaysFor } from "@/lib/billing"
 import { ensureTenant } from "@/platform/tenancy/require-member"
 import { AUTOMATIC_TAX_PARAMS, checkStripeTax } from "@/lib/stripe-tax"
 import type Stripe from "stripe"
@@ -17,7 +17,49 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Billing is not configured" }, { status: 503 })
   }
 
-  const { priceId } = await req.json()
+  const body = await req.json()
+  const { priceId, addonId } = body as { priceId?: string; addonId?: string }
+
+  // An add-on checkout is a one-time Stripe payment whose webhook grants a
+  // TenantAddOn row (task 2.7).
+  if (addonId) {
+    const { tenantId } = await ensureTenant(currentUser)
+    const addOn = await db8.orm.public.AddOn.where({ id: addonId }).first()
+    if (!addOn || !addOn.isActive || !addOn.stripePriceId) {
+      return NextResponse.json({ error: "Invalid add-on" }, { status: 400 })
+    }
+    const owned = await db8.orm.public.TenantAddOn.where({ tenantId, addOnId: addOn.id }).first()
+    if (owned) {
+      return NextResponse.json({ error: "Add-on already purchased" }, { status: 400 })
+    }
+    const user = await db8.orm.public.User.select("stripeCustomerId", "email", "name")
+      .where({ id: currentUser.id })
+      .first()
+    if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 })
+    let customerId = user.stripeCustomerId
+    if (!customerId) {
+      const customer = await stripe.customers.create({
+        email: user.email,
+        name: user.name ?? undefined,
+        metadata: { tenantId },
+      })
+      customerId = customer.id
+      await db8.orm.public.User.where({ id: currentUser.id }).update({ stripeCustomerId: customerId })
+    }
+    const metadata = { tenantId, addonId: addOn.id }
+    const checkoutSession = await stripe.checkout.sessions.create({
+      customer: customerId,
+      mode: "payment",
+      line_items: [{ price: addOn.stripePriceId, quantity: 1 }],
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/billing?success=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/billing?canceled=true`,
+      metadata,
+      invoice_creation: { enabled: true },
+      payment_intent_data: { metadata },
+    })
+    return NextResponse.json({ url: checkoutSession.url })
+  }
+
   if (!priceId) {
     return NextResponse.json({ error: "Price ID required" }, { status: 400 })
   }
@@ -26,7 +68,16 @@ export async function POST(req: NextRequest) {
   // Stripe computes the amount server-side, so this isn't about underpaying;
   // it's intent + defense in depth. The webhook only grants a plan when the
   // price maps to a Plan row, so an unknown price would mean "paid for nothing".
-  const plan = await db8.orm.public.Plan.select("id", "interval", "meterEventName", "isActive", "trialDays")
+  const plan = await db8.orm.public.Plan.select(
+    "id",
+    "name",
+    "interval",
+    "meterEventName",
+    "isActive",
+    "trialDays",
+    "setupFeeCents",
+    "stripePriceId"
+  )
     .where({ stripePriceId: priceId })
     .first()
   if (!plan || !plan.isActive) {
@@ -67,7 +118,7 @@ export async function POST(req: NextRequest) {
     const customer = await stripe.customers.create({
       email: user.email,
       name: user.name ?? undefined,
-      metadata: { userId: currentUser.id },
+      metadata: { tenantId },
     })
     customerId = customer.id
     await db8.orm.public.User.where({ id: currentUser.id }).update({ stripeCustomerId: customerId })
@@ -77,13 +128,14 @@ export async function POST(req: NextRequest) {
 
   // planId in metadata saves the webhook a listLineItems call: the session
   // event doesn't include line items, and the plan was validated above.
-  const metadata = { userId: currentUser.id, tenantId, planId: plan.id }
+  const metadata = { tenantId, planId: plan.id }
 
   const params: Stripe.Checkout.SessionCreateParams = {
     customer: customerId,
     mode: isOneTime ? "payment" : "subscription",
-    // Metered prices bill from reported usage, so Stripe rejects a quantity.
-    line_items: [plan.meterEventName ? { price: priceId } : { price: priceId, quantity: 1 }],
+    // The plan's price plus its setup fee — the fee only on the very first
+    // checkout, so a re-subscribe after cancelling never charges it again.
+    line_items: checkoutLineItems(plan, subscription === null && purchases.length === 0),
     success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/billing?success=true`,
     cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/billing?canceled=true`,
     metadata,

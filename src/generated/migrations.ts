@@ -22,4 +22,6 @@ export const MIGRATIONS: readonly MigrationEdge[] = [
   { name: "20261028T1614_platform_session_impersonation", from: "d927132041fdd4862a0a32a8c3ff5253e06d5165b4dfe61d3e7ee9f650483a2e", to: "4c38a62ad25336ed1418a5be092074fd47a9186f4fa2190b367a94a86e198c63" },
   { name: "20261028T1759_platform_email_payload", from: "4c38a62ad25336ed1418a5be092074fd47a9186f4fa2190b367a94a86e198c63", to: "368c0f832bf717aae07a211a316faa92e5b72946f90895162a8e58bbaa1a0def" },
   { name: "20261028T1836_platform_entitlement_schema", from: "368c0f832bf717aae07a211a316faa92e5b72946f90895162a8e58bbaa1a0def", to: "c08b36563264571a863a535b9c306ad9c0305559b75497eb2ba95c132bc40e2b" },
+  { name: "20261028T1922_platform_subscription_free_plan", from: "c08b36563264571a863a535b9c306ad9c0305559b75497eb2ba95c132bc40e2b", to: "8df07bc27c1ad7747df83fe7ab886e71c2fd0bb92caff790fca3245ff65d21d7" },
+  { name: "20261028T1926_platform_purchase_addon", from: "8df07bc27c1ad7747df83fe7ab886e71c2fd0bb92caff790fca3245ff65d21d7", to: "d7db91618cbf15dda1340e26963f9fbd88d338024bff3d79ad5d432d27788be1" },
 ]

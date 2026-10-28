@@ -5,7 +5,8 @@ import type Stripe from "stripe"
 // a real client just to read the constant below.
 vi.mock("@/lib/db8", () => ({ db8: {} }))
 
-const { CHECKOUT_BLOCKING_STATUSES, trialDaysFor, subscriptionDates, describeDiscount } = await import("@/lib/billing")
+const { CHECKOUT_BLOCKING_STATUSES, trialDaysFor, subscriptionDates, describeDiscount, checkoutLineItems } =
+  await import("@/lib/billing")
 
 describe("CHECKOUT_BLOCKING_STATUSES", () => {
   it("lists the statuses Stripe still manages", () => {
@@ -129,5 +130,22 @@ describe("describeDiscount", () => {
   it("leaves out a coupon it cannot put into words", () => {
     expect(describeDiscount(discount(coupon({})))).toBeNull()
     expect(describeDiscount(discount(coupon({ percent_off: 10, duration: "someday" })))).toBeNull()
+  })
+})
+
+describe("checkoutLineItems", () => {
+  const plan = { stripePriceId: "price_1", meterEventName: null, setupFeeCents: 4900, name: "Pro" }
+
+  it("adds the setup fee on the first checkout only", () => {
+    const first = checkoutLineItems(plan, true)
+    expect(first).toHaveLength(2)
+    expect(first[1]).toMatchObject({ price_data: { unit_amount: 4900 }, quantity: 1 })
+    const again = checkoutLineItems(plan, false)
+    expect(again).toHaveLength(1)
+  })
+
+  it("skips the fee entirely on plans without one", () => {
+    expect(checkoutLineItems({ ...plan, setupFeeCents: null }, true)).toHaveLength(1)
+    expect(checkoutLineItems({ ...plan, setupFeeCents: 0 }, true)).toHaveLength(1)
   })
 })

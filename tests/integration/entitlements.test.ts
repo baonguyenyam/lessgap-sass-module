@@ -91,4 +91,30 @@ describe("getEntitlements (task 2.2)", () => {
     expect(overridden.has("roles.custom")).toBe(false)
     expect(overridden.limit("roles.max")).toBe(0)
   })
+
+  it("a free plan assigned without Stripe resolves its feature map (task 2.7)", async () => {
+    const { Plan, Subscription } = db8.orm.public
+    const { assignFreePlan } = await import("@/lib/billing")
+    const { user } = await auth.api.signUpEmail({
+      body: { email: `free-${Date.now()}@example.test`, password: "correct horse battery staple", name: "Free" },
+    })
+    const tenant = await auth.api.createOrganization({
+      body: { name: "Freebies", slug: `free-${Date.now()}`, userId: user.id },
+    })
+    const plan = await Plan.create({
+      name: "Free",
+      slug: `free-${Date.now()}`,
+      price: 0,
+      interval: "MONTH",
+      features: { "roles.max": 3 },
+    })
+
+    await assignFreePlan(tenant.id, plan)
+
+    const ent = await getEntitlements({ tenantId: tenant.id })
+    expect(ent.limit("roles.max")).toBe(3)
+    const sub = await Subscription.where({ tenantId: tenant.id }).first()
+    expect(sub?.stripeSubscriptionId).toBeNull()
+    expect(sub?.status).toBe("ACTIVE")
+  })
 })

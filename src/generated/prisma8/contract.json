@@ -349,6 +349,21 @@
               }
             },
             "relations": {
+              "purchases": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "addOnId"
+                  ]
+                },
+                "to": {
+                  "model": "Purchase",
+                  "namespace": "public"
+                }
+              },
               "tenantAddOns": {
                 "cardinality": "1:N",
                 "on": {
@@ -1957,6 +1972,13 @@
           },
           "Purchase": {
             "fields": {
+              "addOnId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "amount": {
                 "nullable": false,
                 "type": {
@@ -1989,7 +2011,7 @@
                 }
               },
               "planId": {
-                "nullable": false,
+                "nullable": true,
                 "type": {
                   "codecId": "pg/text@1",
                   "kind": "scalar"
@@ -2038,9 +2060,25 @@
               }
             },
             "relations": {
+              "addOn": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "addOnId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "AddOn",
+                  "namespace": "public"
+                }
+              },
               "plan": {
                 "cardinality": "N:1",
-                "nullable": false,
+                "nullable": true,
                 "on": {
                   "localFields": [
                     "planId"
@@ -2073,6 +2111,9 @@
             },
             "storage": {
               "fields": {
+                "addOnId": {
+                  "column": "addOnId"
+                },
                 "amount": {
                   "column": "amount"
                 },
@@ -2329,7 +2370,7 @@
                 }
               },
               "stripeSubscriptionId": {
-                "nullable": false,
+                "nullable": true,
                 "type": {
                   "codecId": "pg/text@1",
                   "kind": "scalar"
@@ -5476,6 +5517,11 @@
             },
             "Purchase": {
               "columns": {
+                "addOnId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
                 "amount": {
                   "codecId": "pg/int4@1",
                   "dataType": "pg/int4",
@@ -5510,7 +5556,7 @@
                 "planId": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
-                  "nullable": false
+                  "nullable": true
                 },
                 "status": {
                   "codecId": "pg/enum@1",
@@ -5572,6 +5618,25 @@
                     ],
                     "namespaceId": "public",
                     "tableName": "Plan"
+                  }
+                },
+                {
+                  "name": "Purchase_addOnId_fkey",
+                  "onDelete": "restrict",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "addOnId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Purchase"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "AddOn"
                   }
                 },
                 {
@@ -5818,7 +5883,7 @@
                 "stripeSubscriptionId": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
-                  "nullable": false
+                  "nullable": true
                 },
                 "tenantId": {
                   "codecId": "pg/text@1",
@@ -6955,7 +7020,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "c08b36563264571a863a535b9c306ad9c0305559b75497eb2ba95c132bc40e2b"
+    "storageHash": "d7db91618cbf15dda1340e26963f9fbd88d338024bff3d79ad5d432d27788be1"
   },
   "execution": {
     "executionHash": "4909b387c650a5789a1075caffd5bf593ee47b98ecc2f48ce11b9f5cd1fa3c04",

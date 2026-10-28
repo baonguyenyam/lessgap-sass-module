@@ -23,7 +23,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'c08b36563264571a863a535b9c306ad9c0305559b75497eb2ba95c132bc40e2b'>;
+  StorageHashBase<'d7db91618cbf15dda1340e26963f9fbd88d338024bff3d79ad5d432d27788be1'>;
 export type ExecutionHash =
   ExecutionHashBase<'4909b387c650a5789a1075caffd5bf593ee47b98ecc2f48ce11b9f5cd1fa3c04'>;
 export type ProfileHash =
@@ -405,8 +405,9 @@ export namespace Models {
     name: FieldOutputTypes['public']['AddOn']['name'];
     stripePriceId: FieldOutputTypes['public']['AddOn']['stripePriceId'];
     updatedAt: FieldOutputTypes['public']['AddOn']['updatedAt'];
+    purchases: public_Purchase[];
     tenantAddOns: public_TenantAddOn[];
-    readonly [RelationKeys]?: 'tenantAddOns';
+    readonly [RelationKeys]?: 'purchases' | 'tenantAddOns';
   };
   export type public_AuditLog = {
     action: FieldOutputTypes['public']['AuditLog']['action'];
@@ -571,6 +572,7 @@ export namespace Models {
     readonly [RelationKeys]?: 'user';
   };
   export type public_Purchase = {
+    addOnId: FieldOutputTypes['public']['Purchase']['addOnId'];
     amount: FieldOutputTypes['public']['Purchase']['amount'];
     createdAt: FieldOutputTypes['public']['Purchase']['createdAt'];
     currency: FieldOutputTypes['public']['Purchase']['currency'];
@@ -581,9 +583,10 @@ export namespace Models {
     stripePaymentIntentId: FieldOutputTypes['public']['Purchase']['stripePaymentIntentId'];
     tenantId: FieldOutputTypes['public']['Purchase']['tenantId'];
     updatedAt: FieldOutputTypes['public']['Purchase']['updatedAt'];
-    plan: public_Plan;
+    addOn: public_AddOn | null;
+    plan: public_Plan | null;
     tenant: public_Tenant;
-    readonly [RelationKeys]?: 'plan' | 'tenant';
+    readonly [RelationKeys]?: 'addOn' | 'plan' | 'tenant';
   };
   export type public_Session = {
     activeOrganizationId: FieldOutputTypes['public']['Session']['activeOrganizationId'];
@@ -2164,6 +2167,12 @@ type ContractBase = Omit<
             };
             readonly Purchase: {
               columns: {
+                readonly addOnId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
                 readonly amount: {
                   readonly dataType: 'pg/int4';
                   readonly codecId: 'pg/int4@1';
@@ -2197,7 +2206,7 @@ type ContractBase = Omit<
                 readonly planId: {
                   readonly dataType: 'pg/text';
                   readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
+                  readonly nullable: true;
                   readonly many: false;
                 };
                 readonly status: {
@@ -2269,6 +2278,19 @@ type ContractBase = Omit<
                     readonly columns: readonly ['id'];
                   };
                   readonly name: 'Purchase_planId_fkey';
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Purchase';
+                    readonly columns: readonly ['addOnId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'AddOn';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'Purchase_addOnId_fkey';
                 },
                 {
                   readonly source: {
@@ -2450,7 +2472,7 @@ type ContractBase = Omit<
                 readonly stripeSubscriptionId: {
                   readonly dataType: 'pg/text';
                   readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
+                  readonly nullable: true;
                   readonly many: false;
                 };
                 readonly tenantId: {
@@ -3589,6 +3611,17 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly purchases: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Purchase';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['addOnId'];
+                };
+              };
               readonly tenantAddOns: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -4579,6 +4612,10 @@ type ContractBase = Omit<
           };
           readonly Purchase: {
             readonly fields: {
+              readonly addOnId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
               readonly amount: {
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
@@ -4600,7 +4637,7 @@ type ContractBase = Omit<
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
               readonly planId: {
-                readonly nullable: false;
+                readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
               readonly status: {
@@ -4633,10 +4670,22 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly addOn: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'AddOn';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['addOnId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
               readonly plan: {
                 readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Plan' };
                 readonly cardinality: 'N:1';
-                readonly nullable: false;
+                readonly nullable: true;
                 readonly on: {
                   readonly localFields: readonly ['planId'];
                   readonly targetFields: readonly ['id'];
@@ -4659,6 +4708,7 @@ type ContractBase = Omit<
               readonly table: 'Purchase';
               readonly namespaceId: 'public';
               readonly fields: {
+                readonly addOnId: { readonly column: 'addOnId' };
                 readonly amount: { readonly column: 'amount' };
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly currency: { readonly column: 'currency' };
@@ -4812,7 +4862,7 @@ type ContractBase = Omit<
                 };
               };
               readonly stripeSubscriptionId: {
-                readonly nullable: false;
+                readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
               readonly tenantId: {

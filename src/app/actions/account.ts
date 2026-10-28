@@ -174,7 +174,7 @@ export async function deleteAccount(formData: FormData) {
   //
   // Stripe is only touched when there is something to cancel, so a deployment
   // without billing configured never reaches this call.
-  if (subscription && BILLING_STATUSES.includes(subscription.status)) {
+  if (subscription && subscription.stripeSubscriptionId && BILLING_STATUSES.includes(subscription.status)) {
     try {
       await stripe.subscriptions.cancel(subscription.stripeSubscriptionId)
     } catch (error) {

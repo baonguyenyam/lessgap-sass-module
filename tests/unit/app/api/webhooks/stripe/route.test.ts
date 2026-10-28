@@ -144,6 +144,7 @@ describe("POST /api/webhooks/stripe: a refused email never fails the payment", (
     db.fn("Plan.first").mockResolvedValue({ id: "plan_1", name: "Lifetime", price: 9900 })
     db.fn("Purchase.first").mockResolvedValue(null)
     db.fn("Purchase.upsert").mockResolvedValue({ id: "purchase_1" })
+    db.fn("Member.first").mockResolvedValue({ userId: "user_1" })
     db.fn("User.first").mockResolvedValue({ email: "buyer@example.com", name: "Buyer" })
   })
 
@@ -162,5 +163,31 @@ describe("POST /api/webhooks/stripe: a refused email never fails the payment", (
     expect(response.status).toBe(200)
     expect(db.fn("Purchase.upsert")).toHaveBeenCalledOnce()
     log.mockRestore()
+  })
+})
+
+describe("POST /api/webhooks/stripe: an add-on checkout grants the tenant, not a plan", () => {
+  const addOnPaid = () =>
+    event("checkout.session.completed", {
+      id: "cs_ao",
+      mode: "payment",
+      payment_intent: "pi_ao",
+      amount_total: 1500,
+      currency: "usd",
+      metadata: { tenantId: "t_1", addonId: "ao_1" },
+    })
+
+  it("creates the TenantAddOn and the Purchase keyed on the tenant", async () => {
+    db.fn("AddOn.first").mockResolvedValue({ id: "ao_1", name: "Extra seats" })
+    db.fn("Purchase.first").mockResolvedValue(null)
+    db.fn("Member.first").mockResolvedValue({ userId: "user_1" })
+    const response = await POST(signed(addOnPaid()) as never)
+    expect(response.status).toBe(200)
+    expect(db.fn("TenantAddOn.upsert")).toHaveBeenCalledWith(
+      expect.objectContaining({ create: expect.objectContaining({ tenantId: "t_1", addOnId: "ao_1" }) })
+    )
+    expect(db.fn("Purchase.upsert")).toHaveBeenCalledWith(
+      expect.objectContaining({ create: expect.objectContaining({ tenantId: "t_1", addOnId: "ao_1" }) })
+    )
   })
 })

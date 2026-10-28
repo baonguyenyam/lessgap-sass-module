@@ -12,6 +12,7 @@ import { offsetOf, parseTableQuery, type TableQuerySpec } from "@/lib/table-quer
 import { getViewerSettings } from "@/platform/settings/tenant-store"
 import { ManageBillingButton } from "@/components/billing/manage-billing-button"
 import { SubscriptionStatusBadge } from "@/components/billing/subscription-status-badge"
+import { AddOnCards } from "@/components/billing/addon-cards"
 import { PlanCards, type PlanCardData } from "@/components/billing/plan-cards"
 import { exampleEnterpriseCard } from "@/components/billing/enterprise-card"
 import { CheckoutStatusToast } from "@/components/billing/checkout-status-toast"
@@ -68,6 +69,12 @@ export default async function BillingPage({
   ])
 
   const entitlement = await getEntitlement(tenantId)
+  const [allAddOns, ownedAddOns] = await Promise.all([
+    db8.orm.public.AddOn.where({ isActive: true })
+      .orderBy((a) => a.createdAt.asc())
+      .all(),
+    db8.orm.public.TenantAddOn.where({ tenantId }).all(),
+  ])
   const purchase = entitlement.kind === "lifetime" ? entitlement.purchase : null
   const subscription =
     entitlement.kind === "subscription"
@@ -179,7 +186,9 @@ export default async function BillingPage({
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="space-y-1">
-              <p className="text-lg font-semibold">{purchase?.plan.name ?? subscription?.plan.name ?? t("free")}</p>
+              <p className="text-lg font-semibold">
+                {purchase?.plan?.name ?? purchase?.addOn?.name ?? subscription?.plan.name ?? t("free")}
+              </p>
               {purchase && <Badge variant="success">{t("lifetimeAccess")}</Badge>}
               {!purchase && subscription && <SubscriptionStatusBadge status={subscription.status} />}
               {!purchase && subscription?.cancelAtPeriodEnd && (
@@ -219,6 +228,18 @@ export default async function BillingPage({
           )}
         </CardContent>
       </Card>
+
+      {allAddOns.length > 0 && (
+        <AddOnCards
+          addOns={allAddOns.map((a) => ({
+            id: a.id,
+            name: a.name,
+            features: Object.keys(a.features as Record<string, unknown>).join(", "),
+            owned: ownedAddOns.some((o) => o.addOnId === a.id),
+          }))}
+          disabled={checkoutDisabled}
+        />
+      )}
 
       {entitlement.kind === "free" && plans.length > 0 && (
         <div className="space-y-4">

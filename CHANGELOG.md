@@ -7,6 +7,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.36.0] - 2026-10-28
+
+**Free plans, add-ons and setup fees.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` — two small migrations (`stripeSubscriptionId` and `planId` go nullable, `Purchase.addOnId` is added).
+
+### Added
+
+- **Free plans need no Stripe**: a plan with no Stripe price assigns directly — the tenant's subscription row is `ACTIVE` with `stripeSubscriptionId: null`, and its feature map resolves like any paid plan's
+- **Add-ons**: `AddOn` rows sell through a one-time checkout; the webhook grants a `TenantAddOn` whose feature map folds into the tenant's entitlements. The billing page lists add-ons with Buy/Owned states
+- **Setup fee**: a plan's `setupFeeCents` charges as a one-time line item on the tenant's first checkout only — re-subscribing later never charges it again
+
+### Changed
+
+- **No billing read trusts a `userId` anymore**: checkout and webhook metadata carry `tenantId`; billing emails resolve the tenant's owner member. A `Purchase` is now for a plan *or* an add-on
+
 ## [2.35.0] - 2026-10-28
 
 **Staff can override one tenant's entitlements.** This is a MINOR: `git pull`, `pnpm install` — no migration.

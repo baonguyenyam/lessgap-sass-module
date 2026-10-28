@@ -60,13 +60,19 @@ export async function POST(req: NextRequest) {
 
 const longDate = (date: Date) => date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
 
+/** The person billing mail goes to: the tenant's owner member. */
+async function tenantOwner(tenantId: string) {
+  const owner = await db8.orm.public.Member.select("userId").where({ organizationId: tenantId, role: "owner" }).first()
+  return owner ? db8.orm.public.User.select("email", "name").where({ id: owner.userId }).first() : null
+}
+
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   if (session.mode === "payment") {
     await handleOneTimeCheckout(session)
     return
   }
 
-  if (!session.subscription || !session.metadata?.userId || !session.metadata?.tenantId) return
+  if (!session.subscription || !session.metadata?.tenantId) return
 
   const subscription = await stripe.subscriptions.retrieve(session.subscription as string, {
     expand: ["items.data.price.product"],
@@ -107,7 +113,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   })
 
   // Send subscription confirmation email (fire-and-forget)
-  const user = await db8.orm.public.User.select("email", "name").where({ id: session.metadata.userId }).first()
+  const user = await tenantOwner(tenantId)
   if (isNewSubscription && user && emailEnabled()) {
     const { sendSubscriptionConfirmation } = await import("@/lib/email")
     // Awaited: a promise left running after the response has no guarantee of
@@ -133,11 +139,52 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 async function handleOneTimeCheckout(session: Stripe.Checkout.Session) {
   const paymentIntentId =
     typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent?.id
-  const userId = session.metadata?.userId
+  const tenantId = session.metadata?.tenantId
+  const addonId = session.metadata?.addonId
   const planId = session.metadata?.planId
   // A payment session without our metadata wasn't created by /api/checkout
   // (e.g. a Payment Link): acknowledge it so Stripe doesn't retry.
-  if (!paymentIntentId || !userId || !planId) return
+  if (!paymentIntentId || !tenantId || (!addonId && !planId)) return
+
+  // An add-on checkout grants a TenantAddOn row (task 2.7), not a plan.
+  if (addonId) {
+    const addOn = await db8.orm.public.AddOn.where({ id: addonId }).first()
+    if (!addOn) return
+    const existing = await db8.orm.public.Purchase.select("id")
+      .where({ stripePaymentIntentId: paymentIntentId })
+      .first()
+    await db8.orm.public.TenantAddOn.upsert({
+      conflictOn: uniqueIndexKey({ tenantId, addOnId: addonId }),
+      update: {},
+      create: { tenantId, addOnId: addonId, quantity: 1 },
+    })
+    await db8.orm.public.Purchase.upsert({
+      conflictOn: uniqueIndexKey({ stripePaymentIntentId: paymentIntentId }),
+      update: {},
+      create: {
+        tenantId,
+        addOnId: addonId,
+        stripePaymentIntentId: paymentIntentId,
+        stripeCheckoutSessionId: session.id,
+        amount: session.amount_total ?? 0,
+        currency: session.currency ?? "usd",
+      },
+    })
+    if (!existing && emailEnabled()) {
+      const user = await tenantOwner(tenantId)
+      if (user) {
+        const { sendPurchaseConfirmation } = await import("@/lib/email")
+        await sendPurchaseConfirmation(
+          user.email,
+          user.name ?? "",
+          addOn.name,
+          session.amount_total ?? 0,
+          session.currency ?? "usd"
+        ).catch(console.error)
+      }
+    }
+    return
+  }
 
   const plan = await db8.orm.public.Plan.where({ id: planId }).first()
   if (!plan) return
@@ -145,12 +192,12 @@ async function handleOneTimeCheckout(session: Stripe.Checkout.Session) {
   const existing = await db8.orm.public.Purchase.select("id").where({ stripePaymentIntentId: paymentIntentId }).first()
   const isNewPurchase = !existing
 
-  if (!session.metadata?.tenantId) return
+  if (!planId) return
   await db8.orm.public.Purchase.upsert({
     conflictOn: uniqueIndexKey({ stripePaymentIntentId: paymentIntentId }),
     update: {},
     create: {
-      tenantId: session.metadata.tenantId,
+      tenantId,
       planId,
       stripePaymentIntentId: paymentIntentId,
       stripeCheckoutSessionId: session.id,
@@ -160,7 +207,7 @@ async function handleOneTimeCheckout(session: Stripe.Checkout.Session) {
   })
 
   if (isNewPurchase && emailEnabled()) {
-    const user = await db8.orm.public.User.select("email", "name").where({ id: userId }).first()
+    const user = await tenantOwner(tenantId)
     if (user) {
       const { sendPurchaseConfirmation } = await import("@/lib/email")
       await sendPurchaseConfirmation(

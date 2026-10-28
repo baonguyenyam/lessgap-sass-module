@@ -111,7 +111,8 @@ user        User               @relation(fields: [userId], references: [id], onD
   model Purchase {
     id                      String                  @id(map: "Purchase_pkey") @onCreate(cuid(2))
     tenantId                String
-    planId                  String
+    planId                  String?
+    addOnId                 String?
     stripePaymentIntentId   String
     stripeCheckoutSessionId String?
     amount                  Int
@@ -119,7 +120,8 @@ user        User               @relation(fields: [userId], references: [id], onD
     status                  pg.enum(PurchaseStatus) @default("COMPLETED")
     createdAt               TimestampString(3)      @default(now())
     updatedAt               TimestampString(3)  @onCreate(now()) @onUpdate(now())
-plan                    Plan                    @relation(fields: [planId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "Purchase_planId_fkey", index: false)
+plan                    Plan?                   @relation(fields: [planId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "Purchase_planId_fkey", index: false)
+    addOn                   AddOn?                  @relation(fields: [addOnId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "Purchase_addOnId_fkey", index: false)
     tenant                  Tenant                  @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Purchase_tenantId_fkey")
 
     @@index([stripeCheckoutSessionId], map: "Purchase_stripeCheckoutSessionId_key", unique: true)
@@ -159,7 +161,7 @@ user      User               @relation(fields: [userId], references: [id], onDel
     id                   String                      @id(map: "Subscription_pkey") @onCreate(cuid(2))
     tenantId             String
     planId               String
-    stripeSubscriptionId String
+    stripeSubscriptionId String?
     status               pg.enum(SubscriptionStatus)
     currentPeriodStart   TimestampString(3)
     currentPeriodEnd     TimestampString(3)
@@ -332,6 +334,7 @@ trialEndsAt          TimestampString(3)?
     createdAt     TimestampString(3)  @default(now())
     updatedAt     TimestampString(3)  @default(now()) @onUpdate(now())
     tenantAddOns  TenantAddOn[]
+    purchases     Purchase[]
 
     @@index([key], map: "AddOn_key_key", unique: true)
     @@index([stripePriceId], map: "AddOn_stripePriceId_key", unique: true)

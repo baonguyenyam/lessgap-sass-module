@@ -68,7 +68,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ slug
             <CardDescription>{t("currentPlan")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{lifetime?.plan.name ?? subscription?.plan.name ?? t("planFree")}</p>
+            <p className="text-2xl font-bold">{lifetime?.plan?.name ?? subscription?.plan.name ?? t("planFree")}</p>
           </CardContent>
         </Card>
 

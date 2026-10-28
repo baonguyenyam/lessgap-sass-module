@@ -1054,6 +1054,13 @@
       "upgradeTo": "Upgrade to {plan}",
       "get": "Get {plan}",
       "trial": "{days}-day free trial"
+    },
+    "addons": {
+      "title": "Add-ons",
+      "subtitle": "One-time purchases that add features on top of your plan.",
+      "buy": "Buy",
+      "owned": "Owned",
+      "empty": "No add-ons available right now."
     }
   },
   "email": {

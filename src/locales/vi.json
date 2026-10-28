@@ -1054,6 +1054,13 @@
       "upgradeTo": "Nâng cấp lên {plan}",
       "get": "Sử dụng {plan}",
       "trial": "Dùng thử miễn phí {days} ngày"
+    },
+    "addons": {
+      "title": "Tiện ích mua thêm",
+      "subtitle": "Mua một lần để mở thêm tính năng trên gói hiện tại.",
+      "buy": "Mua",
+      "owned": "Đã mua",
+      "empty": "Hiện chưa có tiện ích nào."
     }
   },
   "email": {
