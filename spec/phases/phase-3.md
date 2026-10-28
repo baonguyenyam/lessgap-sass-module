@@ -90,7 +90,7 @@ set upload rules and rollouts from the console.
   fixtures render.
 - **Checks:** `pnpm test`, `pnpm modules:check`.
 - **Done when:** `/sites/[host]` renders `main` with the site's settings.
-- [ ] done
+- [x] done (`src/themes/types.ts` defines `SiteData` (what the route passes a theme — tenant, site, settings), `ThemeManifest` and `Theme`. `src/themes/main/` is the one shared theme: manifest + `tokenSchema` (accentColour, fontFamily), default tokens, `layout` (header/footer shell), `hero` and `hours` sections, `home` page, `theme.fixtures.ts`. `src/themes/registry.ts` `resolveTheme` falls back to `main` + logs an unknown `themeKey`. `/sites/[host]` assembles `SiteData` from `Site`/`SiteSettings` and renders `resolveTheme(themeKey)`. Contract `themes.test.ts` — manifest fields, tokens parse, layout/pages/sections exist, fixtures valid, fallback works.)
 
 ### 3.6 — Per-host robots, sitemap, JSON-LD, publish cache
 - **Goal:** `robots.txt` and `sitemap.xml` per host (suspended → empty;

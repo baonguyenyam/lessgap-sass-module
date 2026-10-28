@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.44.0] - 2026-10-28
+
+**Themes are a registry: `main` is the shared theme every site starts on.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`src/themes/`** — a theme is a manifest (key, kind, verticals, `tokenSchema`) plus React Server Components (`layout`, `pages`, `sections`) that render `SiteData` — never the database or the session. `main` is the shared theme: header/footer shell, hero and hours sections, a home page, fixture data
+- **`resolveTheme(themeKey)`** — the tenant's `themeKey` resolves to a theme; an unknown key falls back to `main` and logs, never 500s the site. `/sites/[host]` now renders the theme with the site's settings
+
 ## [2.43.0] - 2026-10-28
 
 **Platform upload rules gate every file into R2.** This is a MINOR: `git pull`, `pnpm install`.
