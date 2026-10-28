@@ -11,6 +11,7 @@ vi.mock("@/platform/tenancy/require-member", () => ({ requireTenantContext: asyn
 vi.mock("@/platform/tenancy/permissions", () => ({
   ROLE_PERMISSIONS: { owner: {}, manager: {}, staff: {} },
   permissionsAreDeclared: (p: Record<string, string[]>) => Object.keys(p).every((r) => r === "projects"),
+  withPluginGrants: (p: Record<string, string[]>) => p,
 }))
 vi.mock("@/lib/db8", async () => (await import("@tests/helpers/db8-mock")).createDb8Mock())
 

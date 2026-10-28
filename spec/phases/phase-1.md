@@ -46,7 +46,7 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - **Files:** `src/platform/tenancy/permissions.ts` + test; `ac`/`roles` wiring in `src/auth.ts`.
 - **Tests:** every role × permission pair in a table-driven test; unknown permission is a type error; a custom role created through the plugin refuses an undeclared permission.
 - **Checks:** `pnpm test`.
-- [ ] done
+- [x] done (`TenantPermission`, `TenantVerb`, `RoleGrants` make an undeclared permission a type error; a table-driven test checks every built-in role × permission pair; an integration test creates a custom role through `auth.api.createOrgRole` and sees an undeclared resource and verb refused. Found and fixed: the plugin checks its own statements (`ac`, `member`, `invitation`, `organization`) that the catalog lacked, so no role, the owner included, could create a custom role or invite through the plugin; `withPluginGrants` now derives them from the product permissions for built-in roles and for every custom role stored, and `catalogPermissions` keeps them out of the roles page. Module manifests add their permissions with the first module.)
 
 ### 1.4 — TenantContext and requireTenantMember
 - **Goal:** the context type and its two builders for dashboard and system use.
@@ -135,6 +135,7 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - Query overhead of `tenantDb` recorded in Findings.
 
 ## Findings
+- 2026-10-28, task 1.3: Better Auth's organization plugin authorises its own endpoints against the statements `ac` (custom roles), `member`, `invitation` and `organization`, which the product catalog never declared, so creating a custom role answered "You are not allowed to create a role" even for an owner. The plugin statements are now derived from the catalog (`withPluginGrants`), so the catalog stays the only list people edit.
 - 2026-10-28, task 1.1: Prisma 8 rejects a migration whose `from` equals its `to` (`MIGRATION.CHECK_NOOP_SELF_EDGE`) unless an operation carries an `invariantId`, and the runner takes such an edge only when the target ref requires that invariant, so `pnpm db:migrate` would never apply it. Database roles are cluster objects with no contract counterpart, so they live in `scripts/db-roles.mjs` (`pnpm db:roles`), run once per database, by CI after M1 and by the integration setup.
 - 2026-10-26: Switch As (ADR 0015) already gives ROOT a session as another
   account through `Session.switchedBy` and the `switchAs` plugin in

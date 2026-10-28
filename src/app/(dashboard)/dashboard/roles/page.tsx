@@ -5,7 +5,7 @@ import { permissionKeys } from "@/lib/schemas/tenant"
 import { offsetOf, parseTableQuery, type TableQuerySpec } from "@/lib/table-query"
 import { getViewerSettings } from "@/platform/settings/tenant-store"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
-import { ROLE_PERMISSIONS, TENANT_PERMISSIONS } from "@/platform/tenancy/permissions"
+import { catalogPermissions, ROLE_PERMISSIONS, TENANT_PERMISSIONS } from "@/platform/tenancy/permissions"
 import { RolesTable, type RoleRow } from "@/components/dashboard/roles-table"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
@@ -60,7 +60,7 @@ export default async function RolesPage({
       id: r.role,
       role: r.role,
       builtIn: false,
-      permissions: permissionKeys(r.permission as Record<string, string[]>),
+      permissions: permissionKeys(catalogPermissions(r.permission as Record<string, string[]>)),
       members: counts.get(r.role) ?? 0,
     })),
   ]

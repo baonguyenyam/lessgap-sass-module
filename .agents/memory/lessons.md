@@ -2,6 +2,12 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-28 · better auth · The organization plugin checks its own statements
+- **Symptom:** `auth.api.createOrgRole` answered "You are not allowed to create a role" for the tenant owner.
+- **Cause:** the plugin authorises its endpoints against `ac`, `member`, `invitation` and `organization` statements; the access control was built from the product catalog alone, so no role held them.
+- **Fix:** `tenantAc` includes the plugin's `defaultStatements`, and `withPluginGrants` derives them from product permissions for built-in and custom roles.
+- **Rule:** an endpoint of a Better Auth plugin is exercised in an integration test with a real session before its feature is called done.
+
 ### 2026-10-28 · prisma 8 · A migration that leaves the contract unchanged is refused
 - **Symptom:** `prisma migration check` failed with `MIGRATION.CHECK_NOOP_SELF_EDGE` on a `migration new --from <current hash>` package holding only `rawSql` (database roles).
 - **Cause:** a self-edge needs an operation with an `invariantId`, and the runner takes an invariant edge only when the target ref requires it; `pnpm db:migrate` would never run it.

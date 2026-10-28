@@ -1,4 +1,5 @@
 import { createAccessControl } from "better-auth/plugins/access"
+import { defaultStatements } from "better-auth/plugins/organization/access"
 import { db8 } from "@/lib/db8"
 
 /**
@@ -34,7 +35,58 @@ export const TENANT_PERMISSIONS = {
   reports: ["view"],
 } as const
 
-export const tenantAc = createAccessControl(TENANT_PERMISSIONS)
+export type TenantResource = keyof typeof TENANT_PERMISSIONS
+export type TenantVerb<R extends TenantResource> = (typeof TENANT_PERMISSIONS)[R][number]
+/** Every declared permission as `<resource>.<verb>`; anything else is a type error. */
+export type TenantPermission = { [R in TenantResource]: `${R}.${TenantVerb<R>}` }[TenantResource]
+/** A grant map that only names declared verbs. */
+export type RoleGrants = { readonly [R in TenantResource]?: readonly TenantVerb<R>[] }
+
+/**
+ * The statements the Better Auth organization plugin checks on its own calls:
+ * `invitation` (invite), `member` (add, change, remove), `ac` (custom roles),
+ * `organization` (rename). They are not product permissions and never appear
+ * in a form; `withPluginGrants` derives them from the catalog, so the catalog
+ * stays the only list a person edits.
+ */
+export const tenantAc = createAccessControl({ ...defaultStatements, ...TENANT_PERMISSIONS })
+
+/**
+ * A grant map with the plugin statements its product permissions imply:
+ * `members.invite` → may invite; `members.manage` → may invite and change or
+ * remove members; `roles.view` / `roles.manage` → may read / edit custom
+ * roles; `settings.manage` → may rename the tenant. Used for the built-in
+ * roles below and for every custom role before it is stored.
+ */
+export function withPluginGrants(grants: {
+  readonly [resource: string]: readonly string[] | undefined
+}): Record<string, string[]> {
+  const out: Record<string, string[]> = Object.fromEntries(
+    Object.entries(grants).map(([resource, verbs]) => [resource, [...(verbs ?? [])]])
+  )
+  const has = (resource: string, verb: string) => grants[resource]?.includes(verb) ?? false
+  const add = (resource: string, verbs: string[]) => {
+    out[resource] = [...new Set([...(out[resource] ?? []), ...verbs])]
+  }
+  if (has("members", "invite") || has("members", "manage")) add("invitation", ["create", "cancel"])
+  if (has("members", "manage")) add("member", ["create", "update", "delete"])
+  if (has("roles", "view")) add("ac", ["read"])
+  if (has("roles", "manage")) add("ac", ["create", "read", "update", "delete"])
+  if (has("settings", "manage")) add("organization", ["update"])
+  return out
+}
+
+/** The catalog part of a stored permission map, without the plugin statements. */
+export function catalogPermissions(permission: Record<string, readonly string[]>): Record<string, string[]> {
+  return Object.fromEntries(
+    Object.entries(permission)
+      .filter(([resource]) => resource in TENANT_PERMISSIONS)
+      .map(([resource, verbs]) => [
+        resource,
+        verbs.filter((verb) => (TENANT_PERMISSIONS[resource as TenantResource] as readonly string[]).includes(verb)),
+      ])
+  )
+}
 
 const EVERYTHING = Object.fromEntries(
   Object.entries(TENANT_PERMISSIONS).map(([resource, verbs]) => [resource, [...verbs]])
@@ -49,7 +101,7 @@ const EVERYTHING = Object.fromEntries(
  * day-to-day operations except billing and member administration. `staff`
  * sees their own work only.
  */
-export const ROLE_PERMISSIONS: Record<string, Record<string, readonly string[]>> = {
+export const ROLE_PERMISSIONS: Record<string, RoleGrants> = {
   owner: EVERYTHING,
   manager: {
     members: ["view"],
@@ -75,15 +127,26 @@ export const ROLE_PERMISSIONS: Record<string, Record<string, readonly string[]>>
 }
 
 export const tenantRoles = Object.fromEntries(
-  Object.entries(ROLE_PERMISSIONS).map(([key, grants]) => [key, tenantAc.newRole({ ...grants })])
+  Object.entries(ROLE_PERMISSIONS).map(([key, grants]) => [
+    key,
+    tenantAc.newRole(withPluginGrants(grants) as Parameters<typeof tenantAc.newRole>[0]),
+  ])
 )
 
 export const TENANT_ROLE_KEYS = Object.keys(ROLE_PERMISSIONS)
 
 /** Every `resource:verb` pair the catalog declares, for form UIs. */
-export const DECLARED_PERMISSIONS: string[] = Object.entries(TENANT_PERMISSIONS).flatMap(([resource, verbs]) =>
+export const DECLARED_PERMISSIONS = Object.entries(TENANT_PERMISSIONS).flatMap(([resource, verbs]) =>
   verbs.map((verb) => `${resource}.${verb}`)
-)
+) as TenantPermission[]
+
+/** The permissions a built-in role grants, as `<resource>.<verb>`. */
+export function roleGrants(roleKey: string): TenantPermission[] {
+  const grants = ROLE_PERMISSIONS[roleKey] ?? {}
+  return Object.entries(grants).flatMap(([resource, verbs]) =>
+    (verbs ?? []).map((verb) => `${resource}.${verb}` as TenantPermission)
+  )
+}
 
 /**
  * Whether a permission map (resource → verbs) only uses verbs the catalog
@@ -105,14 +168,14 @@ export function permissionsAreDeclared(permission: Record<string, string[]>): bo
  * roles resolve from ROLE_PERMISSIONS; anything else is a custom role, read
  * from its OrganizationRole row. Unknown roles grant nothing.
  */
-export async function memberCan(
+export async function memberCan<R extends TenantResource>(
   organizationId: string,
   roleKey: string,
-  resource: keyof typeof TENANT_PERMISSIONS,
-  verb: string
+  resource: R,
+  verb: TenantVerb<R>
 ): Promise<boolean> {
   const grants = ROLE_PERMISSIONS[roleKey]
-  if (grants) return grants[resource]?.includes(verb) ?? false
+  if (grants) return (grants[resource] as readonly string[] | undefined)?.includes(verb) ?? false
   const row = await db8.orm.public.OrganizationRole.where({ organizationId, role: roleKey }).first()
   const permission = row?.permission as Record<string, string[]> | null | undefined
   return permission?.[resource]?.includes(verb) ?? false

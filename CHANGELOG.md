@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.21.0] - 2026-10-28
+
+**Phase 1 begins: database roles, and custom roles work again.** This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate; `pnpm db:roles` is a one-time step when you split database users.
+
+### Added
+
+- **`pnpm db:roles`** (task 1.1): creates the `app` (RLS enforced) and `platform` (bypasses RLS) database roles with their grants, safely re-runnable. New optional variables `DATABASE_URL_PLATFORM` and `DATABASE_URL_MIGRATE`; unset, `DATABASE_URL` keeps doing every job. Migrations, `pnpm db:reset`, backups and the admin panel's migrate use `DATABASE_URL_MIGRATE` when it is set. Steps in spec/14, "Database roles"
+- `src/platform/db.ts`, the platform client for cross-tenant reads
+
+### Fixed
+
+- **Custom roles can be created and edited again**: Better Auth's organization plugin checks permissions of its own (custom roles, invitations, members) that the tenant roles did not hold, so saving a custom role failed even for the owner. They are now derived from the role's permissions (task 1.3)
+
 ## [2.20.0] - 2026-10-27
 
 **The public site speaks Vietnamese, and ROOT can back up and migrate the database from the admin panel.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (three new tables: `ErrorReport`, `Job`, `EmailMessage`).

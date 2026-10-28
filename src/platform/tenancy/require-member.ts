@@ -2,7 +2,7 @@ import { headers } from "next/headers"
 import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
 import { requireUser } from "@/lib/auth"
-import { memberCan, TENANT_PERMISSIONS } from "@/platform/tenancy/permissions"
+import { memberCan, type TenantResource, type TenantVerb } from "@/platform/tenancy/permissions"
 import type { FieldOutputTypes } from "@/generated/prisma8/contract.d"
 
 type Tenant = FieldOutputTypes["public"]["Tenant"]
@@ -70,9 +70,9 @@ export async function ensureTenant(user: CurrentUser): Promise<TenantMembership>
  * layer on top — it also covers pages and actions that are not plugin calls.
  * When `verb` is omitted the caller is only proven to belong to the tenant.
  */
-export async function requireTenantContext(
-  resource?: keyof typeof TENANT_PERMISSIONS,
-  verb?: string
+export async function requireTenantContext<R extends TenantResource>(
+  resource?: R,
+  verb?: TenantVerb<R>
 ): Promise<TenantMembership> {
   const user = await requireUser()
   const ctx = await ensureTenant(user)

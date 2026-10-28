@@ -7,7 +7,7 @@ import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
 import { foldPermissions, tenantRoleSchema } from "@/lib/schemas/tenant"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
-import { permissionsAreDeclared, ROLE_PERMISSIONS } from "@/platform/tenancy/permissions"
+import { permissionsAreDeclared, ROLE_PERMISSIONS, withPluginGrants } from "@/platform/tenancy/permissions"
 
 const ROLES = "/dashboard/roles"
 
@@ -36,13 +36,18 @@ export async function saveTenantRole(existing: string | null, values: unknown): 
   const permission = foldPermissions(parsed.data.permissions)
   if (Object.keys(permission).length === 0 || !permissionsAreDeclared(permission))
     return { error: t("unknownPermission") }
+  // What the person checked, plus the plugin statements it implies (task 1.3).
+  const stored = withPluginGrants(permission)
 
   if (existing === null) {
-    await auth.api.createOrgRole({ headers: await headers(), body: { organizationId: ctx.tenantId, role, permission } })
+    await auth.api.createOrgRole({
+      headers: await headers(),
+      body: { organizationId: ctx.tenantId, role, permission: stored },
+    })
   } else {
     await auth.api.updateOrgRole({
       headers: await headers(),
-      body: { organizationId: ctx.tenantId, roleName: role, data: { permission } },
+      body: { organizationId: ctx.tenantId, roleName: role, data: { permission: stored } },
     })
   }
   revalidatePath(ROLES)

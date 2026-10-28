@@ -46,7 +46,7 @@ export const siteConfig = {
    */
   llmsSummary: process.env.NEXT_PUBLIC_LLMS_SUMMARY || null,
 
-  version: "2.20.0",
+  version: "2.21.0",
   description:
     process.env.NEXT_PUBLIC_BRAND_DESCRIPTION ||
     (isKitSite
