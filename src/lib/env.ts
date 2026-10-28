@@ -87,6 +87,11 @@ export const envSchema = z
     // demo, so this is not a half-done configuration worth stopping a boot for.
     CRON_SECRET: optional,
 
+    // Sentry (ADR 0017): off when unset. The auth token only uploads source maps in CI.
+    SENTRY_DSN: optional,
+    NEXT_PUBLIC_SENTRY_DSN: optional,
+    SENTRY_AUTH_TOKEN: optional,
+
     // Cloudflare R2 (spec/adr/0018): database backups now, media later.
     R2_ACCOUNT_ID: optional,
     R2_ACCESS_KEY_ID: optional,

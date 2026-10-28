@@ -1,0 +1,147 @@
+[
+  {
+    "id": "table.ErrorReport",
+    "label": "Create table \"ErrorReport\"",
+    "summary": "Creates table \"ErrorReport\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "ErrorReport"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"ErrorReport\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ErrorReport\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"ErrorReport\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"ErrorReport\"",
+        "sql": "CREATE TABLE \"public\".\"ErrorReport\" (\n  \"count\" int4 DEFAULT 1 NOT NULL,\n  \"digest\" text NOT NULL,\n  \"firstSeenAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"lastSeenAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"message\" text NOT NULL,\n  \"name\" text NOT NULL,\n  \"requestId\" text,\n  \"resolvedAt\" timestamp(3),\n  \"source\" text NOT NULL,\n  \"tenantId\" text,\n  CONSTRAINT \"ErrorReport_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"ErrorReport\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"ErrorReport\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"ErrorReport\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "index.ErrorReport.ErrorReport_digest_key",
+    "label": "Create index \"ErrorReport_digest_key\" on \"ErrorReport\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "ErrorReport_digest_key",
+        "table": "ErrorReport"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"ErrorReport_digest_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ErrorReport_digest_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"ErrorReport_digest_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"ErrorReport_digest_key\"",
+        "sql": "CREATE UNIQUE INDEX \"ErrorReport_digest_key\" ON \"public\".\"ErrorReport\" (\"digest\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"ErrorReport_digest_key\" exists on \"ErrorReport\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"ErrorReport_digest_key\"",
+          "i",
+          "I",
+          "\"public\".\"ErrorReport\"",
+          "btree",
+          "[\"digest\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.ErrorReport.ErrorReport_lastSeenAt_idx",
+    "label": "Create index \"ErrorReport_lastSeenAt_idx\" on \"ErrorReport\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "ErrorReport_lastSeenAt_idx",
+        "table": "ErrorReport"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"ErrorReport_lastSeenAt_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ErrorReport_lastSeenAt_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"ErrorReport_lastSeenAt_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"ErrorReport_lastSeenAt_idx\"",
+        "sql": "CREATE INDEX \"ErrorReport_lastSeenAt_idx\" ON \"public\".\"ErrorReport\" (\"lastSeenAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"ErrorReport_lastSeenAt_idx\" exists on \"ErrorReport\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"ErrorReport_lastSeenAt_idx\"",
+          "i",
+          "I",
+          "\"public\".\"ErrorReport\"",
+          "btree",
+          "[\"lastSeenAt\"]"
+        ]
+      }
+    ]
+  }
+]

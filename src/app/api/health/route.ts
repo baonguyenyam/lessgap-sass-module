@@ -30,10 +30,14 @@ export async function GET() {
   // for a real request first (spec/adr/0022).
   await connection()
   const schema = await getSchemaStatus()
+  // A database that cannot be asked is a failed check (spec/16-operations.md):
+  // 503 with a code the monitor can show, never a stack or a host name.
+  const down = schema.aligned === null
 
   return NextResponse.json(
     {
-      status: "ok",
+      status: down ? "error" : "ok",
+      ...(down ? { code: "database_unreachable" } : {}),
       version: siteConfig.version,
       commit: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? null,
       environment: process.env.VERCEL_ENV ?? process.env.NODE_ENV ?? "unknown",
@@ -44,6 +48,6 @@ export async function GET() {
       schema,
       timestamp: new Date().toISOString(),
     },
-    { headers: { "cache-control": "no-store" } }
+    { status: down ? 503 : 200, headers: { "cache-control": "no-store" } }
   )
 }

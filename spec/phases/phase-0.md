@@ -133,7 +133,7 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 - **Tests:** O4 (digest merge, masking, requestId, Sentry skipped when unconfigured); `beforeSend` scrub test; health returns 503 with a code when the DB is down.
 - **Checks:** `pnpm test`, `pnpm test:integration`, M1, M2; set a scratch DSN and see an event arrive with tags, no user fields.
 - **Done when:** a thrown error in a dev action produces one `ErrorReport` row carrying a `requestId` that the response also shows.
-- [ ] done
+- [x] done (checked on a production build: two uncaught errors with the same cause gave one row, `count` 2, masked message, and the request id the 500 response carried; unit tests for O4 and `beforeSend`, the ErrorReport integration test, `db verify --strict` and `migration check` pass. Shipped differently: the Sentry configs and `instrumentation-client.ts` live in `src/` next to `instrumentation.ts` (imports never use `../`); the hook is Next's `onRequestError`; Sentry 11 has no `sendDefaultPii`, so `dataCollection` turns every category off; `errors.ts` is unchanged and the request id rides on `ActionResult` in `action.ts`. Not done here: a scratch DSN, which needs a Sentry project the owner creates.)
 
 ### 0.15 — Job table and cron runner
 - **Goal:** `Job` model, the runner route and the kind registry of [ADR 0008](../adr/0008-jobs-table-before-a-queue.md): due jobs claimed `FOR UPDATE SKIP LOCKED`, run with retries and backoff, landing `FAILED` with `lastError`.

@@ -2,13 +2,19 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import { action } from "@/platform/action"
 import { AppError, ERROR_CODES } from "@/platform/errors"
 
-const { logError } = vi.hoisted(() => ({ logError: vi.fn() }))
+const { logError, context } = vi.hoisted(() => ({
+  logError: vi.fn(),
+  context: { requestId: null as string | null },
+}))
 
 vi.mock("next-intl/server", () => ({
   getTranslations: async () => (key: string) => `translated:${key}`,
 }))
 
-vi.mock("@/platform/log", () => ({ log: { error: logError, info: vi.fn() } }))
+vi.mock("@/platform/log", () => ({
+  log: { error: logError, info: vi.fn() },
+  requestContext: async () => ({ requestId: context.requestId, source: null }),
+}))
 
 describe("action", () => {
   beforeEach(() => logError.mockClear())
@@ -52,5 +58,17 @@ describe("action", () => {
       error: { code: "internal", message: "translated:internal" },
     })
     expect(logError).toHaveBeenCalledWith("platform.action.failed", { error: expect.any(Error) })
+  })
+
+  it("returns the request id an internal error was recorded under", async () => {
+    context.requestId = "0190f8a2-7b3c-7d4e"
+    const failing = action(async () => {
+      throw new Error("database exploded")
+    })
+    await expect(failing()).resolves.toEqual({
+      ok: false,
+      error: { code: "internal", message: "translated:internal", requestId: "0190f8a2-7b3c-7d4e" },
+    })
+    context.requestId = null
   })
 })

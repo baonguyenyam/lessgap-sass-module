@@ -199,6 +199,26 @@ trialEndsAt          TimestampString(3)?
     updatedAt   TimestampString(3) @default(now()) @onUpdate(now())
   }
 
+  // Errors grouped by digest (spec/16-operations.md, ADR 0017). `log.error`
+  // writes them in every environment, with a masked message; one row per
+  // digest counts the occurrences. Pruned after 30 days by a daily job.
+  model ErrorReport {
+    id          String              @id(map: "ErrorReport_pkey") @onCreate(uuid(7))
+    digest      String
+    source      String
+    name        String
+    message     String
+    count       Int                 @default(1)
+    requestId   String?
+    tenantId    String?
+    firstSeenAt TimestampString(3)  @default(now())
+    lastSeenAt  TimestampString(3)  @default(now())
+    resolvedAt  TimestampString(3)?
+
+    @@index([digest], map: "ErrorReport_digest_key", unique: true)
+    @@index([lastSeenAt], map: "ErrorReport_lastSeenAt_idx")
+  }
+
   // Tenancy (spec/02-tenancy.md, ADR 0003, ADR 0019).
   // Better Auth organization plugin tables. The plugin writes through Kysely
   // with these exact column names; model names are mapped in src/auth.ts.

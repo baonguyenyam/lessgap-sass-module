@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ## [2.20.0] - 2026-10-27
 
-**The public site speaks Vietnamese, and ROOT can back up and migrate the database from the admin panel.** This is a MINOR: `git pull`, `pnpm install`. Nothing to migrate.
+**The public site speaks Vietnamese, and ROOT can back up and migrate the database from the admin panel.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (one new table, `ErrorReport`).
 
 ### Added
 
@@ -19,8 +19,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 - **The private area follows the browser's language** until you pick one: the order is the language picked on this device, your saved preference, your browser's languages, then the workspace default (task 0.13)
 - **Emails to members arrive in their language**: sign-in links, password resets, welcome, billing and cancellation emails use the language saved in Account → Preferences
 
+- **Every request carries an id** (`x-request-id`, uuid v7, kept when an upstream proxy already set a valid one), shown on the response; an action that fails with an internal error returns it, so a person reporting the error can quote it (task 0.14)
+- **`ErrorReport`**: every `log.error` and every uncaught request error is grouped by digest (surface, error name, first stack frame) in a new table, with a masked message, the request id and the surface. Migration `platform_error_reports`: run `pnpm db:migrate`
+- **Sentry**, off unless `SENTRY_DSN` / `NEXT_PUBLIC_SENTRY_DSN` is set; nothing about the person or the request is sent ([ADR 0017](spec/adr/0017-sentry-for-error-tracking.md), now accepted)
+- `/api/health/live` for load checks
+
 ### Changed
 
+- `/api/health` answers 503 with `"code": "database_unreachable"` when the database cannot be asked, instead of 200
+- `log.error` returns a promise: await it where the process may end right after
 - `toDirectUrl` moved to `src/lib/database-url.ts`; `scripts/db-reset-guard.mjs` re-exports it
 
 ## [2.19.0] - 2026-10-27

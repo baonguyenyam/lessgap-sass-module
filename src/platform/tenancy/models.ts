@@ -6,6 +6,10 @@ export type ModelClassification = {
 /** Every Prisma model needs a deliberate data owner before it can ship. */
 export const MODEL_CLASSIFICATION = {
   Account: { kind: "identity", reason: "Better Auth credential and provider links." },
+  ErrorReport: {
+    kind: "platform-private",
+    reason: "Platform error groups for staff; a tenant id is context, not ownership.",
+  },
   Invitation: { kind: "identity", reason: "Better Auth tenant invitations." },
   Member: { kind: "identity", reason: "Better Auth tenant membership records." },
   NewsletterSubscriber: {

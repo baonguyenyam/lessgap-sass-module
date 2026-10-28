@@ -1,6 +1,6 @@
 # 0017. Sentry for error tracking, ErrorReport table in the app
 
-**Status:** proposed
+**Status:** accepted (with phase 0, task 0.14, 2026-10-27)
 **Date:** 2026-10-26
 
 ## Context

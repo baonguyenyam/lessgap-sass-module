@@ -2,6 +2,18 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-27 · prisma 8 · Raw SQL takes no `null`, and `affectedCount()` needs `build()`
+- **Symptom:** `RUNTIME.RAW_SQL_UNSUPPORTED_INTERPOLATION` for a `null` value in ``db8.raw.sql`…` ``, then `Cannot read properties of undefined (reading 'collectParamRefs')` from `db8.execute`.
+- **Cause:** the raw lane infers a codec from each interpolated value and has none for `null` (`param()` is not exported by the façade); `.affectedCount()` returns a builder, not a plan.
+- **Fix:** pass `value ?? ""` and write `NULLIF(${value}, '')` in SQL; end with `.affectedCount().build()` before `db8.execute(plan)`.
+- **Rule:** every raw statement ends in `.build()`; nullable values go through `NULLIF` (or the ORM).
+
+### 2026-10-27 · next · `instrumentation.ts` is loaded once per server start
+- **Symptom:** after adding `onRequestError`, errors in the running `pnpm dev` wrote no `ErrorReport` row.
+- **Cause:** the dev server loads instrumentation when it starts; edits to it do not reach a running server.
+- **Fix:** checked on `pnpm build` + `next start -p 3200` instead of stopping the owner's dev server.
+- **Rule:** after editing `instrumentation*.ts`, restart the dev server (or check on a separate production start) before judging it.
+
 ### 2026-10-27 · ESLint · Use explicit regex exceptions for import boundaries
 - **Symptom:** an allowed module public path was still rejected by `no-restricted-imports`, and `Linter.verify` fixtures reported no matching config.
 - **Cause:** the rule's grouped patterns did not provide the whitelist behavior assumed, and ESLint 10's flat `Linter` needs matching `files` extensions plus a `filename` option.

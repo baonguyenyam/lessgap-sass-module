@@ -1,10 +1,10 @@
 import { getTranslations } from "next-intl/server"
 import { AppError, type ErrorCode } from "@/platform/errors"
-import { log } from "@/platform/log"
+import { log, requestContext } from "@/platform/log"
 
 /** The serializable result returned by every wrapped server action. */
 export type ActionResult<T = void> =
-  { ok: true; data: T } | { ok: false; error: { code: ErrorCode; message: string; field?: string } }
+  { ok: true; data: T } | { ok: false; error: { code: ErrorCode; message: string; field?: string; requestId?: string } }
 
 /** Converts typed service errors to localized results and records unexpected failures. */
 export function action<Args extends unknown[], Data>(
@@ -27,8 +27,13 @@ export function action<Args extends unknown[], Data>(
         }
       }
 
-      log.error("platform.action.failed", { error })
-      return { ok: false, error: { code: "internal", message: t("internal") } }
+      await log.error("platform.action.failed", { error })
+      // The id the error was recorded under, so a person reporting it can quote it.
+      const { requestId } = await requestContext()
+      return {
+        ok: false,
+        error: { code: "internal", message: t("internal"), ...(requestId ? { requestId } : {}) },
+      }
     }
   }
 }

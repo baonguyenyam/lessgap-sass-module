@@ -3,6 +3,8 @@ import { isRoot } from "@/lib/roles"
 import { NextResponse, type NextRequest } from "next/server"
 import createIntlMiddleware from "next-intl/middleware"
 import { routing } from "@/i18n/routing"
+import { newTimeId } from "@/lib/ids"
+import { acceptRequestId, REQUEST_ID_HEADER, REQUEST_SOURCE_HEADER, sourceForPath } from "@/platform/request-context"
 
 /**
  * Locale handling for the public surface only.
@@ -84,6 +86,19 @@ const AUTH_ROUTES = ["/login", "/signup", "/2fa"]
 export default async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl
 
+  // Every request carries an id and its surface (spec/16-operations.md): on
+  // the request, for the server code and `log.error` to read, and on the
+  // response, so a person reporting a problem can quote it. An id an upstream
+  // proxy already set is kept when it looks like one.
+  const requestId = acceptRequestId(req.headers.get(REQUEST_ID_HEADER)) ?? newTimeId()
+  req.headers.set(REQUEST_ID_HEADER, requestId)
+  req.headers.set(REQUEST_SOURCE_HEADER, sourceForPath(pathname))
+  const stamped = (res: NextResponse) => {
+    res.headers.set(REQUEST_ID_HEADER, requestId)
+    return res
+  }
+  const next = () => stamped(NextResponse.next({ request: { headers: req.headers } }))
+
   const isAuthRoute = AUTH_ROUTES.some((r) => pathname.startsWith(r))
   const isAdminRoute = ADMIN_ROUTES.some((r) => pathname.startsWith(r))
   const isProtectedRoute = PROTECTED_ROUTES.some((r) => pathname.startsWith(r))
@@ -96,27 +111,28 @@ export default async function proxy(req: NextRequest) {
   // `/api/auth` and the inbound webhooks (e.g. Stripe) carry no session and
   // need no special case here: they are not in the lists above, so they pass.
   if (isAuthRoute && isLoggedIn) {
-    return NextResponse.redirect(new URL("/dashboard", req.nextUrl))
+    return stamped(NextResponse.redirect(new URL("/dashboard", req.nextUrl)))
   }
 
   if (isAdminRoute) {
-    if (!isLoggedIn) return NextResponse.redirect(new URL("/login", req.nextUrl))
-    if (!isRootUser) return NextResponse.redirect(new URL("/dashboard", req.nextUrl))
-    return NextResponse.next()
+    if (!isLoggedIn) return stamped(NextResponse.redirect(new URL("/login", req.nextUrl)))
+    if (!isRootUser) return stamped(NextResponse.redirect(new URL("/dashboard", req.nextUrl)))
+    return next()
   }
 
   if (isProtectedRoute && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/login", req.nextUrl))
+    return stamped(NextResponse.redirect(new URL("/login", req.nextUrl)))
   }
 
   // Past the guards. Anything that is not a private area is public surface, so
   // it goes through locale resolution; the private areas keep the plain
   // response they have always had.
   if (UNLOCALIZED.some((r) => pathname.startsWith(r))) {
-    return NextResponse.next()
+    return next()
   }
 
-  return intlMiddleware(req)
+  // next-intl forwards `req.headers`, so the id set above reaches the page.
+  return stamped(intlMiddleware(req))
 }
 
 // Static files in public/ skip the proxy. Videos are listed too: without them

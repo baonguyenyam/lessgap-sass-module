@@ -61,11 +61,13 @@ describe("GET /api/health", () => {
 
   // Unknown is its own answer: a database that cannot be asked is not reported
   // as behind, and it does not take the endpoint down with it.
-  it("stays up and says unknown when the database cannot be asked", async () => {
+  it("answers 503 with a code, and no internals, when the database cannot be asked", async () => {
     schema.current = { aligned: null, pending: null }
     const response = await GET()
-    expect(response.status).toBe(200)
-    expect((await response.json()).schema).toEqual({ aligned: null, pending: null })
+    expect(response.status).toBe(503)
+    const body = await response.json()
+    expect(body).toMatchObject({ status: "error", code: "database_unreachable" })
+    expect(body.schema).toEqual({ aligned: null, pending: null })
   })
 
   // The endpoint is public. How many migrations a deployment is missing is what
