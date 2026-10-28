@@ -7,6 +7,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.22.0] - 2026-10-28
+
+**Each tenant's dashboard has its own address, `/t/<slug>`, and a switcher.** This is a MINOR: `git pull`, `pnpm install`; no migration.
+
+### Changed
+
+- **The dashboard moved to `/t/<slug>/...`** (task 1.7): projects, members, roles, newsletter, billing and settings now live under the tenant's address. `/dashboard` and every old `/dashboard/...` link still work: they redirect to the same page in the tenant opened last (else the first one joined). Account pages stay at `/dashboard/account`
+- **Tenant switcher** at the top of the sidebar, listing every workspace you belong to
+- Opening a tenant you do not belong to answers a real 404, so a stranger cannot tell the tenant exists
+
+### Fixed
+
+- A new account's first visit to the dashboard could fail with "Organization already exists" when two requests created its tenant at once
+
 ## [2.21.0] - 2026-10-28
 
 **Phase 1 begins: database roles, and custom roles work again.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (row-level security on `TenantSetting`, a new `TenantModule` table); `pnpm db:roles` is a one-time step when you split database users.

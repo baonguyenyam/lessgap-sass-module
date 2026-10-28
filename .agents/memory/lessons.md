@@ -2,6 +2,23 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-28 · next · `notFound()` in a layout cannot send a 404 once the shell streams
+- **Symptom:** the T6 E2E got status 200 for a tenant the user was not a member of; the 404 page rendered, but late.
+- **Cause:** with Cache Components the static shell (and `loading.tsx`) streams before the layout's membership check, and the status is fixed when streaming starts.
+- **Fix:** the proxy checks membership (`isTenantMember`) and rewrites to `/_not-found` with `{ status: 404 }`; the layout keeps its own check.
+- **Rule:** when the HTTP status matters (404/403/401), decide it in the proxy or before any await or Suspense; assert the status in E2E, not only the page text.
+
+### 2026-10-28 · next · A layout and a page of the same request run in parallel
+- **Symptom:** "Organization already exists" on a new account's first `/dashboard`, about one run in five.
+- **Cause:** the dashboard layout and the redirect page both called `ensureTenant`, and both created the tenant.
+- **Fix:** `ensureTenant` wrapped in React `cache()` and, when the create loses the race, a short wait for the winner's membership.
+- **Rule:** a get-or-create called from more than one segment is `cache()`d and tolerates a concurrent create; repeat the E2E (`--repeat-each`) before trusting it.
+
+### 2026-10-28 · e2e · The running dev server may serve stale code
+- **Symptom:** E2E against the owner's `pnpm dev` on :3000 rendered links like `/t//settings` that the source could not produce.
+- **Fix:** ran the specs against a fresh `pnpm build` served by `next start -p 3100` (`E2E_BASE_URL=http://localhost:3100`), leaving the owner's server alone.
+- **Rule:** verify route moves against a fresh build on a separate port; never stop the owner's dev server.
+
 ### 2026-10-28 · better auth · The organization plugin checks its own statements
 - **Symptom:** `auth.api.createOrgRole` answered "You are not allowed to create a role" for the tenant owner.
 - **Cause:** the plugin authorises its endpoints against `ac`, `member`, `invitation` and `organization` statements; the access control was built from the product catalog alone, so no role held them.

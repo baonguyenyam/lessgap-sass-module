@@ -1,4 +1,5 @@
 import { headers } from "next/headers"
+import { cache } from "react"
 import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
 import { requireUser } from "@/lib/auth"
@@ -71,12 +72,21 @@ export async function listMemberTenants(userId: string): Promise<Array<{ slug: s
   })
 }
 
+async function waitForMembership(userId: string, attempts = 10): Promise<Member | null> {
+  for (let i = 0; i < attempts; i++) {
+    const member = await getMembership(userId)
+    if (member) return member
+    await new Promise((resolve) => setTimeout(resolve, 100))
+  }
+  return null
+}
+
 /**
  * The tenant an owner lands on. Phase-1 decision 1-A: every existing user
  * gets one tenant named after them, and the tenant is created the first time
  * they need it (sign-up provisioning arrives with the phase-4 wizard).
  */
-export async function ensureTenant(user: CurrentUser): Promise<TenantMembership> {
+export const ensureTenant = cache(async (user: CurrentUser): Promise<TenantMembership> => {
   const existing = await getMembership(user.id)
   if (existing) {
     const tenant = await db8.orm.public.Tenant.where({ id: existing.organizationId }).first()
@@ -89,10 +99,18 @@ export async function ensureTenant(user: CurrentUser): Promise<TenantMembership>
   let slug = base
   for (let i = 2; await db8.orm.public.Tenant.where({ slug }).first(); i++) slug = `${base}-${i}`
 
-  await auth.api.createOrganization({
-    headers: await headers(),
-    body: { name: displayName, slug },
-  })
+  try {
+    await auth.api.createOrganization({
+      headers: await headers(),
+      body: { name: displayName, slug },
+    })
+  } catch (error) {
+    // Two requests of the same first visit (the dashboard layout and the
+    // `/dashboard` redirect run in parallel, and `cache` only covers one
+    // render) can both get here. The loser waits for the winner's member row,
+    // which Better Auth writes just after the tenant.
+    if (!(await waitForMembership(user.id))) throw error
+  }
   const member = await getMembership(user.id)
   if (!member) throw new Error("Tenant creation did not produce a membership")
 
@@ -101,7 +119,7 @@ export async function ensureTenant(user: CurrentUser): Promise<TenantMembership>
   await db8.orm.public.Tenant.where({ id: member.organizationId, status: "PROVISIONING" }).update({ status: "ACTIVE" })
   const tenant = (await db8.orm.public.Tenant.where({ id: member.organizationId }).first())!
   return { user, member, tenant, tenantId: tenant.id }
-}
+})
 
 /**
  * Membership + permission gate for tenant dashboard pages and actions. The
@@ -159,6 +177,17 @@ export async function resolveTenantMember(
     if (!(await memberCan(tenant.id, member.role, resource, verb))) throw new AppError("forbidden")
   }
   return { tenantId: tenant.id, actor: { kind: "member", userId, role: member.role }, tenant, member }
+}
+
+/** Whether `userId` may open the tenant at `slug` at all: the proxy's check, so a stranger gets a real 404 (T6). */
+export async function isTenantMember(userId: string, slug: string): Promise<boolean> {
+  try {
+    await resolveTenantMember(userId, slug)
+    return true
+  } catch (error) {
+    if (error instanceof AppError && error.code === "not_found") return false
+    throw error
+  }
 }
 
 /** `resolveTenantMember` for the signed-in user: dashboard pages and actions under `/t/[slug]`. */

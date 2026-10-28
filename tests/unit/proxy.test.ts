@@ -17,6 +17,10 @@ vi.mock("@/auth", () => ({
 }))
 vi.mock("next-intl/middleware", () => ({ default: () => intl }))
 vi.mock("@/i18n/routing", () => ({ routing: {} }))
+const isTenantMember = vi.fn()
+vi.mock("@/platform/tenancy/require-member", () => ({
+  isTenantMember: (...a: unknown[]) => isTenantMember(...a),
+}))
 
 const { default: proxy } = await import("@/proxy")
 
@@ -25,6 +29,7 @@ const location = (res: Response) => res.headers.get("location")
 
 beforeEach(() => {
   getSession.mockReset()
+  isTenantMember.mockReset()
   intl.mockClear()
 })
 
@@ -77,5 +82,32 @@ describe("proxy: the redirects are unchanged", () => {
     const res = await run("/pricing")
     expect(intl).toHaveBeenCalledOnce()
     expect(res.headers.get("x-intl")).toBe("1")
+  })
+})
+
+describe("proxy: tenant dashboards (task 1.7)", () => {
+  const member = { user: { id: "u1", role: "USER" } }
+
+  it("answers a real 404 to someone outside the tenant, before the page streams (T6)", async () => {
+    getSession.mockResolvedValue(member)
+    isTenantMember.mockResolvedValue(false)
+    const res = await run("/t/acme/projects")
+    expect(isTenantMember).toHaveBeenCalledWith("u1", "acme")
+    expect(res.status).toBe(404)
+    expect(res.headers.get("x-middleware-rewrite")).toBe("http://localhost/_not-found")
+  })
+
+  it("lets a member in and remembers the tenant for /dashboard", async () => {
+    getSession.mockResolvedValue(member)
+    isTenantMember.mockResolvedValue(true)
+    const res = await run("/t/acme")
+    expect(res.status).toBe(200)
+    expect(res.cookies.get("last_tenant")?.value).toBe("acme")
+  })
+
+  it("sends a signed-out visitor to /login without looking the tenant up", async () => {
+    getSession.mockResolvedValue(null)
+    expect(location(await run("/t/acme"))).toBe("http://localhost/login")
+    expect(isTenantMember).not.toHaveBeenCalled()
   })
 })

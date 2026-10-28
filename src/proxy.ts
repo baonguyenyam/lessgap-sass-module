@@ -13,6 +13,7 @@ import {
   TENANT_SLUG_HEADER,
   tenantSlugFromPath,
 } from "@/platform/request-context"
+import { isTenantMember } from "@/platform/tenancy/require-member"
 
 /**
  * Locale handling for the public surface only.
@@ -136,6 +137,14 @@ export default async function proxy(req: NextRequest) {
 
   if (isProtectedRoute && !isLoggedIn) {
     return stamped(NextResponse.redirect(new URL("/login", req.nextUrl)))
+  }
+
+  // A tenant someone does not belong to is answered here, before the page
+  // streams: past that point the status is already 200 and the tenant layout
+  // can only render the 404 page, not send a 404 (T6). The layout keeps its
+  // own check for what reaches it.
+  if (tenantSlug && session && !(await isTenantMember(session.user.id, tenantSlug))) {
+    return stamped(NextResponse.rewrite(new URL("/_not-found", req.nextUrl), { status: 404 }))
   }
 
   // Past the guards. Anything that is not a private area is public surface, so

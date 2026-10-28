@@ -31,5 +31,6 @@ test("each account lands on its own tenant, and a member of A gets 404 on B (T6)
   await expect(a.page).toHaveURL(new RegExp(`${a.home}/projects$`))
 
   const response = await b.page.goto(`${a.home}/projects`)
+  await expect(b.page.getByRole("heading", { name: /page not found/i })).toBeVisible()
   expect(response?.status()).toBe(404)
 })
