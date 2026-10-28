@@ -3,10 +3,12 @@ import { getTranslations } from "next-intl/server"
 import { redirect } from "next/navigation"
 import { db8 } from "@/lib/db8"
 import { offsetOf, parseTableQuery, type TableQuerySpec } from "@/lib/table-query"
+import { mayGrantRole } from "@/lib/invitations"
 import { toDate } from "@/lib/timestamps"
 import { getViewerSettings } from "@/platform/settings/tenant-store"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
-import { TENANT_ROLE_KEYS } from "@/platform/tenancy/permissions"
+import { memberCan } from "@/platform/tenancy/permissions"
+import { tenantRoleKeys } from "@/platform/tenancy/invitations"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MembersTable, type MemberRow } from "@/components/dashboard/members-table"
@@ -35,13 +37,9 @@ export default async function MembersPage({
   }
   const t = await getTranslations("dashboard.members")
   const settings = await getViewerSettings()
-  const { Invitation, Member, OrganizationRole, Session, User } = db8.orm.public
+  const { Invitation, Member, Session, User } = db8.orm.public
 
-  const customRoles = await OrganizationRole.select("role")
-    .where({ organizationId: ctx.tenantId })
-    .orderBy((r) => r.role.asc())
-    .all()
-  const roleOptions = [...TENANT_ROLE_KEYS, ...customRoles.map((r) => r.role)]
+  const roleOptions = await tenantRoleKeys(ctx.tenantId)
 
   const spec: TableQuerySpec = {
     sortable: ["createdAt", "role"],
@@ -98,7 +96,10 @@ export default async function MembersPage({
     createdAt: toDate(m.createdAt).toISOString(),
     lastActiveAt: lastActive.has(m.userId) ? new Date(lastActive.get(m.userId)!).toISOString() : null,
   }))
-  const canManage = ctx.member.role === "owner" || ctx.member.role === "manager"
+  const [canManage, canInvite] = await Promise.all([
+    memberCan(ctx.tenantId, ctx.member.role, "members", "manage"),
+    memberCan(ctx.tenantId, ctx.member.role, "members", "invite"),
+  ])
 
   return (
     <div className="space-y-6">
@@ -112,7 +113,9 @@ export default async function MembersPage({
         query={query}
         defaults={{ sort: spec.sortable[0], dir: spec.defaultDir, pageSize: spec.defaultPageSize }}
         roleOptions={roleOptions}
+        grantableRoles={roleOptions.filter((role) => mayGrantRole(ctx.member.role, role))}
         canManage={canManage}
+        canInvite={canManage || canInvite}
         viewerUserId={ctx.user.id}
       />
       {invitations.length > 0 && (
@@ -127,7 +130,7 @@ export default async function MembersPage({
                   <span className="min-w-0 truncate">{i.email}</span>
                   <Badge variant="secondary">{i.role}</Badge>
                   <span className="ml-auto text-xs text-muted-foreground">{t(`invitations.status.${i.status}`)}</span>
-                  {canManage && <RevokeInvitation id={i.id} email={i.email} />}
+                  {(canManage || canInvite) && <RevokeInvitation id={i.id} email={i.email} />}
                 </li>
               ))}
             </ul>

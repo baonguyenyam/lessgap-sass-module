@@ -39,11 +39,24 @@ type Props = {
   query: TableQuery
   defaults: { sort: string; dir: "asc" | "desc"; pageSize: number }
   roleOptions: string[]
+  /** The roles the viewer may hand out (only an owner grants `owner`). */
+  grantableRoles: string[]
   canManage: boolean
+  canInvite: boolean
   viewerUserId: string
 }
 
-export function MembersTable({ rows, total, query, defaults, roleOptions, canManage, viewerUserId }: Props) {
+export function MembersTable({
+  rows,
+  total,
+  query,
+  defaults,
+  roleOptions,
+  grantableRoles,
+  canManage,
+  canInvite,
+  viewerUserId,
+}: Props) {
   const t = useTranslations("dashboard.members")
   const format = useFormatter()
   const openDrawer = useDrawer((s) => s.open)
@@ -180,7 +193,7 @@ export function MembersTable({ rows, total, query, defaults, roleOptions, canMan
           icon: Users,
           title: t("list.empty.title"),
           description: t("list.empty.description"),
-          action: canManage ? (
+          action: canInvite ? (
             <Button onClick={() => openDrawer(INVITE)}>
               <UserPlus />
               {t("invite.title")}
@@ -188,7 +201,7 @@ export function MembersTable({ rows, total, query, defaults, roleOptions, canMan
           ) : undefined,
         }}
         actions={
-          canManage ? (
+          canInvite ? (
             <Button onClick={() => openDrawer(INVITE)}>
               <UserPlus className="h-4 w-4" />
               {t("invite.title")}
@@ -196,8 +209,8 @@ export function MembersTable({ rows, total, query, defaults, roleOptions, canMan
           ) : null
         }
       />
-      {canManage && <InviteDrawer roleOptions={roleOptions} />}
-      {canManage && <RoleDrawer rows={rows} roleOptions={roleOptions} />}
+      {canInvite && <InviteDrawer roleOptions={grantableRoles} />}
+      {canManage && <RoleDrawer rows={rows} roleOptions={grantableRoles} />}
     </>
   )
 }

@@ -6,8 +6,10 @@ import { getTranslations } from "next-intl/server"
 import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
 import { inviteMemberSchema } from "@/lib/schemas/tenant"
+import { mayGrantRole } from "@/lib/invitations"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
-import { TENANT_ROLE_KEYS } from "@/platform/tenancy/permissions"
+import { tenantRoleKeys } from "@/platform/tenancy/invitations"
+import { memberCan } from "@/platform/tenancy/permissions"
 
 const MEMBERS = "/t/[slug]/members"
 
@@ -17,25 +19,52 @@ async function ownerCount(tenantId: string): Promise<number> {
     .then((r) => r.n)
 }
 
-async function listRoleKeys(tenantId: string): Promise<string[]> {
-  const custom = await db8.orm.public.OrganizationRole.select("role").where({ organizationId: tenantId }).all()
-  return [...TENANT_ROLE_KEYS, ...custom.map((r) => r.role)]
+/** Better Auth's refusals an inviter can act on, by their code; anything else is a real error. */
+const INVITE_REFUSALS: Record<string, string> = {
+  USER_IS_ALREADY_A_MEMBER_OF_THIS_ORGANIZATION: "alreadyMember",
+  USER_IS_ALREADY_INVITED_TO_THIS_ORGANIZATION: "alreadyInvited",
 }
 
-/** Invite a sub-user by email, from the members drawer. Needs `members.invite`. */
+function refusalCode(error: unknown): string | undefined {
+  const code = (error as { body?: { code?: unknown } } | null)?.body?.code
+  return typeof code === "string" ? INVITE_REFUSALS[code] : undefined
+}
+
+/**
+ * Invite a sub-user by email, from the members drawer (task 1.8). Needs
+ * `members.invite` or `members.manage`; only an owner invites an owner. The
+ * email goes out from the plugin's `sendInvitationEmail` hook in `src/auth.ts`.
+ */
 export async function inviteMember(values: unknown): Promise<{ error?: string }> {
-  const ctx = await requireTenantContext("members", "invite")
+  const ctx = await requireTenantContext()
   const t = await getTranslations("dashboard.members.errors")
+  const allowed =
+    ctx.member.status !== "suspended" &&
+    ((await memberCan(ctx.tenantId, ctx.member.role, "members", "invite")) ||
+      (await memberCan(ctx.tenantId, ctx.member.role, "members", "manage")))
+  if (!allowed) return { error: t("forbidden") }
   const parsed = inviteMemberSchema({ invalidEmail: t("invalidEmail"), roleRequired: t("roleRequired") }).safeParse(
     values
   )
   if (!parsed.success) return { error: parsed.error.issues[0].message }
-  if (!(await listRoleKeys(ctx.tenantId)).includes(parsed.data.role)) return { error: t("unknownRole") }
+  if (!(await tenantRoleKeys(ctx.tenantId)).includes(parsed.data.role)) return { error: t("unknownRole") }
+  if (!mayGrantRole(ctx.member.role, parsed.data.role)) return { error: t("ownerOnly") }
 
-  await auth.api.createInvitation({
-    headers: await headers(),
-    body: { email: parsed.data.email, role: parsed.data.role, organizationId: ctx.tenantId },
-  })
+  // The table keeps one invitation per address and tenant: an expired,
+  // declined or withdrawn one would block the new invitation.
+  await db8.orm.public.Invitation.where({ organizationId: ctx.tenantId, email: parsed.data.email })
+    .where((i) => i.status.neq("pending"))
+    .delete()
+  try {
+    await auth.api.createInvitation({
+      headers: await headers(),
+      body: { email: parsed.data.email, role: parsed.data.role, organizationId: ctx.tenantId },
+    })
+  } catch (error) {
+    const refusal = refusalCode(error)
+    if (refusal) return { error: t(refusal) }
+    throw error
+  }
   revalidatePath(MEMBERS, "page")
   return {}
 }
@@ -47,11 +76,14 @@ export async function inviteMember(values: unknown): Promise<{ error?: string }>
 export async function setMemberRole(memberId: string, role: string): Promise<{ error?: string }> {
   const ctx = await requireTenantContext("members", "manage")
   const t = await getTranslations("dashboard.members.errors")
-  if (!(await listRoleKeys(ctx.tenantId)).includes(role)) return { error: t("unknownRole") }
+  if (!(await tenantRoleKeys(ctx.tenantId)).includes(role)) return { error: t("unknownRole") }
 
   const target = await db8.orm.public.Member.where({ id: memberId, organizationId: ctx.tenantId }).first()
   if (!target) return { error: t("notFound") }
   if (target.role === role) return {}
+  if (!mayGrantRole(ctx.member.role, role) || !mayGrantRole(ctx.member.role, target.role)) {
+    return { error: t("ownerOnly") }
+  }
   if (target.role === "owner" && (await ownerCount(ctx.tenantId)) <= 1) return { error: t("lastOwner") }
 
   await auth.api.updateMemberRole({ headers: await headers(), body: { memberId, role } })
@@ -76,7 +108,7 @@ export async function removeMembers(memberIds: string[]): Promise<{ removed: num
   for (const target of targets) {
     if (target.userId === ctx.user.id) continue
     if (target.role === "owner") {
-      if (owners <= 1) continue
+      if (owners <= 1 || !mayGrantRole(ctx.member.role, "owner")) continue
       owners -= 1
     }
     await auth.api.removeMember({ headers: await headers(), body: { memberIdOrEmail: target.id } })

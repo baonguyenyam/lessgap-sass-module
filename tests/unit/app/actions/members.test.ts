@@ -2,14 +2,18 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import type { Db8Mock } from "@tests/helpers/db8-mock"
 
 const api = { createInvitation: vi.fn(), updateMemberRole: vi.fn(), removeMember: vi.fn(), cancelInvitation: vi.fn() }
-const ctx = { tenantId: "t1", user: { id: "u-me" }, member: { role: "owner" } }
+const ctx = { tenantId: "t1", user: { id: "u-me" }, member: { role: "owner", status: "active" } }
+const memberCan = vi.fn()
 
 vi.mock("@/auth", () => ({ auth: { api } }))
 vi.mock("next/headers", () => ({ headers: async () => new Headers() }))
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }))
 vi.mock("next-intl/server", () => ({ getTranslations: async () => (key: string) => key }))
 vi.mock("@/platform/tenancy/require-member", () => ({ requireTenantContext: async () => ctx }))
-vi.mock("@/platform/tenancy/permissions", () => ({ TENANT_ROLE_KEYS: ["owner", "manager", "staff"] }))
+vi.mock("@/platform/tenancy/permissions", () => ({ memberCan: (...a: unknown[]) => memberCan(...a) }))
+vi.mock("@/platform/tenancy/invitations", () => ({
+  tenantRoleKeys: async () => ["owner", "manager", "staff", "front-desk"],
+}))
 vi.mock("@/lib/db8", async () => (await import("@tests/helpers/db8-mock")).createDb8Mock())
 
 const { cancelMemberInvitation, inviteMember, removeMembers, setMemberRole, setMembersSuspended } =
@@ -19,6 +23,8 @@ const db = (await import("@/lib/db8")) as unknown as Db8Mock
 beforeEach(() => {
   db.reset()
   Object.values(api).forEach((fn) => fn.mockReset())
+  ctx.member.role = "owner"
+  memberCan.mockReset().mockResolvedValue(true)
   db.fn("OrganizationRole.all").mockResolvedValue([{ role: "front-desk" }])
   db.fn("Member.aggregate").mockResolvedValue({ n: 1 })
 })
@@ -38,7 +44,47 @@ describe("inviteMember", () => {
   })
 })
 
+describe("inviteMember permissions (task 1.8)", () => {
+  it("refuses a role that can neither invite nor manage members", async () => {
+    ctx.member.role = "manager"
+    memberCan.mockResolvedValue(false)
+    await expect(inviteMember({ email: "a@example.com", role: "staff" })).resolves.toEqual({ error: "forbidden" })
+    expect(api.createInvitation).not.toHaveBeenCalled()
+  })
+
+  it("lets a custom role with members.invite invite, but never as owner", async () => {
+    ctx.member.role = "front-desk"
+    memberCan.mockImplementation(async (_t: string, _r: string, _res: string, verb: string) => verb === "invite")
+    await expect(inviteMember({ email: "a@example.com", role: "owner" })).resolves.toEqual({ error: "ownerOnly" })
+    await expect(inviteMember({ email: "a@example.com", role: "staff" })).resolves.toEqual({})
+    expect(api.createInvitation).toHaveBeenCalledOnce()
+  })
+
+  it("clears an old answered invitation for the address, then invites", async () => {
+    await inviteMember({ email: "a@example.com", role: "staff" })
+    expect(db.fn("Invitation.delete")).toHaveBeenCalled()
+  })
+
+  it("turns the plugin's 'already invited' and 'already a member' into messages", async () => {
+    api.createInvitation.mockRejectedValueOnce({ body: { code: "USER_IS_ALREADY_INVITED_TO_THIS_ORGANIZATION" } })
+    await expect(inviteMember({ email: "a@example.com", role: "staff" })).resolves.toEqual({ error: "alreadyInvited" })
+    api.createInvitation.mockRejectedValueOnce({ body: { code: "USER_IS_ALREADY_A_MEMBER_OF_THIS_ORGANIZATION" } })
+    await expect(inviteMember({ email: "a@example.com", role: "staff" })).resolves.toEqual({ error: "alreadyMember" })
+    api.createInvitation.mockRejectedValueOnce(new Error("boom"))
+    await expect(inviteMember({ email: "a@example.com", role: "staff" })).rejects.toThrow("boom")
+  })
+})
+
 describe("setMemberRole", () => {
+  it("lets only an owner change an owner's role or make an owner", async () => {
+    ctx.member.role = "front-desk"
+    db.fn("Member.first").mockResolvedValue({ id: "m3", role: "owner", userId: "u3" })
+    await expect(setMemberRole("m3", "staff")).resolves.toEqual({ error: "ownerOnly" })
+    db.fn("Member.first").mockResolvedValue({ id: "m4", role: "staff", userId: "u4" })
+    await expect(setMemberRole("m4", "owner")).resolves.toEqual({ error: "ownerOnly" })
+    expect(api.updateMemberRole).not.toHaveBeenCalled()
+  })
+
   it("never demotes the last owner", async () => {
     db.fn("Member.first").mockResolvedValue({ id: "m1", role: "owner", userId: "u2" })
     await expect(setMemberRole("m1", "staff")).resolves.toEqual({ error: "lastOwner" })

@@ -106,6 +106,32 @@ export async function sendSubscriptionCancelledEmail(to: string, name: string, e
   })
 }
 
+/**
+ * An invitation to join a tenant (task 1.8), sent from the organization
+ * plugin's `sendInvitationEmail`. The invitee may have no account yet, so the
+ * language is their saved one if they have it, else the default.
+ */
+export async function sendTenantInvitationEmail(
+  to: string,
+  invitation: { tenant: string; inviter: string; role: string; url: string }
+) {
+  const locale = await recipientLocale(to)
+  const t = await emailStrings(locale)
+  return sendEmail({
+    kind: "tenant-invitation",
+    to,
+    subject: t("tenantInvitation", { tenant: invitation.tenant }),
+    html: baseTemplate(`
+    <p>${t("tenantInvitationBody.hello")}</p>
+    <p>${t("tenantInvitationBody.intro", { inviter: escapeHtml(invitation.inviter), tenant: escapeHtml(invitation.tenant) })}</p>
+    <div class="highlight"><p>${t("tenantInvitationBody.role", { role: escapeHtml(invitation.role) })}</p></div>
+    <a href="${invitation.url}" class="btn">${t("tenantInvitationBody.cta")}</a>
+    <p style="margin-top:24px">${t("tenantInvitationBody.expires")}</p>
+    <p>${t("tenantInvitationBody.ignore")}</p>
+  `),
+  })
+}
+
 function baseTemplate(content: string) {
   return `<!DOCTYPE html>
 <html lang="en">

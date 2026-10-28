@@ -508,6 +508,17 @@ export const auth = betterAuth({
       dynamicAccessControl: { enabled: true },
       // Phase-1 decision 1-C: invitations live seven days.
       invitationExpiresIn: 7 * 24 * 60 * 60,
+      // Task 1.8: the link opens /invite/<id>, which works signed out too.
+      sendInvitationEmail: async ({ id, email, role, organization, inviter }) => {
+        const { sendTenantInvitationEmail } = await import("@/lib/email")
+        const { invitationPath } = await import("@/lib/invitations")
+        await sendTenantInvitationEmail(email, {
+          tenant: organization.name,
+          inviter: inviter.user.name || inviter.user.email,
+          role,
+          url: `${process.env.NEXT_PUBLIC_APP_URL}${invitationPath(id)}`,
+        })
+      },
       schema: {
         organization: { modelName: "Tenant" },
         member: { modelName: "Member" },

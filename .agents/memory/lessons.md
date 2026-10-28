@@ -2,6 +2,18 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-28 · better auth · `jsonb` columns come back parsed, and Better Auth parses them again
+- **Symptom:** `SyntaxError: "[object Object]" is not valid JSON` in the organization plugin's `hasPermission`, on `createInvitation` in a tenant with a custom role.
+- **Cause:** `OrganizationRole.permission` is `jsonb`; node-postgres parses JSON columns, while Better Auth declares the field a string and calls `JSON.parse`.
+- **Fix:** the Better Auth pool in `src/lib/kysely.ts` has its own `types.getTypeParser` that returns JSON and JSONB as text; the global `pg.types` and the ORM are untouched.
+- **Rule:** a Better Auth field typed `string` on a `jsonb` column is read as text on its pool; test plugin endpoints in a tenant that has a custom role.
+
+### 2026-10-28 · vitest · Mock every export of `@/lib/email` in integration tests
+- **Symptom:** `No "sendWelcomeEmail" export is defined on the mock`, then `Cannot read properties of undefined (reading 'catch')`, after mocking only the invitation email.
+- **Cause:** Better Auth's hooks import other email functions dynamically and chain `.catch` on them.
+- **Fix:** `vi.mock("@/lib/email", async (importOriginal) => ...)` mapping every export to `vi.fn(async () => true)`, then overriding the one under test.
+- **Rule:** when replacing a module that auth hooks import, replace all of its exports with resolving stubs.
+
 ### 2026-10-28 · next · `notFound()` in a layout cannot send a 404 once the shell streams
 - **Symptom:** the T6 E2E got status 200 for a tenant the user was not a member of; the 404 page rendered, but late.
 - **Cause:** with Cache Components the static shell (and `loading.tsx`) streams before the layout's membership check, and the status is fixed when streaming starts.

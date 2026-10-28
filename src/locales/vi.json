@@ -532,7 +532,11 @@
         "roleRequired": "Chọn một vai trò.",
         "unknownRole": "Vai trò này không tồn tại trong không gian làm việc.",
         "notFound": "Thành viên này không còn trong không gian làm việc.",
-        "lastOwner": "Không thể đổi vai trò của chủ sở hữu cuối cùng."
+        "lastOwner": "Không thể đổi vai trò của chủ sở hữu cuối cùng.",
+        "forbidden": "Bạn không thể mời người khác vào không gian làm việc này.",
+        "ownerOnly": "Chỉ chủ sở hữu mới có thể chỉ định chủ sở hữu khác hoặc đổi vai trò của chủ sở hữu.",
+        "alreadyMember": "Người này đã là thành viên của không gian làm việc.",
+        "alreadyInvited": "Địa chỉ này đã có một lời mời đang chờ."
       },
       "suspendConfirm": {
         "title": "Tạm khoá các thành viên đã chọn?",
@@ -927,6 +931,15 @@
       },
       "noSpam": "Không spam, không tin nhắn rác hàng ngày. Hủy đăng ký bất kỳ lúc nào chỉ bằng một cú nhấp chuột.",
       "unsubscribe": "Hủy đăng ký"
+    },
+    "tenantInvitation": "Bạn được mời tham gia {tenant}",
+    "tenantInvitationBody": {
+      "hello": "Xin chào",
+      "intro": "{inviter} đã mời bạn tham gia {tenant}.",
+      "role": "Vai trò của bạn: <strong>{role}</strong>",
+      "cta": "Xem lời mời",
+      "expires": "Lời mời có hiệu lực trong bảy ngày. Hãy đăng nhập hoặc tạo tài khoản bằng địa chỉ email này để nhận lời mời.",
+      "ignore": "Nếu bạn không chờ email này, bạn có thể bỏ qua."
     }
   },
   "hero": {
@@ -1413,5 +1426,23 @@
   },
   "language": {
     "label": "Đổi ngôn ngữ"
+  },
+  "invite": {
+    "title": "Tham gia {tenant}",
+    "summary": "{inviter} đã mời {email} tham gia với vai trò {role}.",
+    "signedOut": "Hãy đăng nhập hoặc tạo tài khoản bằng {email}. Sau đó bạn sẽ quay lại đây để nhận lời mời.",
+    "signUp": "Tạo tài khoản",
+    "signIn": "Đăng nhập",
+    "wrongAccount": "Bạn đang đăng nhập bằng {current}. Lời mời này dành cho {email}: hãy đăng xuất và đăng nhập bằng địa chỉ đó để nhận lời mời.",
+    "accept": "Nhận lời mời",
+    "decline": "Từ chối",
+    "toDashboard": "Đến bảng điều khiển",
+    "toHome": "Về trang chủ",
+    "state": {
+      "expired": "Lời mời này đã hết hạn. Hãy nhờ {inviter} gửi lời mời mới.",
+      "accepted": "Lời mời này đã được nhận.",
+      "rejected": "Lời mời này đã bị từ chối.",
+      "canceled": "Lời mời này đã bị thu hồi."
+    }
   }
 }

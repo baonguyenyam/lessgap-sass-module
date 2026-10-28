@@ -532,7 +532,11 @@
         "roleRequired": "Choose a role.",
         "unknownRole": "That role does not exist in this workspace.",
         "notFound": "That member is no longer in this workspace.",
-        "lastOwner": "The last owner cannot be given another role."
+        "lastOwner": "The last owner cannot be given another role.",
+        "forbidden": "You cannot invite people to this workspace.",
+        "ownerOnly": "Only an owner can make someone an owner, or change an owner's role.",
+        "alreadyMember": "That person is already a member of this workspace.",
+        "alreadyInvited": "That address already has a pending invitation."
       },
       "suspendConfirm": {
         "title": "Suspend the selected members?",
@@ -927,6 +931,15 @@
       },
       "noSpam": "No spam, no daily drip. Unsubscribe anytime with one click.",
       "unsubscribe": "Unsubscribe"
+    },
+    "tenantInvitation": "You are invited to join {tenant}",
+    "tenantInvitationBody": {
+      "hello": "Hello",
+      "intro": "{inviter} invited you to join {tenant}.",
+      "role": "Your role: <strong>{role}</strong>",
+      "cta": "See the invitation",
+      "expires": "The invitation is valid for seven days. Sign in or create an account with this email address to accept it.",
+      "ignore": "If you were not expecting it, you can ignore this email."
     }
   },
   "hero": {
@@ -1413,5 +1426,23 @@
   },
   "language": {
     "label": "Change language"
+  },
+  "invite": {
+    "title": "Join {tenant}",
+    "summary": "{inviter} invited {email} to join as {role}.",
+    "signedOut": "Sign in or create an account with {email}. You will come back here to accept.",
+    "signUp": "Create an account",
+    "signIn": "Sign in",
+    "wrongAccount": "You are signed in as {current}. This invitation is for {email}: sign out and sign in with that address to accept it.",
+    "accept": "Accept the invitation",
+    "decline": "Decline",
+    "toDashboard": "Go to the dashboard",
+    "toHome": "Go to the home page",
+    "state": {
+      "expired": "This invitation has expired. Ask {inviter} to send a new one.",
+      "accepted": "This invitation has already been accepted.",
+      "rejected": "This invitation was declined.",
+      "canceled": "This invitation was withdrawn."
+    }
   }
 }

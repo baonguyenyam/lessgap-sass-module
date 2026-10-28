@@ -13,6 +13,7 @@ import {
   TENANT_SLUG_HEADER,
   tenantSlugFromPath,
 } from "@/platform/request-context"
+import { invitationIdFromPath, PENDING_INVITATION_COOKIE } from "@/lib/invitations"
 import { isTenantMember } from "@/platform/tenancy/require-member"
 
 /**
@@ -51,6 +52,7 @@ const UNLOCALIZED = [
   "/reset-password",
   "/verify-request",
   "/2fa",
+  "/invite",
   // Root level metadata routes.
   "/sitemap.xml",
   "/robots.txt",
@@ -152,6 +154,18 @@ export default async function proxy(req: NextRequest) {
   // response they have always had.
   if (UNLOCALIZED.some((r) => pathname.startsWith(r))) {
     const res = next()
+    // An invitation link opened signed out: `/dashboard` sends the person back
+    // to it once they have signed in or up (task 1.8).
+    const invitationId = invitationIdFromPath(pathname)
+    if (invitationId && !isLoggedIn) {
+      res.cookies.set(PENDING_INVITATION_COOKIE, invitationId, {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: req.nextUrl.protocol === "https:",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      })
+    }
     // Remember the tenant opened, so `/dashboard` (and the links that still
     // point there) lands on it next time. A slug the user is not a member of
     // is ignored where the cookie is read, and 404s in the tenant layout.

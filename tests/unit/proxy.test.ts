@@ -111,3 +111,12 @@ describe("proxy: tenant dashboards (task 1.7)", () => {
     expect(isTenantMember).not.toHaveBeenCalled()
   })
 })
+
+describe("proxy: invitation links (task 1.8)", () => {
+  it("remembers an invitation opened signed out, without asking for a session", async () => {
+    const res = await run("/invite/abc123")
+    expect(location(res)).toBeNull()
+    expect(res.cookies.get("pending_invitation")?.value).toBe("abc123")
+    expect(intl).not.toHaveBeenCalled()
+  })
+})

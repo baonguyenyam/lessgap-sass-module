@@ -7,6 +7,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.23.0] - 2026-10-28
+
+**Invite people to a workspace by email.** This is a MINOR: `git pull`, `pnpm install`; no migration.
+
+### Added
+
+- **Invitation emails** (task 1.8): inviting from Members sends an email with a link to `/invite/<id>`. Signed out, the page asks to sign in or create an account with the invited address and brings the person back afterwards; signed in, they accept or decline. Invitations last seven days
+- Clear messages when an address is already a member or already invited; an address whose earlier invitation expired, was declined or withdrawn can be invited again
+
+### Changed
+
+- Inviting follows the role's permissions (`members.invite` or `members.manage`), so a custom role can be allowed to invite. Only an owner can make someone an owner or change an owner's role
+
+### Fixed
+
+- **A workspace with a custom role could no longer invite or change roles**: the role's permissions were read back in a form the sign-in library did not expect, and every permission check failed
+
 ## [2.22.0] - 2026-10-28
 
 **Each tenant's dashboard has its own address, `/t/<slug>`, and a switcher.** This is a MINOR: `git pull`, `pnpm install`; no migration.
