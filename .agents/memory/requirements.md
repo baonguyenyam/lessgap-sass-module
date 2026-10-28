@@ -5,6 +5,14 @@ requirement is specified so agents read the source, not this summary. When a
 requirement becomes spec, ADR, rule or test, the pointer is updated and this
 file stays the index — not the place requirements are defined.
 
+## 2026-10-27 — Finish phase 0 without stopping to ask
+
+The owner asked for phase 0 to be completed through task 0.16 while away.
+Done: 0.10, 0.12–0.16, each on its own `p0/<task>` branch, committed locally,
+not pushed. Open: 0.11 (domains do not resolve; owner's purchase and DNS) and
+the Sentry scratch-DSN check (needs a Sentry project) → Findings in
+`spec/phases/phase-0.md`.
+
 ## 2026-10-27 — Status surfaces use semantic colours
 
 Danger, warning, info, success and accent surfaces must use their matching
