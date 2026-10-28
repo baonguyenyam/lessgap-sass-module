@@ -1,7 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import type { Db8Mock } from "@tests/helpers/db8-mock"
 
-const api = { createOrgRole: vi.fn(), updateOrgRole: vi.fn(), deleteOrgRole: vi.fn() }
+const api = {
+  createOrgRole: vi.fn(),
+  updateOrgRole: vi.fn(),
+  deleteOrgRole: vi.fn(),
+  // auditRequest reads the session to spot impersonation; none here.
+  getSession: vi.fn(async () => null),
+}
 
 vi.mock("@/auth", () => ({ auth: { api } }))
 vi.mock("next/headers", () => ({ headers: async () => new Headers() }))

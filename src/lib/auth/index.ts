@@ -68,6 +68,20 @@ export async function getSwitchedBy(): Promise<string | null> {
   return (session?.session as { switchedBy?: string | null } | undefined)?.switchedBy ?? null
 }
 
+/**
+ * The tenant impersonation of the current session, or null (task 1.11). A
+ * session impersonating a tenant is a Switch As session that also carries
+ * `impersonationTenantId`/`impersonationReason`.
+ */
+export async function getImpersonation(): Promise<{ by: string; tenantId: string; reason: string } | null> {
+  const session = await auth.api.getSession({ headers: await headers() })
+  const s = session?.session as
+    | { switchedBy?: string | null; impersonationTenantId?: string | null; impersonationReason?: string | null }
+    | undefined
+  if (!s?.switchedBy || !s.impersonationTenantId) return null
+  return { by: s.switchedBy, tenantId: s.impersonationTenantId, reason: s.impersonationReason ?? "" }
+}
+
 /** The id of the session making this request, or null when signed out. */
 export async function getCurrentSessionId(): Promise<string | null> {
   const session = await auth.api.getSession({ headers: await headers() })

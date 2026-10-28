@@ -7,7 +7,7 @@ import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
 import { foldPermissions, tenantRoleSchema } from "@/lib/schemas/tenant"
 import { getEntitlements } from "@/platform/entitlements"
-import { audit, memberAuditContext } from "@/platform/audit"
+import { auditRequest } from "@/platform/audit"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { permissionsAreDeclared, ROLE_PERMISSIONS, withPluginGrants } from "@/platform/tenancy/permissions"
 
@@ -61,7 +61,7 @@ export async function saveTenantRole(existing: string | null, values: unknown): 
       body: { organizationId: ctx.tenantId, roleName: role, data: { permission: stored } },
     })
   }
-  await audit(memberAuditContext(ctx), {
+  await auditRequest(ctx, {
     action: existing === null ? "tenancy.role.created" : "tenancy.role.updated",
     targetType: "role",
     targetId: role,
@@ -83,7 +83,7 @@ export async function deleteTenantRoles(roles: string[]): Promise<{ deleted: num
     if (role in ROLE_PERMISSIONS) continue
     if ((await memberCount(ctx.tenantId, role)) > 0) continue
     await auth.api.deleteOrgRole({ headers: await headers(), body: { organizationId: ctx.tenantId, roleName: role } })
-    await audit(memberAuditContext(ctx), {
+    await auditRequest(ctx, {
       action: "tenancy.role.deleted",
       targetType: "role",
       targetId: role,

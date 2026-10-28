@@ -1,0 +1,122 @@
+[
+  {
+    "id": "column.public.Session.impersonationReason",
+    "label": "Add column \"impersonationReason\" to \"Session\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "impersonationReason",
+        "table": "Session"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"impersonationReason\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Session",
+          "impersonationReason"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"impersonationReason\" on \"Session\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"impersonationReason\"",
+        "sql": "ALTER TABLE \"public\".\"Session\" ADD COLUMN \"impersonationReason\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"impersonationReason\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Session",
+          "impersonationReason"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"impersonationReason\" on \"Session\""
+        }
+      },
+      {
+        "description": "verify column \"impersonationReason\" has type \"text\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Session",
+          "impersonationReason",
+          "text"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Session.impersonationTenantId",
+    "label": "Add column \"impersonationTenantId\" to \"Session\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "impersonationTenantId",
+        "table": "Session"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"impersonationTenantId\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Session",
+          "impersonationTenantId"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"impersonationTenantId\" on \"Session\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"impersonationTenantId\"",
+        "sql": "ALTER TABLE \"public\".\"Session\" ADD COLUMN \"impersonationTenantId\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"impersonationTenantId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Session",
+          "impersonationTenantId"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"impersonationTenantId\" on \"Session\""
+        }
+      },
+      {
+        "description": "verify column \"impersonationTenantId\" has type \"text\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Session",
+          "impersonationTenantId",
+          "text"
+        ]
+      }
+    ]
+  }
+]

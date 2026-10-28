@@ -7,7 +7,7 @@ import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
 import { inviteMemberSchema } from "@/lib/schemas/tenant"
 import { mayGrantRole } from "@/lib/invitations"
-import { audit, memberAuditContext } from "@/platform/audit"
+import { auditRequest } from "@/platform/audit"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { tenantRoleKeys } from "@/platform/tenancy/invitations"
 import { memberCan } from "@/platform/tenancy/permissions"
@@ -67,7 +67,7 @@ export async function inviteMember(values: unknown): Promise<{ error?: string }>
     if (refusal) return { error: t(refusal) }
     throw error
   }
-  await audit(memberAuditContext(ctx), {
+  await auditRequest(ctx, {
     action: "tenancy.member.invited",
     targetType: "invitation",
     targetId: invitation.id,
@@ -95,7 +95,7 @@ export async function setMemberRole(memberId: string, role: string): Promise<{ e
   if (target.role === "owner" && (await ownerCount(ctx.tenantId)) <= 1) return { error: t("lastOwner") }
 
   await auth.api.updateMemberRole({ headers: await headers(), body: { memberId, role } })
-  await audit(memberAuditContext(ctx), {
+  await auditRequest(ctx, {
     action: "tenancy.member.role_changed",
     targetType: "member",
     targetId: memberId,
@@ -126,7 +126,7 @@ export async function removeMembers(memberIds: string[]): Promise<{ removed: num
       owners -= 1
     }
     await auth.api.removeMember({ headers: await headers(), body: { memberIdOrEmail: target.id } })
-    await audit(memberAuditContext(ctx), {
+    await auditRequest(ctx, {
       action: "tenancy.member.removed",
       targetType: "member",
       targetId: target.id,
@@ -156,7 +156,7 @@ export async function setMembersSuspended(memberIds: string[], suspended: boolea
     .where((m) => m.id.in(allowed.map((m) => m.id)))
     .updateAndCount({ status: suspended ? "suspended" : "active" })
   for (const target of allowed) {
-    await audit(memberAuditContext(ctx), {
+    await auditRequest(ctx, {
       action: suspended ? "tenancy.member.suspended" : "tenancy.member.reactivated",
       targetType: "member",
       targetId: target.id,
@@ -179,7 +179,7 @@ export async function cancelMemberInvitation(invitationId: string): Promise<{ er
   if (!invite) return { error: t("notFound") }
 
   await auth.api.cancelInvitation({ headers: await headers(), body: { invitationId } })
-  await audit(memberAuditContext(ctx), {
+  await auditRequest(ctx, {
     action: "tenancy.invitation.canceled",
     targetType: "invitation",
     targetId: invitationId,

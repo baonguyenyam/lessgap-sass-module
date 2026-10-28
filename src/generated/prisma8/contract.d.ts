@@ -23,7 +23,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'d927132041fdd4862a0a32a8c3ff5253e06d5165b4dfe61d3e7ee9f650483a2e'>;
+  StorageHashBase<'4c38a62ad25336ed1418a5be092074fd47a9186f4fa2190b367a94a86e198c63'>;
 export type ExecutionHash =
   ExecutionHashBase<'096a3369903902f3aed35f38fda0382c781b3f96095fa9c152668c52ad635672'>;
 export type ProfileHash =
@@ -552,6 +552,8 @@ export namespace Models {
     createdAt: FieldOutputTypes['public']['Session']['createdAt'];
     expiresAt: FieldOutputTypes['public']['Session']['expiresAt'];
     id: FieldOutputTypes['public']['Session']['id'];
+    impersonationReason: FieldOutputTypes['public']['Session']['impersonationReason'];
+    impersonationTenantId: FieldOutputTypes['public']['Session']['impersonationTenantId'];
     ipAddress: FieldOutputTypes['public']['Session']['ipAddress'];
     switchedBy: FieldOutputTypes['public']['Session']['switchedBy'];
     token: FieldOutputTypes['public']['Session']['token'];
@@ -2024,6 +2026,18 @@ type ContractBase = Omit<
                   readonly dataType: 'pg/text';
                   readonly codecId: 'pg/text@1';
                   readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly impersonationReason: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly impersonationTenantId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
                   readonly many: false;
                 };
                 readonly ipAddress: {
@@ -4043,6 +4057,14 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
+              readonly impersonationReason: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly impersonationTenantId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
               readonly ipAddress: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
@@ -4091,6 +4113,8 @@ type ContractBase = Omit<
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly expiresAt: { readonly column: 'expiresAt' };
                 readonly id: { readonly column: 'id' };
+                readonly impersonationReason: { readonly column: 'impersonationReason' };
+                readonly impersonationTenantId: { readonly column: 'impersonationTenantId' };
                 readonly ipAddress: { readonly column: 'ipAddress' };
                 readonly switchedBy: { readonly column: 'switchedBy' };
                 readonly token: { readonly column: 'token' };

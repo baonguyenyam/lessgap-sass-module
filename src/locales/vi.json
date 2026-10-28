@@ -698,13 +698,21 @@
         "description": "Kích hoạt lại {name}? Thành viên được truy cập lại ở lượt tiếp theo.",
         "reason": "Ghi chú (không bắt buộc)"
       },
+      "impersonate": {
+        "action": "Xem như chủ sở hữu",
+        "title": "Xem như chủ sở hữu",
+        "description": "Mở {name} với tư cách chủ sở hữu. Cần ghi lý do và được lưu lại.",
+        "reason": "Lý do",
+        "reasonPlaceholder": "Vì sao bạn mở bảng điều khiển của khách hàng này?"
+      },
       "errors": {
         "nameRequired": "Tên là bắt buộc.",
         "invalidEmail": "Nhập một địa chỉ email hợp lệ.",
         "ownerNotFound": "Không có tài khoản nào với email này.",
         "notFound": "Không tìm thấy khách hàng.",
         "invalidStatus": "Trạng thái không hợp lệ.",
-        "reasonRequired": "Cần có lý do để tạm ngưng khách hàng."
+        "forbidden": "Vai trò của bạn không được phép.",
+        "reasonRequired": "Cần có lý do."
       }
     }
   },
@@ -917,6 +925,8 @@
   },
   "switchAs": {
     "banner": "Bạn đang sử dụng ứng dụng dưới tên {email}. Mọi thay đổi bạn thực hiện đều là thật.",
+    "impersonationBanner": "Bạn đang xem khách hàng này dưới tên {email}. Lý do: {reason}.",
+    "endImpersonation": "Kết thúc xem",
     "back": "Chuyển lại"
   },
   "billing": {

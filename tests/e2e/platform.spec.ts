@@ -50,3 +50,23 @@ test("staff lists tenants, opens one and suspends it; its members are then block
   await expect(owner.page.getByRole("heading", { name: /page not found/i })).toBeVisible()
   expect(response?.status()).toBe(404)
 })
+
+test("staff impersonates a tenant: banner with reason, end restores the console", async ({ browser }) => {
+  const { db8 } = await import("@/lib/db8")
+  const owner = await signUp(await browser.newContext())
+  const slug = owner.home.split("/")[2]
+
+  const staff = await signUp(await browser.newContext())
+  await db8.orm.public.User.where({ email: staff.email }).update({ platformRole: "SUPPORT" })
+
+  await staff.page.goto(`/platform/tenants/${slug}`)
+  await staff.page.getByRole("button", { name: "Impersonate" }).click()
+  await staff.page.getByRole("textbox", { name: /reason/i }).fill("E2E support ticket")
+  await staff.page.getByRole("button", { name: "Save" }).click()
+
+  await expect(staff.page).toHaveURL(new RegExp(`/t/${slug}`))
+  await expect(staff.page.getByText(/Reason: E2E support ticket/)).toBeVisible()
+
+  await staff.page.getByRole("button", { name: "End impersonation" }).click()
+  await expect(staff.page).toHaveURL(/\/platform\/tenants/)
+})

@@ -1,7 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import type { Db8Mock } from "@tests/helpers/db8-mock"
 
-const api = { createInvitation: vi.fn(), updateMemberRole: vi.fn(), removeMember: vi.fn(), cancelInvitation: vi.fn() }
+const api = {
+  createInvitation: vi.fn(),
+  updateMemberRole: vi.fn(),
+  removeMember: vi.fn(),
+  cancelInvitation: vi.fn(),
+  // auditRequest reads the session to spot impersonation; none here.
+  getSession: vi.fn(async () => null),
+}
 const ctx = { tenantId: "t1", user: { id: "u-me" }, member: { role: "owner", status: "active" } }
 const memberCan = vi.fn()
 

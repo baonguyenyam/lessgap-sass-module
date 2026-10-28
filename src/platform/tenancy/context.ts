@@ -11,6 +11,9 @@ import type { FieldOutputTypes } from "@/generated/prisma8/contract.d"
 export type TenantRole = string
 export type PlatformRole = NonNullable<FieldOutputTypes["public"]["User"]["platformRole"]>
 
+/** Which platform roles may impersonate a tenant (spec/02-tenancy.md): support and above — never the designer. */
+export const IMPERSONATABLE_ROLES: readonly PlatformRole[] = ["OWNER", "ADMIN", "SUPPORT"]
+
 export type TenantActor =
   | { kind: "member"; userId: string; role: TenantRole }
   | { kind: "platform"; userId: string; role: PlatformRole; impersonating: true; reason: string }

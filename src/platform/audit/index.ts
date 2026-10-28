@@ -49,6 +49,23 @@ export function platformAuditContext(userId: string, tenantId: string | null = n
   return { tenantId, actor: { kind: "platform", userId } }
 }
 
+/**
+ * `audit()` for a member action inside a request (task 1.11): when the session
+ * is a tenant impersonation, the actor on the row is the staff member, not the
+ * impersonated user, and the impersonation reason stands where the event has
+ * none — every mutation is audited like the start was (spec/02-tenancy.md).
+ */
+export async function auditRequest(ctx: { tenantId: string; user: { id: string } }, event: AuditEvent): Promise<void> {
+  const { getImpersonation } = await import("@/lib/auth")
+  const impersonation = await getImpersonation()
+  await audit(
+    impersonation
+      ? { tenantId: ctx.tenantId, actor: { kind: "platform", userId: impersonation.by } }
+      : memberAuditContext(ctx),
+    { ...event, reason: event.reason ?? impersonation?.reason }
+  )
+}
+
 function actorIdOf(actor: AuditActor): string | null {
   switch (actor.kind) {
     case "member":

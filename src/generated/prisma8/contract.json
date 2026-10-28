@@ -1838,6 +1838,20 @@
                   "kind": "scalar"
                 }
               },
+              "impersonationReason": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "impersonationTenantId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "ipAddress": {
                 "nullable": true,
                 "type": {
@@ -1915,6 +1929,12 @@
                 },
                 "id": {
                   "column": "id"
+                },
+                "impersonationReason": {
+                  "column": "impersonationReason"
+                },
+                "impersonationTenantId": {
+                  "column": "impersonationTenantId"
                 },
                 "ipAddress": {
                   "column": "ipAddress"
@@ -4830,6 +4850,16 @@
                   "dataType": "pg/text",
                   "nullable": false
                 },
+                "impersonationReason": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "impersonationTenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
                 "ipAddress": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
@@ -5902,7 +5932,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "d927132041fdd4862a0a32a8c3ff5253e06d5165b4dfe61d3e7ee9f650483a2e"
+    "storageHash": "4c38a62ad25336ed1418a5be092074fd47a9186f4fa2190b367a94a86e198c63"
   },
   "execution": {
     "executionHash": "096a3369903902f3aed35f38fda0382c781b3f96095fa9c152668c52ad635672",

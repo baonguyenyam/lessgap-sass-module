@@ -698,13 +698,21 @@
         "description": "Reactivate {name}? Its members get access back on their next request.",
         "reason": "Note (optional)"
       },
+      "impersonate": {
+        "action": "Impersonate",
+        "title": "Impersonate tenant",
+        "description": "Open {name} as its owner. A written reason is required and recorded.",
+        "reason": "Reason",
+        "reasonPlaceholder": "Why are you opening this tenant's dashboard?"
+      },
       "errors": {
         "nameRequired": "Name is required.",
         "invalidEmail": "Enter a valid email address.",
         "ownerNotFound": "No account exists with that email.",
         "notFound": "Tenant not found.",
         "invalidStatus": "Unknown status.",
-        "reasonRequired": "A reason is required to suspend a tenant."
+        "forbidden": "Your role cannot do this.",
+        "reasonRequired": "A reason is required."
       }
     }
   },
@@ -917,6 +925,8 @@
   },
   "switchAs": {
     "banner": "You are using the app as {email}. Every change you make is real.",
+    "impersonationBanner": "You are viewing this tenant as {email}. Reason: {reason}.",
+    "endImpersonation": "End impersonation",
     "back": "Switch back"
   },
   "billing": {

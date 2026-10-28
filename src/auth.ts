@@ -16,6 +16,7 @@ import { emailEnabled } from "@/lib/email-transport"
 import { enabledOAuthProviders, oauthCredentials } from "@/lib/oauth-providers"
 import { canSwitchAs, isRole } from "@/lib/roles"
 import { audit, platformAuditContext } from "@/platform/audit"
+import { IMPERSONATABLE_ROLES } from "@/platform/tenancy/context"
 import { getPlatformSettings } from "@/platform/settings/store"
 import { tenantAc, tenantRoles } from "@/platform/tenancy/permissions"
 
@@ -203,6 +204,63 @@ const switchAs = () =>
           return ctx.json({ ok: true })
         }
       ),
+      // Tenant impersonation (task 1.11, spec/02-tenancy.md): Switch As onto the
+      // tenant's owner with a written reason, which the session row keeps so the
+      // banner and every mutation's audit row carry it. Support and above only.
+      impersonateStart: createAuthEndpoint(
+        "/switch-as/impersonate",
+        {
+          method: "POST",
+          body: z.object({ tenantId: z.string().min(1), reason: z.string().trim().min(1).max(500) }),
+          use: [sessionMiddleware],
+        },
+        async (ctx) => {
+          const actor = ctx.context.session
+          if ((actor.session as { switchedBy?: string | null }).switchedBy) throw new APIError("FORBIDDEN")
+          // platformRole is not an additionalField, so the session cannot carry
+          // it: read the row, fresh, like requirePlatformRole.
+          const staffUser = await db8.orm.public.User.select("platformRole").where({ id: actor.user.id }).first()
+          if (!staffUser?.platformRole || !IMPERSONATABLE_ROLES.includes(staffUser.platformRole)) {
+            throw new APIError("FORBIDDEN")
+          }
+          const tenant = await db8.orm.public.Tenant.select("id", "status").where({ id: ctx.body.tenantId }).first()
+          if (!tenant || tenant.status === "SUSPENDED" || tenant.status === "CANCELED") throw new APIError("NOT_FOUND")
+          const owner = await db8.orm.public.Member.where({ organizationId: tenant.id, role: "owner" })
+            .orderBy((m) => m.createdAt.asc())
+            .first()
+          if (!owner) throw new APIError("NOT_FOUND")
+          const target = await ctx.context.internalAdapter.findUserById(owner.userId)
+          if (!target) throw new APIError("NOT_FOUND")
+
+          const session = await ctx.context.internalAdapter.createSession(
+            target.id,
+            true,
+            {
+              switchedBy: actor.user.id,
+              impersonationTenantId: tenant.id,
+              impersonationReason: ctx.body.reason,
+              expiresAt: new Date(Date.now() + SWITCH_AS_SECONDS * 1000),
+            },
+            true
+          )
+          if (!session) throw new APIError("INTERNAL_SERVER_ERROR")
+
+          const keep = ctx.context.createAuthCookie(SWITCH_AS_COOKIE)
+          await ctx.setSignedCookie(keep.name, actor.session.token, ctx.context.secret, {
+            ...ctx.context.authCookies.sessionToken.attributes,
+            maxAge: SWITCH_AS_SECONDS,
+          })
+          deleteSessionCookie(ctx, true)
+          await setSessionCookie(ctx, { session, user: target }, true)
+          await audit(platformAuditContext(actor.user.id, tenant.id), {
+            action: "impersonation.started",
+            targetType: "tenant",
+            targetId: tenant.id,
+            reason: ctx.body.reason,
+          })
+          return ctx.json({ ok: true })
+        }
+      ),
       switchAsStop: createAuthEndpoint("/switch-as/stop", { method: "POST", requireHeaders: true }, async (ctx) => {
         const current = await getSessionFromCtx(ctx)
         const switchedBy = (current?.session as { switchedBy?: string | null } | undefined)?.switchedBy
@@ -214,11 +272,17 @@ const switchAs = () =>
 
         await ctx.context.internalAdapter.deleteSession(current.session.token)
         expireCookie(ctx, keep)
-        // Task 1.9: audited like the start, whoever the restored session is.
-        await audit(platformAuditContext(switchedBy), {
-          action: "platform.switch_as.stopped",
-          targetType: "user",
-          targetId: current.user.id,
+        // Task 1.9/1.11: audited like the start, whoever the restored session
+        // is. A session opened by impersonation ends as impersonation.stopped.
+        const impersonating = current.session as {
+          impersonationTenantId?: string | null
+          impersonationReason?: string | null
+        }
+        await audit(platformAuditContext(switchedBy, impersonating.impersonationTenantId ?? null), {
+          action: impersonating.impersonationTenantId ? "impersonation.stopped" : "platform.switch_as.stopped",
+          targetType: impersonating.impersonationTenantId ? "tenant" : "user",
+          targetId: impersonating.impersonationTenantId ?? current.user.id,
+          reason: impersonating.impersonationReason ?? undefined,
         })
         // The ROOT session expired or was revoked meanwhile: end the switched
         // session anyway and leave the browser signed out, never stuck as the
@@ -379,6 +443,9 @@ export const auth = betterAuth({
     additionalFields: {
       // Who opened this session with Switch As. Server-owned, like `role`.
       switchedBy: { type: "string", required: false, input: false },
+      // Tenant-impersonation fields (task 1.11), set by the impersonate endpoint.
+      impersonationTenantId: { type: "string", required: false, input: false },
+      impersonationReason: { type: "string", required: false, input: false },
     },
   },
 

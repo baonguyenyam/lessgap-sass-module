@@ -130,6 +130,11 @@ plan                    Plan                    @relation(fields: [planId], refe
     userAgent String?
     // Set on a Switch As session: the ROOT user who opened it (spec/adr/0015-switch-as.md).
     switchedBy String?
+    // Set on a tenant-impersonation session (task 1.11), alongside switchedBy:
+    // the tenant being viewed and the staff-written reason, so the banner and
+    // every mutation's audit row can show it until the session ends.
+    impersonationTenantId String?
+    impersonationReason String?
     // The tenant this session is working in, set by Better Auth's organization
     // plugin (setActive). It writes the column through Kysely on every new session.
     activeOrganizationId String?
