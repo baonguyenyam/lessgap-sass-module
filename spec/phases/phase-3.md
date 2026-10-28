@@ -79,7 +79,7 @@ set upload rules and rollouts from the console.
   console edit takes effect.
 - **Checks:** `pnpm test`, `pnpm test:integration`.
 - **Done when:** an over-limit upload refuses both at sign-time and after.
-- [ ] done
+- [x] done (`upload.types` and `upload.max_mb` join `PLATFORM_SETTINGS` (admin scope — the console edits them live). `src/platform/media/rules.ts` `checkUploadRules` is the pure rule; `assertUploadAllowed` runs it before `/api/upload` signs a PUT (`presignUpload`, SigV4) and `recordMediaUpload` runs it again before writing the `Media` row — a signed URL proves nothing about the bytes that arrived. Unit `rules.test.ts` covers type/size/wildcard/missing-type; integration `upload-rules.test.ts` shows a console edit takes effect on the next upload and `recordMediaUpload` re-checks.)
 
 ### 3.5 — Theme registry + one shared theme
 - **Goal:** theme manifest type per spec/06, `src/themes/` registry, one

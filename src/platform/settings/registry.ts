@@ -55,6 +55,18 @@ export const PLATFORM_SETTINGS = {
     schema: z.enum(APP_LOCALES),
     default: "en",
   },
+  "upload.types": {
+    group: "access",
+    scope: "admin",
+    schema: z.array(z.string()),
+    default: ["image/jpeg", "image/png", "image/webp", "image/gif"],
+  },
+  "upload.max_mb": {
+    group: "access",
+    scope: "admin",
+    schema: z.coerce.number().min(1).max(100),
+    default: 10,
+  },
   "signup.free_plan.enabled": {
     group: "access",
     scope: "root",

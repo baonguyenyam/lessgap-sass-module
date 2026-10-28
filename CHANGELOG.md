@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.43.0] - 2026-10-28
+
+**Platform upload rules gate every file into R2.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`upload.types` and `upload.max_mb` platform settings** (Admin → Settings, admin scope): allowed MIME types and the size cap, edited live
+- **`/api/upload`** — `sign` checks the rules before the SigV4 PUT URL is signed; `confirm` re-checks them after the bytes land, then writes the `Media` row. An over-limit or disallowed file is refused at both points
+
 ## [2.42.0] - 2026-10-28
 
 **Tenants edit their site content from the dashboard.** This is a MINOR: `git pull`, `pnpm install`.

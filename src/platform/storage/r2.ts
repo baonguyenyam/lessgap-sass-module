@@ -77,3 +77,18 @@ export async function presignDownload(key: string, filename: string, seconds = 3
   const signed = await client.sign(url.toString(), { method: "GET", aws: { signQuery: true } })
   return signed.url
 }
+
+/** A PUT link for one object, valid for `seconds` — the upload rules were
+ * already checked before this is signed; `confirmUpload` re-checks them when
+ * the bytes arrive (task 3.4). */
+export async function presignUpload(key: string, contentType: string, seconds = 300): Promise<string> {
+  const { config, client } = connect()
+  const url = new URL(objectUrl(config, key))
+  url.searchParams.set("X-Amz-Expires", String(seconds))
+  const signed = await client.sign(url.toString(), {
+    method: "PUT",
+    headers: { "content-type": contentType },
+    aws: { signQuery: true },
+  })
+  return signed.url
+}
