@@ -3,14 +3,16 @@ import type { Db8Mock } from "@tests/helpers/db8-mock"
 
 const api = { createOrganization: vi.fn() }
 const staff = { user: { id: "staff-1" }, platformRole: "ADMIN" }
+const enqueueJob = vi.fn(async () => "job-1")
 
 vi.mock("@/auth", () => ({ auth: { api } }))
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }))
 vi.mock("next-intl/server", () => ({ getTranslations: async () => (key: string) => key }))
 vi.mock("@/platform/staff", () => ({ requirePlatformRole: async () => staff }))
+vi.mock("@/platform/jobs/runner", () => ({ enqueueJob }))
 vi.mock("@/lib/db8", async () => (await import("@tests/helpers/db8-mock")).createDb8Mock())
 
-const { createTenantFor, setTenantStatus } = await import("@/app/actions/platform-tenants")
+const { createTenantFor, deleteTenant, setTenantStatus } = await import("@/app/actions/platform-tenants")
 const db = (await import("@/lib/db8")) as unknown as Db8Mock
 
 beforeEach(() => {
@@ -100,5 +102,33 @@ describe("setTenantStatus", () => {
     await expect(setTenantStatus("t1", "ACTIVE")).resolves.toEqual({})
     expect(db.fn("Tenant.update")).not.toHaveBeenCalled()
     expect(db.fn("AuditLog.create")).not.toHaveBeenCalled()
+  })
+})
+
+describe("deleteTenant", () => {
+  const tenant = { id: "t1", slug: "rosy-nails", status: "ACTIVE" }
+
+  it("refuses a missing tenant and a wrong confirmation", async () => {
+    await expect(deleteTenant("ghost", "ghost")).resolves.toEqual({ error: "notFound" })
+    db.fn("Tenant.first").mockResolvedValue(tenant)
+    await expect(deleteTenant("rosy-nails", "nope")).resolves.toEqual({ error: "confirmMismatch" })
+    expect(enqueueJob).not.toHaveBeenCalled()
+    expect(db.fn("Tenant.update")).not.toHaveBeenCalled()
+  })
+
+  it("cancels the tenant, enqueues the purge job and audits it", async () => {
+    db.fn("Tenant.first").mockResolvedValue(tenant)
+    await expect(deleteTenant("rosy-nails", "rosy-nails")).resolves.toEqual({})
+    expect(db.fn("Tenant.update")).toHaveBeenCalledWith({ status: "CANCELED" })
+    expect(enqueueJob).toHaveBeenCalledWith("platform.tenant.delete", { tenantId: "t1" }, { tenantId: "t1" })
+    expect(db.fn("AuditLog.create")).toHaveBeenCalledWith(
+      expect.objectContaining({
+        tenantId: "t1",
+        actorId: "staff-1",
+        actorKind: "platform",
+        action: "platform.tenant.deletion_requested",
+        targetId: "t1",
+      })
+    )
   })
 })

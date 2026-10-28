@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.29.0] - 2026-10-28
+
+**Staff can now delete a tenant entirely from the console.** This is a MINOR: `git pull`, `pnpm install` — no migration.
+
+### Added
+
+- **Tenant deletion**: the tenant detail's Delete button asks for the typed slug, cancels the tenant immediately (members lose access on the next request) and queues a `platform.tenant.delete` job that purges every tenant-owned row — subscriptions to the tenant's lists, module states, settings, members, invitations and roles — before removing the tenant itself. Module `onPurge` hooks run first, and the audit trail survives: the deletion request is itself audited
+
 ## [2.28.0] - 2026-10-28
 
 **The platform console now has its ops pages.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.

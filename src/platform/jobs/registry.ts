@@ -40,4 +40,15 @@ export const JOBS: JobRegistry = {
       await db8.orm.public.EmailMessage.where((m) => m.createdAt.lt(cutoff)).deleteAndCount()
     },
   },
+  // Tenant deletion (task 1.14): the console action enqueues one row per
+  // tenant; the purge itself lives in src/platform/tenancy/delete-tenant.ts.
+  // Idempotent — deleting a missing tenant is a no-op.
+  "platform.tenant.delete": {
+    handler: async (payload, context) => {
+      const tenantId = (payload as { tenantId?: string }).tenantId ?? context.tenantId
+      if (!tenantId) throw new Error("platform.tenant.delete without a tenant id")
+      const { deleteTenant } = await import("@/platform/tenancy/delete-tenant")
+      await deleteTenant(tenantId)
+    },
+  },
 }

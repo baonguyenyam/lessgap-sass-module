@@ -41,7 +41,7 @@ export default async function PlatformTenantPage({ params }: { params: Promise<{
             <TenantStatusBadge status={tenant.status} />
           </p>
         </div>
-        <TenantStatusActions tenant={{ id: tenant.id, name: tenant.name, status: tenant.status }} />
+        <TenantStatusActions tenant={{ id: tenant.id, name: tenant.name, slug: tenant.slug, status: tenant.status }} />
       </div>
 
       <Card>

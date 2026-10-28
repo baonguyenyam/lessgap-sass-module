@@ -654,6 +654,12 @@
         "description": "Kích hoạt lại {name}? Thành viên được truy cập lại ở lượt tiếp theo.",
         "reason": "Ghi chú (không bắt buộc)"
       },
+      "delete": {
+        "action": "Xoá",
+        "title": "Xoá khách hàng",
+        "description": "Xoá vĩnh viễn {name} và toàn bộ dữ liệu. Thành viên mất quyền truy cập ngay. Nhập slug {slug} để xác nhận.",
+        "confirmLabel": "Slug"
+      },
       "impersonate": {
         "action": "Xem như chủ sở hữu",
         "title": "Xem như chủ sở hữu",
@@ -668,7 +674,9 @@
         "notFound": "Không tìm thấy khách hàng.",
         "invalidStatus": "Trạng thái không hợp lệ.",
         "forbidden": "Vai trò của bạn không được phép.",
-        "reasonRequired": "Cần có lý do."
+        "reasonRequired": "Cần có lý do.",
+        "confirmRequired": "Nhập slug để xác nhận.",
+        "confirmMismatch": "Đó không phải slug của khách hàng này."
       }
     },
     "jobs": {

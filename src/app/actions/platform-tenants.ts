@@ -7,6 +7,7 @@ import { db8 } from "@/lib/db8"
 import { slugify } from "@/lib/slugify"
 import { createTenantSchema } from "@/lib/schemas/platform"
 import { audit, platformAuditContext } from "@/platform/audit"
+import { enqueueJob } from "@/platform/jobs/runner"
 import { requirePlatformRole } from "@/platform/staff"
 
 const TENANTS = "/platform/tenants"
@@ -77,5 +78,31 @@ export async function setTenantStatus(
   })
   revalidatePath(TENANTS, "page")
   revalidatePath(`${TENANTS}/${tenant.slug}`, "page")
+  return {}
+}
+
+/**
+ * Deletes a tenant (task 1.14): the typed slug is the confirmation, the tenant
+ * is CANCELED immediately so members lose access, then a
+ * `platform.tenant.delete` job purges every tenant-owned row and the tenant
+ * itself. The audit row survives — AuditLog is platform-private.
+ */
+export async function deleteTenant(slug: string, confirmSlug: string): Promise<{ error?: string }> {
+  const { user } = await requirePlatformRole()
+  const t = await getTranslations("platform.tenants.errors")
+
+  const tenant = await db8.orm.public.Tenant.select("id", "slug", "status").where({ slug }).first()
+  if (!tenant) return { error: t("notFound") }
+  if (confirmSlug.trim() !== tenant.slug) return { error: t("confirmMismatch") }
+
+  await db8.orm.public.Tenant.where({ id: tenant.id }).update({ status: "CANCELED" })
+  const jobId = await enqueueJob("platform.tenant.delete", { tenantId: tenant.id }, { tenantId: tenant.id })
+  await audit(platformAuditContext(user.id, tenant.id), {
+    action: "platform.tenant.deletion_requested",
+    targetType: "tenant",
+    targetId: tenant.id,
+    data: { jobId },
+  })
+  revalidatePath(TENANTS, "page")
   return {}
 }

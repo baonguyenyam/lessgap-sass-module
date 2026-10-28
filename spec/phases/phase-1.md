@@ -125,7 +125,7 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - **Goal:** delete a tenant completely, driven by the classification list and module `onPurge` hooks.
 - **Files:** `src/platform/tenancy/delete-tenant.ts`, job registration, console action with confirmation.
 - **Tests:** T9.
-- [ ] done
+- [x] done (`deleteTenant` in `src/platform/tenancy/delete-tenant.ts` runs module `onPurge` hooks first, then removes every tenant-owned row (`NewsletterSubscriber`, `TenantModule`, `TenantSetting` by `tenantId`) and every tenant-identity row (`Member`, `Invitation`, `OrganizationRole` by `organizationId`) before the `Tenant` row — explicit deletes, not reliance on the cascades, so the T9 guarantee survives a later contract change. Platform-private rows keep their `tenantId` as context: the audit trail of the deletion survives it. Registered as job kind `platform.tenant.delete`; the console's Delete button asks for the typed slug, the action cancels the tenant immediately (members lose access on the next request), enqueues the job and audits `platform.tenant.deletion_requested`. Deleting a missing tenant is a no-op. `moduleRegistry` is still empty, so no hook ran here — the loop is covered by the type, and the integration test drives the T9 assertion directly plus the job handler.)
 
 ## Exit criteria
 - T1–T10, R1–R6 and O8 green in CI.
