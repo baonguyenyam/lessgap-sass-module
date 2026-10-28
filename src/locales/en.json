@@ -425,6 +425,9 @@
       "databaseBackups": "Backups",
       "platformSettings": "Settings",
       "tenants": "Tenants",
+      "jobs": "Jobs",
+      "emails": "Emails",
+      "errors": "Errors",
       "groups": {
         "main": "Overview",
         "workspace": "Workspace",
@@ -666,6 +669,85 @@
         "invalidStatus": "Unknown status.",
         "forbidden": "Your role cannot do this.",
         "reasonRequired": "A reason is required."
+      }
+    },
+    "jobs": {
+      "title": "Jobs",
+      "subtitle": "Due, running and failed background work.",
+      "search": "Search by kind…",
+      "colKind": "Kind",
+      "colStatus": "Status",
+      "colAttempts": "Attempts",
+      "colRunAt": "Run at",
+      "colLastError": "Last error",
+      "colActions": "Actions",
+      "retry": "Retry",
+      "runNow": "Run now",
+      "empty": {
+        "title": "No jobs yet",
+        "description": "Queued and finished runs appear here."
+      },
+      "status": {
+        "QUEUED": "Queued",
+        "RUNNING": "Running",
+        "SUCCEEDED": "Succeeded",
+        "FAILED": "Failed"
+      }
+    },
+    "emails": {
+      "title": "Emails",
+      "subtitle": "Every delivery attempt, with its stored body.",
+      "search": "Search by address or subject…",
+      "colTo": "To",
+      "subject": "Subject",
+      "colKind": "Kind",
+      "colStatus": "Status",
+      "colProvider": "Provider",
+      "providerMessageId": "Provider ID",
+      "colTenant": "Tenant",
+      "colCreatedAt": "Created",
+      "sentAt": "Sent at",
+      "lastError": "Last error",
+      "details": "Delivery",
+      "payload": "Body preview",
+      "payloadDescription": "The rendered body kept on the row.",
+      "payloadEmpty": "This message predates body capture; nothing to preview.",
+      "resend": "Resend",
+      "resending": "Resending…",
+      "resent": "Queued for resend",
+      "empty": {
+        "title": "No email yet",
+        "description": "Delivery attempts appear here."
+      },
+      "status": {
+        "QUEUED": "Queued",
+        "SENT": "Sent",
+        "REFUSED": "Refused",
+        "FAILED": "Failed"
+      },
+      "errors": {
+        "notFound": "Email not found.",
+        "noPayload": "No stored body to resend.",
+        "sendFailed": "The resend failed — see the new row for the error."
+      }
+    },
+    "errors": {
+      "title": "Errors",
+      "subtitle": "Masked error groups, one row per digest.",
+      "search": "Search by name or message…",
+      "colName": "Error",
+      "colSource": "Source",
+      "colCount": "Occurrences",
+      "colTenant": "Tenant",
+      "colLastSeen": "Last seen",
+      "colResolved": "State",
+      "colActions": "Actions",
+      "open": "Open",
+      "resolved": "Resolved",
+      "resolve": "Resolve",
+      "empty": {
+        "title": "No errors yet",
+        "description": "Masked error digests appear here."
       }
     }
   },

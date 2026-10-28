@@ -23,7 +23,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'4c38a62ad25336ed1418a5be092074fd47a9186f4fa2190b367a94a86e198c63'>;
+  StorageHashBase<'368c0f832bf717aae07a211a316faa92e5b72946f90895162a8e58bbaa1a0def'>;
 export type ExecutionHash =
   ExecutionHashBase<'096a3369903902f3aed35f38fda0382c781b3f96095fa9c152668c52ad635672'>;
 export type ProfileHash =
@@ -406,6 +406,7 @@ export namespace Models {
     id: FieldOutputTypes['public']['EmailMessage']['id'];
     kind: FieldOutputTypes['public']['EmailMessage']['kind'];
     lastError: FieldOutputTypes['public']['EmailMessage']['lastError'];
+    payload: FieldOutputTypes['public']['EmailMessage']['payload'];
     provider: FieldOutputTypes['public']['EmailMessage']['provider'];
     providerMessageId: FieldOutputTypes['public']['EmailMessage']['providerMessageId'];
     sentAt: FieldOutputTypes['public']['EmailMessage']['sentAt'];
@@ -954,6 +955,12 @@ type ContractBase = Omit<
                 readonly lastError: {
                   readonly dataType: 'pg/text';
                   readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly payload: {
+                  readonly dataType: 'pg/json';
+                  readonly codecId: 'pg/json@1';
                   readonly nullable: true;
                   readonly many: false;
                 };
@@ -3171,6 +3178,10 @@ type ContractBase = Omit<
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
+              readonly payload: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
+              };
               readonly provider: {
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
@@ -3225,6 +3236,7 @@ type ContractBase = Omit<
                 readonly id: { readonly column: 'id' };
                 readonly kind: { readonly column: 'kind' };
                 readonly lastError: { readonly column: 'lastError' };
+                readonly payload: { readonly column: 'payload' };
                 readonly provider: { readonly column: 'provider' };
                 readonly providerMessageId: { readonly column: 'providerMessageId' };
                 readonly sentAt: { readonly column: 'sentAt' };

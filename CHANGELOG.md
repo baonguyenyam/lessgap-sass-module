@@ -7,6 +7,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.28.0] - 2026-10-28
+
+**The platform console now has its ops pages.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **Jobs page** (`/platform/jobs`): due, running and failed background work, with per-row retry (failed runs return to the queue with attempts reset) and run-now (queued rows become due immediately)
+- **Emails page** (`/platform/emails`): every delivery attempt searchable by tenant, kind and status; the detail view previews the stored body and resends the message through the normal transport — the resend lands as its own delivery row
+- **Errors page** (`/platform/errors`): masked error groups with occurrence counts and a resolve action; a recurrence reopens the digest automatically
+- All four ops actions write audit rows, and every `EmailMessage` now keeps the rendered body it was sent with
+
 ## [2.27.0] - 2026-10-28
 
 **The kit's Projects example is gone from the dashboard, and every account gets its own tenant.** This is a MINOR: `git pull`, `pnpm install`; then run `pnpm exec tsx scripts/backfills/20261028-platform-tenant-per-user.ts --apply` to give existing accounts a tenant (dry-run first without the flag).

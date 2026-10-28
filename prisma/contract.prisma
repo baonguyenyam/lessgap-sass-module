@@ -259,6 +259,8 @@ trialEndsAt          TimestampString(3)?
     status            pg.enum(EmailStatus) @default("QUEUED")
     providerMessageId String?
     lastError         String?
+    // The rendered body kept so ops can preview and resend (task 1.13).
+    payload           Json?
     tenantId          String?
     createdAt         TimestampString(3)   @default(now())
     updatedAt         TimestampString(3)   @default(now()) @onUpdate(now())

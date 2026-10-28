@@ -150,3 +150,11 @@ export async function retryJob(id: string): Promise<boolean> {
   })
   return count > 0
 }
+
+/** Makes a QUEUED job due immediately (the console's run-now button, task 1.13). */
+export async function runJobNow(id: string): Promise<boolean> {
+  const count = await db8.orm.public.Job.where({ id, status: "QUEUED" }).updateAndCount({
+    runAt: nowTs(),
+  })
+  return count > 0
+}

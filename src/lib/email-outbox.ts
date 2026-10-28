@@ -20,6 +20,8 @@ export async function openEmailRecord(email: {
   subject: string
   provider: string
   tenantId?: string
+  /** The rendered body, kept for the ops preview/resend (task 1.13). */
+  html?: string
 }): Promise<string | null> {
   try {
     const row = await db8.orm.public.EmailMessage.create({
@@ -28,6 +30,7 @@ export async function openEmailRecord(email: {
       subject: email.subject,
       provider: email.provider,
       tenantId: email.tenantId ?? null,
+      ...(email.html !== undefined ? { payload: { html: email.html } } : {}),
     })
     return row.id
   } catch (error) {

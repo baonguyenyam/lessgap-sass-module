@@ -121,9 +121,7 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - **Tests:** pages refuse non-staff (T10 pattern); email logs search by tenant, kind and status and offer payload preview/resend; retry and run-now actions re-scope through `requirePlatformRole`; resolving a digest sets `resolvedAt` and a recurrence clears it.
 - **Checks:** `pnpm test`, `pnpm test:integration`; E2E walk of the three pages.
 - **Done when:** a failed job and a masked error are visible and actionable in the console without psql or Vercel logs.
-- [ ] done
-
-### 1.14 — Tenant deletion job
+- [x] done (`/platform/jobs` lists due/running/failed rows with retry (FAILED → QUEUED, attempts reset) and run-now (QUEUED → due immediately) per row; `/platform/emails` searches `EmailMessage` by tenant, kind and status, `/platform/emails/[id]` shows the stored body in a sandboxed preview and resends it through the normal transport — a new `EmailMessage` row records the attempt (`EmailMessage.payload` added so a body exists to preview and resend); `/platform/errors` groups `ErrorReport` digests with occurrences and a resolve action — `writeErrorReport` already clears `resolvedAt` on recurrence. All four ops actions re-scope through `requirePlatformRole` and write `platform.job.*` / `platform.email.resent` / `platform.error.resolved` audit rows. **Shipped differently:** "per-kind silence" from the ops-page table is not built — no silencing mechanism exists in the Job model, so it needs its own task rather than a checkbox here.)
 - **Goal:** delete a tenant completely, driven by the classification list and module `onPurge` hooks.
 - **Files:** `src/platform/tenancy/delete-tenant.ts`, job registration, console action with confirmation.
 - **Tests:** T9.

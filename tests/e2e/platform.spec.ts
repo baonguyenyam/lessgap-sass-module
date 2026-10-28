@@ -70,3 +70,46 @@ test("staff impersonates a tenant: banner with reason, end restores the console"
   await staff.page.getByRole("button", { name: "End impersonation" }).click()
   await expect(staff.page).toHaveURL(/\/platform\/tenants/)
 })
+
+test("staff walks the ops pages: a failed job, an email and an error are visible and actionable", async ({
+  browser,
+}) => {
+  const { db8 } = await import("@/lib/db8")
+  const { toTs } = await import("@/lib/timestamps")
+  const staff = await signUp(await browser.newContext())
+  await db8.orm.public.User.where({ email: staff.email }).update({ platformRole: "ADMIN" })
+
+  const kind = `e2e.job.${Date.now()}`
+  const digest = `e2e-${Date.now()}`
+  const errorName = `E2EError-${Date.now()}`
+  await db8.orm.public.Job.create({ kind, status: "FAILED", attempts: 5, lastError: "boom" })
+  await db8.orm.public.EmailMessage.create({
+    kind: "magic-link",
+    toAddress: staff.email,
+    subject: "E2E sign-in",
+    provider: "none",
+    status: "SENT",
+    payload: { html: "<p>e2e body</p>" },
+    sentAt: toTs(new Date()),
+  })
+  await db8.orm.public.ErrorReport.create({
+    digest,
+    source: "action.e2e",
+    name: errorName,
+    message: "masked",
+  })
+
+  await staff.page.goto("/platform/jobs")
+  await expect(staff.page.getByRole("heading", { name: "Jobs" })).toBeVisible()
+  await expect(staff.page.getByText(kind)).toBeVisible()
+
+  await staff.page.goto("/platform/emails")
+  await expect(staff.page.getByRole("heading", { name: "Emails" })).toBeVisible()
+  await staff.page.locator("tr", { hasText: "E2E sign-in" }).getByRole("link").first().click()
+  await expect(staff.page.getByRole("heading", { name: "E2E sign-in" })).toBeVisible()
+  await expect(staff.page.getByRole("button", { name: /resend/i })).toBeVisible()
+
+  await staff.page.goto("/platform/errors")
+  await expect(staff.page.getByRole("heading", { name: "Errors" })).toBeVisible()
+  await expect(staff.page.getByText(errorName)).toBeVisible({ timeout: 15_000 })
+})

@@ -425,6 +425,9 @@
       "databaseBackups": "Bản sao lưu",
       "platformSettings": "Cài đặt",
       "tenants": "Khách hàng",
+      "jobs": "Tác vụ",
+      "emails": "Email",
+      "errors": "Lỗi",
       "groups": {
         "main": "Tổng quan",
         "workspace": "Không gian làm việc",
@@ -666,6 +669,85 @@
         "invalidStatus": "Trạng thái không hợp lệ.",
         "forbidden": "Vai trò của bạn không được phép.",
         "reasonRequired": "Cần có lý do."
+      }
+    },
+    "jobs": {
+      "title": "Tác vụ",
+      "subtitle": "Các tác vụ nền đang chờ, đang chạy và thất bại.",
+      "search": "Tìm theo loại tác vụ…",
+      "colKind": "Loại",
+      "colStatus": "Trạng thái",
+      "colAttempts": "Lần thử",
+      "colRunAt": "Chạy lúc",
+      "colLastError": "Lỗi gần nhất",
+      "colActions": "Thao tác",
+      "retry": "Thử lại",
+      "runNow": "Chạy ngay",
+      "empty": {
+        "title": "Chưa có tác vụ nào",
+        "description": "Các lượt chạy đang chờ và đã xong sẽ hiện ở đây."
+      },
+      "status": {
+        "QUEUED": "Đang chờ",
+        "RUNNING": "Đang chạy",
+        "SUCCEEDED": "Thành công",
+        "FAILED": "Thất bại"
+      }
+    },
+    "emails": {
+      "title": "Email",
+      "subtitle": "Mọi lượt gửi, kèm nội dung đã lưu.",
+      "search": "Tìm theo địa chỉ hoặc chủ đề…",
+      "colTo": "Người nhận",
+      "subject": "Chủ đề",
+      "colKind": "Loại",
+      "colStatus": "Trạng thái",
+      "colProvider": "Nhà cung cấp",
+      "providerMessageId": "ID nhà cung cấp",
+      "colTenant": "Khách hàng",
+      "colCreatedAt": "Ngày tạo",
+      "sentAt": "Gửi lúc",
+      "lastError": "Lỗi gần nhất",
+      "details": "Chi tiết gửi",
+      "payload": "Xem trước nội dung",
+      "payloadDescription": "Nội dung đã render, lưu trên bản ghi.",
+      "payloadEmpty": "Bản ghi này tồn tại trước khi có lưu nội dung; không có gì để xem trước.",
+      "resend": "Gửi lại",
+      "resending": "Đang gửi lại…",
+      "resent": "Đã xếp hàng gửi lại",
+      "empty": {
+        "title": "Chưa có email nào",
+        "description": "Các lượt gửi sẽ xuất hiện ở đây."
+      },
+      "status": {
+        "QUEUED": "Đang chờ",
+        "SENT": "Đã gửi",
+        "REFUSED": "Bị từ chối",
+        "FAILED": "Thất bại"
+      },
+      "errors": {
+        "notFound": "Không tìm thấy email.",
+        "noPayload": "Không có nội dung đã lưu để gửi lại.",
+        "sendFailed": "Gửi lại thất bại — xem bản ghi mới để biết lỗi."
+      }
+    },
+    "errors": {
+      "title": "Lỗi",
+      "subtitle": "Các nhóm lỗi đã che dấu, một hàng cho mỗi digest.",
+      "search": "Tìm theo tên hoặc thông báo…",
+      "colName": "Lỗi",
+      "colSource": "Nguồn",
+      "colCount": "Số lần",
+      "colTenant": "Khách hàng",
+      "colLastSeen": "Lần cuối",
+      "colResolved": "Trạng thái",
+      "colActions": "Thao tác",
+      "open": "Mở",
+      "resolved": "Đã xử lý",
+      "resolve": "Đánh dấu đã xử lý",
+      "empty": {
+        "title": "Chưa có lỗi nào",
+        "description": "Các digest lỗi đã che dấu sẽ xuất hiện ở đây."
       }
     }
   },

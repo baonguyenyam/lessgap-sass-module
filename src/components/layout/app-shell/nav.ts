@@ -8,9 +8,11 @@ import {
   HardDrive,
   KeyRound,
   LayoutGrid,
+  ListChecks,
   Mail,
   Shield,
   SlidersHorizontal,
+  TriangleAlert,
   UserCog,
   UserRound,
   Users,
@@ -57,7 +59,12 @@ export function navGroups(
     return [
       {
         key: "platform",
-        items: [{ key: "tenants", href: "/platform/tenants", icon: Building2 }],
+        items: [
+          { key: "tenants", href: "/platform/tenants", icon: Building2 },
+          { key: "jobs", href: "/platform/jobs", icon: ListChecks },
+          { key: "emails", href: "/platform/emails", icon: Mail },
+          { key: "errors", href: "/platform/errors", icon: TriangleAlert },
+        ],
       },
       { key: "back", items: [{ key: "backToDashboard", href: DASHBOARD, icon: ArrowLeft, exact: true }] },
     ]

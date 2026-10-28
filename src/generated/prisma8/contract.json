@@ -414,6 +414,13 @@
                   "kind": "scalar"
                 }
               },
+              "payload": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
               "provider": {
                 "nullable": false,
                 "type": {
@@ -494,6 +501,9 @@
                 },
                 "lastError": {
                   "column": "lastError"
+                },
+                "payload": {
+                  "column": "payload"
                 },
                 "provider": {
                   "column": "provider"
@@ -3546,6 +3556,11 @@
                   "dataType": "pg/text",
                   "nullable": true
                 },
+                "payload": {
+                  "codecId": "pg/json@1",
+                  "dataType": "pg/json",
+                  "nullable": true
+                },
                 "provider": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
@@ -5932,7 +5947,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "4c38a62ad25336ed1418a5be092074fd47a9186f4fa2190b367a94a86e198c63"
+    "storageHash": "368c0f832bf717aae07a211a316faa92e5b72946f90895162a8e58bbaa1a0def"
   },
   "execution": {
     "executionHash": "096a3369903902f3aed35f38fda0382c781b3f96095fa9c152668c52ad635672",
