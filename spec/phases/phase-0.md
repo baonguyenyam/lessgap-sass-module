@@ -125,7 +125,7 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 - **Files:** `src/i18n/request.ts` (locale from user preference, then `Accept-Language`, then `en`), `User.locale` field (migration `kit_user_locale`), language switcher in the account menu, `src/proxy.ts` untouched for prefixes.
 - **Tests:** preference beats browser header; unknown locale falls back to `en`; emails to a member use their locale.
 - **Checks:** `pnpm test`, `pnpm test:integration`, M1, M2.
-- [ ] done
+- [x] done (`resolveAppLocale` in `src/i18n/app-locale.ts`: device pick, then saved preference, then `Accept-Language`, then the workspace or platform default; member emails use `recipientLocale` in `src/lib/email-locale.ts`. Shipped differently: no `User.locale` column and no migration, because the preference already lives in the person's `UserSetting` row `locale.app` (Account → Preferences, saved by the header switcher), so a second copy would drift. M1 and M2 are unchanged by this task.)
 
 ### 0.14 — Error tracking and request ids
 - **Goal:** `log.error` writes an `ErrorReport` row and reports to Sentry; every request carries a request id ([operations](../16-operations.md), ADR 0017).

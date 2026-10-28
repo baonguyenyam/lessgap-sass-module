@@ -16,6 +16,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 - **`/vi`**: every public page in Vietnamese, under a `/vi` prefix; English stays unprefixed (phase 0, task 0.12)
 - **Admin → Database** (ROOT only, [ADR 0023](spec/adr/0023-database-backup-and-migrate-from-admin.md)): apply pending migrations behind a typed confirmation, a lock and an automatic backup first; take data-only backups (`.sql.gz`) into R2 and download them through a five-minute link. Restoring is done from a terminal, following the ADR. Needs `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET` and `R2_ACCOUNT_ID`; a half-set group now stops the boot
 - `pnpm check:translations`, which runs the message-file tests
+- **The private area follows the browser's language** until you pick one: the order is the language picked on this device, your saved preference, your browser's languages, then the workspace default (task 0.13)
+- **Emails to members arrive in their language**: sign-in links, password resets, welcome, billing and cancellation emails use the language saved in Account → Preferences
 
 ### Changed
 

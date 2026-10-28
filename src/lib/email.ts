@@ -3,30 +3,27 @@ import { emailAccent } from "@/config/brand"
 import { getTranslations } from "next-intl/server"
 import { routing } from "@/i18n/routing"
 import { deliver } from "@/lib/email-delivery"
+import { recipientLocale } from "@/lib/email-locale"
 import { resendClient, sendEmail } from "@/lib/email-transport"
 
 /**
- * Subjects for the transactional emails.
- *
- * Resolved against an **explicit** locale, not the request one. These are sent
- * from a Stripe webhook and from Better Auth callbacks: those requests come from a
- * server, not from the recipient's browser, so there is no locale to inherit
- * and asking for one would silently give you the default anyway.
- *
- * Sending in the recipient's own language needs somewhere to store it, which
- * today is nowhere: there is no language column on the user. Add one and pass
- * it here, and the subjects follow without touching this file again.
+ * The strings of the transactional emails, in an **explicit** locale, not the
+ * request one. These are sent from a Stripe webhook and from Better Auth
+ * callbacks: those requests come from a server, not from the recipient's
+ * browser. Emails to a member pass `recipientLocale(to)` (their saved
+ * preference, task 0.13); the rest use the default.
  */
-function emailStrings() {
-  return getTranslations({ locale: routing.defaultLocale, namespace: "email" })
+function emailStrings(locale: string = routing.defaultLocale) {
+  return getTranslations({ locale, namespace: "email" })
 }
 
 export async function sendWelcomeEmail(to: string, name: string) {
+  const locale = await recipientLocale(to)
   return sendEmail({
     kind: "welcome",
     to,
-    subject: (await emailStrings())("welcome", { site: siteConfig.name }),
-    html: await welcomeTemplate(name),
+    subject: (await emailStrings(locale))("welcome", { site: siteConfig.name }),
+    html: await welcomeTemplate(name, locale),
   })
 }
 
@@ -42,13 +39,14 @@ export async function sendSubscriptionConfirmation(
   // announcing an active subscription.
   trialEndDate?: string
 ) {
+  const locale = await recipientLocale(to)
   return sendEmail({
     kind: "subscription-confirmation",
     to,
     subject: trialEndDate
-      ? (await emailStrings())("trialStarted", { plan: planName })
-      : (await emailStrings())("subscriptionActive", { plan: planName }),
-    html: await subscriptionTemplate(name, planName, amount, currency, renewalDate, trialEndDate),
+      ? (await emailStrings(locale))("trialStarted", { plan: planName })
+      : (await emailStrings(locale))("subscriptionActive", { plan: planName }),
+    html: await subscriptionTemplate(name, planName, amount, currency, renewalDate, trialEndDate, locale),
   })
 }
 
@@ -59,47 +57,52 @@ export async function sendPurchaseConfirmation(
   amount: number,
   currency: string
 ) {
+  const locale = await recipientLocale(to)
   return sendEmail({
     kind: "purchase-confirmation",
     to,
-    subject: (await emailStrings())("purchaseConfirmed", { plan: planName }),
-    html: await purchaseTemplate(name, planName, amount, currency),
+    subject: (await emailStrings(locale))("purchaseConfirmed", { plan: planName }),
+    html: await purchaseTemplate(name, planName, amount, currency, locale),
   })
 }
 
 export async function sendMagicLinkEmail(to: string, url: string) {
+  const locale = await recipientLocale(to)
   return sendEmail({
     kind: "magic-link",
     to,
-    subject: (await emailStrings())("magicLink", { site: siteConfig.name }),
-    html: await magicLinkTemplate(url),
+    subject: (await emailStrings(locale))("magicLink", { site: siteConfig.name }),
+    html: await magicLinkTemplate(url, locale),
   })
 }
 
 export async function sendPasswordResetEmail(to: string, url: string) {
+  const locale = await recipientLocale(to)
   return sendEmail({
     kind: "password-reset",
     to,
-    subject: (await emailStrings())("passwordReset", { site: siteConfig.name }),
-    html: await passwordResetTemplate(url),
+    subject: (await emailStrings(locale))("passwordReset", { site: siteConfig.name }),
+    html: await passwordResetTemplate(url, locale),
   })
 }
 
 export async function sendChangeEmailConfirmation(to: string, newEmail: string, url: string) {
+  const locale = await recipientLocale(to)
   return sendEmail({
     kind: "change-email",
     to,
-    subject: (await emailStrings())("changeEmail", { site: siteConfig.name }),
-    html: await changeEmailTemplate(newEmail, url),
+    subject: (await emailStrings(locale))("changeEmail", { site: siteConfig.name }),
+    html: await changeEmailTemplate(newEmail, url, locale),
   })
 }
 
 export async function sendSubscriptionCancelledEmail(to: string, name: string, endDate: string) {
+  const locale = await recipientLocale(to)
   return sendEmail({
     kind: "subscription-cancelled",
     to,
-    subject: (await emailStrings())("subscriptionCancelled", { site: siteConfig.name }),
-    html: await cancellationTemplate(name, endDate),
+    subject: (await emailStrings(locale))("subscriptionCancelled", { site: siteConfig.name }),
+    html: await cancellationTemplate(name, endDate, locale),
   })
 }
 
@@ -142,8 +145,8 @@ function baseTemplate(content: string) {
 </html>`
 }
 
-async function welcomeTemplate(name: string) {
-  const t = await emailStrings()
+async function welcomeTemplate(name: string, locale?: string) {
+  const t = await emailStrings(locale)
   return baseTemplate(`
     <p>${t("welcomeBody.hello", { name: name || t("welcomeBody.helloFallback") })}</p>
     <p>${t("welcomeBody.intro", { site: siteConfig.name })}</p>
@@ -157,8 +160,8 @@ async function welcomeTemplate(name: string) {
   `)
 }
 
-async function magicLinkTemplate(url: string) {
-  const t = await emailStrings()
+async function magicLinkTemplate(url: string, locale?: string) {
+  const t = await emailStrings(locale)
   return baseTemplate(`
     <p>${t("magicLinkBody.hello")}</p>
     <p>${t("magicLinkBody.intro", { site: siteConfig.name })}</p>
@@ -167,8 +170,8 @@ async function magicLinkTemplate(url: string) {
   `)
 }
 
-async function passwordResetTemplate(url: string) {
-  const t = await emailStrings()
+async function passwordResetTemplate(url: string, locale?: string) {
+  const t = await emailStrings(locale)
   return baseTemplate(`
     <p>${t("passwordResetBody.hello")}</p>
     <p>${t("passwordResetBody.intro", { site: siteConfig.name })}</p>
@@ -182,8 +185,8 @@ async function passwordResetTemplate(url: string) {
  * is moving to. That is the point of it: if somebody with your session tries to
  * walk off with the account, the warning arrives where they cannot read it.
  */
-async function changeEmailTemplate(newEmail: string, url: string) {
-  const t = await emailStrings()
+async function changeEmailTemplate(newEmail: string, url: string, locale?: string) {
+  const t = await emailStrings(locale)
   return baseTemplate(`
     <p>${t("changeEmailBody.hello")}</p>
     <p>${t("changeEmailBody.intro", { site: siteConfig.name, newEmail })}</p>
@@ -199,9 +202,10 @@ async function subscriptionTemplate(
   amount: number,
   currency: string,
   renewalDate: string,
-  trialEndDate?: string
+  trialEndDate?: string,
+  locale?: string
 ) {
-  const t = await emailStrings()
+  const t = await emailStrings(locale)
   const formatted = new Intl.NumberFormat(routing.defaultLocale, {
     style: "currency",
     currency: currency.toUpperCase(),
@@ -227,8 +231,8 @@ async function subscriptionTemplate(
   `)
 }
 
-async function purchaseTemplate(name: string, planName: string, amount: number, currency: string) {
-  const t = await emailStrings()
+async function purchaseTemplate(name: string, planName: string, amount: number, currency: string, locale?: string) {
+  const t = await emailStrings(locale)
   const formatted = new Intl.NumberFormat(routing.defaultLocale, {
     style: "currency",
     currency: currency.toUpperCase(),
@@ -247,8 +251,8 @@ async function purchaseTemplate(name: string, planName: string, amount: number, 
   `)
 }
 
-async function cancellationTemplate(name: string, endDate: string) {
-  const t = await emailStrings()
+async function cancellationTemplate(name: string, endDate: string, locale?: string) {
+  const t = await emailStrings(locale)
   return baseTemplate(`
     <p>${t("cancellationBody.hello", { name: name || t("welcomeBody.helloFallback") })}</p>
     <p>${t.raw("cancellationBody.intro").replace("{site}", siteConfig.name).replace("{date}", endDate)}</p>
