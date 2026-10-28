@@ -1,13 +1,16 @@
 import { headers } from "next/headers"
 import { cache } from "react"
 import { auth } from "@/auth"
+import { and } from "@prisma/orm-postgres/orm-client"
 import { db8 } from "@/lib/db8"
 import { requireUser } from "@/lib/auth"
 import { slugify } from "@/lib/slugify"
 import { AppError } from "@/platform/errors"
 import { LAST_TENANT_COOKIE, TENANT_SLUG_HEADER } from "@/platform/request-context"
 import type { TenantContext } from "@/platform/tenancy/context"
+import { assignFreePlan } from "@/lib/billing"
 import { memberCan, type TenantPermission, type TenantResource, type TenantVerb } from "@/platform/tenancy/permissions"
+import { getPlatformSettings } from "@/platform/settings/store"
 import type { FieldOutputTypes } from "@/generated/prisma8/contract.d"
 
 type Tenant = FieldOutputTypes["public"]["Tenant"]
@@ -93,8 +96,7 @@ export const ensureTenant = cache(async (user: CurrentUser): Promise<TenantMembe
 
   try {
     await auth.api.createOrganization({
-      headers: await headers(),
-      body: { name: displayName, slug },
+      body: { name: displayName, slug, userId: user.id },
     })
   } catch (error) {
     // Two requests of the same first visit (the dashboard layout and the
@@ -106,9 +108,23 @@ export const ensureTenant = cache(async (user: CurrentUser): Promise<TenantMembe
   const member = await getMembership(user.id)
   if (!member) throw new Error("Tenant creation did not produce a membership")
 
-  // The onboarding wizard (phase 4) is what flips this in the full flow; while
-  // it does not exist a new tenant is usable immediately.
-  await db8.orm.public.Tenant.where({ id: member.organizationId, status: "PROVISIONING" }).update({ status: "ACTIVE" })
+  const settings = await getPlatformSettings()
+  // signup.free_plan.enabled (task 2.8): a new tenant starts on the free plan
+  // — a Plan row with no Stripe price — so its feature map resolves before any
+  // payment exists.
+  if (settings["signup.free_plan.enabled"]) {
+    const freePlan = await db8.orm.public.Plan.where((p) =>
+      and(p.isActive.eq(true), p.stripePriceId.isNull(), p.price.eq(0), p.visibility.neq("ARCHIVED"))
+    ).first()
+    if (freePlan) await assignFreePlan(member.organizationId, freePlan)
+  }
+  // signup.require_approval (task 2.8): the tenant stays PROVISIONING — and so
+  // 404 to its members — until staff set it ACTIVE in the console.
+  if (!settings["signup.require_approval"]) {
+    await db8.orm.public.Tenant.where({ id: member.organizationId, status: "PROVISIONING" }).update({
+      status: "ACTIVE",
+    })
+  }
   const tenant = (await db8.orm.public.Tenant.where({ id: member.organizationId }).first())!
   return { user, member, tenant, tenantId: tenant.id }
 })
@@ -163,7 +179,7 @@ export async function resolveTenantMember(
   const tenant = await db8.orm.public.Tenant.where({ slug }).first()
   // Suspended and canceled tenants answer not_found like an unknown slug: the
   // member learns nothing about the tenant's state by probing it (task 1.10).
-  if (!tenant || tenant.status === "SUSPENDED" || tenant.status === "CANCELED") throw new AppError("not_found")
+  if (!tenant || tenant.status !== "ACTIVE") throw new AppError("not_found")
   const member = await db8.orm.public.Member.where({ organizationId: tenant.id, userId }).first()
   if (!member || member.status === "suspended") throw new AppError("not_found")
   if (permission) {

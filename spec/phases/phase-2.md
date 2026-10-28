@@ -100,7 +100,7 @@ Settings → Modules: enable, disable, export data, and schedule a purge with a
 - **Tests:** E2E — switching `signup.free_plan.enabled` off removes the free plan from pricing and signup (roadmap exit criterion); `signup.enabled` off refuses a new signup.
 - **Checks:** `pnpm test`, E2E on a fresh build.
 - **Done when:** the switches visibly gate the public surface without a redeploy.
-- [ ] done
+- [x] done (pricing reads `visibility: "PUBLIC"` only and drops the free plan — `stripePriceId: null`, `price: 0` — when `signup.free_plan.enabled` is off; `signup.enabled` off was already the `/signup?error=closed` gate. `ensureTenant` assigns the free plan via `assignFreePlan` when the switch is on, and `signup.require_approval` leaves the tenant PROVISIONING — `resolveTenantMember` treats any non-ACTIVE status as `not_found` — until staff flip it in the console with `setTenantStatus`. `createOrganization` now passes `userId` directly (system action, like `createTenantFor`), which also made `ensureTenant` callable outside a request. E2E covers the pricing flip; integration covers all three switches.)
 
 ### 2.9 — `past_due` grace period and suspension
 - **Goal:** a subscription that goes `past_due` starts the plan's grace period (decision 2-D); when it lapses the tenant suspends the same way staff suspension does (`resolveTenantMember` → 404); recovering payment reactivates it. Owner sees a billing banner during grace.

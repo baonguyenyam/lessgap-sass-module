@@ -10,7 +10,7 @@ const db = (await import("@/lib/db8")) as unknown as Db8Mock
 const { resolveTenantMember, requireTenantMember } = await import("@/platform/tenancy/require-member")
 const { systemContext, actingUserId } = await import("@/platform/tenancy/context")
 
-const tenant = { id: "t1", slug: "pho", name: "Phở" }
+const tenant = { id: "t1", slug: "pho", name: "Phở", status: "ACTIVE" }
 
 beforeEach(() => {
   db.reset()

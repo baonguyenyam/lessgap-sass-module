@@ -1,12 +1,13 @@
 import { io } from "next/cache"
 import { getTranslations } from "next-intl/server"
-import { and } from "@prisma/orm-postgres/orm-client"
+import { and, or } from "@prisma/orm-postgres/orm-client"
 import { db8 } from "@/lib/db8"
 import { jsonLdScript } from "@/lib/json-ld"
 import { softwareApplicationJsonLd } from "@/lib/pricing-jsonld"
 import { PlanCards, type PlanCardData } from "@/components/billing/plan-cards"
 import { exampleEnterpriseCard } from "@/components/billing/enterprise-card"
 import { Reveal } from "@/components/landing/reveal"
+import { getPlatformSettings } from "@/platform/settings/store"
 
 /**
  * The pricing section, rendered from your `Plan` rows: this is what the kit
@@ -36,8 +37,15 @@ export async function PlanPricing({
   await io()
   // Metered plans stay docs-only; one-time plans (Lifetime) live on the
   // billing page, the landing shows the classic recurring triad.
+  const freePlanEnabled = (await getPlatformSettings())["signup.free_plan.enabled"]
   const planRows = await db8.orm.public.Plan.where((p) =>
-    and(p.isActive.eq(true), p.meterEventName.isNull(), p.interval.neq("ONE_TIME"))
+    and(
+      p.isActive.eq(true),
+      p.visibility.eq("PUBLIC"),
+      p.meterEventName.isNull(),
+      p.interval.neq("ONE_TIME"),
+      freePlanEnabled ? or(p.stripePriceId.isNotNull(), p.price.eq(0)) : p.stripePriceId.isNotNull()
+    )
   )
     .orderBy((p) => p.price.asc())
     .all()

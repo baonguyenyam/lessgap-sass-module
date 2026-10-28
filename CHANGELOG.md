@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.37.0] - 2026-10-28
+
+**The signup switches actually gate the public surface.** This is a MINOR: `git pull`, `pnpm install` — no migration.
+
+### Changed
+
+- **Pricing shows `PUBLIC` plans only** — an `UNLISTED` or `ARCHIVED` plan never reaches the page
+- **`signup.free_plan.enabled` off** removes the free plan from pricing and stops it being assigned at signup; on, a new tenant starts on it without Stripe
+- **`signup.require_approval` on** leaves a new tenant in `provisioning` — members see nothing until staff activate it in the console
+
 ## [2.36.0] - 2026-10-28
 
 **Free plans, add-ons and setup fees.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` — two small migrations (`stripeSubscriptionId` and `planId` go nullable, `Purchase.addOnId` is added).

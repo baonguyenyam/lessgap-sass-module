@@ -25,7 +25,7 @@ async function signUp(context: BrowserContext) {
 test("a member without platformRole cannot open /platform (T10)", async ({ browser }) => {
   const { page } = await signUp(await browser.newContext())
   await page.goto("/platform")
-  await expect(page).toHaveURL(/\/dashboard/)
+  await expect(page).toHaveURL(/\/t\//)
 })
 
 test("staff lists tenants, opens one and suspends it; its members are then blocked", async ({ browser }) => {
@@ -120,4 +120,65 @@ test("staff walks the ops pages: a failed job, an email and an error are visible
   await staff.page.goto("/platform/plans")
   await expect(staff.page.getByRole("heading", { name: "Plans" })).toBeVisible()
   await expect(staff.page.getByText(planName)).toBeVisible()
+})
+
+test("the signup switches gate pricing and signup without a redeploy (task 2.8)", async ({ browser }) => {
+  const { db8 } = await import("@/lib/db8")
+  const staff = await signUp(await browser.newContext())
+  await db8.orm.public.User.where({ email: staff.email }).update({ platformRole: "ADMIN" })
+
+  const freeName = `Free E2E ${Date.now()}`
+  const paidName = `Pro E2E ${Date.now()}`
+  await Promise.all([
+    db8.orm.public.Plan.create({
+      name: freeName,
+      slug: `free-${Date.now()}`,
+      price: 0,
+      interval: "MONTH",
+      stripePriceId: null,
+      visibility: "PUBLIC",
+    }),
+    db8.orm.public.Plan.create({
+      name: paidName,
+      slug: `pro-${Date.now()}`,
+      price: 1000,
+      interval: "MONTH",
+      stripePriceId: `price_${Date.now()}`,
+      visibility: "PUBLIC",
+    }),
+  ])
+
+  // The free plan shows while the switch is on — the pricing page reads the
+  // same PlatformSwitch rows the console edits.
+  await staff.page.goto("/pricing")
+  await expect(staff.page.getByText(freeName, { exact: true })).toBeVisible()
+  await expect(staff.page.getByText(paidName, { exact: true })).toBeVisible()
+
+  // Flip the switch through the console itself — that is the path that expires
+  // the settings cache, so the public page reflects it without a redeploy.
+  await staff.page.goto("/platform/settings")
+  const row = staff.page.locator("tr", { hasText: "signup.free_plan.enabled" })
+  await row.getByRole("button", { name: "Edit" }).click()
+  await staff.page.getByRole("textbox").fill("false")
+  await staff.page.getByRole("button", { name: "Save" }).click()
+
+  // The pricing section sits in the cached shell (io()), so the change
+  // shows on the next page revalidation rather than the next request — poll
+  // until it does.
+  await expect(async () => {
+    await staff.page.goto("/pricing")
+    expect(await staff.page.getByText(freeName, { exact: true }).count()).toBe(0)
+    expect(await staff.page.getByText(paidName, { exact: true }).count()).toBe(1)
+  }).toPass({ timeout: 90_000, intervals: [5_000, 15_000] })
+
+  // And back — the flip is the same path in the other direction, and leaving
+  // the row on keeps the dev database usable for the next run.
+  await staff.page.goto("/platform/settings")
+  await row.getByRole("button", { name: "Edit" }).click()
+  await staff.page.getByRole("textbox").fill("true")
+  await staff.page.getByRole("button", { name: "Save" }).click()
+  await expect(async () => {
+    await staff.page.goto("/pricing")
+    expect(await staff.page.getByText(freeName, { exact: true }).count()).toBe(1)
+  }).toPass({ timeout: 90_000, intervals: [5_000, 15_000] })
 })
