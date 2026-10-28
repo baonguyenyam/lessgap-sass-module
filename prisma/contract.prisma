@@ -219,6 +219,29 @@ trialEndsAt          TimestampString(3)?
     @@index([lastSeenAt], map: "ErrorReport_lastSeenAt_idx")
   }
 
+  // Background work (ADR 0008, spec/16-operations.md): one row per run. The
+  // cron route claims due rows with FOR UPDATE SKIP LOCKED; a failed run comes
+  // back QUEUED with a later runAt until maxAttempts, then stays FAILED.
+  model Job {
+    id          String              @id(map: "Job_pkey") @onCreate(uuid(7))
+    kind        String
+    payload     Json                @default(json`{}`)
+    status      pg.enum(JobStatus)  @default("QUEUED")
+    runAt       TimestampString(3)  @default(now())
+    attempts    Int                 @default(0)
+    maxAttempts Int                 @default(5)
+    lockedUntil TimestampString(3)?
+    lastError   String?
+    tenantId    String?
+    requestId   String?
+    createdAt   TimestampString(3)  @default(now())
+    updatedAt   TimestampString(3)  @default(now()) @onUpdate(now())
+    finishedAt  TimestampString(3)?
+
+    @@index([status, runAt], map: "Job_status_runAt_idx")
+    @@index([kind, status], map: "Job_kind_status_idx")
+  }
+
   // Tenancy (spec/02-tenancy.md, ADR 0003, ADR 0019).
   // Better Auth organization plugin tables. The plugin writes through Kysely
   // with these exact column names; model names are mapped in src/auth.ts.
@@ -322,6 +345,13 @@ trialEndsAt          TimestampString(3)?
     tenant         Tenant            @relation(fields: [organizationId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "OrganizationRole_organizationId_fkey")
 
     @@index([organizationId, role], map: "OrganizationRole_organizationId_role_key", unique: true)
+  }
+
+  native_enum JobStatus {
+    QUEUED = "QUEUED"
+    RUNNING = "RUNNING"
+    SUCCEEDED = "SUCCEEDED"
+    FAILED = "FAILED"
   }
 
   native_enum TenantStatus {

@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ## [2.20.0] - 2026-10-27
 
-**The public site speaks Vietnamese, and ROOT can back up and migrate the database from the admin panel.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (one new table, `ErrorReport`).
+**The public site speaks Vietnamese, and ROOT can back up and migrate the database from the admin panel.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (two new tables, `ErrorReport` and `Job`).
 
 ### Added
 
@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 - **`ErrorReport`**: every `log.error` and every uncaught request error is grouped by digest (surface, error name, first stack frame) in a new table, with a masked message, the request id and the surface. Migration `platform_error_reports`: run `pnpm db:migrate`
 - **Sentry**, off unless `SENTRY_DSN` / `NEXT_PUBLIC_SENTRY_DSN` is set; nothing about the person or the request is sent ([ADR 0017](spec/adr/0017-sentry-for-error-tracking.md), now accepted)
 - `/api/health/live` for load checks
+- **Background jobs** ([ADR 0008](spec/adr/0008-jobs-table-before-a-queue.md), task 0.15): a `Job` table (migration `platform_jobs`) and `/api/cron`, which claims due jobs with `FOR UPDATE SKIP LOCKED`, retries failures with backoff (1, 2, 4… minutes, up to an hour) and leaves them `FAILED` with a masked `lastError` after the last attempt. Recurring jobs declare a cron expression; the first one prunes `ErrorReport` groups older than 30 days. Vercel Cron calls it daily; point a one-minute pinger at it in production (spec/14). It needs `CRON_SECRET`
 
 ### Changed
 

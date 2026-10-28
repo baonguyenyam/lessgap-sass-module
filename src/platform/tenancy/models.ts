@@ -11,6 +11,7 @@ export const MODEL_CLASSIFICATION = {
     reason: "Platform error groups for staff; a tenant id is context, not ownership.",
   },
   Invitation: { kind: "identity", reason: "Better Auth tenant invitations." },
+  Job: { kind: "platform-private", reason: "Platform job queue; a tenant id is the job's scope, run by the system." },
   Member: { kind: "identity", reason: "Better Auth tenant membership records." },
   NewsletterSubscriber: {
     kind: "tenant-owned",

@@ -82,9 +82,9 @@ export const envSchema = z
     DEMO_MODE: flag,
     WAITLIST_ENABLED: flag,
 
-    // Read by the demo reset cron, which refuses to run without it. Not paired
-    // with DEMO_MODE on purpose: a demo with no scheduled reset is a working
-    // demo, so this is not a half-done configuration worth stopping a boot for.
+    // Read by the cron routes (the job runner and the demo reset), which refuse
+    // to run without it. Not required at boot: without it no job runs, which a
+    // fresh clone and a preview can live with.
     CRON_SECRET: optional,
 
     // Sentry (ADR 0017): off when unset. The auth token only uploads source maps in CI.

@@ -1,0 +1,169 @@
+[
+  {
+    "id": "createNativeEnumType.JobStatus",
+    "label": "Create enum type \"JobStatus\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "type",
+        "name": "JobStatus"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "create enum type \"JobStatus\"",
+        "sql": "CREATE TYPE \"public\".\"JobStatus\" AS ENUM ('QUEUED', 'RUNNING', 'SUCCEEDED', 'FAILED')",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.Job",
+    "label": "Create table \"Job\"",
+    "summary": "Creates table \"Job\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Job"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Job\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Job\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"Job\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Job\"",
+        "sql": "CREATE TABLE \"public\".\"Job\" (\n  \"attempts\" int4 DEFAULT 0 NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"finishedAt\" timestamp(3),\n  \"id\" text NOT NULL,\n  \"kind\" text NOT NULL,\n  \"lastError\" text,\n  \"lockedUntil\" timestamp(3),\n  \"maxAttempts\" int4 DEFAULT 5 NOT NULL,\n  \"payload\" json DEFAULT '{}'::json NOT NULL,\n  \"requestId\" text,\n  \"runAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"status\" \"JobStatus\" DEFAULT 'QUEUED'::\"JobStatus\" NOT NULL,\n  \"tenantId\" text,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  CONSTRAINT \"Job_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Job\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"Job\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"Job\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "index.Job.Job_kind_status_idx",
+    "label": "Create index \"Job_kind_status_idx\" on \"Job\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Job_kind_status_idx",
+        "table": "Job"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Job_kind_status_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Job_kind_status_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Job_kind_status_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Job_kind_status_idx\"",
+        "sql": "CREATE INDEX \"Job_kind_status_idx\" ON \"public\".\"Job\" (\"kind\", \"status\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Job_kind_status_idx\" exists on \"Job\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Job_kind_status_idx\"",
+          "i",
+          "I",
+          "\"public\".\"Job\"",
+          "btree",
+          "[\"kind\",\"status\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Job.Job_status_runAt_idx",
+    "label": "Create index \"Job_status_runAt_idx\" on \"Job\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Job_status_runAt_idx",
+        "table": "Job"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Job_status_runAt_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Job_status_runAt_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Job_status_runAt_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Job_status_runAt_idx\"",
+        "sql": "CREATE INDEX \"Job_status_runAt_idx\" ON \"public\".\"Job\" (\"status\", \"runAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Job_status_runAt_idx\" exists on \"Job\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Job_status_runAt_idx\"",
+          "i",
+          "I",
+          "\"public\".\"Job\"",
+          "btree",
+          "[\"status\",\"runAt\"]"
+        ]
+      }
+    ]
+  }
+]

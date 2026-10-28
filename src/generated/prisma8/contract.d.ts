@@ -23,9 +23,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'30f14e0651daa25408ef25150422756ade5dd16e0462ad2b0edf28e19c6395cc'>;
+  StorageHashBase<'78be6818fa3798ebdec8eaff5d8335b31419e76e083cd0a7f9220d8b5deaa05c'>;
 export type ExecutionHash =
-  ExecutionHashBase<'7999c4ab9c79f3b781c83a79d1d1719edc5ac20a4b07855a24ff034f7ac83022'>;
+  ExecutionHashBase<'70354a8ca90008ce9019fee1050e58c75be807602a64afef3b9d0cdb5f7f53ae'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -241,6 +241,12 @@ type ParameterizedOutputTypeFunctions = PgParameterizedOutputTypes;
 type FieldTypeOverrides = {
   readonly public: {
     readonly models: {
+      readonly Job: {
+        readonly status: {
+          readonly output: 'QUEUED' | 'RUNNING' | 'SUCCEEDED' | 'FAILED';
+          readonly input: 'QUEUED' | 'RUNNING' | 'SUCCEEDED' | 'FAILED';
+        };
+      };
       readonly Plan: {
         readonly interval: {
           readonly output: 'MONTH' | 'YEAR' | 'ONE_TIME';
@@ -295,6 +301,12 @@ export type FieldInputTypes = FieldTypesFromDomain<
 >;
 type ColumnTypeOverrides = {
   readonly public: {
+    readonly Job: {
+      readonly status: {
+        readonly output: 'QUEUED' | 'RUNNING' | 'SUCCEEDED' | 'FAILED';
+        readonly input: 'QUEUED' | 'RUNNING' | 'SUCCEEDED' | 'FAILED';
+      };
+    };
     readonly Plan: {
       readonly interval: {
         readonly output: 'MONTH' | 'YEAR' | 'ONE_TIME';
@@ -392,6 +404,23 @@ export namespace Models {
     inviter: public_User;
     tenant: public_Tenant;
     readonly [RelationKeys]?: 'inviter' | 'tenant';
+  };
+  export type public_Job = {
+    attempts: FieldOutputTypes['public']['Job']['attempts'];
+    createdAt: FieldOutputTypes['public']['Job']['createdAt'];
+    finishedAt: FieldOutputTypes['public']['Job']['finishedAt'];
+    id: FieldOutputTypes['public']['Job']['id'];
+    kind: FieldOutputTypes['public']['Job']['kind'];
+    lastError: FieldOutputTypes['public']['Job']['lastError'];
+    lockedUntil: FieldOutputTypes['public']['Job']['lockedUntil'];
+    maxAttempts: FieldOutputTypes['public']['Job']['maxAttempts'];
+    payload: FieldOutputTypes['public']['Job']['payload'];
+    requestId: FieldOutputTypes['public']['Job']['requestId'];
+    runAt: FieldOutputTypes['public']['Job']['runAt'];
+    status: FieldOutputTypes['public']['Job']['status'];
+    tenantId: FieldOutputTypes['public']['Job']['tenantId'];
+    updatedAt: FieldOutputTypes['public']['Job']['updatedAt'];
+    readonly [RelationKeys]?: never;
   };
   export type public_Member = {
     createdAt: FieldOutputTypes['public']['Member']['createdAt'];
@@ -610,6 +639,7 @@ export declare const models: {
     Account: Models.public_Account;
     ErrorReport: Models.public_ErrorReport;
     Invitation: Models.public_Invitation;
+    Job: Models.public_Job;
     Member: Models.public_Member;
     NewsletterSubscriber: Models.public_NewsletterSubscriber;
     OrganizationRole: Models.public_OrganizationRole;
@@ -982,6 +1012,134 @@ type ContractBase = Omit<
                   readonly name: 'Invitation_inviterId_fkey';
                 },
               ];
+            };
+            readonly Job: {
+              columns: {
+                readonly attempts: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                  readonly many: false;
+                };
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly finishedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly kind: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly lastError: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly lockedUntil: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly maxAttempts: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 5>;
+                  };
+                  readonly many: false;
+                };
+                readonly payload: {
+                  readonly dataType: 'pg/json';
+                  readonly codecId: 'pg/json@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/json@1', {}>;
+                  };
+                  readonly many: false;
+                };
+                readonly requestId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly runAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly status: {
+                  readonly dataType: 'pg/enum';
+                  readonly codecId: 'pg/enum@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/enum@1', 'QUEUED'>;
+                  };
+                  readonly typeParams: { readonly typeName: 'JobStatus' };
+                  readonly many: false;
+                };
+                readonly tenantId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id']; readonly name: 'Job_pkey' };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'Job_kind_status_idx';
+                  readonly columns: readonly ['kind', 'status'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'Job_status_runAt_idx';
+                  readonly columns: readonly ['status', 'runAt'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [];
             };
             readonly Member: {
               columns: {
@@ -2357,6 +2515,10 @@ type ContractBase = Omit<
               readonly kind: 'valueSet';
               readonly values: readonly ['MONTH', 'YEAR', 'ONE_TIME'];
             };
+            readonly JobStatus: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['QUEUED', 'RUNNING', 'SUCCEEDED', 'FAILED'];
+            };
             readonly PlatformRole: {
               readonly kind: 'valueSet';
               readonly values: readonly ['OWNER', 'ADMIN', 'SUPPORT', 'DESIGNER'];
@@ -2410,6 +2572,7 @@ type ContractBase = Omit<
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'Invitation';
     };
+    readonly Job: { readonly namespace: 'public' & NamespaceId; readonly model: 'Job' };
     readonly Member: { readonly namespace: 'public' & NamespaceId; readonly model: 'Member' };
     readonly NewsletterSubscriber: {
       readonly namespace: 'public' & NamespaceId;
@@ -2722,6 +2885,111 @@ type ContractBase = Omit<
                 readonly role: { readonly column: 'role' };
                 readonly status: { readonly column: 'status' };
                 readonly teamId: { readonly column: 'teamId' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+              };
+            };
+          };
+          readonly Job: {
+            readonly fields: {
+              readonly attempts: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly finishedAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly kind: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly lastError: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly lockedUntil: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly maxAttempts: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly payload: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
+              };
+              readonly requestId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly runAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly status: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/enum@1';
+                  readonly typeParams: { readonly typeName: 'JobStatus' };
+                };
+              };
+              readonly tenantId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+            };
+            readonly relations: Record<string, never>;
+            readonly storage: {
+              readonly table: 'Job';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly attempts: { readonly column: 'attempts' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly finishedAt: { readonly column: 'finishedAt' };
+                readonly id: { readonly column: 'id' };
+                readonly kind: { readonly column: 'kind' };
+                readonly lastError: { readonly column: 'lastError' };
+                readonly lockedUntil: { readonly column: 'lockedUntil' };
+                readonly maxAttempts: { readonly column: 'maxAttempts' };
+                readonly payload: { readonly column: 'payload' };
+                readonly requestId: { readonly column: 'requestId' };
+                readonly runAt: { readonly column: 'runAt' };
+                readonly status: { readonly column: 'status' };
+                readonly tenantId: { readonly column: 'tenantId' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
               };
             };
@@ -4083,6 +4351,22 @@ type ContractBase = Omit<
           readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'Invitation';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'uuidv7'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'Job';
+            readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'Job';
             readonly field: 'updatedAt';
             readonly namespace: 'public';
           };

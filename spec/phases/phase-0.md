@@ -141,7 +141,7 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 - **Tests:** O1, O2, O7; a handler that throws leaves the row retriable; an overdue locked job is reclaimed.
 - **Checks:** `pnpm test`, `pnpm test:integration`, M1, M2; call the route twice concurrently in an integration test.
 - **Done when:** a job enqueued for now runs on the next cron hit, and a second concurrent hit does not re-run it.
-- [ ] done
+- [x] done (integration: O1, O2 with `retryJob`, O7, an overdue lock reclaimed, an unknown kind failed at once, one scheduled row under a concurrent race, and two concurrent route hits running the job once; `db verify --strict` and `migration check` pass. Schedules are five-field UTC cron expressions parsed in `src/platform/jobs/schedule.ts`; module `jobs.ts` registration arrives with the first module in phase 1. The first scheduled kind is the 30-day `ErrorReport` prune that task 0.14's spec section calls for.)
 
 ### 0.16 — EmailMessage delivery record
 - **Goal:** every `sendEmail()` call writes one `EmailMessage` row ([operations](../16-operations.md#email-outbox)); the provider outcome maps to `status`.

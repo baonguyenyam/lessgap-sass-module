@@ -34,6 +34,24 @@ predictable cost once traffic is real). That decision must land before phase
 - Preview environments stay on Vercel regardless — they are free there and a
   preview is not the thing that needs to scale.
 
+### Cron and the job runner
+
+`/api/cron` runs due jobs ([ADR 0008](./adr/0008-jobs-table-before-a-queue.md)).
+It refuses every call while `CRON_SECRET` is unset (500) and any call without
+`Authorization: Bearer <CRON_SECRET>` (401).
+
+- **Vercel Cron** calls it once a day (`vercel.json`, 05:00 UTC), the floor on
+  the Hobby tier. Vercel sends the secret itself when `CRON_SECRET` is set in
+  the project's environment variables.
+- **External pinger, production:** a free cron-job.org job (or a GitHub
+  Actions `schedule:`) every minute: `GET https://<production host>/api/cron`
+  with the header `Authorization: Bearer <CRON_SECRET>`, a 60-second timeout,
+  and failure alerts on. The same secret as Vercel's; rotate both together.
+- Any number of callers is safe: claims are `FOR UPDATE SKIP LOCKED`, so a
+  minute-pinger and the daily Vercel Cron never run the same job twice.
+- The response is `{ claimed, succeeded, retried, failed }`; a pinger that
+  sees a non-200 for several minutes is itself an alert.
+
 - Secrets live in Vercel environment variables per environment; `.env` is
   local only and never committed. `.env.example` lists every variable with an
   empty value and a comment.
