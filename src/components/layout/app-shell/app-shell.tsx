@@ -25,6 +25,7 @@ export async function AppShell({
   breadcrumbs,
   tenant = null,
   tenants = [],
+  customRoles = true,
   children,
 }: {
   area: NavArea
@@ -33,6 +34,8 @@ export async function AppShell({
   /** The tenant the dashboard area shows, and every tenant the person belongs to (task 1.7). */
   tenant?: TenantOption | null
   tenants?: TenantOption[]
+  /** The tenant's `roles.custom` feature: shows or hides the roles entry. */
+  customRoles?: boolean
   breadcrumbs: React.ComponentProps<typeof HeaderBreadcrumbs>
   children: React.ReactNode
 }) {
@@ -40,7 +43,14 @@ export async function AppShell({
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
-      <AppSidebar area={area} showAdmin={showAdmin} user={user} tenant={tenant} tenants={tenants} />
+      <AppSidebar
+        area={area}
+        showAdmin={showAdmin}
+        user={user}
+        tenant={tenant}
+        tenants={tenants}
+        customRoles={customRoles}
+      />
       {/* min-w-0: a wide table scrolls inside its card instead of widening the page.
           md:border: the UI has no shadows, so the border sets the page apart from the sidebar.
           md:overflow-clip: rounds the sticky header's corners too; clip, not hidden, so sticky still works. */}
@@ -50,7 +60,7 @@ export async function AppShell({
           <SidebarTrigger className="-ml-1" />
           <HeaderBreadcrumbs {...breadcrumbs} />
           <div className="ml-auto flex items-center gap-2">
-            <SearchDialog area={area} showAdmin={showAdmin} slug={tenant?.slug ?? ""} />
+            <SearchDialog area={area} showAdmin={showAdmin} slug={tenant?.slug ?? ""} customRoles={customRoles} />
             <LanguageSwitcher locales={APP_LOCALES} />
             <ThemeToggle />
           </div>

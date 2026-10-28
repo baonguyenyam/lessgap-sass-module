@@ -36,6 +36,35 @@ export const TENANT_PERMISSIONS = {
 } as const
 
 export type TenantResource = keyof typeof TENANT_PERMISSIONS
+
+/**
+ * How the roles page groups the catalog, one heading per area (task 1.8b).
+ * Every resource sits in exactly one group (tested); a module adds its own
+ * group when it lands.
+ */
+export const PERMISSION_GROUPS = {
+  workspace: ["members", "roles", "settings", "billing", "notifications"],
+  website: ["site", "pages", "media"],
+  bookings: ["bookings", "customers"],
+  sales: ["catalog", "orders", "quotes"],
+  marketing: ["newsletter", "chatbot"],
+  insights: ["reports"],
+} as const satisfies Record<string, readonly TenantResource[]>
+
+export type PermissionGroupKey = keyof typeof PERMISSION_GROUPS
+
+/** The catalog in display order: each group with its resources and their verbs. */
+export function groupedCatalog(): Array<{
+  group: PermissionGroupKey
+  resources: Array<{ resource: TenantResource; verbs: string[] }>
+}> {
+  return (Object.entries(PERMISSION_GROUPS) as [PermissionGroupKey, readonly TenantResource[]][]).map(
+    ([group, resources]) => ({
+      group,
+      resources: resources.map((resource) => ({ resource, verbs: [...TENANT_PERMISSIONS[resource]] })),
+    })
+  )
+}
 export type TenantVerb<R extends TenantResource> = (typeof TENANT_PERMISSIONS)[R][number]
 /** Every declared permission as `<resource>.<verb>`; anything else is a type error. */
 export type TenantPermission = { [R in TenantResource]: `${R}.${TenantVerb<R>}` }[TenantResource]

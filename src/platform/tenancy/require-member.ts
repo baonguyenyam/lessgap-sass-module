@@ -58,7 +58,7 @@ export async function getMembership(userId: string): Promise<Member | null> {
 }
 
 /** Every tenant `userId` is an active member of, oldest membership first: the tenant switcher's list. */
-export async function listMemberTenants(userId: string): Promise<Array<{ slug: string; name: string }>> {
+export async function listMemberTenants(userId: string): Promise<Array<{ id: string; slug: string; name: string }>> {
   const members = await db8.orm.public.Member.where({ userId })
     .orderBy((m) => m.createdAt.asc())
     .all()
@@ -68,7 +68,7 @@ export async function listMemberTenants(userId: string): Promise<Array<{ slug: s
   const byId = new Map(tenants.map((t) => [t.id, t]))
   return active.flatMap((m) => {
     const tenant = byId.get(m.organizationId)
-    return tenant ? [{ slug: tenant.slug, name: tenant.name }] : []
+    return tenant ? [{ id: tenant.id, slug: tenant.slug, name: tenant.name }] : []
   })
 }
 

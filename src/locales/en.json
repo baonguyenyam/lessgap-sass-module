@@ -577,11 +577,44 @@
         "roleKey": "Use lowercase letters, digits and hyphens.",
         "permissionsRequired": "Choose at least one permission.",
         "builtIn": "That name belongs to a built-in role.",
-        "unknownPermission": "One of the permissions does not exist."
+        "unknownPermission": "One of the permissions does not exist.",
+        "limitReached": "This workspace has reached its number of custom roles ({max}).",
+        "featureUnavailable": "Custom roles are not available for this workspace."
       },
       "empty": {
         "title": "No roles",
         "description": "The built-in roles and your custom ones appear here."
+      },
+      "groups": {
+        "workspace": "Workspace",
+        "website": "Website",
+        "bookings": "Bookings and customers",
+        "sales": "Catalog and sales",
+        "marketing": "Marketing",
+        "insights": "Reports"
+      },
+      "resources": {
+        "members": "Members",
+        "roles": "Roles",
+        "settings": "Settings",
+        "billing": "Billing",
+        "notifications": "Notifications",
+        "site": "Site",
+        "pages": "Pages",
+        "media": "Media",
+        "bookings": "Bookings",
+        "customers": "Customers",
+        "catalog": "Catalog",
+        "orders": "Orders",
+        "quotes": "Quotes",
+        "newsletter": "Newsletter",
+        "chatbot": "Chatbot",
+        "reports": "Reports"
+      },
+      "verbs": {
+        "view": "View",
+        "invite": "Invite",
+        "manage": "Manage"
       }
     },
     "search": {

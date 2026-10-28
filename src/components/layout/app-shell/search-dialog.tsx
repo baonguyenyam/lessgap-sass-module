@@ -18,7 +18,17 @@ import { Kbd } from "@/components/ui/kbd"
 import { navGroups, type NavArea } from "@/components/layout/app-shell/nav"
 
 /** Go to any page of the area by name: the header search, opened with Cmd/Ctrl+K (from Studio Admin). */
-export function SearchDialog({ area, showAdmin, slug }: { area: NavArea; showAdmin: boolean; slug: string }) {
+export function SearchDialog({
+  area,
+  showAdmin,
+  slug,
+  customRoles,
+}: {
+  area: NavArea
+  showAdmin: boolean
+  slug: string
+  customRoles: boolean
+}) {
   const t = useTranslations("dashboard.search")
   const tNav = useTranslations("dashboard.nav")
   const router = useRouter()
@@ -52,7 +62,7 @@ export function SearchDialog({ area, showAdmin, slug }: { area: NavArea; showAdm
           <CommandInput placeholder={t("placeholder")} />
           <CommandList>
             <CommandEmpty>{t("empty")}</CommandEmpty>
-            {navGroups(area, { showAdmin, slug }).map((group) => (
+            {navGroups(area, { showAdmin, slug, customRoles }).map((group) => (
               <CommandGroup key={group.key} heading={tNav(`groups.${group.key}`)}>
                 {group.items.map((item) => {
                   const Icon = item.icon

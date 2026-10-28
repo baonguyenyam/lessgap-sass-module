@@ -5,6 +5,9 @@ vi.mock("@/lib/db8", async () => (await import("@tests/helpers/db8-mock")).creat
 import {
   catalogPermissions,
   DECLARED_PERMISSIONS,
+  groupedCatalog,
+  PERMISSION_GROUPS,
+  TENANT_PERMISSIONS,
   memberCan,
   permissionsAreDeclared,
   roleGrants,
@@ -103,5 +106,18 @@ describe("plugin statements", () => {
     expect(catalogPermissions({ bookings: ["view", "delete"], ac: ["create"], member: ["delete"] })).toEqual({
       bookings: ["view"],
     })
+  })
+})
+
+describe("permission groups (task 1.8b)", () => {
+  it("puts every resource of the catalog in exactly one group", () => {
+    const grouped = Object.values(PERMISSION_GROUPS).flat()
+    expect([...grouped].sort()).toEqual(Object.keys(TENANT_PERMISSIONS).sort())
+    expect(new Set(grouped).size).toBe(grouped.length)
+  })
+
+  it("lists each group's resources with the verbs the catalog declares", () => {
+    const workspace = groupedCatalog().find((g) => g.group === "workspace")!
+    expect(workspace.resources[0]).toEqual({ resource: "members", verbs: ["view", "invite", "manage"] })
   })
 })

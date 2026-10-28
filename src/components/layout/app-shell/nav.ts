@@ -29,8 +29,13 @@ export type NavArea = "dashboard" | "admin"
 /**
  * `slug` is the tenant the dashboard area is showing (task 1.7): its pages
  * live under `/t/<slug>`. Account pages are the person's, at `/dashboard/account`.
+ * `customRoles` is the tenant's `roles.custom` feature (task 1.8b): without it
+ * the roles page does not exist, so neither does its entry.
  */
-export function navGroups(area: NavArea, { showAdmin, slug }: { showAdmin: boolean; slug: string }): NavGroup[] {
+export function navGroups(
+  area: NavArea,
+  { showAdmin, slug, customRoles = true }: { showAdmin: boolean; slug: string; customRoles?: boolean }
+): NavGroup[] {
   const t = (page = "") => tenantPath(slug, page)
   if (area === "admin") {
     return [
@@ -61,7 +66,7 @@ export function navGroups(area: NavArea, { showAdmin, slug }: { showAdmin: boole
       items: [
         { key: "members", href: t("members"), icon: Users },
         { key: "newsletter", href: t("newsletter"), icon: Mail },
-        { key: "roles", href: t("roles"), icon: KeyRound },
+        ...(customRoles ? [{ key: "roles", href: t("roles"), icon: KeyRound } satisfies NavItem] : []),
       ],
     },
     {

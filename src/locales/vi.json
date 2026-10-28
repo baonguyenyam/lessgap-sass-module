@@ -577,11 +577,44 @@
         "roleKey": "Dùng chữ thường, chữ số và dấu gạch ngang.",
         "permissionsRequired": "Chọn ít nhất một quyền.",
         "builtIn": "Tên này thuộc về một vai trò có sẵn.",
-        "unknownPermission": "Một trong các quyền không tồn tại."
+        "unknownPermission": "Một trong các quyền không tồn tại.",
+        "limitReached": "Không gian làm việc này đã đạt số nhóm quyền tối đa ({max}).",
+        "featureUnavailable": "Nhóm quyền tùy chỉnh không khả dụng cho không gian làm việc này."
       },
       "empty": {
         "title": "Chưa có vai trò",
         "description": "Các vai trò có sẵn và vai trò tùy chỉnh của bạn sẽ hiện ở đây."
+      },
+      "groups": {
+        "workspace": "Không gian làm việc",
+        "website": "Website",
+        "bookings": "Lịch hẹn và khách hàng",
+        "sales": "Danh mục và bán hàng",
+        "marketing": "Tiếp thị",
+        "insights": "Báo cáo"
+      },
+      "resources": {
+        "members": "Thành viên",
+        "roles": "Nhóm quyền",
+        "settings": "Cài đặt",
+        "billing": "Thanh toán",
+        "notifications": "Thông báo",
+        "site": "Trang web",
+        "pages": "Trang",
+        "media": "Thư viện",
+        "bookings": "Lịch hẹn",
+        "customers": "Khách hàng",
+        "catalog": "Danh mục",
+        "orders": "Đơn hàng",
+        "quotes": "Báo giá",
+        "newsletter": "Bản tin",
+        "chatbot": "Chatbot",
+        "reports": "Báo cáo"
+      },
+      "verbs": {
+        "view": "Xem",
+        "invite": "Mời",
+        "manage": "Quản lý"
       }
     },
     "search": {

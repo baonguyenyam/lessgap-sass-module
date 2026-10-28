@@ -6,6 +6,7 @@ import { getTranslations } from "next-intl/server"
 import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
 import { foldPermissions, tenantRoleSchema } from "@/lib/schemas/tenant"
+import { getEntitlements } from "@/platform/entitlements"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { permissionsAreDeclared, ROLE_PERMISSIONS, withPluginGrants } from "@/platform/tenancy/permissions"
 
@@ -21,11 +22,15 @@ async function memberCount(tenantId: string, role: string): Promise<number> {
  * Create (`existing` null) or edit a custom role ("nhóm quyền"), from the roles
  * drawer. Refuses built-in keys, malformed keys and any permission the catalog
  * does not declare (tests R2, R5). An edit keeps the key and changes the
- * permissions.
+ * permissions. Needs the `roles.custom` feature, and a new role must fit under
+ * `roles.max` (task 1.8b; the plugin enforces the same cap through
+ * `maximumRolesPerOrganization`).
  */
 export async function saveTenantRole(existing: string | null, values: unknown): Promise<{ error?: string }> {
   const ctx = await requireTenantContext("roles", "manage")
   const t = await getTranslations("dashboard.roles.errors")
+  const entitlements = await getEntitlements(ctx)
+  if (!entitlements.has("roles.custom")) return { error: t("featureUnavailable") }
   const parsed = tenantRoleSchema({ roleKey: t("roleKey"), permissionsRequired: t("permissionsRequired") }).safeParse(
     values
   )
@@ -40,6 +45,11 @@ export async function saveTenantRole(existing: string | null, values: unknown): 
   const stored = withPluginGrants(permission)
 
   if (existing === null) {
+    const max = entitlements.limit("roles.max")
+    const count = await db8.orm.public.OrganizationRole.where({ organizationId: ctx.tenantId })
+      .aggregate((a) => ({ n: a.count() }))
+      .then((r) => r.n)
+    if (max !== null && count >= max) return { error: t("limitReached", { max }) }
     await auth.api.createOrgRole({
       headers: await headers(),
       body: { organizationId: ctx.tenantId, role, permission: stored },
@@ -60,6 +70,7 @@ export async function saveTenantRole(existing: string | null, values: unknown): 
  */
 export async function deleteTenantRoles(roles: string[]): Promise<{ deleted: number }> {
   const ctx = await requireTenantContext("roles", "manage")
+  if (!(await getEntitlements(ctx)).has("roles.custom")) return { deleted: 0 }
   let deleted = 0
   for (const role of [...new Set(roles)].slice(0, 100)) {
     if (role in ROLE_PERMISSIONS) continue

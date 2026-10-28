@@ -1,11 +1,12 @@
 import { getTranslations } from "next-intl/server"
-import { redirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { db8 } from "@/lib/db8"
 import { permissionKeys } from "@/lib/schemas/tenant"
 import { offsetOf, parseTableQuery, type TableQuerySpec } from "@/lib/table-query"
 import { getViewerSettings } from "@/platform/settings/tenant-store"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
-import { catalogPermissions, ROLE_PERMISSIONS, TENANT_PERMISSIONS } from "@/platform/tenancy/permissions"
+import { getEntitlements } from "@/platform/entitlements"
+import { catalogPermissions, groupedCatalog, memberCan, ROLE_PERMISSIONS } from "@/platform/tenancy/permissions"
 import { RolesTable, type RoleRow } from "@/components/dashboard/roles-table"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
@@ -29,6 +30,8 @@ export default async function RolesPage({
   } catch {
     redirect("/dashboard")
   }
+  // Custom roles are a feature (spec/adr/0019): without it the page is not there.
+  if (!(await getEntitlements(ctx)).has("roles.custom")) notFound()
   const t = await getTranslations("dashboard.roles")
   const settings = await getViewerSettings()
   const { Member, OrganizationRole } = db8.orm.public
@@ -85,10 +88,8 @@ export default async function RolesPage({
         total={filtered.length}
         query={query}
         defaults={{ sort: spec.sortable[0], dir: spec.defaultDir, pageSize: spec.defaultPageSize }}
-        catalog={Object.fromEntries(
-          Object.entries(TENANT_PERMISSIONS).map(([resource, verbs]) => [resource, [...verbs]])
-        )}
-        canManage={ctx.member.role === "owner"}
+        catalog={groupedCatalog()}
+        canManage={await memberCan(ctx.tenantId, ctx.member.role, "roles", "manage")}
       />
     </div>
   )

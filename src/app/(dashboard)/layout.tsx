@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server"
 import { LayoutGrid } from "lucide-react"
 import { AppShell } from "@/components/layout/app-shell/app-shell"
 import { tenantPath } from "@/lib/tenant-paths"
+import { getEntitlements } from "@/platform/entitlements"
 import { TENANT_SLUG_HEADER } from "@/platform/request-context"
 import { ensureTenant, listMemberTenants } from "@/platform/tenancy/require-member"
 
@@ -22,7 +23,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
   // membership; an unknown slug here only means no entry is marked current.
   const slug = (await headers()).get(TENANT_SLUG_HEADER) ?? (await ensureTenant(user)).tenant.slug
   const tenants = await listMemberTenants(user.id)
-  const tenant = tenants.find((t) => t.slug === slug) ?? { slug, name: slug }
+  const current = tenants.find((t) => t.slug === slug)
+  const tenant = current ? { slug: current.slug, name: current.name } : { slug, name: slug }
+  const entitlements = await getEntitlements({ tenantId: current?.id ?? "" })
 
   return (
     <AppShell
@@ -30,7 +33,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
       user={{ name: user.name, email: user.email, image: user.image }}
       showAdmin={isRoot(user.role)}
       tenant={tenant}
-      tenants={tenants}
+      tenants={tenants.map(({ slug, name }) => ({ slug, name }))}
+      customRoles={entitlements.has("roles.custom")}
       breadcrumbs={{
         icon: <LayoutGrid className="h-4 w-4" />,
         base: { name: tNav("dashboard"), href: tenantPath(slug) },

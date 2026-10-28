@@ -14,6 +14,10 @@ vi.mock("@/platform/tenancy/permissions", () => ({
   withPluginGrants: (p: Record<string, string[]>) => p,
 }))
 vi.mock("@/lib/db8", async () => (await import("@tests/helpers/db8-mock")).createDb8Mock())
+const entitlements = { custom: true, max: 10 as number | null }
+vi.mock("@/platform/entitlements", () => ({
+  getEntitlements: async () => ({ has: () => entitlements.custom, limit: () => entitlements.max }),
+}))
 
 const { deleteTenantRoles, saveTenantRole } = await import("@/app/actions/roles")
 const db = (await import("@/lib/db8")) as unknown as Db8Mock
@@ -21,6 +25,32 @@ const db = (await import("@/lib/db8")) as unknown as Db8Mock
 beforeEach(() => {
   db.reset()
   Object.values(api).forEach((fn) => fn.mockReset())
+  entitlements.custom = true
+  entitlements.max = 10
+  db.fn("OrganizationRole.aggregate").mockResolvedValue({ n: 0 })
+})
+
+describe("custom roles as a feature (task 1.8b)", () => {
+  it("refuses to save or delete when roles.custom is off", async () => {
+    entitlements.custom = false
+    await expect(saveTenantRole(null, { role: "desk", permissions: ["projects.view"] })).resolves.toEqual({
+      error: "featureUnavailable",
+    })
+    await expect(deleteTenantRoles(["desk"])).resolves.toEqual({ deleted: 0 })
+    expect(api.createOrgRole).not.toHaveBeenCalled()
+    expect(api.deleteOrgRole).not.toHaveBeenCalled()
+  })
+
+  it("refuses a new role past roles.max, but still edits an existing one", async () => {
+    entitlements.max = 2
+    db.fn("OrganizationRole.aggregate").mockResolvedValue({ n: 2 })
+    await expect(saveTenantRole(null, { role: "desk", permissions: ["projects.view"] })).resolves.toEqual({
+      error: "limitReached",
+    })
+    await expect(saveTenantRole("desk", { role: "desk", permissions: ["projects.view"] })).resolves.toEqual({})
+    expect(api.createOrgRole).not.toHaveBeenCalled()
+    expect(api.updateOrgRole).toHaveBeenCalledOnce()
+  })
 })
 
 describe("saveTenantRole", () => {

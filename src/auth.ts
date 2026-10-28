@@ -505,7 +505,15 @@ export const auth = betterAuth({
       ac: tenantAc,
       roles: tenantRoles,
       creatorRole: "owner",
-      dynamicAccessControl: { enabled: true },
+      dynamicAccessControl: {
+        enabled: true,
+        // `roles.max` (task 1.8b): the plugin refuses a role past the tenant's
+        // cap even when it is called directly, not only from our actions.
+        maximumRolesPerOrganization: async (organizationId) => {
+          const { getEntitlements } = await import("@/platform/entitlements")
+          return (await getEntitlements({ tenantId: organizationId })).limit("roles.max") ?? Number.POSITIVE_INFINITY
+        },
+      },
       // Phase-1 decision 1-C: invitations live seven days.
       invitationExpiresIn: 7 * 24 * 60 * 60,
       // Task 1.8: the link opens /invite/<id>, which works signed out too.

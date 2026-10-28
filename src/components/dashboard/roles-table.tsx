@@ -19,7 +19,7 @@ import type { TableQuery } from "@/lib/table-query"
 import { useDrawer } from "@/stores/drawer"
 
 export type RoleRow = { id: string; role: string; builtIn: boolean; permissions: string[]; members: number }
-type Catalog = Record<string, string[]>
+type Catalog = Array<{ group: string; resources: Array<{ resource: string; verbs: string[] }> }>
 
 const DRAWER = "tenant-role"
 
@@ -65,7 +65,12 @@ export function RolesTable({
         header: t("colPermissions"),
         cell: ({ row }) => (
           <span className="line-clamp-2 max-w-md text-xs text-muted-foreground">
-            {row.original.permissions.join(", ")}
+            {row.original.permissions
+              .map((key) => {
+                const [resource, verb] = key.split(".")
+                return `${t(`resources.${resource}`)}: ${t(`verbs.${verb}`)}`
+              })
+              .join(", ")}
           </span>
         ),
       }),
@@ -192,30 +197,39 @@ function RoleForm({ role, catalog }: { role: RoleRow | null; catalog: Catalog })
         render={({ field }) => (
           <FormItem>
             <FormLabel>{t("colPermissions")}</FormLabel>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {Object.entries(catalog).map(([resource, verbs]) => (
-                <fieldset key={resource} className="rounded-lg border border-border p-3">
-                  <legend className="px-1 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                    {resource}
+            <div className="space-y-5">
+              {catalog.map(({ group, resources }) => (
+                <fieldset key={group} className="space-y-2">
+                  <legend className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                    {t(`groups.${group}`)}
                   </legend>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                    {verbs.map((verb) => {
-                      const key = `${resource}.${verb}`
-                      const checked = field.value.includes(key)
-                      return (
-                        <label key={key} className="flex items-center gap-2 text-sm">
-                          <Checkbox
-                            checked={checked}
-                            onCheckedChange={(next) =>
-                              field.onChange(
-                                next === true ? [...field.value, key] : field.value.filter((k) => k !== key)
-                              )
-                            }
-                          />
-                          {verb}
-                        </label>
-                      )
-                    })}
+                  <div className="divide-y divide-border rounded-lg border border-border">
+                    {resources.map(({ resource, verbs }) => (
+                      <div
+                        key={resource}
+                        role="group"
+                        aria-label={t(`resources.${resource}`)}
+                        className="flex flex-wrap items-center gap-x-6 gap-y-2 px-3 py-2"
+                      >
+                        <span className="min-w-32 text-sm font-medium">{t(`resources.${resource}`)}</span>
+                        {verbs.map((verb) => {
+                          const key = `${resource}.${verb}`
+                          return (
+                            <label key={key} className="flex items-center gap-2 text-sm">
+                              <Checkbox
+                                checked={field.value.includes(key)}
+                                onCheckedChange={(next) =>
+                                  field.onChange(
+                                    next === true ? [...field.value, key] : field.value.filter((k) => k !== key)
+                                  )
+                                }
+                              />
+                              {t(`verbs.${verb}`)}
+                            </label>
+                          )
+                        })}
+                      </div>
+                    ))}
                   </div>
                 </fieldset>
               ))}
