@@ -1,6 +1,6 @@
 # Phase 1 — Tenancy core
 
-**Status:** draft
+**Status:** approved (by the product owner, 2026-10-28)
 **Roadmap:** [roadmap.md#phase-1--tenancy-core](../roadmap.md)
 **Read first:** [tenancy](../02-tenancy.md), [data-model](../09-data-model.md), [migrations-and-data](../12-migrations-and-data.md), [testing](../11-testing.md) (T1–T10, O1–O8), [module-system](../15-module-system.md), [operations](../16-operations.md), ADR [0002](../adr/0002-shared-database-tenant-id-and-rls.md), [0003](../adr/0003-better-auth-organizations-for-tenants.md)
 
@@ -31,7 +31,7 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - **Tests:** integration: the app role cannot bypass RLS on a table with a policy (uses a temporary test table).
 - **Checks:** `pnpm test:integration`, M1, M2.
 - **Done when:** the app runs with `DATABASE_URL` on the app role.
-- [ ] done
+- [x] done (integration on PostgreSQL: the app role sees only its `app.tenant_id`, cannot turn `row_security` off or write into another tenant, and reads and writes the application tables; the platform role reads across tenants. `pnpm db:roles` ran on the development database: `app` without and `platform` with `BYPASSRLS`. Shipped differently: a script instead of the migration `platform_db_roles`, because Prisma 8 refuses a contract-neutral migration without a data invariant and only runs such an edge when a ref asks for it (Findings). Switching a deployment's `DATABASE_URL` to an app login needs login roles with passwords, which the owner creates in the provider's console (spec/14, "Database roles").)
 
 ### 1.2 — Tenant, Member, Invitation, platformRole
 - **Goal:** Better Auth organization plugin enabled, mapped to `Tenant`; `platformRole` on `User`; `ac` + static `roles` (`owner`, `manager`, `staff`) and `dynamicAccessControl` for custom roles ([ADR 0019](../adr/0019-tenant-roles-are-permission-groups.md)).
@@ -135,6 +135,7 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - Query overhead of `tenantDb` recorded in Findings.
 
 ## Findings
+- 2026-10-28, task 1.1: Prisma 8 rejects a migration whose `from` equals its `to` (`MIGRATION.CHECK_NOOP_SELF_EDGE`) unless an operation carries an `invariantId`, and the runner takes such an edge only when the target ref requires that invariant, so `pnpm db:migrate` would never apply it. Database roles are cluster objects with no contract counterpart, so they live in `scripts/db-roles.mjs` (`pnpm db:roles`), run once per database, by CI after M1 and by the integration setup.
 - 2026-10-26: Switch As (ADR 0015) already gives ROOT a session as another
   account through `Session.switchedBy` and the `switchAs` plugin in
   `src/auth.ts`. The impersonation task should extend it (reason, tenant,

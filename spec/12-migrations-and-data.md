@@ -86,7 +86,14 @@ Test M3 fails when a tenant-owned table lacks it.
 
 Connection strings: `DATABASE_URL` (app role, pooled), `DATABASE_URL_PLATFORM`
 (platform role, pooled), `DATABASE_URL_MIGRATE` (owner, direct). Introduced
-in phase 1; until then the kit's single `DATABASE_URL` keeps working.
+in phase 1; until they are set the kit's single `DATABASE_URL` keeps working.
+
+`pnpm db:roles` (`scripts/db-roles.mjs`) creates `app` and `platform` as
+NOLOGIN groups with their grants, including default privileges for tables
+later migrations create. It is a script, not a migration: Prisma 8 refuses a
+migration that leaves the contract unchanged unless it carries a data
+invariant, and such an edge runs only when a ref demands it. Run it once per
+database as the owner; running it again changes nothing. CI runs it after M1.
 
 ## Changes that must not break a running deploy
 

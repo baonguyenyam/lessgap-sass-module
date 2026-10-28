@@ -5,6 +5,11 @@ requirement is specified so agents read the source, not this summary. When a
 requirement becomes spec, ADR, rule or test, the pointer is updated and this
 file stays the index — not the place requirements are defined.
 
+## 2026-10-28 — Phase 1 approved
+
+The owner approved `spec/phases/phase-1.md` and asked for its tasks in order,
+from 1.1, on `main`.
+
 ## 2026-10-27 — Finish phase 0 without stopping to ask
 
 The owner asked for phase 0 to be completed through task 0.16 while away.

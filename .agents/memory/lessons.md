@@ -2,6 +2,12 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-28 · prisma 8 · A migration that leaves the contract unchanged is refused
+- **Symptom:** `prisma migration check` failed with `MIGRATION.CHECK_NOOP_SELF_EDGE` on a `migration new --from <current hash>` package holding only `rawSql` (database roles).
+- **Cause:** a self-edge needs an operation with an `invariantId`, and the runner takes an invariant edge only when the target ref requires it; `pnpm db:migrate` would never run it.
+- **Fix:** database roles moved to `scripts/db-roles.mjs` (`pnpm db:roles`).
+- **Rule:** cluster-level setup with no contract counterpart (roles, grants) is an idempotent script run once per database, not a migration.
+
 ### 2026-10-27 · vitest · Integration files sharing one database must not run in parallel
 - **Symptom:** after a fourth integration file was added, the smoke test and the job test failed with rows "undefined" right after inserting them; each file passed alone.
 - **Cause:** every file truncates the shared test database in `beforeEach`; Vitest ran the files in parallel workers, so one file wiped another's rows mid-test.

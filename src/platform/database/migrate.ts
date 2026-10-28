@@ -2,7 +2,7 @@ import path from "node:path"
 import { createPostgresControlClient } from "@prisma/orm-postgres/control"
 import contractJson from "@/generated/prisma8/contract.json" with { type: "json" }
 import { MIGRATIONS } from "@/generated/migrations"
-import { toDirectUrl } from "@/lib/database-url"
+import { ownerUrl } from "@/lib/database-url"
 import { readMarkerFromDatabase } from "@/lib/schema-status"
 import { storageConfigured } from "@/platform/storage/r2"
 import { createBackup, directClient } from "@/platform/database/backup"
@@ -57,7 +57,7 @@ export async function applyMigrations(startedBy: string): Promise<ApplyResult> {
         return { ok: false, reason: "no-storage" }
       }
 
-      const url = toDirectUrl(process.env.DIRECT_URL || process.env.DATABASE_URL || "")
+      const url = ownerUrl(process.env) ?? ""
       const client = createPostgresControlClient({ connection: url })
       const result = await client
         .migrate({

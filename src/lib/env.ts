@@ -49,6 +49,10 @@ export const envSchema = z
         message: "DATABASE_URL should be a postgres connection string (postgresql://...)",
       }),
     DIRECT_URL: optional,
+    // Phase 1 database roles (spec/12): the platform role (bypasses RLS) and the
+    // owner for migrations. Optional: unset, DATABASE_URL does every job.
+    DATABASE_URL_PLATFORM: optional,
+    DATABASE_URL_MIGRATE: optional,
 
     // Better Auth generates a development secret on the fly, but refuses to run
     // without one in production.

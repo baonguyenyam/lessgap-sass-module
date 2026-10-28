@@ -34,6 +34,22 @@ predictable cost once traffic is real). That decision must land before phase
 - Preview environments stay on Vercel regardless — they are free there and a
   preview is not the thing that needs to scale.
 
+### Database roles
+
+Phase 1 splits the single database user into three (spec/12, "Database roles").
+Once per database (production, each preview branch you keep, local):
+
+1. `pnpm db:roles` as the owner (`DATABASE_URL_MIGRATE`, or `DATABASE_URL`
+   while that is still the owner): creates the `app` and `platform` groups.
+   On a provider that keeps `BYPASSRLS` for superusers it prints a notice;
+   then grant it once from the provider's console.
+2. In the provider's console, create two login roles with generated
+   passwords, and `GRANT app TO <app login>; GRANT platform TO <platform login>;`.
+3. Set `DATABASE_URL` to the app login (pooled host), `DATABASE_URL_PLATFORM`
+   to the platform login (pooled), `DATABASE_URL_MIGRATE` to the owner
+   (direct host). `pnpm db:migrate`, `pnpm db:reset`, backups and the admin
+   panel's migrate use `DATABASE_URL_MIGRATE`; the app runs on `DATABASE_URL`.
+
 ### Cron and the job runner
 
 `/api/cron` runs due jobs ([ADR 0008](./adr/0008-jobs-table-before-a-queue.md)).

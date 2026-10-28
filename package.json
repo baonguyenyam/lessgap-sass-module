@@ -41,6 +41,7 @@
     "audit:tenancy": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/audit-tenancy.mjs",
     "new:module": "node scripts/new-module.mjs",
     "modules:check": "node scripts/generate-module-registry.mjs && vitest run tests/contract/modules.test.ts",
+    "db:roles": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/db-roles.mjs",
     "db:adopt": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/db-adopt.mjs"
   },
   "dependencies": {

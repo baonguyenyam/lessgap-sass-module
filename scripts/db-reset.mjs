@@ -31,7 +31,8 @@ const withDemo = args.has("--demo")
 // Schema changes need a direct connection. DIRECT_URL wins when set; a Neon
 // `-pooler` host (in either variable) is switched to its direct host, because
 // PgBouncer in transaction mode breaks what Prisma does while building a schema.
-const configured = process.env.DIRECT_URL?.trim() || process.env.DATABASE_URL?.trim()
+const configured =
+  process.env.DATABASE_URL_MIGRATE?.trim() || process.env.DIRECT_URL?.trim() || process.env.DATABASE_URL?.trim()
 const url = configured ? toDirectUrl(configured) : configured
 
 const target = checkResetTarget({ url, env: process.env })

@@ -28,3 +28,14 @@ export function toDirectUrl(url: string): string {
     return url
   }
 }
+
+/**
+ * The connection for schema work, backups and other owner-level jobs (spec/12,
+ * "Database roles"): `DATABASE_URL_MIGRATE` (the owner role) when set, then
+ * `DIRECT_URL`, then `DATABASE_URL`, on the direct host. Until the roles are
+ * set up, `DATABASE_URL` is the owner and this returns it.
+ */
+export function ownerUrl(env: Record<string, string | undefined>): string | null {
+  const url = env.DATABASE_URL_MIGRATE?.trim() || env.DIRECT_URL?.trim() || env.DATABASE_URL?.trim()
+  return url ? toDirectUrl(url) : null
+}

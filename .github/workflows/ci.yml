@@ -131,6 +131,8 @@ jobs:
       - run: pnpm exec prisma db migrate --db "$DATABASE_URL"
       # M2: the result is exactly the contract, nothing more (strict).
       - run: pnpm exec prisma db verify --strict --db "$DATABASE_URL"
+      # The app and platform roles (spec/12) apply, and apply again with no change.
+      - run: pnpm db:roles && pnpm db:roles
       # The seeds run on the migrated schema.
       - run: pnpm db:seed
 

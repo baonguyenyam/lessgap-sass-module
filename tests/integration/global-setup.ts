@@ -14,7 +14,7 @@ function databaseIdentity(value: string) {
   return `${url.protocol}//${url.hostname}:${url.port || "5432"}${url.pathname}`
 }
 
-export default function migrateTestDatabase() {
+export default async function migrateTestDatabase() {
   const databaseUrl = process.env["DATABASE_URL"]
   const testDatabaseUrl = requiredTestDatabaseUrl()
 
@@ -26,4 +26,8 @@ export default function migrateTestDatabase() {
     env: { ...process.env, DATABASE_URL: testDatabaseUrl },
     stdio: "inherit",
   })
+
+  // The app and platform roles (phase 1, task 1.1), as `pnpm db:roles` creates them.
+  const { applyRoles } = await import("#scripts/db-roles.mjs")
+  await applyRoles(testDatabaseUrl)
 }

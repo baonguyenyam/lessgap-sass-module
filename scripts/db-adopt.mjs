@@ -33,7 +33,8 @@ config({ path: [".env.local", ".env"], quiet: true })
 const args = new Set(process.argv.slice(2))
 const dropLegacy = args.has("--drop-legacy-table")
 
-const configured = process.env.DIRECT_URL?.trim() || process.env.DATABASE_URL?.trim()
+const configured =
+  process.env.DATABASE_URL_MIGRATE?.trim() || process.env.DIRECT_URL?.trim() || process.env.DATABASE_URL?.trim()
 if (!configured) fail("no database URL: set DATABASE_URL (or DIRECT_URL) first")
 const url = toDirectUrl(configured)
 const { hostname, pathname } = new URL(url)

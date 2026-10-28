@@ -1,7 +1,7 @@
 import { createGzip } from "node:zlib"
 import pg from "pg"
 import { siteConfig } from "@/config/site"
-import { toDirectUrl } from "@/lib/database-url"
+import { ownerUrl } from "@/lib/database-url"
 import { putObject } from "@/platform/storage/r2"
 import {
   backupKey,
@@ -36,9 +36,10 @@ export type Dump = { takenAt: Date; contractHash: string | null; body: Buffer; t
 
 /** A client on the direct host: a cursor held across a long read does not survive Neon's pooler. */
 export function directClient(): pg.Client {
-  const url = process.env.DIRECT_URL || process.env.DATABASE_URL
+  // The owner role (spec/12): the app role would see only what RLS lets one tenant see.
+  const url = ownerUrl(process.env)
   if (!url) throw new Error("DATABASE_URL is not set")
-  return new pg.Client({ connectionString: toDirectUrl(url) })
+  return new pg.Client({ connectionString: url })
 }
 
 /** Takes the backup and stores it under `platform-backups/`. */

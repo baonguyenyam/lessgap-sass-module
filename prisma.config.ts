@@ -13,7 +13,9 @@ export default definePrismaConfig({
     contract: "prisma/contract.prisma",
     output: "src/generated/prisma8",
     db: {
-      connection: process.env["DATABASE_URL"],
+      // Schema work runs as the owner role (spec/12, "Database roles"): the
+      // app role in DATABASE_URL cannot create tables once the roles are set up.
+      connection: process.env["DATABASE_URL_MIGRATE"] || process.env["DATABASE_URL"],
     },
   }),
 })
