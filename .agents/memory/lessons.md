@@ -2,6 +2,12 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-27 · vitest · Integration files sharing one database must not run in parallel
+- **Symptom:** after a fourth integration file was added, the smoke test and the job test failed with rows "undefined" right after inserting them; each file passed alone.
+- **Cause:** every file truncates the shared test database in `beforeEach`; Vitest ran the files in parallel workers, so one file wiped another's rows mid-test.
+- **Fix:** `fileParallelism: false` in `vitest.integration.config.mts`.
+- **Rule:** integration tests share one database and run file by file; a test that passes alone and fails in the suite is checked for shared state first.
+
 ### 2026-10-27 · prisma 8 · Raw SQL takes no `null`, and `affectedCount()` needs `build()`
 - **Symptom:** `RUNTIME.RAW_SQL_UNSUPPORTED_INTERPOLATION` for a `null` value in ``db8.raw.sql`…` ``, then `Cannot read properties of undefined (reading 'collectParamRefs')` from `db8.execute`.
 - **Cause:** the raw lane infers a codec from each interpolated value and has none for `null` (`param()` is not exported by the façade); `.affectedCount()` returns a builder, not a plan.

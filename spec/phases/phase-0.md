@@ -149,7 +149,7 @@ Tenants, memberships, plans, sites (phases 1–3). Any visible UI change.
 - **Tests:** O3; masked `lastError` keeps no address (reuses `maskAddresses`).
 - **Checks:** `pnpm test`, `pnpm test:integration`, M1, M2.
 - **Done when:** a refused send (bad key, suppressed address) still leaves exactly one row with `REFUSED` and a masked error.
-- [ ] done
+- [x] done (integration: a refused key leaves one `REFUSED` row with a masked error, a send leaves `SENT` with the provider's message id, a thrown send leaves `FAILED` and still throws, and the yearly prune job; O3 unit tests for the status mapping; `db verify --strict` and `migration check` pass. Shipped differently: the row writes live in `src/lib/email-outbox.ts`, not `email-delivery.ts`, because the browser bundle reaches `email-delivery.ts` through the log masking and must not pull in the database client; `email-delivery.ts` holds the pure status mapping. Integration files now run one after another (`fileParallelism: false`), since they share one database.)
 
 ## Exit criteria
 - CI green with jobs: install, typecheck, lint (with boundary rules), unit + contract, integration with Postgres, migration checks, tenancy audit, build, audit.

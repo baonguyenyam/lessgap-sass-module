@@ -1,0 +1,169 @@
+[
+  {
+    "id": "createNativeEnumType.EmailStatus",
+    "label": "Create enum type \"EmailStatus\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "type",
+        "name": "EmailStatus"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "create enum type \"EmailStatus\"",
+        "sql": "CREATE TYPE \"public\".\"EmailStatus\" AS ENUM ('QUEUED', 'SENT', 'REFUSED', 'FAILED')",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.EmailMessage",
+    "label": "Create table \"EmailMessage\"",
+    "summary": "Creates table \"EmailMessage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "EmailMessage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"EmailMessage\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"EmailMessage\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"EmailMessage\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"EmailMessage\"",
+        "sql": "CREATE TABLE \"public\".\"EmailMessage\" (\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"kind\" text NOT NULL,\n  \"lastError\" text,\n  \"provider\" text NOT NULL,\n  \"providerMessageId\" text,\n  \"sentAt\" timestamp(3),\n  \"status\" \"EmailStatus\" DEFAULT 'QUEUED'::\"EmailStatus\" NOT NULL,\n  \"subject\" text NOT NULL,\n  \"tenantId\" text,\n  \"toAddress\" text NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  CONSTRAINT \"EmailMessage_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"EmailMessage\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"EmailMessage\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"EmailMessage\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "index.EmailMessage.EmailMessage_createdAt_idx",
+    "label": "Create index \"EmailMessage_createdAt_idx\" on \"EmailMessage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "EmailMessage_createdAt_idx",
+        "table": "EmailMessage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"EmailMessage_createdAt_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"EmailMessage_createdAt_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"EmailMessage_createdAt_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"EmailMessage_createdAt_idx\"",
+        "sql": "CREATE INDEX \"EmailMessage_createdAt_idx\" ON \"public\".\"EmailMessage\" (\"createdAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"EmailMessage_createdAt_idx\" exists on \"EmailMessage\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"EmailMessage_createdAt_idx\"",
+          "i",
+          "I",
+          "\"public\".\"EmailMessage\"",
+          "btree",
+          "[\"createdAt\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.EmailMessage.EmailMessage_tenantId_createdAt_idx",
+    "label": "Create index \"EmailMessage_tenantId_createdAt_idx\" on \"EmailMessage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "EmailMessage_tenantId_createdAt_idx",
+        "table": "EmailMessage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"EmailMessage_tenantId_createdAt_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"EmailMessage_tenantId_createdAt_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"EmailMessage_tenantId_createdAt_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"EmailMessage_tenantId_createdAt_idx\"",
+        "sql": "CREATE INDEX \"EmailMessage_tenantId_createdAt_idx\" ON \"public\".\"EmailMessage\" (\"tenantId\", \"createdAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"EmailMessage_tenantId_createdAt_idx\" exists on \"EmailMessage\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"EmailMessage_tenantId_createdAt_idx\"",
+          "i",
+          "I",
+          "\"public\".\"EmailMessage\"",
+          "btree",
+          "[\"tenantId\",\"createdAt\"]"
+        ]
+      }
+    ]
+  }
+]

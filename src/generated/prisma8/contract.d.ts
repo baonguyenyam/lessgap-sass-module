@@ -23,9 +23,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'78be6818fa3798ebdec8eaff5d8335b31419e76e083cd0a7f9220d8b5deaa05c'>;
+  StorageHashBase<'f8d3dd8f8d36ebcd41534cbe8ea5845782cdb2570d2ab12b75a9f5727d3a8dcc'>;
 export type ExecutionHash =
-  ExecutionHashBase<'70354a8ca90008ce9019fee1050e58c75be807602a64afef3b9d0cdb5f7f53ae'>;
+  ExecutionHashBase<'365acb882aef04183b863bd6d1994bcdc8bdf98856af732e8cb42ebda635ef2e'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -241,6 +241,12 @@ type ParameterizedOutputTypeFunctions = PgParameterizedOutputTypes;
 type FieldTypeOverrides = {
   readonly public: {
     readonly models: {
+      readonly EmailMessage: {
+        readonly status: {
+          readonly output: 'QUEUED' | 'SENT' | 'REFUSED' | 'FAILED';
+          readonly input: 'QUEUED' | 'SENT' | 'REFUSED' | 'FAILED';
+        };
+      };
       readonly Job: {
         readonly status: {
           readonly output: 'QUEUED' | 'RUNNING' | 'SUCCEEDED' | 'FAILED';
@@ -301,6 +307,12 @@ export type FieldInputTypes = FieldTypesFromDomain<
 >;
 type ColumnTypeOverrides = {
   readonly public: {
+    readonly EmailMessage: {
+      readonly status: {
+        readonly output: 'QUEUED' | 'SENT' | 'REFUSED' | 'FAILED';
+        readonly input: 'QUEUED' | 'SENT' | 'REFUSED' | 'FAILED';
+      };
+    };
     readonly Job: {
       readonly status: {
         readonly output: 'QUEUED' | 'RUNNING' | 'SUCCEEDED' | 'FAILED';
@@ -375,6 +387,21 @@ export namespace Models {
     userId: FieldOutputTypes['public']['Account']['userId'];
     user: public_User;
     readonly [RelationKeys]?: 'user';
+  };
+  export type public_EmailMessage = {
+    createdAt: FieldOutputTypes['public']['EmailMessage']['createdAt'];
+    id: FieldOutputTypes['public']['EmailMessage']['id'];
+    kind: FieldOutputTypes['public']['EmailMessage']['kind'];
+    lastError: FieldOutputTypes['public']['EmailMessage']['lastError'];
+    provider: FieldOutputTypes['public']['EmailMessage']['provider'];
+    providerMessageId: FieldOutputTypes['public']['EmailMessage']['providerMessageId'];
+    sentAt: FieldOutputTypes['public']['EmailMessage']['sentAt'];
+    status: FieldOutputTypes['public']['EmailMessage']['status'];
+    subject: FieldOutputTypes['public']['EmailMessage']['subject'];
+    tenantId: FieldOutputTypes['public']['EmailMessage']['tenantId'];
+    toAddress: FieldOutputTypes['public']['EmailMessage']['toAddress'];
+    updatedAt: FieldOutputTypes['public']['EmailMessage']['updatedAt'];
+    readonly [RelationKeys]?: never;
   };
   export type public_ErrorReport = {
     count: FieldOutputTypes['public']['ErrorReport']['count'];
@@ -637,6 +664,7 @@ export namespace Models {
 export declare const models: {
   public: {
     Account: Models.public_Account;
+    EmailMessage: Models.public_EmailMessage;
     ErrorReport: Models.public_ErrorReport;
     Invitation: Models.public_Invitation;
     Job: Models.public_Job;
@@ -791,6 +819,107 @@ type ContractBase = Omit<
                   readonly name: 'Account_userId_fkey';
                 },
               ];
+            };
+            readonly EmailMessage: {
+              columns: {
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly kind: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly lastError: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly provider: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly providerMessageId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly sentAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly status: {
+                  readonly dataType: 'pg/enum';
+                  readonly codecId: 'pg/enum@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/enum@1', 'QUEUED'>;
+                  };
+                  readonly typeParams: { readonly typeName: 'EmailStatus' };
+                  readonly many: false;
+                };
+                readonly subject: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly tenantId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly toAddress: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id']; readonly name: 'EmailMessage_pkey' };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'EmailMessage_createdAt_idx';
+                  readonly columns: readonly ['createdAt'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'EmailMessage_tenantId_createdAt_idx';
+                  readonly columns: readonly ['tenantId', 'createdAt'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [];
             };
             readonly ErrorReport: {
               columns: {
@@ -2515,6 +2644,10 @@ type ContractBase = Omit<
               readonly kind: 'valueSet';
               readonly values: readonly ['MONTH', 'YEAR', 'ONE_TIME'];
             };
+            readonly EmailStatus: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['QUEUED', 'SENT', 'REFUSED', 'FAILED'];
+            };
             readonly JobStatus: {
               readonly kind: 'valueSet';
               readonly values: readonly ['QUEUED', 'RUNNING', 'SUCCEEDED', 'FAILED'];
@@ -2564,6 +2697,10 @@ type ContractBase = Omit<
   readonly targetFamily: 'sql';
   readonly roots: {
     readonly Account: { readonly namespace: 'public' & NamespaceId; readonly model: 'Account' };
+    readonly EmailMessage: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'EmailMessage';
+    };
     readonly ErrorReport: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'ErrorReport';
@@ -2713,6 +2850,93 @@ type ContractBase = Omit<
                 readonly scope: { readonly column: 'scope' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
                 readonly userId: { readonly column: 'userId' };
+              };
+            };
+          };
+          readonly EmailMessage: {
+            readonly fields: {
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly kind: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly lastError: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly provider: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly providerMessageId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly sentAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly status: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/enum@1';
+                  readonly typeParams: { readonly typeName: 'EmailStatus' };
+                };
+              };
+              readonly subject: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly tenantId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly toAddress: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+            };
+            readonly relations: Record<string, never>;
+            readonly storage: {
+              readonly table: 'EmailMessage';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly id: { readonly column: 'id' };
+                readonly kind: { readonly column: 'kind' };
+                readonly lastError: { readonly column: 'lastError' };
+                readonly provider: { readonly column: 'provider' };
+                readonly providerMessageId: { readonly column: 'providerMessageId' };
+                readonly sentAt: { readonly column: 'sentAt' };
+                readonly status: { readonly column: 'status' };
+                readonly subject: { readonly column: 'subject' };
+                readonly tenantId: { readonly column: 'tenantId' };
+                readonly toAddress: { readonly column: 'toAddress' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
               };
             };
           };
@@ -4327,6 +4551,22 @@ type ContractBase = Omit<
           readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'Account';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'uuidv7'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'EmailMessage';
+            readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'EmailMessage';
             readonly field: 'updatedAt';
             readonly namespace: 'public';
           };

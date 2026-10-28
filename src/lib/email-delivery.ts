@@ -20,7 +20,33 @@
 
 /** The part of a Resend SDK response this looks at. */
 export type ResendOutcome = {
+  /** The provider's answer on success; a send answers with `{ id }`. */
+  data?: unknown
   error: { name?: string; message?: string; statusCode?: number | null } | null
+}
+
+/** What one send comes to, as the `EmailMessage` row records it (spec/16-operations.md, test O3). */
+export type DeliveryResult =
+  { status: "SENT"; providerMessageId: string | null } | { status: "REFUSED" | "FAILED"; lastError: string }
+
+/**
+ * Maps a provider outcome, or an exception, onto the row's status: accepted →
+ * SENT; answered with an error → REFUSED; threw (no key, the network) →
+ * FAILED. The error is masked: some providers quote the address back.
+ */
+export function deliveryResult(input: { outcome: ResendOutcome } | { thrown: unknown }): DeliveryResult {
+  if ("thrown" in input) {
+    const message = input.thrown instanceof Error ? input.thrown.message : String(input.thrown)
+    return { status: "FAILED", lastError: maskAddresses(message).slice(0, 1000) || "unknown error" }
+  }
+  const { data, error } = input.outcome
+  if (!error) {
+    const id = data && typeof data === "object" && "id" in data && typeof data.id === "string" ? data.id : null
+    return { status: "SENT", providerMessageId: id }
+  }
+  const code = [error.name, error.statusCode].filter((part) => part !== undefined && part !== null).join(" ")
+  const detail = maskAddresses(error.message ?? "")
+  return { status: "REFUSED", lastError: [code, detail].filter(Boolean).join(": ").slice(0, 1000) || "refused" }
 }
 
 const ADDRESS = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g

@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ## [2.20.0] - 2026-10-27
 
-**The public site speaks Vietnamese, and ROOT can back up and migrate the database from the admin panel.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (two new tables, `ErrorReport` and `Job`).
+**The public site speaks Vietnamese, and ROOT can back up and migrate the database from the admin panel.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (three new tables: `ErrorReport`, `Job`, `EmailMessage`).
 
 ### Added
 
@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 - **Sentry**, off unless `SENTRY_DSN` / `NEXT_PUBLIC_SENTRY_DSN` is set; nothing about the person or the request is sent ([ADR 0017](spec/adr/0017-sentry-for-error-tracking.md), now accepted)
 - `/api/health/live` for load checks
 - **Background jobs** ([ADR 0008](spec/adr/0008-jobs-table-before-a-queue.md), task 0.15): a `Job` table (migration `platform_jobs`) and `/api/cron`, which claims due jobs with `FOR UPDATE SKIP LOCKED`, retries failures with backoff (1, 2, 4… minutes, up to an hour) and leaves them `FAILED` with a masked `lastError` after the last attempt. Recurring jobs declare a cron expression; the first one prunes `ErrorReport` groups older than 30 days. Vercel Cron calls it daily; point a one-minute pinger at it in production (spec/14). It needs `CRON_SECRET`
+- **`EmailMessage`, the delivery record** (task 0.16, migration `platform_email_messages`): every `sendEmail()` call leaves one row with the recipient, subject, provider and outcome (`SENT` with the provider's message id, `REFUSED` or `FAILED` with a masked error), including when the send throws. Records older than a year are pruned daily. `sendEmail()` takes an optional `tenantId` for the row
 
 ### Changed
 

@@ -13,10 +13,19 @@ vi.mock("resend", () => ({
   },
 }))
 
+// The EmailMessage record (test O3): one row opened per call, settled once.
+const outbox = vi.hoisted(() => ({ open: vi.fn(), settle: vi.fn() }))
+vi.mock("@/lib/email-outbox", () => ({
+  openEmailRecord: (...a: unknown[]) => outbox.open(...a),
+  settleEmailRecord: (...a: unknown[]) => outbox.settle(...a),
+}))
+
 const original = { ...process.env }
 
 beforeEach(() => {
   send.mockReset()
+  outbox.open.mockReset().mockResolvedValue("row-1")
+  outbox.settle.mockReset().mockResolvedValue(undefined)
   vi.resetModules()
 })
 
@@ -75,6 +84,37 @@ describe("sendEmail", () => {
       "RESEND_API_KEY is not set"
     )
     expect(send).not.toHaveBeenCalled()
+  })
+
+  it("records one EmailMessage per call, settled with the outcome (O3)", async () => {
+    process.env.RESEND_API_KEY = "re_test"
+    const { sendEmail } = await import("@/lib/email-transport")
+
+    send.mockResolvedValue({ data: { id: "msg_1" }, error: null })
+    await sendEmail({ kind: "welcome", to: "a@b.test", subject: "Hi", html: "h", tenantId: "t1" })
+    expect(outbox.open).toHaveBeenCalledWith(
+      expect.objectContaining({ kind: "welcome", to: "a@b.test", subject: "Hi", provider: "resend", tenantId: "t1" })
+    )
+    expect(outbox.settle).toHaveBeenLastCalledWith("row-1", { status: "SENT", providerMessageId: "msg_1" })
+
+    vi.spyOn(console, "error").mockImplementation(() => {})
+    send.mockResolvedValue({ error: { name: "validation_error", statusCode: 403, message: "a@b.test is suppressed" } })
+    await sendEmail({ kind: "welcome", to: "a@b.test", subject: "Hi", html: "h" })
+    expect(outbox.settle).toHaveBeenLastCalledWith("row-1", {
+      status: "REFUSED",
+      lastError: "validation_error 403: [address] is suppressed",
+    })
+
+    expect(outbox.open).toHaveBeenCalledTimes(2)
+    expect(outbox.settle).toHaveBeenCalledTimes(2)
+  })
+
+  it("still settles the record as FAILED when the send throws, and rethrows", async () => {
+    delete process.env.RESEND_API_KEY
+    const { sendEmail } = await import("@/lib/email-transport")
+    await expect(sendEmail({ kind: "welcome", to: "a@b.test", subject: "s", html: "h" })).rejects.toThrow()
+    expect(outbox.open).toHaveBeenCalledWith(expect.objectContaining({ provider: "none" }))
+    expect(outbox.settle).toHaveBeenCalledWith("row-1", { status: "FAILED", lastError: "RESEND_API_KEY is not set" })
   })
 })
 

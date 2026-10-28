@@ -1,5 +1,5 @@
 import { siteConfig } from "@/config/site"
-import { deliver } from "@/lib/email-delivery"
+import { deliver, deliveryResult } from "@/lib/email-delivery"
 import type { Resend } from "resend"
 import type { ResendOutcome } from "@/lib/email-delivery"
 
@@ -42,6 +42,8 @@ export type OutgoingEmail = {
   subject: string
   html: string
   replyTo?: string
+  /** The workspace the email is sent for, when there is one; recorded on the `EmailMessage` row. */
+  tenantId?: string
 }
 
 /**
@@ -52,21 +54,47 @@ export type OutgoingEmail = {
  * answer the same way whether or not an address exists). A missing key or a
  * network failure still throws, as before. Keep both behaviours if you replace
  * the provider.
+ *
+ * Every call leaves exactly one `EmailMessage` row (spec/16-operations.md):
+ * opened before the provider is asked, settled to SENT, REFUSED or FAILED
+ * after, including when the send throws.
  */
 export async function sendEmail(email: OutgoingEmail): Promise<boolean> {
-  if (provider() === "brevo") {
-    return deliver(email.kind, () => sendWithBrevo(email), undefined, "Brevo")
+  const name = provider()
+  const { openEmailRecord, settleEmailRecord } = await import("@/lib/email-outbox")
+  const record = await openEmailRecord({ ...email, provider: name ?? "none" })
+  let outcome: ResendOutcome | undefined
+  const capture = (send: () => Promise<ResendOutcome>) => async () => (outcome = await send())
+  try {
+    let accepted: boolean
+    if (name === "brevo") {
+      accepted = await deliver(
+        email.kind,
+        capture(() => sendWithBrevo(email)),
+        undefined,
+        "Brevo"
+      )
+    } else {
+      const resend = await resendClient()
+      accepted = await deliver(
+        email.kind,
+        capture(() =>
+          resend.emails.send({
+            from: EMAIL_FROM,
+            to: email.to,
+            subject: email.subject,
+            html: email.html,
+            replyTo: email.replyTo,
+          })
+        )
+      )
+    }
+    await settleEmailRecord(record, deliveryResult({ outcome: outcome! }))
+    return accepted
+  } catch (error) {
+    await settleEmailRecord(record, deliveryResult({ thrown: error }))
+    throw error
   }
-  const resend = await resendClient()
-  return deliver(email.kind, () =>
-    resend.emails.send({
-      from: EMAIL_FROM,
-      to: email.to,
-      subject: email.subject,
-      html: email.html,
-      replyTo: email.replyTo,
-    })
-  )
 }
 
 /**
@@ -103,7 +131,10 @@ async function sendWithBrevo(email: OutgoingEmail): Promise<ResendOutcome> {
       ...(email.replyTo ? { replyTo: { email: email.replyTo } } : {}),
     }),
   })
-  if (response.ok) return { error: null }
+  if (response.ok) {
+    const sent = (await response.json().catch(() => null)) as { messageId?: string } | null
+    return { data: sent?.messageId ? { id: sent.messageId } : null, error: null }
+  }
   const body = (await response.json().catch(() => null)) as { code?: string; message?: string } | null
   return {
     error: {

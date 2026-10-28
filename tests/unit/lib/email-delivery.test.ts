@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
-import { deliver, maskAddresses } from "@/lib/email-delivery"
+import { deliver, deliveryResult, maskAddresses } from "@/lib/email-delivery"
 
 /**
  * The failure this guards is silent by construction: the Resend SDK resolves
@@ -70,5 +70,33 @@ describe("maskAddresses", () => {
 
   it("leaves text without addresses as it is", () => {
     expect(maskAddresses("The domain is not verified.")).toBe("The domain is not verified.")
+  })
+})
+
+describe("deliveryResult (O3)", () => {
+  it("maps an accepted send to SENT with the provider's message id", () => {
+    expect(deliveryResult({ outcome: { data: { id: "m1" }, error: null } })).toEqual({
+      status: "SENT",
+      providerMessageId: "m1",
+    })
+    expect(deliveryResult({ outcome: { data: { deleted: true }, error: null } })).toEqual({
+      status: "SENT",
+      providerMessageId: null,
+    })
+  })
+
+  it("maps a refusal to REFUSED with a masked error that keeps no address", () => {
+    const result = deliveryResult({
+      outcome: { error: { name: "unauthorized", statusCode: 401, message: "Key rejected for owner@example.com" } },
+    })
+    expect(result).toEqual({ status: "REFUSED", lastError: "unauthorized 401: Key rejected for [address]" })
+    expect(JSON.stringify(result)).not.toContain("@")
+  })
+
+  it("maps an exception to FAILED, masked as well", () => {
+    expect(deliveryResult({ thrown: new Error("connect failed for x@y.test") })).toEqual({
+      status: "FAILED",
+      lastError: "connect failed for [address]",
+    })
   })
 })

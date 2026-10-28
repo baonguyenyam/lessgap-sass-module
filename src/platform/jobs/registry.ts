@@ -31,4 +31,13 @@ export const JOBS: JobRegistry = {
       await db8.orm.public.ErrorReport.where((r) => r.lastSeenAt.lt(cutoff)).deleteAndCount()
     },
   },
+  // Email delivery records older than a year (spec/10-security-compliance.md, "Data retention").
+  "platform.email_messages.prune": {
+    schedule: "30 3 * * *",
+    handler: async () => {
+      const [{ db8 }, { toTs }] = await Promise.all([import("@/lib/db8"), import("@/lib/timestamps")])
+      const cutoff = toTs(new Date(Date.now() - 365 * DAY_MS))
+      await db8.orm.public.EmailMessage.where((m) => m.createdAt.lt(cutoff)).deleteAndCount()
+    },
+  },
 }
