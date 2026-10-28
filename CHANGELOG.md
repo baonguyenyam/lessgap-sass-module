@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.41.0] - 2026-10-28
+
+**A tenant's site has a schema: `Site`, `SiteSettings`, `Page`, `Media`.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` — one migration adds the four site tables.
+
+### Added
+
+- **`Site`** — one per tenant: `themeKey`, `tokens` and `sections` (theme-validated JSON), `languages`, `status` (DRAFT / PUBLISHED / MAINTENANCE)
+- **`SiteSettings`** — the site content the dashboard edits: company profile, opening hours, appearance
+- **`Page`** — tenant pages keyed to the theme's page keys; **`Media`** — uploaded files in R2
+
 ## [2.40.0] - 2026-10-28
 
 **Tenant sites have an address: `<slug>.<sites-domain>` resolves to a tenant.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` — one migration adds RLS to `ModuleExport` and `ModulePurge`.

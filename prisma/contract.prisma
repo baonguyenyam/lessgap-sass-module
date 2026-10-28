@@ -611,3 +611,81 @@ trialEndsAt          TimestampString(3)?
     INCOMPLETE = "INCOMPLETE"
   }
 }
+
+  // A tenant's public site (spec/03-domains.md, spec/09-data-model.md).
+  // `tokens` and `sections` are validated against the theme's own schemas —
+  // the contract stores them opaque.
+  model Site {
+    id          String             @id(map: "Site_pkey") @onCreate(cuid(2))
+    tenantId    String
+    themeKey    String             @default("main")
+    tokens      Json?
+    sections    Json?
+    languages   Json               @default(json`["en"]`)
+    status      SiteStatus         @default(DRAFT)
+    publishedAt TimestampString(3)?
+    createdAt   TimestampString(3) @default(now())
+    updatedAt   TimestampString(3) @default(now()) @onUpdate(now())
+    tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Site_tenantId_fkey")
+
+    @@index([tenantId], map: "Site_tenantId_key", unique: true)
+    @@rls
+  }
+
+  enum SiteStatus {
+    DRAFT
+    PUBLISHED
+    MAINTENANCE
+  }
+
+  // The site's tenant-editable content (spec/06 "Content"): company profile,
+  // opening hours and appearance — three JSON documents the theme reads.
+  model SiteSettings {
+    id         String             @id(map: "SiteSettings_pkey") @onCreate(cuid(2))
+    tenantId   String
+    profile    Json?
+    hours      Json?
+    appearance Json?
+    createdAt  TimestampString(3) @default(now())
+    updatedAt  TimestampString(3) @default(now()) @onUpdate(now())
+    tenant     Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "SiteSettings_tenantId_fkey")
+
+    @@index([tenantId], map: "SiteSettings_tenantId_key", unique: true)
+    @@rls
+  }
+
+  // A tenant page keyed to a theme page key (spec/06: "Page keys come from
+  // the theme manifest"). `content` is the theme-section JSON for that page.
+  model Page {
+    id        String             @id(map: "Page_pkey") @onCreate(cuid(2))
+    tenantId  String
+    key       String
+    title     String?
+    content   Json?
+    sortOrder Int                @default(0)
+    status    String             @default("published")
+    createdAt TimestampString(3) @default(now())
+    updatedAt TimestampString(3) @default(now()) @onUpdate(now())
+    tenant    Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Page_tenantId_fkey")
+
+    @@index([tenantId, key], map: "Page_tenantId_key_key", unique: true)
+    @@rls
+  }
+
+  // An uploaded file in R2 (ADR 0018). `key` is the object key; the rules
+  // (types, size) come from the platform `upload.*` settings (task 3.4).
+  model Media {
+    id          String             @id(map: "Media_pkey") @onCreate(cuid(2))
+    tenantId    String
+    key         String
+    contentType String
+    bytes       Int
+    alt         String?
+    width       Int?
+    height      Int?
+    createdAt   TimestampString(3) @default(now())
+    tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Media_tenantId_fkey")
+
+    @@index([tenantId, key], map: "Media_tenantId_key_key", unique: true)
+    @@rls
+  }

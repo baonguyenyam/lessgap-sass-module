@@ -28,7 +28,13 @@ describe("tenant deletion (T9)", () => {
 
   it("leaves no row with the tenant's id in any tenant-owned or tenant-identity table", async () => {
     const {
+      Media,
+      ModuleExport,
+      ModulePurge,
       NewsletterSubscriber,
+      Page,
+      Site,
+      SiteSettings,
       TenantModule,
       TenantSetting,
       Purchase,
@@ -58,6 +64,12 @@ describe("tenant deletion (T9)", () => {
         confirmToken: newTimeId(),
         unsubscribeToken: newTimeId(),
       }),
+      Media.create({ tenantId: tenant.id, key: `media/${slug}`, contentType: "image/png", bytes: 100 }),
+      ModuleExport.create({ tenantId: tenant.id, moduleKey: "demo", files: {}, expiresAt: nowTs() }),
+      ModulePurge.create({ tenantId: tenant.id, moduleKey: "demo", runAfter: nowTs() }),
+      Page.create({ tenantId: tenant.id, key: "home" }),
+      Site.create({ tenantId: tenant.id, themeKey: "main" }),
+      SiteSettings.create({ tenantId: tenant.id, profile: { name: "Purge Me" } }),
       TenantModule.create({ tenantId: tenant.id, moduleKey: "demo", enabled: true }),
       TenantSetting.create({ tenantId: tenant.id, key: "display.page_size", value: 25 }),
       OrganizationRole.create({ organizationId: tenant.id, role: "greeter", permission: { demo: ["view"] } }),

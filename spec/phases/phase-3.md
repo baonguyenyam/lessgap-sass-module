@@ -56,7 +56,7 @@ set upload rules and rollouts from the console.
 - **Tests:** integration — T9 tenant deletion covers the new models.
 - **Checks:** `pnpm db:emit`, `pnpm db:plan`, `pnpm db:migrate`, `pnpm audit:tenancy`.
 - **Done when:** models exist tenant-owned, deletion verified.
-- [ ] done
+- [x] done (`platform_site_schema` adds `Site` (one per tenant — `themeKey`, `tokens`, `sections`, `languages`, `status` DRAFT|PUBLISHED|MAINTENANCE), `SiteSettings` (company profile / hours / appearance JSON), `Page` (`tenantId`+`key` unique, theme-page-key'd content) and `Media` (R2 object rows) — all tenant-owned, `@@rls`, cascade. `MODEL_CLASSIFICATION` 32 models; `deleteTenant` deletes each explicitly (T9 covers all four).)
 
 ### 3.3 — Tenant dashboard: company profile, hours, pages, appearance
 - **Goal:** `/t/<slug>/settings/site` pages for the `SiteSettings` fields —
