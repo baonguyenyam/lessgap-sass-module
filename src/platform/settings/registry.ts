@@ -55,6 +55,42 @@ export const PLATFORM_SETTINGS = {
     schema: z.enum(APP_LOCALES),
     default: "en",
   },
+  "signup.free_plan.enabled": {
+    group: "access",
+    scope: "root",
+    schema: z.preprocess((v) => (v === "true" ? true : v === "false" ? false : v), z.boolean()),
+    default: true,
+  },
+  "signup.require_approval": {
+    group: "access",
+    scope: "root",
+    schema: z.preprocess((v) => (v === "true" ? true : v === "false" ? false : v), z.boolean()),
+    default: false,
+  },
+  "signup.verticals": {
+    group: "access",
+    scope: "root",
+    schema: z.array(z.string()),
+    default: ["generic"],
+  },
+  "maintenance.dashboard": {
+    group: "access",
+    scope: "root",
+    schema: z.preprocess((v) => (v === "true" ? true : v === "false" ? false : v), z.boolean()),
+    default: false,
+  },
+  "maintenance.sites": {
+    group: "access",
+    scope: "root",
+    schema: z.preprocess((v) => (v === "true" ? true : v === "false" ? false : v), z.boolean()),
+    default: false,
+  },
+  "chatbot.provider": {
+    group: "access",
+    scope: "root",
+    schema: z.enum(["off", "openai", "anthropic", "google"]),
+    default: "off",
+  },
   "signup.enabled": {
     group: "access",
     scope: "root",
@@ -88,7 +124,9 @@ export const isSettingKey = (key: string): key is SettingKey => Object.hasOwn(PL
 
 /** The settings in force, from the stored rows: defaults fill every gap. */
 export function readSettings(rows: { key: string; value: unknown }[]): PlatformSettings {
-  const out = Object.fromEntries(SETTING_KEYS.map((key) => [key, PLATFORM_SETTINGS[key].default])) as PlatformSettings
+  const out = Object.fromEntries(
+    SETTING_KEYS.map((key) => [key, PLATFORM_SETTINGS[key].default])
+  ) as unknown as PlatformSettings
   for (const row of rows) {
     if (!isSettingKey(row.key)) continue
     const parsed = PLATFORM_SETTINGS[row.key].schema.safeParse(row.value)
@@ -105,7 +143,7 @@ export function canEditSetting(role: Role | null | undefined, key: SettingKey): 
 /** Parses a value for `key` coming from a form; `null` when it is not valid. */
 export function parseSettingValue<K extends SettingKey>(key: K, raw: unknown): PlatformSettings[K] | null {
   const parsed = PLATFORM_SETTINGS[key].schema.safeParse(raw)
-  return parsed.success ? (parsed.data as PlatformSettings[K]) : null
+  return parsed.success ? (parsed.data as unknown as PlatformSettings[K]) : null
 }
 
 /**

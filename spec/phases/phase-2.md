@@ -68,7 +68,7 @@ Settings → Modules: enable, disable, export data, and schedule a purge with a
 - **Tests:** unit — a switch write re-scopes through `requirePlatformRole` and audits; integration — the new value is visible to `getPlatformSettings` on the next read.
 - **Checks:** `pnpm test`, `pnpm test:integration`.
 - **Done when:** flipping a switch in the console takes effect without a restart and leaves an audit row.
-- [ ] done
+- [x] done (`/platform/settings` lists every switch: typed registry settings (with effective values and whether a stored row differs) plus untyped rows `feature.*`/`module.*`/anything hand-written. `setPlatformSwitch` re-scopes through `requirePlatformRole`, validates typed keys against their registry schema (`parseSettingValue`), and writes `feature.*`/`module.*` as untyped JSON — anything else refused. The registry gained the spec/04 initial set: `signup.free_plan.enabled`, `signup.require_approval`, `signup.verticals`, `maintenance.dashboard`, `maintenance.sites`, `chatbot.provider`. `updateTag(PLATFORM_SETTINGS_TAG)` makes the next read wait for the new value; every write audits `platform.switch.updated`. Integration: write → `getPlatformSwitches` sees it → audit row names staff.)
 
 ### 2.5 — Platform plans page
 - **Goal:** `/platform/plans` lists `Plan` rows with visibility; staff edit the feature map (validated against the registry), setup fee and visibility, and see how many tenants a change touches before saving (spec/04).

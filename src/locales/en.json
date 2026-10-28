@@ -428,6 +428,7 @@
       "jobs": "Jobs",
       "emails": "Emails",
       "errors": "Errors",
+      "settings": "Settings",
       "groups": {
         "main": "Overview",
         "workspace": "Workspace",
@@ -600,6 +601,23 @@
   },
   "platform": {
     "badge": "Platform",
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Platform switches: signup gates, maintenance flags, feature kill switches and module states. Changes apply without a restart.",
+      "columns": {
+        "key": "Key",
+        "value": "Value",
+        "group": "Group"
+      },
+      "edit": "Edit",
+      "editTitle": "Edit switch",
+      "editDescription": "Set a new JSON value for {key}: true, false, a number, a string in quotes, or an array.",
+      "errors": {
+        "keyRequired": "A key is required.",
+        "invalidValue": "That is not a valid value for this setting.",
+        "unknownKey": "Unknown key. Typed settings must exist in the registry; custom keys must start with feature. or module."
+      }
+    },
     "tenants": {
       "title": "Tenants",
       "subtitle": "Every workspace on the platform.",

@@ -64,6 +64,7 @@ export function navGroups(
           { key: "jobs", href: "/platform/jobs", icon: ListChecks },
           { key: "emails", href: "/platform/emails", icon: Mail },
           { key: "errors", href: "/platform/errors", icon: TriangleAlert },
+          { key: "settings", href: "/platform/settings", icon: SlidersHorizontal },
         ],
       },
       { key: "back", items: [{ key: "backToDashboard", href: DASHBOARD, icon: ArrowLeft, exact: true }] },

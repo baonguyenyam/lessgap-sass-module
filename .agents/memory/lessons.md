@@ -338,3 +338,11 @@ Read before every task. Format and rules: [README.md](./README.md). Newest first
 - **Cause:** without `"type": "module"` tsx compiles to CJS, which has no TLA.
 - **Fix:** wrap the entrypoint in an `async function main()` and call `void main()`.
 - **Rule:** CLI scripts in `scripts/` keep their await inside `main()`, not at top level.
+
+### 2026-10-28 · actions · a "new" action file may already exist
+- **Symptom:** overwriting `src/app/actions/platform-settings.ts` deleted `savePlatformSettings`, the kit admin's save action.
+- **Cause:** I created the file without checking it existed — the naming
+  convention (one file per domain) means `platform-settings` was already taken.
+- **Fix:** restored `savePlatformSettings` alongside the new `setPlatformSwitch`.
+- **Rule:** before `write` to a new-looking file, `ls`/`git log` it first —
+  one action file per domain collides fast.

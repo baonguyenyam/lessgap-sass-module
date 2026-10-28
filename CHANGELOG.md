@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.33.0] - 2026-10-28
+
+**Platform settings are editable in the console.** This is a MINOR: `git pull`, `pnpm install` — no migration.
+
+### Added
+
+- **`/platform/settings`**: every platform switch in one table — typed settings (display, locale, signup gates, maintenance flags, chatbot provider) with their effective values, plus untyped `feature.*` kill switches and `module.*` states. Each row edits through a JSON field the server re-validates; the change applies without a restart and leaves an audit row
+- **New typed switches**: `signup.free_plan.enabled`, `signup.require_approval`, `signup.verticals`, `maintenance.dashboard`, `maintenance.sites`, `chatbot.provider` — all ROOT-scoped with defaults until a deployment overrides them
+
 ## [2.32.0] - 2026-10-28
 
 **Metered limits exist now.** This is a MINOR: `git pull`, `pnpm install` — no migration.

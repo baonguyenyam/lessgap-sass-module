@@ -428,6 +428,7 @@
       "jobs": "Tác vụ",
       "emails": "Email",
       "errors": "Lỗi",
+      "settings": "Cài đặt",
       "groups": {
         "main": "Tổng quan",
         "workspace": "Không gian làm việc",
@@ -600,6 +601,23 @@
   },
   "platform": {
     "badge": "Nền tảng",
+    "settings": {
+      "title": "Cài đặt",
+      "subtitle": "Công tắc nền tảng: cổng đăng ký, cờ bảo trì, kill switch tính năng và trạng thái module. Thay đổi áp dụng không cần khởi động lại.",
+      "columns": {
+        "key": "Khoá",
+        "value": "Giá trị",
+        "group": "Nhóm"
+      },
+      "edit": "Sửa",
+      "editTitle": "Sửa công tắc",
+      "editDescription": "Đặt giá trị JSON mới cho {key}: true, false, số, chuỗi trong ngoặc kép, hoặc mảng.",
+      "errors": {
+        "keyRequired": "Cần có khoá.",
+        "invalidValue": "Giá trị không hợp lệ cho cài đặt này.",
+        "unknownKey": "Khoá không tồn tại. Cài đặt typed phải có trong registry; khoá tuỳ biến phải bắt đầu bằng feature. hoặc module."
+      }
+    },
     "tenants": {
       "title": "Khách hàng",
       "subtitle": "Mọi không gian làm việc trên nền tảng.",
