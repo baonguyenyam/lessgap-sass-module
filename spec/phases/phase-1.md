@@ -88,7 +88,7 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - **Files:** roles page and actions under `/t/[slug]/settings/roles`, permission-grouped UI, translations.
 - **Tests:** `roles.custom` feature off → page hidden and actions refuse; `roles.max` cap enforced through `maximumRolesPerOrganization`; `owner` role uneditable/undeletable; a role with members cannot be deleted; edited permissions apply on the member's next request (T7 pattern).
 - **Checks:** unit, integration, one E2E.
-- [ ] done
+- [x] done (the role drawer ticks permissions grouped by area (`PERMISSION_GROUPS`, every resource in exactly one group, tested), with translated group, resource and verb names; the list shows them translated too. `roles.custom` off: the page 404s, the sidebar and search drop it, and both actions refuse; `roles.max` checked in `saveTenantRole` and fed to the plugin's `maximumRolesPerOrganization`, so a direct plugin call is capped too. Owner and built-ins stay uneditable and undeletable, a role with members is skipped on delete. Entitlements come from a phase-1 resolver in `src/platform/entitlements/` with the spec's API (`getEntitlements`, `has`, `limit`, `requireFeature`): the feature registry's defaults (`roles.custom` on, `roles.max` 10) under the platform kill switch `feature.<key>`. Unit: resolver, registry, groups, nav, roles actions. Integration (`tenant-roles.test.ts`): cap through the plugin, switch off refuses, edited permissions apply on the next check, owner refused. E2E `roles.spec.ts`. **Shipped differently:** the page stays at `/t/[slug]/roles` (the sidebar entry from 1.7), as members did in 1.8.)
 
 ### 1.9 — Audit log
 - **Goal:** `AuditLog` model and `audit()` writer; used by members, roles, suspension, impersonation.
@@ -135,6 +135,8 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - Query overhead of `tenantDb` recorded in Findings.
 
 ## Findings
+- 2026-10-28, task 1.8b: **entitlements have a phase-1 stand-in.** `getEntitlements` resolves only layer 1 (platform switch `feature.<key>`) over registry defaults, so every tenant gets the same answer. Phase 2 adds plans, add-ons and overrides behind the same `has` / `limit`, and the default of 10 custom roles becomes a plan value. `feature.*` switches cannot be edited in Platform → Settings yet; they are rows in `PlatformSwitch`.
+- 2026-10-28, task 1.8b: outside this task, the stock checkbox border (`border-input`) is barely visible in dark mode, on the role drawer and the table row selection alike. A theme token change, not a component change.
 - 2026-10-28, task 1.8: **any custom role broke the organization plugin's permission checks.** `OrganizationRole.permission` is `jsonb`; node-postgres returned it parsed and Better Auth `JSON.parse`d it again ("[object Object] is not valid JSON"), so in a tenant with one custom role, inviting or changing a role failed for everybody. Better Auth's own pool (`src/lib/kysely.ts`) now reads JSON as text; the ORM client is unchanged.
 - 2026-10-28, task 1.8: `Invitation` has a unique index on (tenant, email), and the plugin keeps answered invitations, so re-inviting an address after an expired, declined or withdrawn invitation would collide. `inviteMember` deletes the answered ones for that address first.
 - 2026-10-28, task 1.8: an invitee who signs up also gets a tenant of their own (decision 1-A, created on the first `/dashboard`). Phase 4's onboarding should skip that for someone arriving through an invitation.

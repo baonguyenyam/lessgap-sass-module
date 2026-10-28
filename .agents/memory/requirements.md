@@ -5,6 +5,10 @@ requirement is specified so agents read the source, not this summary. When a
 requirement becomes spec, ADR, rule or test, the pointer is updated and this
 file stays the index — not the place requirements are defined.
 
+## 2026-10-28 — Continue phase 1 with task 1.8b
+
+The owner asked to continue with task 1.8b (tenant roles page) after 1.8.
+
 ## 2026-10-28 — Continue phase 1 with task 1.8
 
 The owner asked to continue with task 1.8 (invitations and members) after 1.7.
