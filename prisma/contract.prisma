@@ -689,3 +689,24 @@ trialEndsAt          TimestampString(3)?
     @@index([tenantId, key], map: "Media_tenantId_key_key", unique: true)
     @@rls
   }
+
+  // A custom domain a tenant attaches to its site (spec/03-domains.md).
+  // `pending` until the provider's DNS check passes; `isPrimary` marks the
+  // canonical hostname every other one redirects to.
+  model Domain {
+    id            String             @id(map: "Domain_pkey") @onCreate(cuid(2))
+    tenantId      String
+    hostname      String
+    status        String             @default("pending")
+    verification  Json?
+    isPrimary     Boolean            @default(false)
+    verifiedAt    TimestampString(3)?
+    lastCheckedAt TimestampString(3)?
+    createdAt     TimestampString(3) @default(now())
+    updatedAt     TimestampString(3) @default(now()) @onUpdate(now())
+    tenant        Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Domain_tenantId_fkey")
+
+    @@index([hostname], map: "Domain_hostname_key", unique: true)
+    @@index([tenantId], map: "Domain_tenantId_idx")
+    @@rls
+  }

@@ -4,6 +4,7 @@ import { cacheLife, cacheTag } from "next/cache"
 import { db8 } from "@/lib/db8"
 import { resolveHost } from "@/platform/tenancy/host"
 import { siteOrigin } from "@/platform/tenancy/site-origin"
+import { primaryDomain } from "@/platform/domains"
 import { localBusinessJsonLd } from "@/lib/structured-data"
 import { resolveTheme } from "@/themes/registry"
 import type { SiteData } from "@/themes/types"
@@ -58,7 +59,7 @@ export default async function SitePage() {
     phone: data.settings.profile.phone,
     email: data.settings.profile.email,
     address: data.settings.profile.address,
-    origin: siteOrigin(data.tenant.slug),
+    origin: siteOrigin(data.tenant.slug, await primaryDomain(resolved.tenantId)),
   })
   return (
     <Layout data={data}>

@@ -367,6 +367,24 @@
           "nameRequired": "Business name is required.",
           "hoursInvalid": "Hours for {day} must look like 09:00-17:00."
         }
+      },
+      "domains": {
+        "title": "Domains",
+        "subtitle": "Connect a custom domain to your site.",
+        "empty": "No custom domains yet.",
+        "primary": "Primary",
+        "status": {
+          "pending": "Pending — add the DNS records below",
+          "active": "Active",
+          "failed": "Failed"
+        },
+        "addPlaceholder": "example.com",
+        "actions": {
+          "add": "Add domain",
+          "check": "Check now",
+          "primary": "Make primary",
+          "remove": "Remove"
+        }
       }
     },
     "account": {
@@ -504,7 +522,8 @@
       "switchWorkspace": "Switch workspace",
       "pastDueBanner": "A payment failed — access continues until {date}. Update billing to keep working.",
       "modules": "Modules",
-      "site": "Site"
+      "site": "Site",
+      "domains": "Domains"
     },
     "members": {
       "title": "Members",

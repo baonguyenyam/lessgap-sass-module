@@ -3,6 +3,7 @@ import { DASHBOARD, tenantPath } from "@/lib/tenant-paths"
 import {
   Boxes,
   Globe,
+  Globe2,
   ArrowLeft,
   Building2,
   CreditCard,
@@ -102,6 +103,7 @@ export function navGroups(
         { key: "account", href: "/dashboard/account", icon: UserRound },
         { key: "settings", href: t("settings"), icon: SlidersHorizontal },
         { key: "site", href: `${t("settings")}/site` as Route, icon: Globe },
+        { key: "domains", href: `${t("settings")}/domains` as Route, icon: Globe2 },
         ...(showAdmin ? [{ key: "adminPanel", href: "/admin", icon: Shield } satisfies NavItem] : []),
       ],
     },

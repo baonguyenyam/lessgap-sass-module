@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.46.0] - 2026-10-28
+
+**Tenants attach custom domains to their site.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` — one migration adds `Domain`.
+
+### Added
+
+- **Settings → Domains** (`/t/<slug>/settings/domains`): add a custom domain, see the DNS records to create, check verification, make it primary, remove it
+- **`DomainProvider` abstraction** (decision 3-A): `VercelDomainProvider` for test/preview, `DigitalOceanDomainProvider` for production, `LocalDomainProvider` for dev — `DOMAIN_PROVIDER` env selects. `resolveHost` resolves an `active` domain to its tenant; the site's canonical origin uses the primary domain
+- **`platform.domain.verify` job** — re-checks pending domains against the provider
+
 ## [2.45.0] - 2026-10-28
 
 **Every tenant site is crawlable and publishes in under a minute.** This is a MINOR: `git pull`, `pnpm install`.

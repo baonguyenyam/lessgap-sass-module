@@ -45,8 +45,15 @@ export const resolveHost = cache(async function resolveHost(rawHost: string): Pr
     return tenant ? { kind: "site", tenantId: tenant.id, slug: tenant.slug } : { kind: "none" }
   }
 
-  // A custom `Domain` row lands in task 3.7 — until then an unknown host is
-  // an unknown host.
+  // A custom `Domain` (task 3.7): `active` status only — a pending or
+  // failed domain is not a site.
+  const domain = await db8.orm.public.Domain.where({ hostname: host, status: "active" }).first()
+  if (domain) {
+    const tenant = await db8.orm.public.Tenant.where({ id: domain.tenantId, status: "ACTIVE" })
+      .select("id", "slug")
+      .first()
+    if (tenant) return { kind: "site", tenantId: tenant.id, slug: tenant.slug }
+  }
   return { kind: "none" }
 })
 

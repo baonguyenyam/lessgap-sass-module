@@ -367,6 +367,24 @@
           "nameRequired": "Cần tên doanh nghiệp.",
           "hoursInvalid": "Giờ cho {day} phải dạng 09:00-17:00."
         }
+      },
+      "domains": {
+        "title": "Tên miền",
+        "subtitle": "Kết nối tên miền riêng với trang web.",
+        "empty": "Chưa có tên miền riêng nào.",
+        "primary": "Chính",
+        "status": {
+          "pending": "Chờ — thêm các bản ghi DNS bên dưới",
+          "active": "Hoạt động",
+          "failed": "Thất bại"
+        },
+        "addPlaceholder": "example.com",
+        "actions": {
+          "add": "Thêm tên miền",
+          "check": "Kiểm tra ngay",
+          "primary": "Đặt làm chính",
+          "remove": "Gỡ"
+        }
       }
     },
     "account": {
@@ -504,7 +522,8 @@
       "switchWorkspace": "Chuyển không gian làm việc",
       "pastDueBanner": "Thanh toán thất bại — truy cập tiếp tục đến {date}. Cập nhật thanh toán để tiếp tục.",
       "modules": "Tiện ích",
-      "site": "Trang web"
+      "site": "Trang web",
+      "domains": "Tên miền"
     },
     "members": {
       "title": "Thành viên",

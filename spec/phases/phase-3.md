@@ -118,7 +118,7 @@ set upload rules and rollouts from the console.
 - **Checks:** `pnpm test`, `pnpm test:integration`, E2E.
 - **Done when:** both providers exist behind one interface and the lifecycle
   is green on a dev host.
-- [ ] done
+- [x] done (`Domain` model (`platform_domains`) — hostname unique, `status` pending/active/failed, `verification` JSON (the DNS records to show), `isPrimary`. `DomainProvider` interface with `VercelDomainProvider` (Vercel test/preview), `DigitalOceanDomainProvider` (production) and `LocalDomainProvider` (dev default), `DOMAIN_PROVIDER` env selects (decision 3-A). `addDomain`/`checkDomain`/`removeDomain`/`setPrimaryDomain`/`primaryDomain` audit every step; `resolveHost` resolves an `active` domain to its tenant; `siteOrigin` uses the primary domain when set; `platform.domain.verify` re-checks pending rows. `/t/<slug>/settings/domains` lists rows with DNS records + add/check/primary/remove. Unit `provider.test.ts` + integration `domains.test.ts` — pending→active resolves the host, pending does not, primary wins.)
 
 ## Exit criteria
 

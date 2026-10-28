@@ -60,6 +60,27 @@ export const JOBS: JobRegistry = {
       await runModuleExport(exportId)
     },
   },
+  // Domain verification (task 3.7, spec/03): re-checks pending Domain rows
+  // against the provider — an `active` result flips the row and audits.
+  "platform.domain.verify": {
+    handler: async (payload, context) => {
+      const { checkDomain } = await import("@/platform/domains")
+      const { systemContext } = await import("@/platform/tenancy/context")
+      const { db8 } = await import("@/lib/db8")
+      const hostname = (payload as { hostname?: string }).hostname
+      const rows = hostname
+        ? await db8.orm.public.Domain.where({ hostname }).all()
+        : await db8.orm.public.Domain.where({ status: "pending" }).all()
+      for (const row of rows) {
+        try {
+          await checkDomain(systemContext(row.tenantId, "platform.domain.verify"), row.hostname)
+        } catch (error) {
+          void error
+        }
+      }
+      void context
+    },
+  },
   // Tenant deletion (task 1.14): the console action enqueues one row per
   // tenant; the purge itself lives in src/platform/tenancy/delete-tenant.ts.
   // Idempotent — deleting a missing tenant is a no-op.

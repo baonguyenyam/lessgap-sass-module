@@ -27,6 +27,7 @@ export const MODEL_CLASSIFICATION = {
   Job: { kind: "platform-private", reason: "Platform job queue; a tenant id is the job's scope, run by the system." },
   Member: { kind: "identity", reason: "Better Auth tenant membership records." },
   Media: { kind: "tenant-owned", reason: "A tenant's uploaded files in R2." },
+  Domain: { kind: "tenant-owned", reason: "A tenant's custom domain for its site." },
   ModuleExport: { kind: "tenant-owned", reason: "A tenant's own module data export; expires after 7 days." },
   ModulePurge: { kind: "tenant-owned", reason: "A scheduled or finished module deletion for one tenant." },
   Page: { kind: "tenant-owned", reason: "A tenant's site pages keyed to theme page keys." },

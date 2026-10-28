@@ -1,6 +1,7 @@
 import { headers } from "next/headers"
 import { resolveHost } from "@/platform/tenancy/host"
 import { siteOrigin } from "@/platform/tenancy/site-origin"
+import { primaryDomain } from "@/platform/domains"
 
 /**
  * A tenant site's `robots.txt` (task 3.6): the proxy rewrites `/robots.txt`
@@ -13,7 +14,7 @@ export async function GET() {
   if (resolved.kind !== "site") {
     return new Response("User-agent: *\nDisallow: /\n", { headers: { "Content-Type": "text/plain" } })
   }
-  const origin = siteOrigin(resolved.slug)
+  const origin = siteOrigin(resolved.slug, await primaryDomain(resolved.tenantId))
   return new Response(`User-agent: *\nAllow: /\nSitemap: ${origin}/sitemap.xml\n`, {
     headers: { "Content-Type": "text/plain" },
   })
