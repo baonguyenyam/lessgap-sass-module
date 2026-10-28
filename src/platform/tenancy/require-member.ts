@@ -2,7 +2,9 @@ import { headers } from "next/headers"
 import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
 import { requireUser } from "@/lib/auth"
-import { memberCan, type TenantResource, type TenantVerb } from "@/platform/tenancy/permissions"
+import { AppError } from "@/platform/errors"
+import type { TenantContext } from "@/platform/tenancy/context"
+import { memberCan, type TenantPermission, type TenantResource, type TenantVerb } from "@/platform/tenancy/permissions"
 import type { FieldOutputTypes } from "@/generated/prisma8/contract.d"
 
 type Tenant = FieldOutputTypes["public"]["Tenant"]
@@ -78,7 +80,44 @@ export async function requireTenantContext<R extends TenantResource>(
   const ctx = await ensureTenant(user)
   const suspended = ctx.member.status === "suspended"
   if (resource && verb && (suspended || !(await memberCan(ctx.tenantId, ctx.member.role, resource, verb)))) {
-    throw new Error("Forbidden")
+    throw new AppError("forbidden")
   }
   return ctx
+}
+
+export type TenantMemberContext = TenantContext & {
+  actor: { kind: "member"; userId: string; role: string }
+  tenant: Tenant
+  member: Member
+}
+
+/**
+ * The membership of `userId` in the tenant at `slug`, checked against
+ * `permission` (task 1.4). Read from the database on every call, so a member
+ * removed or demoted loses access on their next request (T7).
+ *
+ * - no tenant at that slug, no membership, or a suspended membership →
+ *   `not_found`: a stranger cannot tell a tenant exists;
+ * - a member without the permission → `forbidden`.
+ */
+export async function resolveTenantMember(
+  userId: string,
+  slug: string,
+  permission?: TenantPermission
+): Promise<TenantMemberContext> {
+  const tenant = await db8.orm.public.Tenant.where({ slug }).first()
+  if (!tenant) throw new AppError("not_found")
+  const member = await db8.orm.public.Member.where({ organizationId: tenant.id, userId }).first()
+  if (!member || member.status === "suspended") throw new AppError("not_found")
+  if (permission) {
+    const [resource, verb] = permission.split(".") as [TenantResource, TenantVerb<TenantResource>]
+    if (!(await memberCan(tenant.id, member.role, resource, verb))) throw new AppError("forbidden")
+  }
+  return { tenantId: tenant.id, actor: { kind: "member", userId, role: member.role }, tenant, member }
+}
+
+/** `resolveTenantMember` for the signed-in user: dashboard pages and actions under `/t/[slug]`. */
+export async function requireTenantMember(slug: string, permission?: TenantPermission): Promise<TenantMemberContext> {
+  const user = await requireUser()
+  return resolveTenantMember(user.id, slug, permission)
 }

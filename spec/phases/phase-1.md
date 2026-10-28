@@ -53,7 +53,7 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - **Files:** `src/platform/tenancy/context.ts`, `src/platform/tenancy/require-member.ts`, tests.
 - **Tests:** T7 (removed member loses access next request); non-member gets `not_found`; permission missing gets `forbidden`.
 - **Checks:** `pnpm test`, `pnpm test:integration`.
-- [ ] done
+- [x] done (`src/platform/tenancy/context.ts` holds `TenantContext` with the four actors and `systemContext`; `requireTenantMember(slug, permission?)` and its session-free core `resolveTenantMember` answer `not_found` for an unknown slug, a non-member or a suspended member and `forbidden` for a missing permission; integration T7: demoted narrows and removed loses access on the next call, a member of A gets `not_found` on B. The kit's `/dashboard` keeps `requireTenantContext` until task 1.7 moves the routes; its refusal is now `AppError("forbidden")`.)
 
 ### 1.5 — tenantDb (scoped client) and RLS helper
 - **Goal:** Prisma extension that injects and enforces `tenantId`, inside a transaction with `SET LOCAL app.tenant_id`.
