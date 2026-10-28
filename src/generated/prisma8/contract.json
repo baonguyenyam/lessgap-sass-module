@@ -2966,6 +2966,27 @@
               "typeName": "TenantStatus"
             }
           },
+          "policy": {
+            "tenant_setting_isolation": {
+              "kind": "policy",
+              "name": "tenant_setting_isolation_c516f4ff",
+              "namespaceId": "public",
+              "operation": "all",
+              "permissive": true,
+              "prefix": "tenant_setting_isolation",
+              "roles": [],
+              "tableName": "TenantSetting",
+              "using": "\"tenantId\" = current_setting('app.tenant_id', true)",
+              "withCheck": "\"tenantId\" = current_setting('app.tenant_id', true)"
+            }
+          },
+          "rls": {
+            "TenantSetting": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "TenantSetting"
+            }
+          },
           "table": {
             "Account": {
               "columns": {
@@ -5375,7 +5396,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "f8d3dd8f8d36ebcd41534cbe8ea5845782cdb2570d2ab12b75a9f5727d3a8dcc"
+    "storageHash": "380db2a5812355eca8175dd24a64a1cff5f2e49d0b34ac36ad06b14704761259"
   },
   "execution": {
     "executionHash": "365acb882aef04183b863bd6d1994bcdc8bdf98856af732e8cb42ebda635ef2e",

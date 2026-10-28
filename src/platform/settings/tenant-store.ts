@@ -1,6 +1,8 @@
 import { cacheLife, cacheTag, updateTag } from "next/cache"
 import { cache } from "react"
 import { db8 } from "@/lib/db8"
+import { platformDb } from "@/platform/db"
+import { tenantDb } from "@/platform/tenancy/tenant-db"
 import { getCurrentUser } from "@/lib/auth"
 import { nowTs } from "@/lib/timestamps"
 import { getMembership } from "@/platform/tenancy/require-member"
@@ -23,7 +25,9 @@ async function readTenantRows(tenantId: string): Promise<SettingRow[]> {
   "use cache"
   cacheTag(tenantSettingsTag(tenantId))
   cacheLife("minutes")
-  return db8.orm.public.TenantSetting.select("key", "value").where({ tenantId }).all()
+  // The platform client: cached across requests for one tenant id, outside any
+  // tenant's transaction, so it reads past RLS (task 1.5) by design.
+  return platformDb.orm.public.TenantSetting.select("key", "value").where({ tenantId }).all()
 }
 
 async function readUserRows(userId: string): Promise<SettingRow[]> {
@@ -90,12 +94,15 @@ export async function saveTenantSettings(
   values: Partial<Pick<PlatformSettings, TenantSettingKey>>,
   updatedById: string
 ): Promise<void> {
-  for (const [key, value] of Object.entries(values)) {
-    await db8.orm.public.TenantSetting.upsert({
-      conflictOn: { tenantId, key },
-      create: { tenantId, key, value: value as never, updatedById },
-      update: { value: value as never, updatedById, updatedAt: nowTs() },
-    })
-  }
+  // Through the scoped client (task 1.5): the transaction carries app.tenant_id.
+  await tenantDb({ tenantId, actor: { kind: "member", userId: updatedById, role: "" } }, async (db) => {
+    for (const [key, value] of Object.entries(values)) {
+      await db.TenantSetting.upsert({
+        conflictOn: { tenantId, key },
+        create: { key, value: value as never, updatedById } as never,
+        update: { value: value as never, updatedById, updatedAt: nowTs() },
+      })
+    }
+  })
   updateTag(tenantSettingsTag(tenantId))
 }

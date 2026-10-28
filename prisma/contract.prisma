@@ -306,6 +306,16 @@ trialEndsAt          TimestampString(3)?
     tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "TenantSetting_tenantId_fkey")
 
     @@id([tenantId, key], map: "TenantSetting_pkey")
+    @@rls
+  }
+
+  // Tenant isolation (spec/02-tenancy.md, line 2): a row is visible and
+  // writable only inside a transaction whose app.tenant_id is its tenant
+  // (tenantDb). The owner and the platform role bypass it.
+  policy_all tenant_setting_isolation {
+    target    = TenantSetting
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
   }
 
   // One person's own value for a display or language setting, or a
