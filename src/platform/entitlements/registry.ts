@@ -22,3 +22,11 @@ export type BooleanFeature = {
   [K in FeatureKey]: (typeof FEATURES)[K]["kind"] extends "boolean" ? K : never
 }[FeatureKey]
 export type LimitFeature = { [K in FeatureKey]: (typeof FEATURES)[K]["kind"] extends "limit" ? K : never }[FeatureKey]
+
+/**
+ * Modules declare their features through this so the type-check keeps feature
+ * keys honest everywhere (`ent.has`, `ent.limit`, plan maps, overrides).
+ */
+export function defineFeatures<T extends Record<string, FeatureDefinition>>(defs: T): T {
+  return defs
+}

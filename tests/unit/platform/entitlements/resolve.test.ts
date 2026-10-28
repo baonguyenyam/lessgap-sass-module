@@ -38,6 +38,102 @@ describe("resolveEntitlements (phase 1: switches over defaults)", () => {
     expect(ent.limit("seats" as never)).toBeNull()
     expect(ent.has("nope" as never)).toBe(false)
   })
+
+  // Task 2.2: the five layers in order (spec/04-entitlements.md).
+  describe("the five layers", () => {
+    const registry = {
+      flag: { kind: "boolean" as const, default: true },
+      seats: { kind: "limit" as const, default: 3 },
+    }
+    const input = (over: Record<string, unknown> = {}) => ({
+      switches: {},
+      planFeatures: null,
+      addOnFeatures: [],
+      overrides: [],
+      tenantSettings: {},
+      ...over,
+    })
+
+    it("the plan map replaces the registry default", () => {
+      const ent = resolveEntitlements(input({ planFeatures: { flag: false, seats: 10 } }), registry)
+      expect(ent.has("flag" as never)).toBe(false)
+      expect(ent.limit("seats" as never)).toBe(10)
+    })
+
+    it("a plan key the map omits falls back to the registry default", () => {
+      const ent = resolveEntitlements(input({ planFeatures: { seats: 0 } }), registry)
+      expect(ent.has("flag" as never)).toBe(true)
+      expect(ent.limit("seats" as never)).toBe(0)
+    })
+
+    it("add-ons OR booleans and take the max of limits; null is unlimited", () => {
+      const ent = resolveEntitlements(
+        input({
+          planFeatures: { flag: false, seats: 3 },
+          addOnFeatures: [{ flag: true, seats: 7 }, { seats: 20 }],
+        }),
+        registry
+      )
+      expect(ent.has("flag" as never)).toBe(true)
+      expect(ent.limit("seats" as never)).toBe(20)
+      const unlimited = resolveEntitlements(input({ addOnFeatures: [{ seats: null }] }), registry)
+      expect(unlimited.limit("seats" as never)).toBeNull()
+    })
+
+    it("an override replaces every lower layer, and an expired one falls through", () => {
+      const ent = resolveEntitlements(
+        input({
+          planFeatures: { flag: false },
+          addOnFeatures: [{ flag: false }],
+          overrides: [{ featureKey: "flag", value: true, ignoresSwitch: false }],
+        }),
+        registry
+      )
+      expect(ent.has("flag" as never)).toBe(true)
+    })
+
+    it("a platform switch beats plan and override unless the override ignores it", () => {
+      const off = resolveEntitlements(
+        input({
+          switches: { "feature.flag": false },
+          planFeatures: { flag: true },
+          overrides: [{ featureKey: "flag", value: true, ignoresSwitch: false }],
+        }),
+        registry
+      )
+      expect(off.has("flag" as never)).toBe(false)
+      const beta = resolveEntitlements(
+        input({
+          switches: { "feature.flag": false },
+          overrides: [{ featureKey: "flag", value: true, ignoresSwitch: true }],
+        }),
+        registry
+      )
+      expect(beta.has("flag" as never)).toBe(true)
+    })
+
+    it("the tenant's own setting can only remove", () => {
+      const on = resolveEntitlements(
+        input({ tenantSettings: { "feature.flag": true }, planFeatures: { flag: false } }),
+        registry
+      )
+      expect(on.has("flag" as never)).toBe(false)
+      const off = resolveEntitlements(input({ tenantSettings: { "feature.flag": false } }), registry)
+      expect(off.has("flag" as never)).toBe(false)
+    })
+
+    it("a requirement that is off turns its dependant off whatever the layers say", () => {
+      const chained = { ...registry, vip: { kind: "boolean" as const, default: true, requires: ["flag"] } }
+      const ent = resolveEntitlements(
+        input({
+          planFeatures: { flag: false, vip: true },
+          overrides: [{ featureKey: "vip", value: true, ignoresSwitch: false }],
+        }),
+        chained
+      )
+      expect(ent.has("vip" as never)).toBe(false)
+    })
+  })
 })
 
 describe("feature registry", () => {

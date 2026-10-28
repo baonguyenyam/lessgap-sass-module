@@ -52,7 +52,7 @@ Settings → Modules: enable, disable, export data, and schedule a purge with a
 - **Tests:** unit resolver for every layer combination — switch off wins unless `ignoresSwitch`; add-on beats plan default; expired override falls through; `requires` unmet turns a feature off; `0` vs `null` limits.
 - **Checks:** `pnpm typecheck`, `pnpm test`.
 - **Done when:** the resolver passes the full matrix and existing `getEntitlement` callers read the real layers.
-- [ ] done
+- [x] done (`resolveEntitlements(ResolveInput)` in `src/platform/entitlements/resolve.ts` evaluates the five layers in order — platform switch (`feature.<key>` can only remove), plan feature map over the registry default, add-ons (boolean OR, limit max, `null` = unlimited wins), unexpired `EntitlementOverride` (replaces outright; `ignoresSwitch` escapes the kill switch), tenant setting `feature.<key>` (can only remove) — then `requires` chains collapse dependants. `getEntitlements(ctx)` reads the real rows: subscription→plan.features, TenantAddOn→AddOn.features (active only), unexpired overrides, TenantSetting `feature.*`. The bare-`switches` call shape stays so phase-1 callers and tests keep working. `defineFeatures` lands in the registry for modules. A tenant without a subscription resolves on registry defaults — the free catalogue row becomes a plan assignment in 2.7, not a resolver special-case.)
 
 ### 2.3 — `requireFeature` and `consumeLimit` with `UsageCounter`
 - **Goal:** `requireFeature(ctx, key)` throws `FeatureNotAvailable` (404 on routes, typed error in actions); `consumeLimit(ctx, key, n)` increments the period bucket inside the guarded write's transaction with a conditional update; lowering a limit never deletes data.

@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.31.0] - 2026-10-28
+
+**What a tenant may use is now resolved from its plan, add-ons and staff overrides — not a kit-wide default.** This is a MINOR: `git pull`, `pnpm install` — no migration.
+
+### Added
+
+- **The five-layer entitlement resolver**: `getEntitlements(tenantId)` evaluates platform switch, plan feature map, purchased add-ons, unexpired staff overrides and the tenant's own settings in order — a kill switch still wins unless an override marked `ignoresSwitch` says otherwise, and an expired override silently stops applying. `requireFeature` refuses what a tenant may not use
+
 ## [2.30.0] - 2026-10-28
 
 **Billing belongs to the tenant now.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
