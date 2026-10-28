@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test"
 import { freshEmail as newFreshEmail } from "./fresh-email"
+import { TENANT_HOME } from "./urls"
 
 /**
  * Signing up with email and password, the whole way through: form, account
@@ -22,7 +23,7 @@ test("a new visitor can sign up and lands on the dashboard", async ({ page }) =>
   await page.getByPlaceholder(/Password/).fill(password)
   await page.getByRole("button", { name: /create account|sign up/i }).click()
 
-  await page.waitForURL("**/dashboard", { timeout: 20_000 })
+  await page.waitForURL(TENANT_HOME, { timeout: 20_000 })
   await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible()
 })
 
@@ -42,7 +43,7 @@ test("the same email cannot be registered twice", async ({ browser }) => {
   // this is about, and it avoids depending on how sign-out is wired.
   const first = await browser.newContext()
   const firstPage = await signUpIn(first)
-  await firstPage.waitForURL("**/dashboard", { timeout: 20_000 })
+  await firstPage.waitForURL(TENANT_HOME, { timeout: 20_000 })
   await first.close()
 
   const second = await browser.newContext()

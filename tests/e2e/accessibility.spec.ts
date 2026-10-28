@@ -1,6 +1,7 @@
 import { test, expect, type Page } from "@playwright/test"
 import AxeBuilder from "@axe-core/playwright"
 import { freshEmail as newFreshEmail } from "./fresh-email"
+import { TENANT_HOME } from "./urls"
 
 /**
  * WCAG 2.1 AA, on every surface rather than on the marketing pages alone.
@@ -93,7 +94,7 @@ test.describe("accessibility", () => {
     await page.locator('input[name="email"]').fill(freshEmail())
     await page.locator('input[name="password"][type="password"]').fill(password)
     await page.getByRole("button", { name: /create account|sign up/i }).click()
-    await page.waitForURL("**/dashboard", { timeout: 20_000 })
+    await page.waitForURL(TENANT_HOME, { timeout: 20_000 })
 
     await scan(page, "dashboard")
 

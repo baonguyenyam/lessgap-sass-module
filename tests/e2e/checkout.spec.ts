@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test"
 import { freshEmail as newFreshEmail } from "./fresh-email"
+import { TENANT_HOME } from "./urls"
 
 /**
  * Starting a checkout.
@@ -23,7 +24,7 @@ async function signUp(page: import("@playwright/test").Page) {
   await page.getByPlaceholder("you@example.com").fill(freshEmail())
   await page.getByPlaceholder(/Password/).fill(password)
   await page.getByRole("button", { name: "Create account" }).click()
-  await page.waitForURL("**/dashboard", { timeout: 20_000 })
+  await page.waitForURL(TENANT_HOME, { timeout: 20_000 })
 }
 
 test("a signed-in user can reach the billing page", async ({ page }) => {

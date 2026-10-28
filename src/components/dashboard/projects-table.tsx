@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { FolderKanban, FolderOpen, Pencil, Plus, Trash2 } from "lucide-react"
 import { useFormatter, useNow, useTranslations } from "next-intl"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { deleteProjects, saveProject } from "@/app/actions/projects"
@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { PROJECT_DESCRIPTION_MAX, PROJECT_NAME_MAX, projectSchema, type ProjectInput } from "@/lib/schemas/project"
 import type { TableQuery } from "@/lib/table-query"
+import { tenantPath } from "@/lib/tenant-paths"
 import { useDrawer } from "@/stores/drawer"
 
 export type ProjectRow = { id: string; name: string; description: string | null; createdAt: string; updatedAt: string }
@@ -39,6 +40,7 @@ export function ProjectsTable({
   // A clock next-intl owns, so "2 minutes ago" is the same on the server and in the browser.
   const now = useNow({ updateInterval: 60_000 })
   const router = useRouter()
+  const { slug } = useParams<{ slug: string }>()
   const openDrawer = useDrawer((s) => s.open)
 
   const deleteConfirm = {
@@ -55,7 +57,7 @@ export function ProjectsTable({
         cell: ({ row }) => (
           <div className="min-w-0">
             <Link
-              href={`/dashboard/projects/${row.original.id}`}
+              href={tenantPath(slug, `projects/${row.original.id}`)}
               className="font-medium text-foreground hover:underline"
             >
               {row.original.name}
@@ -92,7 +94,7 @@ export function ProjectsTable({
               {
                 label: t("open"),
                 icon: FolderOpen,
-                onSelect: () => router.push(`/dashboard/projects/${row.original.id}`),
+                onSelect: () => router.push(tenantPath(slug, `projects/${row.original.id}`)),
               },
               { label: t("edit"), icon: Pencil, onSelect: () => openDrawer(DRAWER, row.original.id) },
               {

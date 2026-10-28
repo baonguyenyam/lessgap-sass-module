@@ -24,7 +24,7 @@ import { BrandLoader } from "@/components/brand-loader"
  */
 
 /** Paths whose links get the overlay. The public pages are static and fast. */
-const APP_PATHS = ["/dashboard", "/admin"]
+const APP_PATHS = ["/dashboard", "/t", "/admin"]
 const isAppPath = (pathname: string) => APP_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`))
 /** Below this a page change reads as instant, and an overlay would only flicker. */
 const SHOW_AFTER_MS = 120

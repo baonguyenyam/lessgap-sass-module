@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test"
 import pg from "pg"
+import { TENANT_HOME } from "./urls"
 
 /**
  * The state every other test is blind to: signed in, but not recently.
@@ -31,7 +32,7 @@ test("settings works when the session is old, and a device can still be ended", 
     await page.getByPlaceholder("you@example.com").fill(email)
     await page.getByPlaceholder(/Password/).fill(password)
     await page.getByRole("button", { name: "Create account" }).click()
-    await page.waitForURL("**/dashboard", { timeout: 20_000 })
+    await page.waitForURL(TENANT_HOME, { timeout: 20_000 })
 
     const user = (await db.query('SELECT id FROM "User" WHERE email = $1', [email])).rows[0]
 

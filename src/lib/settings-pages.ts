@@ -1,3 +1,5 @@
+import { tenantPath } from "@/lib/tenant-paths"
+
 /**
  * Two sections, each with its own vertical tabs. Account is the person: the
  * profile, how they sign in, their data and its history. Settings is how the
@@ -23,13 +25,13 @@ export function accountHref(key: AccountPageKey): AccountHref {
   return ACCOUNT_PAGES.find((page) => page.key === key)!.href
 }
 
-export const SETTINGS_BASE = "/dashboard/settings"
-
-export const SETTINGS_PAGES = [
-  { key: "general", href: SETTINGS_BASE },
-  { key: "localization", href: `${SETTINGS_BASE}/localization` },
-  { key: "display", href: `${SETTINGS_BASE}/display` },
-] as const
+/** The tenant's settings pages, under its dashboard (task 1.7); `segment` is the part after `settings/`. */
+export function settingsPages(slug: string) {
+  return (["general", "localization", "display"] as const).map((key) => {
+    const segment = key === "general" ? null : key
+    return { key, segment, href: tenantPath(slug, segment ? `settings/${segment}` : "settings") }
+  })
+}
 
 /**
  * Result codes the account actions put in the query string (`?ok=` or

@@ -9,7 +9,7 @@ import { foldPermissions, tenantRoleSchema } from "@/lib/schemas/tenant"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { permissionsAreDeclared, ROLE_PERMISSIONS, withPluginGrants } from "@/platform/tenancy/permissions"
 
-const ROLES = "/dashboard/roles"
+const ROLES = "/t/[slug]/roles"
 
 async function memberCount(tenantId: string, role: string): Promise<number> {
   return db8.orm.public.Member.where({ organizationId: tenantId, role })
@@ -50,7 +50,7 @@ export async function saveTenantRole(existing: string | null, values: unknown): 
       body: { organizationId: ctx.tenantId, roleName: role, data: { permission: stored } },
     })
   }
-  revalidatePath(ROLES)
+  revalidatePath(ROLES, "page")
   return {}
 }
 
@@ -67,6 +67,6 @@ export async function deleteTenantRoles(roles: string[]): Promise<{ deleted: num
     await auth.api.deleteOrgRole({ headers: await headers(), body: { organizationId: ctx.tenantId, roleName: role } })
     deleted += 1
   }
-  revalidatePath(ROLES)
+  revalidatePath(ROLES, "page")
   return { deleted }
 }

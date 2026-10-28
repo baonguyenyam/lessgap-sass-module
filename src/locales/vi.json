@@ -478,7 +478,8 @@
         "admin": "Quản trị",
         "back": "Quay lại"
       },
-      "account": "Tài khoản"
+      "account": "Tài khoản",
+      "switchWorkspace": "Chuyển không gian làm việc"
     },
     "members": {
       "title": "Thành viên",

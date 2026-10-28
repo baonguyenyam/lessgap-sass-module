@@ -478,7 +478,8 @@
         "admin": "Administration",
         "back": "Back"
       },
-      "account": "Account"
+      "account": "Account",
+      "switchWorkspace": "Switch workspace"
     },
     "members": {
       "title": "Members",

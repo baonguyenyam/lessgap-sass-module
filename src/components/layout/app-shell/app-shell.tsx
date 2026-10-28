@@ -7,6 +7,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { AppSidebar } from "@/components/layout/app-shell/app-sidebar"
 import type { NavUserProps } from "@/components/layout/app-shell/nav-user"
 import type { NavArea } from "@/components/layout/app-shell/nav"
+import type { TenantOption } from "@/components/layout/app-shell/tenant-switcher"
 import { SearchDialog } from "@/components/layout/app-shell/search-dialog"
 import { LanguageSwitcher } from "@/components/layout/app-shell/language-switcher"
 import { APP_LOCALES } from "@/platform/settings/registry"
@@ -22,11 +23,16 @@ export async function AppShell({
   user,
   showAdmin,
   breadcrumbs,
+  tenant = null,
+  tenants = [],
   children,
 }: {
   area: NavArea
   user: NavUserProps
   showAdmin: boolean
+  /** The tenant the dashboard area shows, and every tenant the person belongs to (task 1.7). */
+  tenant?: TenantOption | null
+  tenants?: TenantOption[]
   breadcrumbs: React.ComponentProps<typeof HeaderBreadcrumbs>
   children: React.ReactNode
 }) {
@@ -34,7 +40,7 @@ export async function AppShell({
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
-      <AppSidebar area={area} showAdmin={showAdmin} user={user} />
+      <AppSidebar area={area} showAdmin={showAdmin} user={user} tenant={tenant} tenants={tenants} />
       {/* min-w-0: a wide table scrolls inside its card instead of widening the page.
           md:border: the UI has no shadows, so the border sets the page apart from the sidebar.
           md:overflow-clip: rounds the sticky header's corners too; clip, not hidden, so sticky still works. */}
@@ -44,7 +50,7 @@ export async function AppShell({
           <SidebarTrigger className="-ml-1" />
           <HeaderBreadcrumbs {...breadcrumbs} />
           <div className="ml-auto flex items-center gap-2">
-            <SearchDialog area={area} showAdmin={showAdmin} />
+            <SearchDialog area={area} showAdmin={showAdmin} slug={tenant?.slug ?? ""} />
             <LanguageSwitcher locales={APP_LOCALES} />
             <ThemeToggle />
           </div>

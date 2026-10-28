@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { ACCOUNT_PAGES, SETTINGS_PAGES, accountHref, settingsMessage } from "@/lib/settings-pages"
+import { ACCOUNT_PAGES, accountHref, settingsMessage, settingsPages } from "@/lib/settings-pages"
 
 describe("account and settings pages", () => {
   it("puts every account page under the account URL, profile first", () => {
@@ -9,8 +9,14 @@ describe("account and settings pages", () => {
     expect(accountHref("security")).toBe("/dashboard/account/security")
   })
 
-  it("opens settings on the workspace's general page", () => {
-    expect(SETTINGS_PAGES[0]).toEqual({ key: "general", href: "/dashboard/settings" })
+  it("opens settings on the tenant's general page", () => {
+    const pages = settingsPages("acme")
+    expect(pages[0]).toEqual({ key: "general", segment: null, href: "/t/acme/settings" })
+    expect(pages.map((p) => p.href)).toEqual([
+      "/t/acme/settings",
+      "/t/acme/settings/localization",
+      "/t/acme/settings/display",
+    ])
   })
 })
 

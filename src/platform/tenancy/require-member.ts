@@ -3,6 +3,7 @@ import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
 import { requireUser } from "@/lib/auth"
 import { AppError } from "@/platform/errors"
+import { LAST_TENANT_COOKIE, TENANT_SLUG_HEADER } from "@/platform/request-context"
 import type { TenantContext } from "@/platform/tenancy/context"
 import { memberCan, type TenantPermission, type TenantResource, type TenantVerb } from "@/platform/tenancy/permissions"
 import type { FieldOutputTypes } from "@/generated/prisma8/contract.d"
@@ -27,11 +28,47 @@ const slugify = (text: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "") || "workspace"
 
-/** The member row linking `userId` to their first tenant, oldest first. */
+/** The tenant slug of this request: the `/t/<slug>` path the proxy read, else the last one opened. */
+async function preferredTenantSlug(): Promise<string | null> {
+  try {
+    const { cookies } = await import("next/headers")
+    return (await headers()).get(TENANT_SLUG_HEADER) ?? (await cookies()).get(LAST_TENANT_COOKIE)?.value ?? null
+  } catch {
+    // Outside a request (a job, a script): no preference.
+    return null
+  }
+}
+
+/**
+ * The member row for `userId` in the tenant this request is about: the tenant
+ * of the `/t/<slug>` path, else the one last opened, else the oldest
+ * membership. A preference the user does not belong to is ignored.
+ */
 export async function getMembership(userId: string): Promise<Member | null> {
+  const slug = await preferredTenantSlug()
+  if (slug) {
+    const tenant = await db8.orm.public.Tenant.where({ slug }).first()
+    const member = tenant ? await db8.orm.public.Member.where({ organizationId: tenant.id, userId }).first() : null
+    if (member) return member
+  }
   return db8.orm.public.Member.where({ userId })
     .orderBy((m) => m.createdAt.asc())
     .first()
+}
+
+/** Every tenant `userId` is an active member of, oldest membership first: the tenant switcher's list. */
+export async function listMemberTenants(userId: string): Promise<Array<{ slug: string; name: string }>> {
+  const members = await db8.orm.public.Member.where({ userId })
+    .orderBy((m) => m.createdAt.asc())
+    .all()
+  const active = members.filter((m) => m.status !== "suspended")
+  if (active.length === 0) return []
+  const tenants = await db8.orm.public.Tenant.where((t) => t.id.in(active.map((m) => m.organizationId))).all()
+  const byId = new Map(tenants.map((t) => [t.id, t]))
+  return active.flatMap((m) => {
+    const tenant = byId.get(m.organizationId)
+    return tenant ? [{ slug: tenant.slug, name: tenant.name }] : []
+  })
 }
 
 /**
@@ -77,6 +114,14 @@ export async function requireTenantContext<R extends TenantResource>(
   verb?: TenantVerb<R>
 ): Promise<TenantMembership> {
   const user = await requireUser()
+  // Under /t/<slug> (task 1.7) the path names the tenant: membership and
+  // permission come from it, not from whichever tenant the user joined first.
+  const slug = (await headers()).get(TENANT_SLUG_HEADER)
+  if (slug) {
+    const permission = resource && verb ? (`${resource}.${verb}` as TenantPermission) : undefined
+    const { tenant, member, tenantId } = await resolveTenantMember(user.id, slug, permission)
+    return { user, member, tenant, tenantId }
+  }
   const ctx = await ensureTenant(user)
   const suspended = ctx.member.status === "suspended"
   if (resource && verb && (suspended || !(await memberCan(ctx.tenantId, ctx.member.role, resource, verb)))) {

@@ -3,9 +3,12 @@
 import { getCurrentUser } from "@/lib/auth"
 import { db8 } from "@/lib/db8"
 import { revalidatePath } from "next/cache"
+import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import { projectSchema } from "@/lib/schemas/project"
+import { tenantPath } from "@/lib/tenant-paths"
+import { TENANT_SLUG_HEADER } from "@/platform/request-context"
 
 export type ProjectState = { error?: string; success?: boolean }
 
@@ -51,8 +54,8 @@ export async function updateProject(_prevState: ProjectState, formData: FormData
     description: result.data.description ?? null,
   })
 
-  revalidatePath("/dashboard/projects")
-  revalidatePath(`/dashboard/projects/${id}`)
+  revalidatePath("/t/[slug]/projects", "page")
+  revalidatePath("/t/[slug]/projects/[id]", "page")
   return { success: true }
 }
 
@@ -68,9 +71,12 @@ export async function deleteProject(formData: FormData): Promise<void> {
 
   await db8.orm.public.Project.where({ id }).delete()
 
-  revalidatePath("/dashboard/projects")
-  revalidatePath("/dashboard")
-  redirect("/dashboard/projects")
+  revalidatePath("/t/[slug]/projects", "page")
+  revalidatePath("/t/[slug]", "page")
+  // The action posts to the page it was called from, so the proxy has read
+  // the tenant from that path; `/dashboard/projects` redirects as a fallback.
+  const slug = (await headers()).get(TENANT_SLUG_HEADER)
+  redirect(slug ? tenantPath(slug, "projects") : "/dashboard/projects")
 }
 
 /**
@@ -92,8 +98,8 @@ export async function saveProject(id: string | null, values: unknown): Promise<{
     const updated = await db8.orm.public.Project.where({ id, userId: user.id }).update(data)
     if (!updated) return { error: t("projectNotFound") }
   }
-  revalidatePath("/dashboard/projects")
-  revalidatePath("/dashboard")
+  revalidatePath("/t/[slug]/projects", "page")
+  revalidatePath("/t/[slug]", "page")
   return {}
 }
 
@@ -106,7 +112,7 @@ export async function deleteProjects(ids: string[]): Promise<{ deleted: number }
   const deleted = await db8.orm.public.Project.where({ userId: user.id })
     .where((p) => p.id.in(unique))
     .deleteAndCount()
-  revalidatePath("/dashboard/projects")
-  revalidatePath("/dashboard")
+  revalidatePath("/t/[slug]/projects", "page")
+  revalidatePath("/t/[slug]", "page")
   return { deleted }
 }

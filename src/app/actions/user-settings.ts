@@ -23,6 +23,7 @@ export async function saveUserSettingsAction(values: Record<string, unknown>): P
   // The locale cookie outranks the stored value, so keep it in step.
   if (typeof parsed["locale.app"] === "string") await setAppLocale(parsed["locale.app"])
   revalidatePath("/dashboard", "layout")
+  revalidatePath("/t/[slug]", "layout")
   return {}
 }
 

@@ -29,7 +29,7 @@ export async function updateProfile(_prevState: ProfileState, formData: FormData
 
   await db8.orm.public.User.where({ id: user.id }).update({ name: result.data.name })
 
-  revalidatePath("/dashboard")
+  revalidatePath("/t/[slug]", "page")
   revalidatePath("/dashboard/account", "layout")
   return { success: true }
 }

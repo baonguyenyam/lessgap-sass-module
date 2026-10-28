@@ -12,12 +12,14 @@ import { GetStartedChecklist } from "@/components/dashboard/get-started-checklis
 import { CheckoutStatusToast } from "@/components/billing/checkout-status-toast"
 import { SubscriptionStatusBadge } from "@/components/billing/subscription-status-badge"
 import { isKitSite } from "@/config/kit"
+import { tenantPath } from "@/lib/tenant-paths"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
 export const instant = false
 
-export default async function DashboardPage() {
+export default async function DashboardPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
   const t = await getTranslations("dashboard.home")
   const format = await getFormatter()
   const user = await requireUser()
@@ -56,6 +58,7 @@ export default async function DashboardPage() {
 
       {!userRow?.onboardingDismissedAt && (
         <GetStartedChecklist
+          slug={slug}
           hasName={Boolean(userRow?.name)}
           hasProject={projectCount > 0}
           hasBilling={entitlement.kind !== "free" || Boolean(userRow?.stripeCustomerId)}
@@ -70,7 +73,7 @@ export default async function DashboardPage() {
               <CardDescription>{t("projectsCount", { count: projectCount })}</CardDescription>
             </div>
             <Button asChild variant="outline">
-              <Link href="/dashboard/projects">
+              <Link href={tenantPath(slug, "projects")}>
                 {projectCount === 0 ? t("projectsCreate") : t("projectsViewAll")}
                 <ArrowRight />
               </Link>
@@ -125,7 +128,7 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline">
-              <Link href={isKitSite ? "/pricing" : "/dashboard/billing"}>
+              <Link href={isKitSite ? "/pricing" : tenantPath(slug, "billing")}>
                 {t("upsellCta")}
                 <ArrowRight />
               </Link>

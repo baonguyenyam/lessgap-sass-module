@@ -27,12 +27,19 @@ import type { Crumb } from "@/lib/breadcrumb"
 export function HeaderBreadcrumbs({
   icon,
   base,
+  alsoUnder,
   labels,
 }: {
   /** In front of the trail: the area's icon. */
   icon?: React.ReactNode
   /** The first crumb: the area's home, `/dashboard` or `/admin`. */
   base: Crumb
+  /**
+   * Another path whose pages hang under the same first crumb: the tenant
+   * dashboard's base is `/t/<slug>`, while the account pages stay at
+   * `/dashboard` (task 1.7).
+   */
+  alsoUnder?: string
   /** The label of each path segment after it, `{ projects: "Projects" }`. */
   labels: Record<string, string>
 }) {
@@ -40,8 +47,9 @@ export function HeaderBreadcrumbs({
   const named = useBreadcrumbName(path)
 
   const trail: Crumb[] = [base]
-  const segments = path.startsWith(base.href) ? path.slice(base.href.length).split("/").filter(Boolean) : []
-  let href = base.href
+  const root = [base.href, alsoUnder].find((prefix) => prefix && isUnder(path, prefix))
+  const segments = root ? path.slice(root.length).split("/").filter(Boolean) : []
+  let href = root ?? base.href
   segments.forEach((segment, index) => {
     href += `/${segment}`
     const name = labels[segment] ?? (index === segments.length - 1 ? named : undefined)
@@ -58,4 +66,8 @@ export function HeaderBreadcrumbs({
       <BreadcrumbTrail trail={trail} className="min-w-0" />
     </div>
   )
+}
+
+function isUnder(path: string, prefix: string): boolean {
+  return path === prefix || path.startsWith(`${prefix}/`)
 }

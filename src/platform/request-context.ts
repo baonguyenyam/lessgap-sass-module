@@ -6,6 +6,10 @@
 
 export const REQUEST_ID_HEADER = "x-request-id"
 export const REQUEST_SOURCE_HEADER = "x-request-source"
+/** The tenant of a `/t/<slug>/…` request, set (and otherwise removed) by the proxy, never by the client. */
+export const TENANT_SLUG_HEADER = "x-tenant-slug"
+/** The tenant whose dashboard was opened last, kept by the proxy so `/dashboard` lands there again. */
+export const LAST_TENANT_COOKIE = "last_tenant"
 
 export const ERROR_SOURCES = ["marketing", "dashboard", "platform", "site", "api", "cron", "job"] as const
 export type ErrorSource = (typeof ERROR_SOURCES)[number]
@@ -30,9 +34,16 @@ export function sourceForPath(pathname: string): ErrorSource {
   if (under("/api")) return "api"
   if (under("/admin")) return "platform"
   if (
-    ["/dashboard", "/login", "/signup", "/forgot-password", "/reset-password", "/verify-request", "/2fa"].some(under)
+    ["/dashboard", "/t", "/login", "/signup", "/forgot-password", "/reset-password", "/verify-request", "/2fa"].some(
+      under
+    )
   ) {
     return "dashboard"
   }
   return "marketing"
+}
+
+/** The slug in a tenant dashboard path, `/t/<slug>` or `/t/<slug>/…`, or null. */
+export function tenantSlugFromPath(pathname: string): string | null {
+  return /^\/t\/([a-z0-9]+(?:-[a-z0-9]+)*)(?:\/|$)/.exec(pathname)?.[1] ?? null
 }

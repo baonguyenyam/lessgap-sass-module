@@ -9,7 +9,7 @@ import { inviteMemberSchema } from "@/lib/schemas/tenant"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { TENANT_ROLE_KEYS } from "@/platform/tenancy/permissions"
 
-const MEMBERS = "/dashboard/members"
+const MEMBERS = "/t/[slug]/members"
 
 async function ownerCount(tenantId: string): Promise<number> {
   return db8.orm.public.Member.where({ organizationId: tenantId, role: "owner" })
@@ -36,7 +36,7 @@ export async function inviteMember(values: unknown): Promise<{ error?: string }>
     headers: await headers(),
     body: { email: parsed.data.email, role: parsed.data.role, organizationId: ctx.tenantId },
   })
-  revalidatePath(MEMBERS)
+  revalidatePath(MEMBERS, "page")
   return {}
 }
 
@@ -55,7 +55,7 @@ export async function setMemberRole(memberId: string, role: string): Promise<{ e
   if (target.role === "owner" && (await ownerCount(ctx.tenantId)) <= 1) return { error: t("lastOwner") }
 
   await auth.api.updateMemberRole({ headers: await headers(), body: { memberId, role } })
-  revalidatePath(MEMBERS)
+  revalidatePath(MEMBERS, "page")
   return {}
 }
 
@@ -82,7 +82,7 @@ export async function removeMembers(memberIds: string[]): Promise<{ removed: num
     await auth.api.removeMember({ headers: await headers(), body: { memberIdOrEmail: target.id } })
     removed += 1
   }
-  revalidatePath(MEMBERS)
+  revalidatePath(MEMBERS, "page")
   return { removed }
 }
 
@@ -103,7 +103,7 @@ export async function setMembersSuspended(memberIds: string[], suspended: boolea
   const changed = await inTenant
     .where((m) => m.id.in(allowed))
     .updateAndCount({ status: suspended ? "suspended" : "active" })
-  revalidatePath(MEMBERS)
+  revalidatePath(MEMBERS, "page")
   return { changed }
 }
 
@@ -119,6 +119,6 @@ export async function cancelMemberInvitation(invitationId: string): Promise<{ er
   if (!invite) return { error: t("notFound") }
 
   await auth.api.cancelInvitation({ headers: await headers(), body: { invitationId } })
-  revalidatePath(MEMBERS)
+  revalidatePath(MEMBERS, "page")
   return {}
 }

@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test"
 import { freshEmail as newFreshEmail } from "./fresh-email"
+import { TENANT_HOME } from "./urls"
 
 /**
  * Signing in as an existing user with email and password.
@@ -28,7 +29,7 @@ test("an existing user can sign in with email and password", async ({ browser })
   await signupPage.locator('input[name="email"]').fill(email)
   await signupPage.locator('input[name="password"][type="password"]').fill(password)
   await signupPage.getByRole("button", { name: /create account|sign up/i }).click()
-  await signupPage.waitForURL("**/dashboard", { timeout: 20_000 })
+  await signupPage.waitForURL(TENANT_HOME, { timeout: 20_000 })
   await signup.close()
 
   // A visitor with no cookies, who knows the password.
@@ -58,7 +59,7 @@ test("an existing user can sign in with email and password", async ({ browser })
     .first()
     .click()
 
-  await page.waitForURL("**/dashboard", { timeout: 20_000 })
+  await page.waitForURL(TENANT_HOME, { timeout: 20_000 })
   await expect(page.getByRole("heading", { name: /welcome back/i })).toBeVisible()
   await returning.close()
 })

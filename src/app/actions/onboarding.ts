@@ -11,5 +11,5 @@ export async function dismissOnboarding() {
 
   await db8.orm.public.User.where({ id: user.id }).update({ onboardingDismissedAt: nowTs() })
 
-  revalidatePath("/dashboard")
+  revalidatePath("/t/[slug]", "page")
 }

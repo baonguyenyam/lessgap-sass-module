@@ -10,7 +10,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/dashboard", "/admin", "/api/", "/verify-request", "/reset-password"],
+      disallow: ["/dashboard", "/t/", "/admin", "/api/", "/verify-request", "/reset-password"],
     },
     // A demo deployment is `noindex` (see the root layout) and stays crawlable
     // on purpose, so engines can read that noindex. It just has no sitemap to

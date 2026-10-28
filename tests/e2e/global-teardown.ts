@@ -25,6 +25,9 @@ export default async function globalTeardown() {
 
   const { db8 } = await import("@/lib/db8")
   try {
+    // Their tenants first: a tenant outlives its members' accounts, and each
+    // e2e signup gets one named after the address (task 1.7).
+    await db8.orm.public.Tenant.where((t) => t.slug.like("e2e-%")).deleteAndCount()
     const count = await db8.orm.public.User.where((u) => u.email.like("e2e-%")).deleteAndCount()
     if (count > 0) console.log(`\n  cleaned up ${count} test account(s)`)
   } finally {

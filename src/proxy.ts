@@ -4,7 +4,15 @@ import { NextResponse, type NextRequest } from "next/server"
 import createIntlMiddleware from "next-intl/middleware"
 import { routing } from "@/i18n/routing"
 import { newTimeId } from "@/lib/ids"
-import { acceptRequestId, REQUEST_ID_HEADER, REQUEST_SOURCE_HEADER, sourceForPath } from "@/platform/request-context"
+import {
+  acceptRequestId,
+  REQUEST_ID_HEADER,
+  REQUEST_SOURCE_HEADER,
+  sourceForPath,
+  LAST_TENANT_COOKIE,
+  TENANT_SLUG_HEADER,
+  tenantSlugFromPath,
+} from "@/platform/request-context"
 
 /**
  * Locale handling for the public surface only.
@@ -33,6 +41,7 @@ const intlMiddleware = createIntlMiddleware(routing)
 const UNLOCALIZED = [
   // Private areas and auth, matched by prefix.
   "/dashboard",
+  "/t/",
   "/admin",
   "/api",
   "/login",
@@ -62,7 +71,7 @@ const UNLOCALIZED = [
  * each return 401 on their own. Treat this file as defence in depth, and add
  * a prefix here when you add a private area outside `/dashboard`.
  */
-const PROTECTED_ROUTES = ["/dashboard", "/api/checkout", "/api/billing"]
+const PROTECTED_ROUTES = ["/dashboard", "/t/", "/api/checkout", "/api/billing"]
 const ADMIN_ROUTES = ["/admin", "/api/admin"]
 // `/2fa` belongs here for the same reason as the other two: it is a step on the
 // way in, so somebody who already holds a session has nothing to do on it. The
@@ -93,6 +102,11 @@ export default async function proxy(req: NextRequest) {
   const requestId = acceptRequestId(req.headers.get(REQUEST_ID_HEADER)) ?? newTimeId()
   req.headers.set(REQUEST_ID_HEADER, requestId)
   req.headers.set(REQUEST_SOURCE_HEADER, sourceForPath(pathname))
+  // The tenant of a dashboard request comes from the path, never from a header
+  // the client sent (task 1.7): set it on /t/<slug>/…, strip it everywhere else.
+  const tenantSlug = tenantSlugFromPath(pathname)
+  if (tenantSlug) req.headers.set(TENANT_SLUG_HEADER, tenantSlug)
+  else req.headers.delete(TENANT_SLUG_HEADER)
   const stamped = (res: NextResponse) => {
     res.headers.set(REQUEST_ID_HEADER, requestId)
     return res
@@ -128,7 +142,20 @@ export default async function proxy(req: NextRequest) {
   // it goes through locale resolution; the private areas keep the plain
   // response they have always had.
   if (UNLOCALIZED.some((r) => pathname.startsWith(r))) {
-    return next()
+    const res = next()
+    // Remember the tenant opened, so `/dashboard` (and the links that still
+    // point there) lands on it next time. A slug the user is not a member of
+    // is ignored where the cookie is read, and 404s in the tenant layout.
+    if (tenantSlug && isLoggedIn && req.cookies.get(LAST_TENANT_COOKIE)?.value !== tenantSlug) {
+      res.cookies.set(LAST_TENANT_COOKIE, tenantSlug, {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: req.nextUrl.protocol === "https:",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 365,
+      })
+    }
+    return res
   }
 
   // next-intl forwards `req.headers`, so the id set above reaches the page.

@@ -24,6 +24,7 @@ export async function saveTenantSettingsAction(values: Record<string, unknown>):
 
   await saveTenantSettings(ctx.tenantId, parsed as Partial<PlatformSettings>, ctx.user.id)
   revalidatePath("/dashboard", "layout")
+  revalidatePath("/t/[slug]", "layout")
   return {}
 }
 
@@ -46,5 +47,6 @@ export async function saveTenantGeneral(values: unknown): Promise<{ error?: stri
 
   await db8.orm.public.Tenant.where({ id: ctx.tenantId }).update({ name: parsed.data.name, slug: parsed.data.slug })
   revalidatePath("/dashboard", "layout")
+  revalidatePath("/t/[slug]", "layout")
   return {}
 }

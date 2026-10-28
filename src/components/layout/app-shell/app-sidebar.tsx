@@ -19,13 +19,28 @@ import {
 } from "@/components/ui/sidebar"
 import { NavUser, type NavUserProps } from "@/components/layout/app-shell/nav-user"
 import { isNavItemActive, navGroups, type NavArea } from "@/components/layout/app-shell/nav"
+import { tenantPath } from "@/lib/tenant-paths"
+import { TenantSwitcher, type TenantOption } from "@/components/layout/app-shell/tenant-switcher"
 
 /**
  * The app sidebar (spec/adr/0021, from Studio Admin): collapses to icons on
  * desktop, opens as a sheet on a phone, and keeps the signed-in user at the
  * bottom.
  */
-export function AppSidebar({ area, showAdmin, user }: { area: NavArea; showAdmin: boolean; user: NavUserProps }) {
+export function AppSidebar({
+  area,
+  showAdmin,
+  user,
+  tenant,
+  tenants,
+}: {
+  area: NavArea
+  showAdmin: boolean
+  user: NavUserProps
+  /** The tenant the dashboard area shows; null in the admin area. */
+  tenant: TenantOption | null
+  tenants: TenantOption[]
+}) {
   const t = useTranslations("dashboard.nav")
   const pathname = usePathname()
 
@@ -35,15 +50,16 @@ export function AppSidebar({ area, showAdmin, user }: { area: NavArea; showAdmin
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild size="lg">
-              <Link href={area === "admin" ? "/admin" : "/dashboard"}>
+              <Link href={area === "admin" ? "/admin" : tenant ? tenantPath(tenant.slug) : "/dashboard"}>
                 <Logo animated wordmarkClassName="group-data-[collapsible=icon]:hidden" />
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
+        {area === "dashboard" && tenant && <TenantSwitcher current={tenant} tenants={tenants} />}
       </SidebarHeader>
       <SidebarContent>
-        {navGroups(area, { showAdmin }).map((group) => (
+        {navGroups(area, { showAdmin, slug: tenant?.slug ?? "" }).map((group) => (
           <SidebarGroup key={group.key}>
             <SidebarGroupLabel>{t(`groups.${group.key}`)}</SidebarGroupLabel>
             <SidebarGroupContent>

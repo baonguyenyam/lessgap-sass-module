@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { acceptRequestId, sourceForPath } from "@/platform/request-context"
+import { acceptRequestId, sourceForPath, tenantSlugFromPath } from "@/platform/request-context"
 
 describe("acceptRequestId", () => {
   it("keeps an upstream id that looks like one", () => {
@@ -27,5 +27,17 @@ describe("sourceForPath", () => {
 
   it("matches whole segments only", () => {
     expect(sourceForPath("/administration")).toBe("marketing")
+  })
+})
+
+describe("tenantSlugFromPath", () => {
+  it("reads the slug of a tenant dashboard path", () => {
+    expect(tenantSlugFromPath("/t/pho-ha-noi")).toBe("pho-ha-noi")
+    expect(tenantSlugFromPath("/t/pho/members")).toBe("pho")
+  })
+
+  it("finds none anywhere else, or in a slug that could not exist", () => {
+    for (const path of ["/t", "/t/", "/terms", "/dashboard", "/t/Pho", "/t/..%2f"])
+      expect(tenantSlugFromPath(path)).toBeNull()
   })
 })

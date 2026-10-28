@@ -10,7 +10,7 @@ import { nowTs } from "@/lib/timestamps"
 import { tenantSubscribers } from "@/platform/newsletter/tenant-list"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 
-const PAGE = "/dashboard/newsletter"
+const PAGE = "/t/[slug]/newsletter"
 const token = () => crypto.randomBytes(24).toString("base64url")
 
 /** Adds an address to this workspace's list; it joins once the person confirms by email. */
@@ -36,7 +36,7 @@ export async function addTenantSubscriber(values: unknown): Promise<{ error?: st
   await sendNewsletterConfirmEmail(email, `${siteConfig.url}/newsletter/confirm?token=${confirmToken}`).catch((error) =>
     console.error("[newsletter] confirmation email failed:", error)
   )
-  revalidatePath(PAGE)
+  revalidatePath(PAGE, "page")
   return {}
 }
 
@@ -49,6 +49,6 @@ export async function unsubscribeTenantSubscribers(ids: string[]): Promise<{ cha
     .where((s) => s.id.in(unique))
     .where((s) => s.unsubscribedAt.isNull())
     .updateAndCount({ unsubscribedAt: nowTs() })
-  revalidatePath(PAGE)
+  revalidatePath(PAGE, "page")
   return { changed }
 }

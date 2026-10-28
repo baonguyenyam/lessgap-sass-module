@@ -5,16 +5,19 @@ import { ArrowRight, Check, X } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { dismissOnboarding } from "@/app/actions/onboarding"
+import { tenantPath } from "@/lib/tenant-paths"
 
 type ChecklistItem = { label: string; done: boolean; href: Route }
 
 // Server component: the items are derived live from the DB by the dashboard
 // page, only the dismissal is persisted (User.onboardingDismissedAt).
 export async function GetStartedChecklist({
+  slug,
   hasName,
   hasProject,
   hasBilling,
 }: {
+  slug: string
   hasName: boolean
   hasProject: boolean
   hasBilling: boolean
@@ -22,8 +25,8 @@ export async function GetStartedChecklist({
   const t = await getTranslations("dashboard.home")
   const items: ChecklistItem[] = [
     { label: t("checklistName"), done: hasName, href: "/dashboard/account" },
-    { label: t("checklistProject"), done: hasProject, href: "/dashboard/projects" },
-    { label: t("checklistBilling"), done: hasBilling, href: "/dashboard/billing" },
+    { label: t("checklistProject"), done: hasProject, href: tenantPath(slug, "projects") },
+    { label: t("checklistBilling"), done: hasBilling, href: tenantPath(slug, "billing") },
   ]
   const doneCount = items.filter((i) => i.done).length
   if (doneCount === items.length) return null

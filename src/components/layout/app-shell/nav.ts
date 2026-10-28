@@ -1,4 +1,5 @@
 import type { Route } from "next"
+import { DASHBOARD, tenantPath } from "@/lib/tenant-paths"
 import {
   ArrowLeft,
   CreditCard,
@@ -25,7 +26,12 @@ export type NavItem = { key: string; href: Route; icon: LucideIcon; exact?: bool
 export type NavGroup = { key: string; items: NavItem[] }
 export type NavArea = "dashboard" | "admin"
 
-export function navGroups(area: NavArea, { showAdmin }: { showAdmin: boolean }): NavGroup[] {
+/**
+ * `slug` is the tenant the dashboard area is showing (task 1.7): its pages
+ * live under `/t/<slug>`. Account pages are the person's, at `/dashboard/account`.
+ */
+export function navGroups(area: NavArea, { showAdmin, slug }: { showAdmin: boolean; slug: string }): NavGroup[] {
+  const t = (page = "") => tenantPath(slug, page)
   if (area === "admin") {
     return [
       {
@@ -39,31 +45,31 @@ export function navGroups(area: NavArea, { showAdmin }: { showAdmin: boolean }):
           { key: "platformSettings", href: "/admin/settings", icon: SlidersHorizontal },
         ],
       },
-      { key: "back", items: [{ key: "backToDashboard", href: "/dashboard", icon: ArrowLeft, exact: true }] },
+      { key: "back", items: [{ key: "backToDashboard", href: DASHBOARD, icon: ArrowLeft, exact: true }] },
     ]
   }
   return [
     {
       key: "main",
       items: [
-        { key: "dashboard", href: "/dashboard", icon: LayoutGrid, exact: true },
-        { key: "projects", href: "/dashboard/projects", icon: FolderKanban },
+        { key: "dashboard", href: t(), icon: LayoutGrid, exact: true },
+        { key: "projects", href: t("projects"), icon: FolderKanban },
       ],
     },
     {
       key: "workspace",
       items: [
-        { key: "members", href: "/dashboard/members", icon: Users },
-        { key: "newsletter", href: "/dashboard/newsletter", icon: Mail },
-        { key: "roles", href: "/dashboard/roles", icon: KeyRound },
+        { key: "members", href: t("members"), icon: Users },
+        { key: "newsletter", href: t("newsletter"), icon: Mail },
+        { key: "roles", href: t("roles"), icon: KeyRound },
       ],
     },
     {
       key: "account",
       items: [
-        { key: "billing", href: "/dashboard/billing", icon: CreditCard },
+        { key: "billing", href: t("billing"), icon: CreditCard },
         { key: "account", href: "/dashboard/account", icon: UserRound },
-        { key: "settings", href: "/dashboard/settings", icon: SlidersHorizontal },
+        { key: "settings", href: t("settings"), icon: SlidersHorizontal },
         ...(showAdmin ? [{ key: "adminPanel", href: "/admin", icon: Shield } satisfies NavItem] : []),
       ],
     },

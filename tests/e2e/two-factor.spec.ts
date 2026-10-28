@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test"
 import { createHmac } from "node:crypto"
 import { freshEmail as newFreshEmail } from "./fresh-email"
+import { TENANT_HOME } from "./urls"
 
 /**
  * Two-factor authentication, end to end (2.2).
@@ -53,7 +54,7 @@ test("a user can turn on 2FA, and then needs a code to sign in", async ({ browse
   await page.locator('input[name="email"]').fill(email)
   await page.locator('input[name="password"][type="password"]').fill(password)
   await page.getByRole("button", { name: /create account|sign up/i }).click()
-  await page.waitForURL("**/dashboard", { timeout: 20_000 })
+  await page.waitForURL(TENANT_HOME, { timeout: 20_000 })
 
   await page.goto("/dashboard/account/security")
   await page.locator("#enable-password").fill(password)
@@ -95,7 +96,7 @@ test("a user can turn on 2FA, and then needs a code to sign in", async ({ browse
 
   await returning.locator("#code").fill(totp(secret))
   await returning.getByRole("button", { name: /verify/i }).click()
-  await returning.waitForURL("**/dashboard", { timeout: 20_000 })
+  await returning.waitForURL(TENANT_HOME, { timeout: 20_000 })
   await second.close()
 
   // ── And a backup code works when the phone does not ────────────────────

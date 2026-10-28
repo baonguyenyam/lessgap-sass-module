@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest"
 import { db8 } from "@/lib/db8"
-import { resolveTenantMember } from "@/platform/tenancy/require-member"
+import { listMemberTenants, resolveTenantMember } from "@/platform/tenancy/require-member"
 import { createMember, createTenant } from "@tests/factories"
 import { resetDatabase } from "@tests/helpers/db"
 
@@ -25,5 +25,17 @@ describe("tenant membership on every request (T7)", () => {
     const a = await createTenant({ slug: "tenant-a" })
     await createTenant({ slug: "tenant-b" })
     await expect(resolveTenantMember(a.owner.id, "tenant-b")).rejects.toMatchObject({ code: "not_found" })
+  })
+
+  it("lists the tenants a user can switch to, oldest membership first, without suspended ones (1.7)", async () => {
+    const a = await createTenant({ slug: "switch-a", name: "Alpha" })
+    const b = await createTenant({ slug: "switch-b", name: "Beta" })
+    const c = await createTenant({ slug: "switch-c", name: "Gamma" })
+    const { user } = await createMember(b.tenant.id, { role: "staff" })
+    await createMember(c.tenant.id, { role: "staff", userId: user.id })
+    await db8.orm.public.Member.where({ organizationId: c.tenant.id, userId: user.id }).update({ status: "suspended" })
+
+    expect(await listMemberTenants(user.id)).toEqual([{ slug: "switch-b", name: "Beta" }])
+    expect(await listMemberTenants(a.owner.id)).toEqual([{ slug: "switch-a", name: "Alpha" }])
   })
 })
