@@ -428,7 +428,6 @@
       "jobs": "Jobs",
       "emails": "Emails",
       "errors": "Errors",
-      "settings": "Settings",
       "plans": "Plans",
       "groups": {
         "main": "Overview",
@@ -797,6 +796,33 @@
       "empty": {
         "title": "No errors yet",
         "description": "Masked error digests appear here."
+      }
+    },
+    "overrides": {
+      "title": "Entitlement overrides",
+      "new": "New override",
+      "newTitle": "New override",
+      "editTitle": "Edit override",
+      "description": "Override a feature for this tenant only: a JSON value (true, false, a number or null), the reason it deviates, and an optional expiry after which it stops applying.",
+      "empty": "No overrides. The tenant resolves its plan and the platform switches.",
+      "columns": {
+        "feature": "Feature",
+        "value": "Value",
+        "reason": "Reason",
+        "expires": "Expires"
+      },
+      "ignoresSwitch": "ignores switch",
+      "ignoresSwitchLabel": "Applies even when the platform kill switch is off",
+      "edit": "Edit",
+      "revoke": "Revoke",
+      "revokeTitle": "Revoke override",
+      "revokeDescription": "Revoke the override on {key}? The plan and platform layers take over again.",
+      "errors": {
+        "unknownFeature": "That feature is not declared in the registry.",
+        "badValue": "The value does not match the feature's kind.",
+        "reasonRequired": "A reason is required.",
+        "badExpiry": "That is not a valid date.",
+        "notFound": "Override not found."
       }
     }
   },

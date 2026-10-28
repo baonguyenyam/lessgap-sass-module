@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.35.0] - 2026-10-28
+
+**Staff can override one tenant's entitlements.** This is a MINOR: `git pull`, `pnpm install` — no migration.
+
+### Added
+
+- **Entitlement overrides on the tenant detail page**: grant, change or revoke any feature for one tenant — a beta flag that survives a platform kill switch (`ignoresSwitch`), a negotiated limit, a revoked capability. Every override needs a written reason, takes an optional expiry after which it quietly stops applying, and leaves an audit row naming the staff member
+
 ## [2.34.0] - 2026-10-28
 
 **Plans are editable in the console.** This is a MINOR: `git pull`, `pnpm install` — no migration.

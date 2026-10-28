@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { TenantStatusActions } from "@/components/platform/tenant-status-actions"
 import { TenantStatusBadge } from "@/components/platform/tenant-status-badge"
+import { TenantOverrides } from "@/components/platform/tenant-overrides"
+import { FEATURES } from "@/platform/entitlements/registry"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -30,6 +32,9 @@ export default async function PlatformTenantPage({ params }: { params: Promise<{
     .orderBy((m) => m.createdAt.asc())
     .all()
   const owner = members.find((m) => m.role === "owner")
+  const overrides = await db8.orm.public.EntitlementOverride.where({ tenantId: tenant.id })
+    .orderBy((o) => o.createdAt.asc())
+    .all()
 
   return (
     <div className="space-y-6">
@@ -99,6 +104,8 @@ export default async function PlatformTenantPage({ params }: { params: Promise<{
           </ul>
         </CardContent>
       </Card>
+
+      <TenantOverrides tenantId={tenant.id} rows={overrides} featureKeys={Object.keys(FEATURES)} />
     </div>
   )
 }

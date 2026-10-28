@@ -84,7 +84,7 @@ Settings → Modules: enable, disable, export data, and schedule a purge with a
 - **Tests:** unit — reason required, expiry optional, `ignoresSwitch` honoured; integration — an override resolves then expires.
 - **Checks:** `pnpm test`, `pnpm test:integration`.
 - **Done when:** an override visibly flips the tenant's `ent.has` for one feature and the audit log names staff, reason and expiry.
-- [ ] done
+- [x] done (`/platform/tenants/[slug]` gained an "Entitlement overrides" card listing every row (feature, value, reason, expiry, ignoresSwitch badge) with a New/Edit drawer and a Revoke confirm drawer. `setEntitlementOverride` requires a declared feature, a value matching its kind and a written reason; expiry is optional; one row per tenant+feature upserts through the composite unique index (`uniqueIndexKey`). `revokeEntitlementOverride` deletes the row. Both audit `platform.override.upserted`/`revoked` with staff id + tenantId. Resolver side was already live from 2.2 — the integration test flips `ent.has` true→false, expires the row directly and watches it come back without a delete.)
 
 ### 2.7 — Tenant-owned billing: re-own, free plan, add-ons, setup fee
 - **Goal:** checkout, portal, webhooks and the tenant billing page read the tenant's subscription (one per tenant); the free plan needs no Stripe subscription; add-ons sell via `AddOn`/`TenantAddOn` rows and fold into the resolver; a plan's `setupFeeCents` charges once at first checkout.

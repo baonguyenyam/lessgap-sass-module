@@ -428,7 +428,6 @@
       "jobs": "Tác vụ",
       "emails": "Email",
       "errors": "Lỗi",
-      "settings": "Cài đặt",
       "plans": "Gói",
       "groups": {
         "main": "Tổng quan",
@@ -797,6 +796,33 @@
       "empty": {
         "title": "Chưa có lỗi nào",
         "description": "Các digest lỗi đã che dấu sẽ xuất hiện ở đây."
+      }
+    },
+    "overrides": {
+      "title": "Ghi đè entitlement",
+      "new": "Thêm ghi đè",
+      "newTitle": "Thêm ghi đè",
+      "editTitle": "Sửa ghi đè",
+      "description": "Ghi đè một tính năng riêng cho khách hàng này: giá trị JSON (true, false, số hoặc null), lý do, và ngày hết hạn tuỳ chọn mà sau đó nó ngừng áp dụng.",
+      "empty": "Chưa có ghi đè nào. Khách hàng nhận quyền theo gói và công tắc nền tảng.",
+      "columns": {
+        "feature": "Tính năng",
+        "value": "Giá trị",
+        "reason": "Lý do",
+        "expires": "Hết hạn"
+      },
+      "ignoresSwitch": "bỏ qua switch",
+      "ignoresSwitchLabel": "Vẫn áp dụng khi kill switch nền tảng tắt",
+      "edit": "Sửa",
+      "revoke": "Thu hồi",
+      "revokeTitle": "Thu hồi ghi đè",
+      "revokeDescription": "Thu hồi ghi đè trên {key}? Gói và các tầng nền tảng sẽ áp dụng lại.",
+      "errors": {
+        "unknownFeature": "Tính năng chưa khai báo trong registry.",
+        "badValue": "Giá trị không khớp kiểu của tính năng.",
+        "reasonRequired": "Cần có lý do.",
+        "badExpiry": "Ngày không hợp lệ.",
+        "notFound": "Không tìm thấy ghi đè."
       }
     }
   },
