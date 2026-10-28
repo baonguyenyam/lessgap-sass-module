@@ -2,6 +2,6 @@
 import module_0 from "./newsletter/module"
 
 export const moduleRegistry = {
-  newsletter: module_0,
+  "newsletter": module_0,
 } as const
 export type ModuleKey = keyof typeof moduleRegistry

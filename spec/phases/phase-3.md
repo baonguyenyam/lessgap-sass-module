@@ -45,7 +45,7 @@ set upload rules and rollouts from the console.
   localhost dev map); integration — a `/sites/[host]` page renders the tenant.
 - **Checks:** `pnpm test`, `pnpm test:integration`.
 - **Done when:** `localhost` tenant subdomains resolve and proxy rewrites.
-- [ ] done
+- [x] done (`src/platform/tenancy/host.ts` implements the spec/03 table: normalise → platform hosts → `<slug>.<sites-domain>` → tenant (active only) → none; reserved slugs can never be a tenant; `DEV_TENANT_HOST_MAP` aliases a dev host for custom-domain dev. The proxy rewrites a `site` host to `/sites/[host]` and a `none` root to 404. `src/config/sites.ts` holds `SITES_DOMAIN` + `RESERVED_SLUGS`. The `Domain`-row lookup lands in 3.7 with the model. `ModuleExport`/`ModulePurge` also gained `@@rls` (M3 caught the gap from 2.10). Unit `host.test.ts` covers every row of the resolution table.)
 
 ### 3.2 — `Site`, `SiteSettings`, `Page`, `Media` schema
 - **Goal:** contract models per spec/09 — `Site` (one per tenant), `SiteSettings`

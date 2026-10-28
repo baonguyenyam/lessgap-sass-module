@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.40.0] - 2026-10-28
+
+**Tenant sites have an address: `<slug>.<sites-domain>` resolves to a tenant.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` — one migration adds RLS to `ModuleExport` and `ModulePurge`.
+
+### Added
+
+- **Host resolution** (`src/platform/tenancy/host.ts`): `resolveHost(host)` answers the spec/03 table — platform hosts (the app and marketing surface), `<slug>.<sites-domain>` → a tenant's site (active only), everything else → nothing. Reserved slugs (`www`, `app`, `api`, `admin`, `mail`, …) can never be a tenant
+- **The proxy rewrites a tenant hostname to `/sites/[host]`** — the URL stays on the tenant's host while the app renders the shared site page
+- **`SITES_DOMAIN` env + `DEV_TENANT_HOST_MAP`** — the sites domain is deployment config; `DEV_TENANT_HOST_MAP="slug=host,…"` aliases a dev host for custom-domain testing
+
 ## [2.39.0] - 2026-10-28
 
 **Modules get a lifecycle: enable, disable, export, delete.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` — one migration adds `ModulePurge` and `ModuleExport`.

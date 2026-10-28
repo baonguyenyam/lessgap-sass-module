@@ -1,0 +1,80 @@
+[
+  {
+    "id": "rowLevelSecurity.public.ModuleExport",
+    "label": "Enable row-level security on \"ModuleExport\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "ModuleExport"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"ModuleExport\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "ModuleExport"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"ModuleExport\"",
+        "sql": "ALTER TABLE \"public\".\"ModuleExport\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"ModuleExport\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "ModuleExport"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.ModulePurge",
+    "label": "Enable row-level security on \"ModulePurge\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "ModulePurge"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"ModulePurge\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "ModulePurge"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"ModulePurge\"",
+        "sql": "ALTER TABLE \"public\".\"ModulePurge\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"ModulePurge\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "ModulePurge"
+        ]
+      }
+    ]
+  }
+]

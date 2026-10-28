@@ -15,6 +15,7 @@ import {
 } from "@/platform/request-context"
 import { invitationIdFromPath, PENDING_INVITATION_COOKIE } from "@/lib/invitations"
 import { isTenantMember } from "@/platform/tenancy/require-member"
+import { resolveHost } from "@/platform/tenancy/host"
 
 /**
  * Locale handling for the public surface only.
@@ -116,6 +117,18 @@ export default async function proxy(req: NextRequest) {
     return res
   }
   const next = () => stamped(NextResponse.next({ request: { headers: req.headers } }))
+
+  // A tenant site's hostname: `<slug>.<sites-domain>` (and dev aliases) is
+  // answered by `/sites/[host]` — the URL stays on the tenant's host. The
+  // pathname guards below all belong to the app host's own URLs.
+  const resolvedHost = await resolveHost(req.headers.get("host") ?? "")
+  if (resolvedHost.kind === "site" && !pathname.startsWith("/sites/")) {
+    const url = new URL(`/sites${pathname === "/" ? "" : pathname}${req.nextUrl.search}`, req.nextUrl)
+    return stamped(NextResponse.rewrite(url))
+  }
+  if (resolvedHost.kind === "none" && !pathname.startsWith("/sites/") && pathname === "/") {
+    return stamped(NextResponse.rewrite(new URL("/_not-found", req.nextUrl), { status: 404 }))
+  }
 
   const isAuthRoute = AUTH_ROUTES.some((r) => pathname.startsWith(r))
   const isAdminRoute = ADMIN_ROUTES.some((r) => pathname.startsWith(r))
