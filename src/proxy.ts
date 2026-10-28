@@ -45,6 +45,7 @@ const UNLOCALIZED = [
   "/dashboard",
   "/t/",
   "/admin",
+  "/platform",
   "/api",
   "/login",
   "/signup",
@@ -74,7 +75,7 @@ const UNLOCALIZED = [
  * each return 401 on their own. Treat this file as defence in depth, and add
  * a prefix here when you add a private area outside `/dashboard`.
  */
-const PROTECTED_ROUTES = ["/dashboard", "/t/", "/api/checkout", "/api/billing"]
+const PROTECTED_ROUTES = ["/dashboard", "/t/", "/platform", "/api/checkout", "/api/billing"]
 const ADMIN_ROUTES = ["/admin", "/api/admin"]
 // `/2fa` belongs here for the same reason as the other two: it is a step on the
 // way in, so somebody who already holds a session has nothing to do on it. The

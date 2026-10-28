@@ -10,6 +10,7 @@ import { applyDatabaseMigrations } from "@/app/actions/database"
 import { DataTable, dataTableColumns } from "@/components/data-table/data-table"
 import { EmptyState } from "@/components/layout/empty-state"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Badge } from "@/components/ui/badge"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -68,7 +69,12 @@ export function DatabaseMigrations({
       col.accessor("status", {
         id: "status",
         header: t("colStatus"),
-        cell: ({ row }) => t(`state.${row.original.status}`),
+        // Badge
+        cell: ({ row }) => (
+          <Badge variant={row.original.status === "applied" ? "success" : "default"}>
+            {t(`state.${row.original.status}`)}
+          </Badge>
+        ),
       }),
     ])
   }, [t])

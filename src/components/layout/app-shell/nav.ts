@@ -2,6 +2,7 @@ import type { Route } from "next"
 import { DASHBOARD, tenantPath } from "@/lib/tenant-paths"
 import {
   ArrowLeft,
+  Building2,
   CreditCard,
   Database,
   HardDrive,
@@ -24,7 +25,7 @@ import {
  */
 export type NavItem = { key: string; href: Route; icon: LucideIcon; exact?: boolean }
 export type NavGroup = { key: string; items: NavItem[] }
-export type NavArea = "dashboard" | "admin"
+export type NavArea = "dashboard" | "admin" | "platform"
 
 /**
  * `slug` is the tenant the dashboard area is showing (task 1.7): its pages
@@ -49,6 +50,15 @@ export function navGroups(
           { key: "databaseBackups", href: "/admin/database/backups", icon: Database },
           { key: "platformSettings", href: "/admin/settings", icon: SlidersHorizontal },
         ],
+      },
+      { key: "back", items: [{ key: "backToDashboard", href: DASHBOARD, icon: ArrowLeft, exact: true }] },
+    ]
+  }
+  if (area === "platform") {
+    return [
+      {
+        key: "platform",
+        items: [{ key: "tenants", href: "/platform/tenants", icon: Building2 }],
       },
       { key: "back", items: [{ key: "backToDashboard", href: DASHBOARD, icon: ArrowLeft, exact: true }] },
     ]

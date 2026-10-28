@@ -471,11 +471,13 @@
       "databaseMigrations": "Migration",
       "databaseBackups": "Bản sao lưu",
       "platformSettings": "Cài đặt",
+      "tenants": "Khách hàng",
       "groups": {
         "main": "Tổng quan",
         "workspace": "Không gian làm việc",
         "account": "Tài khoản",
         "admin": "Quản trị",
+        "platform": "Nền tảng",
         "back": "Quay lại"
       },
       "account": "Tài khoản",
@@ -637,6 +639,72 @@
       "errors": {
         "invalidEmail": "Nhập địa chỉ email hợp lệ.",
         "exists": "Địa chỉ này đã có trong danh sách."
+      }
+    }
+  },
+  "platform": {
+    "badge": "Nền tảng",
+    "tenants": {
+      "title": "Khách hàng",
+      "subtitle": "Mọi không gian làm việc trên nền tảng.",
+      "search": "Tìm theo tên hoặc slug…",
+      "colTenant": "Khách hàng",
+      "colStatus": "Trạng thái",
+      "colMembers": "Thành viên",
+      "colCreated": "Ngày tạo",
+      "empty": {
+        "title": "Chưa có khách hàng nào",
+        "description": "Không gian làm việc do nhân viên tạo sẽ xuất hiện ở đây."
+      },
+      "status": {
+        "PROVISIONING": "Đang khởi tạo",
+        "ACTIVE": "Hoạt động",
+        "PAST_DUE": "Quá hạn",
+        "SUSPENDED": "Đã tạm ngưng",
+        "CANCELED": "Đã hủy"
+      },
+      "create": {
+        "title": "Khách hàng mới",
+        "description": "Tạo không gian làm việc cho một tài khoản đã có; tài khoản đó là chủ sở hữu.",
+        "name": "Tên",
+        "namePlaceholder": "Rosy Nails",
+        "ownerEmail": "Email chủ sở hữu",
+        "ownerEmailPlaceholder": "owner@example.com"
+      },
+      "detail": {
+        "overview": "Tổng quan",
+        "slug": "Slug",
+        "created": "Ngày tạo",
+        "owner": "Chủ sở hữu",
+        "vertical": "Ngành",
+        "timeZone": "Múi giờ",
+        "currency": "Tiền tệ",
+        "members": "Thành viên ({count})",
+        "memberStatus": {
+          "active": "Hoạt động",
+          "suspended": "Đã tạm ngưng"
+        }
+      },
+      "suspend": {
+        "action": "Tạm ngưng",
+        "title": "Tạm ngưng khách hàng",
+        "description": "Tạm ngưng {name}? Thành viên sẽ mất quyền truy cập ở lượt tiếp theo.",
+        "reason": "Lý do",
+        "reasonPlaceholder": "Vì sao khách hàng này bị tạm ngưng?"
+      },
+      "reactivate": {
+        "action": "Kích hoạt lại",
+        "title": "Kích hoạt lại khách hàng",
+        "description": "Kích hoạt lại {name}? Thành viên được truy cập lại ở lượt tiếp theo.",
+        "reason": "Ghi chú (không bắt buộc)"
+      },
+      "errors": {
+        "nameRequired": "Tên là bắt buộc.",
+        "invalidEmail": "Nhập một địa chỉ email hợp lệ.",
+        "ownerNotFound": "Không có tài khoản nào với email này.",
+        "notFound": "Không tìm thấy khách hàng.",
+        "invalidStatus": "Trạng thái không hợp lệ.",
+        "reasonRequired": "Cần có lý do để tạm ngưng khách hàng."
       }
     }
   },

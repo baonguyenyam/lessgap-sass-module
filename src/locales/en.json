@@ -471,11 +471,13 @@
       "databaseMigrations": "Migrations",
       "databaseBackups": "Backups",
       "platformSettings": "Settings",
+      "tenants": "Tenants",
       "groups": {
         "main": "Overview",
         "workspace": "Workspace",
         "account": "Account",
         "admin": "Administration",
+        "platform": "Platform",
         "back": "Back"
       },
       "account": "Account",
@@ -637,6 +639,72 @@
       "errors": {
         "invalidEmail": "Enter a valid email address.",
         "exists": "That address is already on the list."
+      }
+    }
+  },
+  "platform": {
+    "badge": "Platform",
+    "tenants": {
+      "title": "Tenants",
+      "subtitle": "Every workspace on the platform.",
+      "search": "Search by name or slug…",
+      "colTenant": "Tenant",
+      "colStatus": "Status",
+      "colMembers": "Members",
+      "colCreated": "Created",
+      "empty": {
+        "title": "No tenants yet",
+        "description": "Workspaces created by staff appear here."
+      },
+      "status": {
+        "PROVISIONING": "Provisioning",
+        "ACTIVE": "Active",
+        "PAST_DUE": "Past due",
+        "SUSPENDED": "Suspended",
+        "CANCELED": "Canceled"
+      },
+      "create": {
+        "title": "New tenant",
+        "description": "Create a workspace for an existing account; that account becomes its owner.",
+        "name": "Name",
+        "namePlaceholder": "Rosy Nails",
+        "ownerEmail": "Owner email",
+        "ownerEmailPlaceholder": "owner@example.com"
+      },
+      "detail": {
+        "overview": "Overview",
+        "slug": "Slug",
+        "created": "Created",
+        "owner": "Owner",
+        "vertical": "Vertical",
+        "timeZone": "Time zone",
+        "currency": "Currency",
+        "members": "Members ({count})",
+        "memberStatus": {
+          "active": "Active",
+          "suspended": "Suspended"
+        }
+      },
+      "suspend": {
+        "action": "Suspend",
+        "title": "Suspend tenant",
+        "description": "Suspend {name}? Its members lose access on their next request.",
+        "reason": "Reason",
+        "reasonPlaceholder": "Why is this tenant being suspended?"
+      },
+      "reactivate": {
+        "action": "Reactivate",
+        "title": "Reactivate tenant",
+        "description": "Reactivate {name}? Its members get access back on their next request.",
+        "reason": "Note (optional)"
+      },
+      "errors": {
+        "nameRequired": "Name is required.",
+        "invalidEmail": "Enter a valid email address.",
+        "ownerNotFound": "No account exists with that email.",
+        "notFound": "Tenant not found.",
+        "invalidStatus": "Unknown status.",
+        "reasonRequired": "A reason is required to suspend a tenant."
       }
     }
   },

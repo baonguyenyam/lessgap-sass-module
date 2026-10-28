@@ -16,7 +16,7 @@ function Empty({ className, ...props }: React.ComponentProps<"div">) {
 
 function EmptyHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div data-slot="empty-header" className={cn("flex max-w-sm flex-col items-center gap-2", className)} {...props} />
+    <div data-slot="empty-header" className={cn("flex max-w-md flex-col items-center gap-2", className)} {...props} />
   )
 }
 
@@ -26,7 +26,7 @@ const emptyMediaVariants = cva(
     variants: {
       variant: {
         default: "bg-transparent",
-        icon: "flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground [&_svg:not([class*='size-'])]:size-4",
+        icon: "flex size-16 shrink-0 items-center justify-center rounded-full bg-muted text-foreground [&_svg:not([class*='size-'])]:size-8",
       },
     },
     defaultVariants: {
@@ -54,7 +54,7 @@ function EmptyTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="empty-title"
-      className={cn("font-heading text-sm font-medium tracking-tight", className)}
+      className={cn("font-heading text-lg font-semibold tracking-tight", className)}
       {...props}
     />
   )
@@ -77,7 +77,7 @@ function EmptyContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="empty-content"
-      className={cn("flex w-full max-w-sm min-w-0 flex-col items-center gap-2.5 text-sm text-balance", className)}
+      className={cn("flex w-full max-w-md min-w-0 flex-col items-center gap-2.5 text-sm text-balance", className)}
       {...props}
     />
   )

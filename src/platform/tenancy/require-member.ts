@@ -3,6 +3,7 @@ import { cache } from "react"
 import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
 import { requireUser } from "@/lib/auth"
+import { slugify } from "@/lib/slugify"
 import { AppError } from "@/platform/errors"
 import { LAST_TENANT_COOKIE, TENANT_SLUG_HEADER } from "@/platform/request-context"
 import type { TenantContext } from "@/platform/tenancy/context"
@@ -19,15 +20,6 @@ export type TenantMembership = {
   tenant: Tenant
   tenantId: string
 }
-
-const slugify = (text: string) =>
-  text
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/đ/g, "d")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "") || "workspace"
 
 /** The tenant slug of this request: the `/t/<slug>` path the proxy read, else the last one opened. */
 async function preferredTenantSlug(): Promise<string | null> {
@@ -169,7 +161,9 @@ export async function resolveTenantMember(
   permission?: TenantPermission
 ): Promise<TenantMemberContext> {
   const tenant = await db8.orm.public.Tenant.where({ slug }).first()
-  if (!tenant) throw new AppError("not_found")
+  // Suspended and canceled tenants answer not_found like an unknown slug: the
+  // member learns nothing about the tenant's state by probing it (task 1.10).
+  if (!tenant || tenant.status === "SUSPENDED" || tenant.status === "CANCELED") throw new AppError("not_found")
   const member = await db8.orm.public.Member.where({ organizationId: tenant.id, userId }).first()
   if (!member || member.status === "suspended") throw new AppError("not_found")
   if (permission) {

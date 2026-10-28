@@ -52,7 +52,17 @@ export function AppSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild size="lg">
-              <Link href={area === "admin" ? "/admin" : tenant ? tenantPath(tenant.slug) : "/dashboard"}>
+              <Link
+                href={
+                  area === "admin"
+                    ? "/admin"
+                    : area === "platform"
+                      ? "/platform"
+                      : tenant
+                        ? tenantPath(tenant.slug)
+                        : "/dashboard"
+                }
+              >
                 <Logo animated wordmarkClassName="group-data-[collapsible=icon]:hidden" />
               </Link>
             </SidebarMenuButton>

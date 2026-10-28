@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.25.0] - 2026-10-28
+
+**Platform staff get their own console at `/platform`.** This is a MINOR: `git pull`, `pnpm install`; no migration.
+
+### Added
+
+- **Platform console** (task 1.10): `/platform` opens only to users holding a `platformRole` — checked on the User row every request, so a revoked role closes the console at once; everyone else lands on their dashboard. The Tenants page lists every workspace with search and a status filter, and "New tenant" creates a workspace for an existing account (that account becomes the owner)
+- **Tenant detail and suspension**: a tenant's page shows its identity, status and members; staff can suspend it — a written reason is required and audited — and reactivate it. A suspended or canceled tenant answers 404 to its members on their next request, in the proxy before the page even streams, so nobody learns it exists by probing
+
 ## [2.24.0] - 2026-10-28
 
 **Every important change now leaves an audit row.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (a new `AuditLog` table).
