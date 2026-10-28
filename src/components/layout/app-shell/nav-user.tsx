@@ -48,10 +48,12 @@ export function NavUser({ name, email, image }: NavUserProps) {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              aria-label={t("open")}
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               {identity}
+              {/* Inside, so the accessible name keeps the visible name and
+                  email plus the action — label-content-name-mismatch. */}
+              <span className="sr-only">{t("open")}</span>
               <EllipsisVertical className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>

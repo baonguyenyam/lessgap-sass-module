@@ -18,7 +18,7 @@ const call = (auth?: string) =>
 
 beforeEach(() => {
   seedDemoData.mockReset()
-  seedDemoData.mockResolvedValue({ users: 17, subscriptions: 8, purchases: 1, projects: 12 })
+  seedDemoData.mockResolvedValue({ users: 17, subscriptions: 8, purchases: 1 })
   process.env.DEMO_MODE = "true"
   process.env.CRON_SECRET = "s3cret"
 })
@@ -32,7 +32,7 @@ describe("GET /api/cron/reset-demo", () => {
     const response = await call("Bearer s3cret")
     expect(response.status).toBe(200)
     const body = await response.json()
-    expect(body).toMatchObject({ status: "ok", users: 17, projects: 12 })
+    expect(body).toMatchObject({ status: "ok", users: 17, subscriptions: 8 })
     expect(seedDemoData).toHaveBeenCalledOnce()
   })
 

@@ -49,13 +49,16 @@ export function SearchDialog({
     <>
       <Button
         variant="outline"
-        aria-label={t("button")}
         className="size-8 justify-center px-0 text-muted-foreground sm:w-56 sm:justify-start sm:gap-2 sm:px-2"
         onClick={() => setOpen(true)}
       >
         <Search />
-        <span className="hidden flex-1 text-left sm:inline">{t("button")}</span>
-        <Kbd className="hidden sm:inline-flex">⌘K</Kbd>
+        <span className="sr-only sm:not-sr-only sm:flex-1 sm:text-left">{t("button")}</span>
+        {/* Decorative hint: kept out of the accessible name, which is the
+            button text — label-content-name-mismatch. */}
+        <Kbd className="hidden sm:inline-flex" aria-hidden="true">
+          ⌘K
+        </Kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen} title={t("title")} description={t("description")}>
         <Command>

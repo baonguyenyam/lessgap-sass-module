@@ -7,6 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.27.0] - 2026-10-28
+
+**The kit's Projects example is gone from the dashboard, and every account gets its own tenant.** This is a MINOR: `git pull`, `pnpm install`; then run `pnpm exec tsx scripts/backfills/20261028-platform-tenant-per-user.ts --apply` to give existing accounts a tenant (dry-run first without the flag).
+
+### Removed
+
+- **Projects**: the example resource leaves the product surface — the pages, nav entry, home card, onboarding checklist item and editing drawers are gone. The `Project` model and its data stay in the database for now and are still part of the account export
+
+### Added
+
+- **Tenant-per-user backfill** (task 1.12): a dry-run-first script creates a workspace for every account that has none — named after the user, slug from the name, the user as owner — and carries `stripeCustomerId` across. Idempotent, so it is safe to run again after a crash or on new data
+
 ## [2.26.0] - 2026-10-28
 
 **Platform staff can open a tenant's dashboard as its owner.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` — two nullable columns join `Session`.

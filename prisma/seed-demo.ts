@@ -23,10 +23,8 @@ async function main() {
   const { seedDemoData } = await import("@/lib/demo-seed")
   const { grantRootFromConfig } = await import("@/lib/root-accounts")
   try {
-    const { users, subscriptions, purchases, projects } = await seedDemoData()
-    console.log(
-      `Demo seed complete: ${users} users, ${subscriptions} subscriptions, ${purchases} purchases, ${projects} projects`
-    )
+    const { users, subscriptions, purchases } = await seedDemoData()
+    console.log(`Demo seed complete: ${users} users, ${subscriptions} subscriptions, ${purchases} purchases`)
     const roots = await grantRootFromConfig()
     if (roots > 0) console.log(`ROOT granted to ${roots} account(s) from ROOT_EMAILS`)
   } finally {

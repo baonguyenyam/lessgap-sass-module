@@ -28,12 +28,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ slug
   const subscription = entitlement.kind === "subscription" ? entitlement.subscription : null
   const lifetime = entitlement.kind === "lifetime" ? entitlement.purchase : null
 
-  const [projectCount, userRow] = await Promise.all([
-    db8.orm.public.Project.where({ userId: user.id })
-      .aggregate((a) => ({ n: a.count() }))
-      .then((r) => r.n),
-    db8.orm.public.User.select("name", "onboardingDismissedAt", "stripeCustomerId").where({ id: user.id }).first(),
-  ])
+  const userRow = await db8.orm.public.User.select("name", "onboardingDismissedAt", "stripeCustomerId")
+    .where({ id: user.id })
+    .first()
 
   // Formatted through next-intl rather than a hardcoded "en-US": a date is
   // part of the interface, and a locale that reads dates day-first would show
@@ -60,27 +57,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ slug
         <GetStartedChecklist
           slug={slug}
           hasName={Boolean(userRow?.name)}
-          hasProject={projectCount > 0}
           hasBilling={entitlement.kind !== "free" || Boolean(userRow?.stripeCustomerId)}
         />
       )}
-
-      <Card>
-        <CardHeader className="pb-4">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <CardTitle className="text-base">{t("projectsTitle")}</CardTitle>
-              <CardDescription>{t("projectsCount", { count: projectCount })}</CardDescription>
-            </div>
-            <Button asChild variant="outline">
-              <Link href={tenantPath(slug, "projects")}>
-                {projectCount === 0 ? t("projectsCreate") : t("projectsViewAll")}
-                <ArrowRight />
-              </Link>
-            </Button>
-          </div>
-        </CardHeader>
-      </Card>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Card>

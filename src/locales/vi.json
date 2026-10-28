@@ -113,39 +113,10 @@
     }
   },
   "dashboard": {
-    "projects": {
-      "title": "Dự án",
-      "subtitle": "Những công việc bạn đang thực hiện. Đây là tài nguyên mẫu.",
-      "newTitle": "Dự án mới",
-      "newDescription": "Tạo một dự án do bạn sở hữu.",
-      "noDescription": "Không có mô tả",
-      "searchPlaceholder": "Tìm kiếm dự án...",
-      "colName": "Tên",
-      "colUpdated": "Cập nhật",
-      "colCreated": "Ngày tạo",
-      "colActions": "Thao tác",
-      "description": "Mô tả",
-      "open": "Mở",
-      "edit": "Sửa",
-      "delete": "Xóa",
-      "editTitle": "Sửa dự án",
-      "deleteConfirm": {
-        "title": "Xóa các dự án đã chọn?",
-        "description": "Chúng sẽ bị xóa vĩnh viễn. Không thể hoàn tác."
-      },
-      "empty": {
-        "title": "Chưa có dự án",
-        "description": "Tạo dự án đầu tiên để bắt đầu."
-      }
-    },
     "home": {
       "greeting": "Chào mừng trở lại, {name}",
       "greetingFallback": "bạn",
       "subtitle": "Đây là những gì đang diễn ra với tài khoản của bạn.",
-      "projectsTitle": "Dự án",
-      "projectsCount": "{count, plural, =0 {Tạo dự án đầu tiên để bắt đầu.} one {Bạn có # dự án.} other {Bạn có # dự án.}}",
-      "projectsCreate": "Tạo một dự án",
-      "projectsViewAll": "Xem tất cả",
       "currentPlan": "Gói hiện tại",
       "planFree": "Miễn phí",
       "status": "Trạng thái",
@@ -167,7 +138,6 @@
       "checklistProgress": "Hoàn thành {done} / {total}",
       "checklistDismiss": "Ẩn danh sách công việc",
       "checklistName": "Thêm tên của bạn",
-      "checklistProject": "Tạo dự án đầu tiên",
       "checklistBilling": "Thiết lập thanh toán"
     },
     "settings": {
@@ -414,22 +384,6 @@
       },
       "noInvoicesTitle": "Chưa có hóa đơn"
     },
-    "projectDetail": {
-      "subtitle": "Chỉnh sửa chi tiết hoặc xóa dự án này.",
-      "detailsTitle": "Chi tiết",
-      "detailsDescription": "Cập nhật tên và mô tả dự án.",
-      "metadataTitle": "Dữ liệu hệ thống",
-      "created": "Đã tạo",
-      "updated": "Cập nhật lần cuối",
-      "dangerTitle": "Vùng nguy hiểm",
-      "dangerDescription": "Xóa dự án là vĩnh viễn và không thể hoàn tác.",
-      "delete": "Xóa dự án"
-    },
-    "projectEdit": {
-      "updated": "Đã cập nhật dự án",
-      "name": "Tên dự án",
-      "descriptionPlaceholder": "Dự án này nói về điều gì?"
-    },
     "profile": {
       "updated": "Đã cập nhật hồ sơ",
       "avatarAlt": "Ảnh đại diện",
@@ -455,7 +409,6 @@
     },
     "nav": {
       "dashboard": "Bảng điều khiển",
-      "projects": "Dự án",
       "billing": "Thanh toán",
       "settings": "Cài đặt",
       "overview": "Tổng quan",
@@ -1473,10 +1426,8 @@
     "rate_limited": "Quá nhiều yêu cầu. Hãy thử lại sau vài phút.",
     "payment_required": "Hãy cập nhật gói để tiếp tục.",
     "internal": "Đã xảy ra lỗi. Hãy thử lại.",
-    "projectNotFound": "Không tìm thấy dự án",
     "nameRequired": "Vui lòng nhập tên",
     "nameTooLong": "Tên quá dài",
-    "descriptionTooLong": "Mô tả quá dài",
     "invalidEmail": "Nhập địa chỉ email hợp lệ",
     "messageTooShort": "Vui lòng nhập chi tiết hơn (ít nhất 10 ký tự)",
     "checkTheForm": "Kiểm tra lại biểu mẫu và thử lại",

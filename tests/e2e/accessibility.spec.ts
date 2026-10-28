@@ -107,8 +107,8 @@ test.describe("accessibility", () => {
     await page.goto("/dashboard/settings")
     await scan(page, "settings")
 
-    await page.goto("/dashboard/projects")
-    await scan(page, "projects")
+    await page.goto("/dashboard/members")
+    await scan(page, "members")
 
     await page.goto("/dashboard/billing")
     await scan(page, "billing")

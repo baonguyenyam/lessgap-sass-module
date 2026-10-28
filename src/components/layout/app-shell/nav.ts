@@ -6,7 +6,6 @@ import {
   CreditCard,
   Database,
   HardDrive,
-  FolderKanban,
   KeyRound,
   LayoutGrid,
   Mail,
@@ -66,10 +65,7 @@ export function navGroups(
   return [
     {
       key: "main",
-      items: [
-        { key: "dashboard", href: t(), icon: LayoutGrid, exact: true },
-        { key: "projects", href: t("projects"), icon: FolderKanban },
-      ],
+      items: [{ key: "dashboard", href: t(), icon: LayoutGrid, exact: true }],
     },
     {
       key: "workspace",

@@ -27,10 +27,10 @@ test("each account lands on its own tenant, and a member of A gets 404 on B (T6)
   expect(a.home).not.toBe(b.home)
 
   // `/dashboard` and the old deep links still work: they redirect into the tenant.
-  await a.page.goto("/dashboard/projects")
-  await expect(a.page).toHaveURL(new RegExp(`${a.home}/projects$`))
+  await a.page.goto("/dashboard/members")
+  await expect(a.page).toHaveURL(new RegExp(`${a.home}/members$`))
 
-  const response = await b.page.goto(`${a.home}/projects`)
+  const response = await b.page.goto(`${a.home}/members`)
   await expect(b.page.getByRole("heading", { name: /page not found/i })).toBeVisible()
   expect(response?.status()).toBe(404)
 })

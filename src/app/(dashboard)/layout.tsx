@@ -40,7 +40,6 @@ export default async function DashboardLayout({ children }: { children: React.Re
         base: { name: tNav("dashboard"), href: tenantPath(slug) },
         alsoUnder: "/dashboard",
         labels: {
-          projects: tNav("projects"),
           members: tNav("members"),
           newsletter: tNav("newsletter"),
           roles: tNav("roles"),

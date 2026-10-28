@@ -14,18 +14,15 @@ type ChecklistItem = { label: string; done: boolean; href: Route }
 export async function GetStartedChecklist({
   slug,
   hasName,
-  hasProject,
   hasBilling,
 }: {
   slug: string
   hasName: boolean
-  hasProject: boolean
   hasBilling: boolean
 }) {
   const t = await getTranslations("dashboard.home")
   const items: ChecklistItem[] = [
     { label: t("checklistName"), done: hasName, href: "/dashboard/account" },
-    { label: t("checklistProject"), done: hasProject, href: tenantPath(slug, "projects") },
     { label: t("checklistBilling"), done: hasBilling, href: tenantPath(slug, "billing") },
   ]
   const doneCount = items.filter((i) => i.done).length

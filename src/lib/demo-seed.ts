@@ -107,7 +107,6 @@ const fakeUsers: {
   plan?: "starter-monthly" | "pro-monthly" | "pro-yearly"
   subStatus?: SubscriptionStatus
   lifetime?: boolean
-  projects: string[]
 }[] = [
   {
     name: "Ada Lovelace",
@@ -115,7 +114,6 @@ const fakeUsers: {
     signedUpDaysAgo: 88,
     plan: "pro-yearly",
     subStatus: "ACTIVE",
-    projects: ["Analytics engine", "Docs portal"],
   },
   {
     name: "Grace Hopper",
@@ -123,14 +121,12 @@ const fakeUsers: {
     signedUpDaysAgo: 80,
     plan: "pro-monthly",
     subStatus: "ACTIVE",
-    projects: ["Compiler playground"],
   },
   {
     name: "Alan Turing",
     email: "alan@example.com",
     signedUpDaysAgo: 74,
     lifetime: true,
-    projects: ["Enigma dashboard", "Morphogenesis lab", "Chess bot"],
   },
   {
     name: "Margaret Hamilton",
@@ -138,16 +134,14 @@ const fakeUsers: {
     signedUpDaysAgo: 66,
     plan: "pro-monthly",
     subStatus: "ACTIVE",
-    projects: ["Guidance system"],
   },
-  { name: "Linus Chen", email: "linus@example.com", signedUpDaysAgo: 59, projects: [] },
+  { name: "Linus Chen", email: "linus@example.com", signedUpDaysAgo: 59 },
   {
     name: "Sofia Almeida",
     email: "sofia@example.com",
     signedUpDaysAgo: 51,
     plan: "pro-monthly",
     subStatus: "PAST_DUE",
-    projects: ["Churn radar"],
   },
   {
     name: "Yuki Tanaka",
@@ -155,16 +149,14 @@ const fakeUsers: {
     signedUpDaysAgo: 45,
     plan: "pro-yearly",
     subStatus: "ACTIVE",
-    projects: ["Design tokens", "Icon pipeline"],
   },
-  { name: "Omar Haddad", email: "omar@example.com", signedUpDaysAgo: 38, projects: ["Side project"] },
+  { name: "Omar Haddad", email: "omar@example.com", signedUpDaysAgo: 38 },
   {
     name: "Elena Petrova",
     email: "elena@example.com",
     signedUpDaysAgo: 30,
     plan: "pro-monthly",
     subStatus: "CANCELED",
-    projects: [],
   },
   {
     name: "Marco Rossi",
@@ -172,7 +164,6 @@ const fakeUsers: {
     signedUpDaysAgo: 24,
     plan: "starter-monthly",
     subStatus: "ACTIVE",
-    projects: ["Invoice generator"],
   },
   {
     name: "Priya Sharma",
@@ -180,19 +171,17 @@ const fakeUsers: {
     signedUpDaysAgo: 18,
     plan: "pro-monthly",
     subStatus: "TRIALING",
-    projects: ["Feedback widget"],
   },
-  { name: "Tom Becker", email: "tom@example.com", signedUpDaysAgo: 12, projects: [] },
+  { name: "Tom Becker", email: "tom@example.com", signedUpDaysAgo: 12 },
   {
     name: "Aisha Bello",
     email: "aisha@example.com",
     signedUpDaysAgo: 7,
     plan: "starter-monthly",
     subStatus: "ACTIVE",
-    projects: ["Launch checklist"],
   },
-  { name: "Jonas Weber", email: "jonas@example.com", signedUpDaysAgo: 3, projects: ["Weekend MVP"] },
-  { name: "Lucia Fernandez", email: "lucia@example.com", signedUpDaysAgo: 1, projects: [] },
+  { name: "Jonas Weber", email: "jonas@example.com", signedUpDaysAgo: 3 },
+  { name: "Lucia Fernandez", email: "lucia@example.com", signedUpDaysAgo: 1 },
   // A wider paying population, spread across the twelve weeks the chart covers,
   // so the line climbs instead of sitting on the axis. Dates are what make it a
   // curve; the plan mix is what gives it steps of different heights.
@@ -202,7 +191,6 @@ const fakeUsers: {
     signedUpDaysAgo: 84,
     plan: "pro-monthly",
     subStatus: "ACTIVE",
-    projects: ["Fleet tracker"],
   },
   {
     name: "Amara Okafor",
@@ -210,7 +198,6 @@ const fakeUsers: {
     signedUpDaysAgo: 77,
     plan: "pro-yearly",
     subStatus: "ACTIVE",
-    projects: ["Grant tracker", "Field notes"],
   },
   {
     name: "Ines Moreau",
@@ -218,7 +205,6 @@ const fakeUsers: {
     signedUpDaysAgo: 71,
     plan: "pro-monthly",
     subStatus: "ACTIVE",
-    projects: ["Menu planner"],
   },
   {
     name: "Kwame Mensah",
@@ -226,7 +212,6 @@ const fakeUsers: {
     signedUpDaysAgo: 64,
     plan: "pro-monthly",
     subStatus: "ACTIVE",
-    projects: ["Route optimiser"],
   },
   {
     name: "Hana Kobayashi",
@@ -234,7 +219,6 @@ const fakeUsers: {
     signedUpDaysAgo: 57,
     plan: "starter-monthly",
     subStatus: "ACTIVE",
-    projects: ["Recipe box"],
   },
   {
     name: "Diego Ramirez",
@@ -242,7 +226,6 @@ const fakeUsers: {
     signedUpDaysAgo: 49,
     plan: "pro-monthly",
     subStatus: "ACTIVE",
-    projects: ["Match stats", "Team wiki"],
   },
   {
     name: "Freya Nilsen",
@@ -250,7 +233,6 @@ const fakeUsers: {
     signedUpDaysAgo: 43,
     plan: "pro-yearly",
     subStatus: "ACTIVE",
-    projects: ["Trail atlas"],
   },
   {
     name: "Samir Farouk",
@@ -258,7 +240,6 @@ const fakeUsers: {
     signedUpDaysAgo: 36,
     plan: "pro-monthly",
     subStatus: "ACTIVE",
-    projects: ["Invoice inbox"],
   },
   {
     name: "Clara Bianchi",
@@ -266,7 +247,6 @@ const fakeUsers: {
     signedUpDaysAgo: 29,
     plan: "pro-monthly",
     subStatus: "ACTIVE",
-    projects: ["Studio bookings"],
   },
   {
     name: "Ravi Menon",
@@ -274,7 +254,6 @@ const fakeUsers: {
     signedUpDaysAgo: 22,
     plan: "starter-monthly",
     subStatus: "ACTIVE",
-    projects: ["Habit log"],
   },
   {
     name: "Mia Sorensen",
@@ -282,7 +261,6 @@ const fakeUsers: {
     signedUpDaysAgo: 16,
     plan: "pro-monthly",
     subStatus: "ACTIVE",
-    projects: ["Client portal"],
   },
   {
     name: "Theo Vasquez",
@@ -290,7 +268,6 @@ const fakeUsers: {
     signedUpDaysAgo: 11,
     plan: "pro-monthly",
     subStatus: "ACTIVE",
-    projects: ["Deploy board"],
   },
   {
     name: "Zara Haddadi",
@@ -298,7 +275,6 @@ const fakeUsers: {
     signedUpDaysAgo: 6,
     plan: "pro-yearly",
     subStatus: "ACTIVE",
-    projects: ["Podcast notes"],
   },
   {
     name: "Felix Braun",
@@ -306,7 +282,6 @@ const fakeUsers: {
     signedUpDaysAgo: 2,
     plan: "pro-monthly",
     subStatus: "TRIALING",
-    projects: [],
   },
 ]
 
@@ -314,11 +289,10 @@ export type DemoSeedResult = {
   users: number
   subscriptions: number
   purchases: number
-  projects: number
 }
 
 export async function seedDemoData(): Promise<DemoSeedResult> {
-  const { Account, Plan, Project, Purchase, Subscription, User } = db8.orm.public
+  const { Account, Plan, Purchase, Subscription, User } = db8.orm.public
 
   // Plans first (same example plans as the regular seed)
   const planBySlug = new Map<string, { id: string; price: number }>()
@@ -397,15 +371,6 @@ export async function seedDemoData(): Promise<DemoSeedResult> {
       createdAt,
       stripeCustomerId: hasBilling ? `cus_demo_${String(++customerCounter).padStart(3, "0")}` : null,
     })
-    for (const [i, name] of fake.projects.entries()) {
-      await Project.create({
-        userId: user.id,
-        name,
-        description: "Demo project (seeded data)",
-        createdAt: daysAgo(Math.max(fake.signedUpDaysAgo - 1 - i * 2, 0)),
-      })
-    }
-
     if (fake.plan && fake.subStatus) {
       const plan = planBySlug.get(fake.plan)!
       const periodDays = fake.plan === "pro-yearly" ? 365 : 30
@@ -440,12 +405,11 @@ export async function seedDemoData(): Promise<DemoSeedResult> {
     }
   }
 
-  const [users, subscriptions, purchases, projects] = await Promise.all([
+  const [users, subscriptions, purchases] = await Promise.all([
     User.aggregate((a) => ({ n: a.count() })),
     Subscription.aggregate((a) => ({ n: a.count() })),
     Purchase.aggregate((a) => ({ n: a.count() })),
-    Project.aggregate((a) => ({ n: a.count() })),
   ])
 
-  return { users: users.n, subscriptions: subscriptions.n, purchases: purchases.n, projects: projects.n }
+  return { users: users.n, subscriptions: subscriptions.n, purchases: purchases.n }
 }
