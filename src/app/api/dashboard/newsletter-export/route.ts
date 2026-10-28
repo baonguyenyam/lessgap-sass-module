@@ -1,4 +1,6 @@
 import { toDate } from "@/lib/timestamps"
+import { consumeLimit } from "@/platform/entitlements/usage"
+import { AppError } from "@/platform/errors"
 import { tenantSubscribers } from "@/platform/newsletter/tenant-list"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 
@@ -9,6 +11,14 @@ export async function GET() {
     tenantId = (await requireTenantContext("newsletter", "view")).tenantId
   } catch {
     return new Response("Not found", { status: 404 })
+  }
+  try {
+    await consumeLimit({ tenantId }, "newsletter.exports.monthly", 1)
+  } catch (error) {
+    if (error instanceof AppError && error.code === "limit_reached") {
+      return new Response("Export limit reached for this month", { status: 429 })
+    }
+    throw error
   }
   const subs = await tenantSubscribers(tenantId)
     .orderBy((s) => s.createdAt.asc())

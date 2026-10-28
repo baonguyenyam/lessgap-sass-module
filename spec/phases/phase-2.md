@@ -60,7 +60,7 @@ Settings → Modules: enable, disable, export data, and schedule a purge with a
 - **Tests:** unit for throws and `LimitReached`; integration: two concurrent `consumeLimit` calls never exceed the limit (roadmap exit criterion).
 - **Checks:** `pnpm test`, `pnpm test:integration`.
 - **Done when:** the concurrency test is green and no code path can take a unit outside the transaction.
-- [ ] done
+- [x] done (`consumeLimit(ctx, key, n, tx?)` in `src/platform/entitlements/usage.ts`: resolves the limit through `getEntitlements`, no-ops on `null` (unlimited), then takes `n` with one atomic `INSERT … ON CONFLICT DO UPDATE SET used = used + n WHERE used + n <= limit` — affectedRows 0 means someone else took the last unit and `limit_reached` throws. `tx` is the guarded write's transaction so counter and write commit or roll back together. Only `kind: "limit"` features with a `period` are metered (`roles.max`-style counts are not consumable); `"month"` buckets UTC months. `requireFeature` was already the 2.2 shape — `feature_unavailable`. First real consumer wired: `newsletter.exports.monthly` on the subscribers CSV export (429 over the cap). Concurrency test: 10 parallel calls on a limit of 5 take exactly 5, counter reads 5.)
 
 ### 2.4 — Platform switches page
 - **Goal:** the initial switch set exists (`signup.*`, `maintenance.*`, `feature.*`, `chatbot.provider`) and staff edit `PlatformSwitch` rows in `/platform/settings` or a switches page — with the cache invalidation spec/04 requires, and an audit row per change.

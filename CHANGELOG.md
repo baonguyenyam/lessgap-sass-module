@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.32.0] - 2026-10-28
+
+**Metered limits exist now.** This is a MINOR: `git pull`, `pnpm install` — no migration.
+
+### Added
+
+- **`consumeLimit(tenant, key, n)`** takes units of a `period` limit with one atomic conditional write, inside the guarded write's transaction — two requests cannot both take the last unit. Unlimited (`null`) consumes nothing; over the cap throws `limit_reached`. First caller wired: the subscribers CSV export counts against `newsletter.exports.monthly`
+
 ## [2.31.0] - 2026-10-28
 
 **What a tenant may use is now resolved from its plan, add-ons and staff overrides — not a kit-wide default.** This is a MINOR: `git pull`, `pnpm install` — no migration.

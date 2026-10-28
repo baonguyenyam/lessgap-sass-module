@@ -9,12 +9,17 @@
  */
 export type FeatureDefinition =
   | { kind: "boolean"; default: boolean; requires?: readonly string[] }
-  | { kind: "limit"; default: number | null; requires?: readonly string[] }
+  // `period` ("month") makes the limit metered through `UsageCounter`:
+  // consumed with `consumeLimit`, reset by the period bucket, not counted
+  // from live rows.
+  | { kind: "limit"; default: number | null; period?: string; requires?: readonly string[] }
 
 export const FEATURES = {
   // Custom roles ("nhóm quyền"), spec/adr/0019: the capability and its size.
   "roles.custom": { kind: "boolean", default: true },
   "roles.max": { kind: "limit", default: 10, requires: ["roles.custom"] },
+  // Metered example wired to the subscribers CSV export (task 2.3).
+  "newsletter.exports.monthly": { kind: "limit", default: null, period: "month" },
 } as const satisfies Record<string, FeatureDefinition>
 
 export type FeatureKey = keyof typeof FEATURES
