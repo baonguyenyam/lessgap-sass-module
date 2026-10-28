@@ -15,6 +15,7 @@ import { siteConfig } from "@/config/site"
 import { emailEnabled } from "@/lib/email-transport"
 import { enabledOAuthProviders, oauthCredentials } from "@/lib/oauth-providers"
 import { canSwitchAs, isRole } from "@/lib/roles"
+import { audit, platformAuditContext } from "@/platform/audit"
 import { getPlatformSettings } from "@/platform/settings/store"
 import { tenantAc, tenantRoles } from "@/platform/tenancy/permissions"
 
@@ -192,6 +193,13 @@ const switchAs = () =>
           })
           deleteSessionCookie(ctx, true)
           await setSessionCookie(ctx, { session, user: target }, true)
+          // Task 1.9: the switch is audited wherever it started — the server
+          // action or a direct call to this endpoint.
+          await audit(platformAuditContext(actor.user.id), {
+            action: "platform.switch_as.started",
+            targetType: "user",
+            targetId: target.id,
+          })
           return ctx.json({ ok: true })
         }
       ),
@@ -206,6 +214,12 @@ const switchAs = () =>
 
         await ctx.context.internalAdapter.deleteSession(current.session.token)
         expireCookie(ctx, keep)
+        // Task 1.9: audited like the start, whoever the restored session is.
+        await audit(platformAuditContext(switchedBy), {
+          action: "platform.switch_as.stopped",
+          targetType: "user",
+          targetId: current.user.id,
+        })
         // The ROOT session expired or was revoked meanwhile: end the switched
         // session anyway and leave the browser signed out, never stuck as the
         // other account.

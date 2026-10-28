@@ -391,6 +391,27 @@ trialEndsAt          TimestampString(3)?
     @@index([email], map: "Invitation_email_idx")
   }
 
+  // "Who changed this?" (spec/13-conventions.md, "Audit"; task 1.9). One row
+  // per change, written by `audit()` in src/platform/audit: members, roles,
+  // suspension, impersonation. tenantId is for filtering, not ownership —
+  // platform-private, like ErrorReport, so a deleted tenant keeps its trail.
+  model AuditLog {
+    id         String             @id(map: "AuditLog_pkey") @onCreate(uuid(7))
+    tenantId   String?
+    actorId    String?
+    // member | platform | customer | system
+    actorKind  String
+    // "<module>.<entity>.<verb>", e.g. "tenancy.member.role_changed"
+    action     String
+    targetType String?
+    targetId   String?
+    data       Json?
+    reason     String?
+    createdAt  TimestampString(3) @default(now())
+
+    @@index([tenantId, createdAt], map: "AuditLog_tenantId_createdAt_idx")
+  }
+
   // Custom permission groups ("nhóm quyền") written only through the plugin's
   // dynamicAccessControl API — never by hand (ADR 0019).
   model OrganizationRole {

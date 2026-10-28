@@ -7,6 +7,7 @@ import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
 import { inviteMemberSchema } from "@/lib/schemas/tenant"
 import { mayGrantRole } from "@/lib/invitations"
+import { audit, memberAuditContext } from "@/platform/audit"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { tenantRoleKeys } from "@/platform/tenancy/invitations"
 import { memberCan } from "@/platform/tenancy/permissions"
@@ -55,8 +56,9 @@ export async function inviteMember(values: unknown): Promise<{ error?: string }>
   await db8.orm.public.Invitation.where({ organizationId: ctx.tenantId, email: parsed.data.email })
     .where((i) => i.status.neq("pending"))
     .delete()
+  let invitation
   try {
-    await auth.api.createInvitation({
+    invitation = await auth.api.createInvitation({
       headers: await headers(),
       body: { email: parsed.data.email, role: parsed.data.role, organizationId: ctx.tenantId },
     })
@@ -65,6 +67,12 @@ export async function inviteMember(values: unknown): Promise<{ error?: string }>
     if (refusal) return { error: t(refusal) }
     throw error
   }
+  await audit(memberAuditContext(ctx), {
+    action: "tenancy.member.invited",
+    targetType: "invitation",
+    targetId: invitation.id,
+    data: { email: parsed.data.email, role: parsed.data.role },
+  })
   revalidatePath(MEMBERS, "page")
   return {}
 }
@@ -87,6 +95,12 @@ export async function setMemberRole(memberId: string, role: string): Promise<{ e
   if (target.role === "owner" && (await ownerCount(ctx.tenantId)) <= 1) return { error: t("lastOwner") }
 
   await auth.api.updateMemberRole({ headers: await headers(), body: { memberId, role } })
+  await audit(memberAuditContext(ctx), {
+    action: "tenancy.member.role_changed",
+    targetType: "member",
+    targetId: memberId,
+    data: { from: target.role, to: role },
+  })
   revalidatePath(MEMBERS, "page")
   return {}
 }
@@ -112,6 +126,12 @@ export async function removeMembers(memberIds: string[]): Promise<{ removed: num
       owners -= 1
     }
     await auth.api.removeMember({ headers: await headers(), body: { memberIdOrEmail: target.id } })
+    await audit(memberAuditContext(ctx), {
+      action: "tenancy.member.removed",
+      targetType: "member",
+      targetId: target.id,
+      data: { userId: target.userId, role: target.role },
+    })
     removed += 1
   }
   revalidatePath(MEMBERS, "page")
@@ -129,12 +149,20 @@ export async function setMembersSuspended(memberIds: string[], suspended: boolea
 
   const inTenant = db8.orm.public.Member.where({ organizationId: ctx.tenantId })
   const targets = await inTenant.where((m) => m.id.in(ids)).all()
-  const allowed = targets.filter((m) => m.userId !== ctx.user.id && m.role !== "owner").map((m) => m.id)
+  const allowed = targets.filter((m) => m.userId !== ctx.user.id && m.role !== "owner")
   if (allowed.length === 0) return { changed: 0 }
 
   const changed = await inTenant
-    .where((m) => m.id.in(allowed))
+    .where((m) => m.id.in(allowed.map((m) => m.id)))
     .updateAndCount({ status: suspended ? "suspended" : "active" })
+  for (const target of allowed) {
+    await audit(memberAuditContext(ctx), {
+      action: suspended ? "tenancy.member.suspended" : "tenancy.member.reactivated",
+      targetType: "member",
+      targetId: target.id,
+      data: { userId: target.userId },
+    })
+  }
   revalidatePath(MEMBERS, "page")
   return { changed }
 }
@@ -151,6 +179,12 @@ export async function cancelMemberInvitation(invitationId: string): Promise<{ er
   if (!invite) return { error: t("notFound") }
 
   await auth.api.cancelInvitation({ headers: await headers(), body: { invitationId } })
+  await audit(memberAuditContext(ctx), {
+    action: "tenancy.invitation.canceled",
+    targetType: "invitation",
+    targetId: invitationId,
+    data: { email: invite.email },
+  })
   revalidatePath(MEMBERS, "page")
   return {}
 }

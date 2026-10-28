@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.24.0] - 2026-10-28
+
+**Every important change now leaves an audit row.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (a new `AuditLog` table).
+
+### Added
+
+- **Audit log** (task 1.9): a platform-private `AuditLog` table and `audit(ctx, event)`, which writes exactly one row per audited change — actor, tenant, action, target, data and reason. Inviting, changing or removing members, suspending or reactivating them, withdrawing an invitation, creating, editing or deleting a tenant role, and every Switch As start and stop now write rows; a bulk action writes one row per member or role it changed. Tenant suspension and impersonation wire in with the platform console
+
 ## [2.23.0] - 2026-10-28
 
 **Invite people to a workspace by email, and build roles from grouped permissions.** This is a MINOR: `git pull`, `pnpm install`; no migration.

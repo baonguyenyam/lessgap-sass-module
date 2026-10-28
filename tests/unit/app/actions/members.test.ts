@@ -23,6 +23,7 @@ const db = (await import("@/lib/db8")) as unknown as Db8Mock
 beforeEach(() => {
   db.reset()
   Object.values(api).forEach((fn) => fn.mockReset())
+  api.createInvitation.mockResolvedValue({ id: "inv-1" })
   ctx.member.role = "owner"
   memberCan.mockReset().mockResolvedValue(true)
   db.fn("OrganizationRole.all").mockResolvedValue([{ role: "front-desk" }])
@@ -41,6 +42,27 @@ describe("inviteMember", () => {
     expect(api.createInvitation).toHaveBeenCalledWith(
       expect.objectContaining({ body: { email: "a@example.com", role: "front-desk", organizationId: "t1" } })
     )
+  })
+
+  it("writes one audit row for the invite, and none for a refusal", async () => {
+    await inviteMember({ email: "a@example.com", role: "staff" })
+    expect(db.fn("AuditLog.create")).toHaveBeenCalledTimes(1)
+    expect(db.fn("AuditLog.create")).toHaveBeenCalledWith(
+      expect.objectContaining({
+        tenantId: "t1",
+        actorId: "u-me",
+        actorKind: "member",
+        action: "tenancy.member.invited",
+        targetType: "invitation",
+        targetId: "inv-1",
+        data: { email: "a@example.com", role: "staff" },
+      })
+    )
+
+    memberCan.mockResolvedValue(false)
+    ctx.member.role = "manager"
+    await inviteMember({ email: "b@example.com", role: "staff" })
+    expect(db.fn("AuditLog.create")).toHaveBeenCalledTimes(1)
   })
 })
 
@@ -98,6 +120,14 @@ describe("setMemberRole", () => {
     expect(api.updateMemberRole).toHaveBeenCalledWith(
       expect.objectContaining({ body: { memberId: "m2", role: "manager" } })
     )
+    expect(db.fn("AuditLog.create")).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: "tenancy.member.role_changed",
+        targetType: "member",
+        targetId: "m2",
+        data: { from: "staff", to: "manager" },
+      })
+    )
   })
 })
 
@@ -112,6 +142,10 @@ describe("removeMembers", () => {
     await expect(removeMembers(["m-me", "m-owner", "m-staff"])).resolves.toEqual({ removed: 1 })
     expect(api.removeMember).toHaveBeenCalledTimes(1)
     expect(api.removeMember).toHaveBeenCalledWith(expect.objectContaining({ body: { memberIdOrEmail: "m-staff" } }))
+    expect(db.fn("AuditLog.create")).toHaveBeenCalledTimes(1)
+    expect(db.fn("AuditLog.create")).toHaveBeenCalledWith(
+      expect.objectContaining({ action: "tenancy.member.removed", targetType: "member", targetId: "m-staff" })
+    )
   })
 })
 
@@ -127,6 +161,10 @@ describe("setMembersSuspended", () => {
     const update = db.call("Member.updateAndCount")
     expect(update?.chain[0]).toEqual(["where", [{ organizationId: "t1" }]])
     expect(update?.args).toEqual([{ status: "suspended" }])
+    expect(db.fn("AuditLog.create")).toHaveBeenCalledTimes(1)
+    expect(db.fn("AuditLog.create")).toHaveBeenCalledWith(
+      expect.objectContaining({ action: "tenancy.member.suspended", targetId: "m-staff" })
+    )
   })
 
   it("does nothing when only protected members are picked", async () => {
@@ -142,11 +180,19 @@ describe("cancelMemberInvitation", () => {
     await expect(cancelMemberInvitation("i-other")).resolves.toEqual({ error: "notFound" })
     expect(api.cancelInvitation).not.toHaveBeenCalled()
 
-    db.fn("Invitation.first").mockResolvedValue({ id: "i1" })
+    db.fn("Invitation.first").mockResolvedValue({ id: "i1", email: "a@example.com" })
     await expect(cancelMemberInvitation("i1")).resolves.toEqual({})
     expect(db.call("Invitation.first")?.chain).toEqual([
       ["where", [{ id: "i1", organizationId: "t1", status: "pending" }]],
     ])
     expect(api.cancelInvitation).toHaveBeenCalledWith(expect.objectContaining({ body: { invitationId: "i1" } }))
+    expect(db.fn("AuditLog.create")).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: "tenancy.invitation.canceled",
+        targetType: "invitation",
+        targetId: "i1",
+        data: { email: "a@example.com" },
+      })
+    )
   })
 })

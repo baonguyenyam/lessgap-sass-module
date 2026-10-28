@@ -2,6 +2,12 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-28 · tests · Forwarded `set-cookie` headers: the empty delete wins
+- **Symptom:** `auth.api.switchAsStop` answered BAD_REQUEST in an integration test that rebuilt a `cookie` header from the start response's `set-cookie` list.
+- **Cause:** the start endpoint emits `session_token=` (delete) before the real `session_token=<value>`; concatenating every `name=value` left the empty one first, and the parser took it.
+- **Fix:** dedupe by cookie name and drop empty values, then join.
+- **Rule:** when a test forwards `set-cookie` headers back as one `cookie` header, keep the last non-empty value per name — delete cookies are part of the response too.
+
 ### 2026-10-28 · better auth · `jsonb` columns come back parsed, and Better Auth parses them again
 - **Symptom:** `SyntaxError: "[object Object]" is not valid JSON` in the organization plugin's `hasPermission`, on `createInvitation` in a tenant with a custom role.
 - **Cause:** `OrganizationRole.permission` is `jsonb`; node-postgres parses JSON columns, while Better Auth declares the field a string and calls `JSON.parse`.

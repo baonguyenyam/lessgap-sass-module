@@ -7,7 +7,9 @@ vi.mock("@/auth", () => ({ auth: { api } }))
 vi.mock("next/headers", () => ({ headers: async () => new Headers() }))
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }))
 vi.mock("next-intl/server", () => ({ getTranslations: async () => (key: string) => key }))
-vi.mock("@/platform/tenancy/require-member", () => ({ requireTenantContext: async () => ({ tenantId: "t1" }) }))
+vi.mock("@/platform/tenancy/require-member", () => ({
+  requireTenantContext: async () => ({ tenantId: "t1", user: { id: "u-me" } }),
+}))
 vi.mock("@/platform/tenancy/permissions", () => ({
   ROLE_PERMISSIONS: { owner: {}, manager: {}, staff: {} },
   permissionsAreDeclared: (p: Record<string, string[]>) => Object.keys(p).every((r) => r === "projects"),
@@ -72,11 +74,25 @@ describe("saveTenantRole", () => {
     expect(api.createOrgRole).toHaveBeenCalledWith(
       expect.objectContaining({ body: { organizationId: "t1", role: "desk", permission: { projects: ["view"] } } })
     )
+    expect(db.fn("AuditLog.create")).toHaveBeenCalledWith(
+      expect.objectContaining({
+        tenantId: "t1",
+        actorId: "u-me",
+        actorKind: "member",
+        action: "tenancy.role.created",
+        targetType: "role",
+        targetId: "desk",
+        data: { permission: { projects: ["view"] } },
+      })
+    )
     await expect(saveTenantRole("desk", { role: "renamed", permissions: ["projects.edit"] })).resolves.toEqual({})
     expect(api.updateOrgRole).toHaveBeenCalledWith(
       expect.objectContaining({
         body: { organizationId: "t1", roleName: "desk", data: { permission: { projects: ["edit"] } } },
       })
+    )
+    expect(db.fn("AuditLog.create")).toHaveBeenCalledWith(
+      expect.objectContaining({ action: "tenancy.role.updated", targetId: "desk" })
     )
   })
 })
@@ -87,6 +103,10 @@ describe("deleteTenantRoles", () => {
     await expect(deleteTenantRoles(["owner", "busy", "empty"])).resolves.toEqual({ deleted: 1 })
     expect(api.deleteOrgRole).toHaveBeenCalledWith(
       expect.objectContaining({ body: { organizationId: "t1", roleName: "empty" } })
+    )
+    expect(db.fn("AuditLog.create")).toHaveBeenCalledTimes(1)
+    expect(db.fn("AuditLog.create")).toHaveBeenCalledWith(
+      expect.objectContaining({ action: "tenancy.role.deleted", targetType: "role", targetId: "empty" })
     )
   })
 })

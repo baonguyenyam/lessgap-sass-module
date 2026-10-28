@@ -94,7 +94,7 @@ Plans and limits (phase 2), sites and domains (phase 3), any business module (ph
 - **Goal:** `AuditLog` model and `audit()` writer; used by members, roles, suspension, impersonation.
 - **Files:** schema, migration, `src/platform/audit/*`, tests.
 - **Tests:** each audited action writes exactly one row with actor, tenant and reason where required.
-- [ ] done
+- [x] done (`AuditLog` (platform-private, nullable `tenantId` for filtering), migration `platform_audit_log`; `audit(ctx, event)` in `src/platform/audit` writes one row per change and never throws — a failed write is logged, the change it records stands. Members (invite, role change, remove, suspend/reactivate, cancel invitation) and roles (create, update, delete) write through `memberAuditContext`, one row per changed target in bulk actions; Switch As start and stop write inside the plugin endpoints (`platform.switch_as.*`, no tenant), so a direct API call is recorded too. Tenant suspension and impersonation wire in at 1.10/1.11 — `reason` already exists for them. Unit: the writer and every members/roles action. Integration (`audit.test.ts`): a row read back from the real table, Switch As start and stop rows through real sessions. **Shipped differently:** the id is `uuid(7)`, not cuid — an append-only high-volume table follows ADR 0013; and the call is `audit(ctx, event)` with an event object rather than `audit(ctx, action, target, data)`.)
 
 ### 1.10 — Platform console skeleton
 - **Goal:** `/platform` for platform staff: tenants list (search, status), tenant detail, create tenant, suspend/reactivate.
