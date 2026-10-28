@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.45.0] - 2026-10-28
+
+**Every tenant site is crawlable and publishes in under a minute.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **Per-host `robots.txt` and `sitemap.xml`** — a site host allows crawling and links its sitemap (canonical origin + published pages); a non-site host disallows or 404s
+- **LocalBusiness JSON-LD** — structured data from the same `SiteSettings.profile` the page renders
+- **Publish cache** — the site's data is cached under `site:<tenant>` and `saveSiteSettings` `updateTag`s it: an edit is live within a minute
+
 ## [2.44.0] - 2026-10-28
 
 **Themes are a registry: `main` is the shared theme every site starts on.** This is a MINOR: `git pull`, `pnpm install`.

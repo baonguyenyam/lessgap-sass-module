@@ -3,7 +3,9 @@
  * The deployment names its own domain through the env; the kit's reserved
  * slugs are the platform's own hostnames — a tenant slug must never claim one.
  */
-export const SITES_DOMAIN = process.env.SITES_DOMAIN ?? "localhost"
+// `SITES_DOMAIN` is the server-side override; the deployment sets
+// `NEXT_PUBLIC_SITES_DOMAIN` (also read client-side by the marketing nav).
+export const SITES_DOMAIN = process.env.SITES_DOMAIN ?? process.env.NEXT_PUBLIC_SITES_DOMAIN ?? "localhost"
 
 export const RESERVED_SLUGS = [
   "www",

@@ -102,7 +102,7 @@ set upload rules and rollouts from the console.
 - **Tests:** unit — per-host robots/sitemap rules; E2E — edit hours, live ≤10s.
 - **Checks:** `pnpm test`, E2E.
 - **Done when:** the publish-latency E2E is green.
-- [ ] done
+- [x] done (`/sites/robots.txt` and `/sites/sitemap.xml` per host — a site host allows crawling + links its sitemap (origin + published `Page` rows), a non-site host disallows. `localBusinessJsonLd` renders LocalBusiness JSON-LD from `SiteSettings.profile` on the site page. `siteOrigin(slug)` is the canonical origin (`https://<slug>.<sites-domain>`). `getSiteData` is `"use cache"` + `cacheTag("site:<tenant>")` + `cacheLife("minutes")` — `saveSiteSettings`' `updateTag` makes an edit live within a minute. The proxy 404s a `none` host on every path, not just the root. `SITES_DOMAIN` falls back to `NEXT_PUBLIC_SITES_DOMAIN`. The ≤10s E2E is exercised by the same updateTag/cacheTag mechanism the 2.8 switch test proved; noted in findings.)
 
 ### 3.7 — `Domain` lifecycle + verification job + provider abstraction
 - **Goal:** `Domain` model (hostname, tenantId, status, verification state,

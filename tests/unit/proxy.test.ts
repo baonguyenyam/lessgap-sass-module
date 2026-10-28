@@ -21,6 +21,9 @@ const isTenantMember = vi.fn()
 vi.mock("@/platform/tenancy/require-member", () => ({
   isTenantMember: (...a: unknown[]) => isTenantMember(...a),
 }))
+// Host resolution (3.1) is covered by host.test.ts — these tests exercise the
+// proxy's redirect logic on the app host.
+vi.mock("@/platform/tenancy/host", () => ({ resolveHost: async () => ({ kind: "platform" }) }))
 
 const { default: proxy } = await import("@/proxy")
 

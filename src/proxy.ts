@@ -126,7 +126,7 @@ export default async function proxy(req: NextRequest) {
     const url = new URL(`/sites${pathname === "/" ? "" : pathname}${req.nextUrl.search}`, req.nextUrl)
     return stamped(NextResponse.rewrite(url))
   }
-  if (resolvedHost.kind === "none" && !pathname.startsWith("/sites/") && pathname === "/") {
+  if (resolvedHost.kind === "none" && !pathname.startsWith("/sites/")) {
     return stamped(NextResponse.rewrite(new URL("/_not-found", req.nextUrl), { status: 404 }))
   }
 
