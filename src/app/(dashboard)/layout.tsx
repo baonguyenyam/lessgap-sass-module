@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server"
 import { LayoutGrid } from "lucide-react"
 import { AppShell } from "@/components/layout/app-shell/app-shell"
 import { tenantPath } from "@/lib/tenant-paths"
+import { toDate } from "@/lib/timestamps"
 import { getEntitlements } from "@/platform/entitlements"
 import { TENANT_SLUG_HEADER } from "@/platform/request-context"
 import { ensureTenant, listMemberTenants } from "@/platform/tenancy/require-member"
@@ -27,36 +28,45 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const tenant = current ? { slug: current.slug, name: current.name } : { slug, name: slug }
   const entitlements = await getEntitlements({ tenantId: current?.id ?? "" })
 
+  const pastDueUntil = current?.status === "PAST_DUE" && current.graceUntil ? toDate(current.graceUntil) : null
+
   return (
-    <AppShell
-      area="dashboard"
-      user={{ name: user.name, email: user.email, image: user.image }}
-      showAdmin={isRoot(user.role)}
-      tenant={tenant}
-      tenants={tenants.map(({ slug, name }) => ({ slug, name }))}
-      customRoles={entitlements.has("roles.custom")}
-      breadcrumbs={{
-        icon: <LayoutGrid className="h-4 w-4" />,
-        base: { name: tNav("dashboard"), href: tenantPath(slug) },
-        alsoUnder: "/dashboard",
-        labels: {
-          members: tNav("members"),
-          newsletter: tNav("newsletter"),
-          roles: tNav("roles"),
-          billing: tNav("billing"),
-          account: tNav("account"),
-          settings: tNav("settings"),
-          preferences: tAccount("preferences"),
-          notifications: tAccount("notifications"),
-          localization: tSettingsNav("localization"),
-          display: tSettingsNav("display"),
-          security: tAccount("security"),
-          backup: tAccount("backup"),
-          activity: tAccount("activity"),
-        },
-      }}
-    >
-      {children}
-    </AppShell>
+    <>
+      {pastDueUntil && (
+        <div className="bg-amber-500/10 px-4 py-2 text-center text-sm text-amber-700 dark:text-amber-400">
+          {tNav("pastDueBanner", { date: pastDueUntil.toLocaleDateString() })}
+        </div>
+      )}
+      <AppShell
+        area="dashboard"
+        user={{ name: user.name, email: user.email, image: user.image }}
+        showAdmin={isRoot(user.role)}
+        tenant={tenant}
+        tenants={tenants.map(({ slug, name }) => ({ slug, name }))}
+        customRoles={entitlements.has("roles.custom")}
+        breadcrumbs={{
+          icon: <LayoutGrid className="h-4 w-4" />,
+          base: { name: tNav("dashboard"), href: tenantPath(slug) },
+          alsoUnder: "/dashboard",
+          labels: {
+            members: tNav("members"),
+            newsletter: tNav("newsletter"),
+            roles: tNav("roles"),
+            billing: tNav("billing"),
+            account: tNav("account"),
+            settings: tNav("settings"),
+            preferences: tAccount("preferences"),
+            notifications: tAccount("notifications"),
+            localization: tSettingsNav("localization"),
+            display: tSettingsNav("display"),
+            security: tAccount("security"),
+            backup: tAccount("backup"),
+            activity: tAccount("activity"),
+          },
+        }}
+      >
+        {children}
+      </AppShell>
+    </>
   )
 }

@@ -5,6 +5,7 @@ import { and } from "@prisma/orm-postgres/orm-client"
 import { db8 } from "@/lib/db8"
 import { requireUser } from "@/lib/auth"
 import { slugify } from "@/lib/slugify"
+import { toDate } from "@/lib/timestamps"
 import { AppError } from "@/platform/errors"
 import { LAST_TENANT_COOKIE, TENANT_SLUG_HEADER } from "@/platform/request-context"
 import type { TenantContext } from "@/platform/tenancy/context"
@@ -53,7 +54,9 @@ export async function getMembership(userId: string): Promise<Member | null> {
 }
 
 /** Every tenant `userId` is an active member of, oldest membership first: the tenant switcher's list. */
-export async function listMemberTenants(userId: string): Promise<Array<{ id: string; slug: string; name: string }>> {
+export async function listMemberTenants(
+  userId: string
+): Promise<Array<{ id: string; slug: string; name: string; status: string; graceUntil: string | null }>> {
   const members = await db8.orm.public.Member.where({ userId })
     .orderBy((m) => m.createdAt.asc())
     .all()
@@ -63,7 +66,9 @@ export async function listMemberTenants(userId: string): Promise<Array<{ id: str
   const byId = new Map(tenants.map((t) => [t.id, t]))
   return active.flatMap((m) => {
     const tenant = byId.get(m.organizationId)
-    return tenant ? [{ id: tenant.id, slug: tenant.slug, name: tenant.name }] : []
+    return tenant
+      ? [{ id: tenant.id, slug: tenant.slug, name: tenant.name, status: tenant.status, graceUntil: tenant.graceUntil }]
+      : []
   })
 }
 
@@ -179,7 +184,17 @@ export async function resolveTenantMember(
   const tenant = await db8.orm.public.Tenant.where({ slug }).first()
   // Suspended and canceled tenants answer not_found like an unknown slug: the
   // member learns nothing about the tenant's state by probing it (task 1.10).
-  if (!tenant || tenant.status !== "ACTIVE") throw new AppError("not_found")
+  if (!tenant) throw new AppError("not_found")
+  if (tenant.status === "PAST_DUE") {
+    // Grace period (task 2.9): the tenant keeps working until graceUntil; the
+    // first request after it lapses writes the suspension down — the same
+    // state a staff suspension produces.
+    const lapsed = !tenant.graceUntil || toDate(tenant.graceUntil) <= new Date()
+    if (lapsed) {
+      await db8.orm.public.Tenant.where({ id: tenant.id }).update({ status: "SUSPENDED", graceUntil: null })
+      throw new AppError("not_found")
+    }
+  } else if (tenant.status !== "ACTIVE") throw new AppError("not_found")
   const member = await db8.orm.public.Member.where({ organizationId: tenant.id, userId }).first()
   if (!member || member.status === "suspended") throw new AppError("not_found")
   if (permission) {

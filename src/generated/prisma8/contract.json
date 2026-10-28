@@ -1628,6 +1628,13 @@
                   "kind": "scalar"
                 }
               },
+              "gracePeriodDays": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
               "id": {
                 "nullable": false,
                 "type": {
@@ -1777,6 +1784,9 @@
                 },
                 "feeModel": {
                   "column": "feeModel"
+                },
+                "gracePeriodDays": {
+                  "column": "gracePeriodDays"
                 },
                 "id": {
                   "column": "id"
@@ -2511,6 +2521,16 @@
                   "kind": "scalar"
                 }
               },
+              "graceUntil": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
               "id": {
                 "nullable": false,
                 "type": {
@@ -2775,6 +2795,9 @@
                 },
                 "defaultLanguage": {
                   "column": "defaultLanguage"
+                },
+                "graceUntil": {
+                  "column": "graceUntil"
                 },
                 "id": {
                   "column": "id"
@@ -5264,6 +5287,11 @@
                   "dataType": "pg/json",
                   "nullable": true
                 },
+                "gracePeriodDays": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": true
+                },
                 "id": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
@@ -6014,6 +6042,14 @@
                     "value": "en"
                   },
                   "nullable": false
+                },
+                "graceUntil": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 3
+                  }
                 },
                 "id": {
                   "codecId": "pg/text@1",
@@ -7020,7 +7056,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "d7db91618cbf15dda1340e26963f9fbd88d338024bff3d79ad5d432d27788be1"
+    "storageHash": "e783cff1bc4fdfbefa763aacf334641be18a56caf96a874e96a39b3a2e39157f"
   },
   "execution": {
     "executionHash": "4909b387c650a5789a1075caffd5bf593ee47b98ecc2f48ce11b9f5cd1fa3c04",

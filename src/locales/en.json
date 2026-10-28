@@ -438,7 +438,8 @@
         "back": "Back"
       },
       "account": "Account",
-      "switchWorkspace": "Switch workspace"
+      "switchWorkspace": "Switch workspace",
+      "pastDueBanner": "A payment failed — access continues until {date}. Update billing to keep working."
     },
     "members": {
       "title": "Members",

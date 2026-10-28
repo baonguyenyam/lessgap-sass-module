@@ -13,6 +13,7 @@ const VISIBILITIES = ["PUBLIC", "UNLISTED", "ARCHIVED"] as const
 export type PlanPatch = {
   visibility?: string
   setupFeeCents?: number | null
+  gracePeriodDays?: number | null
   features?: unknown
 }
 
@@ -43,6 +44,12 @@ export async function updatePlan(planId: string, patch: PlanPatch): Promise<{ er
       return { error: t("badSetupFee") }
     update.setupFeeCents = patch.setupFeeCents
     changes.setupFeeCents = patch.setupFeeCents
+  }
+  if (patch.gracePeriodDays !== undefined) {
+    if (patch.gracePeriodDays !== null && (!Number.isInteger(patch.gracePeriodDays) || patch.gracePeriodDays < 0))
+      return { error: "gracePeriodDays must be a non-negative integer or null" }
+    update.gracePeriodDays = patch.gracePeriodDays
+    changes.gracePeriodDays = patch.gracePeriodDays
   }
   if (patch.features !== undefined) {
     const bad = validateFeatureMap(patch.features)

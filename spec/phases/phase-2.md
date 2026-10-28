@@ -108,7 +108,7 @@ Settings → Modules: enable, disable, export data, and schedule a purge with a
 - **Tests:** integration — webhook `past_due` at T, tenant still works at T+grace-1, 404 at T+grace; recovery clears it.
 - **Checks:** `pnpm test:integration`.
 - **Done when:** the timeline is covered end-to-end without manual dates in the test.
-- [ ] done
+- [x] done (`platform_past_due_grace` adds `Plan.gracePeriodDays` and `Tenant.graceUntil`. The webhook's `PAST_DUE` mapping — `subscription.updated` and `invoice.payment_failed` — moves the tenant to `PAST_DUE` until `now + gracePeriodDays`; `resolveTenantMember` lets a PAST_DUE tenant through while `graceUntil` is future, and the first request after it lapses writes `SUSPENDED` — the same row a staff suspension produces. `active` reactivates; `subscription.deleted` suspends outright. `getEntitlements` grants plan features only while the subscription is live (`CHECKOUT_BLOCKING_STATUSES`), so a PAST_DUE plan still resolves during grace and a CANCELED one stops. The owner sees an amber banner over the dashboard during grace; `gracePeriodDays` is editable on `/platform/plans`.)
 
 ### 2.10 — Settings → Modules lifecycle (L1–L10)
 - **Goal:** a tenant's Settings → Modules page lists registry modules with enable, disable, export data and scheduled delete (7-day grace, typed-name confirm, cancel link email); the platform console mirrors the same operations. The first real module through it is the decision-2-A pick.

@@ -23,7 +23,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'d7db91618cbf15dda1340e26963f9fbd88d338024bff3d79ad5d432d27788be1'>;
+  StorageHashBase<'e783cff1bc4fdfbefa763aacf334641be18a56caf96a874e96a39b3a2e39157f'>;
 export type ExecutionHash =
   ExecutionHashBase<'4909b387c650a5789a1075caffd5bf593ee47b98ecc2f48ce11b9f5cd1fa3c04'>;
 export type ProfileHash =
@@ -537,6 +537,7 @@ export namespace Models {
     description: FieldOutputTypes['public']['Plan']['description'];
     features: FieldOutputTypes['public']['Plan']['features'];
     feeModel: FieldOutputTypes['public']['Plan']['feeModel'];
+    gracePeriodDays: FieldOutputTypes['public']['Plan']['gracePeriodDays'];
     id: FieldOutputTypes['public']['Plan']['id'];
     interval: FieldOutputTypes['public']['Plan']['interval'];
     isActive: FieldOutputTypes['public']['Plan']['isActive'];
@@ -625,6 +626,7 @@ export namespace Models {
     createdAt: FieldOutputTypes['public']['Tenant']['createdAt'];
     currency: FieldOutputTypes['public']['Tenant']['currency'];
     defaultLanguage: FieldOutputTypes['public']['Tenant']['defaultLanguage'];
+    graceUntil: FieldOutputTypes['public']['Tenant']['graceUntil'];
     id: FieldOutputTypes['public']['Tenant']['id'];
     logo: FieldOutputTypes['public']['Tenant']['logo'];
     metadata: FieldOutputTypes['public']['Tenant']['metadata'];
@@ -1951,6 +1953,12 @@ type ContractBase = Omit<
                   readonly nullable: true;
                   readonly many: false;
                 };
+                readonly gracePeriodDays: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
                 readonly id: {
                   readonly dataType: 'pg/text';
                   readonly codecId: 'pg/text@1';
@@ -2577,6 +2585,13 @@ type ContractBase = Omit<
                     readonly kind: 'literal';
                     readonly value: DefaultLiteralValue<'pg/text@1', 'en'>;
                   };
+                  readonly many: false;
+                };
+                readonly graceUntil: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly id: {
@@ -4402,6 +4417,10 @@ type ContractBase = Omit<
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
               };
+              readonly gracePeriodDays: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
               readonly id: {
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
@@ -4500,6 +4519,7 @@ type ContractBase = Omit<
                 readonly description: { readonly column: 'description' };
                 readonly features: { readonly column: 'features' };
                 readonly feeModel: { readonly column: 'feeModel' };
+                readonly gracePeriodDays: { readonly column: 'gracePeriodDays' };
                 readonly id: { readonly column: 'id' };
                 readonly interval: { readonly column: 'interval' };
                 readonly isActive: { readonly column: 'isActive' };
@@ -4949,6 +4969,14 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
+              readonly graceUntil: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
               readonly id: {
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
@@ -5133,6 +5161,7 @@ type ContractBase = Omit<
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly currency: { readonly column: 'currency' };
                 readonly defaultLanguage: { readonly column: 'defaultLanguage' };
+                readonly graceUntil: { readonly column: 'graceUntil' };
                 readonly id: { readonly column: 'id' };
                 readonly logo: { readonly column: 'logo' };
                 readonly metadata: { readonly column: 'metadata' };

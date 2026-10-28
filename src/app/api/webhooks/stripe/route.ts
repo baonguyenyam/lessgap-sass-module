@@ -240,6 +240,15 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     trialEndsAt: toTs(trialEndsAt),
   })
 
+  // The tenant follows the subscription (task 2.9): a payment failure starts
+  // the plan's grace period; a recovery reactivates it.
+  const mapped = mapSubscriptionStatus(subscription.status)
+  if (mapped === "PAST_DUE") {
+    await markPastDue(existing.tenantId, plan?.gracePeriodDays)
+  } else if (mapped === "ACTIVE") {
+    await db8.orm.public.Tenant.where({ id: existing.tenantId }).update({ status: "ACTIVE", graceUntil: null })
+  }
+
   // Send cancellation email when subscription will cancel at period end.
   // The row is the tenant's: the owner gets the email.
   if (subscription.cancel_at_period_end && !existing.cancelAtPeriodEnd) {
@@ -255,8 +264,23 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+  const row = await db8.orm.public.Subscription.where({ stripeSubscriptionId: subscription.id }).first()
   await db8.orm.public.Subscription.where({ stripeSubscriptionId: subscription.id }).updateAndCount({
     status: "CANCELED",
+  })
+  if (row) {
+    await db8.orm.public.Tenant.where({ id: row.tenantId }).update({ status: "SUSPENDED", graceUntil: null })
+  }
+}
+
+// A payment failure (or the subscription updated event carrying the same)
+// moves the tenant to PAST_DUE until the plan's grace period lapses. With no
+// grace period configured, the first access after this suspends them.
+async function markPastDue(tenantId: string, gracePeriodDays: number | null | undefined) {
+  const graceUntil = new Date(Date.now() + (gracePeriodDays ?? 0) * 86_400_000)
+  await db8.orm.public.Tenant.where({ id: tenantId }).update({
+    status: "PAST_DUE",
+    graceUntil: toTs(graceUntil),
   })
 }
 
@@ -266,9 +290,11 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
   if (!subRef) return
   const subscriptionId = typeof subRef === "string" ? subRef : subRef.id
 
+  const row = await db8.orm.public.Subscription.include("plan").where({ stripeSubscriptionId: subscriptionId }).first()
   await db8.orm.public.Subscription.where({ stripeSubscriptionId: subscriptionId }).updateAndCount({
     status: "PAST_DUE",
   })
+  if (row) await markPastDue(row.tenantId, row.plan?.gracePeriodDays)
 }
 
 async function handleChargeRefunded(charge: Stripe.Charge) {

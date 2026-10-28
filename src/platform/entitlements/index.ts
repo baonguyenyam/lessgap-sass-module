@@ -1,3 +1,4 @@
+import { CHECKOUT_BLOCKING_STATUSES } from "@/lib/billing"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { AppError } from "@/platform/errors"
@@ -37,7 +38,13 @@ export async function getEntitlements(ctx: { tenantId: string }): Promise<Entitl
   const now = Date.now()
   const input: ResolveInput = {
     switches,
-    planFeatures: (subscription?.plan?.features as Record<string, unknown>) ?? null,
+    // A subscription only grants while Stripe still manages it (ACTIVE,
+    // TRIALING, PAST_DUE during grace, UNPAID); CANCELED and INCOMPLETE are
+    // history — the tenant falls back to defaults and add-ons.
+    planFeatures:
+      subscription && (CHECKOUT_BLOCKING_STATUSES as readonly string[]).includes(subscription.status)
+        ? ((subscription.plan?.features as Record<string, unknown>) ?? null)
+        : null,
     addOnFeatures: tenantAddOns.flatMap((t) =>
       t.addOn?.isActive ? [(t.addOn.features as Record<string, unknown>) ?? {}] : []
     ),

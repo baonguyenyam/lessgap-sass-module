@@ -438,7 +438,8 @@
         "back": "Quay lại"
       },
       "account": "Tài khoản",
-      "switchWorkspace": "Chuyển không gian làm việc"
+      "switchWorkspace": "Chuyển không gian làm việc",
+      "pastDueBanner": "Thanh toán thất bại — truy cập tiếp tục đến {date}. Cập nhật thanh toán để tiếp tục."
     },
     "members": {
       "title": "Thành viên",

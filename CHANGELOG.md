@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.38.0] - 2026-10-28
+
+**A failed payment starts a grace period, not a dead end.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` — one migration adds `Plan.gracePeriodDays` and `Tenant.graceUntil`.
+
+### Added
+
+- **Grace period on `past_due`**: a payment failure marks the tenant `PAST_DUE` until `now + plan.gracePeriodDays`. Members keep working — an amber banner tells the owner until when — and the first request after it lapses writes the same suspension a staff action would
+- **Recovery reactivates**: a subscription that goes `active` again clears the marker; a deleted subscription suspends outright. `gracePeriodDays` is editable per plan on `/platform/plans`
+
+### Fixed
+
+- **A cancelled subscription no longer grants its plan**: `getEntitlements` reads plan features only while Stripe still manages the row — the same live-status list the billing page uses
+
 ## [2.37.0] - 2026-10-28
 
 **The signup switches actually gate the public surface.** This is a MINOR: `git pull`, `pnpm install` — no migration.

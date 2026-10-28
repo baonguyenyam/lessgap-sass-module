@@ -89,6 +89,7 @@ user                  User                @relation(fields: [userId], references
     updatedAt      TimestampString(3)  @onCreate(now()) @onUpdate(now())
 meterEventName String?
     trialDays      Int?
+    gracePeriodDays Int?
     purchases      Purchase[]
     subscriptions  Subscription[]
 
@@ -294,6 +295,7 @@ trialEndsAt          TimestampString(3)?
     logo             String?
     metadata         Json?
     status           pg.enum(TenantStatus) @default("PROVISIONING")
+    graceUntil       TimestampString(3)?
     verticalKey      String                @default("generic")
     timeZone         String                @default("America/Chicago")
     currency         String                @default("usd")
