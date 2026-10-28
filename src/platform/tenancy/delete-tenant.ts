@@ -21,14 +21,31 @@ export async function deleteTenant(tenantId: string): Promise<void> {
     if (mod.onPurge) await mod.onPurge(tenantId)
   }
 
-  const { NewsletterSubscriber, TenantModule, TenantSetting, Member, Invitation, OrganizationRole, Tenant } =
-    db8.orm.public
+  const {
+    NewsletterSubscriber,
+    TenantModule,
+    TenantSetting,
+    Purchase,
+    Subscription,
+    TenantAddOn,
+    EntitlementOverride,
+    UsageCounter,
+    Member,
+    Invitation,
+    OrganizationRole,
+    Tenant,
+  } = db8.orm.public
 
   // Tenant-owned tables (MODEL_CLASSIFICATION).
   await Promise.all([
     NewsletterSubscriber.where({ tenantId }).deleteAndCount(),
     TenantModule.where({ tenantId }).deleteAndCount(),
     TenantSetting.where({ tenantId }).deleteAndCount(),
+    Purchase.where({ tenantId }).deleteAndCount(),
+    Subscription.where({ tenantId }).deleteAndCount(),
+    TenantAddOn.where({ tenantId }).deleteAndCount(),
+    EntitlementOverride.where({ tenantId }).deleteAndCount(),
+    UsageCounter.where({ tenantId }).deleteAndCount(),
   ])
 
   // Better Auth tenant-identity tables (organizationId).

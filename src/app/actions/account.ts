@@ -12,6 +12,7 @@ import { isAdmin, isRoot } from "@/lib/roles"
 import { passwordSchema } from "@/lib/password"
 import { stripe } from "@/lib/stripe"
 import { checkRateLimit } from "@/lib/rate-limit"
+import { getMembership } from "@/platform/tenancy/require-member"
 import { emailEnabled } from "@/lib/email-transport"
 import { enabledOAuthProviders } from "@/lib/oauth-providers"
 import { accountHref } from "@/lib/settings-pages"
@@ -128,11 +129,17 @@ export async function deleteAccount(formData: FormData) {
   // visitor delete one would empty the showcase until the next reset.
   if (process.env.DEMO_MODE === "true") redirect(`${GENERAL}?error=demo`)
 
-  const user = await db8.orm.public.User.select("email", "role")
-    .include("subscription", (s) => s.select("status", "stripeSubscriptionId"))
-    .where({ id: currentUser.id })
-    .first()
+  const user = await db8.orm.public.User.select("email", "role").where({ id: currentUser.id }).first()
   if (!user) redirect("/login")
+
+  // The subscription belongs to the tenant now (phase 2): a user closing
+  // their account cancels their own tenant's live subscription at Stripe.
+  const member = await getMembership(currentUser.id)
+  const subscription = member
+    ? await db8.orm.public.Subscription.select("status", "stripeSubscriptionId")
+        .where({ tenantId: member.organizationId })
+        .first()
+    : null
 
   // The address has to be typed back, so no single click can destroy an
   // account and no stray form submission can either.
@@ -167,9 +174,9 @@ export async function deleteAccount(formData: FormData) {
   //
   // Stripe is only touched when there is something to cancel, so a deployment
   // without billing configured never reaches this call.
-  if (user.subscription && BILLING_STATUSES.includes(user.subscription.status)) {
+  if (subscription && BILLING_STATUSES.includes(subscription.status)) {
     try {
-      await stripe.subscriptions.cancel(user.subscription.stripeSubscriptionId)
+      await stripe.subscriptions.cancel(subscription.stripeSubscriptionId)
     } catch (error) {
       // Already gone at Stripe is the outcome we wanted, not a failure: the
       // row here is simply stale, and the delete below clears it.

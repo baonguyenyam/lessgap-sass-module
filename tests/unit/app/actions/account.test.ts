@@ -147,6 +147,13 @@ describe("deleteAccount", () => {
   }
   const live = { status: "ACTIVE", stripeSubscriptionId: "sub_1" }
 
+  // The subscription belongs to the tenant now: the action reads the member's
+  // organizationId, then the tenant's row.
+  beforeEach(() => {
+    db.fn("Member.first").mockResolvedValue({ organizationId: "t1" })
+    db.fn("Subscription.first").mockResolvedValue(live)
+  })
+
   beforeEach(() => {
     getCurrentUser.mockResolvedValue({ id: "u1", email: "me@example.com", role: "ADMIN" })
     cancelSubscription.mockResolvedValue({})

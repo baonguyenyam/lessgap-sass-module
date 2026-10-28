@@ -3,6 +3,7 @@ import { getCurrentUser } from "@/lib/auth"
 import { stripe } from "@/lib/stripe"
 import { db8 } from "@/lib/db8"
 import { CHECKOUT_BLOCKING_STATUSES, trialDaysFor } from "@/lib/billing"
+import { ensureTenant } from "@/platform/tenancy/require-member"
 import { AUTOMATIC_TAX_PARAMS, checkStripeTax } from "@/lib/stripe-tax"
 import type Stripe from "stripe"
 
@@ -32,24 +33,28 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid price" }, { status: 400 })
   }
 
-  const user = await db8.orm.public.User.select("stripeCustomerId", "email", "name")
-    .include("subscription", (s) => s.select("status"))
-    .include("purchases", (p) => p.where({ status: "COMPLETED" }).select("id").limit(1))
-    .where({ id: currentUser.id })
-    .first()
+  // Billing belongs to the tenant (phase 2): the checks read the user's own
+  // tenant, which `ensureTenant` creates lazily for a first-time checkout.
+  const { tenantId } = await ensureTenant(currentUser)
+
+  const [user, subscription, purchases] = await Promise.all([
+    db8.orm.public.User.select("stripeCustomerId", "email", "name").where({ id: currentUser.id }).first(),
+    db8.orm.public.Subscription.select("status").where({ tenantId }).first(),
+    db8.orm.public.Purchase.select("id").where({ tenantId, status: "COMPLETED" }).limit(1).all(),
+  ])
 
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 })
   }
 
-  if (user.purchases.length > 0) {
+  if (purchases.length > 0) {
     return NextResponse.json({ error: "You already have lifetime access" }, { status: 400 })
   }
 
-  // A user with a live subscription changes plans through the Customer Portal
+  // A tenant with a live subscription changes plans through the Customer Portal
   // (which handles proration); a second checkout would create a second
   // subscription in Stripe.
-  if (user.subscription && (CHECKOUT_BLOCKING_STATUSES as readonly string[]).includes(user.subscription.status)) {
+  if (subscription && (CHECKOUT_BLOCKING_STATUSES as readonly string[]).includes(subscription.status)) {
     return NextResponse.json(
       { error: "You already have a subscription. Use the billing portal to change plans." },
       { status: 400 }
@@ -72,7 +77,7 @@ export async function POST(req: NextRequest) {
 
   // planId in metadata saves the webhook a listLineItems call: the session
   // event doesn't include line items, and the plan was validated above.
-  const metadata = { userId: currentUser.id, planId: plan.id }
+  const metadata = { userId: currentUser.id, tenantId, planId: plan.id }
 
   const params: Stripe.Checkout.SessionCreateParams = {
     customer: customerId,
@@ -97,7 +102,7 @@ export async function POST(req: NextRequest) {
   // is what stops the trial from restarting on every new checkout. The card is
   // still collected up front, as Checkout does by default: the first charge
   // then happens when the trial ends, with no second step for the customer.
-  const trialDays = trialDaysFor(plan, user.subscription !== null)
+  const trialDays = trialDaysFor(plan, subscription !== null)
   if (trialDays) {
     params.subscription_data = { trial_period_days: trialDays }
   }

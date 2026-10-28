@@ -66,7 +66,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     return
   }
 
-  if (!session.subscription || !session.metadata?.userId) return
+  if (!session.subscription || !session.metadata?.userId || !session.metadata?.tenantId) return
 
   const subscription = await stripe.subscriptions.retrieve(session.subscription as string, {
     expand: ["items.data.price.product"],
@@ -87,9 +87,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   // only send it when this is a genuinely new subscription, not a replay of an
   // event we've already applied. (For higher volume, a dedicated table keyed on
   // event.id is the more general webhook-idempotency pattern.)
-  const existingSub = await db8.orm.public.Subscription.select("stripeSubscriptionId")
-    .where({ userId: session.metadata.userId })
-    .first()
+  const tenantId = session.metadata.tenantId
+  const existingSub = await db8.orm.public.Subscription.select("stripeSubscriptionId").where({ tenantId }).first()
   const isNewSubscription = existingSub?.stripeSubscriptionId !== subscription.id
 
   const fields = {
@@ -102,9 +101,9 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     trialEndsAt: toTs(trialEndsAt),
   }
   await db8.orm.public.Subscription.upsert({
-    conflictOn: uniqueIndexKey({ userId: session.metadata.userId }),
+    conflictOn: uniqueIndexKey({ tenantId }),
     update: fields,
-    create: { userId: session.metadata.userId, ...fields },
+    create: { tenantId, ...fields },
   })
 
   // Send subscription confirmation email (fire-and-forget)
@@ -146,11 +145,12 @@ async function handleOneTimeCheckout(session: Stripe.Checkout.Session) {
   const existing = await db8.orm.public.Purchase.select("id").where({ stripePaymentIntentId: paymentIntentId }).first()
   const isNewPurchase = !existing
 
+  if (!session.metadata?.tenantId) return
   await db8.orm.public.Purchase.upsert({
     conflictOn: uniqueIndexKey({ stripePaymentIntentId: paymentIntentId }),
     update: {},
     create: {
-      userId,
+      tenantId: session.metadata.tenantId,
       planId,
       stripePaymentIntentId: paymentIntentId,
       stripeCheckoutSessionId: session.id,
@@ -193,9 +193,13 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     trialEndsAt: toTs(trialEndsAt),
   })
 
-  // Send cancellation email when subscription will cancel at period end
+  // Send cancellation email when subscription will cancel at period end.
+  // The row is the tenant's: the owner gets the email.
   if (subscription.cancel_at_period_end && !existing.cancelAtPeriodEnd) {
-    const user = await db8.orm.public.User.select("email", "name").where({ id: existing.userId }).first()
+    const owner = await db8.orm.public.Member.select("userId")
+      .where({ organizationId: existing.tenantId, role: "owner" })
+      .first()
+    const user = owner ? await db8.orm.public.User.select("email", "name").where({ id: owner.userId }).first() : null
     if (user && emailEnabled()) {
       const { sendSubscriptionCancelledEmail } = await import("@/lib/email")
       await sendSubscriptionCancelledEmail(user.email, user.name ?? "", longDate(currentPeriodEnd)).catch(console.error)

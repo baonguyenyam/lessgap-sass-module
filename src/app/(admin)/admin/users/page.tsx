@@ -40,7 +40,16 @@ export default async function AdminUsersPage({
     matching.aggregate((a) => ({ n: a.count() })),
     matching
       .select("id", "name", "email", "image", "role", "createdAt")
-      .include("subscription", (s) => s.select("status").include("plan", (p) => p.select("name")))
+      .include("members", (m) =>
+        m.include("tenant", (t) =>
+          t.include("subscriptions", (s) =>
+            s
+              .select("status")
+              .include("plan", (p) => p.select("name"))
+              .limit(1)
+          )
+        )
+      )
       .orderBy(orderByField(User, query.sort, query.dir, ["createdAt", "email", "name"]))
       .offset(offsetOf(query))
       .limit(query.pageSize)
@@ -54,8 +63,8 @@ export default async function AdminUsersPage({
     image: u.image,
     role: u.role,
     createdAt: toDate(u.createdAt).toISOString(),
-    plan: u.subscription?.plan?.name ?? null,
-    status: u.subscription?.status ?? null,
+    plan: u.members[0]?.tenant?.subscriptions[0]?.plan?.name ?? null,
+    status: u.members[0]?.tenant?.subscriptions[0]?.status ?? null,
   }))
 
   return (

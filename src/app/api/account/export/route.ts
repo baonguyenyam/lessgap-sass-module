@@ -2,6 +2,7 @@ import { getCurrentUser } from "@/lib/auth"
 import { db8 } from "@/lib/db8"
 import { checkRateLimit } from "@/lib/rate-limit"
 import { accountExportFileName, buildAccountExport } from "@/lib/account-export"
+import { getMembership } from "@/platform/tenancy/require-member"
 
 /**
  * Settings → Backup: the signed-in user's own data as a JSON download. What
@@ -31,25 +32,34 @@ export async function GET() {
     .first()
   if (!user) return new Response("Unauthorized", { status: 401 })
 
+  // Billing belongs to the tenant now (phase 2): the export reads the user's
+  // own tenant's rows.
+  const member = await getMembership(userId)
+  const tenantId = member?.organizationId ?? null
+
   const [accounts, sessions, projects, subscription, purchases, newsletter] = await Promise.all([
     Account.select("providerId", "createdAt").where({ userId }).all(),
     Session.select("createdAt", "expiresAt", "ipAddress", "userAgent").where({ userId }).all(),
     Project.select("id", "name", "description", "createdAt", "updatedAt").where({ userId }).all(),
-    Subscription.select(
-      "status",
-      "currentPeriodStart",
-      "currentPeriodEnd",
-      "cancelAtPeriodEnd",
-      "trialEndsAt",
-      "createdAt"
-    )
-      .include("plan", (p) => p.select("name"))
-      .where({ userId })
-      .first(),
-    Purchase.select("amount", "currency", "status", "createdAt")
-      .include("plan", (p) => p.select("name"))
-      .where({ userId })
-      .all(),
+    tenantId
+      ? Subscription.select(
+          "status",
+          "currentPeriodStart",
+          "currentPeriodEnd",
+          "cancelAtPeriodEnd",
+          "trialEndsAt",
+          "createdAt"
+        )
+          .include("plan", (p) => p.select("name"))
+          .where({ tenantId })
+          .first()
+      : Promise.resolve(null),
+    tenantId
+      ? Purchase.select("amount", "currency", "status", "createdAt")
+          .include("plan", (p) => p.select("name"))
+          .where({ tenantId })
+          .all()
+      : Promise.resolve([]),
     NewsletterSubscriber.select("source", "createdAt", "confirmedAt", "unsubscribedAt")
       .where({ email: user.email })
       .first(),

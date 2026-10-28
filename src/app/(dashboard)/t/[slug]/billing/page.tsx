@@ -4,6 +4,7 @@ import { and } from "@prisma/orm-postgres/orm-client"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { describeDiscount, getEntitlement, trialDaysFor, type DiscountSummary } from "@/lib/billing"
+import { ensureTenant } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { InvoicesTable, INVOICE_STATUSES, type InvoiceRow } from "@/components/billing/invoices-table"
@@ -60,12 +61,13 @@ export default async function BillingPage({
   const format = await getFormatter()
   const currentUser = await requireUser()
 
-  const user = await db8.orm.public.User.select("stripeCustomerId")
-    .include("subscription", (s) => s.select("id"))
-    .where({ id: currentUser.id })
-    .first()
+  const { tenantId } = await ensureTenant(currentUser)
+  const [user, subscriptionRow] = await Promise.all([
+    db8.orm.public.User.select("stripeCustomerId").where({ id: currentUser.id }).first(),
+    db8.orm.public.Subscription.select("id").where({ tenantId }).first(),
+  ])
 
-  const entitlement = await getEntitlement(currentUser.id)
+  const entitlement = await getEntitlement(tenantId)
   const purchase = entitlement.kind === "lifetime" ? entitlement.purchase : null
   const subscription =
     entitlement.kind === "subscription"
@@ -93,7 +95,7 @@ export default async function BillingPage({
   // Same rule as the checkout route, so a card only shows the trial a checkout
   // from it would really carry: a free user whose subscription was cancelled
   // still has the row, and gets no second trial.
-  const hasHadSubscription = Boolean(user?.subscription)
+  const hasHadSubscription = Boolean(subscriptionRow)
   const plans: PlanCardData[] = planRows.map((p) => ({
     id: p.id,
     slug: p.slug,
@@ -102,7 +104,7 @@ export default async function BillingPage({
     price: p.price,
     interval: p.interval,
     stripePriceId: p.stripePriceId,
-    features: p.features,
+    features: [...p.marketingFeatures],
     trialDays: trialDaysFor(p, hasHadSubscription),
   }))
   const checkoutDisabled = isDemo || !process.env.STRIPE_SECRET_KEY

@@ -8,12 +8,20 @@
       "model": "Account",
       "namespace": "public"
     },
+    "AddOn": {
+      "model": "AddOn",
+      "namespace": "public"
+    },
     "AuditLog": {
       "model": "AuditLog",
       "namespace": "public"
     },
     "EmailMessage": {
       "model": "EmailMessage",
+      "namespace": "public"
+    },
+    "EntitlementOverride": {
+      "model": "EntitlementOverride",
       "namespace": "public"
     },
     "ErrorReport": {
@@ -68,6 +76,10 @@
       "model": "Tenant",
       "namespace": "public"
     },
+    "TenantAddOn": {
+      "model": "TenantAddOn",
+      "namespace": "public"
+    },
     "TenantModule": {
       "model": "TenantModule",
       "namespace": "public"
@@ -78,6 +90,10 @@
     },
     "TwoFactor": {
       "model": "TwoFactor",
+      "namespace": "public"
+    },
+    "UsageCounter": {
+      "model": "UsageCounter",
       "namespace": "public"
     },
     "User": {
@@ -265,6 +281,119 @@
               },
               "namespaceId": "public",
               "table": "Account"
+            }
+          },
+          "AddOn": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "features": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "isActive": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "key": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "stripePriceId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              }
+            },
+            "relations": {
+              "tenantAddOns": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "addOnId"
+                  ]
+                },
+                "to": {
+                  "model": "TenantAddOn",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "features": {
+                  "column": "features"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "isActive": {
+                  "column": "isActive"
+                },
+                "key": {
+                  "column": "key"
+                },
+                "name": {
+                  "column": "name"
+                },
+                "stripePriceId": {
+                  "column": "stripePriceId"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "AddOn"
             }
           },
           "AuditLog": {
@@ -532,6 +661,130 @@
               },
               "namespaceId": "public",
               "table": "EmailMessage"
+            }
+          },
+          "EntitlementOverride": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "createdById": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "expiresAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "featureKey": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "ignoresSwitch": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "reason": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "value": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "tenant": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "tenantId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tenant",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "createdById": {
+                  "column": "createdById"
+                },
+                "expiresAt": {
+                  "column": "expiresAt"
+                },
+                "featureKey": {
+                  "column": "featureKey"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "ignoresSwitch": {
+                  "column": "ignoresSwitch"
+                },
+                "reason": {
+                  "column": "reason"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                },
+                "value": {
+                  "column": "value"
+                }
+              },
+              "namespaceId": "public",
+              "table": "EntitlementOverride"
             }
           },
           "ErrorReport": {
@@ -1347,12 +1600,16 @@
                 }
               },
               "features": {
-                "many": {
-                  "elementNullable": false
-                },
                 "nullable": false,
                 "type": {
-                  "codecId": "pg/text@1",
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
+              "feeModel": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/json@1",
                   "kind": "scalar"
                 }
               },
@@ -1380,6 +1637,16 @@
                   "kind": "scalar"
                 }
               },
+              "marketingFeatures": {
+                "many": {
+                  "elementNullable": false
+                },
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "meterEventName": {
                 "nullable": true,
                 "type": {
@@ -1401,6 +1668,13 @@
                   "kind": "scalar"
                 }
               },
+              "setupFeeCents": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
               "slug": {
                 "nullable": false,
                 "type": {
@@ -1409,7 +1683,7 @@
                 }
               },
               "stripePriceId": {
-                "nullable": false,
+                "nullable": true,
                 "type": {
                   "codecId": "pg/text@1",
                   "kind": "scalar"
@@ -1429,6 +1703,16 @@
                   "kind": "scalar",
                   "typeParams": {
                     "precision": 3
+                  }
+                }
+              },
+              "visibility": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/enum@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "typeName": "PlanVisibility"
                   }
                 }
               }
@@ -1476,6 +1760,9 @@
                 "features": {
                   "column": "features"
                 },
+                "feeModel": {
+                  "column": "feeModel"
+                },
                 "id": {
                   "column": "id"
                 },
@@ -1485,6 +1772,9 @@
                 "isActive": {
                   "column": "isActive"
                 },
+                "marketingFeatures": {
+                  "column": "marketingFeatures"
+                },
                 "meterEventName": {
                   "column": "meterEventName"
                 },
@@ -1493,6 +1783,9 @@
                 },
                 "price": {
                   "column": "price"
+                },
+                "setupFeeCents": {
+                  "column": "setupFeeCents"
                 },
                 "slug": {
                   "column": "slug"
@@ -1505,6 +1798,9 @@
                 },
                 "updatedAt": {
                   "column": "updatedAt"
+                },
+                "visibility": {
+                  "column": "visibility"
                 }
               },
               "namespaceId": "public",
@@ -1723,6 +2019,13 @@
                   "kind": "scalar"
                 }
               },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "updatedAt": {
                 "nullable": false,
                 "type": {
@@ -1731,13 +2034,6 @@
                   "typeParams": {
                     "precision": 3
                   }
-                }
-              },
-              "userId": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
                 }
               }
             },
@@ -1758,19 +2054,19 @@
                   "namespace": "public"
                 }
               },
-              "user": {
+              "tenant": {
                 "cardinality": "N:1",
                 "nullable": false,
                 "on": {
                   "localFields": [
-                    "userId"
+                    "tenantId"
                   ],
                   "targetFields": [
                     "id"
                   ]
                 },
                 "to": {
-                  "model": "User",
+                  "model": "Tenant",
                   "namespace": "public"
                 }
               }
@@ -1801,11 +2097,11 @@
                 "stripePaymentIntentId": {
                   "column": "stripePaymentIntentId"
                 },
+                "tenantId": {
+                  "column": "tenantId"
+                },
                 "updatedAt": {
                   "column": "updatedAt"
-                },
-                "userId": {
-                  "column": "userId"
                 }
               },
               "namespaceId": "public",
@@ -2039,6 +2335,13 @@
                   "kind": "scalar"
                 }
               },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "trialEndsAt": {
                 "nullable": true,
                 "type": {
@@ -2057,13 +2360,6 @@
                   "typeParams": {
                     "precision": 3
                   }
-                }
-              },
-              "userId": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
                 }
               }
             },
@@ -2084,19 +2380,19 @@
                   "namespace": "public"
                 }
               },
-              "user": {
+              "tenant": {
                 "cardinality": "N:1",
                 "nullable": false,
                 "on": {
                   "localFields": [
-                    "userId"
+                    "tenantId"
                   ],
                   "targetFields": [
                     "id"
                   ]
                 },
                 "to": {
-                  "model": "User",
+                  "model": "Tenant",
                   "namespace": "public"
                 }
               }
@@ -2127,14 +2423,14 @@
                 "stripeSubscriptionId": {
                   "column": "stripeSubscriptionId"
                 },
+                "tenantId": {
+                  "column": "tenantId"
+                },
                 "trialEndsAt": {
                   "column": "trialEndsAt"
                 },
                 "updatedAt": {
                   "column": "updatedAt"
-                },
-                "userId": {
-                  "column": "userId"
                 }
               },
               "namespaceId": "public",
@@ -2304,6 +2600,36 @@
                   "namespace": "public"
                 }
               },
+              "overrides": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "tenantId"
+                  ]
+                },
+                "to": {
+                  "model": "EntitlementOverride",
+                  "namespace": "public"
+                }
+              },
+              "purchases": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "tenantId"
+                  ]
+                },
+                "to": {
+                  "model": "Purchase",
+                  "namespace": "public"
+                }
+              },
               "roles": {
                 "cardinality": "1:N",
                 "on": {
@@ -2346,6 +2672,51 @@
                 },
                 "to": {
                   "model": "NewsletterSubscriber",
+                  "namespace": "public"
+                }
+              },
+              "subscriptions": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "tenantId"
+                  ]
+                },
+                "to": {
+                  "model": "Subscription",
+                  "namespace": "public"
+                }
+              },
+              "tenantAddOns": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "tenantId"
+                  ]
+                },
+                "to": {
+                  "model": "TenantAddOn",
+                  "namespace": "public"
+                }
+              },
+              "usageCounters": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "tenantId"
+                  ]
+                },
+                "to": {
+                  "model": "UsageCounter",
                   "namespace": "public"
                 }
               }
@@ -2400,6 +2771,103 @@
               },
               "namespaceId": "public",
               "table": "Tenant"
+            }
+          },
+          "TenantAddOn": {
+            "fields": {
+              "addOnId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "quantity": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "addOn": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "addOnId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "AddOn",
+                  "namespace": "public"
+                }
+              },
+              "tenant": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "tenantId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tenant",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "addOnId": {
+                  "column": "addOnId"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "quantity": {
+                  "column": "quantity"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "TenantAddOn"
             }
           },
           "TenantModule": {
@@ -2753,6 +3221,87 @@
               "table": "TwoFactor"
             }
           },
+          "UsageCounter": {
+            "fields": {
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "limitKey": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "periodStart": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "used": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "tenant": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "tenantId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tenant",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "id": {
+                  "column": "id"
+                },
+                "limitKey": {
+                  "column": "limitKey"
+                },
+                "periodStart": {
+                  "column": "periodStart"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                },
+                "used": {
+                  "column": "used"
+                }
+              },
+              "namespaceId": "public",
+              "table": "UsageCounter"
+            }
+          },
           "User": {
             "fields": {
               "createdAt": {
@@ -2916,21 +3465,6 @@
                   "namespace": "public"
                 }
               },
-              "purchases": {
-                "cardinality": "1:N",
-                "on": {
-                  "localFields": [
-                    "id"
-                  ],
-                  "targetFields": [
-                    "userId"
-                  ]
-                },
-                "to": {
-                  "model": "Purchase",
-                  "namespace": "public"
-                }
-              },
               "sessions": {
                 "cardinality": "1:N",
                 "on": {
@@ -2958,22 +3492,6 @@
                 },
                 "to": {
                   "model": "UserSetting",
-                  "namespace": "public"
-                }
-              },
-              "subscription": {
-                "cardinality": "1:1",
-                "nullable": true,
-                "on": {
-                  "localFields": [
-                    "id"
-                  ],
-                  "targetFields": [
-                    "userId"
-                  ]
-                },
-                "to": {
-                  "model": "Subscription",
                   "namespace": "public"
                 }
               },
@@ -3225,6 +3743,15 @@
               ],
               "typeName": "JobStatus"
             },
+            "PlanVisibility": {
+              "kind": "postgres-enum",
+              "members": [
+                "PUBLIC",
+                "UNLISTED",
+                "ARCHIVED"
+              ],
+              "typeName": "PlanVisibility"
+            },
             "PlatformRole": {
               "kind": "postgres-enum",
               "members": [
@@ -3303,6 +3830,26 @@
             }
           },
           "rls": {
+            "EntitlementOverride": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "EntitlementOverride"
+            },
+            "Purchase": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "Purchase"
+            },
+            "Subscription": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "Subscription"
+            },
+            "TenantAddOn": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "TenantAddOn"
+            },
             "TenantModule": {
               "kind": "rls",
               "namespaceId": "public",
@@ -3312,6 +3859,11 @@
               "kind": "rls",
               "namespaceId": "public",
               "tableName": "TenantSetting"
+            },
+            "UsageCounter": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "UsageCounter"
             }
           },
           "table": {
@@ -3445,6 +3997,96 @@
                   "id"
                 ],
                 "name": "Account_pkey"
+              },
+              "uniques": []
+            },
+            "AddOn": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "features": {
+                  "codecId": "pg/json@1",
+                  "dataType": "pg/json",
+                  "default": {
+                    "kind": "literal",
+                    "value": {}
+                  },
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "isActive": {
+                  "codecId": "pg/bool@1",
+                  "dataType": "pg/bool",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nullable": false
+                },
+                "key": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "stripePriceId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [
+                {
+                  "columns": [
+                    "key"
+                  ],
+                  "name": "AddOn_key_key",
+                  "unique": true
+                },
+                {
+                  "columns": [
+                    "stripePriceId"
+                  ],
+                  "name": "AddOn_stripePriceId_key",
+                  "unique": true
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "AddOn_pkey"
               },
               "uniques": []
             },
@@ -3648,6 +4290,118 @@
                   "id"
                 ],
                 "name": "EmailMessage_pkey"
+              },
+              "uniques": []
+            },
+            "EntitlementOverride": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "createdById": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "expiresAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "featureKey": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "ignoresSwitch": {
+                  "codecId": "pg/bool@1",
+                  "dataType": "pg/bool",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nullable": false
+                },
+                "reason": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "value": {
+                  "codecId": "pg/json@1",
+                  "dataType": "pg/json",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "EntitlementOverride_tenantId_idx_c93ed4f1"
+                  },
+                  "name": "EntitlementOverride_tenantId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "tenantId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "EntitlementOverride"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tenant"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "tenantId",
+                    "featureKey"
+                  ],
+                  "name": "EntitlementOverride_tenantId_featureKey_key",
+                  "unique": true
+                },
+                {
+                  "columns": [
+                    "tenantId"
+                  ],
+                  "name": "EntitlementOverride_tenantId_idx_c93ed4f1",
+                  "prefix": "EntitlementOverride_tenantId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "EntitlementOverride_pkey"
               },
               "uniques": []
             },
@@ -4432,9 +5186,9 @@
             "Plan": {
               "checks": [
                 {
-                  "expression": "array_position(\"features\", NULL) IS NULL",
-                  "name": "Plan_features_elem_not_null_1a661718",
-                  "prefix": "Plan_features_elem_not_null"
+                  "expression": "array_position(\"marketingFeatures\", NULL) IS NULL",
+                  "name": "Plan_marketingFeatures_elem_not_null_4825684d",
+                  "prefix": "Plan_marketingFeatures_elem_not_null"
                 }
               ],
               "columns": {
@@ -4456,12 +5210,18 @@
                   "nullable": true
                 },
                 "features": {
-                  "codecId": "pg/text@1",
-                  "dataType": "pg/text",
-                  "many": {
-                    "elementNullable": false
+                  "codecId": "pg/json@1",
+                  "dataType": "pg/json",
+                  "default": {
+                    "kind": "literal",
+                    "value": {}
                   },
                   "nullable": false
+                },
+                "feeModel": {
+                  "codecId": "pg/json@1",
+                  "dataType": "pg/json",
+                  "nullable": true
                 },
                 "id": {
                   "codecId": "pg/text@1",
@@ -4491,6 +5251,18 @@
                   },
                   "nullable": false
                 },
+                "marketingFeatures": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "default": {
+                    "kind": "literal",
+                    "value": []
+                  },
+                  "many": {
+                    "elementNullable": false
+                  },
+                  "nullable": false
+                },
                 "meterEventName": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
@@ -4506,6 +5278,11 @@
                   "dataType": "pg/int4",
                   "nullable": false
                 },
+                "setupFeeCents": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": true
+                },
                 "slug": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
@@ -4514,7 +5291,7 @@
                 "stripePriceId": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
-                  "nullable": false
+                  "nullable": true
                 },
                 "trialDays": {
                   "codecId": "pg/int4@1",
@@ -4527,6 +5304,24 @@
                   "nullable": false,
                   "typeParams": {
                     "precision": 3
+                  }
+                },
+                "visibility": {
+                  "codecId": "pg/enum@1",
+                  "dataType": "pg/enum",
+                  "default": {
+                    "kind": "literal",
+                    "value": "PUBLIC"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "typeName": "PlanVisibility"
+                  },
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "PlanVisibility",
+                    "namespaceId": "public",
+                    "plane": "storage"
                   }
                 }
               },
@@ -4745,6 +5540,11 @@
                   "dataType": "pg/text",
                   "nullable": false
                 },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
                 "updatedAt": {
                   "codecId": "pg/timestamp-string@1",
                   "dataType": "pg/timestamp",
@@ -4752,11 +5552,6 @@
                   "typeParams": {
                     "precision": 3
                   }
-                },
-                "userId": {
-                  "codecId": "pg/text@1",
-                  "dataType": "pg/text",
-                  "nullable": false
                 }
               },
               "foreignKeys": [
@@ -4781,14 +5576,14 @@
                 },
                 {
                   "index": {
-                    "name": "Purchase_userId_idx"
+                    "name": "Purchase_tenantId_idx"
                   },
-                  "name": "Purchase_userId_fkey",
+                  "name": "Purchase_tenantId_fkey",
                   "onDelete": "cascade",
                   "onUpdate": "cascade",
                   "source": {
                     "columns": [
-                      "userId"
+                      "tenantId"
                     ],
                     "namespaceId": "public",
                     "tableName": "Purchase"
@@ -4798,7 +5593,7 @@
                       "id"
                     ],
                     "namespaceId": "public",
-                    "tableName": "User"
+                    "tableName": "Tenant"
                   }
                 }
               ],
@@ -4819,9 +5614,9 @@
                 },
                 {
                   "columns": [
-                    "userId"
+                    "tenantId"
                   ],
-                  "name": "Purchase_userId_idx",
+                  "name": "Purchase_tenantId_idx",
                   "unique": false
                 }
               ],
@@ -5025,6 +5820,11 @@
                   "dataType": "pg/text",
                   "nullable": false
                 },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
                 "trialEndsAt": {
                   "codecId": "pg/timestamp-string@1",
                   "dataType": "pg/timestamp",
@@ -5040,11 +5840,6 @@
                   "typeParams": {
                     "precision": 3
                   }
-                },
-                "userId": {
-                  "codecId": "pg/text@1",
-                  "dataType": "pg/text",
-                  "nullable": false
                 }
               },
               "foreignKeys": [
@@ -5069,14 +5864,14 @@
                 },
                 {
                   "index": {
-                    "name": "Subscription_userId_key"
+                    "name": "Subscription_tenantId_key"
                   },
-                  "name": "Subscription_userId_fkey",
+                  "name": "Subscription_tenantId_fkey",
                   "onDelete": "cascade",
                   "onUpdate": "cascade",
                   "source": {
                     "columns": [
-                      "userId"
+                      "tenantId"
                     ],
                     "namespaceId": "public",
                     "tableName": "Subscription"
@@ -5086,7 +5881,7 @@
                       "id"
                     ],
                     "namespaceId": "public",
-                    "tableName": "User"
+                    "tableName": "Tenant"
                   }
                 }
               ],
@@ -5100,9 +5895,9 @@
                 },
                 {
                   "columns": [
-                    "userId"
+                    "tenantId"
                   ],
-                  "name": "Subscription_userId_key",
+                  "name": "Subscription_tenantId_key",
                   "unique": true
                 }
               ],
@@ -5268,6 +6063,125 @@
                   "id"
                 ],
                 "name": "Tenant_pkey"
+              },
+              "uniques": []
+            },
+            "TenantAddOn": {
+              "columns": {
+                "addOnId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "quantity": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "default": {
+                    "kind": "literal",
+                    "value": 1
+                  },
+                  "nullable": false
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "TenantAddOn_tenantId_idx_c93ed4f1"
+                  },
+                  "name": "TenantAddOn_tenantId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "tenantId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "TenantAddOn"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tenant"
+                  }
+                },
+                {
+                  "index": {
+                    "name": "TenantAddOn_addOnId_idx_84096c82"
+                  },
+                  "name": "TenantAddOn_addOnId_fkey",
+                  "onDelete": "restrict",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "addOnId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "TenantAddOn"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "AddOn"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "addOnId"
+                  ],
+                  "name": "TenantAddOn_addOnId_idx_84096c82",
+                  "prefix": "TenantAddOn_addOnId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "tenantId",
+                    "addOnId"
+                  ],
+                  "name": "TenantAddOn_tenantId_addOnId_key",
+                  "unique": true
+                },
+                {
+                  "columns": [
+                    "tenantId"
+                  ],
+                  "name": "TenantAddOn_tenantId_idx_c93ed4f1",
+                  "prefix": "TenantAddOn_tenantId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "TenantAddOn_pkey"
               },
               "uniques": []
             },
@@ -5600,6 +6514,92 @@
               },
               "uniques": []
             },
+            "UsageCounter": {
+              "columns": {
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "limitKey": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "periodStart": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "used": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "UsageCounter_tenantId_idx_c93ed4f1"
+                  },
+                  "name": "UsageCounter_tenantId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "tenantId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "UsageCounter"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tenant"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "tenantId"
+                  ],
+                  "name": "UsageCounter_tenantId_idx_c93ed4f1",
+                  "prefix": "UsageCounter_tenantId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "tenantId",
+                    "limitKey",
+                    "periodStart"
+                  ],
+                  "name": "UsageCounter_tenantId_limitKey_periodStart_key",
+                  "unique": true
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "UsageCounter_pkey"
+              },
+              "uniques": []
+            },
             "User": {
               "columns": {
                 "createdAt": {
@@ -5896,6 +6896,14 @@
                 "FAILED"
               ]
             },
+            "PlanVisibility": {
+              "kind": "valueSet",
+              "values": [
+                "PUBLIC",
+                "UNLISTED",
+                "ARCHIVED"
+              ]
+            },
             "PlatformRole": {
               "kind": "valueSet",
               "values": [
@@ -5947,10 +6955,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "368c0f832bf717aae07a211a316faa92e5b72946f90895162a8e58bbaa1a0def"
+    "storageHash": "c08b36563264571a863a535b9c306ad9c0305559b75497eb2ba95c132bc40e2b"
   },
   "execution": {
-    "executionHash": "096a3369903902f3aed35f38fda0382c781b3f96095fa9c152668c52ad635672",
+    "executionHash": "4909b387c650a5789a1075caffd5bf593ee47b98ecc2f48ce11b9f5cd1fa3c04",
     "mutations": {
       "defaults": [
         {
@@ -5975,6 +6983,28 @@
           },
           "ref": {
             "entry": "Account",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "AddOn",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onUpdate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "AddOn",
             "field": "updatedAt",
             "namespace": "public"
           }
@@ -6009,6 +7039,17 @@
           "ref": {
             "entry": "EmailMessage",
             "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "EntitlementOverride",
+            "field": "id",
             "namespace": "public"
           }
         },
@@ -6291,6 +7332,17 @@
             "kind": "generator"
           },
           "ref": {
+            "entry": "TenantAddOn",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
             "entry": "TenantModule",
             "field": "id",
             "namespace": "public"
@@ -6337,6 +7389,17 @@
           "ref": {
             "entry": "TwoFactor",
             "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "UsageCounter",
+            "field": "id",
             "namespace": "public"
           }
         },

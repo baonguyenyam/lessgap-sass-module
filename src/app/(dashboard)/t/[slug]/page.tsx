@@ -5,6 +5,7 @@ import Link from "next/link"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { getEntitlement } from "@/lib/billing"
+import { ensureTenant } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -24,7 +25,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ slug
   const format = await getFormatter()
   const user = await requireUser()
 
-  const entitlement = await getEntitlement(user.id)
+  const entitlement = await getEntitlement((await ensureTenant(user)).tenantId)
   const subscription = entitlement.kind === "subscription" ? entitlement.subscription : null
   const lifetime = entitlement.kind === "lifetime" ? entitlement.purchase : null
 

@@ -326,3 +326,15 @@ Read before every task. Format and rules: [README.md](./README.md). Newest first
 - **Fix:** read it through `db8.orm.public.User.select("platformRole")` instead.
 - **Rule:** inside Better Auth endpoints, columns the config does not declare are
   invisible to `internalAdapter` — use db8 for anything beyond the declared fields.
+
+### 2026-10-28 · prisma-8 · data transforms inside migration.ts
+- **Symptom:** a `userId`→`tenantId` re-own could not be a `--rename` (values need a lookup, not a copy), and `addRequiredColumnToEmptyTable` fails when the table has rows.
+- **Cause:** the planner renders holes; filling `tenantId` must happen *before* `dropColumn userId` and inside the same transaction.
+- **Fix:** reorder ops in `migration.ts` — `addColumn` nullable → `this.dataTransform(contract, 'name', { backfillsColumn, check, run })` where check/run are `raw.sql\`...\`.returnsRow({...}).build()` / `.affectedCount().build()` plans from `postgres({ contract: contractFromJson<End>(endContract) })` (`@prisma/orm-postgres/runtime` + `/static`) → `setNotNull`. The runner's postcheck is the "every row filled" guarantee.
+- **Rule:** a column re-own is `addColumn` + `dataTransform` + `setNotNull`, never `--rename`; the 1.12 tenant-per-user backfill must run first on databases holding pre-tenancy rows.
+
+### 2026-10-28 · tsx · top-level await breaks CLI scripts
+- **Symptom:** `pnpm exec tsx scripts/…` died with "Top-level await is currently not supported with the cjs output format".
+- **Cause:** without `"type": "module"` tsx compiles to CJS, which has no TLA.
+- **Fix:** wrap the entrypoint in an `async function main()` and call `void main()`.
+- **Rule:** CLI scripts in `scripts/` keep their await inside `main()`, not at top level.

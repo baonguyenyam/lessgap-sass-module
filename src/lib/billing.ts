@@ -16,13 +16,13 @@ export type Entitlement =
   | { kind: "subscription"; subscription: SubscriptionWithPlan }
   | { kind: "free" }
 
-export async function getEntitlement(userId: string): Promise<Entitlement> {
+export async function getEntitlement(tenantId: string): Promise<Entitlement> {
   const [purchase, subscription] = await Promise.all([
-    db8.orm.public.Purchase.where({ userId, status: "COMPLETED" })
+    db8.orm.public.Purchase.where({ tenantId, status: "COMPLETED" })
       .orderBy((p) => p.createdAt.desc())
       .include("plan")
       .first(),
-    db8.orm.public.Subscription.where({ userId }).include("plan").first(),
+    db8.orm.public.Subscription.where({ tenantId }).include("plan").first(),
   ])
 
   // A subscription only counts while Stripe still manages it (same statuses

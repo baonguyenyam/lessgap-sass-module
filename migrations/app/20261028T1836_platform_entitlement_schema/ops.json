@@ -1,0 +1,2409 @@
+[
+  {
+    "id": "createNativeEnumType.PlanVisibility",
+    "label": "Create enum type \"PlanVisibility\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "type",
+        "name": "PlanVisibility"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "create enum type \"PlanVisibility\"",
+        "sql": "CREATE TYPE \"public\".\"PlanVisibility\" AS ENUM ('PUBLIC', 'UNLISTED', 'ARCHIVED')",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "dropConstraint.Purchase.Purchase_userId_fkey",
+    "label": "Drop constraint \"Purchase_userId_fkey\" on \"Purchase\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Purchase_userId_fkey",
+        "table": "Purchase"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Purchase_userId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Purchase_userId_fkey",
+          "public",
+          "\"public\".\"Purchase\""
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "constraint \"Purchase_userId_fkey\" on \"Purchase\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop constraint \"Purchase_userId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Purchase\" DROP CONSTRAINT \"Purchase_userId_fkey\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Purchase_userId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Purchase_userId_fkey",
+          "public",
+          "\"public\".\"Purchase\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"Purchase_userId_fkey\" on \"Purchase\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "dropConstraint.Subscription.Subscription_userId_fkey",
+    "label": "Drop constraint \"Subscription_userId_fkey\" on \"Subscription\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Subscription_userId_fkey",
+        "table": "Subscription"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Subscription_userId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Subscription_userId_fkey",
+          "public",
+          "\"public\".\"Subscription\""
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "constraint \"Subscription_userId_fkey\" on \"Subscription\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop constraint \"Subscription_userId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Subscription\" DROP CONSTRAINT \"Subscription_userId_fkey\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Subscription_userId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Subscription_userId_fkey",
+          "public",
+          "\"public\".\"Subscription\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"Subscription_userId_fkey\" on \"Subscription\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "dropCheckConstraint.Plan.Plan_features_elem_not_null_1a661718",
+    "label": "Drop check constraint \"Plan_features_elem_not_null_1a661718\" on \"Plan\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "Plan_features_elem_not_null_1a661718",
+        "table": "Plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Plan_features_elem_not_null_1a661718\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Plan_features_elem_not_null_1a661718",
+          "public",
+          "\"public\".\"Plan\""
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "constraint \"Plan_features_elem_not_null_1a661718\" on \"Plan\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop check constraint \"Plan_features_elem_not_null_1a661718\"",
+        "sql": "ALTER TABLE \"public\".\"Plan\" DROP CONSTRAINT \"Plan_features_elem_not_null_1a661718\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Plan_features_elem_not_null_1a661718\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Plan_features_elem_not_null_1a661718",
+          "public",
+          "\"public\".\"Plan\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"Plan_features_elem_not_null_1a661718\" on \"Plan\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "column.public.Purchase.tenantId",
+    "label": "Add column \"tenantId\" to \"Purchase\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "tenantId",
+        "table": "Purchase"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"tenantId\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Purchase",
+          "tenantId"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"tenantId\" on \"Purchase\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"tenantId\"",
+        "sql": "ALTER TABLE \"public\".\"Purchase\" ADD COLUMN \"tenantId\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"tenantId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Purchase",
+          "tenantId"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"tenantId\" on \"Purchase\""
+        }
+      },
+      {
+        "description": "verify column \"tenantId\" has type \"text\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Purchase",
+          "tenantId",
+          "text"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Subscription.tenantId",
+    "label": "Add column \"tenantId\" to \"Subscription\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "tenantId",
+        "table": "Subscription"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"tenantId\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Subscription",
+          "tenantId"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"tenantId\" on \"Subscription\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"tenantId\"",
+        "sql": "ALTER TABLE \"public\".\"Subscription\" ADD COLUMN \"tenantId\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"tenantId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Subscription",
+          "tenantId"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"tenantId\" on \"Subscription\""
+        }
+      },
+      {
+        "description": "verify column \"tenantId\" has type \"text\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Subscription",
+          "tenantId",
+          "text"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "data_migration.backfill-purchase-tenant",
+    "label": "Data transform: backfill-purchase-tenant",
+    "operationClass": "data",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "tenantId",
+        "table": "Purchase"
+      }
+    },
+    "precheck": [
+      {
+        "description": "Check backfill-purchase-tenant has work to do",
+        "sql": "SELECT EXISTS (SELECT \"id\" FROM \"Purchase\" WHERE \"tenantId\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "Run backfill-purchase-tenant",
+        "sql": "UPDATE \"Purchase\" p SET \"tenantId\" = (SELECT m.\"organizationId\" FROM \"Member\" m WHERE m.\"userId\" = p.\"userId\" AND m.\"role\" = 'owner' ORDER BY m.\"createdAt\" ASC LIMIT 1) WHERE p.\"tenantId\" IS NULL",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "Verify backfill-purchase-tenant resolved all violations",
+        "sql": "SELECT NOT EXISTS (SELECT \"id\" FROM \"Purchase\" WHERE \"tenantId\" IS NULL LIMIT 1) AS ok",
+        "params": [],
+        "meta": {
+          "requiredColumn": {
+            "table": "Purchase",
+            "column": "tenantId",
+            "reason": "backfillMissedRows"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "data_migration.backfill-subscription-tenant",
+    "label": "Data transform: backfill-subscription-tenant",
+    "operationClass": "data",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "tenantId",
+        "table": "Subscription"
+      }
+    },
+    "precheck": [
+      {
+        "description": "Check backfill-subscription-tenant has work to do",
+        "sql": "SELECT EXISTS (SELECT \"id\" FROM \"Subscription\" WHERE \"tenantId\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "Run backfill-subscription-tenant",
+        "sql": "UPDATE \"Subscription\" s SET \"tenantId\" = (SELECT m.\"organizationId\" FROM \"Member\" m WHERE m.\"userId\" = s.\"userId\" AND m.\"role\" = 'owner' ORDER BY m.\"createdAt\" ASC LIMIT 1) WHERE s.\"tenantId\" IS NULL",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "Verify backfill-subscription-tenant resolved all violations",
+        "sql": "SELECT NOT EXISTS (SELECT \"id\" FROM \"Subscription\" WHERE \"tenantId\" IS NULL LIMIT 1) AS ok",
+        "params": [],
+        "meta": {
+          "requiredColumn": {
+            "table": "Subscription",
+            "column": "tenantId",
+            "reason": "backfillMissedRows"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "dropIndex.Purchase.Purchase_userId_idx",
+    "label": "Drop index \"Purchase_userId_idx\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Purchase_userId_idx",
+        "table": "Purchase"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Purchase_userId_idx\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Purchase_userId_idx\""
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "index \"Purchase_userId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop index \"Purchase_userId_idx\"",
+        "sql": "DROP INDEX \"public\".\"Purchase_userId_idx\"",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Purchase_userId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Purchase_userId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Purchase_userId_idx\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "dropColumn.Purchase.userId",
+    "label": "Drop column \"userId\" from \"Purchase\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "userId",
+        "table": "Purchase"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"userId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Purchase",
+          "userId"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"userId\" on \"Purchase\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop column \"userId\"",
+        "sql": "ALTER TABLE \"public\".\"Purchase\" DROP COLUMN \"userId\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"userId\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Purchase",
+          "userId"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"userId\" on \"Purchase\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "dropIndex.Subscription.Subscription_userId_key",
+    "label": "Drop index \"Subscription_userId_key\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Subscription_userId_key",
+        "table": "Subscription"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Subscription_userId_key\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Subscription_userId_key\""
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "index \"Subscription_userId_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop index \"Subscription_userId_key\"",
+        "sql": "DROP INDEX \"public\".\"Subscription_userId_key\"",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Subscription_userId_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Subscription_userId_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Subscription_userId_key\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "dropColumn.Subscription.userId",
+    "label": "Drop column \"userId\" from \"Subscription\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "userId",
+        "table": "Subscription"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"userId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Subscription",
+          "userId"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"userId\" on \"Subscription\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop column \"userId\"",
+        "sql": "ALTER TABLE \"public\".\"Subscription\" DROP COLUMN \"userId\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"userId\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Subscription",
+          "userId"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"userId\" on \"Subscription\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.setNotNull.Purchase.tenantId",
+    "label": "Set NOT NULL on \"Purchase\".\"tenantId\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "tenantId",
+        "table": "Purchase"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"tenantId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Purchase",
+          "tenantId"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"tenantId\" on \"Purchase\""
+        }
+      },
+      {
+        "description": "ensure no NULL values in \"tenantId\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"public\".\"Purchase\" WHERE \"tenantId\" IS NULL) AS \"result\"",
+        "params": [],
+        "meta": {
+          "requiredColumn": {
+            "table": "Purchase",
+            "column": "tenantId",
+            "reason": "nullValues"
+          }
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "set NOT NULL on \"tenantId\"",
+        "sql": "ALTER TABLE \"public\".\"Purchase\" ALTER COLUMN \"tenantId\" SET NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"tenantId\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "Purchase",
+          "tenantId",
+          "NO"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.setNotNull.Subscription.tenantId",
+    "label": "Set NOT NULL on \"Subscription\".\"tenantId\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "tenantId",
+        "table": "Subscription"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"tenantId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Subscription",
+          "tenantId"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"tenantId\" on \"Subscription\""
+        }
+      },
+      {
+        "description": "ensure no NULL values in \"tenantId\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"public\".\"Subscription\" WHERE \"tenantId\" IS NULL) AS \"result\"",
+        "params": [],
+        "meta": {
+          "requiredColumn": {
+            "table": "Subscription",
+            "column": "tenantId",
+            "reason": "nullValues"
+          }
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "set NOT NULL on \"tenantId\"",
+        "sql": "ALTER TABLE \"public\".\"Subscription\" ALTER COLUMN \"tenantId\" SET NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"tenantId\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "Subscription",
+          "tenantId",
+          "NO"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.AddOn",
+    "label": "Create table \"AddOn\"",
+    "summary": "Creates table \"AddOn\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "AddOn"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"AddOn\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AddOn\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"AddOn\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"AddOn\"",
+        "sql": "CREATE TABLE \"public\".\"AddOn\" (\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"features\" json DEFAULT '{}'::json NOT NULL,\n  \"id\" text NOT NULL,\n  \"isActive\" bool DEFAULT true NOT NULL,\n  \"key\" text NOT NULL,\n  \"name\" text NOT NULL,\n  \"stripePriceId\" text NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  CONSTRAINT \"AddOn_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"AddOn\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"AddOn\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"AddOn\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.EntitlementOverride",
+    "label": "Create table \"EntitlementOverride\"",
+    "summary": "Creates table \"EntitlementOverride\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "EntitlementOverride"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"EntitlementOverride\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"EntitlementOverride\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"EntitlementOverride\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"EntitlementOverride\"",
+        "sql": "CREATE TABLE \"public\".\"EntitlementOverride\" (\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"createdById\" text NOT NULL,\n  \"expiresAt\" timestamp(3),\n  \"featureKey\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"ignoresSwitch\" bool DEFAULT false NOT NULL,\n  \"reason\" text NOT NULL,\n  \"tenantId\" text NOT NULL,\n  \"value\" json NOT NULL,\n  CONSTRAINT \"EntitlementOverride_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"EntitlementOverride\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"EntitlementOverride\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"EntitlementOverride\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.TenantAddOn",
+    "label": "Create table \"TenantAddOn\"",
+    "summary": "Creates table \"TenantAddOn\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "TenantAddOn"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"TenantAddOn\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TenantAddOn\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"TenantAddOn\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"TenantAddOn\"",
+        "sql": "CREATE TABLE \"public\".\"TenantAddOn\" (\n  \"addOnId\" text NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"quantity\" int4 DEFAULT 1 NOT NULL,\n  \"tenantId\" text NOT NULL,\n  CONSTRAINT \"TenantAddOn_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"TenantAddOn\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"TenantAddOn\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"TenantAddOn\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.UsageCounter",
+    "label": "Create table \"UsageCounter\"",
+    "summary": "Creates table \"UsageCounter\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "UsageCounter"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"UsageCounter\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"UsageCounter\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"UsageCounter\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"UsageCounter\"",
+        "sql": "CREATE TABLE \"public\".\"UsageCounter\" (\n  \"id\" text NOT NULL,\n  \"limitKey\" text NOT NULL,\n  \"periodStart\" timestamp(3) NOT NULL,\n  \"tenantId\" text NOT NULL,\n  \"used\" int4 DEFAULT 0 NOT NULL,\n  CONSTRAINT \"UsageCounter_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"UsageCounter\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"UsageCounter\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"UsageCounter\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "column.public.Plan.feeModel",
+    "label": "Add column \"feeModel\" to \"Plan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "feeModel",
+        "table": "Plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"feeModel\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "feeModel"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"feeModel\" on \"Plan\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"feeModel\"",
+        "sql": "ALTER TABLE \"public\".\"Plan\" ADD COLUMN \"feeModel\" json"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"feeModel\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "feeModel"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"feeModel\" on \"Plan\""
+        }
+      },
+      {
+        "description": "verify column \"feeModel\" has type \"json\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "feeModel",
+          "json"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Plan.marketingFeatures",
+    "label": "Add column \"marketingFeatures\" to \"Plan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "marketingFeatures",
+        "table": "Plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"marketingFeatures\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "marketingFeatures"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"marketingFeatures\" on \"Plan\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"marketingFeatures\"",
+        "sql": "ALTER TABLE \"public\".\"Plan\" ADD COLUMN \"marketingFeatures\" text[] DEFAULT '{}' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"marketingFeatures\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "marketingFeatures"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"marketingFeatures\" on \"Plan\""
+        }
+      },
+      {
+        "description": "verify column \"marketingFeatures\" has type \"text[]\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "marketingFeatures",
+          "text[]"
+        ]
+      },
+      {
+        "description": "verify column \"marketingFeatures\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "marketingFeatures",
+          "NO"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Plan.setupFeeCents",
+    "label": "Add column \"setupFeeCents\" to \"Plan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "setupFeeCents",
+        "table": "Plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"setupFeeCents\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "setupFeeCents"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"setupFeeCents\" on \"Plan\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"setupFeeCents\"",
+        "sql": "ALTER TABLE \"public\".\"Plan\" ADD COLUMN \"setupFeeCents\" int4"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"setupFeeCents\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "setupFeeCents"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"setupFeeCents\" on \"Plan\""
+        }
+      },
+      {
+        "description": "verify column \"setupFeeCents\" has type \"integer\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "setupFeeCents",
+          "integer"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Plan.visibility",
+    "label": "Add column \"visibility\" to \"Plan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "visibility",
+        "table": "Plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"visibility\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "visibility"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"visibility\" on \"Plan\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"visibility\"",
+        "sql": "ALTER TABLE \"public\".\"Plan\" ADD COLUMN \"visibility\" \"PlanVisibility\" DEFAULT 'PUBLIC'::\"PlanVisibility\" NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"visibility\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "visibility"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"visibility\" on \"Plan\""
+        }
+      },
+      {
+        "description": "verify column \"visibility\" has type \"PlanVisibility\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" WHERE (\"a\".\"attrelid\" = to_regclass($1) AND \"a\".\"attname\" = $2 AND \"a\".\"atttypid\" = to_regtype($3) AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "\"public\".\"Plan\"",
+          "visibility",
+          "\"PlanVisibility\""
+        ]
+      },
+      {
+        "description": "verify column \"visibility\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "visibility",
+          "NO"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "data_migration.copy-plan-marketing-features",
+    "label": "Data transform: copy-plan-marketing-features",
+    "operationClass": "data",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "marketingFeatures",
+        "table": "Plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "Check copy-plan-marketing-features has work to do",
+        "sql": "SELECT EXISTS (SELECT \"id\" FROM \"Plan\" WHERE \"marketingFeatures\" = '{}' AND \"features\" <> '{}' LIMIT 1) AS ok",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "Run copy-plan-marketing-features",
+        "sql": "UPDATE \"Plan\" SET \"marketingFeatures\" = \"features\"",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "Verify copy-plan-marketing-features resolved all violations",
+        "sql": "SELECT NOT EXISTS (SELECT \"id\" FROM \"Plan\" WHERE \"marketingFeatures\" = '{}' AND \"features\" <> '{}' LIMIT 1) AS ok",
+        "params": [],
+        "meta": {
+          "requiredColumn": {
+            "table": "Plan",
+            "column": "marketingFeatures",
+            "reason": "backfillMissedRows"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "alterType.Plan.features",
+    "label": "Alter type of \"Plan\".\"features\" to json",
+    "operationClass": "data",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "features",
+        "table": "Plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"features\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "features"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"features\" on \"Plan\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "alter type of \"features\" to json",
+        "sql": "ALTER TABLE \"public\".\"Plan\" ALTER COLUMN \"features\" TYPE json USING '{}'::json",
+        "meta": {
+          "convertedColumn": {
+            "table": "Plan",
+            "column": "features",
+            "by": "conversion"
+          }
+        }
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"features\" has type \"json\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "features",
+          "json"
+        ]
+      }
+    ],
+    "meta": {
+      "warning": "TABLE_REWRITE"
+    }
+  },
+  {
+    "id": "setDefault.Plan.features",
+    "label": "Set default on \"Plan\".\"features\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "features",
+        "table": "Plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"features\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "features"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"features\" on \"Plan\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "set default on \"features\"",
+        "sql": "ALTER TABLE \"public\".\"Plan\" ALTER COLUMN \"features\" SET DEFAULT '{}'::json"
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "alterNullability.dropNotNull.Plan.stripePriceId",
+    "label": "Drop NOT NULL on \"Plan\".\"stripePriceId\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "stripePriceId",
+        "table": "Plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"stripePriceId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "stripePriceId"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"stripePriceId\" on \"Plan\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop NOT NULL on \"stripePriceId\"",
+        "sql": "ALTER TABLE \"public\".\"Plan\" ALTER COLUMN \"stripePriceId\" DROP NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"stripePriceId\" is nullable",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "Plan",
+          "stripePriceId",
+          "YES"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "checkConstraint.Plan.Plan_marketingFeatures_elem_not_null_4825684d",
+    "label": "Add check constraint \"Plan_marketingFeatures_elem_not_null_4825684d\" on \"Plan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "Plan_marketingFeatures_elem_not_null_4825684d",
+        "table": "Plan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Plan_marketingFeatures_elem_not_null_4825684d\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Plan_marketingFeatures_elem_not_null_4825684d",
+          "public",
+          "\"public\".\"Plan\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"Plan_marketingFeatures_elem_not_null_4825684d\" on \"Plan\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"Plan_marketingFeatures_elem_not_null_4825684d\"",
+        "sql": "ALTER TABLE \"public\".\"Plan\" ADD CONSTRAINT \"Plan_marketingFeatures_elem_not_null_4825684d\" CHECK (array_position(\"marketingFeatures\", NULL) IS NULL)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify check constraint \"Plan_marketingFeatures_elem_not_null_4825684d\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4)) AS \"result\"",
+        "params": [
+          "Plan_marketingFeatures_elem_not_null_4825684d",
+          "public",
+          "\"public\".\"Plan\"",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.AddOn.AddOn_key_key",
+    "label": "Create index \"AddOn_key_key\" on \"AddOn\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "AddOn_key_key",
+        "table": "AddOn"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"AddOn_key_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AddOn_key_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"AddOn_key_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"AddOn_key_key\"",
+        "sql": "CREATE UNIQUE INDEX \"AddOn_key_key\" ON \"public\".\"AddOn\" (\"key\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"AddOn_key_key\" exists on \"AddOn\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"AddOn_key_key\"",
+          "i",
+          "I",
+          "\"public\".\"AddOn\"",
+          "btree",
+          "[\"key\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.AddOn.AddOn_stripePriceId_key",
+    "label": "Create index \"AddOn_stripePriceId_key\" on \"AddOn\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "AddOn_stripePriceId_key",
+        "table": "AddOn"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"AddOn_stripePriceId_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AddOn_stripePriceId_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"AddOn_stripePriceId_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"AddOn_stripePriceId_key\"",
+        "sql": "CREATE UNIQUE INDEX \"AddOn_stripePriceId_key\" ON \"public\".\"AddOn\" (\"stripePriceId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"AddOn_stripePriceId_key\" exists on \"AddOn\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"AddOn_stripePriceId_key\"",
+          "i",
+          "I",
+          "\"public\".\"AddOn\"",
+          "btree",
+          "[\"stripePriceId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.EntitlementOverride.EntitlementOverride_tenantId_featureKey_key",
+    "label": "Create index \"EntitlementOverride_tenantId_featureKey_key\" on \"EntitlementOverride\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "EntitlementOverride_tenantId_featureKey_key",
+        "table": "EntitlementOverride"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"EntitlementOverride_tenantId_featureKey_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"EntitlementOverride_tenantId_featureKey_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"EntitlementOverride_tenantId_featureKey_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"EntitlementOverride_tenantId_featureKey_key\"",
+        "sql": "CREATE UNIQUE INDEX \"EntitlementOverride_tenantId_featureKey_key\" ON \"public\".\"EntitlementOverride\" (\"tenantId\", \"featureKey\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"EntitlementOverride_tenantId_featureKey_key\" exists on \"EntitlementOverride\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"EntitlementOverride_tenantId_featureKey_key\"",
+          "i",
+          "I",
+          "\"public\".\"EntitlementOverride\"",
+          "btree",
+          "[\"tenantId\",\"featureKey\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.EntitlementOverride.EntitlementOverride_tenantId_idx_c93ed4f1",
+    "label": "Create index \"EntitlementOverride_tenantId_idx_c93ed4f1\" on \"EntitlementOverride\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "EntitlementOverride_tenantId_idx_c93ed4f1",
+        "table": "EntitlementOverride"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"EntitlementOverride_tenantId_idx_c93ed4f1\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"EntitlementOverride_tenantId_idx_c93ed4f1\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"EntitlementOverride_tenantId_idx_c93ed4f1\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"EntitlementOverride_tenantId_idx_c93ed4f1\"",
+        "sql": "CREATE INDEX \"EntitlementOverride_tenantId_idx_c93ed4f1\" ON \"public\".\"EntitlementOverride\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"EntitlementOverride_tenantId_idx_c93ed4f1\" exists on \"EntitlementOverride\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"EntitlementOverride_tenantId_idx_c93ed4f1\"",
+          "i",
+          "I",
+          "\"public\".\"EntitlementOverride\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Purchase.Purchase_tenantId_idx",
+    "label": "Create index \"Purchase_tenantId_idx\" on \"Purchase\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Purchase_tenantId_idx",
+        "table": "Purchase"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Purchase_tenantId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Purchase_tenantId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Purchase_tenantId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Purchase_tenantId_idx\"",
+        "sql": "CREATE INDEX \"Purchase_tenantId_idx\" ON \"public\".\"Purchase\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Purchase_tenantId_idx\" exists on \"Purchase\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Purchase_tenantId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"Purchase\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Subscription.Subscription_tenantId_key",
+    "label": "Create index \"Subscription_tenantId_key\" on \"Subscription\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Subscription_tenantId_key",
+        "table": "Subscription"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Subscription_tenantId_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Subscription_tenantId_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Subscription_tenantId_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Subscription_tenantId_key\"",
+        "sql": "CREATE UNIQUE INDEX \"Subscription_tenantId_key\" ON \"public\".\"Subscription\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Subscription_tenantId_key\" exists on \"Subscription\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Subscription_tenantId_key\"",
+          "i",
+          "I",
+          "\"public\".\"Subscription\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.TenantAddOn.TenantAddOn_addOnId_idx_84096c82",
+    "label": "Create index \"TenantAddOn_addOnId_idx_84096c82\" on \"TenantAddOn\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "TenantAddOn_addOnId_idx_84096c82",
+        "table": "TenantAddOn"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"TenantAddOn_addOnId_idx_84096c82\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TenantAddOn_addOnId_idx_84096c82\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"TenantAddOn_addOnId_idx_84096c82\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"TenantAddOn_addOnId_idx_84096c82\"",
+        "sql": "CREATE INDEX \"TenantAddOn_addOnId_idx_84096c82\" ON \"public\".\"TenantAddOn\" (\"addOnId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"TenantAddOn_addOnId_idx_84096c82\" exists on \"TenantAddOn\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"TenantAddOn_addOnId_idx_84096c82\"",
+          "i",
+          "I",
+          "\"public\".\"TenantAddOn\"",
+          "btree",
+          "[\"addOnId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.TenantAddOn.TenantAddOn_tenantId_addOnId_key",
+    "label": "Create index \"TenantAddOn_tenantId_addOnId_key\" on \"TenantAddOn\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "TenantAddOn_tenantId_addOnId_key",
+        "table": "TenantAddOn"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"TenantAddOn_tenantId_addOnId_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TenantAddOn_tenantId_addOnId_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"TenantAddOn_tenantId_addOnId_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"TenantAddOn_tenantId_addOnId_key\"",
+        "sql": "CREATE UNIQUE INDEX \"TenantAddOn_tenantId_addOnId_key\" ON \"public\".\"TenantAddOn\" (\"tenantId\", \"addOnId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"TenantAddOn_tenantId_addOnId_key\" exists on \"TenantAddOn\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"TenantAddOn_tenantId_addOnId_key\"",
+          "i",
+          "I",
+          "\"public\".\"TenantAddOn\"",
+          "btree",
+          "[\"tenantId\",\"addOnId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.TenantAddOn.TenantAddOn_tenantId_idx_c93ed4f1",
+    "label": "Create index \"TenantAddOn_tenantId_idx_c93ed4f1\" on \"TenantAddOn\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "TenantAddOn_tenantId_idx_c93ed4f1",
+        "table": "TenantAddOn"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"TenantAddOn_tenantId_idx_c93ed4f1\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TenantAddOn_tenantId_idx_c93ed4f1\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"TenantAddOn_tenantId_idx_c93ed4f1\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"TenantAddOn_tenantId_idx_c93ed4f1\"",
+        "sql": "CREATE INDEX \"TenantAddOn_tenantId_idx_c93ed4f1\" ON \"public\".\"TenantAddOn\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"TenantAddOn_tenantId_idx_c93ed4f1\" exists on \"TenantAddOn\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"TenantAddOn_tenantId_idx_c93ed4f1\"",
+          "i",
+          "I",
+          "\"public\".\"TenantAddOn\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.UsageCounter.UsageCounter_tenantId_idx_c93ed4f1",
+    "label": "Create index \"UsageCounter_tenantId_idx_c93ed4f1\" on \"UsageCounter\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "UsageCounter_tenantId_idx_c93ed4f1",
+        "table": "UsageCounter"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"UsageCounter_tenantId_idx_c93ed4f1\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"UsageCounter_tenantId_idx_c93ed4f1\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"UsageCounter_tenantId_idx_c93ed4f1\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"UsageCounter_tenantId_idx_c93ed4f1\"",
+        "sql": "CREATE INDEX \"UsageCounter_tenantId_idx_c93ed4f1\" ON \"public\".\"UsageCounter\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"UsageCounter_tenantId_idx_c93ed4f1\" exists on \"UsageCounter\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"UsageCounter_tenantId_idx_c93ed4f1\"",
+          "i",
+          "I",
+          "\"public\".\"UsageCounter\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.UsageCounter.UsageCounter_tenantId_limitKey_periodStart_key",
+    "label": "Create index \"UsageCounter_tenantId_limitKey_periodStart_key\" on \"UsageCounter\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "UsageCounter_tenantId_limitKey_periodStart_key",
+        "table": "UsageCounter"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"UsageCounter_tenantId_limitKey_periodStart_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"UsageCounter_tenantId_limitKey_periodStart_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"UsageCounter_tenantId_limitKey_periodStart_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"UsageCounter_tenantId_limitKey_periodStart_key\"",
+        "sql": "CREATE UNIQUE INDEX \"UsageCounter_tenantId_limitKey_periodStart_key\" ON \"public\".\"UsageCounter\" (\"tenantId\", \"limitKey\", \"periodStart\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"UsageCounter_tenantId_limitKey_periodStart_key\" exists on \"UsageCounter\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"UsageCounter_tenantId_limitKey_periodStart_key\"",
+          "i",
+          "I",
+          "\"public\".\"UsageCounter\"",
+          "btree",
+          "[\"tenantId\",\"limitKey\",\"periodStart\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.EntitlementOverride.EntitlementOverride_tenantId_fkey",
+    "label": "Add foreign key \"EntitlementOverride_tenantId_fkey\" on \"EntitlementOverride\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "EntitlementOverride_tenantId_fkey",
+        "table": "EntitlementOverride"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"EntitlementOverride_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "EntitlementOverride_tenantId_fkey",
+          "public",
+          "\"public\".\"EntitlementOverride\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"EntitlementOverride_tenantId_fkey\" on \"EntitlementOverride\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"EntitlementOverride_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"EntitlementOverride\"\nADD CONSTRAINT \"EntitlementOverride_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"EntitlementOverride_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "EntitlementOverride_tenantId_fkey",
+          "public",
+          "\"public\".\"EntitlementOverride\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Purchase.Purchase_tenantId_fkey",
+    "label": "Add foreign key \"Purchase_tenantId_fkey\" on \"Purchase\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Purchase_tenantId_fkey",
+        "table": "Purchase"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Purchase_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Purchase_tenantId_fkey",
+          "public",
+          "\"public\".\"Purchase\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Purchase_tenantId_fkey\" on \"Purchase\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Purchase_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Purchase\"\nADD CONSTRAINT \"Purchase_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Purchase_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Purchase_tenantId_fkey",
+          "public",
+          "\"public\".\"Purchase\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Subscription.Subscription_tenantId_fkey",
+    "label": "Add foreign key \"Subscription_tenantId_fkey\" on \"Subscription\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Subscription_tenantId_fkey",
+        "table": "Subscription"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Subscription_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Subscription_tenantId_fkey",
+          "public",
+          "\"public\".\"Subscription\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Subscription_tenantId_fkey\" on \"Subscription\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Subscription_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Subscription\"\nADD CONSTRAINT \"Subscription_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Subscription_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Subscription_tenantId_fkey",
+          "public",
+          "\"public\".\"Subscription\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.TenantAddOn.TenantAddOn_tenantId_fkey",
+    "label": "Add foreign key \"TenantAddOn_tenantId_fkey\" on \"TenantAddOn\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "TenantAddOn_tenantId_fkey",
+        "table": "TenantAddOn"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"TenantAddOn_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "TenantAddOn_tenantId_fkey",
+          "public",
+          "\"public\".\"TenantAddOn\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"TenantAddOn_tenantId_fkey\" on \"TenantAddOn\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"TenantAddOn_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"TenantAddOn\"\nADD CONSTRAINT \"TenantAddOn_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"TenantAddOn_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "TenantAddOn_tenantId_fkey",
+          "public",
+          "\"public\".\"TenantAddOn\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.TenantAddOn.TenantAddOn_addOnId_fkey",
+    "label": "Add foreign key \"TenantAddOn_addOnId_fkey\" on \"TenantAddOn\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "TenantAddOn_addOnId_fkey",
+        "table": "TenantAddOn"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"TenantAddOn_addOnId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "TenantAddOn_addOnId_fkey",
+          "public",
+          "\"public\".\"TenantAddOn\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"TenantAddOn_addOnId_fkey\" on \"TenantAddOn\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"TenantAddOn_addOnId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"TenantAddOn\"\nADD CONSTRAINT \"TenantAddOn_addOnId_fkey\"\nFOREIGN KEY (\"addOnId\")\nREFERENCES \"public\".\"AddOn\" (\"id\")\nON DELETE RESTRICT\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"TenantAddOn_addOnId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "TenantAddOn_addOnId_fkey",
+          "public",
+          "\"public\".\"TenantAddOn\"",
+          "f",
+          "[\"addOnId\"]",
+          "\"public\".\"AddOn\"",
+          "[\"id\"]",
+          "r",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.UsageCounter.UsageCounter_tenantId_fkey",
+    "label": "Add foreign key \"UsageCounter_tenantId_fkey\" on \"UsageCounter\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "UsageCounter_tenantId_fkey",
+        "table": "UsageCounter"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"UsageCounter_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "UsageCounter_tenantId_fkey",
+          "public",
+          "\"public\".\"UsageCounter\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"UsageCounter_tenantId_fkey\" on \"UsageCounter\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"UsageCounter_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"UsageCounter\"\nADD CONSTRAINT \"UsageCounter_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"UsageCounter_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "UsageCounter_tenantId_fkey",
+          "public",
+          "\"public\".\"UsageCounter\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.EntitlementOverride",
+    "label": "Enable row-level security on \"EntitlementOverride\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "EntitlementOverride"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"EntitlementOverride\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "EntitlementOverride"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"EntitlementOverride\"",
+        "sql": "ALTER TABLE \"public\".\"EntitlementOverride\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"EntitlementOverride\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "EntitlementOverride"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.Purchase",
+    "label": "Enable row-level security on \"Purchase\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "Purchase"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"Purchase\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Purchase"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"Purchase\"",
+        "sql": "ALTER TABLE \"public\".\"Purchase\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"Purchase\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "Purchase"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.Subscription",
+    "label": "Enable row-level security on \"Subscription\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "Subscription"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"Subscription\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Subscription"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"Subscription\"",
+        "sql": "ALTER TABLE \"public\".\"Subscription\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"Subscription\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "Subscription"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.TenantAddOn",
+    "label": "Enable row-level security on \"TenantAddOn\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "TenantAddOn"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"TenantAddOn\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "TenantAddOn"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"TenantAddOn\"",
+        "sql": "ALTER TABLE \"public\".\"TenantAddOn\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"TenantAddOn\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "TenantAddOn"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.UsageCounter",
+    "label": "Enable row-level security on \"UsageCounter\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "UsageCounter"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"UsageCounter\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "UsageCounter"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"UsageCounter\"",
+        "sql": "ALTER TABLE \"public\".\"UsageCounter\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"UsageCounter\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "UsageCounter"
+        ]
+      }
+    ]
+  }
+]

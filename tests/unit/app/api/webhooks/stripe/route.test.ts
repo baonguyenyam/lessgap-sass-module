@@ -136,7 +136,7 @@ describe("POST /api/webhooks/stripe: a refused email never fails the payment", (
       payment_intent: "pi_1",
       amount_total: 9900,
       currency: "usd",
-      metadata: { userId: "user_1", planId: "plan_1" },
+      metadata: { userId: "user_1", tenantId: "t_1", planId: "plan_1" },
     })
 
   beforeEach(() => {

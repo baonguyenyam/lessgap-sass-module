@@ -2,7 +2,7 @@ import { afterAll, beforeEach, describe, expect, it, vi } from "vitest"
 import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
 import { newTimeId } from "@/lib/ids"
-import { toTs } from "@/lib/timestamps"
+import { nowTs, toTs } from "@/lib/timestamps"
 import { deleteTenant } from "@/platform/tenancy/delete-tenant"
 import { resetDatabase } from "@tests/helpers/db"
 
@@ -31,15 +31,24 @@ describe("tenant deletion (T9)", () => {
       NewsletterSubscriber,
       TenantModule,
       TenantSetting,
+      Purchase,
+      Subscription,
+      TenantAddOn,
+      EntitlementOverride,
+      UsageCounter,
       Member,
       Invitation,
       OrganizationRole,
       Tenant,
       AuditLog,
+      Plan,
+      AddOn,
     } = db8.orm.public
     const userId = await signUp()
     const slug = `purge-${Date.now()}-${++seq}`
     const tenant = await auth.api.createOrganization({ body: { name: "Purge Me", slug, userId } })
+    const plan = await Plan.create({ name: "Purge Plan", slug, price: 100, interval: "MONTH" })
+    const addOn = await AddOn.create({ key: slug, name: "Purge Add-on", stripePriceId: `price_${slug}` })
 
     await Promise.all([
       NewsletterSubscriber.create({
@@ -66,6 +75,29 @@ describe("tenant deletion (T9)", () => {
         action: "platform.tenant.marked",
         tenantId: tenant.id,
       }),
+      Subscription.create({
+        tenantId: tenant.id,
+        planId: plan.id,
+        stripeSubscriptionId: `sub_${slug}`,
+        status: "ACTIVE",
+        currentPeriodStart: nowTs(),
+        currentPeriodEnd: toTs(new Date(2100, 0, 1)),
+      }),
+      Purchase.create({
+        tenantId: tenant.id,
+        planId: plan.id,
+        stripePaymentIntentId: `pi_${slug}`,
+        amount: 100,
+      }),
+      TenantAddOn.create({ tenantId: tenant.id, addOnId: addOn.id }),
+      EntitlementOverride.create({
+        tenantId: tenant.id,
+        featureKey: "demo",
+        value: true,
+        reason: "test",
+        createdById: "staff-1",
+      }),
+      UsageCounter.create({ tenantId: tenant.id, limitKey: "demo", periodStart: nowTs(), used: 1 }),
     ])
 
     await deleteTenant(tenant.id)
@@ -75,6 +107,11 @@ describe("tenant deletion (T9)", () => {
       ["NewsletterSubscriber", NewsletterSubscriber, "tenantId"],
       ["TenantModule", TenantModule, "tenantId"],
       ["TenantSetting", TenantSetting, "tenantId"],
+      ["Purchase", Purchase, "tenantId"],
+      ["Subscription", Subscription, "tenantId"],
+      ["TenantAddOn", TenantAddOn, "tenantId"],
+      ["EntitlementOverride", EntitlementOverride, "tenantId"],
+      ["UsageCounter", UsageCounter, "tenantId"],
       ["Member", Member, "organizationId"],
       ["Invitation", Invitation, "organizationId"],
       ["OrganizationRole", OrganizationRole, "organizationId"],

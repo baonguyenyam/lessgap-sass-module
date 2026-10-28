@@ -6,6 +6,7 @@ export type ModelClassification = {
 /** Every Prisma model needs a deliberate data owner before it can ship. */
 export const MODEL_CLASSIFICATION = {
   Account: { kind: "identity", reason: "Better Auth credential and provider links." },
+  AddOn: { kind: "global", reason: "Platform catalogue of what a tenant can buy on top of its plan." },
   AuditLog: {
     kind: "platform-private",
     reason: "The who-changed-what record staff read; a tenant id is for filtering, not ownership.",
@@ -13,6 +14,10 @@ export const MODEL_CLASSIFICATION = {
   EmailMessage: {
     kind: "platform-private",
     reason: "Platform delivery record of every email; a tenant id says whose email it was, staff read it.",
+  },
+  EntitlementOverride: {
+    kind: "tenant-owned",
+    reason: "A staff override of one feature for one tenant; deleted with the tenant.",
   },
   ErrorReport: {
     kind: "platform-private",
@@ -29,12 +34,14 @@ export const MODEL_CLASSIFICATION = {
   Plan: { kind: "global", reason: "Platform-wide plan catalogue." },
   PlatformSwitch: { kind: "global", reason: "Platform-wide feature and setting switches." },
   Project: { kind: "identity", reason: "Legacy kit records are scoped to their User until Phase 1 retires them." },
-  Purchase: { kind: "identity", reason: "Legacy kit purchases are linked to their User." },
+  Purchase: { kind: "tenant-owned", reason: "What a tenant bought; re-owned from userId in phase 2." },
   Session: { kind: "identity", reason: "Better Auth login sessions." },
-  Subscription: { kind: "identity", reason: "Legacy kit subscriptions are linked to their User." },
+  Subscription: { kind: "tenant-owned", reason: "One subscription per tenant; re-owned from userId in phase 2." },
   Tenant: { kind: "platform-private", reason: "Platform-managed tenant directory and lifecycle state." },
+  TenantAddOn: { kind: "tenant-owned", reason: "The add-ons one tenant holds." },
   TenantModule: { kind: "tenant-owned", reason: "Which modules one tenant has turned on." },
   TenantSetting: { kind: "tenant-owned", reason: "Settings belong to one tenant." },
+  UsageCounter: { kind: "tenant-owned", reason: "Metered usage belongs to one tenant." },
   TwoFactor: { kind: "identity", reason: "Better Auth two-factor credentials." },
   User: { kind: "identity", reason: "Better Auth user accounts." },
   UserSetting: { kind: "identity", reason: "Preferences belong to one user account." },

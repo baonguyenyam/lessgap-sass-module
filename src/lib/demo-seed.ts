@@ -2,6 +2,7 @@ import { not } from "@prisma/orm-postgres/orm-client"
 import { db8, uniqueIndexKey } from "@/lib/db8"
 import type { BillingInterval, SubscriptionStatus } from "@/lib/billing"
 import { hashPassword } from "./password"
+import { slugify } from "./slugify"
 import { toTs } from "@/lib/timestamps"
 
 /**
@@ -36,7 +37,7 @@ const examplePlans: {
   price: number
   interval: BillingInterval
   stripePriceId: string
-  features: string[]
+  marketingFeatures: string[]
   meterEventName?: string
   trialDays?: number
   isActive?: boolean
@@ -48,7 +49,7 @@ const examplePlans: {
     price: 900,
     interval: "MONTH",
     stripePriceId: priceId(process.env.STRIPE_STARTER_PRICE_ID, "price_starter_placeholder"),
-    features: ["Up to 3 projects", "Basic analytics", "Community support"],
+    marketingFeatures: ["Up to 3 projects", "Basic analytics", "Community support"],
   },
   {
     slug: "starter-yearly",
@@ -57,7 +58,7 @@ const examplePlans: {
     price: 9000,
     interval: "YEAR",
     stripePriceId: priceId(process.env.STRIPE_STARTER_YEARLY_PRICE_ID, "price_starter_yearly_placeholder"),
-    features: ["Up to 3 projects", "Basic analytics", "2 months free"],
+    marketingFeatures: ["Up to 3 projects", "Basic analytics", "2 months free"],
   },
   {
     slug: "pro-monthly",
@@ -67,7 +68,7 @@ const examplePlans: {
     interval: "MONTH",
     stripePriceId: priceId(process.env.STRIPE_PRO_PRICE_ID, "price_pro_placeholder"),
     trialDays: 14,
-    features: ["Everything in Starter", "Unlimited projects", "Advanced analytics", "Priority support"],
+    marketingFeatures: ["Everything in Starter", "Unlimited projects", "Advanced analytics", "Priority support"],
   },
   {
     slug: "pro-yearly",
@@ -76,7 +77,7 @@ const examplePlans: {
     price: 19000,
     interval: "YEAR",
     stripePriceId: priceId(process.env.STRIPE_PRO_YEARLY_PRICE_ID, "price_pro_yearly_placeholder"),
-    features: ["Everything in Pro", "2 months free", "Priority support"],
+    marketingFeatures: ["Everything in Pro", "2 months free", "Priority support"],
   },
   {
     slug: "lifetime",
@@ -85,7 +86,7 @@ const examplePlans: {
     price: 29900,
     interval: "ONE_TIME",
     stripePriceId: priceId(process.env.STRIPE_LIFETIME_PRICE_ID, "price_lifetime_placeholder"),
-    features: ["Everything in Pro", "All future updates", "No recurring billing"],
+    marketingFeatures: ["Everything in Pro", "All future updates", "No recurring billing"],
   },
   {
     slug: "metered-example",
@@ -94,7 +95,7 @@ const examplePlans: {
     price: 0,
     interval: "MONTH",
     stripePriceId: priceId(process.env.STRIPE_METERED_PRICE_ID, "price_metered_placeholder"),
-    features: ["Billed per API request", "No monthly minimum"],
+    marketingFeatures: ["Billed per API request", "No monthly minimum"],
     meterEventName: "api_request",
     isActive: false,
   },
@@ -358,8 +359,10 @@ export async function seedDemoData(): Promise<DemoSeedResult> {
     password: await hashPassword("adminadmin"),
   })
 
-  // Fake population
+  // Fake population. Every user owns a tenant (phase-1 shape): billing rows
+  // belong to it, so member and tenant come before the subscription.
   let customerCounter = 0
+  let tenantCounter = 0
   for (const fake of fakeUsers) {
     const createdAt = daysAgo(fake.signedUpDaysAgo)
     const hasBilling = Boolean(fake.plan || fake.lifetime)
@@ -371,11 +374,18 @@ export async function seedDemoData(): Promise<DemoSeedResult> {
       createdAt,
       stripeCustomerId: hasBilling ? `cus_demo_${String(++customerCounter).padStart(3, "0")}` : null,
     })
+    const tenant = await db8.orm.public.Tenant.create({
+      name: `${fake.name}'s workspace`,
+      slug: `${slugify(fake.name) || "user"}-${++tenantCounter}`,
+      status: "ACTIVE",
+      createdAt,
+    })
+    await db8.orm.public.Member.create({ organizationId: tenant.id, userId: user.id, role: "owner", createdAt })
     if (fake.plan && fake.subStatus) {
       const plan = planBySlug.get(fake.plan)!
       const periodDays = fake.plan === "pro-yearly" ? 365 : 30
       await Subscription.create({
-        userId: user.id,
+        tenantId: tenant.id,
         planId: plan.id,
         stripeSubscriptionId: `sub_demo_${String(customerCounter).padStart(3, "0")}`,
         status: fake.subStatus,
@@ -395,7 +405,7 @@ export async function seedDemoData(): Promise<DemoSeedResult> {
     if (fake.lifetime) {
       const plan = planBySlug.get("lifetime")!
       await Purchase.create({
-        userId: user.id,
+        tenantId: tenant.id,
         planId: plan.id,
         stripePaymentIntentId: `pi_demo_${String(customerCounter).padStart(3, "0")}`,
         stripeCheckoutSessionId: `cs_demo_${String(customerCounter).padStart(3, "0")}`,

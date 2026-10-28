@@ -51,7 +51,7 @@ export async function PlanPricing({
     price: p.price,
     interval: p.interval,
     stripePriceId: p.stripePriceId,
-    features: p.features,
+    features: [...p.marketingFeatures],
   }))
 
   return (

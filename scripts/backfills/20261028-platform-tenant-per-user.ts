@@ -10,7 +10,7 @@ import { pathToFileURL } from "node:url"
 
 config({ path: [".env.local", ".env"], quiet: true })
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+async function main() {
   const { runTenantPerUserBackfill } = await import("@/platform/backfills/tenant-per-user")
   const apply = process.argv.includes("--apply")
   const result = await runTenantPerUserBackfill({ apply })
@@ -20,4 +20,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   )
   const { db8 } = await import("@/lib/db8")
   await db8.close()
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  void main()
 }

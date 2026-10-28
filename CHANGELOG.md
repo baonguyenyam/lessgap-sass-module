@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.30.0] - 2026-10-28
+
+**Billing belongs to the tenant now.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Changed
+
+- **Subscriptions and purchases are owned by the tenant**, not the user — one subscription per tenant, enforced by the schema. Checkout, webhooks, the billing page, account deletion and export all read through the tenant; a user with no tenant yet gets one lazily at checkout, like the dashboard does
+- **Plans gained the entitlement columns** (`features` map, `visibility`, `setupFeeCents`, `feeModel`) behind the platform entitlements work; the marketing bullet list moved to `marketingFeatures`. A plan may have no Stripe price — the free plan's "checkout" is disabled until signup flow lands
+
+### Added
+
+- **`AddOn`/`TenantAddOn`, `EntitlementOverride`, `UsageCounter`** — the rows the five-layer entitlement resolver reads when it arrives (catalogue, what a tenant holds, staff overrides, metered usage)
+
 ## [2.29.0] - 2026-10-28
 
 **Staff can now delete a tenant entirely from the console.** This is a MINOR: `git pull`, `pnpm install` — no migration.

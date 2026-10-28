@@ -22,7 +22,7 @@ export type PlanCardData = {
   description: string | null
   price: number
   interval: "MONTH" | "YEAR" | "ONE_TIME"
-  stripePriceId: string
+  stripePriceId: string | null
   features: readonly string[]
   // Days of free trial this visitor would actually get at checkout. The page
   // passes null to anyone who has already had a subscription, so the card never
@@ -236,8 +236,8 @@ export function PlanCards({
                   </Button>
                 ) : (
                   <UpgradeButton
-                    priceId={active.stripePriceId}
-                    disabled={checkoutDisabled || isCurrent}
+                    priceId={active.stripePriceId ?? ""}
+                    disabled={checkoutDisabled || isCurrent || !active.stripePriceId}
                     className="w-full"
                   >
                     {isCurrent ? t("current") : t("upgradeTo", { plan: base.name })}
@@ -276,8 +276,8 @@ export function PlanCards({
                   </Button>
                 ) : (
                   <UpgradeButton
-                    priceId={plan.stripePriceId}
-                    disabled={checkoutDisabled || isCurrent}
+                    priceId={plan.stripePriceId ?? ""}
+                    disabled={checkoutDisabled || isCurrent || !plan.stripePriceId}
                     className="w-full"
                   >
                     {isCurrent ? t("current") : t("get", { plan: plan.name })}
