@@ -35,3 +35,24 @@ export type LimitFeature = { [K in FeatureKey]: (typeof FEATURES)[K]["kind"] ext
 export function defineFeatures<T extends Record<string, FeatureDefinition>>(defs: T): T {
   return defs
 }
+
+/**
+ * Validates a plan's (or add-on's) feature map against the registry (task 2.5):
+ * every key declared, a boolean feature holding a boolean, a limit feature
+ * holding a non-negative number or `null` (unlimited). The error names the
+ * first bad entry so the console can show it; `null` means the map is clean.
+ */
+export function validateFeatureMap(map: unknown): string | null {
+  if (map === null || map === undefined) return null
+  if (typeof map !== "object" || Array.isArray(map)) return "mapNotObject"
+  for (const [key, value] of Object.entries(map)) {
+    const definition = (FEATURES as Record<string, FeatureDefinition>)[key]
+    if (!definition) return `unknownKey:${key}`
+    if (definition.kind === "boolean") {
+      if (typeof value !== "boolean") return `badValue:${key}`
+    } else if (value !== null && (typeof value !== "number" || !Number.isFinite(value) || value < 0)) {
+      return `badValue:${key}`
+    }
+  }
+  return null
+}

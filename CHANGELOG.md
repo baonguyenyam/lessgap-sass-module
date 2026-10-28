@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.34.0] - 2026-10-28
+
+**Plans are editable in the console.** This is a MINOR: `git pull`, `pnpm install` — no migration.
+
+### Added
+
+- **`/platform/plans`**: every plan with its visibility, price and live subscriber count. Staff edit the feature map (validated against the feature registry — unknown keys and wrong value kinds refuse the whole save), the setup fee and whether the plan shows on the pricing page; the edit drawer names the tenants a change reaches before it saves. An edited plan changes what its tenants resolve on their next request
+
 ## [2.33.0] - 2026-10-28
 
 **Platform settings are editable in the console.** This is a MINOR: `git pull`, `pnpm install` — no migration.

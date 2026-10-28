@@ -61,6 +61,7 @@ export function navGroups(
         key: "platform",
         items: [
           { key: "tenants", href: "/platform/tenants", icon: Building2 },
+          { key: "plans", href: "/platform/plans", icon: CreditCard },
           { key: "jobs", href: "/platform/jobs", icon: ListChecks },
           { key: "emails", href: "/platform/emails", icon: Mail },
           { key: "errors", href: "/platform/errors", icon: TriangleAlert },

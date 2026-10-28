@@ -112,4 +112,12 @@ test("staff walks the ops pages: a failed job, an email and an error are visible
   await staff.page.goto("/platform/errors")
   await expect(staff.page.getByRole("heading", { name: "Errors" })).toBeVisible()
   await expect(staff.page.getByText(errorName)).toBeVisible({ timeout: 15_000 })
+
+  // Plans (task 2.5): the page lists every plan with its visibility and
+  // subscriber count, and the edit drawer names the tenants it reaches.
+  const planName = `E2E Plan ${Date.now()}`
+  await db8.orm.public.Plan.create({ name: planName, slug: `e2e-${Date.now()}`, price: 100, interval: "MONTH" })
+  await staff.page.goto("/platform/plans")
+  await expect(staff.page.getByRole("heading", { name: "Plans" })).toBeVisible()
+  await expect(staff.page.getByText(planName)).toBeVisible()
 })

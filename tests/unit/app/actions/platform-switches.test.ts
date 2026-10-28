@@ -8,7 +8,7 @@ vi.mock("next-intl/server", () => ({ getTranslations: async () => (key: string) 
 vi.mock("@/platform/staff", () => ({ requirePlatformRole: async () => staff }))
 vi.mock("@/lib/db8", async () => (await import("@tests/helpers/db8-mock")).createDb8Mock())
 
-const { setPlatformSwitch } = await import("@/app/actions/platform-settings")
+const { setPlatformSwitch } = await import("@/app/actions/platform-switches")
 const db = (await import("@/lib/db8")) as unknown as Db8Mock
 
 describe("setPlatformSwitch", () => {

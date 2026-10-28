@@ -429,6 +429,7 @@
       "emails": "Email",
       "errors": "Lỗi",
       "settings": "Cài đặt",
+      "plans": "Gói",
       "groups": {
         "main": "Tổng quan",
         "workspace": "Không gian làm việc",
@@ -601,6 +602,28 @@
   },
   "platform": {
     "badge": "Nền tảng",
+    "plans": {
+      "title": "Gói",
+      "subtitle": "Mỗi gói bán gì: feature map mà resolver đọc, hiển thị trên trang giá và phí setup một lần.",
+      "columns": {
+        "name": "Gói",
+        "price": "Giá",
+        "visibility": "Hiển thị",
+        "features": "Feature map",
+        "subscribers": "Khách hàng"
+      },
+      "edit": "Sửa",
+      "editTitle": "Sửa gói",
+      "editDescription": "Thay đổi {name} áp dụng cho {subscribers} khách hàng đang dùng ở request tiếp theo.",
+      "setupFee": "Phí setup (cent, để trống nếu không có)",
+      "errors": {
+        "notFound": "Không tìm thấy gói.",
+        "badVisibility": "Hiển thị phải là PUBLIC, UNLISTED hoặc ARCHIVED.",
+        "badSetupFee": "Phí setup phải là số cent nguyên.",
+        "badFeatures": "Feature map không hợp lệ ({detail}).",
+        "badJson": "Feature map không phải JSON hợp lệ."
+      }
+    },
     "settings": {
       "title": "Cài đặt",
       "subtitle": "Công tắc nền tảng: cổng đăng ký, cờ bảo trì, kill switch tính năng và trạng thái module. Thay đổi áp dụng không cần khởi động lại.",

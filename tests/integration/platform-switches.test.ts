@@ -25,7 +25,7 @@ describe("platform settings", () => {
   afterAll(async () => db8.close())
 
   it("a switch write is visible to readers and audited", async () => {
-    const { setPlatformSwitch } = await import("@/app/actions/platform-settings")
+    const { setPlatformSwitch } = await import("@/app/actions/platform-switches")
     await expect(setPlatformSwitch("signup.free_plan.enabled", false)).resolves.toEqual({})
     await expect(setPlatformSwitch("feature.roles.custom", false)).resolves.toEqual({})
     await expect(setPlatformSwitch("bogus.key", true)).resolves.toEqual({ error: expect.any(String) })

@@ -76,7 +76,7 @@ Settings → Modules: enable, disable, export data, and schedule a purge with a
 - **Tests:** unit — invalid feature keys and bad values refused; unlisted plan not assignable through public flows; integration — plan edit flips a tenant's resolved entitlement.
 - **Checks:** `pnpm test`, `pnpm test:integration`, E2E smoke.
 - **Done when:** an edited plan changes what its tenants resolve on their next read, and the save screen showed the affected count first.
-- [ ] done
+- [x] done (`/platform/plans` lists every plan: name, price/interval, visibility badge, feature map, subscriber count. `updatePlan` edits visibility, `setupFeeCents` and the feature map — the map validates through `validateFeatureMap` in the registry (`unknownKey`/`badValue` name the first bad entry; a bad save writes nothing). The drawer names the subscriber count before save ("applies to the N tenants subscribed"), and the audit row carries it. Subscriber counts come from `Subscription.select("planId")` + JS count. E2E walk added to the platform ops spec.)
 
 ### 2.6 — Tenant overrides
 - **Goal:** `/platform/tenants/[slug]` gains an overrides section: grant, revoke or change any feature for that tenant with a reason and optional expiry; every row is audited; expired rows stop applying without being deleted.

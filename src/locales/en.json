@@ -429,6 +429,7 @@
       "emails": "Emails",
       "errors": "Errors",
       "settings": "Settings",
+      "plans": "Plans",
       "groups": {
         "main": "Overview",
         "workspace": "Workspace",
@@ -601,6 +602,28 @@
   },
   "platform": {
     "badge": "Platform",
+    "plans": {
+      "title": "Plans",
+      "subtitle": "What each plan sells: the feature map the resolver reads, visibility on the pricing page and the one-time setup fee.",
+      "columns": {
+        "name": "Plan",
+        "price": "Price",
+        "visibility": "Visibility",
+        "features": "Feature map",
+        "subscribers": "Tenants"
+      },
+      "edit": "Edit",
+      "editTitle": "Edit plan",
+      "editDescription": "Changes to {name} apply to the {subscribers} tenants subscribed to it on their next request.",
+      "setupFee": "Setup fee (cents, empty for none)",
+      "errors": {
+        "notFound": "Plan not found.",
+        "badVisibility": "Visibility must be PUBLIC, UNLISTED or ARCHIVED.",
+        "badSetupFee": "Setup fee must be a whole number of cents.",
+        "badFeatures": "Invalid feature map ({detail}).",
+        "badJson": "The feature map is not valid JSON."
+      }
+    },
     "settings": {
       "title": "Settings",
       "subtitle": "Platform switches: signup gates, maintenance flags, feature kill switches and module states. Changes apply without a restart.",
