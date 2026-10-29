@@ -523,7 +523,8 @@
       "pastDueBanner": "Thanh toán thất bại — truy cập tiếp tục đến {date}. Cập nhật thanh toán để tiếp tục.",
       "modules": "Tiện ích",
       "site": "Trang web",
-      "domains": "Tên miền"
+      "domains": "Tên miền",
+      "catalog": "Danh mục"
     },
     "members": {
       "title": "Thành viên",
@@ -681,6 +682,18 @@
       "errors": {
         "invalidEmail": "Nhập địa chỉ email hợp lệ.",
         "exists": "Địa chỉ này đã có trong danh sách."
+      }
+    },
+    "catalog": {
+      "title": "Danh mục",
+      "subtitle": "Dịch vụ và giá hiển thị trên trang web.",
+      "serviceName": "Tên dịch vụ",
+      "duration": "Phút",
+      "price": "Giá ($)",
+      "actions": {
+        "add": "Thêm dịch vụ",
+        "addCategory": "Thêm danh mục",
+        "remove": "Xóa"
       }
     }
   },

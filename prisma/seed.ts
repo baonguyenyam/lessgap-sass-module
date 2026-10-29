@@ -126,7 +126,12 @@ async function main() {
     await db8.orm.public.PlatformSwitch.upsert({
       conflictOn: { key: "module.newsletter" },
       create: { key: "module.newsletter", value: true, updatedById: "seed" },
-      update: { value: true },
+      update: {},
+    })
+    await db8.orm.public.PlatformSwitch.upsert({
+      conflictOn: { key: "module.catalog" },
+      create: { key: "module.catalog", value: true, updatedById: "seed" },
+      update: {},
     })
     console.log(`Seed complete: ${examplePlans.length} example plans upserted`)
     const roots = await grantRootFromConfig()

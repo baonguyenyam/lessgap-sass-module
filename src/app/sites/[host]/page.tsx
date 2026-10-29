@@ -22,10 +22,30 @@ async function getSiteData(tenantId: string): Promise<SiteData | null> {
   cacheLife("minutes")
   const tenant = await db8.orm.public.Tenant.where({ id: tenantId }).first()
   if (!tenant) return null
-  const [site, settings] = await Promise.all([
+  const [site, settings, moduleOn] = await Promise.all([
     db8.orm.public.Site.where({ tenantId }).first(),
     db8.orm.public.SiteSettings.where({ tenantId }).first(),
+    db8.orm.public.TenantModule.where({ tenantId, moduleKey: "catalog", enabled: true }).first(),
   ])
+  const catalog = moduleOn
+    ? {
+        categories: (await db8.orm.public.ServiceCategory.where({ tenantId }).all()).map((x) => ({
+          id: x.id,
+          name: x.name,
+          sortOrder: x.sortOrder,
+        })),
+        services: (await db8.orm.public.Service.where({ tenantId, status: "active" }).all()).map((x) => ({
+          id: x.id,
+          name: x.name,
+          description: x.description,
+          durationMinutes: x.durationMinutes,
+          priceCents: x.priceCents,
+          currency: x.currency,
+          categoryId: x.categoryId,
+          imageKey: x.imageKey,
+        })),
+      }
+    : undefined
   return {
     tenant: { name: tenant.name, slug: tenant.slug },
     site: {
@@ -39,6 +59,7 @@ async function getSiteData(tenantId: string): Promise<SiteData | null> {
       hours: (settings?.hours as Record<string, string>) ?? {},
       appearance: (settings?.appearance as { accentColor?: string }) ?? {},
     },
+    catalog,
   }
 }
 

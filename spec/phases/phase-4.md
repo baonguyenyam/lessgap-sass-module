@@ -53,7 +53,7 @@ holds for two designs.
   CRUD + purge is tenant-scoped.
 - **Checks:** `pnpm test`, `pnpm test:integration`, `pnpm modules:check`.
 - **Done when:** catalog enables, lists services on the site, purges cleanly.
-- [ ] done
+- [x] done (`src/modules/catalog/module.ts` manifest (`ServiceCategory`/`Service`/`ServiceVariant`) + lifecycle (`describeData`/`onExport` one file per model/`onPurge` variants→services→categories). `/t/<slug>/catalog` lists categories and services; `addService` enforces `catalog.services.max` (`feature_unavailable`). The `main` theme's `services` section renders `SiteData.catalog` when `module.catalog` is on for the tenant; fixtures carry sample services. Registry regenerated; integration `catalog.test.ts` — purge is tenant-scoped, export returns one file per model.)
 
 ### 4.3 — `team` module through the lifecycle
 - **Goal:** `src/modules/team/module.ts` manifest + hooks; Teams page manages

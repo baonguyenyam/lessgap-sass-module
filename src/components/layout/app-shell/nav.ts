@@ -3,6 +3,7 @@ import { DASHBOARD, tenantPath } from "@/lib/tenant-paths"
 import {
   Boxes,
   Globe,
+  List,
   Globe2,
   ArrowLeft,
   Building2,
@@ -93,6 +94,9 @@ export function navGroups(
         ...(enabledModules && !enabledModules.has("newsletter")
           ? []
           : [{ key: "newsletter", href: t("newsletter"), icon: Mail } satisfies NavItem]),
+        ...(enabledModules && !enabledModules.has("catalog")
+          ? []
+          : [{ key: "catalog", href: t("catalog"), icon: List } satisfies NavItem]),
         ...(customRoles ? [{ key: "roles", href: t("roles"), icon: KeyRound } satisfies NavItem] : []),
       ],
     },

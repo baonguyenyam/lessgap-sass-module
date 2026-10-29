@@ -14,6 +14,21 @@ export type SiteData = {
     hours: Record<string, string>
     appearance: { accentColor?: string }
   }
+  /** Present when the `catalog` module is enabled (task 4.2) — the site's
+   * service list, grouped by category. */
+  catalog?: {
+    categories: { id: string; name: string; sortOrder: number }[]
+    services: {
+      id: string
+      name: string
+      description: string | null
+      durationMinutes: number
+      priceCents: number
+      currency: string
+      categoryId: string | null
+      imageKey: string | null
+    }[]
+  }
 }
 
 export type ThemeManifest = {

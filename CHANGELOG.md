@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.48.0] - 2026-10-29
+
+**A tenant's catalog — services with duration and price — is the second module through the lifecycle.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`catalog` module** — categories, services with duration/price, per-service variants; purged tenant-scoped, exported as JSON, gated by `module.catalog` and `catalog.services.max`
+- **Settings → Catalog** (`/t/<slug>/catalog`) — add categories and services
+- **Site services section** — the `main` theme lists services grouped by category when the module is on
+
 ## [2.47.0] - 2026-10-29
 
 **Catalog and team have a schema: services, variants, staff.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` — one migration adds five tables.

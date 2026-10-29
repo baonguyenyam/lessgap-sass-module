@@ -523,7 +523,8 @@
       "pastDueBanner": "A payment failed — access continues until {date}. Update billing to keep working.",
       "modules": "Modules",
       "site": "Site",
-      "domains": "Domains"
+      "domains": "Domains",
+      "catalog": "Catalog"
     },
     "members": {
       "title": "Members",
@@ -681,6 +682,18 @@
       "errors": {
         "invalidEmail": "Enter a valid email address.",
         "exists": "That address is already on the list."
+      }
+    },
+    "catalog": {
+      "title": "Catalog",
+      "subtitle": "Services and prices your site shows.",
+      "serviceName": "Service name",
+      "duration": "Minutes",
+      "price": "Price ($)",
+      "actions": {
+        "add": "Add service",
+        "addCategory": "Add category",
+        "remove": "Remove"
       }
     }
   },
