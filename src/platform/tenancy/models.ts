@@ -84,6 +84,8 @@ export const MODEL_CLASSIFICATION = {
   Tenant: { kind: "platform-private", reason: "Platform-managed tenant directory and lifecycle state." },
   TenantAddOn: { kind: "tenant-owned", reason: "The add-ons one tenant holds." },
   TenantModule: { kind: "tenant-owned", reason: "Which modules one tenant has turned on." },
+  WaitlistEntry: { kind: "tenant-owned", reason: "A visitor's name on a fully booked day's waitlist." },
+  Review: { kind: "tenant-owned", reason: "A customer's review of a completed appointment, pending moderation." },
   TenantSetting: { kind: "tenant-owned", reason: "Settings belong to one tenant." },
   UsageCounter: { kind: "tenant-owned", reason: "Metered usage belongs to one tenant." },
   TwoFactor: { kind: "identity", reason: "Better Auth two-factor credentials." },
