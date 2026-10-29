@@ -1,0 +1,38 @@
+# Phase 12 — gift cards, memberships and packages
+
+The roadmap's "Later" list's sellable items: a tenant sells a gift card (a
+balance someone pays up front and spends later), a membership (a recurring
+perk — e.g. "member hours") and a package (a bundle of prepaid sessions — e.g.
+"5 massages"). They're booking-adjacent: the buyer pays once and the credit
+lands against later appointments.
+
+**Read:** spec/07-booking.md, spec/15-module-system.md,
+spec/12-migrations-and-data.md, `src/app/actions/booking.ts`,
+`src/app/actions/orders.ts`, `src/platform/payments/connect.ts`,
+`src/platform/modules/registry.ts`.
+
+## Scope
+
+- Phase 12: in progress.
+
+## Tasks
+
+### 12.1 `GiftCard` + `Purchase` extension — buy a card, hold a balance
+
+`GiftCard` — tenant-owned, a code, `balanceCents`, `soldVia` (`Purchase`),
+`active`. A `purchase.kind: "giftcard"` buys one through the same checkout;
+a card's balance is debited when it's spent against an appointment (the
+booking's `orderId` stays `null` — the card pays, not Stripe). A
+`GiftCardLedger` row per change so the balance is auditable.
+
+**Tests:** integration — a card debits when spent; a spent-down card stops;
+the ledger's balance matches the card's.
+**Done when:** buy → card → spend → ledger hold together.
+- [ ] done
+
+## Exit criteria
+
+- The card buys, spends and balances correctly; tests green.
+- `pnpm typecheck`, `pnpm lint`, `pnpm test:integration` green.
+
+## Findings
