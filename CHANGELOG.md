@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.56.0] - 2026-10-29
+
+**A visitor books a service on the tenant's site — service, staff, time, details — and manages it from a signed link.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **Site booking flow** (`/sites/[host]/book`) — pick a service, a staff member (or "any"), an open slot, and your details; the booking honours the availability engine and the tenant's approval mode
+- **Manage link** — every booking gets a signed link to reschedule or cancel; an `.ics` calendar file accompanies the confirmation email
+- **Customers and consent** — a booker's `Customer` row deduplicates by email then phone; marketing and SMS consent stamp once, with source
+
 ## [2.55.0] - 2026-10-29
 
 **The booking module and a dashboard calendar: appointments create, confirm, cancel, complete — the book is managed.** This is a MINOR: `git pull`, `pnpm install`.

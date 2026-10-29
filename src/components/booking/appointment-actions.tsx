@@ -39,7 +39,8 @@ export function AppointmentActions({
           defaultValue=""
           onChange={(e) => {
             const p = new URLSearchParams(window.location.search)
-            e.target.value ? p.set("staff", e.target.value) : p.delete("staff")
+            if (e.target.value) p.set("staff", e.target.value)
+            else p.delete("staff")
             router.push(`?${p.toString()}` as never)
           }}
         >

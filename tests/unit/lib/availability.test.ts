@@ -8,7 +8,6 @@ const rule = (weekday: number, startMinute: number, endMinute: number, staffId =
   staffId,
 })
 
-const range = { startTs: "2027-03-01T00:00:00Z", endTs: "2027-03-31T23:59:59Z" }
 const service = { durationMinutes: 30 }
 
 describe("wallToUtc / local helpers (5.1)", () => {

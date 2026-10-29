@@ -10,8 +10,6 @@ import { Input } from "@/components/ui/input"
  * form (name + optional category); `remove` renders a delete button. */
 export function CatalogActions({
   addService: addServiceFlag,
-  remove,
-  categories,
   serviceId,
 }: {
   addService?: boolean

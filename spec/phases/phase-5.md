@@ -107,7 +107,7 @@ PHI).
   creates appointment+customer+event; manage link reschedules.
 - **Checks:** `pnpm test`, `pnpm test:integration`.
 - **Done when:** a visitor books, gets a confirmation + ICS, and manages it.
-- [ ] done
+- [x] done (`/sites/[host]/book` — service → staff (or "any") → a slot from `availableSlots` → name/email/phone + consent checkboxes → `bookAppointment` (a site action reading the host through `resolveHost`, not a member context): the slot re-checks through the pure function, the exclusion constraint is the race backstop, `upsertCustomer` dedups by email then phone and stamps consent once, `Appointment` + `AppointmentEvent` write, `booking.manual_approval` flips `confirmed`/`requested`, and `notify` logs a confirmation. `/sites/[host]/book/manage/[token]` — an HMAC-signed manage link (strict 64-hex sig: `Buffer.from` silently drops non-hex tail) reschedules (slot re-check) or cancels. `icsFile` produces the `.ics`. Integration `site-booking.test.ts` — book→customer+event+log, manage reschedule+cancel, out-of-rules refused; unit token sign/verify + ICS.)
 
 ### 5.5 — `customers` module
 - **Goal:** `src/modules/customers/module.ts` + `/t/<slug>/customers` —

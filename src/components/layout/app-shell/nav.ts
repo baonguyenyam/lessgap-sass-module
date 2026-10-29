@@ -1,7 +1,8 @@
 import type { Route } from "next"
-import { Calendar, DASHBOARD, tenantPath } from "@/lib/tenant-paths"
+import { DASHBOARD, tenantPath } from "@/lib/tenant-paths"
 import {
   Boxes,
+  Calendar,
   Globe,
   List,
   Globe2,

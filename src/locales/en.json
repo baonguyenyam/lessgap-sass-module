@@ -1819,5 +1819,46 @@
       "conflict": "That address is taken",
       "tenant_creation_failed": "Could not create the tenant"
     }
+  },
+  "site": {
+    "booking": {
+      "title": "Book an appointment",
+      "service": "Service",
+      "staff": "Staff",
+      "any_staff": "Any staff",
+      "slot": "Time",
+      "choose": "Choose…",
+      "name": "Your name",
+      "email": "Email",
+      "phone": "Phone",
+      "marketing_consent": "Email me offers and news",
+      "sms_consent": "Text me about this booking",
+      "book": "Book now",
+      "booking": "Booking…",
+      "confirmed": "Booked — check your email for the calendar invite.",
+      "requested": "Requested — we'll confirm shortly.",
+      "manage_title": "Your booking",
+      "appointment": "Appointment",
+      "new_slot": "New time",
+      "reschedule": "Reschedule",
+      "cancel": "Cancel booking",
+      "error": {
+        "conflict": "That slot is taken — pick another.",
+        "invalid_input": "Check the form and try again.",
+        "unauthorized": "That link has expired or is invalid.",
+        "not_found": "Booking not found."
+      },
+      "status": {
+        "requested": "requested",
+        "confirmed": "confirmed",
+        "completed": "completed",
+        "canceled": "cancelled",
+        "no_show": "no-show"
+      },
+      "done": {
+        "reschedule": "Rescheduled.",
+        "cancel": "Cancelled."
+      }
+    }
   }
 }

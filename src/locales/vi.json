@@ -1819,5 +1819,46 @@
       "conflict": "Địa chỉ đã được dùng",
       "tenant_creation_failed": "Không tạo được tenant"
     }
+  },
+  "site": {
+    "booking": {
+      "title": "Đặt lịch hẹn",
+      "service": "Dịch vụ",
+      "staff": "Nhân viên",
+      "any_staff": "Bất kỳ",
+      "slot": "Thời gian",
+      "choose": "Chọn…",
+      "name": "Tên của bạn",
+      "email": "Email",
+      "phone": "Điện thoại",
+      "marketing_consent": "Gửi ưu đãi và tin tức qua email",
+      "sms_consent": "Nhắn tin về cuộc hẹn này",
+      "book": "Đặt lịch",
+      "booking": "Đang đặt…",
+      "confirmed": "Đã đặt — kiểm tra email để nhận lời mời lịch.",
+      "requested": "Đã gửi — chúng tôi sẽ xác nhận sớm.",
+      "manage_title": "Cuộc hẹn của bạn",
+      "appointment": "Cuộc hẹn",
+      "new_slot": "Thời gian mới",
+      "reschedule": "Dời lịch",
+      "cancel": "Huỷ cuộc hẹn",
+      "error": {
+        "conflict": "Khung giờ đã có người đặt — chọn khung khác.",
+        "invalid_input": "Kiểm tra lại thông tin.",
+        "unauthorized": "Liên kết hết hạn hoặc không hợp lệ.",
+        "not_found": "Không tìm thấy cuộc hẹn."
+      },
+      "status": {
+        "requested": "đang chờ",
+        "confirmed": "đã xác nhận",
+        "completed": "hoàn thành",
+        "canceled": "đã huỷ",
+        "no_show": "vắng"
+      },
+      "done": {
+        "reschedule": "Đã dời lịch.",
+        "cancel": "Đã huỷ."
+      }
+    }
   }
 }
