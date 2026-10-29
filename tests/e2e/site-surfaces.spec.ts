@@ -32,7 +32,7 @@ async function provision(slug: string) {
   return tenant
 }
 
-test("the waitlist join shows when a day is full; a published review renders", async ({ request, page }) => {
+test("the waitlist join shows when a day is full; a published review renders", async ({ request }) => {
   const slug = `e2e-sur-${newId().slice(0, 8).toLowerCase()}`
   const tenant = await provision(slug)
   const siteHost = `${slug}.lessgap.io`

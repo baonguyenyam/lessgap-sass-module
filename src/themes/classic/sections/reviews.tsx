@@ -11,7 +11,7 @@ export default function ReviewsSection({ data }: { data: SiteData }) {
         {reviews.map((r) => (
           <li key={r.id} className="text-center">
             <p className="text-lg font-semibold">{"★".repeat(r.rating)}</p>
-            {r.body && <p className="text-sm text-stone-600 italic">"{r.body}"</p>}
+            {r.body && <p className="text-sm text-stone-600 italic">&ldquo;{r.body}&rdquo;</p>}
             <p className="mt-1 text-sm text-stone-500">— {r.name}</p>
           </li>
         ))}

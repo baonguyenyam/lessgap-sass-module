@@ -12,7 +12,7 @@ export default function ReviewsSection({ data }: { data: SiteData }) {
         {reviews.map((r) => (
           <div key={r.id} className="rounded-lg border p-4">
             <p className="font-medium">{"★".repeat(r.rating)}</p>
-            {r.body && <p className="mt-1 text-sm text-muted-foreground">"{r.body}"</p>}
+            {r.body && <p className="mt-1 text-sm text-muted-foreground">&ldquo;{r.body}&rdquo;</p>}
             <p className="mt-1 text-sm text-muted-foreground">— {r.name}</p>
           </div>
         ))}
