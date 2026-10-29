@@ -1478,3 +1478,26 @@ because every test hit `resolveHost`/`getSiteData` directly and no E2E
 had ever fetched a site through the proxy. The rewrite is
 `/sites/${host}${pathname}`; the D-column E2E specs exist for exactly
 this class of bug.
+- `auth.api.createOrganization` re-saves the User and can drop a column set
+  earlier — update custom `User` fields (e.g. `platformRole`) AFTER org
+  creation, not before.
+- `redirect()` inside a Server Component fires as an RSC redirect — a
+  `page.goto` to the redirecting path aborts mid-flight with
+  `net::ERR_ABORTED`; swallow the goto's error and `waitForURL` the
+  destination instead.
+- `/2fa` is the sign-in challenge page — a signed-in user sent there gets
+  bounced by the proxy's AUTH_ROUTES guard; the setup surface is
+  `/dashboard/account/security`.
+- Cache Components' unstable-value check (`new Date()`, `randomUUID`,
+  `Math.random`) runs during prerender — opt a request-time page out with
+  `await connection()` (route segment `dynamic` is incompatible with
+  `cacheComponents`), compute time-sensitive values server-side or after
+  hydration.
+- `getSiteData`'s `"use cache"` needs `updateTag("site:<tenantId>")` on
+  every write that changes what it renders — module toggles, content
+  saves, suspension.
+- A module that depends on another (`ordering` → `shop`) is inactive
+  until both are enabled — test setups need the dependency chain.
+- `reindexTenant`-style per-tenant job checks belong on `TenantModule`,
+  not `isModuleActive` — the platform switch's `cacheTag` fallback in
+  non-request contexts makes `isModuleActive` always false.

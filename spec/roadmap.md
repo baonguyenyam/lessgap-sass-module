@@ -192,3 +192,18 @@ out of scope, even when it looks small: write it down under "Later" instead.
 - Patient intake forms (requires HIPAA decision first).
 - Multiple locations per tenant.
 - Dedicated deployment for enterprise contracts.
+
+## Phase 9 — launch-readiness E2E (done — `4da6755` → `b55e26d`)
+
+Host routing D4–D7, module downgrade E8, booking and order/quote
+journeys, revalidation. Found: the `/sites` root rewrite bug,
+module-toggle and content-write cache invalidation, Cache Components
+unstable values on every request-time site page, missing `site.*`
+translations.
+
+## Phase 10 — spec/11 close-out (done — `2ef5f0d` → `03c7a85`)
+
+D8 theme-axe (`/themes/[theme]` fixture + spec), O8 platform 2FA gate
+(`/dashboard/account/security` — `/2fa` is the challenge page), L2
+routes + jobs (`requireModuleRoute` 404s, `reindexTenant` pauses on
+`TenantModule`).
