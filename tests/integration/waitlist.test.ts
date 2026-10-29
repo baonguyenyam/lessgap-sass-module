@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { db8 } from "@/lib/db8"
-import { nowTs, toTs } from "@/lib/timestamps"
+import { toTs } from "@/lib/timestamps"
 import { resetDatabase } from "@tests/helpers/db"
 import { signManageToken } from "@/lib/booking/manage-token"
 
