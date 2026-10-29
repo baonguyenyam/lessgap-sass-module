@@ -57,6 +57,7 @@ const UNLOCALIZED = [
   "/invite",
   // Theme fixture previews (task 10.1, D8) — a public route outside [locale].
   "/themes",
+  "/status",
   // Root level metadata routes.
   "/sitemap.xml",
   "/robots.txt",

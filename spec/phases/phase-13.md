@@ -22,7 +22,7 @@ the primary domain renders the latest probe — the tenant's customers see
 **Tests:** integration — the job writes a `HealthCheck` row; `/status`
 renders the last one.
 **Done when:** the page reads what the job writes.
-- [ ] done
+- [x] done (`tests/integration/status-probe.test.ts` 1/1 — `platform.health_check` runs `probeHealth` (DB `SELECT 1` latency + a `RUNNING` job's stale `lockedUntil`) → `HealthCheck` rows; `/status` reads the latest per kind.)
 
 ### 13.2 Pusher realtime (ADR 0026)
 

@@ -28,9 +28,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'eae0f2648e7a4f9867cebfc77f0def0324e49876dce0d1896ee7f7d0dc0f661d'>;
+  StorageHashBase<'cc5471f9c3edd9617c076bef7278bef74dddfae3193b78cf4e80852b88bebb5e'>;
 export type ExecutionHash =
-  ExecutionHashBase<'5d74285528f4ec8fb13087db13692d77a7158f20ee427868243a5676469d5694'>;
+  ExecutionHashBase<'adf1c47f909912cd26d72cd312f120a6c1644ada99dc9bf4da19278d93c06b5f'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -677,6 +677,15 @@ export namespace Models {
     card: public_GiftCard;
     tenant: public_Tenant;
     readonly [RelationKeys]?: 'card' | 'tenant';
+  };
+  export type public_HealthCheck = {
+    checkedAt: FieldOutputTypes['public']['HealthCheck']['checkedAt'];
+    detail: FieldOutputTypes['public']['HealthCheck']['detail'];
+    id: FieldOutputTypes['public']['HealthCheck']['id'];
+    kind: FieldOutputTypes['public']['HealthCheck']['kind'];
+    latencyMs: FieldOutputTypes['public']['HealthCheck']['latencyMs'];
+    status: FieldOutputTypes['public']['HealthCheck']['status'];
+    readonly [RelationKeys]?: never;
   };
   export type public_Invitation = {
     createdAt: FieldOutputTypes['public']['Invitation']['createdAt'];
@@ -1552,6 +1561,7 @@ export declare const models: {
     ErrorReport: Models.public_ErrorReport;
     GiftCard: Models.public_GiftCard;
     GiftCardLedger: Models.public_GiftCardLedger;
+    HealthCheck: Models.public_HealthCheck;
     Invitation: Models.public_Invitation;
     Job: Models.public_Job;
     KnowledgeChunk: Models.public_KnowledgeChunk;
@@ -3728,6 +3738,62 @@ type ContractBase = Omit<
                   readonly name: 'GiftCardLedger_cardId_fkey';
                 },
               ];
+            };
+            readonly HealthCheck: {
+              columns: {
+                readonly checkedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly detail: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly kind: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly latencyMs: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly status: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'ok'>;
+                  };
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id']; readonly name: 'HealthCheck_pkey' };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'HealthCheck_kindChecked_idx';
+                  readonly columns: readonly ['kind', 'checkedAt'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [];
             };
             readonly Invitation: {
               columns: {
@@ -9984,6 +10050,10 @@ type ContractBase = Omit<
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'GiftCardLedger';
     };
+    readonly HealthCheck: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'HealthCheck';
+    };
     readonly Invitation: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'Invitation';
@@ -11933,6 +12003,51 @@ type ContractBase = Omit<
                 readonly id: { readonly column: 'id' };
                 readonly reason: { readonly column: 'reason' };
                 readonly tenantId: { readonly column: 'tenantId' };
+              };
+            };
+          };
+          readonly HealthCheck: {
+            readonly fields: {
+              readonly checkedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly detail: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly kind: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly latencyMs: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly status: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: Record<string, never>;
+            readonly storage: {
+              readonly table: 'HealthCheck';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly checkedAt: { readonly column: 'checkedAt' };
+                readonly detail: { readonly column: 'detail' };
+                readonly id: { readonly column: 'id' };
+                readonly kind: { readonly column: 'kind' };
+                readonly latencyMs: { readonly column: 'latencyMs' };
+                readonly status: { readonly column: 'status' };
               };
             };
           };
@@ -17646,6 +17761,14 @@ type ContractBase = Omit<
           readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'GiftCardLedger';
+            readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'HealthCheck';
             readonly field: 'id';
             readonly namespace: 'public';
           };

@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.99.0] - 2026-10-29
+
+**A first-party `/status` page reads the platform's own health — no managed provider needed.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **`HealthCheck` + `platform.health_check`** — a job probes the DB (`SELECT 1` latency) and the queue (a `RUNNING` job's stale `lockedUntil`) → `HealthCheck` rows; `/status` renders the latest per kind
+
 ## [2.98.0] - 2026-10-29
 
 **The till can sell a gift card, a package and a membership — and the holdings list alongside.** This is a MINOR: `git pull`, `pnpm install`.

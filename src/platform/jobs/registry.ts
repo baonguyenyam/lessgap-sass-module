@@ -31,6 +31,15 @@ export const JOBS: JobRegistry = {
       await db8.orm.public.ErrorReport.where((r) => r.lastSeenAt.lt(cutoff)).deleteAndCount()
     },
   },
+  // Health probe (task 13.1, ADR 0029): every minute, write a HealthCheck
+  // per kind — the status page reads the latest.
+  "platform.health_check": {
+    schedule: "* * * * *",
+    handler: async () => {
+      const { probeHealth } = await import("@/platform/status/probe")
+      await probeHealth()
+    },
+  },
   // Email delivery records older than a year (spec/10-security-compliance.md, "Data retention").
   "platform.email_messages.prune": {
     schedule: "30 3 * * *",

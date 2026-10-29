@@ -1889,6 +1889,17 @@ trialEndsAt          TimestampString(3)?
   // A tenant's backup (task 8.3): every tenant-owned table, gzipped to
   // snapshots/<tenantId>/<id>.json.gz in R2. The row is the audit trail —
   // status, row counts, size — the bundle is the data (decision 8-C).
+  model HealthCheck {
+    id        String           @id(map: "HealthCheck_pkey") @onCreate(cuid(2))
+    kind      String
+    status    String           @default("ok")
+    detail    String?
+    latencyMs Int?
+    checkedAt TimestampString(3) @default(now())
+
+    @@index([kind, checkedAt], map: "HealthCheck_kindChecked_idx")
+  }
+
   model TenantSnapshot {
     id          String             @id(map: "TenantSnapshot_pkey") @onCreate(cuid(2))
     tenantId    String

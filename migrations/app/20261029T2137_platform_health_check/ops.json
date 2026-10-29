@@ -1,0 +1,99 @@
+[
+  {
+    "id": "table.HealthCheck",
+    "label": "Create table \"HealthCheck\"",
+    "summary": "Creates table \"HealthCheck\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "HealthCheck"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"HealthCheck\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"HealthCheck\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"HealthCheck\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"HealthCheck\"",
+        "sql": "CREATE TABLE \"public\".\"HealthCheck\" (\n  \"checkedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"detail\" text,\n  \"id\" text NOT NULL,\n  \"kind\" text NOT NULL,\n  \"latencyMs\" int4,\n  \"status\" text DEFAULT 'ok' NOT NULL,\n  CONSTRAINT \"HealthCheck_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"HealthCheck\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"HealthCheck\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"HealthCheck\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "index.HealthCheck.HealthCheck_kindChecked_idx",
+    "label": "Create index \"HealthCheck_kindChecked_idx\" on \"HealthCheck\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "HealthCheck_kindChecked_idx",
+        "table": "HealthCheck"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"HealthCheck_kindChecked_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"HealthCheck_kindChecked_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"HealthCheck_kindChecked_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"HealthCheck_kindChecked_idx\"",
+        "sql": "CREATE INDEX \"HealthCheck_kindChecked_idx\" ON \"public\".\"HealthCheck\" (\"kind\", \"checkedAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"HealthCheck_kindChecked_idx\" exists on \"HealthCheck\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"HealthCheck_kindChecked_idx\"",
+          "i",
+          "I",
+          "\"public\".\"HealthCheck\"",
+          "btree",
+          "[\"kind\",\"checkedAt\"]"
+        ]
+      }
+    ]
+  }
+]
