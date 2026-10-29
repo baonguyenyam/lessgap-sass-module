@@ -385,6 +385,20 @@
           "primary": "Make primary",
           "remove": "Remove"
         }
+      },
+      "payments": {
+        "title": "Payments",
+        "subtitle": "Take deposits and payments from your customers",
+        "not_connected": "Not connected",
+        "connected": "Connected",
+        "gate_hint": "Deposits, shop checkout and paid quotes stay hidden until your Stripe account can take charges.",
+        "connected_hint": "Your Stripe account can take charges — paid features are live.",
+        "connect": "Connect Stripe",
+        "connecting": "Connecting…",
+        "account": "Account",
+        "payouts": "payouts",
+        "yes": "yes",
+        "no": "no"
       }
     },
     "account": {

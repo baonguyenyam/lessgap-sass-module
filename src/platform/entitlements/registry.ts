@@ -31,6 +31,7 @@ export const FEATURES = {
   "booking.manual_approval": { kind: "boolean", default: false, requires: ["booking"] },
   "booking.sms_reminders": { kind: "boolean", default: false, requires: ["booking"] },
   "booking.deposits": { kind: "boolean", default: false, requires: ["booking"] },
+  "payments.connect": { kind: "boolean", default: true },
 } as const satisfies Record<string, FeatureDefinition>
 
 export type FeatureKey = keyof typeof FEATURES

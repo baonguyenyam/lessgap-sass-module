@@ -82,7 +82,7 @@ appointment), and booking deposits (`booking.deposits` wired at last).
 - **Checks:** `pnpm test:integration`, `pnpm modules:check`.
 - **Done when:** a tenant connects, webhook flips `chargesEnabled`,
   checkout creates a session on the connected account with the fee.
-- [ ] done
+- [x] done (`src/platform/payments/connect.ts` — `canCharge` (the gate every paid feature asks), `createOnboardingLink` (account once, Stripe-hosted link), `syncAccountStatus` (`account.updated` → `chargesEnabled`/`payoutsEnabled`/`connectOnboardingStatus` by `stripeAccountId`), `resolveFeeModel` (`payment.fee_model` TenantSetting override → `Plan.feeModel` → `none`), `createCheckout` (Checkout Session on the connected account + `application_fee_amount` + `Payment` row keyed by `checkoutSessionId`), `markPaymentSucceeded` (idempotent). `/api/webhooks/connect` — `STRIPE_CONNECT_WEBHOOK_SECRET`, account.updated + checkout.session.completed. `src/modules/payments/module.ts` lifecycle; `/t/<slug>/settings/payments` + `startConnectOnboarding` + `ConnectButton`; `payments.connect` feature; `module.payments` seeded. Integration `connect-webhook.test.ts` — signed via `generateTestHeaderString`, forged sig 400, session.completed flips once + replay no-op, unknown session no-op; unit `canCharge`.)
 
 ### 6.4 — `shop` module: products, cart, checkout
 - **Goal:** catalog of products → anonymous cart → checkout on the

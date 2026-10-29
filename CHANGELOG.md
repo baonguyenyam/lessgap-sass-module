@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.64.0] - 2026-10-29
+
+**The payments module: Stripe Connect onboarding, a signed webhook, and checkout on the tenant's own account.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **Settings → Payments** — the owner connects a Stripe account through Stripe-hosted onboarding; `account.updated` webhook syncs `chargesEnabled` and `payoutsEnabled`
+- **`createCheckout`** — a Checkout Session on the connected account with the application fee from `computeApplicationFee`; every paid feature gates on `canCharge`
+- **Connect webhook** — `/api/webhooks/connect` with its own signing secret; `checkout.session.completed` flips the `Payment` idempotently
+
 ## [2.63.0] - 2026-10-29
 
 **Tenant payment records: `Payment` and `Refund`, plus connected-account state on `Tenant`.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.

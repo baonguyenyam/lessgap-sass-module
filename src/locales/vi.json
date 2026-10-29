@@ -385,6 +385,20 @@
           "primary": "Đặt làm chính",
           "remove": "Gỡ"
         }
+      },
+      "payments": {
+        "title": "Thanh toán",
+        "subtitle": "Nhận đặt cọc và thanh toán từ khách hàng",
+        "not_connected": "Chưa kết nối",
+        "connected": "Đã kết nối",
+        "gate_hint": "Đặt cọc, thanh toán cửa hàng và báo giá trả phí sẽ ẩn cho đến khi tài khoản Stripe có thể nhận tiền.",
+        "connected_hint": "Tài khoản Stripe có thể nhận tiền — các tính năng trả phí đã hoạt động.",
+        "connect": "Kết nối Stripe",
+        "connecting": "Đang kết nối…",
+        "account": "Tài khoản",
+        "payouts": "rút tiền",
+        "yes": "có",
+        "no": "không"
       }
     },
     "account": {
