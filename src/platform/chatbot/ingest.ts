@@ -2,8 +2,6 @@ import { createHash } from "node:crypto"
 import { db8 } from "@/lib/db8"
 import { chunkText, estimateTokens } from "@/lib/chatbot/chunk"
 import { getChatProvider } from "@/platform/chatbot/provider"
-import { isModuleActive } from "@/platform/modules/runtime"
-import { systemContext } from "@/platform/tenancy/context"
 
 /** The ingest pipeline (task 7.2, spec/08): a tenant's prose — site pages,
  * its `chatbot.faq` entries, uploaded documents — is chunked, embedded and
@@ -40,8 +38,8 @@ async function collectSources(tenantId: string): Promise<IngestItem[]> {
 export async function reindexTenant(tenantId: string): Promise<{ sources: number; chunks: number }> {
   // L2: a disabled module's jobs pause — the scheduled reindex no-ops
   // until the tenant re-enables chatbot.
-  const c = systemContext(tenantId, "system")
-  if (!(await isModuleActive(c, "chatbot"))) return { sources: 0, chunks: 0 }
+  const tm = await db8.orm.public.TenantModule.where({ tenantId, moduleKey: "chatbot", enabled: true }).first()
+  if (!tm) return { sources: 0, chunks: 0 }
   const provider = getChatProvider()
   const items = await collectSources(tenantId)
   let chunks = 0

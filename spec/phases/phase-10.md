@@ -10,7 +10,7 @@ and the parts of the module-disable check E8 didn't reach.
 
 ## Scope
 
-- Phase 10: in progress.
+- Phase 10: done.
 
 ## Tasks
 
