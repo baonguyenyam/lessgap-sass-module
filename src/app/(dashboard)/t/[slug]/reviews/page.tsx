@@ -40,7 +40,7 @@ export default async function ReviewsPage() {
               <p className="text-sm font-medium">
                 {"★".repeat(r.rating)} · {(r.customer as { name?: string } | null)?.name ?? "—"}
               </p>
-              {r.body && <p className="text-sm text-muted-foreground">"{r.body}"</p>}
+              {r.body && <p className="text-sm text-muted-foreground">&ldquo;{r.body}&rdquo;</p>}
               <ReviewActions id={r.id} />
             </div>
           ))}

@@ -1,4 +1,4 @@
-import { test, expect, type BrowserContext } from "@playwright/test"
+import { test, expect } from "@playwright/test"
 import { config } from "dotenv"
 import { newId } from "@/lib/ids"
 import { freshEmail } from "./fresh-email"
