@@ -8,12 +8,12 @@ import module_5 from "./reservations/module"
 import module_6 from "./team/module"
 
 export const moduleRegistry = {
-  booking: module_0,
-  catalog: module_1,
-  customers: module_2,
-  newsletter: module_3,
-  notifications: module_4,
-  reservations: module_5,
-  team: module_6,
+  "booking": module_0,
+  "catalog": module_1,
+  "customers": module_2,
+  "newsletter": module_3,
+  "notifications": module_4,
+  "reservations": module_5,
+  "team": module_6,
 } as const
 export type ModuleKey = keyof typeof moduleRegistry

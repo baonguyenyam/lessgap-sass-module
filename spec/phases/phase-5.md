@@ -182,7 +182,7 @@ PHI).
   clinical field.
 - **Checks:** `pnpm test:integration`.
 - **Done when:** the exclusion constraint is proven in a race test.
-- [ ] done
+- [x] done (two direct `Appointment.create` on one staff slot — the second fails at `appointment_no_double_staff` (the constraint was committed to `migration.ts` in 5.2 but never self-emitted into `ops.json`, so it never landed in any database; self-emit `node <pkg>/migration.ts` regenerated ops.json+migrationHash `82d60f7e`, applied to dev + test DBs — lesson added: ops.json is emitted, not edited). Two concurrent `bookAppointment` on one slot — one wins, the loser gets `conflict` (the ORM's 23P01 maps to `AppError("conflict")`). Dental: `bookingInputError` (pure) refuses `notes` on `verticalKey === "dental"` tenants, the site booking page shows a no-PHI hint, `Appointment.notes` carries it otherwise. Unit `dental.test.ts` 2/2; integration 6/6.)
 
 ## Exit criteria
 

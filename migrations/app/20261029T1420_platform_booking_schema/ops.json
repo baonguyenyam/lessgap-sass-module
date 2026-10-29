@@ -2310,5 +2310,71 @@
         ]
       }
     ]
+  },
+  {
+    "id": "extension.btree_gist",
+    "label": "Create extension btree_gist",
+    "summary": "Creates the btree_gist extension for exclusion constraints",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "extension",
+        "name": "btree_gist"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "create extension btree_gist",
+        "sql": "CREATE EXTENSION IF NOT EXISTS btree_gist"
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "constraint.appointment_no_double_staff",
+    "label": "Add exclusion constraint appointment_no_double_staff",
+    "summary": "A staff member cannot hold two overlapping appointments",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "constraint",
+        "name": "appointment_no_double_staff"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "add exclusion constraint appointment_no_double_staff",
+        "sql": "ALTER TABLE \"public\".\"Appointment\" ADD CONSTRAINT \"appointment_no_double_staff\" EXCLUDE USING gist (\"staffId\" WITH =, tsrange(\"startTs\", \"endTs\") WITH &&) WHERE (status <> 'canceled')"
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "constraint.appointment_no_double_resource",
+    "label": "Add exclusion constraint appointment_no_double_resource",
+    "summary": "A resource cannot hold two overlapping appointments",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "constraint",
+        "name": "appointment_no_double_resource"
+      }
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "add exclusion constraint appointment_no_double_resource",
+        "sql": "ALTER TABLE \"public\".\"Appointment\" ADD CONSTRAINT \"appointment_no_double_resource\" EXCLUDE USING gist (\"resourceId\" WITH =, tsrange(\"startTs\", \"endTs\") WITH &&) WHERE (status <> 'canceled' AND \"resourceId\" IS NOT NULL)"
+      }
+    ],
+    "postcheck": []
   }
 ]

@@ -19,13 +19,15 @@ export default async function BookPage() {
   const c = systemContext(resolved.tenantId, "customer")
   await requireModule(c, "booking")
   const t = await getTranslations("site.booking")
-  const [services, staff, rules, timeOff, existing] = await Promise.all([
+  const [services, staff, rules, timeOff, existing, tenant] = await Promise.all([
     db8.orm.public.Service.where({ tenantId: resolved.tenantId }).all(),
     db8.orm.public.StaffMember.where({ tenantId: resolved.tenantId }).all(),
     db8.orm.public.AvailabilityRule.where({ tenantId: resolved.tenantId }).all(),
     db8.orm.public.TimeOff.where({ tenantId: resolved.tenantId }).all(),
     db8.orm.public.Appointment.where({ tenantId: resolved.tenantId }).all(),
+    db8.orm.public.Tenant.where({ id: resolved.tenantId }).first(),
   ])
+  const dental = tenant?.verticalKey === "dental"
   const now = new Date()
   const range = { startTs: now.toISOString(), endTs: new Date(now.getTime() + 30 * 24 * 3600 * 1000).toISOString() }
   const slots = availableSlots(
@@ -55,6 +57,7 @@ export default async function BookPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-6 px-6 py-10">
       <h1 className="text-2xl font-bold">{t("title")}</h1>
+      {dental && <p className="text-sm text-muted-foreground">{t("no_phi")}</p>}
       <BookingForm
         services={services.map((s) => ({ id: s.id, name: s.name, durationMinutes: s.durationMinutes }))}
         staff={staff.map((s) => ({ id: s.id, name: s.name }))}

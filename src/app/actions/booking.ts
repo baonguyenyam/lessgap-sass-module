@@ -13,6 +13,17 @@ import { availableSlots } from "@/lib/availability"
 import { signManageToken, verifyManageToken } from "@/lib/booking/manage-token"
 import { icsFile } from "@/lib/ics"
 import { resolveHost } from "@/platform/tenancy/host"
+import { bookingInputError } from "@/lib/booking/dental"
+
+/** Postgres 23P01 — an exclusion constraint refused the row. */
+function isExclusionViolation(error: unknown): boolean {
+  const e = error as { code?: string; cause?: { code?: string } }
+  return (
+    e?.code === "23P01" ||
+    e?.cause?.code === "23P01" ||
+    String((error as Error)?.message).includes("appointment_no_double")
+  )
+}
 import { headers } from "next/headers"
 
 /** The site booking flow (task 5.4, spec/07): a visitor books a service —
@@ -37,14 +48,22 @@ export async function bookAppointment(input: {
   language?: string
   marketingConsent?: boolean
   smsConsent?: boolean
+  notes?: string
 }) {
   try {
     const site = await siteCtx()
     const c = systemContext(site.tenantId, "customer")
     await requireModule(c, "booking")
     if (!input.name.trim() || (!input.email && !input.phone)) throw new AppError("invalid_input")
-    const service = await db8.orm.public.Service.where({ tenantId: site.tenantId, id: input.serviceId }).first()
+    const [service, tenant] = await Promise.all([
+      db8.orm.public.Service.where({ tenantId: site.tenantId, id: input.serviceId }).first(),
+      db8.orm.public.Tenant.where({ id: site.tenantId }).first(),
+    ])
     if (!service) throw new AppError("invalid_input", { field: "serviceId" })
+    // Dental tenants never take free-text notes — clinical details have no
+    // place in this platform (spec/10).
+    const phiError = bookingInputError({ notes: input.notes }, tenant?.verticalKey ?? "generic")
+    if (phiError) throw new AppError("invalid_input", { field: "notes" })
     // The requested window must still be a real slot — the pure function
     // answers authoritatively, the constraint catches what races past.
     const [rules, timeOff, existing, staff] = await Promise.all([
@@ -86,16 +105,25 @@ export async function bookAppointment(input: {
       source: "site",
     })
     const status = (await getEntitlements(c)).has("booking.manual_approval") ? "requested" : "confirmed"
-    const appointment = await db8.orm.public.Appointment.create({
-      tenantId: site.tenantId,
-      customerId,
-      staffId: match.staffId,
-      serviceId: input.serviceId,
-      startTs: input.startTs,
-      endTs: input.endTs,
-      status,
-      source: "site",
-    })
+    let appointment
+    try {
+      appointment = await db8.orm.public.Appointment.create({
+        tenantId: site.tenantId,
+        customerId,
+        staffId: match.staffId,
+        serviceId: input.serviceId,
+        startTs: input.startTs,
+        endTs: input.endTs,
+        status,
+        source: "site",
+        notes: input.notes ?? null,
+      })
+    } catch (error) {
+      // The exclusion constraint is the race backstop (decision 5-A): two
+      // requests that both pass the slot check — one loses here.
+      if (isExclusionViolation(error)) throw new AppError("conflict")
+      throw error
+    }
     await db8.orm.public.AppointmentEvent.create({
       tenantId: site.tenantId,
       appointmentId: appointment.id,
@@ -113,9 +141,11 @@ export async function bookAppointment(input: {
     })
     if (input.email) {
       await notify(c, "booking.confirmation", input.email, {
-        subject: `Your booking: ${service.name}`,
-        html: `<p>Hi ${input.name},</p><p>${service.name} is booked with ${staffName} at ${new Date(input.startTs).toUTCString()}.</p><p><a href="${manageUrl}">Manage your booking</a></p>`,
-        text: `Booking: ${service.name} with ${staffName} at ${input.startTs}. Manage: ${manageUrl}`,
+        name: input.name,
+        service: service.name,
+        staff: staffName,
+        time: new Date(input.startTs).toUTCString(),
+        manageUrl,
       })
     }
     await audit(c, {

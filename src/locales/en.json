@@ -1890,7 +1890,8 @@
       "done": {
         "reschedule": "Rescheduled.",
         "cancel": "Cancelled."
-      }
+      },
+      "no_phi": "Please share only your name, contact details, and preferred time — no medical information."
     },
     "reserve": {
       "title": "Book a table",

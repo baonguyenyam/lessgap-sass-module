@@ -1890,7 +1890,8 @@
       "done": {
         "reschedule": "Đã dời lịch.",
         "cancel": "Đã huỷ."
-      }
+      },
+      "no_phi": "Vui lòng chỉ cung cấp tên, thông tin liên hệ và thời gian mong muốn — không có thông tin y tế."
     },
     "reserve": {
       "title": "Đặt bàn",

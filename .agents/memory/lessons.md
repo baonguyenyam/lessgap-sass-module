@@ -346,3 +346,12 @@ Read before every task. Format and rules: [README.md](./README.md). Newest first
 - **Fix:** restored `savePlatformSettings` alongside the new `setPlatformSwitch`.
 - **Rule:** before `write` to a new-looking file, `ls`/`git log` it first —
   one action file per domain collides fast.
+
+## ops.json is emitted, not edited — run `node <pkg>/migration.ts` to self-emit
+
+Hand-written migration ops (raw SQL like exclusion constraints) go in
+`migration.ts`'s `operations` array. `ops.json` and `migration.json`
+(`migrationHash`) are derived — editing `ops.json` by hand trips
+`MIGRATION.CONTRACT_SPACE_VIOLATION` at the next run. After editing
+`migration.ts`, self-emit: `node migrations/app/<dir>/migration.ts` rewrites
+`ops.json` + `migration.json` with the recomputed hash.

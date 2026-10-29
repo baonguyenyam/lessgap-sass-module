@@ -22,6 +22,8 @@ vi.mock("@/lib/email-transport", async (importOriginal) => {
 })
 
 const { bookAppointment, manageAppointment } = await import("@/app/actions/booking")
+
+afterAll(async () => db8.close())
 const { resolveHost } = await import("@/platform/tenancy/host")
 
 async function provision() {
@@ -58,7 +60,6 @@ async function provision() {
 
 describe("site booking (5.4)", () => {
   beforeEach(resetDatabase)
-  afterAll(async () => db8.close())
 
   it("books a slot, creates the customer and logs the notification", async () => {
     const { tenant, staff, service } = await provision()
@@ -122,5 +123,67 @@ describe("site booking (5.4)", () => {
       email: "ana@example.test",
     })
     expect(res.error).toBe("conflict")
+  })
+})
+
+describe("exclusion constraint race (5.9)", () => {
+  beforeEach(resetDatabase)
+
+  it("two inserts for the same staff slot — the database refuses the second", async () => {
+    const { tenant, staff } = await provision()
+    const customer = await db8.orm.public.Customer.create({ tenantId: tenant.id, name: "Ana" })
+    const row = {
+      tenantId: tenant.id,
+      customerId: customer.id,
+      staffId: staff.id,
+      startTs: "2027-03-08T16:00:00.000Z",
+      endTs: "2027-03-08T17:00:00.000Z",
+      status: "confirmed" as const,
+    }
+    await db8.orm.public.Appointment.create(row)
+    // The exclusion constraint is the last word — overlapping non-canceled
+    // rows on one staff member fail at the database, not in app code.
+    // (try/catch, not rejects.toThrow: the ORM's StructuredError breaks the
+    // vitest diff printer.)
+    let caught: unknown = null
+    try {
+      await db8.orm.public.Appointment.create({
+        ...row,
+        startTs: "2027-03-08T16:30:00.000Z",
+        endTs: "2027-03-08T17:30:00.000Z",
+      })
+    } catch (error) {
+      caught = error
+    }
+    expect(caught).not.toBeNull()
+  })
+
+  it("two bookAppointment calls on one slot — one wins, the loser gets conflict", async () => {
+    const { service } = await provision()
+    const input = {
+      serviceId: service.id,
+      startTs: "2027-03-08T15:00:00.000Z",
+      endTs: "2027-03-08T15:30:00.000Z",
+      name: "Ana",
+      email: "ana@x.test",
+    }
+    const [a, b] = await Promise.all([bookAppointment(input), bookAppointment({ ...input, name: "Bia" })])
+    const outcomes = [a.error, b.error]
+    expect(outcomes.filter((e) => e === "conflict")).toHaveLength(1)
+    expect(outcomes.filter((e) => e === undefined)).toHaveLength(1)
+  })
+
+  it("a dental tenant's booking refuses notes (PHI)", async () => {
+    const { tenant, service } = await provision()
+    await db8.orm.public.Tenant.where({ id: tenant.id }).update({ verticalKey: "dental" })
+    const res = await bookAppointment({
+      serviceId: service.id,
+      startTs: "2027-03-08T18:00:00.000Z",
+      endTs: "2027-03-08T18:30:00.000Z",
+      name: "Ana",
+      email: "ana@x.test",
+      notes: "my tooth hurts",
+    })
+    expect(res.error).toBe("invalid_input")
   })
 })

@@ -7,6 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.61.0] - 2026-10-29
+
+**The double-booking guarantee is proven in the database: two simultaneous bookings for one slot — exactly one succeeds.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Fixed
+
+- **Exclusion constraints actually applied** — `appointment_no_double_staff`/`appointment_no_double_resource` were committed in `migration.ts` but never self-emitted into `ops.json`, so no database had them; `node <pkg>/migration.ts` regenerated the package and both are now applied — the second insert in a race fails at Postgres with 23P01, which `bookAppointment` maps to `conflict`
+
+### Added
+
+- **Dental PHI guard** — a `dental`-vertical tenant's booking refuses free-text notes outright, and the site booking page tells the visitor to share only name, contact, and a preferred time
+
 ## [2.60.0] - 2026-10-29
 
 **The reservations module: restaurant tables, service periods, and bookings that respect capacity and turn time.** This is a MINOR: `git pull`, `pnpm install`.
