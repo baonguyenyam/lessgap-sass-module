@@ -2006,7 +2006,14 @@
         "unauthorized": "Please sign in first.",
         "not_found": "Not found.",
         "unknown": "Something went wrong."
-      }
+      },
+      "appointment": "Appointment",
+      "booking": "Booking",
+      "cancel": "Cancel",
+      "manage_title": "Manage your appointment",
+      "new_slot": "New time",
+      "reschedule": "Reschedule",
+      "host": "Host"
     },
     "order": {
       "title": "Order for pickup",
@@ -2027,7 +2034,14 @@
         "rate_limited": "Too many tries — wait a minute.",
         "not_found": "Not found.",
         "unknown": "Something went wrong."
-      }
+      },
+      "choose": "Choose…",
+      "host": "Host",
+      "item": "Item",
+      "offline": "Ordering is offline for this shop right now.",
+      "ordered": "Order placed — see you at pickup.",
+      "pickup_slot": "Pickup time",
+      "placing": "Placing…"
     },
     "quote": {
       "title": "Request a quote",
@@ -2044,7 +2058,16 @@
         "not_found": "Not found.",
         "unknown": "Something went wrong."
       },
-      "subtitle": "Tell us what you need and we'll send a quote."
+      "subtitle": "Tell us what you need and we'll send a quote.",
+      "accept": "Accept",
+      "accept_title": "Your quote",
+      "choose": "Choose…",
+      "decline": "Decline",
+      "expired": "This quote has expired.",
+      "host": "Host",
+      "sending": "Sending…",
+      "submitted": "Sent — we'll get back to you.",
+      "valid_until": "Valid until"
     },
     "reserve": {
       "title": "Reserve a table",
@@ -2062,7 +2085,12 @@
         "module_inactive": "Reservations are unavailable.",
         "not_found": "Not found.",
         "unknown": "Something went wrong."
-      }
+      },
+      "choose": "Choose…",
+      "host": "Host",
+      "party_size": "Party size",
+      "reserving": "Reserving…",
+      "slot": "Time"
     },
     "shop": {
       "title": "Shop",
@@ -2074,7 +2102,13 @@
       "error": {
         "not_found": "Not found.",
         "unknown": "Something went wrong."
-      }
+      },
+      "email": "Email",
+      "host": "Host",
+      "name": "Name",
+      "offline": "Checkout is offline for this shop right now.",
+      "ordered": "Order placed — check your email.",
+      "paying": "Paying…"
     }
   }
 }
