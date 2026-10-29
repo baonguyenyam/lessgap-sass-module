@@ -1,0 +1,171 @@
+# Phase 6 — Payments, shop, ordering, quotes
+
+**Status:** draft
+**Roadmap:** [roadmap.md#phase-6--payments-shop-ordering-quotes](../roadmap.md)
+**Read first:** [billing.md](../05-billing.md) ("Tenant payments"),
+[modules.md](../07-modules.md) (`payments`, `shop`, `ordering`, `quotes`),
+[ADR 0006](../adr/0006-stripe-connect-for-tenant-payments.md),
+[module-system.md](../15-module-system.md), [conventions](../13-conventions.md).
+
+## Goal
+
+A tenant takes real money. The owner connects a Stripe account through
+Stripe-hosted onboarding (ADR 0006 — the tenant is merchant of record; we
+never see bank details), charges run on the connected account with an
+application fee from `computeApplicationFee(model, amount, context)` — a
+pure function with a test per model. Until `chargesEnabled` flips true,
+every paid feature on the site (deposits, shop checkout, paying a quote)
+is hidden, not broken. `payments` is the only module that talks to Stripe —
+others ask it for a checkout; refunds return the fee proportionally; a
+payouts view lists money in and out. On top of it: `shop` (products → cart
+→ checkout → pickup or shipping), `ordering` (menu items with modifiers +
+pickup slots + kitchen capacity), `quotes` (schema-driven request → priced
+quote → link → accept with optional deposit → convert to order or
+appointment), and booking deposits (`booking.deposits` wired at last).
+
+## Out of scope
+
+- Platform's own subscription billing — phase 2 did that; this phase is
+  only money the TENANT collects.
+- Stripe Tax auto-calculation — the flag and hook exist; enabling per
+  tenant is a later polish.
+- Gift card redemption flow — `Product.type` includes it; the sell/redeem
+  UI is later.
+- In-person/POS payments, Square/Clover — ADR 0006 leaves them to a later
+  integration.
+- Multi-item quote→appointment scheduling — conversion produces an order
+  or a single appointment.
+
+## Decisions needed before starting
+| # | Question | Options | Decision |
+|---|---|---|---|
+| 6-A | Connected-account state | Columns on `Tenant` / own `ConnectedAccount` model | **Columns on `Tenant`** (`stripeAccountId`, `chargesEnabled`, `payoutsEnabled`, `onboardingStatus`) — one account per tenant per ADR 0006; no second lifecycle |
+| 6-B | Checkout mechanism | PaymentIntent / Checkout Session | **Checkout Session** — Stripe-hosted, no card fields on our site, application_fee_amount supported |
+| 6-C | Fee config resolution | Plan key + `EntitlementOverride` / new table | **`Plan.paymentFeeModel` + `Plan.paymentFeeBps/fixed/cap` + `EntitlementOverride`** — the existing five-layer resolver decides |
+| 6-D | Cart identity | `Cart` row by cookie / sessionStorage | **`Cart` row keyed by cookie (`cart_id`), attached to `Customer` on checkout** per spec/07 |
+| 6-E | Quote→deposit | Reuse appointment deposit / own checkout | **Own checkout session on the quote** — a `Payment` row links `quoteId`, same fee path |
+
+## Tasks
+
+### 6.1 — `computeApplicationFee` engine
+- **Goal:** the one pure function every charge consults.
+- **Files:** `src/lib/billing/fee.ts`, `src/platform/entitlements/registry.ts`
+  (fee model/bps/fixed/cap feature keys), `tests/unit/lib/fee.test.ts`.
+- **Tests:** every model (`none`, `percent`, `fixed`, `percent_fixed`,
+  `per_booking` → metered flag not amount, `percent_capped`), rounding
+  (integer cents, half-up), zero amount, cap, fee never negative/exceeding
+  charge, `refundFee` proportional on partial refunds.
+- **Checks:** `pnpm test`, `pnpm typecheck`.
+- **Done when:** fee math is unit-tested per spec/05's table.
+- [ ] done
+
+### 6.2 — Connect + Payment schema
+- **Goal:** connected-account state on `Tenant`, `Payment` and `Refund`
+  models, migration, classification.
+- **Files:** `prisma/contract.prisma` (+Tenant columns, `Payment`, `Refund`),
+  migration, `models.ts`, `delete-tenant.ts` + T9, `src/platform/tenancy/`.
+- **Tests:** T9 extension — delete cleans Payment/Refund.
+- **Checks:** `pnpm db:emit`, `pnpm audit:tenancy`, `pnpm test:integration`.
+- **Done when:** migration applied, 51 models classified.
+- [ ] done
+
+### 6.3 — `payments` module: onboarding, webhook, chargesEnabled gate
+- **Goal:** Connect onboarding link (Settings → Payments), Connect webhook
+  (`/api/webhooks/connect`, signed, idempotent, mapped by account id),
+  `createCheckout(ctx, …)` the other modules call, paid-feature gate.
+- **Files:** `src/modules/payments/module.ts`, `src/platform/payments/*`,
+  `src/app/actions/payments.ts`, `src/app/api/webhooks/connect/route.ts`,
+  `/t/<slug>/settings/payments`, nav, translations, `module.payments` seed.
+- **Tests:** integration — webhook signed with Stripe SDK, idempotent on
+  replay, maps by account id; a tenant without charges gets `forbidden`
+  on checkout; unit — `canCharge(tenant)` gate.
+- **Checks:** `pnpm test:integration`, `pnpm modules:check`.
+- **Done when:** a tenant connects, webhook flips `chargesEnabled`,
+  checkout creates a session on the connected account with the fee.
+- [ ] done
+
+### 6.4 — `shop` module: products, cart, checkout
+- **Goal:** catalog of products → anonymous cart → checkout on the
+  connected account → `Order`/`OrderLine`, pickup or shipping.
+- **Files:** contract (+`ProductCategory`, `Product`, `ProductVariant`,
+  `Cart`, `CartLine`, `Order`, `OrderLine`), migration,
+  `src/modules/shop/module.ts`, `src/app/actions/shop.ts`,
+  `/sites/[host]/shop`, `/t/<slug>/orders`, nav, translations,
+  `module.shop` seed, feature keys (`shop.*`).
+- **Tests:** unit — cart totals; integration — add→checkout→order,
+  `shop.products.max` enforced, order only in own tenant.
+- **Checks:** `pnpm test:integration`, `pnpm audit:tenancy`,
+  `pnpm modules:check`.
+- **Done when:** a visitor buys a product; the tenant sees the order.
+- [ ] done
+
+### 6.5 — `ordering` module: menu items, modifiers, pickup slots
+- **Goal:** restaurant pickup ordering on `shop` `menu_item`s with
+  modifier groups, pickup time slots with kitchen capacity, a dashboard
+  order-status board.
+- **Files:** contract (+`ProductModifierGroup`, `ProductModifier`,
+  `Order.modifierJson` or `OrderLine.modifiers`), migration,
+  `src/modules/ordering/module.ts`, `src/app/actions/ordering.ts`,
+  `/sites/[host]/order`, `/t/<slug>/orders/board`, translations,
+  `module.ordering` seed.
+- **Tests:** unit — `pickupSlots(rules, capacity, existing)`; integration —
+  order with modifiers totals, slot capacity enforced, board transitions.
+- **Checks:** `pnpm test:integration`, `pnpm modules:check`.
+- **Done when:** a diner orders with modifiers for a pickup slot; the
+  board moves the order received → preparing → ready → done.
+- [ ] done
+
+### 6.6 — `quotes` module: request → quote → accept → convert
+- **Goal:** schema-driven request forms, priced quotes, signed accept
+  link, optional deposit checkout, conversion to order or appointment.
+- **Files:** contract (+`QuoteRequest`, `Quote`, `QuoteLine`, `QuoteEvent`),
+  migration, `src/modules/quotes/module.ts`, `src/lib/quotes/form.ts` (pure
+  form-definition validation), `src/app/actions/quotes.ts`,
+  `/sites/[host]/quote`, `/sites/[host]/quote/accept/[token]`,
+  `/t/<slug>/quotes`, translations, `module.quotes` seed.
+- **Tests:** unit — form-definition validation + quote totals; integration —
+  full flow request→price→accept(+deposit)→convert; `quotes.monthly` cap.
+- **Checks:** `pnpm test:integration`, `pnpm modules:check`.
+- **Done when:** a customer's request becomes a paid, converted quote.
+- [ ] done
+
+### 6.7 — Booking deposits
+- **Goal:** `booking.deposits` finally wired — a deposit amount on the
+  service requires payment at book time; the appointment stays
+  `requested`/unpaid until the checkout confirms.
+- **Files:** `Service.depositCents` (contract), migration,
+  `src/app/actions/booking.ts`, `/sites/[host]/book` deposit step,
+  translations.
+- **Tests:** integration — deposit required → unpaid booking isn't
+  confirmed until `Payment` succeeds; free booking unchanged.
+- **Checks:** `pnpm test:integration`.
+- **Done when:** a deposit-gated service takes payment before
+  confirmation.
+- [ ] done
+
+### 6.8 — Proportional refunds + payouts view
+- **Goal:** `/t/<slug>/payments` — money in/out list; refund action calls
+  Stripe with the proportional fee, `Refund` rows record it.
+- **Files:** `src/app/actions/payments.ts` (`refundPayment`), payouts page,
+  translations.
+- **Tests:** unit — `refundFee` math on partial refunds; integration —
+  refund records row + fee proportion.
+- **Checks:** `pnpm test`, `pnpm test:integration`.
+- **Done when:** a refund returns the fee proportionally and shows in the
+  payouts view.
+- [ ] done
+
+## Exit criteria
+
+- Unit tests for every fee model, rounding and refunds (`fee.test.ts`).
+- E2E in Stripe test mode: shop checkout on a connected account with the
+  plan's fee; refund refunds the fee proportionally (noted in findings —
+  the mechanism is unit/integration tested; live Stripe E2E needs keys).
+- Paid features hidden while `chargesEnabled` is false (`canCharge` gate
+  everywhere paid UI renders).
+- `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm test:integration`,
+  `pnpm modules:check`, `pnpm audit:tenancy` all green.
+
+## Findings
+
+(none yet)
