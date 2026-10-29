@@ -1,0 +1,36 @@
+# Phase 11 — the waitlist: fully booked days take names
+
+The roadmap's "Later" list's most self-contained piece. `spec/07`'s booking
+flow refuses a fully booked day; a tenant should instead offer to take the
+visitor's name — when a slot frees, the waitlisted get first pick.
+
+**Read:** spec/07-booking.md (slots, availability), spec/12-migrations-and-data.md
+(schema/migration rules), `src/lib/availability.ts`, `src/app/actions/booking.ts`,
+`tests/e2e/booking.spec.ts`.
+
+## Scope
+
+- Phase 11: in progress.
+
+## Tasks
+
+### 11.1 `WaitlistEntry` + join + notify-on-free
+
+`WaitlistEntry` — tenant-owned, `@@rls`, a customer email/phone, the service
+(or "any"), the day they want, status `waiting | notified | booked | canceled`.
+The booking page offers "join the waitlist" when `availableSlots` is empty;
+`manageAppointment`'s cancel/reschedule notifies the waitlist's next entries
+through `notify`; a waitlisted visitor books through the same manage-link
+flow.
+
+**Tests:** integration — join → row; cancel → next entry notified (outbox
+row); waitlisted book lands the appointment.
+**Done when:** the join and notify paths work end-to-end.
+- [ ] done
+
+## Exit criteria
+
+- The waitlist joins and notifies correctly; tests green.
+- `pnpm typecheck`, `pnpm lint`, `pnpm test:integration` green.
+
+## Findings
