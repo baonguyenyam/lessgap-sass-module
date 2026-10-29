@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation"
+import { updateTag } from "next/cache"
 import { moduleRegistry } from "@/modules/registry"
 import { nowTs } from "@/lib/timestamps"
 import { AppError } from "@/platform/errors"
@@ -90,6 +91,9 @@ export async function enableModule(
       await db.TenantModule.create({ moduleKey: key, enabled: true, enabledAt: now, firstEnabledAt: now } as never)
       return { firstTime: true }
     }
+    // E8: the site's `use cache` holds the module list — revalidate so a
+    // change lands before the cache's own expiry (task 9.2's spec caught
+    // this: a disabled module's section stayed rendered).
     await db.TenantModule.where({ moduleKey: key }).update({
       enabled: true,
       enabledAt: now,
@@ -98,6 +102,9 @@ export async function enableModule(
     })
     return { firstTime: row.firstEnabledAt === null }
   }).then(async (result) => {
+    // E8/D7: the site's `use cache` holds the module list — revalidate so
+    // the change lands before the cache's own expiry.
+    updateTag(`site:${ctx.tenantId}`)
     // The manifest hook runs once per fresh enable — a module can seed or
     // sync here, but never on re-enable (spec/15, "Lifecycle").
     if (result.firstTime) {
@@ -124,6 +131,7 @@ export async function disableModule(
     db.TenantModule.where({ moduleKey: key, enabled: true }).updateAndCount({ enabled: false, disabledAt: nowTs() })
   )
   if (changed > 0) {
+    updateTag(`site:${ctx.tenantId}`)
     const hook = (registry[key] as { lifecycle?: { onDisable?: unknown } }).lifecycle?.onDisable as
       ((ctx: TenantContext) => Promise<void>) | undefined
     if (hook) await hook(ctx)

@@ -7,6 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.83.0] - 2026-10-29
+
+**Module changes reach the site immediately — `enableModule`/`disableModule` now invalidate the site's cache — plus the E8 downgrade E2E.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Fixed
+
+- **Stale module list on sites** — `getSiteData` caches under `site:<tenantId>` and no path invalidated it; a disabled module's section rendered until the cache expired. `updateTag` now fires on enable and disable.
+
+### Added
+
+- **`tests/e2e/modules.spec.ts`** — the E8 check: disable a module → the site's section and the dashboard nav hide, the rows stay.
+
 ## [2.82.0] - 2026-10-29
 
 **Two site-surface fixes the deferred E2E caught: the site's root URL 404'd since task 3.1, and suspended tenants had no page at all — plus the first host-routing Playwright spec.** This is a MINOR: `git pull`, `pnpm install`.

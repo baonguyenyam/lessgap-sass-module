@@ -59,7 +59,7 @@ preserved for purge, not hidden-delete).
 
 **Tests:** Playwright spec — site section hides, nav hides, rows stay.
 **Done when:** the spec passes; `describeData` still reports the rows.
-- [ ] done
+- [x] done (`tests/e2e/modules.spec.ts` 1/1 — enable `catalog` + `Service` + published site → service renders → disable via the settings/modules UI → the service leaves the site's HTML, the nav item leaves, the `Service` row stays. **The spec found a real bug**: `enableModule`/`disableModule` never invalidated `getSiteData`'s `"use cache"` — a module change kept rendering until cache expiry. `updateTag("site:<tenantId>")` added to both paths (server-action-only immediate invalidation — `revalidateTag(tag, "max")` extends, doesn't expire). Also: signup lands on the onboarding wizard — specs provision `auth.api.signUpEmail` + `createOrganization` then log in.)
 
 ### 9.3 Booking journey E2E
 
