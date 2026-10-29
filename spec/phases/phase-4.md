@@ -40,7 +40,7 @@ holds for two designs.
 - **Tests:** T9 covers the new models.
 - **Checks:** `pnpm db:emit`, `pnpm db:plan`, `pnpm db:migrate`, `pnpm audit:tenancy`.
 - **Done when:** models exist tenant-owned, deletion verified.
-- [ ] done
+- [x] done (`platform_catalog_team` adds `ServiceCategory`, `Service` (categoryId, durationMinutes, priceCents, currency, imageKey, `isSample`, status), `ServiceVariant` (own duration/price), `StaffMember` (name, photo, bio, `isSample` — not a Member) and `StaffService` join — all tenant-owned, `@@rls`, cascade. `MODEL_CLASSIFICATION` 38 models; `deleteTenant` covers all five (T9).)
 
 ### 4.2 — `catalog` module through the lifecycle
 - **Goal:** `src/modules/catalog/module.ts` manifest + hooks

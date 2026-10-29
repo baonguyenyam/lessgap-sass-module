@@ -33,8 +33,13 @@ describe("tenant deletion (T9)", () => {
       ModulePurge,
       NewsletterSubscriber,
       Page,
+      Service,
+      ServiceCategory,
+      ServiceVariant,
       Site,
       SiteSettings,
+      StaffMember,
+      StaffService,
       TenantModule,
       TenantSetting,
       Purchase,
@@ -57,6 +62,10 @@ describe("tenant deletion (T9)", () => {
     const plan = await Plan.create({ name: "Purge Plan", slug, price: 100, interval: "MONTH" })
     const addOn = await AddOn.create({ key: slug, name: "Purge Add-on", stripePriceId: `price_${slug}` })
 
+    const service = await Service.create({ tenantId: tenant.id, name: "Manicure" })
+    const staff = await StaffMember.create({ tenantId: tenant.id, name: "Mia" })
+    const serviceId = service.id
+    const staffId = staff.id
     await Promise.all([
       NewsletterSubscriber.create({
         email: "list@example.test",
@@ -69,7 +78,10 @@ describe("tenant deletion (T9)", () => {
       ModulePurge.create({ tenantId: tenant.id, moduleKey: "demo", runAfter: nowTs() }),
       Page.create({ tenantId: tenant.id, key: "home" }),
       Site.create({ tenantId: tenant.id, themeKey: "main" }),
+      ServiceCategory.create({ tenantId: tenant.id, name: "Nails" }),
       SiteSettings.create({ tenantId: tenant.id, profile: { name: "Purge Me" } }),
+      ServiceVariant.create({ tenantId: tenant.id, serviceId: serviceId, name: "Gel" }),
+      StaffService.create({ tenantId: tenant.id, staffMemberId: staffId, serviceId: serviceId }),
       TenantModule.create({ tenantId: tenant.id, moduleKey: "demo", enabled: true }),
       TenantSetting.create({ tenantId: tenant.id, key: "display.page_size", value: 25 }),
       OrganizationRole.create({ organizationId: tenant.id, role: "greeter", permission: { demo: ["view"] } }),

@@ -710,3 +710,91 @@ trialEndsAt          TimestampString(3)?
     @@index([tenantId], map: "Domain_tenantId_idx")
     @@rls
   }
+
+  // The catalog module (spec/07): service categories, services with
+  // duration and price, and per-service variants. `isSample` marks rows a
+  // vertical wrote — removable in one click (spec/06).
+  model ServiceCategory {
+    id        String             @id(map: "ServiceCategory_pkey") @onCreate(cuid(2))
+    tenantId  String
+    name      String
+    sortOrder Int                @default(0)
+    createdAt TimestampString(3) @default(now())
+    updatedAt TimestampString(3) @default(now()) @onUpdate(now())
+    tenant    Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "ServiceCategory_tenantId_fkey")
+    services  Service[]
+
+    @@index([tenantId], map: "ServiceCategory_tenantId_idx")
+    @@rls
+  }
+
+  model Service {
+    id              String           @id(map: "Service_pkey") @onCreate(cuid(2))
+    tenantId        String
+    categoryId      String?
+    name            String
+    description     String?
+    durationMinutes Int              @default(60)
+    priceCents      Int              @default(0)
+    currency        String           @default("usd")
+    imageKey        String?
+    isSample        Boolean          @default(false)
+    status          String           @default("active")
+    createdAt       TimestampString(3) @default(now())
+    updatedAt       TimestampString(3) @default(now()) @onUpdate(now())
+    tenant          Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Service_tenantId_fkey")
+    category        ServiceCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "Service_categoryId_fkey")
+    variants        ServiceVariant[]
+    staff           StaffService[]
+
+    @@index([tenantId], map: "Service_tenantId_idx")
+    @@rls
+  }
+
+  model ServiceVariant {
+    id              String             @id(map: "ServiceVariant_pkey") @onCreate(cuid(2))
+    tenantId        String
+    serviceId       String
+    name            String
+    durationMinutes Int                @default(0)
+    priceCents      Int                @default(0)
+    createdAt       TimestampString(3) @default(now())
+    updatedAt       TimestampString(3) @default(now()) @onUpdate(now())
+    tenant          Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "ServiceVariant_tenantId_fkey")
+    service         Service            @relation(fields: [serviceId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "ServiceVariant_serviceId_fkey")
+
+    @@index([serviceId], map: "ServiceVariant_serviceId_idx")
+    @@rls
+  }
+
+  // The team module (spec/07): staff shown on the site and used by booking.
+  // A staff member is not a tenant member — it may never have a login.
+  model StaffMember {
+    id        String           @id(map: "StaffMember_pkey") @onCreate(cuid(2))
+    tenantId  String
+    name      String
+    photo     String?
+    bio       String?
+    isSample  Boolean          @default(false)
+    createdAt TimestampString(3) @default(now())
+    updatedAt TimestampString(3) @default(now()) @onUpdate(now())
+    tenant    Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "StaffMember_tenantId_fkey")
+    services  StaffService[]
+
+    @@index([tenantId], map: "StaffMember_tenantId_idx")
+    @@rls
+  }
+
+  model StaffService {
+    id            String      @id(map: "StaffService_pkey") @onCreate(cuid(2))
+    tenantId      String
+    staffMemberId String
+    serviceId     String
+    createdAt     TimestampString(3) @default(now())
+    tenant        Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "StaffService_tenantId_fkey")
+    staffMember   StaffMember @relation(fields: [staffMemberId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "StaffService_staffMemberId_fkey")
+    service       Service     @relation(fields: [serviceId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "StaffService_serviceId_fkey")
+
+    @@index([staffMemberId, serviceId], map: "StaffService_staffMemberId_serviceId_key", unique: true)
+    @@rls
+  }

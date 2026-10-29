@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.47.0] - 2026-10-29
+
+**Catalog and team have a schema: services, variants, staff.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` — one migration adds five tables.
+
+### Added
+
+- **`ServiceCategory`, `Service`, `ServiceVariant`** — the catalog module's data: categorized services with duration and price, and per-service variants
+- **`StaffMember`, `StaffService`** — the team module's staff profiles (a staff member is not a tenant member — it may never have a login) and which services they perform
+- **`isSample` flags** on `Service` and `StaffMember` — the rows a vertical preset writes are removable in one click
+
 ## [2.46.0] - 2026-10-28
 
 **Tenants attach custom domains to their site.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` — one migration adds `Domain`.
