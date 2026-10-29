@@ -55,6 +55,8 @@ const UNLOCALIZED = [
   "/verify-request",
   "/2fa",
   "/invite",
+  // Theme fixture previews (task 10.1, D8) — a public route outside [locale].
+  "/themes",
   // Root level metadata routes.
   "/sitemap.xml",
   "/robots.txt",

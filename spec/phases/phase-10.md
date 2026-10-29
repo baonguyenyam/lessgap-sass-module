@@ -23,7 +23,7 @@ critical violations.
 
 **Tests:** extend `tests/e2e/` — one axe scan per registered theme.
 **Done when:** every theme in `src/themes/registry.ts` is scanned and clean.
-- [ ] done
+- [x] done (`tests/e2e/themes.spec.ts` 1/1 — `themeFixtures` in `src/themes/fixtures.ts` + `/themes/[theme]` renders each theme's `fixtureSite` (the route sits outside `[locale]`, so `/themes` joined `UNLOCALIZED` in the proxy); `classic` and `main` scan clean.)
 
 ### 10.2 O8 — staff without 2FA is refused `/platform` until it's on
 

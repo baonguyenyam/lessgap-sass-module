@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.87.0] - 2026-10-29
+
+**Every shared theme's fixture renders on a preview route — and the axe suite scans each with zero serious violations.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`/themes/<theme>`** — renders a registered theme's `fixtureSite` without a tenant (D8, spec/11); `themeFixtures` maps each theme's fixture
+- **`tests/e2e/themes.spec.ts`** — one axe scan per theme in the registry
+
 ## [2.86.0] - 2026-10-29
 
 **Every site-content write now invalidates the site's cache — a saved setting, a new service, a staff change or a suspension reaches the published site inside its cache window.** This is a MINOR: `git pull`, `pnpm install`.
