@@ -37,7 +37,7 @@ export const localProvider: ChatProvider = {
     const norm = Math.sqrt(vector.reduce((s, x) => s + x * x, 0)) || 1
     return vector.map((x) => x / norm)
   },
-  async chat(messages, _tools) {
+  async chat(messages) {
     const last = messages[messages.length - 1]?.content ?? ""
     const system = messages.find((m) => m.role === "system")?.content ?? ""
     // The stub honours the tool contract deterministically: a question

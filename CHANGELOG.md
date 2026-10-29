@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.72.0] - 2026-10-29
+
+**The chatbot's answer pipeline: rate-limited, prompt-templated, tool-grounded, logged.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`answerChat`** — `chatbot.messages.monthly` cap → versioned system prompt (tenant content is data, facts from tools, never confirms bookings) → cosine-ranked chunks → provider + six tools (`get_services`, `get_hours`, `find_slots`, `start_booking`, `start_quote`, `leave_message`) → logged conversation
+- **`/api/chat`** — the site bubble's endpoint; gated by the `chatbot` module and `feature.chatbot` switch
+
 ## [2.71.0] - 2026-10-29
 
 **The chatbot ingest pipeline: pages and FAQs are chunked, embedded, and re-indexed — idempotent by checksum.** This is a MINOR: `git pull`, `pnpm install`.

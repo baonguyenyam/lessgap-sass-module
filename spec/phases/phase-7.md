@@ -36,7 +36,7 @@ abstraction (`chatbot.provider`) keeps the LLM and embedder swappable.
 |---|---|---|---|
 | 7-A | LLM + embedder | Real API / provider interface | **`ChatProvider` interface** like `DomainProvider` — `local` stubs answers + embeddings (deterministic), `openai` behind `OPENAI_API_KEY`; `chatbot.provider` platform switch picks |
 | 7-B | Conversation logging | `ChatConversation` + `ChatMessage` rows / `NotificationLog` | **`ChatConversation` + `ChatMessage`** — 90-day retention job; personal data minimised before quality review |
-| 7-C | Prompt template | DB / versioned file | **Versioned file** in `src/modules/chatbot/prompts/` — a tenant's `chatbot.prompt.<version>` TenantSetting overrides (like notify templates) |
+| 7-C | Prompt template | DB / versioned file | **Versioned file** in `src/platform/chatbot/prompt.ts` — the kernel boundary lint (`no-restricted-imports`) keeps the kernel out of `src/modules/`; a tenant's `chatbot.prompt.<version>` TenantSetting overrides (like notify templates) |
 | 7-D | Kill switches | Two switches / one | **`chatbot` tenant module + `feature.chatbot` platform switch** — a platform-off stops every site |
 | 7-E | Re-index trigger | Job tick / `site.page.saved` event | **Event + job**: save/upload/delete enqueue `platform.chatbot.reindex` (the existing job runner) |
 
@@ -85,7 +85,7 @@ abstraction (`chatbot.provider`) keeps the LLM and embedder swappable.
 - **Checks:** `pnpm test`, `pnpm test:integration`.
 - **Done when:** a question gets a streamed, sourced answer and a logged
   conversation.
-- [ ] done
+- [x] done (`src/platform/chatbot/answer.ts` — `answerChat`: `consumeLimit(chatbot.messages.monthly)` → tenant settings + `chatbot.settings` (tone/languages) + `chatbot.prompt.v1` TenantSetting override → `buildSystemPrompt` (injection-safe: tenant content is DATA, facts from tools, never confirms booking) → embed question → retrieve chunks (`tenantId` first, cosine top-5) → `provider.chat` with 6 tools → executes calls (`get_services`/`get_hours`/`find_slots` read the DB live; `start_booking`/`start_quote`/`leave_message` hand off) → logs `ChatConversation` + 2 `ChatMessage`s. `/api/chat` POST — `resolveHost` → `requireModule(chatbot)` + `feature.chatbot` switch (403 when off). Prompt moved to `src/platform/chatbot/prompt.ts` — kernel can't import `src/modules/`. Integration `chatbot-answer.test.ts` 4/4 — chunk answer + logged conversation, price-from-tools (change → new answer, no re-index), `chatbot.messages.monthly` cap → AppError, tenant-isolated retrieval; unit `chatbot-prompt.test.ts` 2/2.)
 
 ### 7.4 — Site chat bubble + dashboard + switches
 - **Goal:** the widget on `/sites/[host]` (bubble → sheet → input →
