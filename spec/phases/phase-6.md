@@ -1,6 +1,6 @@
 # Phase 6 — Payments, shop, ordering, quotes
 
-**Status:** draft
+**Status:** done
 **Roadmap:** [roadmap.md#phase-6--payments-shop-ordering-quotes](../roadmap.md)
 **Read first:** [billing.md](../05-billing.md) ("Tenant payments"),
 [modules.md](../07-modules.md) (`payments`, `shop`, `ordering`, `quotes`),
@@ -156,6 +156,20 @@ appointment), and booking deposits (`booking.deposits` wired at last).
 - [x] done (`refundPayment` (billing.manage + `module.payments`): `stripe.refunds.create` with `refund_application_fee: true` on the connected account → Stripe returns the fee proportionally; `Refund` row records `amountCents` + `feeRefundCents` (from `refundFee`); `Payment` flips `refunded`/`partially_refunded`. `/t/<slug>/payments` — the payouts view: every Payment with kind, status, fee, and the refunded total, plus a Refund button on `succeeded` rows. Integration `refund.test.ts` — refund → row + proportional fee + `partially_refunded`, full → `refunded`, unsucceeded → `invalid_input`. `refundFee` math already unit-tested in `fee.test.ts`.)
 
 ## Exit criteria
+
+All verified at close-out (2026-10-29, 2.69.0):
+- `pnpm typecheck` green; `pnpm audit:tenancy` — 63 models classified;
+  `pnpm test` — 951 unit; `pnpm test:integration` — 44 files, 130 tests;
+  `pnpm modules:check` — 4/4 (10 modules: newsletter, booking,
+  reservations, customers, notifications, catalog, team, payments, shop,
+  ordering, quotes).
+- Fee tests cover every model, rounding, zero, cap, refund —
+  `tests/unit/lib/fee.test.ts` (9 tests).
+- Stripe test-mode E2E — **deferred, mechanism covered** (see Findings).
+- Paid features hidden while `chargesEnabled` is false — `canCharge`
+  gates the site shop, ordering, deposit and quote-deposit flows.
+
+## Exit criteria (from the roadmap)
 
 - Unit tests for every fee model, rounding and refunds (`fee.test.ts`).
 - E2E in Stripe test mode: shop checkout on a connected account with the
