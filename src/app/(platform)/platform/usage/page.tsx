@@ -6,15 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 /** Platform → Usage (task 8.5): usage counters, job throughput, error
  * rate, queue depth — rows, not log lines. */
-export default async function PlatformUsagePage() {
-  await requirePlatformRole()
-  const t = await getTranslations("platform.usage")
-  const [counters, jobs, errors, tenants] = await Promise.all([
-    db8.orm.public.UsageCounter.include("tenant").all(),
-    db8.orm.public.Job.all(),
-    db8.orm.public.ErrorReport.all(),
-    db8.orm.public.Tenant.where({ status: "ACTIVE" }).all(),
-  ])
+function computeMetrics(
+  jobs: Awaited<ReturnType<typeof db8.orm.public.Job.all>>,
+  errors: Awaited<ReturnType<typeof db8.orm.public.ErrorReport.all>>
+) {
   const now = Date.now()
   const day = 24 * 3600 * 1000
   const jobsDay = jobs.filter((j) => now - toDate(j.createdAt).getTime() < day)
@@ -22,6 +17,17 @@ export default async function PlatformUsagePage() {
   const failed = jobs.filter((j) => j.status === "FAILED")
   const errorsDay = errors.filter((e) => now - toDate(e.lastSeenAt).getTime() < day)
   const errorCount = errorsDay.reduce((a, e) => a + e.count, 0)
+  return { jobsDay, queued, failed, errorCount }
+}
+export default async function PlatformUsagePage() {
+  await requirePlatformRole()
+  const t = await getTranslations("platform.usage")
+  const [counters, jobs, errors] = await Promise.all([
+    db8.orm.public.UsageCounter.include("tenant").all(),
+    db8.orm.public.Job.all(),
+    db8.orm.public.ErrorReport.all(),
+  ])
+  const { jobsDay, queued, failed, errorCount } = computeMetrics(jobs, errors)
   return (
     <div className="space-y-6">
       <div>
