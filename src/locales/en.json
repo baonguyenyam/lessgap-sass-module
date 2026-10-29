@@ -1066,6 +1066,24 @@
         "missing_provider": "row exists, provider lost it",
         "extra_provider": "provider has it, no row"
       }
+    },
+    "backups": {
+      "title": "Backups",
+      "subtitle": "Tenant snapshots and restore-to-new",
+      "nightly": "Nightly snapshots",
+      "nightly_last": "Last run {at} — {status}",
+      "nightly_never": "Nightly snapshot job hasn't run yet.",
+      "request": "Request a snapshot",
+      "request_button": "Snapshot now",
+      "snapshots": "{count} snapshots",
+      "empty": "No snapshots yet.",
+      "rows": "rows",
+      "restore_to_new": "Restore to new tenant",
+      "done": "Done.",
+      "error": {
+        "restore_failed": "Restore failed.",
+        "snapshot_not_restorable": "Not restorable."
+      }
     }
   },
   "admin": {
@@ -1608,7 +1626,8 @@
     "quotes": "Quotes",
     "payments": "Payments",
     "chatbot": "Chatbot",
-    "domains": "Domains"
+    "domains": "Domains",
+    "backups": "Backups"
   },
   "faq": {
     "title": "Frequently asked questions",

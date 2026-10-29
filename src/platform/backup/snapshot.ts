@@ -17,21 +17,27 @@ const TENANT_MODELS = Object.entries(MODEL_CLASSIFICATION)
 
 export type SnapshotBundle = { tenantId: string; takenAt: string; tables: Record<string, unknown[]> }
 
+export async function buildBundle(
+  tenantId: string
+): Promise<{ bundle: SnapshotBundle; rowCounts: Record<string, number> }> {
+  const tables: Record<string, unknown[]> = {}
+  const rowCounts: Record<string, number> = {}
+  for (const model of TENANT_MODELS) {
+    const rows = await (
+      db8.orm.public as Record<string, { where: (w: { tenantId: string }) => { all: () => Promise<unknown[]> } }>
+    )
+      [model]!.where({ tenantId })
+      .all()
+    tables[model] = rows
+    rowCounts[model] = rows.length
+  }
+  return { bundle: { tenantId, takenAt: new Date().toISOString(), tables }, rowCounts }
+}
+
 export async function snapshotTenant(tenantId: string, requestedBy?: string): Promise<{ id: string; rows: number }> {
   const snapshot = await db8.orm.public.TenantSnapshot.create({ tenantId, requestedBy: requestedBy ?? null })
   try {
-    const tables: Record<string, unknown[]> = {}
-    const rowCounts: Record<string, number> = {}
-    for (const model of TENANT_MODELS) {
-      const rows = await (
-        db8.orm.public as Record<string, { where: (w: { tenantId: string }) => { all: () => Promise<unknown[]> } }>
-      )
-        [model]!.where({ tenantId })
-        .all()
-      tables[model] = rows
-      rowCounts[model] = rows.length
-    }
-    const bundle: SnapshotBundle = { tenantId, takenAt: new Date().toISOString(), tables }
+    const { bundle, rowCounts } = await buildBundle(tenantId)
     const compressed = await gzip(JSON.stringify(bundle))
     const key = `snapshots/${tenantId}/${snapshot.id}.json.gz`
     if (storageConfigured()) {

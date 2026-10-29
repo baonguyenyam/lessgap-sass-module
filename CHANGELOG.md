@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.78.0] - 2026-10-29
+
+**A snapshot restores into a brand-new tenant — every row, every relation remapped, the source untouched — and `/platform/backups` is where it happens.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **Restore-to-new tenant** — a snapshot bundle imports into a fresh tenant; every id is remapped through one map so relations follow and nothing collides
+- **`/platform/backups`** — every `TenantSnapshot` (status, row counts, size), `Snapshot now`, `Restore to new tenant`, nightly status
+
 ## [2.77.0] - 2026-10-29
 
 **A tenant's whole database becomes one gzipped bundle in R2 — on demand and nightly — with a row recording every table's count.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.

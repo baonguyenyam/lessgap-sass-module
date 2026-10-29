@@ -81,7 +81,7 @@ that measurement, not guessed.
 - **Tests:** O6 — snapshot tenant A, restore to new tenant B → row counts
   match, ids differ, tenant A untouched.
 - **Done when:** restore-to-new produces a working tenant from a bundle.
-- [ ] done
+- [x] done (`src/platform/backup/restore.ts` — `restoreBundle`: pass 1 builds a complete `idMap` for every row, then inside one Kysely transaction (`SET LOCAL session_replication_role = replica` — insert order can't trip FK mid-import) inserts every row with `tenantId` remapped, `id` remapped, and any field whose value is a mapped id followed. `JSON_FIELDS` map (contract's `Json` columns) re-serializes db8's parsed values — scalar JSON comes back as plain strings and Postgres rejects them raw (`invalid input syntax for type json`). `restoreSnapshot` → `downloadObject` → gunzip → new `Tenant` → `restoreBundle`. `downloadObject` added to `r2.ts`; `buildBundle` split from `snapshotTenant`. `/platform/backups` — snapshot list (status, counts, size), `Snapshot now` + `Restore to new tenant` actions, nightly-job status. O6 test green — restored tenant reproduces tables with fresh ids, chunk's `sourceId` follows the map, source untouched.)
 
 ### 8.5 — `/platform/usage` page
 - **Goal:** usage counters, job throughput, error rate, queue depth — one

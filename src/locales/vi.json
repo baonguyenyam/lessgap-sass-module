@@ -1066,6 +1066,24 @@
         "missing_provider": "dòng tồn tại, provider mất",
         "extra_provider": "provider có, không có dòng"
       }
+    },
+    "backups": {
+      "title": "Sao lưu",
+      "subtitle": "Snapshot tenant và phục hồi sang tenant mới",
+      "nightly": "Snapshot hàng đêm",
+      "nightly_last": "Chạy gần nhất {at} — {status}",
+      "nightly_never": "Job snapshot hàng đêm chưa chạy.",
+      "request": "Yêu cầu snapshot",
+      "request_button": "Snapshot ngay",
+      "snapshots": "{count} snapshots",
+      "empty": "Chưa có snapshot.",
+      "rows": "dòng",
+      "restore_to_new": "Phục hồi sang tenant mới",
+      "done": "Xong.",
+      "error": {
+        "restore_failed": "Phục hồi thất bại.",
+        "snapshot_not_restorable": "Không thể phục hồi."
+      }
     }
   },
   "admin": {
@@ -1608,7 +1626,8 @@
     "quotes": "Báo giá",
     "payments": "Thanh toán",
     "chatbot": "Chatbot",
-    "domains": "Tên miền"
+    "domains": "Tên miền",
+    "backups": "Sao lưu"
   },
   "faq": {
     "title": "Các câu hỏi thường gặp",

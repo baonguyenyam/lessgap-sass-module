@@ -51,6 +51,13 @@ export async function putObject(
   await ok(await client.fetch(objectUrl(config, key), { method: "PUT", body: body as BodyInit, headers }), `put ${key}`)
 }
 
+/** The bytes of one object — restore reads a snapshot bundle back. */
+export async function downloadObject(key: string): Promise<Uint8Array> {
+  const { config, client } = connect()
+  const res = await ok(await client.fetch(objectUrl(config, key), { method: "GET" }), `get ${key}`)
+  return new Uint8Array(await res.arrayBuffer())
+}
+
 /** Every object under a prefix, newest first. */
 export async function listObjects(prefix: string): Promise<StoredObject[]> {
   const { config, client } = connect()
