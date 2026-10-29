@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { db8 } from "@/lib/db8"
-import { toTs } from "@/lib/timestamps"
 import { resetDatabase } from "@tests/helpers/db"
 import type { SnapshotBundle } from "@/platform/backup/snapshot"
 
