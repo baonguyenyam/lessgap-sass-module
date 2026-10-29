@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.59.0] - 2026-10-29
+
+**The reminders job: `booking.reminder` fires 24 h and 2 h before an appointment — email always, SMS only with entitlement and consent.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`platform.booking.remind` job** — every 15 minutes, confirmed appointments inside a tenant's reminder windows (default 24 h and 2 h) get `booking.reminder`; a send stamps `remindedAt`, so a rerun is a no-op
+- **SMS consent gate** — `SmsProvider` (`local` logs, `twilio` behind env) and `smsStop`: a customer texting STOP clears consent across tenants; `/api/webhooks/sms` records STOP and provider status
+
 ## [2.58.0] - 2026-10-29
 
 **One sender for every message: `notify()` renders a template per locale, logs it, and sends it.** This is a MINOR: `git pull`, `pnpm install`.

@@ -7,11 +7,11 @@ import module_4 from "./notifications/module"
 import module_5 from "./team/module"
 
 export const moduleRegistry = {
-  "booking": module_0,
-  "catalog": module_1,
-  "customers": module_2,
-  "newsletter": module_3,
-  "notifications": module_4,
-  "team": module_5,
+  booking: module_0,
+  catalog: module_1,
+  customers: module_2,
+  newsletter: module_3,
+  notifications: module_4,
+  team: module_5,
 } as const
 export type ModuleKey = keyof typeof moduleRegistry

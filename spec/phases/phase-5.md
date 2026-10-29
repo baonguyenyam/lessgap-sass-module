@@ -152,7 +152,7 @@ PHI).
   sends reminders once, STOP clears consent.
 - **Checks:** `pnpm test`, `pnpm test:integration`.
 - **Done when:** reminders fire once per window and SMS respects consent.
-- [ ] done
+- [x] done (`platform.booking.remind` runs every 15 min: `dueForReminder` (pure — the smallest due window wins, `remindedAt` marks it sent, ISO and `TimestampString` both parse) picks confirmed appointments inside the tenant's `booking.reminder_minutes` (default 24 h, 2 h) → `notify(booking.reminder)` email always; SMS only when `booking.sms_reminders` is entitled AND `Customer.smsConsentAt` is set — `getSmsProvider()` (`local` logs, `twilio` behind env, decision 5-B). `/api/webhooks/sms` — STOP/STOPALL/UNSUBSCRIBE clears consent across tenants + audits; a `providerId`+`status` post updates `NotificationLog.status`. `remindedAt` makes a rerun a no-op. Integration `reminders.test.ts` — one send per window, SMS skipped without consent, STOP clears it; unit `dueForReminder` 3/3.)
 
 ### 5.8 — `reservations` module
 - **Goal:** `Table`, `ReservationRule`, `Reservation` (schema added here,

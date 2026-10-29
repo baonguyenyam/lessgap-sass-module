@@ -81,6 +81,17 @@ export const JOBS: JobRegistry = {
       void context
     },
   },
+  // Booking reminders (task 5.7, spec/07): every 15 minutes, the job
+  // finds confirmed appointments inside a tenant's reminder windows and
+  // sends `booking.reminder` — email always, SMS when entitled and
+  // consented. `remindedAt` makes a rerun a no-op for that window.
+  "platform.booking.remind": {
+    schedule: "*/15 * * * *",
+    handler: async () => {
+      const { sendReminders } = await import("@/platform/booking/reminders")
+      await sendReminders()
+    },
+  },
   // Tenant deletion (task 1.14): the console action enqueues one row per
   // tenant; the purge itself lives in src/platform/tenancy/delete-tenant.ts.
   // Idempotent — deleting a missing tenant is a no-op.
