@@ -40,7 +40,7 @@ the `manageToken` pattern ties the review to a real appointment.
 appointment; the completed one's publishes after approval; the site shows
 only `published` rows.
 **Done when:** the write, gate and publish paths work end-to-end.
-- [ ] done
+- [x] done (`tests/integration/reviews.test.ts` 2/2 — `submitReview` takes the manage token and a `completed` appointment (one per visit — `appointmentId` is `@unique`), `moderateReview` flips `pending` → `published` behind `bookings.manage` and refreshes the site cache.)
 
 ## Exit criteria
 

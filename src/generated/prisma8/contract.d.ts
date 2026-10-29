@@ -28,9 +28,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'fd706e17e65f164f410f3c846447ae89619040423ed7ece8ff2f6328f966685c'>;
+  StorageHashBase<'3a1f89116d98e2693b2a090f7b823d71dd0b951be76bce02aa1ba771dcb54366'>;
 export type ExecutionHash =
-  ExecutionHashBase<'2356ff2c3ecf2263bc047ee44fb991b2c2f904f04bee9838adc96a7ff68de7a9'>;
+  ExecutionHashBase<'74e089713fa1ca68897f500763ebbd1e6d8cdce956474868ed0f2be6bab1b517'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -1078,6 +1078,21 @@ export namespace Models {
     timeOff: public_TimeOff[];
     readonly [RelationKeys]?: 'appointments' | 'rules' | 'tenant' | 'timeOff';
   };
+  export type public_Review = {
+    appointmentId: FieldOutputTypes['public']['Review']['appointmentId'];
+    body: FieldOutputTypes['public']['Review']['body'];
+    createdAt: FieldOutputTypes['public']['Review']['createdAt'];
+    customerId: FieldOutputTypes['public']['Review']['customerId'];
+    id: FieldOutputTypes['public']['Review']['id'];
+    rating: FieldOutputTypes['public']['Review']['rating'];
+    status: FieldOutputTypes['public']['Review']['status'];
+    tenantId: FieldOutputTypes['public']['Review']['tenantId'];
+    updatedAt: FieldOutputTypes['public']['Review']['updatedAt'];
+    appointment: public_Appointment;
+    customer: public_Customer;
+    tenant: public_Tenant;
+    readonly [RelationKeys]?: 'appointment' | 'customer' | 'tenant';
+  };
   export type public_Service = {
     categoryId: FieldOutputTypes['public']['Service']['categoryId'];
     createdAt: FieldOutputTypes['public']['Service']['createdAt'];
@@ -1461,6 +1476,7 @@ export declare const models: {
     Reservation: Models.public_Reservation;
     ReservationRule: Models.public_ReservationRule;
     Resource: Models.public_Resource;
+    Review: Models.public_Review;
     Service: Models.public_Service;
     ServiceCategory: Models.public_ServiceCategory;
     ServiceVariant: Models.public_ServiceVariant;
@@ -6530,6 +6546,134 @@ type ContractBase = Omit<
                 },
               ];
             };
+            readonly Review: {
+              columns: {
+                readonly appointmentId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly body: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly customerId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly rating: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly status: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'pending'>;
+                  };
+                  readonly many: false;
+                };
+                readonly tenantId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id']; readonly name: 'Review_pkey' };
+              uniques: readonly [{ readonly columns: readonly ['appointmentId'] }];
+              indexes: readonly [
+                {
+                  readonly name: 'Review_customerId_idx_b2a8a46c';
+                  readonly prefix: 'Review_customerId_idx';
+                  readonly columns: readonly ['customerId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'Review_tenantId_idx_c93ed4f1';
+                  readonly prefix: 'Review_tenantId_idx';
+                  readonly columns: readonly ['tenantId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'Review_tenantStatus_idx';
+                  readonly columns: readonly ['tenantId', 'status'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Review';
+                    readonly columns: readonly ['tenantId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Tenant';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'Review_tenantId_fkey';
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Review';
+                    readonly columns: readonly ['appointmentId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Appointment';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'Review_appointmentId_fkey';
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Review';
+                    readonly columns: readonly ['customerId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Customer';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'Review_customerId_fkey';
+                },
+              ];
+            };
             readonly Service: {
               columns: {
                 readonly categoryId: {
@@ -9005,6 +9149,7 @@ type ContractBase = Omit<
       readonly model: 'ReservationRule';
     };
     readonly Resource: { readonly namespace: 'public' & NamespaceId; readonly model: 'Resource' };
+    readonly Review: { readonly namespace: 'public' & NamespaceId; readonly model: 'Review' };
     readonly Service: { readonly namespace: 'public' & NamespaceId; readonly model: 'Service' };
     readonly ServiceCategory: {
       readonly namespace: 'public' & NamespaceId;
@@ -13344,6 +13489,107 @@ type ContractBase = Omit<
               };
             };
           };
+          readonly Review: {
+            readonly fields: {
+              readonly appointmentId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly body: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly customerId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly rating: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly status: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly tenantId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly appointment: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Appointment';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['appointmentId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly customer: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Customer';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['customerId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly tenant: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Tenant';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['tenantId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'Review';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly appointmentId: { readonly column: 'appointmentId' };
+                readonly body: { readonly column: 'body' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly customerId: { readonly column: 'customerId' };
+                readonly id: { readonly column: 'id' };
+                readonly rating: { readonly column: 'rating' };
+                readonly status: { readonly column: 'status' };
+                readonly tenantId: { readonly column: 'tenantId' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+              };
+            };
+          };
           readonly Service: {
             readonly fields: {
               readonly categoryId: {
@@ -16174,6 +16420,22 @@ type ContractBase = Omit<
           readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'Resource';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'Review';
+            readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'Review';
             readonly field: 'updatedAt';
             readonly namespace: 'public';
           };

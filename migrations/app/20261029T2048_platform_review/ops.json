@@ -1,0 +1,438 @@
+[
+  {
+    "id": "table.Review",
+    "label": "Create table \"Review\"",
+    "summary": "Creates table \"Review\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Review"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Review\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Review\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"Review\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Review\"",
+        "sql": "CREATE TABLE \"public\".\"Review\" (\n  \"appointmentId\" text NOT NULL,\n  \"body\" text,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"customerId\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"rating\" int4 NOT NULL,\n  \"status\" text DEFAULT 'pending' NOT NULL,\n  \"tenantId\" text NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  CONSTRAINT \"Review_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Review\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"Review\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"Review\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "unique.Review.Review_appointmentId_key",
+    "label": "Add unique constraint on \"Review\" (appointmentId)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Review_appointmentId_key",
+        "table": "Review"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Review_appointmentId_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Review_appointmentId_key",
+          "public",
+          "\"public\".\"Review\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"Review_appointmentId_key\" on \"Review\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Review_appointmentId_key\"",
+        "sql": "ALTER TABLE \"public\".\"Review\" ADD CONSTRAINT \"Review_appointmentId_key\" UNIQUE (\"appointmentId\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify unique constraint \"Review_appointmentId_key\" exists on (appointmentId)",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb)) AS \"result\"",
+        "params": [
+          "Review_appointmentId_key",
+          "public",
+          "\"public\".\"Review\"",
+          "u",
+          "[\"appointmentId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Review.Review_customerId_idx_b2a8a46c",
+    "label": "Create index \"Review_customerId_idx_b2a8a46c\" on \"Review\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Review_customerId_idx_b2a8a46c",
+        "table": "Review"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Review_customerId_idx_b2a8a46c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Review_customerId_idx_b2a8a46c\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Review_customerId_idx_b2a8a46c\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Review_customerId_idx_b2a8a46c\"",
+        "sql": "CREATE INDEX \"Review_customerId_idx_b2a8a46c\" ON \"public\".\"Review\" (\"customerId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Review_customerId_idx_b2a8a46c\" exists on \"Review\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Review_customerId_idx_b2a8a46c\"",
+          "i",
+          "I",
+          "\"public\".\"Review\"",
+          "btree",
+          "[\"customerId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Review.Review_tenantId_idx_c93ed4f1",
+    "label": "Create index \"Review_tenantId_idx_c93ed4f1\" on \"Review\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Review_tenantId_idx_c93ed4f1",
+        "table": "Review"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Review_tenantId_idx_c93ed4f1\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Review_tenantId_idx_c93ed4f1\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Review_tenantId_idx_c93ed4f1\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Review_tenantId_idx_c93ed4f1\"",
+        "sql": "CREATE INDEX \"Review_tenantId_idx_c93ed4f1\" ON \"public\".\"Review\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Review_tenantId_idx_c93ed4f1\" exists on \"Review\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Review_tenantId_idx_c93ed4f1\"",
+          "i",
+          "I",
+          "\"public\".\"Review\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Review.Review_tenantStatus_idx",
+    "label": "Create index \"Review_tenantStatus_idx\" on \"Review\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Review_tenantStatus_idx",
+        "table": "Review"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Review_tenantStatus_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Review_tenantStatus_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Review_tenantStatus_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Review_tenantStatus_idx\"",
+        "sql": "CREATE INDEX \"Review_tenantStatus_idx\" ON \"public\".\"Review\" (\"tenantId\", \"status\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Review_tenantStatus_idx\" exists on \"Review\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Review_tenantStatus_idx\"",
+          "i",
+          "I",
+          "\"public\".\"Review\"",
+          "btree",
+          "[\"tenantId\",\"status\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Review.Review_tenantId_fkey",
+    "label": "Add foreign key \"Review_tenantId_fkey\" on \"Review\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Review_tenantId_fkey",
+        "table": "Review"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Review_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Review_tenantId_fkey",
+          "public",
+          "\"public\".\"Review\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Review_tenantId_fkey\" on \"Review\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Review_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Review\"\nADD CONSTRAINT \"Review_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Review_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Review_tenantId_fkey",
+          "public",
+          "\"public\".\"Review\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Review.Review_appointmentId_fkey",
+    "label": "Add foreign key \"Review_appointmentId_fkey\" on \"Review\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Review_appointmentId_fkey",
+        "table": "Review"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Review_appointmentId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Review_appointmentId_fkey",
+          "public",
+          "\"public\".\"Review\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Review_appointmentId_fkey\" on \"Review\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Review_appointmentId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Review\"\nADD CONSTRAINT \"Review_appointmentId_fkey\"\nFOREIGN KEY (\"appointmentId\")\nREFERENCES \"public\".\"Appointment\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Review_appointmentId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Review_appointmentId_fkey",
+          "public",
+          "\"public\".\"Review\"",
+          "f",
+          "[\"appointmentId\"]",
+          "\"public\".\"Appointment\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Review.Review_customerId_fkey",
+    "label": "Add foreign key \"Review_customerId_fkey\" on \"Review\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Review_customerId_fkey",
+        "table": "Review"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Review_customerId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Review_customerId_fkey",
+          "public",
+          "\"public\".\"Review\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Review_customerId_fkey\" on \"Review\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Review_customerId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Review\"\nADD CONSTRAINT \"Review_customerId_fkey\"\nFOREIGN KEY (\"customerId\")\nREFERENCES \"public\".\"Customer\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Review_customerId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Review_customerId_fkey",
+          "public",
+          "\"public\".\"Review\"",
+          "f",
+          "[\"customerId\"]",
+          "\"public\".\"Customer\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.Review",
+    "label": "Enable row-level security on \"Review\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "Review"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"Review\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Review"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"Review\"",
+        "sql": "ALTER TABLE \"public\".\"Review\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"Review\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "Review"
+        ]
+      }
+    ]
+  }
+]

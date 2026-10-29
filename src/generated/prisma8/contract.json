@@ -196,6 +196,10 @@
       "model": "Resource",
       "namespace": "public"
     },
+    "Review": {
+      "model": "Review",
+      "namespace": "public"
+    },
     "Service": {
       "model": "Service",
       "namespace": "public"
@@ -7079,6 +7083,162 @@
               "table": "Resource"
             }
           },
+          "Review": {
+            "fields": {
+              "appointmentId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "body": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "customerId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "rating": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              }
+            },
+            "relations": {
+              "appointment": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "appointmentId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Appointment",
+                  "namespace": "public"
+                }
+              },
+              "customer": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "customerId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Customer",
+                  "namespace": "public"
+                }
+              },
+              "tenant": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "tenantId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tenant",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "appointmentId": {
+                  "column": "appointmentId"
+                },
+                "body": {
+                  "column": "body"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "customerId": {
+                  "column": "customerId"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "rating": {
+                  "column": "rating"
+                },
+                "status": {
+                  "column": "status"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "Review"
+            }
+          },
           "Service": {
             "fields": {
               "categoryId": {
@@ -11225,6 +11385,11 @@
               "kind": "rls",
               "namespaceId": "public",
               "tableName": "Resource"
+            },
+            "Review": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "Review"
             },
             "Service": {
               "kind": "rls",
@@ -17371,6 +17536,182 @@
               },
               "uniques": []
             },
+            "Review": {
+              "columns": {
+                "appointmentId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "body": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "customerId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "rating": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": false
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "default": {
+                    "kind": "literal",
+                    "value": "pending"
+                  },
+                  "nullable": false
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "Review_tenantId_idx_c93ed4f1"
+                  },
+                  "name": "Review_tenantId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "tenantId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Review"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tenant"
+                  }
+                },
+                {
+                  "index": {
+                    "unique": [
+                      "appointmentId"
+                    ]
+                  },
+                  "name": "Review_appointmentId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "appointmentId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Review"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Appointment"
+                  }
+                },
+                {
+                  "index": {
+                    "name": "Review_customerId_idx_b2a8a46c"
+                  },
+                  "name": "Review_customerId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "customerId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Review"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Customer"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "customerId"
+                  ],
+                  "name": "Review_customerId_idx_b2a8a46c",
+                  "prefix": "Review_customerId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "tenantId"
+                  ],
+                  "name": "Review_tenantId_idx_c93ed4f1",
+                  "prefix": "Review_tenantId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "tenantId",
+                    "status"
+                  ],
+                  "name": "Review_tenantStatus_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "Review_pkey"
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "appointmentId"
+                  ]
+                }
+              ]
+            },
             "Service": {
               "columns": {
                 "categoryId": {
@@ -20265,10 +20606,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "fd706e17e65f164f410f3c846447ae89619040423ed7ece8ff2f6328f966685c"
+    "storageHash": "3a1f89116d98e2693b2a090f7b823d71dd0b951be76bce02aa1ba771dcb54366"
   },
   "execution": {
-    "executionHash": "2356ff2c3ecf2263bc047ee44fb991b2c2f904f04bee9838adc96a7ff68de7a9",
+    "executionHash": "74e089713fa1ca68897f500763ebbd1e6d8cdce956474868ed0f2be6bab1b517",
     "mutations": {
       "defaults": [
         {
@@ -21178,6 +21519,28 @@
           },
           "ref": {
             "entry": "Resource",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "Review",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onUpdate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "Review",
             "field": "updatedAt",
             "namespace": "public"
           }

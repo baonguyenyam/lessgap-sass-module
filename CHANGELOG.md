@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.91.0] - 2026-10-29
+
+**A real customer can leave a review after a completed appointment — and nothing goes on the site until the tenant approves it.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **`Review`** — one per appointment (`appointmentId` `@unique`), `pending` until a `bookings.manage` member flips it `published` or `rejected`; `submitReview` needs the manage token and a `completed` status
+- **`moderateReview`** — the staff gate, with the site cache refreshed on the flip
+- **`tests/integration/reviews.test.ts`** — non-completed refused, completed → pending → published, one per visit
+
 ## [2.90.0] - 2026-10-29
 
 **A fully booked day can take names — the waitlist joins and the next free slot is offered to it first.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
