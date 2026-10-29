@@ -13,7 +13,7 @@ spec/12-migrations-and-data.md, `src/app/actions/booking.ts`,
 
 ## Scope
 
-- Phase 12: in progress.
+- Phase 12: done.
 
 ## Tasks
 
