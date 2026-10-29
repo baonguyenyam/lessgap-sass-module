@@ -46,7 +46,7 @@ that measurement, not guessed.
   model).
 - **Done when:** 67 classified tables each show a policy; adding an
   unprotected table fails.
-- [ ] done
+- [x] done (**found + fixed a real gap**: `@@rls` emits `ENABLE ROW LEVEL SECURITY` only — `CREATE POLICY` comes from `policy_all` blocks, which existed for just `TenantSetting`/`TenantModule`. The other 47 tenant-owned tables were RLS-enabled but policy-less (deny-all in the letter, owner-bypassed in practice). Added `policy_all …_isolation` blocks for all 47 + `@@rls` to `NewsletterSubscriber` (the only `@@rls`-less tenant table), two migrations (`1654` — 45 policies + enable; `1655` — `EntitlementOverride`/`NewsletterSubscriber`). `tests/integration/rls-coverage.test.ts` — `pg_policies` + `pg_class.relrowsecurity` per `tenant-owned` model, Kysely `sql` on `authDb` (49 tables all covered). `db8.raw.sql` needs `.returnsRow({codecs}).build()` — Kysely's `sql` tag is simpler for catalog queries. Lesson added: `@@rls` + `policy_all` are separate directives.)
 
 ### 8.2 — Domain reconciliation job + `/platform/domains`
 - **Goal:** `platform.domain.reconcile` — daily job diffs the Vercel

@@ -65,6 +65,7 @@ user                  User                @relation(fields: [userId], references
     @@index([confirmToken], map: "NewsletterSubscriber_confirmToken_key", unique: true)
     @@index([tenantId, email], map: "NewsletterSubscriber_tenantId_email_key", unique: true)
     @@index([unsubscribeToken], map: "NewsletterSubscriber_unsubscribeToken_key", unique: true)
+    @@rls
   }
 
   // Kit Plan, extended with entitlements (spec/09-data-model.md, phase 2).
@@ -469,6 +470,287 @@ trialEndsAt          TimestampString(3)?
     withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
   }
 
+
+  policy_all entitlement_override_isolation {
+    target    = EntitlementOverride
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all newsletter_subscriber_isolation {
+    target    = NewsletterSubscriber
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+  policy_all knowledge_chunk_isolation {
+    target    = KnowledgeChunk
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all knowledge_source_isolation {
+    target    = KnowledgeSource
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all media_isolation {
+    target    = Media
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all appointment_isolation {
+    target    = Appointment
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all appointment_event_isolation {
+    target    = AppointmentEvent
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all availability_rule_isolation {
+    target    = AvailabilityRule
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all customer_isolation {
+    target    = Customer
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all domain_isolation {
+    target    = Domain
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all module_export_isolation {
+    target    = ModuleExport
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all notification_log_isolation {
+    target    = NotificationLog
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all module_purge_isolation {
+    target    = ModulePurge
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all page_isolation {
+    target    = Page
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all payment_isolation {
+    target    = Payment
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all refund_isolation {
+    target    = Refund
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all reservation_isolation {
+    target    = Reservation
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all reservation_rule_isolation {
+    target    = ReservationRule
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all table_isolation {
+    target    = Table
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all resource_isolation {
+    target    = Resource
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all time_off_isolation {
+    target    = TimeOff
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all cart_isolation {
+    target    = Cart
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all chat_conversation_isolation {
+    target    = ChatConversation
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all chat_message_isolation {
+    target    = ChatMessage
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all cart_line_isolation {
+    target    = CartLine
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all order_isolation {
+    target    = Order
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all order_line_isolation {
+    target    = OrderLine
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all product_isolation {
+    target    = Product
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all product_category_isolation {
+    target    = ProductCategory
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all product_variant_isolation {
+    target    = ProductVariant
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all product_modifier_group_isolation {
+    target    = ProductModifierGroup
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all quote_isolation {
+    target    = Quote
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all quote_line_isolation {
+    target    = QuoteLine
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all quote_event_isolation {
+    target    = QuoteEvent
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all quote_request_isolation {
+    target    = QuoteRequest
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all product_modifier_isolation {
+    target    = ProductModifier
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all service_category_isolation {
+    target    = ServiceCategory
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all service_isolation {
+    target    = Service
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all service_variant_isolation {
+    target    = ServiceVariant
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all site_isolation {
+    target    = Site
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all site_settings_isolation {
+    target    = SiteSettings
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all staff_member_isolation {
+    target    = StaffMember
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all staff_service_isolation {
+    target    = StaffService
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all purchase_isolation {
+    target    = Purchase
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all subscription_isolation {
+    target    = Subscription
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all tenant_add_on_isolation {
+    target    = TenantAddOn
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all usage_counter_isolation {
+    target    = UsageCounter
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
   // One person's own value for a display or language setting, or a
   // notification choice; outranks their workspace's and the platform's.
   model UserSetting {

@@ -7,6 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.75.0] - 2026-10-29
+
+**A test now guards RLS on every tenant table — and it caught 47 tables running enabled but policy-less.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (adds the missing isolation policies).
+
+### Fixed
+
+- **RLS policies for every tenant-owned table** — `@@rls` only enables row security; the `CREATE POLICY` comes from `policy_all` blocks, which were declared for just 2 tables. All 49 now have the same tenant-isolation policy; `NewsletterSubscriber` gains `@@rls` and its policy
+
+### Added
+
+- **RLS coverage test** — every `tenant-owned` table must show a policy in `pg_policies` and `relrowsecurity` in `pg_class`, or the suite fails
+
 ## [2.74.0] - 2026-10-29
 
 **Chatbot safety verified: injection-proof answers, tenant-isolated retrieval, and a measured cost — $0.17 per 1,000 messages at hosted-model prices.** This is a MINOR: `git pull`, `pnpm install`.

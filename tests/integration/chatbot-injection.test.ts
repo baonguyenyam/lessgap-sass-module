@@ -11,9 +11,15 @@ vi.mock("next/cache", () => ({ revalidatePath: vi.fn(), updateTag: vi.fn(), cach
 
 async function provision() {
   const { user } = await auth.api.signUpEmail({
-    body: { email: `inj-${Date.now()}-${Math.random()}@example.test`, password: "correct horse battery staple", name: "I" },
+    body: {
+      email: `inj-${Date.now()}-${Math.random()}@example.test`,
+      password: "correct horse battery staple",
+      name: "I",
+    },
   })
-  const tenant = await auth.api.createOrganization({ body: { name: "InjCo", slug: `inj-${Date.now()}`, userId: user.id } })
+  const tenant = await auth.api.createOrganization({
+    body: { name: "InjCo", slug: `inj-${Date.now()}`, userId: user.id },
+  })
   await db8.orm.public.Tenant.where({ id: tenant.id }).update({ status: "ACTIVE" })
   await db8.orm.public.TenantModule.create({ tenantId: tenant.id, moduleKey: "chatbot", enabled: true })
   return { tenant }

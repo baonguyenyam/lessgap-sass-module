@@ -1,0 +1,2291 @@
+[
+  {
+    "id": "rowLevelSecurity.public.NewsletterSubscriber",
+    "label": "Enable row-level security on \"NewsletterSubscriber\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "NewsletterSubscriber"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"NewsletterSubscriber\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "NewsletterSubscriber"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"NewsletterSubscriber\"",
+        "sql": "ALTER TABLE \"public\".\"NewsletterSubscriber\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"NewsletterSubscriber\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "NewsletterSubscriber"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Appointment.appointment_isolation_c516f4ff",
+    "label": "Create RLS policy \"appointment_isolation_c516f4ff\" on \"Appointment\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "appointment_isolation_c516f4ff",
+        "table": "Appointment"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"appointment_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Appointment",
+          "appointment_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"appointment_isolation_c516f4ff\" on \"Appointment\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"appointment_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"appointment_isolation_c516f4ff\" ON \"public\".\"Appointment\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"appointment_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Appointment",
+          "appointment_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.AppointmentEvent.appointment_event_isolation_c516f4ff",
+    "label": "Create RLS policy \"appointment_event_isolation_c516f4ff\" on \"AppointmentEvent\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "appointment_event_isolation_c516f4ff",
+        "table": "AppointmentEvent"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"appointment_event_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "AppointmentEvent",
+          "appointment_event_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"appointment_event_isolation_c516f4ff\" on \"AppointmentEvent\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"appointment_event_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"appointment_event_isolation_c516f4ff\" ON \"public\".\"AppointmentEvent\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"appointment_event_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "AppointmentEvent",
+          "appointment_event_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.AvailabilityRule.availability_rule_isolation_c516f4ff",
+    "label": "Create RLS policy \"availability_rule_isolation_c516f4ff\" on \"AvailabilityRule\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "availability_rule_isolation_c516f4ff",
+        "table": "AvailabilityRule"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"availability_rule_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "AvailabilityRule",
+          "availability_rule_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"availability_rule_isolation_c516f4ff\" on \"AvailabilityRule\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"availability_rule_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"availability_rule_isolation_c516f4ff\" ON \"public\".\"AvailabilityRule\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"availability_rule_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "AvailabilityRule",
+          "availability_rule_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Cart.cart_isolation_c516f4ff",
+    "label": "Create RLS policy \"cart_isolation_c516f4ff\" on \"Cart\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "cart_isolation_c516f4ff",
+        "table": "Cart"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"cart_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Cart",
+          "cart_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"cart_isolation_c516f4ff\" on \"Cart\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"cart_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"cart_isolation_c516f4ff\" ON \"public\".\"Cart\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"cart_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Cart",
+          "cart_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.CartLine.cart_line_isolation_c516f4ff",
+    "label": "Create RLS policy \"cart_line_isolation_c516f4ff\" on \"CartLine\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "cart_line_isolation_c516f4ff",
+        "table": "CartLine"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"cart_line_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "CartLine",
+          "cart_line_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"cart_line_isolation_c516f4ff\" on \"CartLine\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"cart_line_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"cart_line_isolation_c516f4ff\" ON \"public\".\"CartLine\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"cart_line_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "CartLine",
+          "cart_line_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.ChatConversation.chat_conversation_isolation_c516f4ff",
+    "label": "Create RLS policy \"chat_conversation_isolation_c516f4ff\" on \"ChatConversation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "chat_conversation_isolation_c516f4ff",
+        "table": "ChatConversation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"chat_conversation_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "ChatConversation",
+          "chat_conversation_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"chat_conversation_isolation_c516f4ff\" on \"ChatConversation\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"chat_conversation_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"chat_conversation_isolation_c516f4ff\" ON \"public\".\"ChatConversation\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"chat_conversation_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "ChatConversation",
+          "chat_conversation_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.ChatMessage.chat_message_isolation_c516f4ff",
+    "label": "Create RLS policy \"chat_message_isolation_c516f4ff\" on \"ChatMessage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "chat_message_isolation_c516f4ff",
+        "table": "ChatMessage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"chat_message_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "ChatMessage",
+          "chat_message_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"chat_message_isolation_c516f4ff\" on \"ChatMessage\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"chat_message_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"chat_message_isolation_c516f4ff\" ON \"public\".\"ChatMessage\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"chat_message_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "ChatMessage",
+          "chat_message_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Customer.customer_isolation_c516f4ff",
+    "label": "Create RLS policy \"customer_isolation_c516f4ff\" on \"Customer\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "customer_isolation_c516f4ff",
+        "table": "Customer"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"customer_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Customer",
+          "customer_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"customer_isolation_c516f4ff\" on \"Customer\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"customer_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"customer_isolation_c516f4ff\" ON \"public\".\"Customer\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"customer_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Customer",
+          "customer_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Domain.domain_isolation_c516f4ff",
+    "label": "Create RLS policy \"domain_isolation_c516f4ff\" on \"Domain\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "domain_isolation_c516f4ff",
+        "table": "Domain"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"domain_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Domain",
+          "domain_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"domain_isolation_c516f4ff\" on \"Domain\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"domain_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"domain_isolation_c516f4ff\" ON \"public\".\"Domain\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"domain_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Domain",
+          "domain_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.KnowledgeChunk.knowledge_chunk_isolation_c516f4ff",
+    "label": "Create RLS policy \"knowledge_chunk_isolation_c516f4ff\" on \"KnowledgeChunk\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "knowledge_chunk_isolation_c516f4ff",
+        "table": "KnowledgeChunk"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"knowledge_chunk_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "KnowledgeChunk",
+          "knowledge_chunk_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"knowledge_chunk_isolation_c516f4ff\" on \"KnowledgeChunk\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"knowledge_chunk_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"knowledge_chunk_isolation_c516f4ff\" ON \"public\".\"KnowledgeChunk\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"knowledge_chunk_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "KnowledgeChunk",
+          "knowledge_chunk_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.KnowledgeSource.knowledge_source_isolation_c516f4ff",
+    "label": "Create RLS policy \"knowledge_source_isolation_c516f4ff\" on \"KnowledgeSource\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "knowledge_source_isolation_c516f4ff",
+        "table": "KnowledgeSource"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"knowledge_source_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "KnowledgeSource",
+          "knowledge_source_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"knowledge_source_isolation_c516f4ff\" on \"KnowledgeSource\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"knowledge_source_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"knowledge_source_isolation_c516f4ff\" ON \"public\".\"KnowledgeSource\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"knowledge_source_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "KnowledgeSource",
+          "knowledge_source_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Media.media_isolation_c516f4ff",
+    "label": "Create RLS policy \"media_isolation_c516f4ff\" on \"Media\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "media_isolation_c516f4ff",
+        "table": "Media"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"media_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Media",
+          "media_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"media_isolation_c516f4ff\" on \"Media\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"media_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"media_isolation_c516f4ff\" ON \"public\".\"Media\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"media_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Media",
+          "media_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.ModuleExport.module_export_isolation_c516f4ff",
+    "label": "Create RLS policy \"module_export_isolation_c516f4ff\" on \"ModuleExport\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "module_export_isolation_c516f4ff",
+        "table": "ModuleExport"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"module_export_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "ModuleExport",
+          "module_export_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"module_export_isolation_c516f4ff\" on \"ModuleExport\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"module_export_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"module_export_isolation_c516f4ff\" ON \"public\".\"ModuleExport\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"module_export_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "ModuleExport",
+          "module_export_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.ModulePurge.module_purge_isolation_c516f4ff",
+    "label": "Create RLS policy \"module_purge_isolation_c516f4ff\" on \"ModulePurge\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "module_purge_isolation_c516f4ff",
+        "table": "ModulePurge"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"module_purge_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "ModulePurge",
+          "module_purge_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"module_purge_isolation_c516f4ff\" on \"ModulePurge\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"module_purge_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"module_purge_isolation_c516f4ff\" ON \"public\".\"ModulePurge\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"module_purge_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "ModulePurge",
+          "module_purge_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.NotificationLog.notification_log_isolation_c516f4ff",
+    "label": "Create RLS policy \"notification_log_isolation_c516f4ff\" on \"NotificationLog\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "notification_log_isolation_c516f4ff",
+        "table": "NotificationLog"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"notification_log_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "NotificationLog",
+          "notification_log_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"notification_log_isolation_c516f4ff\" on \"NotificationLog\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"notification_log_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"notification_log_isolation_c516f4ff\" ON \"public\".\"NotificationLog\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"notification_log_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "NotificationLog",
+          "notification_log_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Order.order_isolation_c516f4ff",
+    "label": "Create RLS policy \"order_isolation_c516f4ff\" on \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "order_isolation_c516f4ff",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"order_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "order_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"order_isolation_c516f4ff\" on \"Order\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"order_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"order_isolation_c516f4ff\" ON \"public\".\"Order\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"order_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "order_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.OrderLine.order_line_isolation_c516f4ff",
+    "label": "Create RLS policy \"order_line_isolation_c516f4ff\" on \"OrderLine\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "order_line_isolation_c516f4ff",
+        "table": "OrderLine"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"order_line_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "OrderLine",
+          "order_line_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"order_line_isolation_c516f4ff\" on \"OrderLine\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"order_line_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"order_line_isolation_c516f4ff\" ON \"public\".\"OrderLine\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"order_line_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "OrderLine",
+          "order_line_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Page.page_isolation_c516f4ff",
+    "label": "Create RLS policy \"page_isolation_c516f4ff\" on \"Page\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "page_isolation_c516f4ff",
+        "table": "Page"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"page_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Page",
+          "page_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"page_isolation_c516f4ff\" on \"Page\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"page_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"page_isolation_c516f4ff\" ON \"public\".\"Page\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"page_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Page",
+          "page_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Payment.payment_isolation_c516f4ff",
+    "label": "Create RLS policy \"payment_isolation_c516f4ff\" on \"Payment\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "payment_isolation_c516f4ff",
+        "table": "Payment"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"payment_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Payment",
+          "payment_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"payment_isolation_c516f4ff\" on \"Payment\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"payment_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"payment_isolation_c516f4ff\" ON \"public\".\"Payment\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"payment_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Payment",
+          "payment_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Product.product_isolation_c516f4ff",
+    "label": "Create RLS policy \"product_isolation_c516f4ff\" on \"Product\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "product_isolation_c516f4ff",
+        "table": "Product"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"product_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Product",
+          "product_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"product_isolation_c516f4ff\" on \"Product\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"product_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"product_isolation_c516f4ff\" ON \"public\".\"Product\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"product_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Product",
+          "product_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.ProductCategory.product_category_isolation_c516f4ff",
+    "label": "Create RLS policy \"product_category_isolation_c516f4ff\" on \"ProductCategory\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "product_category_isolation_c516f4ff",
+        "table": "ProductCategory"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"product_category_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "ProductCategory",
+          "product_category_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"product_category_isolation_c516f4ff\" on \"ProductCategory\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"product_category_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"product_category_isolation_c516f4ff\" ON \"public\".\"ProductCategory\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"product_category_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "ProductCategory",
+          "product_category_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.ProductModifier.product_modifier_isolation_c516f4ff",
+    "label": "Create RLS policy \"product_modifier_isolation_c516f4ff\" on \"ProductModifier\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "product_modifier_isolation_c516f4ff",
+        "table": "ProductModifier"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"product_modifier_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "ProductModifier",
+          "product_modifier_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"product_modifier_isolation_c516f4ff\" on \"ProductModifier\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"product_modifier_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"product_modifier_isolation_c516f4ff\" ON \"public\".\"ProductModifier\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"product_modifier_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "ProductModifier",
+          "product_modifier_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.ProductModifierGroup.product_modifier_group_isolation_c516f4ff",
+    "label": "Create RLS policy \"product_modifier_group_isolation_c516f4ff\" on \"ProductModifierGroup\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "product_modifier_group_isolation_c516f4ff",
+        "table": "ProductModifierGroup"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"product_modifier_group_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "ProductModifierGroup",
+          "product_modifier_group_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"product_modifier_group_isolation_c516f4ff\" on \"ProductModifierGroup\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"product_modifier_group_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"product_modifier_group_isolation_c516f4ff\" ON \"public\".\"ProductModifierGroup\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"product_modifier_group_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "ProductModifierGroup",
+          "product_modifier_group_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.ProductVariant.product_variant_isolation_c516f4ff",
+    "label": "Create RLS policy \"product_variant_isolation_c516f4ff\" on \"ProductVariant\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "product_variant_isolation_c516f4ff",
+        "table": "ProductVariant"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"product_variant_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "ProductVariant",
+          "product_variant_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"product_variant_isolation_c516f4ff\" on \"ProductVariant\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"product_variant_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"product_variant_isolation_c516f4ff\" ON \"public\".\"ProductVariant\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"product_variant_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "ProductVariant",
+          "product_variant_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Purchase.purchase_isolation_c516f4ff",
+    "label": "Create RLS policy \"purchase_isolation_c516f4ff\" on \"Purchase\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "purchase_isolation_c516f4ff",
+        "table": "Purchase"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"purchase_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Purchase",
+          "purchase_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"purchase_isolation_c516f4ff\" on \"Purchase\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"purchase_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"purchase_isolation_c516f4ff\" ON \"public\".\"Purchase\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"purchase_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Purchase",
+          "purchase_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Quote.quote_isolation_c516f4ff",
+    "label": "Create RLS policy \"quote_isolation_c516f4ff\" on \"Quote\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "quote_isolation_c516f4ff",
+        "table": "Quote"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"quote_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Quote",
+          "quote_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"quote_isolation_c516f4ff\" on \"Quote\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"quote_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"quote_isolation_c516f4ff\" ON \"public\".\"Quote\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"quote_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Quote",
+          "quote_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.QuoteEvent.quote_event_isolation_c516f4ff",
+    "label": "Create RLS policy \"quote_event_isolation_c516f4ff\" on \"QuoteEvent\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "quote_event_isolation_c516f4ff",
+        "table": "QuoteEvent"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"quote_event_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "QuoteEvent",
+          "quote_event_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"quote_event_isolation_c516f4ff\" on \"QuoteEvent\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"quote_event_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"quote_event_isolation_c516f4ff\" ON \"public\".\"QuoteEvent\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"quote_event_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "QuoteEvent",
+          "quote_event_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.QuoteLine.quote_line_isolation_c516f4ff",
+    "label": "Create RLS policy \"quote_line_isolation_c516f4ff\" on \"QuoteLine\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "quote_line_isolation_c516f4ff",
+        "table": "QuoteLine"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"quote_line_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "QuoteLine",
+          "quote_line_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"quote_line_isolation_c516f4ff\" on \"QuoteLine\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"quote_line_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"quote_line_isolation_c516f4ff\" ON \"public\".\"QuoteLine\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"quote_line_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "QuoteLine",
+          "quote_line_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.QuoteRequest.quote_request_isolation_c516f4ff",
+    "label": "Create RLS policy \"quote_request_isolation_c516f4ff\" on \"QuoteRequest\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "quote_request_isolation_c516f4ff",
+        "table": "QuoteRequest"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"quote_request_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "QuoteRequest",
+          "quote_request_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"quote_request_isolation_c516f4ff\" on \"QuoteRequest\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"quote_request_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"quote_request_isolation_c516f4ff\" ON \"public\".\"QuoteRequest\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"quote_request_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "QuoteRequest",
+          "quote_request_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Refund.refund_isolation_c516f4ff",
+    "label": "Create RLS policy \"refund_isolation_c516f4ff\" on \"Refund\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "refund_isolation_c516f4ff",
+        "table": "Refund"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"refund_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Refund",
+          "refund_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"refund_isolation_c516f4ff\" on \"Refund\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"refund_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"refund_isolation_c516f4ff\" ON \"public\".\"Refund\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"refund_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Refund",
+          "refund_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Reservation.reservation_isolation_c516f4ff",
+    "label": "Create RLS policy \"reservation_isolation_c516f4ff\" on \"Reservation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "reservation_isolation_c516f4ff",
+        "table": "Reservation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"reservation_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Reservation",
+          "reservation_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"reservation_isolation_c516f4ff\" on \"Reservation\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"reservation_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"reservation_isolation_c516f4ff\" ON \"public\".\"Reservation\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"reservation_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Reservation",
+          "reservation_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.ReservationRule.reservation_rule_isolation_c516f4ff",
+    "label": "Create RLS policy \"reservation_rule_isolation_c516f4ff\" on \"ReservationRule\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "reservation_rule_isolation_c516f4ff",
+        "table": "ReservationRule"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"reservation_rule_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "ReservationRule",
+          "reservation_rule_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"reservation_rule_isolation_c516f4ff\" on \"ReservationRule\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"reservation_rule_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"reservation_rule_isolation_c516f4ff\" ON \"public\".\"ReservationRule\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"reservation_rule_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "ReservationRule",
+          "reservation_rule_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Resource.resource_isolation_c516f4ff",
+    "label": "Create RLS policy \"resource_isolation_c516f4ff\" on \"Resource\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "resource_isolation_c516f4ff",
+        "table": "Resource"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"resource_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Resource",
+          "resource_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"resource_isolation_c516f4ff\" on \"Resource\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"resource_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"resource_isolation_c516f4ff\" ON \"public\".\"Resource\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"resource_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Resource",
+          "resource_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Service.service_isolation_c516f4ff",
+    "label": "Create RLS policy \"service_isolation_c516f4ff\" on \"Service\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "service_isolation_c516f4ff",
+        "table": "Service"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"service_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Service",
+          "service_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"service_isolation_c516f4ff\" on \"Service\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"service_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"service_isolation_c516f4ff\" ON \"public\".\"Service\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"service_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Service",
+          "service_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.ServiceCategory.service_category_isolation_c516f4ff",
+    "label": "Create RLS policy \"service_category_isolation_c516f4ff\" on \"ServiceCategory\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "service_category_isolation_c516f4ff",
+        "table": "ServiceCategory"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"service_category_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "ServiceCategory",
+          "service_category_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"service_category_isolation_c516f4ff\" on \"ServiceCategory\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"service_category_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"service_category_isolation_c516f4ff\" ON \"public\".\"ServiceCategory\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"service_category_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "ServiceCategory",
+          "service_category_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.ServiceVariant.service_variant_isolation_c516f4ff",
+    "label": "Create RLS policy \"service_variant_isolation_c516f4ff\" on \"ServiceVariant\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "service_variant_isolation_c516f4ff",
+        "table": "ServiceVariant"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"service_variant_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "ServiceVariant",
+          "service_variant_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"service_variant_isolation_c516f4ff\" on \"ServiceVariant\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"service_variant_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"service_variant_isolation_c516f4ff\" ON \"public\".\"ServiceVariant\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"service_variant_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "ServiceVariant",
+          "service_variant_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Site.site_isolation_c516f4ff",
+    "label": "Create RLS policy \"site_isolation_c516f4ff\" on \"Site\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "site_isolation_c516f4ff",
+        "table": "Site"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"site_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Site",
+          "site_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"site_isolation_c516f4ff\" on \"Site\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"site_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"site_isolation_c516f4ff\" ON \"public\".\"Site\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"site_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Site",
+          "site_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.SiteSettings.site_settings_isolation_c516f4ff",
+    "label": "Create RLS policy \"site_settings_isolation_c516f4ff\" on \"SiteSettings\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "site_settings_isolation_c516f4ff",
+        "table": "SiteSettings"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"site_settings_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "SiteSettings",
+          "site_settings_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"site_settings_isolation_c516f4ff\" on \"SiteSettings\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"site_settings_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"site_settings_isolation_c516f4ff\" ON \"public\".\"SiteSettings\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"site_settings_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "SiteSettings",
+          "site_settings_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.StaffMember.staff_member_isolation_c516f4ff",
+    "label": "Create RLS policy \"staff_member_isolation_c516f4ff\" on \"StaffMember\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "staff_member_isolation_c516f4ff",
+        "table": "StaffMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"staff_member_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "StaffMember",
+          "staff_member_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"staff_member_isolation_c516f4ff\" on \"StaffMember\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"staff_member_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"staff_member_isolation_c516f4ff\" ON \"public\".\"StaffMember\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"staff_member_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "StaffMember",
+          "staff_member_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.StaffService.staff_service_isolation_c516f4ff",
+    "label": "Create RLS policy \"staff_service_isolation_c516f4ff\" on \"StaffService\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "staff_service_isolation_c516f4ff",
+        "table": "StaffService"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"staff_service_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "StaffService",
+          "staff_service_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"staff_service_isolation_c516f4ff\" on \"StaffService\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"staff_service_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"staff_service_isolation_c516f4ff\" ON \"public\".\"StaffService\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"staff_service_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "StaffService",
+          "staff_service_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Subscription.subscription_isolation_c516f4ff",
+    "label": "Create RLS policy \"subscription_isolation_c516f4ff\" on \"Subscription\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "subscription_isolation_c516f4ff",
+        "table": "Subscription"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"subscription_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Subscription",
+          "subscription_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"subscription_isolation_c516f4ff\" on \"Subscription\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"subscription_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"subscription_isolation_c516f4ff\" ON \"public\".\"Subscription\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"subscription_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Subscription",
+          "subscription_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Table.table_isolation_c516f4ff",
+    "label": "Create RLS policy \"table_isolation_c516f4ff\" on \"Table\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "table_isolation_c516f4ff",
+        "table": "Table"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"table_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Table",
+          "table_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"table_isolation_c516f4ff\" on \"Table\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"table_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"table_isolation_c516f4ff\" ON \"public\".\"Table\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"table_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Table",
+          "table_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.TenantAddOn.tenant_add_on_isolation_c516f4ff",
+    "label": "Create RLS policy \"tenant_add_on_isolation_c516f4ff\" on \"TenantAddOn\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "tenant_add_on_isolation_c516f4ff",
+        "table": "TenantAddOn"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"tenant_add_on_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "TenantAddOn",
+          "tenant_add_on_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"tenant_add_on_isolation_c516f4ff\" on \"TenantAddOn\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"tenant_add_on_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"tenant_add_on_isolation_c516f4ff\" ON \"public\".\"TenantAddOn\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"tenant_add_on_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "TenantAddOn",
+          "tenant_add_on_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.TimeOff.time_off_isolation_c516f4ff",
+    "label": "Create RLS policy \"time_off_isolation_c516f4ff\" on \"TimeOff\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "time_off_isolation_c516f4ff",
+        "table": "TimeOff"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"time_off_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "TimeOff",
+          "time_off_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"time_off_isolation_c516f4ff\" on \"TimeOff\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"time_off_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"time_off_isolation_c516f4ff\" ON \"public\".\"TimeOff\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"time_off_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "TimeOff",
+          "time_off_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.UsageCounter.usage_counter_isolation_c516f4ff",
+    "label": "Create RLS policy \"usage_counter_isolation_c516f4ff\" on \"UsageCounter\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "usage_counter_isolation_c516f4ff",
+        "table": "UsageCounter"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"usage_counter_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "UsageCounter",
+          "usage_counter_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"usage_counter_isolation_c516f4ff\" on \"UsageCounter\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"usage_counter_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"usage_counter_isolation_c516f4ff\" ON \"public\".\"UsageCounter\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"usage_counter_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "UsageCounter",
+          "usage_counter_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  }
+]

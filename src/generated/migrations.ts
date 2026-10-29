@@ -38,4 +38,6 @@ export const MIGRATIONS: readonly MigrationEdge[] = [
   { name: "20261029T1559_platform_quotes", from: "ab2607837ca3043312ac0439cc44c53067820888cddb41048f4633572ffaa8a7", to: "0c841be9954d48a5fd4fb5444ad1f301dd2683a64814313616704d87d02d9a2d" },
   { name: "20261029T1607_platform_service_deposit", from: "0c841be9954d48a5fd4fb5444ad1f301dd2683a64814313616704d87d02d9a2d", to: "374f3050ec67ee3e667e52179b395e16555f73ad14a1781f942ca906cd583602" },
   { name: "20261029T1621_platform_chatbot", from: "374f3050ec67ee3e667e52179b395e16555f73ad14a1781f942ca906cd583602", to: "8d60169c1af5cce79877ac5e26844afd89f12bd39cd31c8e8bee0ff5e3fd1bd8" },
+  { name: "20261029T1654_platform_rls_policies", from: "8d60169c1af5cce79877ac5e26844afd89f12bd39cd31c8e8bee0ff5e3fd1bd8", to: "893b1472ff25622df296557ccb8476cec8acc2cfaa4340d979a2c29cdd4c50ea" },
+  { name: "20261029T1655_platform_rls_policies", from: "893b1472ff25622df296557ccb8476cec8acc2cfaa4340d979a2c29cdd4c50ea", to: "6b0e2b0a00fb3889a1c34ee1bb2ae5c2f6d51509ab92c6cc5a3e955f231f9edc" },
 ]
