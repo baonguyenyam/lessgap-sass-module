@@ -30,6 +30,19 @@ the ledger's balance matches the card's.
 **Done when:** buy → card → spend → ledger hold together.
 - [x] done (`tests/integration/gift-cards.test.ts` 1/1 — `buyGiftCard` sells a card at the till, `redeemGiftCard` debits against a `completed` appointment (the ledger's running sum is the balance's twin; one debit per appointment; a spent-down card refuses); `Review`'s missing `policy_all` was caught and added in the same migration.)
 
+### 12.2 Memberships and packages — a prepaid entitlements bundle
+
+`Package` — tenant-owned, a name, a `sessions` count and a `priceCents`; a
+customer buys one and spends sessions against appointments, the same
+ledger-on-the-balance pattern as the gift card. `Membership` — a name and
+monthly `priceCents`; a member gets the tenant's member perks (e.g. member
+hours). A `PackageLedger`/`MembershipLedger` row per change.
+
+**Tests:** integration — a package debits sessions when spent; an empty
+package stops; membership activates and bills monthly.
+**Done when:** package spends + membership activates correctly.
+- [ ] done
+
 ## Exit criteria
 
 - The card buys, spends and balances correctly; tests green.
