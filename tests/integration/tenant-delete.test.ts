@@ -36,6 +36,8 @@ describe("tenant deletion (T9)", () => {
       NotificationLog,
       Cart,
       CartLine,
+      ChatConversation,
+      ChatMessage,
       Order,
       OrderLine,
       Payment,
@@ -43,6 +45,8 @@ describe("tenant deletion (T9)", () => {
       ProductCategory,
       ProductModifier,
       ProductModifierGroup,
+      KnowledgeChunk,
+      KnowledgeSource,
       Quote,
       QuoteEvent,
       QuoteLine,
@@ -178,6 +182,12 @@ describe("tenant deletion (T9)", () => {
         })
       ),
       ReservationRule.create({ tenantId: tenant.id, weekday: 2, startMinute: 660, endMinute: 840 }),
+      ChatConversation.create({ tenantId: tenant.id, visitorKey: "v1" }).then((conv) =>
+        ChatMessage.create({ tenantId: tenant.id, conversationId: conv.id, role: "user", content: "hi" })
+      ),
+      KnowledgeSource.create({ tenantId: tenant.id, type: "faq", title: "FAQ", checksum: "c1" }).then((src) =>
+        KnowledgeChunk.create({ tenantId: tenant.id, sourceId: src.id, content: "hours 9-5", tokenCount: 3 })
+      ),
       ProductCategory.create({ tenantId: tenant.id, name: "Gifts" }).then((c) =>
         Product.create({ tenantId: tenant.id, categoryId: c.id, name: "Card" }).then((p) =>
           Promise.all([
@@ -245,6 +255,10 @@ describe("tenant deletion (T9)", () => {
       ["TimeOff", TimeOff, "tenantId"],
       ["Cart", Cart, "tenantId"],
       ["CartLine", CartLine, "tenantId"],
+      ["ChatConversation", ChatConversation, "tenantId"],
+      ["ChatMessage", ChatMessage, "tenantId"],
+      ["KnowledgeChunk", KnowledgeChunk, "tenantId"],
+      ["KnowledgeSource", KnowledgeSource, "tenantId"],
       ["Order", Order, "tenantId"],
       ["OrderLine", OrderLine, "tenantId"],
       ["Product", Product, "tenantId"],

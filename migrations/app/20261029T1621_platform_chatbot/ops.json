@@ -1,0 +1,954 @@
+[
+  {
+    "id": "table.ChatConversation",
+    "label": "Create table \"ChatConversation\"",
+    "summary": "Creates table \"ChatConversation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "ChatConversation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"ChatConversation\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ChatConversation\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"ChatConversation\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"ChatConversation\"",
+        "sql": "CREATE TABLE \"public\".\"ChatConversation\" (\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"status\" text DEFAULT 'active' NOT NULL,\n  \"tenantId\" text NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"visitorKey\" text NOT NULL,\n  CONSTRAINT \"ChatConversation_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"ChatConversation\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"ChatConversation\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"ChatConversation\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.ChatMessage",
+    "label": "Create table \"ChatMessage\"",
+    "summary": "Creates table \"ChatMessage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "ChatMessage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"ChatMessage\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ChatMessage\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"ChatMessage\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"ChatMessage\"",
+        "sql": "CREATE TABLE \"public\".\"ChatMessage\" (\n  \"content\" text NOT NULL,\n  \"conversationId\" text NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"role\" text DEFAULT 'user' NOT NULL,\n  \"sourcesJson\" json DEFAULT '[]'::json NOT NULL,\n  \"tenantId\" text NOT NULL,\n  CONSTRAINT \"ChatMessage_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"ChatMessage\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"ChatMessage\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"ChatMessage\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.KnowledgeChunk",
+    "label": "Create table \"KnowledgeChunk\"",
+    "summary": "Creates table \"KnowledgeChunk\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "KnowledgeChunk"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"KnowledgeChunk\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"KnowledgeChunk\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"KnowledgeChunk\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"KnowledgeChunk\"",
+        "sql": "CREATE TABLE \"public\".\"KnowledgeChunk\" (\n  \"content\" text NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"embedding\" vector(384),\n  \"id\" text NOT NULL,\n  \"language\" text DEFAULT 'en' NOT NULL,\n  \"sourceId\" text NOT NULL,\n  \"tenantId\" text NOT NULL,\n  \"tokenCount\" int4 DEFAULT 0 NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  CONSTRAINT \"KnowledgeChunk_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"KnowledgeChunk\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"KnowledgeChunk\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"KnowledgeChunk\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.KnowledgeSource",
+    "label": "Create table \"KnowledgeSource\"",
+    "summary": "Creates table \"KnowledgeSource\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "KnowledgeSource"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"KnowledgeSource\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"KnowledgeSource\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"KnowledgeSource\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"KnowledgeSource\"",
+        "sql": "CREATE TABLE \"public\".\"KnowledgeSource\" (\n  \"checksum\" text NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"embeddingModel\" text DEFAULT 'local' NOT NULL,\n  \"id\" text NOT NULL,\n  \"status\" text DEFAULT 'active' NOT NULL,\n  \"tenantId\" text NOT NULL,\n  \"title\" text NOT NULL,\n  \"type\" text DEFAULT 'page' NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  CONSTRAINT \"KnowledgeSource_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"KnowledgeSource\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"KnowledgeSource\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"KnowledgeSource\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "index.ChatConversation.ChatConversation_tenantId_idx",
+    "label": "Create index \"ChatConversation_tenantId_idx\" on \"ChatConversation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "ChatConversation_tenantId_idx",
+        "table": "ChatConversation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"ChatConversation_tenantId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ChatConversation_tenantId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"ChatConversation_tenantId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"ChatConversation_tenantId_idx\"",
+        "sql": "CREATE INDEX \"ChatConversation_tenantId_idx\" ON \"public\".\"ChatConversation\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"ChatConversation_tenantId_idx\" exists on \"ChatConversation\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"ChatConversation_tenantId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"ChatConversation\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.ChatMessage.ChatMessage_conversationId_idx",
+    "label": "Create index \"ChatMessage_conversationId_idx\" on \"ChatMessage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "ChatMessage_conversationId_idx",
+        "table": "ChatMessage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"ChatMessage_conversationId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ChatMessage_conversationId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"ChatMessage_conversationId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"ChatMessage_conversationId_idx\"",
+        "sql": "CREATE INDEX \"ChatMessage_conversationId_idx\" ON \"public\".\"ChatMessage\" (\"conversationId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"ChatMessage_conversationId_idx\" exists on \"ChatMessage\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"ChatMessage_conversationId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"ChatMessage\"",
+          "btree",
+          "[\"conversationId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.ChatMessage.ChatMessage_tenantId_idx",
+    "label": "Create index \"ChatMessage_tenantId_idx\" on \"ChatMessage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "ChatMessage_tenantId_idx",
+        "table": "ChatMessage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"ChatMessage_tenantId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ChatMessage_tenantId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"ChatMessage_tenantId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"ChatMessage_tenantId_idx\"",
+        "sql": "CREATE INDEX \"ChatMessage_tenantId_idx\" ON \"public\".\"ChatMessage\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"ChatMessage_tenantId_idx\" exists on \"ChatMessage\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"ChatMessage_tenantId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"ChatMessage\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.KnowledgeChunk.KnowledgeChunk_sourceId_idx",
+    "label": "Create index \"KnowledgeChunk_sourceId_idx\" on \"KnowledgeChunk\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "KnowledgeChunk_sourceId_idx",
+        "table": "KnowledgeChunk"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"KnowledgeChunk_sourceId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"KnowledgeChunk_sourceId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"KnowledgeChunk_sourceId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"KnowledgeChunk_sourceId_idx\"",
+        "sql": "CREATE INDEX \"KnowledgeChunk_sourceId_idx\" ON \"public\".\"KnowledgeChunk\" (\"sourceId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"KnowledgeChunk_sourceId_idx\" exists on \"KnowledgeChunk\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"KnowledgeChunk_sourceId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"KnowledgeChunk\"",
+          "btree",
+          "[\"sourceId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.KnowledgeChunk.KnowledgeChunk_tenantId_idx",
+    "label": "Create index \"KnowledgeChunk_tenantId_idx\" on \"KnowledgeChunk\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "KnowledgeChunk_tenantId_idx",
+        "table": "KnowledgeChunk"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"KnowledgeChunk_tenantId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"KnowledgeChunk_tenantId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"KnowledgeChunk_tenantId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"KnowledgeChunk_tenantId_idx\"",
+        "sql": "CREATE INDEX \"KnowledgeChunk_tenantId_idx\" ON \"public\".\"KnowledgeChunk\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"KnowledgeChunk_tenantId_idx\" exists on \"KnowledgeChunk\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"KnowledgeChunk_tenantId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"KnowledgeChunk\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.KnowledgeSource.KnowledgeSource_tenantId_idx",
+    "label": "Create index \"KnowledgeSource_tenantId_idx\" on \"KnowledgeSource\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "KnowledgeSource_tenantId_idx",
+        "table": "KnowledgeSource"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"KnowledgeSource_tenantId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"KnowledgeSource_tenantId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"KnowledgeSource_tenantId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"KnowledgeSource_tenantId_idx\"",
+        "sql": "CREATE INDEX \"KnowledgeSource_tenantId_idx\" ON \"public\".\"KnowledgeSource\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"KnowledgeSource_tenantId_idx\" exists on \"KnowledgeSource\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"KnowledgeSource_tenantId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"KnowledgeSource\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.ChatConversation.ChatConversation_tenantId_fkey",
+    "label": "Add foreign key \"ChatConversation_tenantId_fkey\" on \"ChatConversation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "ChatConversation_tenantId_fkey",
+        "table": "ChatConversation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"ChatConversation_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ChatConversation_tenantId_fkey",
+          "public",
+          "\"public\".\"ChatConversation\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"ChatConversation_tenantId_fkey\" on \"ChatConversation\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"ChatConversation_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"ChatConversation\"\nADD CONSTRAINT \"ChatConversation_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"ChatConversation_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "ChatConversation_tenantId_fkey",
+          "public",
+          "\"public\".\"ChatConversation\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.ChatMessage.ChatMessage_tenantId_fkey",
+    "label": "Add foreign key \"ChatMessage_tenantId_fkey\" on \"ChatMessage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "ChatMessage_tenantId_fkey",
+        "table": "ChatMessage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"ChatMessage_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ChatMessage_tenantId_fkey",
+          "public",
+          "\"public\".\"ChatMessage\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"ChatMessage_tenantId_fkey\" on \"ChatMessage\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"ChatMessage_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"ChatMessage\"\nADD CONSTRAINT \"ChatMessage_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"ChatMessage_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "ChatMessage_tenantId_fkey",
+          "public",
+          "\"public\".\"ChatMessage\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.ChatMessage.ChatMessage_conversationId_fkey",
+    "label": "Add foreign key \"ChatMessage_conversationId_fkey\" on \"ChatMessage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "ChatMessage_conversationId_fkey",
+        "table": "ChatMessage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"ChatMessage_conversationId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ChatMessage_conversationId_fkey",
+          "public",
+          "\"public\".\"ChatMessage\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"ChatMessage_conversationId_fkey\" on \"ChatMessage\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"ChatMessage_conversationId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"ChatMessage\"\nADD CONSTRAINT \"ChatMessage_conversationId_fkey\"\nFOREIGN KEY (\"conversationId\")\nREFERENCES \"public\".\"ChatConversation\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"ChatMessage_conversationId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "ChatMessage_conversationId_fkey",
+          "public",
+          "\"public\".\"ChatMessage\"",
+          "f",
+          "[\"conversationId\"]",
+          "\"public\".\"ChatConversation\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.KnowledgeChunk.KnowledgeChunk_tenantId_fkey",
+    "label": "Add foreign key \"KnowledgeChunk_tenantId_fkey\" on \"KnowledgeChunk\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "KnowledgeChunk_tenantId_fkey",
+        "table": "KnowledgeChunk"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"KnowledgeChunk_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "KnowledgeChunk_tenantId_fkey",
+          "public",
+          "\"public\".\"KnowledgeChunk\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"KnowledgeChunk_tenantId_fkey\" on \"KnowledgeChunk\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"KnowledgeChunk_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"KnowledgeChunk\"\nADD CONSTRAINT \"KnowledgeChunk_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"KnowledgeChunk_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "KnowledgeChunk_tenantId_fkey",
+          "public",
+          "\"public\".\"KnowledgeChunk\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.KnowledgeChunk.KnowledgeChunk_sourceId_fkey",
+    "label": "Add foreign key \"KnowledgeChunk_sourceId_fkey\" on \"KnowledgeChunk\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "KnowledgeChunk_sourceId_fkey",
+        "table": "KnowledgeChunk"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"KnowledgeChunk_sourceId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "KnowledgeChunk_sourceId_fkey",
+          "public",
+          "\"public\".\"KnowledgeChunk\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"KnowledgeChunk_sourceId_fkey\" on \"KnowledgeChunk\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"KnowledgeChunk_sourceId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"KnowledgeChunk\"\nADD CONSTRAINT \"KnowledgeChunk_sourceId_fkey\"\nFOREIGN KEY (\"sourceId\")\nREFERENCES \"public\".\"KnowledgeSource\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"KnowledgeChunk_sourceId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "KnowledgeChunk_sourceId_fkey",
+          "public",
+          "\"public\".\"KnowledgeChunk\"",
+          "f",
+          "[\"sourceId\"]",
+          "\"public\".\"KnowledgeSource\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.KnowledgeSource.KnowledgeSource_tenantId_fkey",
+    "label": "Add foreign key \"KnowledgeSource_tenantId_fkey\" on \"KnowledgeSource\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "KnowledgeSource_tenantId_fkey",
+        "table": "KnowledgeSource"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"KnowledgeSource_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "KnowledgeSource_tenantId_fkey",
+          "public",
+          "\"public\".\"KnowledgeSource\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"KnowledgeSource_tenantId_fkey\" on \"KnowledgeSource\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"KnowledgeSource_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"KnowledgeSource\"\nADD CONSTRAINT \"KnowledgeSource_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"KnowledgeSource_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "KnowledgeSource_tenantId_fkey",
+          "public",
+          "\"public\".\"KnowledgeSource\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.ChatConversation",
+    "label": "Enable row-level security on \"ChatConversation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "ChatConversation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"ChatConversation\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "ChatConversation"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"ChatConversation\"",
+        "sql": "ALTER TABLE \"public\".\"ChatConversation\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"ChatConversation\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "ChatConversation"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.ChatMessage",
+    "label": "Enable row-level security on \"ChatMessage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "ChatMessage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"ChatMessage\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "ChatMessage"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"ChatMessage\"",
+        "sql": "ALTER TABLE \"public\".\"ChatMessage\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"ChatMessage\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "ChatMessage"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.KnowledgeChunk",
+    "label": "Enable row-level security on \"KnowledgeChunk\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "KnowledgeChunk"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"KnowledgeChunk\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "KnowledgeChunk"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"KnowledgeChunk\"",
+        "sql": "ALTER TABLE \"public\".\"KnowledgeChunk\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"KnowledgeChunk\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "KnowledgeChunk"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.KnowledgeSource",
+    "label": "Enable row-level security on \"KnowledgeSource\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "KnowledgeSource"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"KnowledgeSource\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "KnowledgeSource"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"KnowledgeSource\"",
+        "sql": "ALTER TABLE \"public\".\"KnowledgeSource\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"KnowledgeSource\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "KnowledgeSource"
+        ]
+      }
+    ]
+  }
+]

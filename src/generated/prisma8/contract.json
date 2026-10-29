@@ -36,6 +36,14 @@
       "model": "CartLine",
       "namespace": "public"
     },
+    "ChatConversation": {
+      "model": "ChatConversation",
+      "namespace": "public"
+    },
+    "ChatMessage": {
+      "model": "ChatMessage",
+      "namespace": "public"
+    },
     "Customer": {
       "model": "Customer",
       "namespace": "public"
@@ -62,6 +70,14 @@
     },
     "Job": {
       "model": "Job",
+      "namespace": "public"
+    },
+    "KnowledgeChunk": {
+      "model": "KnowledgeChunk",
+      "namespace": "public"
+    },
+    "KnowledgeSource": {
+      "model": "KnowledgeSource",
       "namespace": "public"
     },
     "Media": {
@@ -1482,6 +1498,232 @@
               "table": "CartLine"
             }
           },
+          "ChatConversation": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "visitorKey": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "messages": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "conversationId"
+                  ]
+                },
+                "to": {
+                  "model": "ChatMessage",
+                  "namespace": "public"
+                }
+              },
+              "tenant": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "tenantId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tenant",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "status": {
+                  "column": "status"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                },
+                "visitorKey": {
+                  "column": "visitorKey"
+                }
+              },
+              "namespaceId": "public",
+              "table": "ChatConversation"
+            }
+          },
+          "ChatMessage": {
+            "fields": {
+              "content": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "conversationId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "role": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "sourcesJson": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "conversation": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "conversationId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "ChatConversation",
+                  "namespace": "public"
+                }
+              },
+              "tenant": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "tenantId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tenant",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "content": {
+                  "column": "content"
+                },
+                "conversationId": {
+                  "column": "conversationId"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "role": {
+                  "column": "role"
+                },
+                "sourcesJson": {
+                  "column": "sourcesJson"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "ChatMessage"
+            }
+          },
           "Customer": {
             "fields": {
               "createdAt": {
@@ -2524,6 +2766,288 @@
               },
               "namespaceId": "public",
               "table": "Job"
+            }
+          },
+          "KnowledgeChunk": {
+            "fields": {
+              "content": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "embedding": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/vector@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "length": 384
+                  }
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "language": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "sourceId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "tokenCount": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              }
+            },
+            "relations": {
+              "source": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "sourceId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "KnowledgeSource",
+                  "namespace": "public"
+                }
+              },
+              "tenant": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "tenantId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tenant",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "content": {
+                  "column": "content"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "embedding": {
+                  "column": "embedding"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "language": {
+                  "column": "language"
+                },
+                "sourceId": {
+                  "column": "sourceId"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                },
+                "tokenCount": {
+                  "column": "tokenCount"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "KnowledgeChunk"
+            }
+          },
+          "KnowledgeSource": {
+            "fields": {
+              "checksum": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "embeddingModel": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "title": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "type": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              }
+            },
+            "relations": {
+              "chunks": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "sourceId"
+                  ]
+                },
+                "to": {
+                  "model": "KnowledgeChunk",
+                  "namespace": "public"
+                }
+              },
+              "tenant": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "tenantId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tenant",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "checksum": {
+                  "column": "checksum"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "embeddingModel": {
+                  "column": "embeddingModel"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "status": {
+                  "column": "status"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                },
+                "title": {
+                  "column": "title"
+                },
+                "type": {
+                  "column": "type"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "KnowledgeSource"
             }
           },
           "Media": {
@@ -9474,6 +9998,16 @@
               "namespaceId": "public",
               "tableName": "CartLine"
             },
+            "ChatConversation": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "ChatConversation"
+            },
+            "ChatMessage": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "ChatMessage"
+            },
             "Customer": {
               "kind": "rls",
               "namespaceId": "public",
@@ -9488,6 +10022,16 @@
               "kind": "rls",
               "namespaceId": "public",
               "tableName": "EntitlementOverride"
+            },
+            "KnowledgeChunk": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "KnowledgeChunk"
+            },
+            "KnowledgeSource": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "KnowledgeSource"
             },
             "Media": {
               "kind": "rls",
@@ -10787,6 +11331,221 @@
               },
               "uniques": []
             },
+            "ChatConversation": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "default": {
+                    "kind": "literal",
+                    "value": "active"
+                  },
+                  "nullable": false
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "visitorKey": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "ChatConversation_tenantId_idx"
+                  },
+                  "name": "ChatConversation_tenantId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "tenantId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "ChatConversation"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tenant"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "tenantId"
+                  ],
+                  "name": "ChatConversation_tenantId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "ChatConversation_pkey"
+              },
+              "uniques": []
+            },
+            "ChatMessage": {
+              "columns": {
+                "content": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "conversationId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "role": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "default": {
+                    "kind": "literal",
+                    "value": "user"
+                  },
+                  "nullable": false
+                },
+                "sourcesJson": {
+                  "codecId": "pg/json@1",
+                  "dataType": "pg/json",
+                  "default": {
+                    "kind": "literal",
+                    "value": []
+                  },
+                  "nullable": false
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "ChatMessage_tenantId_idx"
+                  },
+                  "name": "ChatMessage_tenantId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "tenantId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "ChatMessage"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tenant"
+                  }
+                },
+                {
+                  "index": {
+                    "name": "ChatMessage_conversationId_idx"
+                  },
+                  "name": "ChatMessage_conversationId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "conversationId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "ChatMessage"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "ChatConversation"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "conversationId"
+                  ],
+                  "name": "ChatMessage_conversationId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "tenantId"
+                  ],
+                  "name": "ChatMessage_tenantId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "ChatMessage_pkey"
+              },
+              "uniques": []
+            },
             "Customer": {
               "columns": {
                 "createdAt": {
@@ -11702,6 +12461,264 @@
                   "id"
                 ],
                 "name": "Job_pkey"
+              },
+              "uniques": []
+            },
+            "KnowledgeChunk": {
+              "columns": {
+                "content": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "embedding": {
+                  "codecId": "pg/vector@1",
+                  "dataType": "pgvector/vector",
+                  "nullable": true,
+                  "typeParams": {
+                    "length": 384
+                  }
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "language": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "default": {
+                    "kind": "literal",
+                    "value": "en"
+                  },
+                  "nullable": false
+                },
+                "sourceId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "tokenCount": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "KnowledgeChunk_tenantId_idx"
+                  },
+                  "name": "KnowledgeChunk_tenantId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "tenantId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "KnowledgeChunk"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tenant"
+                  }
+                },
+                {
+                  "index": {
+                    "name": "KnowledgeChunk_sourceId_idx"
+                  },
+                  "name": "KnowledgeChunk_sourceId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "sourceId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "KnowledgeChunk"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "KnowledgeSource"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "sourceId"
+                  ],
+                  "name": "KnowledgeChunk_sourceId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "tenantId"
+                  ],
+                  "name": "KnowledgeChunk_tenantId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "KnowledgeChunk_pkey"
+              },
+              "uniques": []
+            },
+            "KnowledgeSource": {
+              "columns": {
+                "checksum": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "embeddingModel": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "default": {
+                    "kind": "literal",
+                    "value": "local"
+                  },
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "default": {
+                    "kind": "literal",
+                    "value": "active"
+                  },
+                  "nullable": false
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "title": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "type": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "default": {
+                    "kind": "literal",
+                    "value": "page"
+                  },
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "KnowledgeSource_tenantId_idx"
+                  },
+                  "name": "KnowledgeSource_tenantId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "tenantId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "KnowledgeSource"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tenant"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "tenantId"
+                  ],
+                  "name": "KnowledgeSource_tenantId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "KnowledgeSource_pkey"
               },
               "uniques": []
             },
@@ -17709,10 +18726,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "374f3050ec67ee3e667e52179b395e16555f73ad14a1781f942ca906cd583602"
+    "storageHash": "8d60169c1af5cce79877ac5e26844afd89f12bd39cd31c8e8bee0ff5e3fd1bd8"
   },
   "execution": {
-    "executionHash": "00ccc65aa01566f9dab33fce5330d0b903213065cbd5d2a78651e4c811142246",
+    "executionHash": "90b7a2de8d74c604ca6a41b5af8de90f928d03b321038b8d53d253bf28154bcb",
     "mutations": {
       "defaults": [
         {
@@ -17879,6 +18896,39 @@
             "kind": "generator"
           },
           "ref": {
+            "entry": "ChatConversation",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onUpdate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "ChatConversation",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "ChatMessage",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
             "entry": "Customer",
             "field": "id",
             "namespace": "public"
@@ -18001,6 +19051,50 @@
           },
           "ref": {
             "entry": "Job",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "KnowledgeChunk",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onUpdate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "KnowledgeChunk",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "KnowledgeSource",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onUpdate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "KnowledgeSource",
             "field": "updatedAt",
             "namespace": "public"
           }
@@ -18951,6 +20045,7 @@
       "lateral": true,
       "limit": true,
       "orderBy": true,
+      "pgvector.cosine": true,
       "returning": true
     },
     "sql": {
@@ -18969,7 +20064,48 @@
       "scalarList": true
     }
   },
-  "extensions": {},
+  "extensions": {
+    "pgvector": {
+      "capabilities": {
+        "postgres": {
+          "pgvector.cosine": true
+        }
+      },
+      "familyId": "sql",
+      "id": "pgvector",
+      "kind": "extension",
+      "targetId": "postgres",
+      "types": {
+        "codecTypes": {
+          "import": {
+            "alias": "PgVectorTypes",
+            "named": "CodecTypes",
+            "package": "@internal/extension-pgvector/codec-types"
+          },
+          "parameterizedOutputTypes": {
+            "alias": "PgVectorParameterizedOutputTypes",
+            "named": "ParameterizedOutputTypesForTypeParams",
+            "package": "@internal/extension-pgvector/codec-types"
+          }
+        },
+        "operationTypes": {
+          "import": {
+            "alias": "PgVectorOperationTypes",
+            "named": "OperationTypes",
+            "package": "@internal/extension-pgvector/operation-types"
+          }
+        },
+        "queryOperationTypes": {
+          "import": {
+            "alias": "PgVectorQueryOperationTypes",
+            "named": "QueryOperationTypes",
+            "package": "@internal/extension-pgvector/operation-types"
+          }
+        }
+      },
+      "version": "0.0.1"
+    }
+  },
   "meta": {},
   "_generated": {
     "warning": "⚠️  GENERATED FILE - DO NOT EDIT",

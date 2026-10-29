@@ -1,5 +1,5 @@
 import postgres from "@prisma/orm-postgres/runtime"
-import { contract } from "@/lib/db8"
+import { contract, dbExtensions } from "@/lib/db8"
 
 /**
  * The platform client (spec/12-migrations-and-data.md, "Database roles"): the
@@ -11,7 +11,11 @@ import { contract } from "@/lib/db8"
  * keeps a single-role database working.
  */
 function createPlatformDb() {
-  return postgres({ contract, url: process.env.DATABASE_URL_PLATFORM || process.env.DATABASE_URL! })
+  return postgres({
+    contract,
+    url: process.env.DATABASE_URL_PLATFORM || process.env.DATABASE_URL!,
+    extensions: dbExtensions,
+  })
 }
 
 const globalForPlatformDb = globalThis as typeof globalThis & { platformDb?: ReturnType<typeof createPlatformDb> }

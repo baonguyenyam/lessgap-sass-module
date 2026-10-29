@@ -51,7 +51,7 @@ abstraction (`chatbot.provider`) keeps the LLM and embedder swappable.
 - **Tests:** T9 extension — delete cleans all four.
 - **Checks:** `pnpm db:emit`, `pnpm audit:tenancy`, `pnpm test:integration`.
 - **Done when:** migration applied (pgvector index), 67 models classified.
-- [ ] done
+- [x] done (`@prisma/orm-extension-pgvector` (8.0.0-rc.21) — three layers: control descriptor in `prisma.config.ts` `extensions`, runtime descriptor on `db8` and `platformDb` via shared `dbExtensions` (lesson added — a client without it throws `RUNTIME.MISSING_EXTENSION_PACK`). 4 models: `KnowledgeSource` (type/title/checksum/embeddingModel), `KnowledgeChunk` (`pgvector.Vector(384)`, language, tokenCount), `ChatConversation` (visitorKey, 90-day log), `ChatMessage` (role, sourcesJson) — @@rls cascade, 67 models classified, `deleteTenant` + T9 cover all. Two migration spaces: `app` → `8d60169c`, `pgvector` → `4a96b488` (extension installed in its own space).)
 
 ### 7.2 — Ingest pipeline: chunk, embed, re-index
 - **Goal:** `chunkText` pure (split on headings/paragraphs to a token cap),

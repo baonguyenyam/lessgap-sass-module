@@ -1,5 +1,11 @@
 import postgres from "@prisma/orm-postgres/runtime"
 import { contractFromJson } from "@prisma/orm-postgres/static"
+import pgvectorRuntime from "@prisma/orm-extension-pgvector/runtime"
+
+/** Every `postgres()` client on this contract lists the same extension
+ * runtime descriptors — the contract requires `pgvector`; a client without
+ * it throws RUNTIME.MISSING_EXTENSION_PACK at first query. */
+export const dbExtensions = [pgvectorRuntime as never]
 import type { Contract, FieldOutputTypes } from "@/generated/prisma8/contract.d"
 import contractJson from "@/generated/prisma8/contract.json" with { type: "json" }
 
@@ -11,7 +17,7 @@ import contractJson from "@/generated/prisma8/contract.json" with { type: "json"
 export const contract = contractFromJson<Contract>(contractJson)
 
 function createDb() {
-  return postgres({ contract, url: process.env.DATABASE_URL! })
+  return postgres({ contract, url: process.env.DATABASE_URL!, extensions: dbExtensions })
 }
 
 // In development the client survives hot reloads on `globalThis`, so the dev

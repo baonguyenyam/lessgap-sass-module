@@ -1289,3 +1289,74 @@ trialEndsAt          TimestampString(3)?
     @@index([quoteId], map: "QuoteEvent_quoteId_idx")
     @@rls
   }
+
+  // The chatbot (ADR 0007): a tenant's knowledge base — sources (site
+  // pages, FAQ entries, uploaded documents) chunked and embedded in
+  // pgvector; `embeddingModel` tracks which model made each row so a model
+  // change triggers a re-index. RLS applies like every tenant table.
+  model KnowledgeSource {
+    id             String             @id(map: "KnowledgeSource_pkey") @onCreate(cuid(2))
+    tenantId       String
+    type           String             @default("page")
+    title          String
+    status         String             @default("active")
+    checksum       String
+    embeddingModel String             @default("local")
+    createdAt      TimestampString(3) @default(now())
+    updatedAt      TimestampString(3) @default(now()) @onUpdate(now())
+    tenant         Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "KnowledgeSource_tenantId_fkey")
+    chunks         KnowledgeChunk[]
+
+    @@index([tenantId], map: "KnowledgeSource_tenantId_idx")
+    @@rls
+  }
+
+  model KnowledgeChunk {
+    id          String             @id(map: "KnowledgeChunk_pkey") @onCreate(cuid(2))
+    tenantId    String
+    sourceId    String
+    content     String
+    language    String             @default("en")
+    tokenCount  Int                @default(0)
+    embedding   pgvector.Vector(length: 384)?
+    createdAt   TimestampString(3) @default(now())
+    updatedAt   TimestampString(3) @default(now()) @onUpdate(now())
+    tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "KnowledgeChunk_tenantId_fkey")
+    source      KnowledgeSource    @relation(fields: [sourceId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "KnowledgeChunk_sourceId_fkey")
+
+    @@index([tenantId], map: "KnowledgeChunk_tenantId_idx")
+    @@index([sourceId], map: "KnowledgeChunk_sourceId_idx")
+    @@rls
+  }
+
+  // A visitor's conversation — the 90-day log the tenant reviews; personal
+  // data minimised before quality review (spec/08).
+  model ChatConversation {
+    id            String             @id(map: "ChatConversation_pkey") @onCreate(cuid(2))
+    tenantId      String
+    visitorKey    String
+    status        String             @default("active")
+    createdAt     TimestampString(3) @default(now())
+    updatedAt     TimestampString(3) @default(now()) @onUpdate(now())
+    tenant        Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "ChatConversation_tenantId_fkey")
+    messages      ChatMessage[]
+
+    @@index([tenantId], map: "ChatConversation_tenantId_idx")
+    @@rls
+  }
+
+  model ChatMessage {
+    id             String             @id(map: "ChatMessage_pkey") @onCreate(cuid(2))
+    tenantId       String
+    conversationId String
+    role           String             @default("user")
+    content        String
+    sourcesJson    Json               @default(json`[]`)
+    createdAt      TimestampString(3) @default(now())
+    tenant         Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "ChatMessage_tenantId_fkey")
+    conversation   ChatConversation   @relation(fields: [conversationId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "ChatMessage_conversationId_fkey")
+
+    @@index([tenantId], map: "ChatMessage_tenantId_idx")
+    @@index([conversationId], map: "ChatMessage_conversationId_idx")
+    @@rls
+  }

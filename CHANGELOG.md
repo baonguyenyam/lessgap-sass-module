@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.70.0] - 2026-10-29
+
+**The chatbot's knowledge base: pgvector sources, chunks and conversations — in the same RLS database.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (installs the `vector` extension).
+
+### Added
+
+- **`KnowledgeSource`/`KnowledgeChunk`** — a tenant's pages, FAQ and documents, chunked and embedded in `pgvector` (ADR 0007)
+- **`ChatConversation`/`ChatMessage`** — a visitor's conversation, logged for the tenant's 90-day review
+
 ## [2.69.0] - 2026-10-29
 
 **Proportional refunds and the payouts view: money in and out on the tenant's Stripe account.** This is a MINOR: `git pull`, `pnpm install`.

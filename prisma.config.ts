@@ -3,6 +3,7 @@
 import { config } from "dotenv"
 import { definePrismaConfig } from "prisma/config"
 import { defineConfig as definePostgresConfig } from "@prisma/orm-postgres/config"
+import pgvector from "@prisma/orm-extension-pgvector/control"
 
 // .env.local first, .env after it, and a variable already set in the shell
 // still wins over both files.
@@ -12,6 +13,7 @@ export default definePrismaConfig({
   orm: definePostgresConfig({
     contract: "prisma/contract.prisma",
     output: "src/generated/prisma8",
+    extensions: [pgvector as never],
     db: {
       // Schema work runs as the owner role (spec/12, "Database roles"): the
       // app role in DATABASE_URL cannot create tables once the roles are set up.
