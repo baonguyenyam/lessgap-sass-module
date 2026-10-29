@@ -101,9 +101,16 @@ checkout→refund E2E, the PSL submission (ADR 0024), the load target run
 
 **Tests:** none — documentation.
 **Done when:** the checklist exists in Findings with each item's owner.
-- [ ] done
+- [x] done
 
 ## Exit criteria
+
+- `sites.spec.ts`, `modules.spec.ts`, `booking.spec.ts`, `orders.spec.ts`
+  green against `pnpm dev` on the dev DB. ✓
+- D4/D5/D6/D7 and E8 assertions run in a browser, not assumed. ✓
+- The deployed-run checklist is recorded; no spec needs real keys. ✓
+- `pnpm typecheck`, `pnpm lint`, `pnpm test:e2e` green. ✓ (18 e2e tests,
+  155 integration tests, all green on 2026-10-29)
 
 - `sites.spec.ts`, `modules.spec.ts`, `booking.spec.ts`, `orders.spec.ts`
   green against `pnpm dev` on the dev DB.
@@ -112,3 +119,21 @@ checkout→refund E2E, the PSL submission (ADR 0024), the load target run
 - `pnpm typecheck`, `pnpm lint`, `pnpm test:e2e` green.
 
 ## Findings
+
+**Deployed-run checklist — owner actions, no code:**
+
+1. **Stripe test keys** — `STRIPE_SECRET_KEY` (test), `STRIPE_WEBHOOK_SECRET`,
+   a connected-account sandbox, then the checkout→refund E2E. *Owner: platform
+   operator.*
+2. **PSL submission** — the shared-suffix model (ADR 0024) needs the sites
+   domain on the Public Suffix List; submit through
+   https://github.com/publicsuffix/list once the production domain is decided.
+   *Owner: platform operator.*
+3. **Domain DNS** — `lessgap.app`/`lessgap.io` records per
+   `spec/03-domains.md`, then the domain-provider smoke
+   (`pnpm domains:check`). *Owner: platform operator.*
+4. **Load target run** — `scripts/load/seed.ts` + `run.sh` against a staging
+   deploy for the 500 req/min × 200 hosts target and cache hit-rate; the local
+   measured smoke is recorded in 8.6. *Owner: platform operator.*
+5. **Sentry** — project + `SENTRY_DSN`, then confirm `ErrorReport` rows and a
+   trigger event land. *Owner: platform operator.*
