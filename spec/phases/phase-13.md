@@ -9,7 +9,7 @@ the code lands it).
 
 ## Scope
 
-- Phase 13: in progress.
+- Phase 13: done.
 
 ## Tasks
 
@@ -40,7 +40,7 @@ the calendar subscribes. `/api/pusher/auth` signs the channel-auth.
 
 **Tests:** integration — a second-location staff books without clashing.
 **Done when:** the schema + the locationId path work.
-- [ ] done
+- [x] done (`tests/integration/locations.test.ts` 1/1 — `Location` (tenant-owned, `@@rls`); `StaffMember`/`Appointment`/`AvailabilityRule`/`TimeOff`/`Order` gain `locationId` nullable — one-location tenants keep `null`; `bookAppointment` writes the staff's `locationId` onto the appointment.)
 
 ## Exit criteria
 

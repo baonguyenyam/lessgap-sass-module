@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [3.1.0] - 2026-10-29
+
+**A tenant's second branch is a `Location` — staff and appointments carry `locationId` so the same slot can hold at two addresses.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **`Location`** — tenant-owned branch (`@@rls`); `StaffMember`/`Appointment`/`AvailabilityRule`/`TimeOff`/`Order` gain `locationId` nullable (one-location tenants keep `null`); `bookAppointment` writes the staff's `locationId` onto the appointment
+
 ## [3.0.0] - 2026-10-29
 
 **The calendar live-updates — Pusher Channels pushes `booking.changed` whenever an appointment lands or moves.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`, set `PUSHER_*` for realtime (the app works the same without it).

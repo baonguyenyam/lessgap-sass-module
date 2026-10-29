@@ -124,10 +124,12 @@ export async function bookAppointment(input: {
         : "confirmed"
     let appointment
     try {
+      const staffMember = await db8.orm.public.StaffMember.where({ id: match.staffId }).first()
       appointment = await db8.orm.public.Appointment.create({
         tenantId: site.tenantId,
         customerId,
         staffId: match.staffId,
+        locationId: staffMember?.locationId ?? null,
         serviceId: input.serviceId,
         startTs: input.startTs,
         endTs: input.endTs,

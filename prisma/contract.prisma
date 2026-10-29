@@ -557,6 +557,12 @@ trialEndsAt          TimestampString(3)?
     using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
     withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
   }
+
+  policy_all location_isolation {
+    target    = Location
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
   policy_all knowledge_chunk_isolation {
     target    = KnowledgeChunk
     using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
@@ -1132,6 +1138,7 @@ trialEndsAt          TimestampString(3)?
   model StaffMember {
     id        String           @id(map: "StaffMember_pkey") @onCreate(cuid(2))
     tenantId  String
+    locationId   String?
     name      String
     photo     String?
     bio       String?
@@ -1182,6 +1189,7 @@ trialEndsAt          TimestampString(3)?
   model AvailabilityRule {
     id          String             @id(map: "AvailabilityRule_pkey") @onCreate(cuid(2))
     tenantId    String
+    locationId   String?
     staffId     String?
     resourceId  String?
     weekday     Int
@@ -1200,6 +1208,7 @@ trialEndsAt          TimestampString(3)?
   model TimeOff {
     id         String             @id(map: "TimeOff_pkey") @onCreate(cuid(2))
     tenantId   String
+    locationId   String?
     staffId    String?
     resourceId String?
     startTs    TimestampString(3)
@@ -1239,6 +1248,7 @@ trialEndsAt          TimestampString(3)?
   model Appointment {
     id           String             @id(map: "Appointment_pkey") @onCreate(cuid(2))
     tenantId     String
+    locationId   String?
     customerId   String
     serviceId    String?
     staffId      String
@@ -1661,6 +1671,7 @@ trialEndsAt          TimestampString(3)?
   model Order {
     id           String             @id(map: "Order_pkey") @onCreate(cuid(2))
     tenantId     String
+    locationId   String?
     customerId   String?
     customerName String
     customerEmail String?
@@ -1889,6 +1900,19 @@ trialEndsAt          TimestampString(3)?
   // A tenant's backup (task 8.3): every tenant-owned table, gzipped to
   // snapshots/<tenantId>/<id>.json.gz in R2. The row is the audit trail —
   // status, row counts, size — the bundle is the data (decision 8-C).
+  model Location {
+    id        String           @id(map: "Location_pkey") @onCreate(cuid(2))
+    tenantId  String
+    name      String
+    address   String?
+    createdAt TimestampString(3) @default(now())
+    updatedAt TimestampString(3) @default(now()) @onUpdate(now())
+    tenant    Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Location_tenantId_fkey")
+
+    @@index([tenantId], map: "Location_tenantId_idx")
+    @@rls
+  }
+
   model HealthCheck {
     id        String           @id(map: "HealthCheck_pkey") @onCreate(cuid(2))
     kind      String

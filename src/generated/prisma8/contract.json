@@ -104,6 +104,10 @@
       "model": "KnowledgeSource",
       "namespace": "public"
     },
+    "Location": {
+      "model": "Location",
+      "namespace": "public"
+    },
     "Media": {
       "model": "Media",
       "namespace": "public"
@@ -686,6 +690,13 @@
                   "kind": "scalar"
                 }
               },
+              "locationId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "notes": {
                 "nullable": true,
                 "type": {
@@ -876,6 +887,9 @@
                 },
                 "id": {
                   "column": "id"
+                },
+                "locationId": {
+                  "column": "locationId"
                 },
                 "notes": {
                   "column": "notes"
@@ -1179,6 +1193,13 @@
                   "kind": "scalar"
                 }
               },
+              "locationId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "resourceId": {
                 "nullable": true,
                 "type": {
@@ -1285,6 +1306,9 @@
                 },
                 "id": {
                   "column": "id"
+                },
+                "locationId": {
+                  "column": "locationId"
                 },
                 "resourceId": {
                   "column": "resourceId"
@@ -3832,6 +3856,100 @@
               "table": "KnowledgeSource"
             }
           },
+          "Location": {
+            "fields": {
+              "address": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              }
+            },
+            "relations": {
+              "tenant": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "tenantId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tenant",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "address": {
+                  "column": "address"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "name": {
+                  "column": "name"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "Location"
+            }
+          },
           "Media": {
             "fields": {
               "alt": {
@@ -4848,6 +4966,13 @@
                   "kind": "scalar"
                 }
               },
+              "locationId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "pickupSlot": {
                 "nullable": true,
                 "type": {
@@ -4942,6 +5067,9 @@
                 },
                 "id": {
                   "column": "id"
+                },
+                "locationId": {
+                  "column": "locationId"
                 },
                 "pickupSlot": {
                   "column": "pickupSlot"
@@ -9399,6 +9527,13 @@
                   "kind": "scalar"
                 }
               },
+              "locationId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "name": {
                 "nullable": false,
                 "type": {
@@ -9477,6 +9612,9 @@
                 },
                 "isSample": {
                   "column": "isSample"
+                },
+                "locationId": {
+                  "column": "locationId"
                 },
                 "name": {
                   "column": "name"
@@ -10752,6 +10890,13 @@
                   "kind": "scalar"
                 }
               },
+              "locationId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "reason": {
                 "nullable": true,
                 "type": {
@@ -10861,6 +11006,9 @@
                 },
                 "id": {
                   "column": "id"
+                },
+                "locationId": {
+                  "column": "locationId"
                 },
                 "reason": {
                   "column": "reason"
@@ -11937,6 +12085,18 @@
               "using": "\"tenantId\" = current_setting('app.tenant_id', true)",
               "withCheck": "\"tenantId\" = current_setting('app.tenant_id', true)"
             },
+            "location_isolation": {
+              "kind": "policy",
+              "name": "location_isolation_c516f4ff",
+              "namespaceId": "public",
+              "operation": "all",
+              "permissive": true,
+              "prefix": "location_isolation",
+              "roles": [],
+              "tableName": "Location",
+              "using": "\"tenantId\" = current_setting('app.tenant_id', true)",
+              "withCheck": "\"tenantId\" = current_setting('app.tenant_id', true)"
+            },
             "media_isolation": {
               "kind": "policy",
               "name": "media_isolation_c516f4ff",
@@ -12559,6 +12719,11 @@
               "namespaceId": "public",
               "tableName": "KnowledgeSource"
             },
+            "Location": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "Location"
+            },
             "Media": {
               "kind": "rls",
               "namespaceId": "public",
@@ -13041,6 +13206,11 @@
                   "dataType": "pg/text",
                   "nullable": false
                 },
+                "locationId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
                 "notes": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
@@ -13509,6 +13679,11 @@
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
                   "nullable": false
+                },
+                "locationId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
                 },
                 "resourceId": {
                   "codecId": "pg/text@1",
@@ -15987,6 +16162,94 @@
               },
               "uniques": []
             },
+            "Location": {
+              "columns": {
+                "address": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "Location_tenantId_idx"
+                  },
+                  "name": "Location_tenantId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "tenantId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Location"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tenant"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "tenantId"
+                  ],
+                  "name": "Location_tenantId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "Location_pkey"
+              },
+              "uniques": []
+            },
             "Media": {
               "columns": {
                 "alt": {
@@ -16929,6 +17192,11 @@
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
                   "nullable": false
+                },
+                "locationId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
                 },
                 "pickupSlot": {
                   "codecId": "pg/text@1",
@@ -20989,6 +21257,11 @@
                   },
                   "nullable": false
                 },
+                "locationId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
                 "name": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
@@ -22110,6 +22383,11 @@
                   "dataType": "pg/text",
                   "nullable": false
                 },
+                "locationId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
                 "reason": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
@@ -22974,10 +23252,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "cc5471f9c3edd9617c076bef7278bef74dddfae3193b78cf4e80852b88bebb5e"
+    "storageHash": "a5aea16fd0b8c87b1f0ab50693eadaf894257bfbcd10c3692ddf3721c46020a3"
   },
   "execution": {
-    "executionHash": "adf1c47f909912cd26d72cd312f120a6c1644ada99dc9bf4da19278d93c06b5f",
+    "executionHash": "7d378d19a356f97050df79ea3271aa6c7cade2fc0a04ef6ddd135ce0e88be8a3",
     "mutations": {
       "defaults": [
         {
@@ -23442,6 +23720,28 @@
           },
           "ref": {
             "entry": "KnowledgeSource",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "Location",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onUpdate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "Location",
             "field": "updatedAt",
             "namespace": "public"
           }
