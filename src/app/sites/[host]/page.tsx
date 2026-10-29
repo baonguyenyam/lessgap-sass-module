@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { ChatBubble } from "@/components/chatbot/chat-bubble"
+import { ViewTracker } from "@/components/analytics/view-tracker"
 import { headers } from "next/headers"
 import { cacheLife, cacheTag } from "next/cache"
 import { db8 } from "@/lib/db8"
@@ -23,12 +24,13 @@ async function getSiteData(tenantId: string): Promise<SiteData | null> {
   cacheLife("minutes")
   const tenant = await db8.orm.public.Tenant.where({ id: tenantId }).first()
   if (!tenant) return null
-  const [site, settings, moduleOn, teamOn, chatbotOn, chatbotFeature] = await Promise.all([
+  const [site, settings, moduleOn, teamOn, chatbotOn, analyticsOn, chatbotFeature] = await Promise.all([
     db8.orm.public.Site.where({ tenantId }).first(),
     db8.orm.public.SiteSettings.where({ tenantId }).first(),
     db8.orm.public.TenantModule.where({ tenantId, moduleKey: "catalog", enabled: true }).first(),
     db8.orm.public.TenantModule.where({ tenantId, moduleKey: "team", enabled: true }).first(),
     db8.orm.public.TenantModule.where({ tenantId, moduleKey: "chatbot", enabled: true }).first(),
+    db8.orm.public.TenantModule.where({ tenantId, moduleKey: "analytics", enabled: true }).first(),
     db8.orm.public.PlatformSwitch.where({ key: "feature.chatbot" }).first(),
   ])
   const catalog = moduleOn
@@ -74,6 +76,7 @@ async function getSiteData(tenantId: string): Promise<SiteData | null> {
     catalog,
     team,
     chatbotEnabled: chatbotOn != null && chatbotFeature?.value !== false,
+    analyticsEnabled: analyticsOn != null,
   }
 }
 
@@ -101,6 +104,7 @@ export default async function SitePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Page data={data} />
       {data.chatbotEnabled && <ChatBubble />}
+      {data.analyticsEnabled && <ViewTracker />}
     </Layout>
   )
 }

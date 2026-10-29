@@ -28,9 +28,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'ca7d656ada716165ba7ca4a931b65571b72018fc2a9257c7390c905935a47ca3'>;
+  StorageHashBase<'1b46c0536ccb09069f977f41afb953dbda65fc88964a49b459b4bf92cf793bec'>;
 export type ExecutionHash =
-  ExecutionHashBase<'42db3cdfabb33da0d2da0d72bcaa9e3b3487fff7f73b44e2e23c10e08d25f314'>;
+  ExecutionHashBase<'7247520e7377f36b18ff4ea11a43e7ade3d75de87c0707c2c7d60a47fe0bc3b3'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -1153,6 +1153,17 @@ export namespace Models {
     tenant: public_Tenant;
     readonly [RelationKeys]?: 'tenant';
   };
+  export type public_SitePageView = {
+    count: FieldOutputTypes['public']['SitePageView']['count'];
+    createdAt: FieldOutputTypes['public']['SitePageView']['createdAt'];
+    date: FieldOutputTypes['public']['SitePageView']['date'];
+    id: FieldOutputTypes['public']['SitePageView']['id'];
+    path: FieldOutputTypes['public']['SitePageView']['path'];
+    tenantId: FieldOutputTypes['public']['SitePageView']['tenantId'];
+    updatedAt: FieldOutputTypes['public']['SitePageView']['updatedAt'];
+    tenant: public_Tenant;
+    readonly [RelationKeys]?: 'tenant';
+  };
   export type public_SiteSettings = {
     appearance: FieldOutputTypes['public']['SiteSettings']['appearance'];
     createdAt: FieldOutputTypes['public']['SiteSettings']['createdAt'];
@@ -1440,6 +1451,7 @@ export declare const models: {
     ServiceVariant: Models.public_ServiceVariant;
     Session: Models.public_Session;
     Site: Models.public_Site;
+    SitePageView: Models.public_SitePageView;
     SiteSettings: Models.public_SiteSettings;
     StaffMember: Models.public_StaffMember;
     StaffService: Models.public_StaffService;
@@ -7056,6 +7068,98 @@ type ContractBase = Omit<
                 },
               ];
             };
+            readonly SitePageView: {
+              columns: {
+                readonly count: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                  readonly many: false;
+                };
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly date: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', ''>;
+                  };
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly path: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', '/'>;
+                  };
+                  readonly many: false;
+                };
+                readonly tenantId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id']; readonly name: 'SitePageView_pkey' };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'SitePageView_tenantId_idx_c93ed4f1';
+                  readonly prefix: 'SitePageView_tenantId_idx';
+                  readonly columns: readonly ['tenantId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'SitePageView_tenantId_path_date_key';
+                  readonly columns: readonly ['tenantId', 'path', 'date'];
+                  readonly unique: true;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'SitePageView';
+                    readonly columns: readonly ['tenantId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Tenant';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'SitePageView_tenantId_fkey';
+                },
+              ];
+            };
             readonly SiteSettings: {
               columns: {
                 readonly appearance: {
@@ -8772,6 +8876,10 @@ type ContractBase = Omit<
     };
     readonly Session: { readonly namespace: 'public' & NamespaceId; readonly model: 'Session' };
     readonly Site: { readonly namespace: 'public' & NamespaceId; readonly model: 'Site' };
+    readonly SitePageView: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'SitePageView';
+    };
     readonly SiteSettings: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'SiteSettings';
@@ -13564,6 +13672,73 @@ type ContractBase = Omit<
               };
             };
           };
+          readonly SitePageView: {
+            readonly fields: {
+              readonly count: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly date: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly path: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly tenantId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly tenant: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Tenant';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['tenantId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'SitePageView';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly count: { readonly column: 'count' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly date: { readonly column: 'date' };
+                readonly id: { readonly column: 'id' };
+                readonly path: { readonly column: 'path' };
+                readonly tenantId: { readonly column: 'tenantId' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+              };
+            };
+          };
           readonly SiteSettings: {
             readonly fields: {
               readonly appearance: {
@@ -15842,6 +16017,22 @@ type ContractBase = Omit<
           readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'Site';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'SitePageView';
+            readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'SitePageView';
             readonly field: 'updatedAt';
             readonly namespace: 'public';
           };

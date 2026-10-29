@@ -808,6 +808,14 @@
       "conversations": "{count} hội thoại",
       "conversations_empty": "Chưa có hội thoại.",
       "messages": "tin nhắn"
+    },
+    "analytics": {
+      "title": "Phân tích",
+      "subtitle": "Lượt xem trang của site",
+      "views_14d": "Lượt xem (14 ngày)",
+      "paths_tracked": "Đường dẫn theo dõi",
+      "top_paths": "Top {count} đường dẫn",
+      "empty": "Chưa có lượt xem — beacon bắt đầu đếm từ lượt ghé sau."
     }
   },
   "platform": {
@@ -1639,7 +1647,8 @@
     "chatbot": "Chatbot",
     "domains": "Tên miền",
     "backups": "Sao lưu",
-    "usage": "Sử dụng"
+    "usage": "Sử dụng",
+    "analytics": "Phân tích"
   },
   "faq": {
     "title": "Các câu hỏi thường gặp",

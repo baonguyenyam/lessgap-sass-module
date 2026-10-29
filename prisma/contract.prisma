@@ -1683,3 +1683,25 @@ trialEndsAt          TimestampString(3)?
     using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
     withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
   }
+
+  // Site analytics (task 8.7): one row per tenant per path per day —
+  // the `/api/view` beacon upserts it; `/t/<slug>/analytics` reads it.
+  model SitePageView {
+    id        String             @id(map: "SitePageView_pkey") @onCreate(cuid(2))
+    tenantId  String
+    path      String             @default("/")
+    date      String             @default("")
+    count     Int                @default(0)
+    createdAt TimestampString(3) @default(now())
+    updatedAt TimestampString(3) @default(now()) @onUpdate(now())
+    tenant    Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "SitePageView_tenantId_fkey")
+
+    @@index([tenantId, path, date], map: "SitePageView_tenantId_path_date_key", unique: true)
+    @@rls
+  }
+
+  policy_all site_page_view_isolation {
+    target    = SitePageView
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }

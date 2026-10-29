@@ -808,6 +808,14 @@
       "conversations": "{count} conversations",
       "conversations_empty": "No conversations yet.",
       "messages": "messages"
+    },
+    "analytics": {
+      "title": "Analytics",
+      "subtitle": "Your site's page views",
+      "views_14d": "Views (14d)",
+      "paths_tracked": "Paths tracked",
+      "top_paths": "Top {count} paths",
+      "empty": "No views yet — the beacon starts counting on the next site visit."
     }
   },
   "platform": {
@@ -1639,7 +1647,8 @@
     "chatbot": "Chatbot",
     "domains": "Domains",
     "backups": "Backups",
-    "usage": "Usage"
+    "usage": "Usage",
+    "analytics": "Analytics"
   },
   "faq": {
     "title": "Frequently asked questions",

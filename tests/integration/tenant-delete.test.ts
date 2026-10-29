@@ -47,6 +47,8 @@ describe("tenant deletion (T9)", () => {
       ProductModifierGroup,
       KnowledgeChunk,
       KnowledgeSource,
+      SitePageView,
+      TenantSnapshot,
       Quote,
       QuoteEvent,
       QuoteLine,
@@ -188,6 +190,8 @@ describe("tenant deletion (T9)", () => {
       KnowledgeSource.create({ tenantId: tenant.id, type: "faq", title: "FAQ", checksum: "c1" }).then((src) =>
         KnowledgeChunk.create({ tenantId: tenant.id, sourceId: src.id, content: "hours 9-5", tokenCount: 3 })
       ),
+      SitePageView.create({ tenantId: tenant.id, path: "/about", date: "2026-10-29", count: 1 }),
+      TenantSnapshot.create({ tenantId: tenant.id }),
       ProductCategory.create({ tenantId: tenant.id, name: "Gifts" }).then((c) =>
         Product.create({ tenantId: tenant.id, categoryId: c.id, name: "Card" }).then((p) =>
           Promise.all([
@@ -275,6 +279,8 @@ describe("tenant deletion (T9)", () => {
       ["Reservation", Reservation, "tenantId"],
       ["ReservationRule", ReservationRule, "tenantId"],
       ["Table", Table, "tenantId"],
+      ["SitePageView", SitePageView, "tenantId"],
+      ["TenantSnapshot", TenantSnapshot, "tenantId"],
     ] as const) {
       const row = await (model as typeof NewsletterSubscriber).where({ [field]: tenant.id } as never).first()
       expect(row, name).toBeNull()

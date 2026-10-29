@@ -179,6 +179,11 @@ async function main() {
       update: {},
     })
     await db8.orm.public.PlatformSwitch.upsert({
+      conflictOn: { key: "module.analytics" },
+      create: { key: "module.analytics", value: true, updatedById: "seed" },
+      update: {},
+    })
+    await db8.orm.public.PlatformSwitch.upsert({
       conflictOn: { key: "module.chatbot" },
       create: { key: "module.chatbot", value: true, updatedById: "seed" },
       update: {},

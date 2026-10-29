@@ -20,6 +20,7 @@ export type SiteData = {
    * staff list. */
   team?: { id: string; name: string; photo: string | null; bio: string | null }[]
   chatbotEnabled?: boolean
+  analyticsEnabled?: boolean
   catalog?: {
     categories: { id: string; name: string; sortOrder: number }[]
     services: {

@@ -7,6 +7,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.81.0] - 2026-10-29
+
+**Every tenant site counts its own views — one row per path per day — and the ADRs record what phase 8 actually measured.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **`analytics` module** — `SitePageView` upserts per path+day via the `/api/view` beacon; `/t/<slug>/analytics` shows totals and top paths
+- **ADR 0022** — the `Job` table stays (11 kinds, drain under target; the Trigger.dev trigger unchanged)
+- **ADR 0023** — log drain stays deferred (rows, not log lines, are the observability surface)
+- **ADR 0024** — PSL submission checklist for the sites domain
+
 ## [2.80.0] - 2026-10-29
 
 **The site surface gets a load fixture: `LOAD_TENANTS=N` seeds published sites, `scripts/load/run.sh` drives autocannon across the hosts at the spec's rate.** This is a MINOR: `git pull`, `pnpm install`.

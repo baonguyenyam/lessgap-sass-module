@@ -45,6 +45,7 @@ export const MODEL_CLASSIFICATION = {
   ReservationRule: { kind: "tenant-owned", reason: "A restaurant's service periods and booking rules." },
   Table: { kind: "tenant-owned", reason: "A restaurant's tables (reservations module)." },
   TenantSnapshot: { kind: "tenant-owned", reason: "A backup bundle of one tenant's rows." },
+  SitePageView: { kind: "tenant-owned", reason: "A tenant's site page-view counter (analytics module)." },
   Resource: { kind: "tenant-owned", reason: "A tenant's bookable resources (booking module)." },
   TimeOff: { kind: "tenant-owned", reason: "A tenant's closures and time-off (booking module)." },
   NewsletterSubscriber: {
