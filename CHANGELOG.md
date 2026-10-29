@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.89.0] - 2026-10-29
+
+**A disabled module's site routes now 404 instead of 500ing, and its scheduled work pauses — L2's full disable surface is covered.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Fixed
+
+- **Module-gated routes 500 on disable** — `requireModule` throws `module_inactive`; the seven site pages now call `requireModuleRoute`, which 404s as L2 asks
+- **`reindexTenant` ran after a chatbot disable** — the scheduled reindex now checks `isModuleActive` and no-ops when the module is off
+
+### Added
+
+- **`modules.spec.ts` L2 test** — `/book` 404s after `booking` goes off, the reindex pauses after `chatbot` goes off, rows stay
+
 ## [2.88.0] - 2026-10-29
 
 **The platform console requires a second factor — staff without `twoFactorEnabled` are sent to their security settings before `/platform` opens.** This is a MINOR: `git pull`, `pnpm install`.

@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server"
 import { db8 } from "@/lib/db8"
 import { resolveHost } from "@/platform/tenancy/host"
 import { systemContext } from "@/platform/tenancy/context"
-import { requireModule } from "@/platform/modules/runtime"
+import { requireModuleRoute } from "@/platform/modules/runtime"
 import { canCharge } from "@/platform/payments/connect"
 import { OrderClient } from "@/components/ordering/order-client"
 
@@ -17,7 +17,7 @@ export default async function OrderPage() {
   const resolved = await resolveHost(host)
   if (resolved.kind !== "site") notFound()
   const c = systemContext(resolved.tenantId, "customer")
-  await requireModule(c, "ordering")
+  await requireModuleRoute(c, "ordering")
   const t = await getTranslations("site.order")
   const [tenant, products, groups, modifiers, rules, existing, settings] = await Promise.all([
     db8.orm.public.Tenant.where({ id: resolved.tenantId }).first(),

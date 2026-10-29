@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server"
 import { db8 } from "@/lib/db8"
 import { resolveHost } from "@/platform/tenancy/host"
 import { systemContext } from "@/platform/tenancy/context"
-import { requireModule } from "@/platform/modules/runtime"
+import { requireModuleRoute } from "@/platform/modules/runtime"
 import { ReserveForm } from "@/components/reservations/reserve-form"
 
 /** The site reserve page (task 5.8): party size → slot → details. */
@@ -15,7 +15,7 @@ export default async function ReservePage() {
   const resolved = await resolveHost(host)
   if (resolved.kind !== "site") notFound()
   const c = systemContext(resolved.tenantId, "customer")
-  await requireModule(c, "reservations")
+  await requireModuleRoute(c, "reservations")
   const t = await getTranslations("site.reserve")
   const [rules, tables, existing] = await Promise.all([
     db8.orm.public.ReservationRule.where({ tenantId: resolved.tenantId }).all(),

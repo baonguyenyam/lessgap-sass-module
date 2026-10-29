@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server"
 import { db8 } from "@/lib/db8"
 import { resolveHost } from "@/platform/tenancy/host"
 import { systemContext } from "@/platform/tenancy/context"
-import { requireModule } from "@/platform/modules/runtime"
+import { requireModuleRoute } from "@/platform/modules/runtime"
 import { canCharge } from "@/platform/payments/connect"
 import { ShopClient } from "@/components/shop/shop-client"
 
@@ -17,7 +17,7 @@ export default async function ShopPage() {
   const resolved = await resolveHost(host)
   if (resolved.kind !== "site") notFound()
   const c = systemContext(resolved.tenantId, "customer")
-  await requireModule(c, "shop")
+  await requireModuleRoute(c, "shop")
   const t = await getTranslations("site.shop")
   const tenant = await db8.orm.public.Tenant.where({ id: resolved.tenantId }).first()
   const products = await db8.orm.public.Product.where({ tenantId: resolved.tenantId, isActive: true })

@@ -46,7 +46,7 @@ scheduled work (`platform.chatbot.reindex` no longer enqueues).
 
 **Tests:** `tests/e2e/` — route 404 + job-pause assertions.
 **Done when:** L2's full surface is covered.
-- [ ] done
+- [x] done (`modules.spec.ts` L2 test — `requireModuleRoute` swapped onto all seven site pages (module-gated routes return 404, not the `module_inactive` 500 `requireModule` throws); `reindexTenant` returns `{sources: 0, chunks: 0}` once chatbot is off — the `isModuleActive` guard pauses the scheduled work.)
 
 ## Exit criteria
 

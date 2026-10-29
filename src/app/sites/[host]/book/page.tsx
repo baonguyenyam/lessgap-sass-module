@@ -6,7 +6,7 @@ import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { resolveHost } from "@/platform/tenancy/host"
 import { systemContext } from "@/platform/tenancy/context"
-import { requireModule } from "@/platform/modules/runtime"
+import { requireModuleRoute } from "@/platform/modules/runtime"
 import { availableSlots } from "@/lib/availability"
 import { BookingForm } from "@/components/booking/booking-form"
 
@@ -19,7 +19,7 @@ export default async function BookPage() {
   const resolved = await resolveHost(host)
   if (resolved.kind !== "site") notFound()
   const c = systemContext(resolved.tenantId, "customer")
-  await requireModule(c, "booking")
+  await requireModuleRoute(c, "booking")
   const t = await getTranslations("site.booking")
   const [services, staff, rules, timeOff, existing, tenant] = await Promise.all([
     db8.orm.public.Service.where({ tenantId: resolved.tenantId }).all(),

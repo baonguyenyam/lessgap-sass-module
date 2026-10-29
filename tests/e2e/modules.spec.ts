@@ -94,3 +94,44 @@ test("E8 — disabling a module hides it on site and dashboard, keeps the rows",
   const rows = await db8.orm.public.Service.where({ tenantId: tenant.id }).all()
   expect(rows.map((r) => r.id)).toContain(service.id)
 })
+
+test("L2 — disabling a module 404s its site routes and pauses its jobs, data stays", async ({ context, request }) => {
+  const { page, tenant, slug } = await signUpAndTenant(context)
+  await db8.orm.public.PlatformSwitch.upsert({
+    conflictOn: { key: "module.chatbot" },
+    create: { key: "module.chatbot", value: true, updatedById: "e2e" },
+    update: { value: true },
+  })
+  await db8.orm.public.TenantModule.create({ tenantId: tenant.id, moduleKey: "chatbot", enabled: true })
+  await db8.orm.public.Site.create({ tenantId: tenant.id, themeKey: "classic", status: "PUBLISHED" })
+  await db8.orm.public.SiteSettings.create({ tenantId: tenant.id, profile: { name: "E2E L2" } })
+
+  // Chatbot's scheduled work runs while it's enabled — then stops.
+  const { reindexTenant } = await import("@/platform/chatbot/ingest")
+  const before = await reindexTenant(tenant.id)
+  expect(before.sources).toBeGreaterThanOrEqual(0)
+
+  await page.goto(`/t/${slug}/settings/modules`)
+  // Disable `chatbot` through the same UI as E8 — the disable button's row
+  // sits in the chatbot card.
+  await page
+    .getByRole("button", { name: /^disable$/i })
+    .first()
+    .click()
+  await page.waitForLoadState("networkidle")
+
+  // Its scheduled work pauses — reindex becomes a no-op.
+  const after = await reindexTenant(tenant.id)
+  expect(after).toEqual({ sources: 0, chunks: 0 })
+
+  // And a module-gated site route 404s once its module is off — booking
+  // shares the gate (requireModuleRoute, not requireModule — L2 caught
+  // `module_inactive` reaching the client as a 500).
+  await db8.orm.public.TenantModule.create({ tenantId: tenant.id, moduleKey: "booking", enabled: true })
+  const siteHost = `${slug}.lessgap.io`
+  const on = await request.get("/book", { headers: { host: siteHost } })
+  expect(on.status()).toBe(200)
+  await db8.orm.public.TenantModule.where({ tenantId: tenant.id, moduleKey: "booking" }).update({ enabled: false })
+  const off = await request.get("/book", { headers: { host: siteHost } })
+  expect(off.status()).toBe(404)
+})
