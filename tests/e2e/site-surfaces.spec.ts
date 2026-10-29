@@ -15,9 +15,9 @@ let db8: Awaited<typeof import("@/lib/db8")>["db8"]
 test.beforeAll(async () => {
   db8 = (await import("@/lib/db8")).db8
 })
-test.afterAll(async () => {
-  await db8.close()
-})
+// The db8 globalThis singleton is shared across specs in the worker —
+// closing it in one spec leaves the next with "Postgres client is
+// closed". The process exit cleans connections; no afterAll.
 
 async function provision(slug: string) {
   const tenant = await db8.orm.public.Tenant.create({ name: "E2E Surf", slug, status: "ACTIVE" })

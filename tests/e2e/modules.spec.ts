@@ -21,9 +21,9 @@ test.beforeAll(async () => {
   db8 = (await import("@/lib/db8")).db8
   auth = (await import("@/auth")).auth
 })
-test.afterAll(async () => {
-  await db8.close()
-})
+// db8 is a globalThis singleton shared across specs in the
+// worker — closing it here leaves the next spec with a dead
+// client. The process exit cleans connections.
 
 /** Signup now lands on the onboarding wizard (phase 4), so the spec
  * provisions the member+tenant directly and logs in through the form —

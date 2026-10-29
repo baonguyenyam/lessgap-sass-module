@@ -22,9 +22,9 @@ test.beforeAll(async () => {
   ;({ manageAppointment } = await import("@/app/actions/booking"))
   ;({ signManageToken } = await import("@/lib/booking/manage-token"))
 })
-test.afterAll(async () => {
-  await db8.close()
-})
+// db8 is a globalThis singleton shared across specs in the
+// worker — closing it here leaves the next spec with a dead
+// client. The process exit cleans connections.
 
 function nextFriday() {
   const d = new Date()

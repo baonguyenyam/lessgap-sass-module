@@ -17,9 +17,9 @@ test.beforeAll(async () => {
   db8 = (await import("@/lib/db8")).db8
 })
 
-test.afterAll(async () => {
-  await db8.close()
-})
+// db8 is a globalThis singleton shared across specs in the
+// worker — closing it here leaves the next spec with a dead
+// client. The process exit cleans connections.
 
 async function provision() {
   const id = newId().slice(0, 8).toLowerCase()
