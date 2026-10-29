@@ -4,6 +4,7 @@ import {
   Boxes,
   Calendar,
   Star,
+  Gift,
   Globe,
   List,
   Globe2,
@@ -108,6 +109,9 @@ export function navGroups(
         ...(enabledModules && !enabledModules.has("booking")
           ? []
           : [{ key: "reviews", href: t("reviews"), icon: Star } satisfies NavItem]),
+        ...(enabledModules && !enabledModules.has("booking")
+          ? []
+          : [{ key: "sales", href: t("sales"), icon: Gift } satisfies NavItem]),
         ...(enabledModules && !enabledModules.has("customers")
           ? []
           : [{ key: "customers", href: t("customers"), icon: Users } satisfies NavItem]),

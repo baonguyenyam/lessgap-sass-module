@@ -75,7 +75,7 @@ customer, activates a `Membership`, and lists the holdings.
 **Tests:** integration — the page's actions land the rows; e2e — sell a
 card and see it listed.
 **Done when:** the sell + list paths work end-to-end.
-- [ ] done
+- [x] done (`/t/<slug>/sales` — `SalesActions` sells a card (amount + buyer email → `buyGiftCard`), a package onto a customer (`buyPackage`) and activates a membership (`activateMembership`); cards + holdings list alongside.)
 
 ## Exit criteria
 

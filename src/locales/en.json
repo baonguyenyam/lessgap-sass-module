@@ -540,7 +540,8 @@
       "domains": "Domains",
       "catalog": "Catalog",
       "team": "Team",
-      "reviews": "Reviews"
+      "reviews": "Reviews",
+      "sales": "Sales"
     },
     "members": {
       "title": "Members",
@@ -835,6 +836,29 @@
       "waitlist_notified": "notified",
       "waitlist_booked": "booked",
       "waitlist_canceled": "canceled"
+    },
+    "sales": {
+      "title": "Sales",
+      "sell": "Sell",
+      "sell_card": "Sell a gift card",
+      "sell_pkg": "Sell a package",
+      "sell_mem": "Activate a membership",
+      "amount": "Amount",
+      "email": "Buyer email",
+      "choose_pkg": "Choose a package…",
+      "choose_mem": "Choose a membership…",
+      "choose_customer": "Choose a customer…",
+      "selling": "Selling…",
+      "sold": "Sold.",
+      "cards": "Gift cards",
+      "no_cards": "No cards yet.",
+      "holdings": "Holdings",
+      "no_holdings": "No holdings yet.",
+      "pkg": "Package",
+      "mem": "Membership",
+      "sessions_left": "sessions left",
+      "active": "active",
+      "inactive": "inactive"
     }
   },
   "platform": {

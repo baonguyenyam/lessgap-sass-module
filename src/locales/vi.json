@@ -540,7 +540,8 @@
       "domains": "Tên miền",
       "catalog": "Danh mục",
       "team": "Nhân viên",
-      "reviews": "Đánh giá"
+      "reviews": "Đánh giá",
+      "sales": "Bán hàng"
     },
     "members": {
       "title": "Thành viên",
@@ -835,6 +836,29 @@
       "waitlist_notified": "đã báo",
       "waitlist_booked": "đã đặt",
       "waitlist_canceled": "đã hủy"
+    },
+    "sales": {
+      "title": "Bán hàng",
+      "sell": "Bán",
+      "sell_card": "Bán thẻ quà",
+      "sell_pkg": "Bán gói",
+      "sell_mem": "Kích hoạt membership",
+      "amount": "Số tiền",
+      "email": "Email người mua",
+      "choose_pkg": "Chọn gói…",
+      "choose_mem": "Chọn membership…",
+      "choose_customer": "Chọn khách…",
+      "selling": "Đang bán…",
+      "sold": "Đã bán.",
+      "cards": "Thẻ quà",
+      "no_cards": "Chưa có thẻ nào.",
+      "holdings": "Gói đã bán",
+      "no_holdings": "Chưa có gói nào.",
+      "pkg": "Gói",
+      "mem": "Membership",
+      "sessions_left": "buổi còn lại",
+      "active": "đang dùng",
+      "inactive": "ngừng"
     }
   },
   "platform": {

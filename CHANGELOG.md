@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.98.0] - 2026-10-29
+
+**The till can sell a gift card, a package and a membership — and the holdings list alongside.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`/t/<slug>/sales`** — `SalesActions` sells a `GiftCard` (amount + buyer email), sells a `Package` onto a customer and activates a `Membership`; the cards' balances and the packages'/memberships' holdings list
+
 ## [2.97.0] - 2026-10-29
 
 **A completed appointment's manage page asks for a review — the visitor-facing half of the review loop.** This is a MINOR: `git pull`, `pnpm install`.
