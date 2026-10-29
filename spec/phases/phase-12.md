@@ -13,7 +13,7 @@ spec/12-migrations-and-data.md, `src/app/actions/booking.ts`,
 
 ## Scope
 
-- Phase 12: done.
+- Phase 12: in progress.
 
 ## Tasks
 
@@ -42,6 +42,19 @@ hours). A `PackageLedger`/`MembershipLedger` row per change.
 package stops; membership activates and bills monthly.
 **Done when:** package spends + membership activates correctly.
 - [x] done (`tests/integration/packages-memberships.test.ts` 2/2 — `buyPackage` holds `sessionsLeft` against the package's sessions, `spendPackage` debits one per appointment (empty refuses); `activateMembership` joins and `billMembership` charges the month's `priceCents` — ledgers are the twin of each holding's state.)
+
+### 12.3 In-place restore — a snapshot can come back to the same tenant
+
+`restoreBundle` only builds a new tenant (task 8.4); a tenant who wants
+"put it back how it was" has no path. `restoreInPlace` clears the tenant's
+own rows and re-inserts the snapshot's — the same bundle, same table
+order, the tenant's own `idMap` (the snapshot's tenantId is kept; its
+other ids are preserved). Audited on the platform console.
+
+**Tests:** integration — snapshot → mutate → restore-in-place → the
+pre-snapshot state returns.
+**Done when:** the restore lands on the same tenant.
+- [ ] done
 
 ## Exit criteria
 
