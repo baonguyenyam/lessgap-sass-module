@@ -55,7 +55,7 @@ PHI).
   min notice, max advance.
 - **Checks:** `pnpm test`, `pnpm typecheck`.
 - **Done when:** the DST and edge-case suite is green.
-- [ ] done
+- [x] done (`src/lib/availability.ts` — `availableSlots(rules, timeOff, appointments, service, staff, range, tz, options)`: weekly `WeeklyRule` rows → 15-min-step candidates filtered to the rule's wall window (`localMinutesOfDay` so a slot inside a DST gap is never offered), minus `TimeOff`, minus existing appointments (busy window vs actual time — buffer-vs-buffer is fine, `status: canceled` ignored), `minNotice`/`maxAdvance`. "Any staff" emits one slot per start on the least-busy free staff. `wallToUtc`/`localDate`/`localWeekday` are the DST-safe conversions (fixed-point `t = wall - offset(t)`). 15 unit tests: spring-forward `America/New_York` + `America/Chicago`, fall-back both, buffers, "any staff", last-slot-of-day, closure, min notice, max advance.)
 
 ### 5.2 — Booking, customer and notification schema
 - **Goal:** `Resource`, `AvailabilityRule`, `TimeOff`, `Appointment`,

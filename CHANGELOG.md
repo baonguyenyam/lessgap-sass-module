@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.53.0] - 2026-10-29
+
+**The availability engine — the pure function every booking starts from.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`availableSlots`** (`src/lib/availability.ts`) — weekly rules minus time-off minus existing appointments (with buffers), minimum notice and maximum advance; "any staff" picks the least-busy free staff. DST-safe: slots inside a daylight-saving gap are never offered, and both transitions keep the right UTC instants in `America/Chicago` and `America/New_York`
+
 ## [2.52.0] - 2026-10-29
 
 **A second shared theme — `classic` — proves the theme contract holds for two designs.** This is a MINOR: `git pull`, `pnpm install`.

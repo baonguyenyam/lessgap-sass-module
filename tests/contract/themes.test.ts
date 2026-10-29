@@ -5,7 +5,7 @@ import { fixtureSite } from "@/themes/main/theme.fixtures"
 import { defaultTokens } from "@/themes/main"
 import { classicTheme } from "@/themes/classic"
 import { renderToStaticMarkup } from "react-dom/server"
-import { createElement } from "react"
+import { createElement, type ComponentType } from "react"
 
 /** Task 3.5: every registered theme satisfies the spec/06 theme contract —
  * manifest fields, a token schema its defaults pass, layout + pages +
@@ -45,7 +45,11 @@ describe("theme contract", () => {
       const Page = theme.pages["home"] ?? Object.values(theme.pages)[0]
       const Layout = theme.layout
       const html = renderToStaticMarkup(
-        createElement(Layout, { data: fixtureSite }, createElement(Page, { data: fixtureSite }))
+        createElement(
+          Layout as ComponentType<{ data: typeof fixtureSite }>,
+          { data: fixtureSite },
+          createElement(Page, { data: fixtureSite })
+        )
       )
       // The same fixture produces its name, a service and a staff name in
       // every theme — no theme-specific data path.
