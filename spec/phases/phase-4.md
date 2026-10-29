@@ -104,7 +104,7 @@ holds for two designs.
   selection by `themeKey`.
 - **Checks:** `pnpm test`, `pnpm modules:check`.
 - **Done when:** the same fixture site renders through both themes.
-- [ ] done
+- [x] done (`src/themes/classic/` — the second shared theme: serif, centered masthead, double-rule frame, for `generic` + `restaurant`. Its own `tokenSchema` (`accentColor #7c3aed`, `fontFamily serif`), `defaultTokens`, layout, hero/hours/services/team sections and a home page — the same `SiteData` contract, no theme-specific data code. Registered in `themes`; `resolveTheme("classic")` returns it, `resolveTheme("no-such")` still falls back to `main`. `main`'s `fixtureSite` gained `catalog`/`team`. Contract test renders the same fixture through both themes and sees its name, a service and a staff name in each.)
 
 ## Exit criteria
 

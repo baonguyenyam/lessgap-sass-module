@@ -4,6 +4,25 @@ import type { SiteData } from "@/themes/types"
 export const fixtureSite: SiteData = {
   tenant: { name: "Fixture Co", slug: "fixture" },
   site: { themeKey: "main", tokens: {}, sections: {}, status: "PUBLISHED" },
+  team: [
+    { id: "m1", name: "Mia", photo: null, bio: "Senior stylist" },
+    { id: "m2", name: "Linh", photo: null, bio: null },
+  ],
+  catalog: {
+    categories: [{ id: "c1", name: "Nails", sortOrder: 0 }],
+    services: [
+      {
+        id: "s1",
+        name: "Manicure",
+        description: "Classic",
+        durationMinutes: 45,
+        priceCents: 2800,
+        currency: "usd",
+        categoryId: "c1",
+        imageKey: null,
+      },
+    ],
+  },
   settings: {
     profile: {
       name: "Fixture Co",

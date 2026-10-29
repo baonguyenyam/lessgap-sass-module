@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.52.0] - 2026-10-29
+
+**A second shared theme — `classic` — proves the theme contract holds for two designs.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`classic` theme** — a serif, centered look for `generic` and `restaurant` verticals; its own tokens, layout and sections render the same `SiteData` contract as `main` — no theme-specific data code
+- **Theme choice** — `resolveTheme("classic")` serves it; an unknown key still falls back to `main`
+
 ## [2.51.0] - 2026-10-29
 
 **A new tenant walks through the onboarding wizard: name, vertical, site address, and their site is live.** This is a MINOR: `git pull`, `pnpm install`.

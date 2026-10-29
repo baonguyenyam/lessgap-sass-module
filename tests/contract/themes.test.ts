@@ -3,6 +3,9 @@ import { themes, resolveTheme } from "@/themes/registry"
 import { mainTheme } from "@/themes/main"
 import { fixtureSite } from "@/themes/main/theme.fixtures"
 import { defaultTokens } from "@/themes/main"
+import { classicTheme } from "@/themes/classic"
+import { renderToStaticMarkup } from "react-dom/server"
+import { createElement } from "react"
 
 /** Task 3.5: every registered theme satisfies the spec/06 theme contract —
  * manifest fields, a token schema its defaults pass, layout + pages +
@@ -37,8 +40,24 @@ describe("theme contract", () => {
     expect(() => mainTheme.tokenSchema.parse(fixtureSite.settings.appearance)).not.toThrow()
   })
 
+  it("both shared themes render the same SiteData fixture (task 4.6)", () => {
+    for (const theme of [mainTheme, classicTheme]) {
+      const Page = theme.pages["home"] ?? Object.values(theme.pages)[0]
+      const Layout = theme.layout
+      const html = renderToStaticMarkup(
+        createElement(Layout, { data: fixtureSite }, createElement(Page, { data: fixtureSite }))
+      )
+      // The same fixture produces its name, a service and a staff name in
+      // every theme — no theme-specific data path.
+      expect(html).toContain("Fixture Co")
+      expect(html).toContain("Manicure")
+      expect(html).toContain("Mia")
+    }
+  })
+
   it("resolveTheme falls back to main for an unknown key", () => {
     expect(resolveTheme("main")).toBe(mainTheme)
+    expect(resolveTheme("classic")).toBe(classicTheme)
     expect(resolveTheme("no-such-theme")).toBe(mainTheme)
   })
 })

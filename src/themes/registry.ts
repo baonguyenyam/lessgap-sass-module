@@ -1,12 +1,13 @@
 import { log } from "@/platform/log"
 import type { Theme } from "@/themes/types"
 import { mainTheme } from "@/themes/main"
+import { classicTheme } from "@/themes/classic"
 
 /**
  * The theme registry (spec/06): every theme by key. An unknown `themeKey`
  * falls back to `main` and logs — a bad key must never take the site down.
  */
-export const themes = { main: mainTheme } as const
+export const themes = { main: mainTheme, classic: classicTheme } as const
 
 export function resolveTheme(themeKey: string): Theme {
   const theme = (themes as Record<string, Theme>)[themeKey]
