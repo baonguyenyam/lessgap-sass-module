@@ -43,7 +43,7 @@ describe("reviews (11.2)", () => {
   beforeEach(resetDatabase)
 
   it("a non-completed appointment can't leave one; a completed one's goes pending then publishes", async () => {
-    const { submitReview, moderateReview } = await import("@/app/actions/reviews")
+    const { submitReview } = await import("@/app/actions/reviews")
 
     const requested = await provision("requested")
     const blocked = await submitReview({ token: signManageToken(requested.id), rating: 5 })

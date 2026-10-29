@@ -42,6 +42,18 @@ only `published` rows.
 **Done when:** the write, gate and publish paths work end-to-end.
 - [x] done (`tests/integration/reviews.test.ts` 2/2 — `submitReview` takes the manage token and a `completed` appointment (one per visit — `appointmentId` is `@unique`), `moderateReview` flips `pending` → `published` behind `bookings.manage` and refreshes the site cache.)
 
+### 11.3 The site surfaces the waitlist and the reviews
+
+11.1 and 11.2 are API-complete; the visitor can't reach either. The
+booking page offers the waitlist join form when `availableSlots` is
+empty; `getSiteData` reads `Review` rows with `status: "published"` and
+the themes render them.
+
+**Tests:** e2e — the waitlist join shows when a day is full; a published
+review appears on the site, a pending one doesn't.
+**Done when:** both surfaces render correctly.
+- [ ] done
+
 ## Exit criteria
 
 - The waitlist joins and notifies correctly; tests green.
