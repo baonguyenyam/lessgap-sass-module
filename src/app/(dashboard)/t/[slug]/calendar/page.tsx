@@ -40,6 +40,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
       <div>
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
+        <BookingLiveUpdates tenantId={c.tenantId} />
       </div>
       <AppointmentActions staff={staff.map((s) => ({ id: s.id, name: s.name }))} />
       {byDay.size === 0 ? (
