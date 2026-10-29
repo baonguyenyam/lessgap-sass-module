@@ -1,4 +1,5 @@
 import { headers } from "next/headers"
+import { connection } from "next/server"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { resolveHost } from "@/platform/tenancy/host"
@@ -10,6 +11,7 @@ import { primaryDomain } from "@/platform/domains"
  * published `Page` row, all at the site's canonical origin.
  */
 export async function GET() {
+  await connection()
   const host = (await headers()).get("host") ?? ""
   const resolved = await resolveHost(host)
   if (resolved.kind !== "site") return new Response("Not found", { status: 404 })
