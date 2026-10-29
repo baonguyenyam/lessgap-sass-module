@@ -2,7 +2,7 @@ import { sql } from "kysely"
 import { and } from "@prisma/orm-postgres/orm-client"
 import { db8 } from "@/lib/db8"
 import { authDb } from "@/lib/kysely"
-import { nowTs, toTs } from "@/lib/timestamps"
+import { toTs } from "@/lib/timestamps"
 
 /**
  * The status probe (task 13.1, ADR 0029): write a `HealthCheck` per kind —
