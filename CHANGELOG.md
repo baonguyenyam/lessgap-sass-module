@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.65.0] - 2026-10-29
+
+**The shop module: products → cookie cart → checkout on the tenant's Stripe account → orders.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **`shop` module** — `Product`, `ProductVariant`, `ProductCategory`; anonymous `Cart`/`CartLine` keyed by a `cart_id` cookie; `Order`/`OrderLine`
+- **Site shop** (`/sites/[host]/shop`) — visitors buy with variant buttons; checkout asks `payments` for a session on the connected account; paid UI hides until `chargesEnabled`
+- **`/t/<slug>/orders`** — the tenant's orders with lines, fulfilment and status; a paid webhook flips the order to `paid`
+
 ## [2.64.0] - 2026-10-29
 
 **The payments module: Stripe Connect onboarding, a signed webhook, and checkout on the tenant's own account.** This is a MINOR: `git pull`, `pnpm install`.

@@ -34,7 +34,14 @@ describe("tenant deletion (T9)", () => {
       Customer,
       Media,
       NotificationLog,
+      Cart,
+      CartLine,
+      Order,
+      OrderLine,
       Payment,
+      Product,
+      ProductCategory,
+      ProductVariant,
       Refund,
       Reservation,
       ReservationRule,
@@ -165,6 +172,20 @@ describe("tenant deletion (T9)", () => {
         })
       ),
       ReservationRule.create({ tenantId: tenant.id, weekday: 2, startMinute: 660, endMinute: 840 }),
+      ProductCategory.create({ tenantId: tenant.id, name: "Gifts" }).then((c) =>
+        Product.create({ tenantId: tenant.id, categoryId: c.id, name: "Card" }).then((p) =>
+          Promise.all([
+            ProductVariant.create({ tenantId: tenant.id, productId: p.id, name: "Std", priceCents: 500 }).then((v) =>
+              Cart.create({ tenantId: tenant.id, cartKey: "k1" }).then((cart) =>
+                CartLine.create({ tenantId: tenant.id, cartId: cart.id, variantId: v.id, quantity: 1 })
+              )
+            ),
+            Order.create({ tenantId: tenant.id, customerName: "Ana", totalCents: 500 }).then((o) =>
+              OrderLine.create({ tenantId: tenant.id, orderId: o.id, name: "Std", unitPriceCents: 500 })
+            ),
+          ])
+        )
+      ),
       Payment.create({ tenantId: tenant.id, kind: "deposit", amountCents: 2000, feeCents: 58 }).then((p) =>
         Refund.create({ tenantId: tenant.id, paymentId: p.id, amountCents: 1000, feeRefundCents: 29 })
       ),
@@ -199,6 +220,13 @@ describe("tenant deletion (T9)", () => {
       ["NotificationLog", NotificationLog, "tenantId"],
       ["Resource", Resource, "tenantId"],
       ["TimeOff", TimeOff, "tenantId"],
+      ["Cart", Cart, "tenantId"],
+      ["CartLine", CartLine, "tenantId"],
+      ["Order", Order, "tenantId"],
+      ["OrderLine", OrderLine, "tenantId"],
+      ["Product", Product, "tenantId"],
+      ["ProductCategory", ProductCategory, "tenantId"],
+      ["ProductVariant", ProductVariant, "tenantId"],
       ["Payment", Payment, "tenantId"],
       ["Refund", Refund, "tenantId"],
       ["Reservation", Reservation, "tenantId"],

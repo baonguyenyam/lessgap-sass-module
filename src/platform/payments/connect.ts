@@ -133,4 +133,8 @@ export async function markPaymentSucceeded(sessionId: string, paymentIntentId: s
     status: "succeeded",
     paymentIntentId: paymentIntentId ?? payment.paymentIntentId,
   })
+  // The row's link ids tell us what paid — an order flips to paid.
+  if (payment.orderId) {
+    await db8.orm.public.Order.where({ id: payment.orderId }).update({ status: "paid" })
+  }
 }

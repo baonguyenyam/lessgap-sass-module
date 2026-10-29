@@ -755,6 +755,12 @@
       "list": "{count} reservations",
       "empty": "No reservations yet — visitors book on the site's /reserve page.",
       "party": "party of {size}"
+    },
+    "orders": {
+      "title": "Orders",
+      "subtitle": "Every shop order",
+      "list": "{count} orders",
+      "empty": "No orders yet — visitors buy on the site's /shop page."
     }
   },
   "platform": {
@@ -1538,7 +1544,8 @@
     "getStarted": "Get started",
     "openMenu": "Open menu",
     "backToTop": "Back to top",
-    "reservations": "Reservations"
+    "reservations": "Reservations",
+    "orders": "Orders"
   },
   "faq": {
     "title": "Frequently asked questions",
@@ -1921,6 +1928,22 @@
         "conflict": "That slot is taken — pick another.",
         "invalid_input": "Check the form and try again.",
         "not_found": "Page not found."
+      }
+    },
+    "shop": {
+      "title": "Shop",
+      "cart": "{count} in cart",
+      "name": "Your name",
+      "email": "Email",
+      "checkout": "Checkout",
+      "paying": "Redirecting…",
+      "ordered": "Order placed.",
+      "offline": "Checkout is offline right now — call or visit us.",
+      "error": {
+        "forbidden": "Checkout is offline.",
+        "invalid_input": "Check the form.",
+        "not_found": "Page not found.",
+        "conflict": "Try again."
       }
     }
   }

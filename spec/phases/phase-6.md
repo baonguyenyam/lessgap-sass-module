@@ -97,7 +97,7 @@ appointment), and booking deposits (`booking.deposits` wired at last).
 - **Checks:** `pnpm test:integration`, `pnpm audit:tenancy`,
   `pnpm modules:check`.
 - **Done when:** a visitor buys a product; the tenant sees the order.
-- [ ] done
+- [x] done (7 models — `ProductCategory`, `Product` (type physical|digital|gift_card|menu_item), `ProductVariant`, `Cart` (`cart_id` cookie → Customer on checkout), `CartLine`, `Order`, `OrderLine` — @@rls cascade, 57 models classified, `deleteTenant` + T9 cover all. `src/lib/shop/totals.ts` — `cartTotal`/`orderTotal` (shipping flat-rate when not pickup). `src/modules/shop/module.ts` lifecycle. Site `/sites/[host]/shop` — products + variants, buy buttons hidden when `!canCharge` (hidden not broken); `addToCart` writes the cookie cart, `checkoutCart` builds Order+OrderLines then asks `createCheckout` (fee computed, Stripe session returned) and clears the cart; `markPaymentSucceeded` flips Order → `paid` via `payment.orderId`. `addProduct` honours `shop.products.max`. `/t/<slug>/orders` gated `orders.view` + `module.shop`. Integration `shop.test.ts` — checkout→Order+session+webhook path, `forbidden` without `chargesEnabled`, tenant isolation; unit totals 2/2; T9 green.)
 
 ### 6.5 — `ordering` module: menu items, modifiers, pickup slots
 - **Goal:** restaurant pickup ordering on `shop` `menu_item`s with

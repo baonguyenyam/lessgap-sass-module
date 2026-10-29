@@ -755,6 +755,12 @@
       "list": "{count} đặt bàn",
       "empty": "Chưa có đặt bàn — khách đặt trên trang /reserve của site.",
       "party": "{size} người"
+    },
+    "orders": {
+      "title": "Đơn hàng",
+      "subtitle": "Mọi đơn hàng",
+      "list": "{count} đơn",
+      "empty": "Chưa có đơn — khách mua trên trang /shop của site."
     }
   },
   "platform": {
@@ -1538,7 +1544,8 @@
     "getStarted": "Bắt đầu",
     "openMenu": "Mở menu",
     "backToTop": "Về đầu trang",
-    "reservations": "Đặt bàn"
+    "reservations": "Đặt bàn",
+    "orders": "Đơn hàng"
   },
   "faq": {
     "title": "Các câu hỏi thường gặp",
@@ -1921,6 +1928,22 @@
         "conflict": "Khung giờ đã có người đặt — chọn khung khác.",
         "invalid_input": "Kiểm tra lại thông tin.",
         "not_found": "Không tìm thấy trang."
+      }
+    },
+    "shop": {
+      "title": "Cửa hàng",
+      "cart": "{count} trong giỏ",
+      "name": "Tên của bạn",
+      "email": "Email",
+      "checkout": "Thanh toán",
+      "paying": "Đang chuyển…",
+      "ordered": "Đã đặt hàng.",
+      "offline": "Thanh toán đang tạm tắt — gọi hoặc ghé cửa hàng.",
+      "error": {
+        "forbidden": "Thanh toán tạm tắt.",
+        "invalid_input": "Kiểm tra lại thông tin.",
+        "not_found": "Không tìm thấy trang.",
+        "conflict": "Thử lại."
       }
     }
   }

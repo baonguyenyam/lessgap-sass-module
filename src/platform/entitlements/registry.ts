@@ -32,6 +32,10 @@ export const FEATURES = {
   "booking.sms_reminders": { kind: "boolean", default: false, requires: ["booking"] },
   "booking.deposits": { kind: "boolean", default: false, requires: ["booking"] },
   "payments.connect": { kind: "boolean", default: true },
+  shop: { kind: "boolean", default: true },
+  "shop.products.max": { kind: "limit", default: null, requires: ["shop"] },
+  "shop.shipping": { kind: "boolean", default: false, requires: ["shop"] },
+  "shop.gift_cards": { kind: "boolean", default: false, requires: ["shop"] },
 } as const satisfies Record<string, FeatureDefinition>
 
 export type FeatureKey = keyof typeof FEATURES

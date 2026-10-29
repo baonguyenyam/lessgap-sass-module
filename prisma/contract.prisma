@@ -1045,3 +1045,125 @@ trialEndsAt          TimestampString(3)?
     @@index([paymentId], map: "Refund_paymentId_idx")
     @@rls
   }
+
+  // The shop module (spec/07): products → anonymous cart → checkout on the
+  // connected account → Order/OrderLine, pickup or shipping. A `Cart` is
+  // keyed by a cookie until checkout attaches a Customer.
+  model ProductCategory {
+    id        String             @id(map: "ProductCategory_pkey") @onCreate(cuid(2))
+    tenantId  String
+    name      String
+    position  Int                @default(0)
+    createdAt TimestampString(3) @default(now())
+    updatedAt TimestampString(3) @default(now()) @onUpdate(now())
+    tenant    Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "ProductCategory_tenantId_fkey")
+    products  Product[]
+
+    @@index([tenantId], map: "ProductCategory_tenantId_idx")
+    @@rls
+  }
+
+  model Product {
+    id          String             @id(map: "Product_pkey") @onCreate(cuid(2))
+    tenantId    String
+    categoryId  String?
+    name        String
+    type        String             @default("physical")
+    description String?
+    imageUrl    String?
+    isActive    Boolean            @default(true)
+    createdAt   TimestampString(3) @default(now())
+    updatedAt   TimestampString(3) @default(now()) @onUpdate(now())
+    tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Product_tenantId_fkey")
+    category    ProductCategory?   @relation(fields: [categoryId], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "Product_categoryId_fkey")
+    variants    ProductVariant[]
+
+    @@index([tenantId], map: "Product_tenantId_idx")
+    @@rls
+  }
+
+  model ProductVariant {
+    id         String             @id(map: "ProductVariant_pkey") @onCreate(cuid(2))
+    tenantId   String
+    productId  String
+    name       String
+    priceCents Int
+    sku        String?
+    stockQty   Int?
+    createdAt  TimestampString(3) @default(now())
+    updatedAt  TimestampString(3) @default(now()) @onUpdate(now())
+    tenant     Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "ProductVariant_tenantId_fkey")
+    product    Product            @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "ProductVariant_productId_fkey")
+
+    @@index([tenantId], map: "ProductVariant_tenantId_idx")
+    @@index([productId], map: "ProductVariant_productId_idx")
+    @@rls
+  }
+
+  model Cart {
+    id         String             @id(map: "Cart_pkey") @onCreate(cuid(2))
+    tenantId   String
+    cartKey    String
+    customerId String?
+    createdAt  TimestampString(3) @default(now())
+    updatedAt  TimestampString(3) @default(now()) @onUpdate(now())
+    tenant     Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Cart_tenantId_fkey")
+    lines      CartLine[]
+
+    @@index([tenantId, cartKey], map: "Cart_tenantId_cartKey_idx")
+    @@rls
+  }
+
+  model CartLine {
+    id        String             @id(map: "CartLine_pkey") @onCreate(cuid(2))
+    tenantId  String
+    cartId    String
+    variantId String
+    quantity  Int                @default(1)
+    createdAt TimestampString(3) @default(now())
+    updatedAt TimestampString(3) @default(now()) @onUpdate(now())
+    tenant    Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "CartLine_tenantId_fkey")
+    cart      Cart               @relation(fields: [cartId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "CartLine_cartId_fkey")
+    variant   ProductVariant     @relation(fields: [variantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "CartLine_variantId_fkey")
+
+    @@index([tenantId], map: "CartLine_tenantId_idx")
+    @@index([cartId], map: "CartLine_cartId_idx")
+    @@rls
+  }
+
+  model Order {
+    id           String             @id(map: "Order_pkey") @onCreate(cuid(2))
+    tenantId     String
+    customerId   String?
+    customerName String
+    customerEmail String?
+    customerPhone String?
+    totalCents   Int
+    fulfilment   String             @default("pickup")
+    pickupSlot   String?
+    status       String             @default("received")
+    createdAt    TimestampString(3) @default(now())
+    updatedAt    TimestampString(3) @default(now()) @onUpdate(now())
+    tenant       Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Order_tenantId_fkey")
+    lines        OrderLine[]
+
+    @@index([tenantId], map: "Order_tenantId_idx")
+    @@rls
+  }
+
+  model OrderLine {
+    id             String             @id(map: "OrderLine_pkey") @onCreate(cuid(2))
+    tenantId       String
+    orderId        String
+    variantId      String?
+    name           String
+    quantity       Int                @default(1)
+    unitPriceCents Int
+    createdAt      TimestampString(3) @default(now())
+    tenant         Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "OrderLine_tenantId_fkey")
+    order          Order             @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "OrderLine_orderId_fkey")
+
+    @@index([tenantId], map: "OrderLine_tenantId_idx")
+    @@index([orderId], map: "OrderLine_orderId_idx")
+    @@rls
+  }
