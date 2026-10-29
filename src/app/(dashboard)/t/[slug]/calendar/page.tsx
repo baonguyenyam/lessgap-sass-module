@@ -5,6 +5,7 @@ import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AppointmentActions } from "@/components/booking/appointment-actions"
+import { BookingLiveUpdates } from "@/components/booking/live-updates"
 
 /** Dashboard → Calendar (task 5.3): the tenant's appointments grouped by
  * day — a member sees the whole team's book, a staff member filters to

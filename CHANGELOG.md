@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [3.0.0] - 2026-10-29
+
+**The calendar live-updates — Pusher Channels pushes `booking.changed` whenever an appointment lands or moves.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`, set `PUSHER_*` for realtime (the app works the same without it).
+
+### Added
+
+- **Pusher realtime** — `bookAppointment`/`manageAppointment` publish `booking.changed` on `private-tenant-<id>-booking`; `/api/pusher/auth` signs the channel for the member's tenant; `BookingLiveUpdates` refreshes the calendar
+
 ## [2.99.0] - 2026-10-29
 
 **A first-party `/status` page reads the platform's own health — no managed provider needed.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.

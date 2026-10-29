@@ -5,6 +5,7 @@ import { db8 } from "@/lib/db8"
 import { AppError } from "@/platform/errors"
 import { getEntitlements } from "@/platform/entitlements"
 import { requireModule } from "@/platform/modules/runtime"
+import { publishBookingChange } from "@/platform/realtime/pusher"
 import { audit } from "@/platform/audit"
 import { systemContext } from "@/platform/tenancy/context"
 import type { TenantContext } from "@/platform/tenancy/context"
@@ -183,6 +184,7 @@ export async function bookAppointment(input: {
       data: { staffId: match.staffId, startTs: input.startTs, status, source: "site" },
     })
     void ics
+    void publishBookingChange(site.tenantId, { appointmentId: appointment.id, status })
     return { id: appointment.id, status }
   } catch (error) {
     if (error instanceof AppError) return { error: error.code }
@@ -256,6 +258,7 @@ export async function manageAppointment(input: { token: string; toStatus?: strin
         note: "rescheduled",
       })
       await audit(c, { action: "booking.appointment_rescheduled", targetType: "Appointment", targetId: appointment.id })
+      void publishBookingChange(appointment.tenantId, { appointmentId: appointment.id, status: appointment.status })
     }
     // Specs and jobs call the action without a request store — revalidate
     // when there is one, never break the write over it.

@@ -31,7 +31,7 @@ the calendar subscribes. `/api/pusher/auth` signs the channel-auth.
 
 **Tests:** integration — a publish call fires on book/cancel (mock Pusher).
 **Done when:** the publishes + auth route exist.
-- [ ] done
+- [x] done (`tests/integration/realtime.test.ts` 2/2 — `publishBookingChange` triggers `private-tenant-<id>-booking`'s `booking.changed` when `PUSHER_*` is set and is a no-op without; `bookAppointment`/`manageAppointment` fire it; `/api/pusher/auth` signs the channel for the member's tenant; `BookingLiveUpdates` refreshes the calendar.)
 
 ### 13.3 `Location` — a tenant's second branch (ADR 0025)
 
