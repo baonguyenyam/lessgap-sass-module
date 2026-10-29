@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { AppError } from "@/platform/errors"
 import { requirePlatformRole } from "@/platform/staff"
 import { enqueueJob } from "@/platform/jobs/runner"
-import { restoreSnapshot } from "@/platform/backup/restore"
+import { restoreSnapshot, restoreInPlace } from "@/platform/backup/restore"
 import { audit } from "@/platform/audit"
 import { platformAuditContext } from "@/platform/audit"
 
@@ -38,6 +38,28 @@ export async function restoreToNewTenant(snapshotId: string) {
     })
     revalidatePath("/platform/backups")
     return result
+  } catch (error) {
+    if (error instanceof AppError) return { error: error.code }
+    return { error: "restore_failed" }
+  }
+}
+
+/** In-place restore (task 12.3): the same bundle goes back onto the tenant
+ * it came from — its rows are replaced by the snapshot's. Destructive on
+ * purpose: the tenant asked to "put it back how it was". */
+export async function restoreInPlaceAction(snapshotId: string) {
+  try {
+    const { user } = await requirePlatformRole()
+    const { bundle } = await (await import("@/platform/backup/restore")).fetchBundle(snapshotId)
+    const { rowCounts } = await restoreInPlace(bundle, bundle.tenantId)
+    await audit(platformAuditContext(user.id, bundle.tenantId), {
+      action: "backup.restored_in_place",
+      targetType: "TenantSnapshot",
+      targetId: snapshotId,
+      data: { rows: Object.values(rowCounts).reduce((s, n) => s + n, 0) },
+    })
+    revalidatePath("/platform/backups")
+    return {}
   } catch (error) {
     if (error instanceof AppError) return { error: error.code }
     return { error: "restore_failed" }

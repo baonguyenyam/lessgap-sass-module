@@ -1110,7 +1110,8 @@
       "error": {
         "restore_failed": "Phục hồi thất bại.",
         "snapshot_not_restorable": "Không thể phục hồi."
-      }
+      },
+      "restore_in_place": "Khôi phục tại chỗ"
     },
     "usage": {
       "title": "Sử dụng",

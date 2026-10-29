@@ -1110,7 +1110,8 @@
       "error": {
         "restore_failed": "Restore failed.",
         "snapshot_not_restorable": "Not restorable."
-      }
+      },
+      "restore_in_place": "Restore in place"
     },
     "usage": {
       "title": "Usage",

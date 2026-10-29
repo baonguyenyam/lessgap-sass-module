@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.96.0] - 2026-10-29
+
+**A snapshot can come back to the same tenant — "put it back how it was" replaces the tenant's rows with the snapshot's.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **`restoreInPlace`** — same bundle, same tenant: clears the tenant's rows and re-inserts the snapshot's with their original ids (`restoreBundle`'s remap stays for restore-to-new); `/platform/backups` gets a "Restore in place" button, audited
+
 ## [2.95.0] - 2026-10-29
 
 **A tenant can sell a prepaid bundle of sessions and a recurring membership — the ledgers keep each holding's twin.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.

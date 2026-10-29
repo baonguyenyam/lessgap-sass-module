@@ -44,15 +44,18 @@ const JSON_FIELDS: Record<string, Set<string>> = {
 
 export async function restoreBundle(
   bundle: SnapshotBundle,
-  newTenantId: string
+  newTenantId: string,
+  preserveIds = false
 ): Promise<{ rowCounts: Record<string, number> }> {
   // Pass 1 — every source id maps to a fresh id (the map is complete before
-  // any write, so a field rewritten in pass 2 always resolves).
+  // any write, so a field rewritten in pass 2 always resolves). `preserveIds`
+  // keeps the snapshot's own ids — an in-place restore inserts what it
+  // deleted (task 12.3).
   const idMap = new Map<string, string>()
   for (const model of TENANT_MODELS) {
     for (const row of bundle.tables[model] ?? []) {
       const id = (row as { id?: string }).id
-      if (id) idMap.set(id, newId())
+      if (id) idMap.set(id, preserveIds ? id : newId())
     }
   }
   const rowCounts: Record<string, number> = {}
@@ -101,4 +104,50 @@ export async function restoreSnapshot(snapshotId: string): Promise<{ newTenantId
   })
   await restoreBundle(bundle, tenant.id)
   return { newTenantId: tenant.id }
+}
+
+/**
+ * In-place restore (task 12.3): same bundle, same tenant — clear the
+ * tenant's own rows, then insert the snapshot's with their original ids
+ * (no remap — the snapshot is the tenant's own state). FK triggers are
+ * suspended so the clear/insert order doesn't matter.
+ */
+export async function restoreInPlace(
+  bundle: SnapshotBundle,
+  tenantId: string
+): Promise<{ rowCounts: Record<string, number> }> {
+  const rowCounts: Record<string, number> = {}
+  await authDb.transaction().execute(async (tx) => {
+    await sql`SET LOCAL session_replication_role = replica`.execute(tx)
+    for (const model of TENANT_MODELS) {
+      await sql`DELETE FROM ${sql.ref(model)} WHERE ${sql.ref("tenantId")} = ${tenantId}`.execute(tx)
+      const rows = bundle.tables[model] ?? []
+      rowCounts[model] = rows.length
+      for (const source of rows) {
+        const row: Record<string, unknown> = { ...(source as Record<string, unknown>), tenantId }
+        for (const [field, value] of Object.entries(row)) {
+          if (value !== null && (JSON_FIELDS[model]?.has(field) || typeof value === "object"))
+            row[field] = JSON.stringify(value)
+        }
+        await tx
+          .insertInto(model as never)
+          .values(row as never)
+          .execute()
+      }
+    }
+  })
+  return { rowCounts }
+}
+
+/** Fetch a snapshot's bundle from R2 — the shared half of the two restore
+ * paths (restoreSnapshot's restore-to-new and restoreInPlaceAction's
+ * in-place). */
+export async function fetchBundle(snapshotId: string): Promise<{ bundle: SnapshotBundle }> {
+  const snapshot = await db8.orm.public.TenantSnapshot.where({ id: snapshotId }).first()
+  if (!snapshot || snapshot.status !== "done" || !snapshot.r2Key || !storageConfigured()) {
+    throw new Error("snapshot not restorable")
+  }
+  const bytes = await downloadObject(snapshot.r2Key)
+  const bundle = JSON.parse((await gunzip(bytes)).toString()) as SnapshotBundle
+  return { bundle }
 }

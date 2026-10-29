@@ -68,6 +68,7 @@ export default async function PlatformBackupsPage() {
                   · {Math.round(s.sizeBytes / 1024)} KB · {toDate(s.createdAt).toUTCString().slice(0, 16)}
                 </span>
                 {s.status === "done" && s.r2Key && <BackupActions snapshotId={s.id} restore />}
+                {s.status === "done" && s.r2Key && <BackupActions snapshotId={s.id} inPlace />}
               </div>
             ))
           )}

@@ -13,7 +13,7 @@ spec/12-migrations-and-data.md, `src/app/actions/booking.ts`,
 
 ## Scope
 
-- Phase 12: in progress.
+- Phase 12: done.
 
 ## Tasks
 
@@ -54,7 +54,7 @@ other ids are preserved). Audited on the platform console.
 **Tests:** integration — snapshot → mutate → restore-in-place → the
 pre-snapshot state returns.
 **Done when:** the restore lands on the same tenant.
-- [ ] done
+- [x] done (`tests/integration/restore-in-place.test.ts` 1/1 — `restoreInPlace` clears the tenant's rows and re-inserts the bundle's with their original ids (`restoreBundle`'s remap stays for restore-to-new); `/platform/backups` gets a "Restore in place" button (`restoreInPlaceAction`, audited).)
 
 ## Exit criteria
 
