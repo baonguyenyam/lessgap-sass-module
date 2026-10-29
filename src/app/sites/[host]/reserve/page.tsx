@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { headers } from "next/headers"
+import { connection } from "next/server"
 import { getTranslations } from "next-intl/server"
 import { db8 } from "@/lib/db8"
 import { resolveHost } from "@/platform/tenancy/host"
@@ -9,6 +10,7 @@ import { ReserveForm } from "@/components/reservations/reserve-form"
 
 /** The site reserve page (task 5.8): party size → slot → details. */
 export default async function ReservePage() {
+  await connection()
   const host = (await headers()).get("host") ?? ""
   const resolved = await resolveHost(host)
   if (resolved.kind !== "site") notFound()

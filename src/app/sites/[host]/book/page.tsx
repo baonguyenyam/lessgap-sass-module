@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { headers } from "next/headers"
+import { connection } from "next/server"
 import { getTranslations } from "next-intl/server"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
@@ -13,6 +14,7 @@ import { BookingForm } from "@/components/booking/booking-form"
  * "any") and a slot from `availableSlots`, then their details. The form
  * posts to `bookAppointment`; the slot re-checks server-side. */
 export default async function BookPage() {
+  await connection()
   const host = (await headers()).get("host") ?? ""
   const resolved = await resolveHost(host)
   if (resolved.kind !== "site") notFound()

@@ -7,6 +7,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.85.0] - 2026-10-29
+
+**The ordering and quote surfaces run as a Playwright spec — and the spec flushed out a class of latent site-page bugs: unstable render values, missing translations, a module dependency nobody had exercised.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Fixed
+
+- **Site sub-pages under Cache Components** — `/book`, `/book/manage`, `/order`, `/quote`, `/reserve`, `/shop` and `/quote/accept` now `await connection()`; `new Date()`/`crypto.randomUUID()` in render tripped the unstable-value check and 500'd every request-time page once a `module_inactive` surfaced (the error path itself calls `nowTs`). `force-dynamic` is not allowed with `cacheComponents`.
+- **`OrderClient` slot time** — `now` comes from the server as a prop; a client-side `new Date()` in render is flagged even in a `"use client"` component, and `setState` in `useEffect` trips `react-hooks/set-state-in-effect`.
+- **Missing `site.*` translations** — `site.booking`, `site.order`, `site.quote` (with `subtitle`), `site.reserve`, `site.shop` namespaces added.
+
+### Added
+
+- **`tests/e2e/orders.spec.ts`** — the `/order` + `/quote` surfaces and the rows they land (`ordering` depends on `shop` — specs enable both).
+
 ## [2.84.0] - 2026-10-29
 
 **The booking journey runs as a Playwright spec — site page on a real host, appointment, signed manage link, reschedule — and `manageAppointment` no longer breaks outside a request.** This is a MINOR: `git pull`, `pnpm install`.

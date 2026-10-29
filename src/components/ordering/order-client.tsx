@@ -14,6 +14,7 @@ import { placeOrder } from "@/app/actions/ordering"
  * a pickup slot — the client recomputes slots for the pick; the server
  * re-checks capacity at placeOrder. */
 export function OrderClient({
+  now,
   products,
   groups,
   modifiers,
@@ -28,6 +29,9 @@ export function OrderClient({
   rules: PickupRule[]
   capacity: number
   existing: { pickupSlot: string | null; status: string }[]
+  /** ISO — computed server-side (a client-side `new Date()` in
+   * render trips Cache Components' prerender check). */
+  now: string
   canCharge: boolean
 }) {
   const t = useTranslations("site.order")
@@ -39,10 +43,9 @@ export function OrderClient({
   const [done, setDone] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
-  const now = new Date()
   const slots = pickupSlots(rules, capacity, existing, {
-    startTs: now.toISOString(),
-    endTs: new Date(now.getTime() + 14 * 24 * 3600 * 1000).toISOString(),
+    startTs: now,
+    endTs: new Date(new Date(now).getTime() + 14 * 24 * 3600 * 1000).toISOString(),
   }).slice(0, 30)
   const productGroups = line ? groups.filter((g) => g.productId === line.productId) : []
   async function submit(e: React.FormEvent) {

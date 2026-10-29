@@ -1980,6 +1980,101 @@
     "maintenance": {
       "title": "We're temporarily closed",
       "body": "This site is undergoing maintenance. Please check back soon."
+    },
+    "booking": {
+      "title": "Book an appointment",
+      "no_phi": "Please do not include medical details.",
+      "service": "Service",
+      "choose": "Choose…",
+      "staff": "Staff",
+      "any_staff": "Any staff",
+      "slot": "Time",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "marketing_consent": "I'd like offers and updates.",
+      "sms_consent": "Text me about this appointment.",
+      "notes": "Notes",
+      "book": "Book",
+      "requested": "Requested — we'll confirm shortly.",
+      "confirmed": "Confirmed — see you then.",
+      "error": {
+        "invalid_input": "Please check the details.",
+        "conflict": "That slot was just taken — pick another.",
+        "module_inactive": "Booking is unavailable.",
+        "rate_limited": "Too many tries — wait a minute.",
+        "unauthorized": "Please sign in first.",
+        "not_found": "Not found.",
+        "unknown": "Something went wrong."
+      }
+    },
+    "order": {
+      "title": "Order for pickup",
+      "menu": "Menu",
+      "cart": "Your order",
+      "add": "Add",
+      "name": "Name",
+      "phone": "Phone",
+      "time": "Pickup time",
+      "place_order": "Place order",
+      "empty": "Nothing here yet.",
+      "total": "Total",
+      "placed": "Order placed — we'll see you at pickup.",
+      "error": {
+        "invalid_input": "Please check the details.",
+        "conflict": "That slot was just taken — pick another.",
+        "module_inactive": "Ordering is unavailable.",
+        "rate_limited": "Too many tries — wait a minute.",
+        "not_found": "Not found.",
+        "unknown": "Something went wrong."
+      }
+    },
+    "quote": {
+      "title": "Request a quote",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "details": "What do you need?",
+      "submit": "Request quote",
+      "sent": "Request received — we'll get back to you.",
+      "error": {
+        "invalid_input": "Please check the details.",
+        "module_inactive": "Quotes are unavailable.",
+        "rate_limited": "Too many tries — wait a minute.",
+        "not_found": "Not found.",
+        "unknown": "Something went wrong."
+      },
+      "subtitle": "Tell us what you need and we'll send a quote."
+    },
+    "reserve": {
+      "title": "Reserve a table",
+      "party": "Party size",
+      "date": "Date",
+      "time": "Time",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "reserve": "Reserve",
+      "confirmed": "Reserved — see you then.",
+      "error": {
+        "invalid_input": "Please check the details.",
+        "conflict": "That slot was just taken — pick another.",
+        "module_inactive": "Reservations are unavailable.",
+        "not_found": "Not found.",
+        "unknown": "Something went wrong."
+      }
+    },
+    "shop": {
+      "title": "Shop",
+      "cart": "Cart",
+      "add": "Add to cart",
+      "checkout": "Checkout",
+      "empty": "Nothing here yet.",
+      "total": "Total",
+      "error": {
+        "not_found": "Not found.",
+        "unknown": "Something went wrong."
+      }
     }
   }
 }

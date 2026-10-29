@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { headers } from "next/headers"
+import { connection } from "next/server"
 import { getTranslations } from "next-intl/server"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
@@ -12,6 +13,7 @@ import { ManageForm } from "@/components/booking/manage-form"
 /** The manage-booking link (task 5.4): a customer's signed token opens a
  * page to reschedule or cancel their own appointment. */
 export default async function ManagePage({ params }: { params: Promise<{ host: string; token: string }> }) {
+  await connection()
   const { host, token } = await params
   const verified = verifyManageToken(token)
   if (!verified) notFound()

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { headers } from "next/headers"
+import { connection } from "next/server"
 import { getTranslations } from "next-intl/server"
 import { db8 } from "@/lib/db8"
 import { resolveHost } from "@/platform/tenancy/host"
@@ -9,6 +10,7 @@ import { AcceptButtons } from "@/components/quotes/accept-buttons"
 /** The signed quote accept page (task 6.6): the token is the quote's
  * signed link — lines, total, deposit (if any), accept or decline. */
 export default async function QuoteAcceptPage({ params }: { params: Promise<{ token: string }> }) {
+  await connection()
   const { token } = await params
   const host = (await headers()).get("host") ?? ""
   const resolved = await resolveHost(host)

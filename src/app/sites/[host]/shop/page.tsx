@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { headers } from "next/headers"
+import { connection } from "next/server"
 import { getTranslations } from "next-intl/server"
 import { db8 } from "@/lib/db8"
 import { resolveHost } from "@/platform/tenancy/host"
@@ -11,6 +12,7 @@ import { ShopClient } from "@/components/shop/shop-client"
 /** The site shop (task 6.4): products with their variants — buy only when
  * the tenant's connected account can charge (spec/05, hidden not broken). */
 export default async function ShopPage() {
+  await connection()
   const host = (await headers()).get("host") ?? ""
   const resolved = await resolveHost(host)
   if (resolved.kind !== "site") notFound()

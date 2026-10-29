@@ -1980,6 +1980,101 @@
     "maintenance": {
       "title": "Tạm ngưng hoạt động",
       "body": "Site đang bảo trì. Vui lòng quay lại sau."
+    },
+    "booking": {
+      "title": "Đặt lịch hẹn",
+      "no_phi": "Vui lòng không ghi thông tin y tế.",
+      "service": "Dịch vụ",
+      "choose": "Chọn…",
+      "staff": "Nhân viên",
+      "any_staff": "Bất kỳ",
+      "slot": "Giờ",
+      "name": "Họ tên",
+      "email": "Email",
+      "phone": "Điện thoại",
+      "marketing_consent": "Tôi muốn nhận ưu đãi.",
+      "sms_consent": "Nhắn tin về lịch hẹn này.",
+      "notes": "Ghi chú",
+      "book": "Đặt lịch",
+      "requested": "Đã gửi — chúng tôi sẽ xác nhận sớm.",
+      "confirmed": "Đã xác nhận — hẹn gặp bạn.",
+      "error": {
+        "invalid_input": "Kiểm tra lại thông tin.",
+        "conflict": "Slot vừa bị đặt — chọn giờ khác.",
+        "module_inactive": "Đặt lịch không khả dụng.",
+        "rate_limited": "Quá nhiều lần thử — đợi một phút.",
+        "unauthorized": "Vui lòng đăng nhập.",
+        "not_found": "Không tìm thấy.",
+        "unknown": "Có lỗi xảy ra."
+      }
+    },
+    "order": {
+      "title": "Đặt mang về",
+      "menu": "Thực đơn",
+      "cart": "Đơn của bạn",
+      "add": "Thêm",
+      "name": "Tên",
+      "phone": "Điện thoại",
+      "time": "Giờ lấy",
+      "place_order": "Đặt đơn",
+      "empty": "Chưa có gì.",
+      "total": "Tổng",
+      "placed": "Đã đặt — hẹn bạn lúc lấy hàng.",
+      "error": {
+        "invalid_input": "Kiểm tra lại thông tin.",
+        "conflict": "Slot vừa bị đặt — chọn giờ khác.",
+        "module_inactive": "Đặt hàng không khả dụng.",
+        "rate_limited": "Quá nhiều lần thử — đợi một phút.",
+        "not_found": "Không tìm thấy.",
+        "unknown": "Có lỗi xảy ra."
+      }
+    },
+    "quote": {
+      "title": "Yêu cầu báo giá",
+      "name": "Tên",
+      "email": "Email",
+      "phone": "Điện thoại",
+      "details": "Bạn cần gì?",
+      "submit": "Gửi yêu cầu",
+      "sent": "Đã nhận — chúng tôi sẽ phản hồi.",
+      "error": {
+        "invalid_input": "Kiểm tra lại thông tin.",
+        "module_inactive": "Báo giá không khả dụng.",
+        "rate_limited": "Quá nhiều lần thử — đợi một phút.",
+        "not_found": "Không tìm thấy.",
+        "unknown": "Có lỗi xảy ra."
+      },
+      "subtitle": "Cho chúng tôi biết bạn cần gì, chúng tôi sẽ gửi báo giá."
+    },
+    "reserve": {
+      "title": "Đặt bàn",
+      "party": "Số khách",
+      "date": "Ngày",
+      "time": "Giờ",
+      "name": "Họ tên",
+      "email": "Email",
+      "phone": "Điện thoại",
+      "reserve": "Đặt bàn",
+      "confirmed": "Đã đặt — hẹn gặp bạn.",
+      "error": {
+        "invalid_input": "Kiểm tra lại thông tin.",
+        "conflict": "Slot vừa bị đặt — chọn giờ khác.",
+        "module_inactive": "Đặt bàn không khả dụng.",
+        "not_found": "Không tìm thấy.",
+        "unknown": "Có lỗi xảy ra."
+      }
+    },
+    "shop": {
+      "title": "Cửa hàng",
+      "cart": "Giỏ hàng",
+      "add": "Thêm vào giỏ",
+      "checkout": "Thanh toán",
+      "empty": "Chưa có gì.",
+      "total": "Tổng",
+      "error": {
+        "not_found": "Không tìm thấy.",
+        "unknown": "Có lỗi xảy ra."
+      }
     }
   }
 }
