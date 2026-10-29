@@ -168,6 +168,11 @@ async function main() {
       create: { key: "module.shop", value: true, updatedById: "seed" },
       update: {},
     })
+    await db8.orm.public.PlatformSwitch.upsert({
+      conflictOn: { key: "module.ordering" },
+      create: { key: "module.ordering", value: true, updatedById: "seed" },
+      update: {},
+    })
     console.log(`Seed complete: ${examplePlans.length} example plans upserted`)
     const roots = await grantRootFromConfig()
     if (roots > 0) console.log(`ROOT granted to ${roots} account(s) from ROOT_EMAILS`)

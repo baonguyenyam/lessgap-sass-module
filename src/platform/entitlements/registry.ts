@@ -36,6 +36,7 @@ export const FEATURES = {
   "shop.products.max": { kind: "limit", default: null, requires: ["shop"] },
   "shop.shipping": { kind: "boolean", default: false, requires: ["shop"] },
   "shop.gift_cards": { kind: "boolean", default: false, requires: ["shop"] },
+  ordering: { kind: "boolean", default: true },
 } as const satisfies Record<string, FeatureDefinition>
 
 export type FeatureKey = keyof typeof FEATURES

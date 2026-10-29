@@ -761,6 +761,17 @@
       "subtitle": "Mọi đơn hàng",
       "list": "{count} đơn",
       "empty": "Chưa có đơn — khách mua trên trang /shop của site."
+    },
+    "ordering": {
+      "board_title": "Bảng đơn",
+      "board_subtitle": "Hàng đợi bếp — nhận đến xong",
+      "empty": "không có đơn",
+      "status": {
+        "received": "Đã nhận",
+        "preparing": "Đang làm",
+        "ready": "Sẵn sàng",
+        "done": "Xong"
+      }
     }
   },
   "platform": {
@@ -1944,6 +1955,25 @@
         "invalid_input": "Kiểm tra lại thông tin.",
         "not_found": "Không tìm thấy trang.",
         "conflict": "Thử lại."
+      }
+    },
+    "order": {
+      "title": "Đặt món mang đi",
+      "item": "Món",
+      "choose": "Chọn…",
+      "pickup_slot": "Giờ lấy",
+      "left": "còn {count}",
+      "name": "Tên của bạn",
+      "phone": "Điện thoại",
+      "place_order": "Đặt món",
+      "placing": "Đang đặt…",
+      "ordered": "Đã đặt món.",
+      "offline": "Đặt online đang tắt — gọi chúng tôi.",
+      "error": {
+        "forbidden": "Đặt món đang tắt.",
+        "invalid_input": "Kiểm tra lại thông tin.",
+        "not_found": "Không tìm thấy trang.",
+        "conflict": "Khung giờ đầy — chọn giờ khác."
       }
     }
   }

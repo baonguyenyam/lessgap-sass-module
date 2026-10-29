@@ -1077,6 +1077,7 @@ trialEndsAt          TimestampString(3)?
     tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Product_tenantId_fkey")
     category    ProductCategory?   @relation(fields: [categoryId], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "Product_categoryId_fkey")
     variants    ProductVariant[]
+    modifierGroups ProductModifierGroup[]
 
     @@index([tenantId], map: "Product_tenantId_idx")
     @@rls
@@ -1159,11 +1160,52 @@ trialEndsAt          TimestampString(3)?
     name           String
     quantity       Int                @default(1)
     unitPriceCents Int
+    modifiers    Json                @default(json`[]`)
     createdAt      TimestampString(3) @default(now())
     tenant         Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "OrderLine_tenantId_fkey")
     order          Order             @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "OrderLine_orderId_fkey")
 
     @@index([tenantId], map: "OrderLine_tenantId_idx")
     @@index([orderId], map: "OrderLine_orderId_idx")
+    @@rls
+  }
+
+  // The ordering module (spec/07): restaurant menu items carry modifier
+  // groups — "size" or "toppings" — each option adding priceCents. The
+  // OrderLine records chosen modifiers as JSON so totals stay what the
+  // customer saw.
+  model ProductModifierGroup {
+    id            String             @id(map: "ProductModifierGroup_pkey") @onCreate(cuid(2))
+    tenantId      String
+    productId     String
+    name          String
+    minSelections Int                @default(0)
+    maxSelections Int                @default(1)
+    position      Int                @default(0)
+    createdAt     TimestampString(3) @default(now())
+    updatedAt     TimestampString(3) @default(now()) @onUpdate(now())
+    tenant        Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "ProductModifierGroup_tenantId_fkey")
+    product       Product            @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "ProductModifierGroup_productId_fkey")
+    modifiers     ProductModifier[]
+
+    @@index([tenantId], map: "ProductModifierGroup_tenantId_idx")
+    @@index([productId], map: "ProductModifierGroup_productId_idx")
+    @@rls
+  }
+
+  model ProductModifier {
+    id           String             @id(map: "ProductModifier_pkey") @onCreate(cuid(2))
+    tenantId     String
+    groupId      String
+    name         String
+    priceCents   Int                @default(0)
+    position     Int                @default(0)
+    createdAt    TimestampString(3) @default(now())
+    updatedAt    TimestampString(3) @default(now()) @onUpdate(now())
+    tenant       Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "ProductModifier_tenantId_fkey")
+    group        ProductModifierGroup @relation(fields: [groupId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "ProductModifier_groupId_fkey")
+
+    @@index([tenantId], map: "ProductModifier_tenantId_idx")
+    @@index([groupId], map: "ProductModifier_groupId_idx")
     @@rls
   }

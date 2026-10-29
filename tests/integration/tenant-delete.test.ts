@@ -41,6 +41,8 @@ describe("tenant deletion (T9)", () => {
       Payment,
       Product,
       ProductCategory,
+      ProductModifier,
+      ProductModifierGroup,
       ProductVariant,
       Refund,
       Reservation,
@@ -175,6 +177,9 @@ describe("tenant deletion (T9)", () => {
       ProductCategory.create({ tenantId: tenant.id, name: "Gifts" }).then((c) =>
         Product.create({ tenantId: tenant.id, categoryId: c.id, name: "Card" }).then((p) =>
           Promise.all([
+            ProductModifierGroup.create({ tenantId: tenant.id, productId: p.id, name: "Size" }).then((g) =>
+              ProductModifier.create({ tenantId: tenant.id, groupId: g.id, name: "Large", priceCents: 200 })
+            ),
             ProductVariant.create({ tenantId: tenant.id, productId: p.id, name: "Std", priceCents: 500 }).then((v) =>
               Cart.create({ tenantId: tenant.id, cartKey: "k1" }).then((cart) =>
                 CartLine.create({ tenantId: tenant.id, cartId: cart.id, variantId: v.id, quantity: 1 })
@@ -226,6 +231,8 @@ describe("tenant deletion (T9)", () => {
       ["OrderLine", OrderLine, "tenantId"],
       ["Product", Product, "tenantId"],
       ["ProductCategory", ProductCategory, "tenantId"],
+      ["ProductModifier", ProductModifier, "tenantId"],
+      ["ProductModifierGroup", ProductModifierGroup, "tenantId"],
       ["ProductVariant", ProductVariant, "tenantId"],
       ["Payment", Payment, "tenantId"],
       ["Refund", Refund, "tenantId"],

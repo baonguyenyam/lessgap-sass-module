@@ -113,7 +113,7 @@ appointment), and booking deposits (`booking.deposits` wired at last).
 - **Checks:** `pnpm test:integration`, `pnpm modules:check`.
 - **Done when:** a diner orders with modifiers for a pickup slot; the
   board moves the order received → preparing → ready → done.
-- [ ] done
+- [x] done (2 models — `ProductModifierGroup` (min/max selections) + `ProductModifier` (price delta) + `OrderLine.modifiers` JSON — @@rls cascade, 59 models classified, `deleteTenant` + T9 cover all. `pickupSlots(rules, capacity, existing)` emits each `slotMinutes` window inside `ReservationRule`s and counts non-canceled orders per slot (kitchen capacity — the server re-checks at `placeOrder`); `orderLineTotal` adds modifiers × quantity. `src/modules/ordering/module.ts` (dependsOn `shop`). `placeOrder` validates `menu_item` products + modifiers, computes totals, writes Order+OrderLines (modifiers as JSON), asks `createCheckout`. `setOrderStatus` walks received→preparing→ready→done. `/sites/[host]/order` + `/t/<slug>/orders/board` (four columns); `ordering` feature + `module.ordering` seed. Unit `pickup-slots.test.ts` 3/3; integration `ordering.test.ts` — modifier totals, slot capacity → `conflict`, board transitions (skip → `invalid_input`).)
 
 ### 6.6 — `quotes` module: request → quote → accept → convert
 - **Goal:** schema-driven request forms, priced quotes, signed accept

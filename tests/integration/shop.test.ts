@@ -27,7 +27,7 @@ vi.mock("@/platform/payments/connect", async (importOriginal) => {
 // One jar for every cookies() call — addToCart and checkoutCart share it.
 const sharedJar = new Map<string, string>()
 
-const { checkoutCart, addToCart, addProduct } = await import("@/app/actions/shop")
+const { checkoutCart, addToCart } = await import("@/app/actions/shop")
 const { resolveHost } = await import("@/platform/tenancy/host")
 const { createCheckout } = await import("@/platform/payments/connect")
 

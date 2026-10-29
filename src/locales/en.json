@@ -761,6 +761,17 @@
       "subtitle": "Every shop order",
       "list": "{count} orders",
       "empty": "No orders yet — visitors buy on the site's /shop page."
+    },
+    "ordering": {
+      "board_title": "Order board",
+      "board_subtitle": "Kitchen queue — received to done",
+      "empty": "no orders",
+      "status": {
+        "received": "Received",
+        "preparing": "Preparing",
+        "ready": "Ready",
+        "done": "Done"
+      }
     }
   },
   "platform": {
@@ -1944,6 +1955,25 @@
         "invalid_input": "Check the form.",
         "not_found": "Page not found.",
         "conflict": "Try again."
+      }
+    },
+    "order": {
+      "title": "Order for pickup",
+      "item": "Item",
+      "choose": "Choose…",
+      "pickup_slot": "Pickup time",
+      "left": "{count} left",
+      "name": "Your name",
+      "phone": "Phone",
+      "place_order": "Place order",
+      "placing": "Placing…",
+      "ordered": "Order placed.",
+      "offline": "Online ordering is offline — call us.",
+      "error": {
+        "forbidden": "Ordering is offline.",
+        "invalid_input": "Check the form.",
+        "not_found": "Page not found.",
+        "conflict": "That slot is full — pick another."
       }
     }
   }

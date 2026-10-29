@@ -4,10 +4,11 @@ import module_1 from "./catalog/module"
 import module_2 from "./customers/module"
 import module_3 from "./newsletter/module"
 import module_4 from "./notifications/module"
-import module_5 from "./payments/module"
-import module_6 from "./reservations/module"
-import module_7 from "./shop/module"
-import module_8 from "./team/module"
+import module_5 from "./ordering/module"
+import module_6 from "./payments/module"
+import module_7 from "./reservations/module"
+import module_8 from "./shop/module"
+import module_9 from "./team/module"
 
 export const moduleRegistry = {
   "booking": module_0,
@@ -15,9 +16,10 @@ export const moduleRegistry = {
   "customers": module_2,
   "newsletter": module_3,
   "notifications": module_4,
-  "payments": module_5,
-  "reservations": module_6,
-  "shop": module_7,
-  "team": module_8,
+  "ordering": module_5,
+  "payments": module_6,
+  "reservations": module_7,
+  "shop": module_8,
+  "team": module_9,
 } as const
 export type ModuleKey = keyof typeof moduleRegistry

@@ -7,6 +7,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.66.0] - 2026-10-29
+
+**The ordering module: restaurant pickup ordering — menu items with modifiers, capacity-bounded pickup slots, and a kitchen board.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **`ordering` module** — `ProductModifierGroup`/`ProductModifier` on `menu_item` products; `OrderLine.modifiers` records what the customer chose
+- **`pickupSlots`** — every `ReservationRule` window emits `slotMinutes` pickups; a slot stops appearing when its kitchen capacity fills
+- **Site order** (`/sites/[host]/order`) — item + modifiers + a pickup slot → checkout on the tenant's connected account
+- **Order board** (`/t/<slug>/orders/board`) — the kitchen moves an order received → preparing → ready → done
+
 ## [2.65.0] - 2026-10-29
 
 **The shop module: products → cookie cart → checkout on the tenant's Stripe account → orders.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.

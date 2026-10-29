@@ -55,6 +55,8 @@ export const MODEL_CLASSIFICATION = {
   Product: { kind: "tenant-owned", reason: "A tenant's sellable items (shop module)." },
   ProductCategory: { kind: "tenant-owned", reason: "A tenant's product groupings (shop module)." },
   ProductVariant: { kind: "tenant-owned", reason: "Priced variants of a tenant's products." },
+  ProductModifierGroup: { kind: "tenant-owned", reason: "Modifier groups on a tenant's menu items (ordering module)." },
+  ProductModifier: { kind: "tenant-owned", reason: "Priced options inside a tenant's modifier groups." },
   Plan: { kind: "global", reason: "Platform-wide plan catalogue." },
   PlatformSwitch: { kind: "global", reason: "Platform-wide feature and setting switches." },
   Project: { kind: "identity", reason: "Legacy kit records are scoped to their User until Phase 1 retires them." },
