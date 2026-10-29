@@ -68,7 +68,7 @@ describe("gift cards (12.1)", () => {
     const { appointment } = await provision()
 
     const bought = await buyGiftCard({ amountCents: 8000, buyerEmail: "b@example.test" })
-    const code = "code" in bought ? bought.code : ""
+    const code = "code" in bought && bought.code ? bought.code : ""
     expect(code).not.toBe("")
 
     const redeemed = await redeemGiftCard({ code, appointmentId: appointment.id })
@@ -86,12 +86,12 @@ describe("gift cards (12.1)", () => {
 
     // A spent-down card stops.
     const small = await buyGiftCard({ amountCents: 1000 })
-    const code2 = "code" in small ? small.code : ""
+    const code2 = "code" in small && small.code ? small.code : ""
     const appt2 = await db8.orm.public.Appointment.create({
       tenantId: TENANT,
       staffId: appointment.staffId,
       customerId: appointment.customerId,
-      serviceId: appointment.serviceId,
+      serviceId: appointment.serviceId ?? null,
       startTs: toTs(new Date("2099-12-30T10:00:00Z")),
       endTs: toTs(new Date("2099-12-30T11:00:00Z")),
       status: "completed",
