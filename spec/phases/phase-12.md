@@ -13,7 +13,7 @@ spec/12-migrations-and-data.md, `src/app/actions/booking.ts`,
 
 ## Scope
 
-- Phase 12: done.
+- Phase 12: in progress.
 
 ## Tasks
 
@@ -55,6 +55,27 @@ other ids are preserved). Audited on the platform console.
 pre-snapshot state returns.
 **Done when:** the restore lands on the same tenant.
 - [x] done (`tests/integration/restore-in-place.test.ts` 1/1 — `restoreInPlace` clears the tenant's rows and re-inserts the bundle's with their original ids (`restoreBundle`'s remap stays for restore-to-new); `/platform/backups` gets a "Restore in place" button (`restoreInPlaceAction`, audited).)
+
+### 12.4 The manage page asks for the review
+
+`submitReview` exists; the visitor can't reach it — a `completed`
+appointment's manage page now asks, the token proving the visit.
+
+**Tests:** e2e — a completed appointment's manage page shows the form; a
+submitted review lands `pending`.
+**Done when:** the form renders and submits.
+- [x] done (`src/components/booking/review-form.tsx` — the manage page's `completed` appointment offers a rating + note → `submitReview`; an existing review's status shows instead.)
+
+### 12.5 The dashboard sells the cards, packages and memberships
+
+12.1's and 12.2's actions exist but the till can't reach them — a
+`/t/<slug>/sales` page sells a `GiftCard`, sells a `Package` onto a
+customer, activates a `Membership`, and lists the holdings.
+
+**Tests:** integration — the page's actions land the rows; e2e — sell a
+card and see it listed.
+**Done when:** the sell + list paths work end-to-end.
+- [ ] done
 
 ## Exit criteria
 

@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.97.0] - 2026-10-29
+
+**A completed appointment's manage page asks for a review — the visitor-facing half of the review loop.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`ReviewForm` on `/book/manage/[token]`** — a `completed` appointment offers a rating + a note → `submitReview`; the review's own status (`pending`/`published`/`rejected`) shows once it's in
+
 ## [2.96.0] - 2026-10-29
 
 **A snapshot can come back to the same tenant — "put it back how it was" replaces the tenant's rows with the snapshot's.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.

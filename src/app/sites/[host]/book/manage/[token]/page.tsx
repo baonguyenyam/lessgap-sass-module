@@ -9,6 +9,7 @@ import { resolveHost } from "@/platform/tenancy/host"
 import { availableSlots } from "@/lib/availability"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ManageForm } from "@/components/booking/manage-form"
+import { ReviewForm } from "@/components/booking/review-form"
 
 /** The manage-booking link (task 5.4): a customer's signed token opens a
  * page to reschedule or cancel their own appointment. */
@@ -28,10 +29,11 @@ export default async function ManagePage({ params }: { params: Promise<{ host: s
     .include("service")
     .first()
   if (!appointment) notFound()
-  const [rules, timeOff, existing] = await Promise.all([
+  const [rules, timeOff, existing, existingReview] = await Promise.all([
     db8.orm.public.AvailabilityRule.where({ tenantId: resolved.tenantId }).all(),
     db8.orm.public.TimeOff.where({ tenantId: resolved.tenantId }).all(),
     db8.orm.public.Appointment.where({ tenantId: resolved.tenantId }).all(),
+    db8.orm.public.Review.where({ tenantId: resolved.tenantId, appointmentId: appointment.id }).first(),
   ])
   const now = new Date()
   const slots = availableSlots(
@@ -78,6 +80,16 @@ export default async function ManagePage({ params }: { params: Promise<{ host: s
         status={appointment.status}
         slots={slots.slice(0, 60).map((s) => ({ ...s, label: `${toDate(s.startTs).toUTCString()}` }))}
       />
+      {appointment.status === "completed" && (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("review_title")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {existingReview ? <p>{t(`review_${existingReview.status}`)}</p> : <ReviewForm token={token} />}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

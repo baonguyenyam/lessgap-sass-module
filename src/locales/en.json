@@ -2038,7 +2038,16 @@
       "waitlist_date": "Day you wanted",
       "waitlist_join": "Join the waitlist",
       "waitlist_joining": "Joining…",
-      "waitlist_joined": "You're on the list — we'll let you know when a slot frees."
+      "waitlist_joined": "You're on the list — we'll let you know when a slot frees.",
+      "review_title": "How was your visit?",
+      "review_rating": "Rating (1–5)",
+      "review_body": "A note (optional)",
+      "review_submit": "Leave a review",
+      "review_submitting": "Sending…",
+      "review_thanks": "Thanks — the review waits for the tenant's approval.",
+      "review_pending": "Your review is waiting for approval.",
+      "review_published": "Your review is live — thank you!",
+      "review_rejected": "Your review wasn't published."
     },
     "order": {
       "title": "Order for pickup",

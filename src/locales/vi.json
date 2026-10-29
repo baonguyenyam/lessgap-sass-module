@@ -2038,7 +2038,16 @@
       "waitlist_date": "Ngày bạn muốn",
       "waitlist_join": "Tham gia danh sách chờ",
       "waitlist_joining": "Đang thêm…",
-      "waitlist_joined": "Bạn đã vào danh sách — chúng tôi sẽ báo khi có chỗ."
+      "waitlist_joined": "Bạn đã vào danh sách — chúng tôi sẽ báo khi có chỗ.",
+      "review_title": "Bạn thấy buổi hẹn thế nào?",
+      "review_rating": "Đánh giá (1–5)",
+      "review_body": "Ghi chú (không bắt buộc)",
+      "review_submit": "Gửi đánh giá",
+      "review_submitting": "Đang gửi…",
+      "review_thanks": "Cảm ơn — đánh giá đang chờ duyệt.",
+      "review_pending": "Đánh giá của bạn đang chờ duyệt.",
+      "review_published": "Đánh giá của bạn đã đăng — cảm ơn!",
+      "review_rejected": "Đánh giá của bạn không được đăng."
     },
     "order": {
       "title": "Đặt mang về",
