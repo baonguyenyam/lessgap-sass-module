@@ -150,6 +150,8 @@ out of scope, even when it looks small: write it down under "Later" instead.
 
 ## Phase 7 — Chatbot
 
+**Status:** done (2026-10-29).
+
 **Read:** [chatbot-rag.md](./08-chatbot-rag.md), ADR 0007.
 
 **Scope**

@@ -1,6 +1,6 @@
 # Phase 7 — Chatbot (retrieval-augmented)
 
-**Status:** draft
+**Status:** done (2026-10-29)
 **Roadmap:** [roadmap.md#phase-7--chatbot](../roadmap.md)
 **Read first:** [chatbot-rag.md](../08-chatbot-rag.md),
 [ADR 0007](../adr/0007-pgvector-for-rag.md),
