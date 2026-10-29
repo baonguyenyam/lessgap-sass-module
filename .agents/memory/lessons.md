@@ -1460,3 +1460,21 @@ which bypasses RLS. The task 8.1 coverage test now lists `pg_policies` +
 `pg_class.relrowsecurity` for every `tenant-owned` model. **When you add
 `@@rls` to a model, add the `policy_all` block in the same change — and
 check `policy_all` is declared whenever a model looks un-isolated.**
+### 2026-10-29 — `db8` singleton in e2e specs: never `close()` inside a test
+The first `sites.spec.ts` closed `db8` at the end of each test; the next
+test's `provision()` hit `Postgres client is closed` — the singleton does
+not reopen. Open it in `beforeAll`, close it in `afterAll`.
+
+### 2026-10-29 — Chromium can't override `Host`; test site hosts through `request`
+`context.setExtraHTTPHeaders({ host })` + `page.goto` fails with
+`net::ERR_INVALID_ARGUMENT` — browsers block `Host`. Playwright's Node-side
+`request` API sends it fine: use `request.get("/", { headers: { host } })`
+and assert on `res.text()` instead of `page` locators.
+
+### 2026-10-29 — the `/sites/[host]` rewrite needs the host in the path
+The proxy rewrote a site's `/` to `/sites` (no segment), which never
+matched `/sites/[host]` — the site's root URL 404'd from task 3.1 to 9.1
+because every test hit `resolveHost`/`getSiteData` directly and no E2E
+had ever fetched a site through the proxy. The rewrite is
+`/sites/${host}${pathname}`; the D-column E2E specs exist for exactly
+this class of bug.

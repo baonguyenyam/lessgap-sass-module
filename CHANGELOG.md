@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.82.0] - 2026-10-29
+
+**Two site-surface fixes the deferred E2E caught: the site's root URL 404'd since task 3.1, and suspended tenants had no page at all — plus the first host-routing Playwright spec.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Fixed
+
+- **Site root 404** — the proxy rewrote a site's `/` to `/sites` (no `[host]` segment → route unmatched); the rewrite is `/sites/${host}${pathname}`
+- **Suspended tenants** — `resolveHost` gains `kind: "suspended"`; the site renders a maintenance page with `noindex` instead of a hard 404
+
+### Added
+
+- **`tests/e2e/sites.spec.ts`** — the D4/D5/D6 host-routing checks (308→primary, `/sites/` refused on app host, maintenance+noindex)
+
 ## [2.81.0] - 2026-10-29
 
 **Every tenant site counts its own views — one row per path per day — and the ADRs record what phase 8 actually measured.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.

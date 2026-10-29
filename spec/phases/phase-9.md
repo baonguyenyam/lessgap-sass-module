@@ -48,7 +48,7 @@ and one booking journey — and records what still needs a deployed run
 
 **Tests:** Playwright spec — the three checks above.
 **Done when:** `sites.spec.ts` passes against the dev server.
-- [ ] done
+- [x] done (`tests/e2e/sites.spec.ts` 3/3 — D5 `/sites/` on app host 404s, D6 suspended → maintenance + `noindex`, D4 non-primary → 308 to `isPrimary` `Domain`. **The spec found two real bugs**: (1) the proxy rewrote a site's `/` to `/sites` (no `[host]` segment → route unmatched → root 404 since task 3.1 — fixed to `/sites/${host}${pathname}`); (2) suspended tenants had no path at all — `resolveHost` gains `kind: "suspended"` (tenant found, `status !== "ACTIVE"`) → proxy rewrites → `SitePage` renders a maintenance page + `noindex` meta instead of 404. Lessons: `db8` singleton opens `beforeAll`/closes `afterAll`; `Host` header tests go through `request`, not `page`.)
 
 ### 9.2 Module downgrade E2E (E8)
 

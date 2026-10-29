@@ -8,7 +8,11 @@ import { devHostMap, RESERVED_SLUGS, SITES_DOMAIN } from "@/config/sites"
  * tenant's site (active only), everything else → a custom `Domain` row
  * (task 3.7) or nothing.
  */
-export type ResolvedHost = { kind: "platform" } | { kind: "site"; tenantId: string; slug: string } | { kind: "none" }
+export type ResolvedHost =
+  | { kind: "platform" }
+  | { kind: "site"; tenantId: string; slug: string }
+  | { kind: "suspended"; tenantId: string; slug: string }
+  | { kind: "none" }
 
 /** lowercase, strip port, strip a trailing dot — never trust the header raw. */
 export function normaliseHost(host: string): string {
@@ -42,21 +46,25 @@ export const resolveHost = cache(async function resolveHost(rawHost: string): Pr
     const slug = host.slice(0, -`.${SITES_DOMAIN}`.length)
     if (!slug || RESERVED_SLUGS.includes(slug as never) || slug.includes(".")) return { kind: "none" }
     const tenant = await tenantBySlug(slug)
-    return tenant ? { kind: "site", tenantId: tenant.id, slug: tenant.slug } : { kind: "none" }
+    if (!tenant) return { kind: "none" }
+    // D6 (spec/11): a suspended tenant's host still answers — the site
+    // page renders maintenance, never a hard 404.
+    if (tenant.status !== "ACTIVE") return { kind: "suspended", tenantId: tenant.id, slug: tenant.slug }
+    return { kind: "site", tenantId: tenant.id, slug: tenant.slug }
   }
 
   // A custom `Domain` (task 3.7): `active` status only — a pending or
   // failed domain is not a site.
   const domain = await db8.orm.public.Domain.where({ hostname: host, status: "active" }).first()
   if (domain) {
-    const tenant = await db8.orm.public.Tenant.where({ id: domain.tenantId, status: "ACTIVE" })
-      .select("id", "slug")
-      .first()
-    if (tenant) return { kind: "site", tenantId: tenant.id, slug: tenant.slug }
+    const tenant = await db8.orm.public.Tenant.where({ id: domain.tenantId }).select("id", "slug", "status").first()
+    if (!tenant) return { kind: "none" }
+    if (tenant.status !== "ACTIVE") return { kind: "suspended", tenantId: tenant.id, slug: tenant.slug }
+    return { kind: "site", tenantId: tenant.id, slug: tenant.slug }
   }
   return { kind: "none" }
 })
 
 async function tenantBySlug(slug: string) {
-  return db8.orm.public.Tenant.where({ slug, status: "ACTIVE" }).select("id", "slug").first()
+  return db8.orm.public.Tenant.where({ slug }).select("id", "slug", "status").first()
 }

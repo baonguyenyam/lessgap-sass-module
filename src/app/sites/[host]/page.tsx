@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation"
+import { getTranslations } from "next-intl/server"
 import { ChatBubble } from "@/components/chatbot/chat-bubble"
 import { ViewTracker } from "@/components/analytics/view-tracker"
 import { headers } from "next/headers"
@@ -83,6 +84,25 @@ async function getSiteData(tenantId: string): Promise<SiteData | null> {
 export default async function SitePage() {
   const host = (await headers()).get("host") ?? ""
   const resolved = await resolveHost(host)
+  if (resolved.kind === "suspended") {
+    // D6 (spec/11): suspended — a maintenance page, not a hard 404, and
+    // `noindex` so the parked host leaves search results.
+    const t = await getTranslations("site.maintenance")
+    return (
+      <html>
+        <head>
+          <meta name="robots" content="noindex" />
+          <title>{t("title")}</title>
+        </head>
+        <body style={{ fontFamily: "system-ui", display: "grid", minHeight: "100vh", placeItems: "center" }}>
+          <main style={{ textAlign: "center" }}>
+            <h1>{t("title")}</h1>
+            <p>{t("body")}</p>
+          </main>
+        </body>
+      </html>
+    )
+  }
   if (resolved.kind !== "site") notFound()
 
   const data = await getSiteData(resolved.tenantId)

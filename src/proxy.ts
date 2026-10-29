@@ -15,7 +15,7 @@ import {
 } from "@/platform/request-context"
 import { invitationIdFromPath, PENDING_INVITATION_COOKIE } from "@/lib/invitations"
 import { isTenantMember } from "@/platform/tenancy/require-member"
-import { resolveHost } from "@/platform/tenancy/host"
+import { normaliseHost, resolveHost } from "@/platform/tenancy/host"
 
 /**
  * Locale handling for the public surface only.
@@ -123,7 +123,24 @@ export default async function proxy(req: NextRequest) {
   // pathname guards below all belong to the app host's own URLs.
   const resolvedHost = await resolveHost(req.headers.get("host") ?? "")
   if (resolvedHost.kind === "site" && !pathname.startsWith("/sites/")) {
-    const url = new URL(`/sites${pathname === "/" ? "" : pathname}${req.nextUrl.search}`, req.nextUrl)
+    // D4 (spec/11): a non-primary hostname 308s to the tenant's primary —
+    // the slug host stays canonical when no `Domain` rows exist.
+    const { primaryDomain } = await import("@/platform/domains")
+    const primary = await primaryDomain(resolvedHost.tenantId)
+    const requestHost = normaliseHost(req.headers.get("host") ?? "")
+    if (primary && primary !== requestHost) {
+      return stamped(NextResponse.redirect(new URL(`https://${primary}${pathname}${req.nextUrl.search}`), 308))
+    }
+    // The route is `/sites/[host]` — the host goes in the path so `/`
+    // resolves too; the page reads the real host from the header.
+    const url = new URL(`/sites/${requestHost}${pathname === "/" ? "" : pathname}${req.nextUrl.search}`, req.nextUrl)
+    return stamped(NextResponse.rewrite(url))
+  }
+  // D6 (spec/11): suspended — the site's own page renders maintenance
+  // with noindex, not a hard 404.
+  if (resolvedHost.kind === "suspended" && !pathname.startsWith("/sites/")) {
+    const requestHost = normaliseHost(req.headers.get("host") ?? "")
+    const url = new URL(`/sites/${requestHost}${pathname === "/" ? "" : pathname}${req.nextUrl.search}`, req.nextUrl)
     return stamped(NextResponse.rewrite(url))
   }
   if (resolvedHost.kind === "none" && !pathname.startsWith("/sites/")) {
