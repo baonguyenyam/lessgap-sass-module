@@ -937,3 +937,63 @@ trialEndsAt          TimestampString(3)?
     @@index([tenantId], map: "NotificationLog_tenantId_idx")
     @@rls
   }
+
+  // The reservations module (spec/07): a restaurant's tables, the service
+  // periods and rules governing a slot, and the reservations themselves.
+  // The unit is a party and a table, not a service and a staff member —
+  // `availableSlots` is shared but `reservationSlots` adds party size and
+  // turn time.
+  model Table {
+    id         String             @id(map: "Table_pkey") @onCreate(cuid(2))
+    tenantId   String
+    name       String
+    capacity   Int
+    area       String             @default("main")
+    createdAt  TimestampString(3) @default(now())
+    updatedAt  TimestampString(3) @default(now()) @onUpdate(now())
+    tenant     Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Table_tenantId_fkey")
+    reservations Reservation[]
+
+    @@index([tenantId], map: "Table_tenantId_idx")
+    @@rls
+  }
+
+  model ReservationRule {
+    id              String             @id(map: "ReservationRule_pkey") @onCreate(cuid(2))
+    tenantId        String
+    weekday         Int
+    startMinute     Int
+    endMinute       Int
+    slotMinutes     Int                @default(90)
+    turnMinutes     Int                @default(15)
+    minPartySize    Int                @default(1)
+    maxPartySize    Int                @default(12)
+    createdAt       TimestampString(3) @default(now())
+    updatedAt       TimestampString(3) @default(now()) @onUpdate(now())
+    tenant          Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "ReservationRule_tenantId_fkey")
+
+    @@index([tenantId], map: "ReservationRule_tenantId_idx")
+    @@rls
+  }
+
+  model Reservation {
+    id        String             @id(map: "Reservation_pkey") @onCreate(cuid(2))
+    tenantId  String
+    tableId   String?
+    partySize Int
+    startTs   TimestampString(3)
+    endTs     TimestampString(3)
+    name      String
+    phone     String?
+    email     String?
+    status    String             @default("confirmed")
+    notes     String?
+    createdAt TimestampString(3) @default(now())
+    updatedAt TimestampString(3) @default(now()) @onUpdate(now())
+    tenant    Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Reservation_tenantId_fkey")
+    table     Table?             @relation(fields: [tableId], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "Reservation_tableId_fkey")
+
+    @@index([tenantId], map: "Reservation_tenantId_idx")
+    @@index([tableId, startTs], map: "Reservation_tableId_startTs_idx")
+    @@rls
+  }

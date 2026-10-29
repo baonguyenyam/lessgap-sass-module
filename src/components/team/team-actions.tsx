@@ -44,6 +44,7 @@ export function TeamActions({ add, remove, staffId }: { add?: boolean; remove?: 
       </div>
     )
   }
+  if (!remove) return null
   return (
     <Button size="sm" variant="destructive" disabled={pending} onClick={() => run(() => removeStaff(staffId!))}>
       {t("actions.remove")}

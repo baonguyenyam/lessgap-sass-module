@@ -36,6 +36,9 @@ export const MODEL_CLASSIFICATION = {
   NotificationLog: { kind: "tenant-owned", reason: "A tenant's outbound message log." },
   ModulePurge: { kind: "tenant-owned", reason: "A scheduled or finished module deletion for one tenant." },
   Page: { kind: "tenant-owned", reason: "A tenant's site pages." },
+  Reservation: { kind: "tenant-owned", reason: "A restaurant's table reservations (reservations module)." },
+  ReservationRule: { kind: "tenant-owned", reason: "A restaurant's service periods and booking rules." },
+  Table: { kind: "tenant-owned", reason: "A restaurant's tables (reservations module)." },
   Resource: { kind: "tenant-owned", reason: "A tenant's bookable resources (booking module)." },
   TimeOff: { kind: "tenant-owned", reason: "A tenant's closures and time-off (booking module)." },
   NewsletterSubscriber: {

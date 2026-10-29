@@ -6,7 +6,7 @@ import { notify } from "@/platform/notify"
 import { dueForReminder } from "@/lib/booking/reminders"
 import { signManageToken } from "@/lib/booking/manage-token"
 import { siteOrigin } from "@/platform/tenancy/site-origin"
-import { systemContext, type TenantContext } from "@/platform/tenancy/context"
+import { systemContext } from "@/platform/tenancy/context"
 import type { SmsProvider } from "@/platform/notify/sms"
 
 /** The reminder job (task 5.7, spec/07): every confirmed appointment inside

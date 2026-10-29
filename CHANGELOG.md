@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.60.0] - 2026-10-29
+
+**The reservations module: restaurant tables, service periods, and bookings that respect capacity and turn time.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`reservations` module** — `Table`, `ReservationRule`, and `Reservation` (tenant-owned + RLS); `reservationSlots` computes open tables per party size against the rule's service periods, capacity range, and turnover buffer
+- **Site reserve flow** (`/sites/[host]/reserve`) — party size, time, name and phone; the slot re-checks server-side before the reservation confirms
+- **`/t/<slug>/reservations`** — the tenant's table bookings, newest first
+
 ## [2.59.0] - 2026-10-29
 
 **The reminders job: `booking.reminder` fires 24 h and 2 h before an appointment — email always, SMS only with entitlement and consent.** This is a MINOR: `git pull`, `pnpm install`.

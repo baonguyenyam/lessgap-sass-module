@@ -34,7 +34,10 @@ describe("tenant deletion (T9)", () => {
       Customer,
       Media,
       NotificationLog,
+      Reservation,
+      ReservationRule,
       Resource,
+      Table,
       TimeOff,
       ModuleExport,
       ModulePurge,
@@ -149,6 +152,17 @@ describe("tenant deletion (T9)", () => {
         endMinute: 1020,
       }),
       TimeOff.create({ tenantId: tenant.id, staffId: staff.id, startTs: nowTs(), endTs: nowTs() }),
+      Table.create({ tenantId: tenant.id, name: "T1", capacity: 4 }).then((t) =>
+        Reservation.create({
+          tenantId: tenant.id,
+          tableId: t.id,
+          partySize: 2,
+          startTs: nowTs(),
+          endTs: nowTs(),
+          name: "Ana",
+        })
+      ),
+      ReservationRule.create({ tenantId: tenant.id, weekday: 2, startMinute: 660, endMinute: 840 }),
       AppointmentEvent.create({ tenantId: tenant.id, appointmentId: appointment.id, toStatus: "confirmed" }),
       NotificationLog.create({
         tenantId: tenant.id,
@@ -180,6 +194,9 @@ describe("tenant deletion (T9)", () => {
       ["NotificationLog", NotificationLog, "tenantId"],
       ["Resource", Resource, "tenantId"],
       ["TimeOff", TimeOff, "tenantId"],
+      ["Reservation", Reservation, "tenantId"],
+      ["ReservationRule", ReservationRule, "tenantId"],
+      ["Table", Table, "tenantId"],
     ] as const) {
       const row = await (model as typeof NewsletterSubscriber).where({ [field]: tenant.id } as never).first()
       expect(row, name).toBeNull()

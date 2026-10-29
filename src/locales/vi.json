@@ -734,6 +734,13 @@
         "exported": "đã xuất",
         "deleted": "đã xoá"
       }
+    },
+    "reservations": {
+      "title": "Đặt bàn",
+      "subtitle": "Mọi đặt bàn",
+      "list": "{count} đặt bàn",
+      "empty": "Chưa có đặt bàn — khách đặt trên trang /reserve của site.",
+      "party": "{size} người"
     }
   },
   "platform": {
@@ -1516,7 +1523,8 @@
     "demo": "Demo",
     "getStarted": "Bắt đầu",
     "openMenu": "Mở menu",
-    "backToTop": "Về đầu trang"
+    "backToTop": "Về đầu trang",
+    "reservations": "Đặt bàn"
   },
   "faq": {
     "title": "Các câu hỏi thường gặp",
@@ -1882,6 +1890,22 @@
       "done": {
         "reschedule": "Đã dời lịch.",
         "cancel": "Đã huỷ."
+      }
+    },
+    "reserve": {
+      "title": "Đặt bàn",
+      "party_size": "Số người",
+      "slot": "Thời gian",
+      "choose": "Chọn…",
+      "name": "Tên của bạn",
+      "phone": "Điện thoại",
+      "reserve": "Đặt bàn",
+      "reserving": "Đang đặt…",
+      "confirmed": "Đã đặt — hẹn gặp bạn.",
+      "error": {
+        "conflict": "Khung giờ đã có người đặt — chọn khung khác.",
+        "invalid_input": "Kiểm tra lại thông tin.",
+        "not_found": "Không tìm thấy trang."
       }
     }
   }
