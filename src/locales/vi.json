@@ -539,7 +539,8 @@
       "site": "Trang web",
       "domains": "Tên miền",
       "catalog": "Danh mục",
-      "team": "Nhân viên"
+      "team": "Nhân viên",
+      "reviews": "Đánh giá"
     },
     "members": {
       "title": "Thành viên",
@@ -816,6 +817,24 @@
       "paths_tracked": "Đường dẫn theo dõi",
       "top_paths": "Top {count} đường dẫn",
       "empty": "Chưa có lượt xem — beacon bắt đầu đếm từ lượt ghé sau."
+    },
+    "reviews": {
+      "title": "Đánh giá",
+      "pending": "Chờ duyệt",
+      "none_pending": "Không có đánh giá nào chờ.",
+      "waitlist": "Danh sách chờ",
+      "none_waiting": "Không ai đang chờ.",
+      "history": "Lịch sử",
+      "published": "đã đăng",
+      "rejected": "đã từ chối",
+      "approve": "Duyệt",
+      "reject": "Từ chối",
+      "publishing": "Đang đăng…",
+      "rejecting": "Đang từ chối…",
+      "waitlist_waiting": "đang chờ",
+      "waitlist_notified": "đã báo",
+      "waitlist_booked": "đã đặt",
+      "waitlist_canceled": "đã hủy"
     }
   },
   "platform": {

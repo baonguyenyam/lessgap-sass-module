@@ -10,7 +10,7 @@ visitor's name — when a slot frees, the waitlisted get first pick.
 
 ## Scope
 
-- Phase 11: in progress.
+- Phase 11: done.
 
 ## Tasks
 
@@ -64,7 +64,7 @@ page lists the `pending` `Review` rows with approve/reject buttons, and the
 **Tests:** e2e — a pending review appears on the page; approving it shows it
 on the site; the waitlist rows list.
 **Done when:** both lists render and the approve action works end-to-end.
-- [ ] done
+- [x] done (`site-surfaces.spec.ts` 2/2 — `/t/<slug>/reviews` lists the `pending` rows with approve/reject (`ReviewActions` → `moderateReview`), approving one renders it on the site; `WaitlistEntry` rows list alongside.)
 
 ## Exit criteria
 

@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.93.0] - 2026-10-29
+
+**The dashboard surfaces the reviews and the waitlist — pending reviews wait for an approve, and the waitlist's coming days sit alongside.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`/t/<slug>/reviews`** — `pending` `Review` rows with approve/reject (`ReviewActions` → `moderateReview`), `WaitlistEntry` rows for the coming days, and the published/rejected history
+- **`reviews` nav** — booking-module-gated, between calendar and customers
+- **`site-surfaces.spec.ts`** — a pending review approves and renders on the site
+
 ## [2.92.0] - 2026-10-29
 
 **The site surfaces the waitlist and the reviews — a full day offers the join form, and approved reviews render.** This is a MINOR: `git pull`, `pnpm install`.

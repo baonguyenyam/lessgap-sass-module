@@ -539,7 +539,8 @@
       "site": "Site",
       "domains": "Domains",
       "catalog": "Catalog",
-      "team": "Team"
+      "team": "Team",
+      "reviews": "Reviews"
     },
     "members": {
       "title": "Members",
@@ -816,6 +817,24 @@
       "paths_tracked": "Paths tracked",
       "top_paths": "Top {count} paths",
       "empty": "No views yet — the beacon starts counting on the next site visit."
+    },
+    "reviews": {
+      "title": "Reviews",
+      "pending": "Waiting for approval",
+      "none_pending": "No reviews waiting.",
+      "waitlist": "Waitlist",
+      "none_waiting": "Nobody is waiting.",
+      "history": "History",
+      "published": "published",
+      "rejected": "rejected",
+      "approve": "Approve",
+      "reject": "Reject",
+      "publishing": "Publishing…",
+      "rejecting": "Rejecting…",
+      "waitlist_waiting": "waiting",
+      "waitlist_notified": "notified",
+      "waitlist_booked": "booked",
+      "waitlist_canceled": "canceled"
     }
   },
   "platform": {

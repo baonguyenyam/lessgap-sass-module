@@ -3,6 +3,7 @@ import { DASHBOARD, tenantPath } from "@/lib/tenant-paths"
 import {
   Boxes,
   Calendar,
+  Star,
   Globe,
   List,
   Globe2,
@@ -104,6 +105,9 @@ export function navGroups(
         ...(enabledModules && !enabledModules.has("booking")
           ? []
           : [{ key: "calendar", href: t("calendar"), icon: Calendar } satisfies NavItem]),
+        ...(enabledModules && !enabledModules.has("booking")
+          ? []
+          : [{ key: "reviews", href: t("reviews"), icon: Star } satisfies NavItem]),
         ...(enabledModules && !enabledModules.has("customers")
           ? []
           : [{ key: "customers", href: t("customers"), icon: Users } satisfies NavItem]),
