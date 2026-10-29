@@ -117,7 +117,7 @@ abstraction (`chatbot.provider`) keeps the LLM and embedder swappable.
   `tests/unit/lib/chatbot-*.test.ts`, `spec/adr/00XX-chatbot-cost.md`.
 - **Done when:** all three spec tests green + ADR records the measured
   cost per 1,000 messages with the local provider's deterministic count.
-- [ ] done
+- [x] done (spec/08's three required tests all green — tenant-isolated retrieval (`chatbot-answer.test.ts`: same text, two tenants, own chunks only), price/hours from tools (change price → new answer, no re-index), injection fixtures don't change behaviour (`chatbot-injection.test.ts`: injected document can't alter the tool path or the prompt's DATA rule — verified via a `localProvider.chat` spy asserting the system prompt keeps the guard; an injection question leaks no rows). `spec/adr/0021-chatbot-cost.md` — ~875 tokens/message measured via `estimateTokens` (prompt ~180 + chunks ~600 + question ~15 + answer ~80) → ~875k/1,000 → $0 local, ~$0.17/1,000 at typical hosted prices, bounded by `chatbot.messages.monthly` + `feature.chatbot`.)
 
 ## Exit criteria
 
@@ -128,4 +128,16 @@ abstraction (`chatbot.provider`) keeps the LLM and embedder swappable.
 
 ## Findings
 
-(none yet)
+- **Platform kernel cannot import `src/modules/`** — `no-restricted-imports`
+  enforced it twice; the provider and prompt template live in
+  `src/platform/chatbot/` (not `src/modules/chatbot/server/` +
+  `prompts/` as the spec sketched). `src/modules/chatbot/module.ts` keeps the
+  manifest + lifecycle; the runtime belongs to the kernel.
+- **Prompt is versioned + overridable** — `chatbot.prompt.v1` TenantSetting
+  replaces the base prompt; a bump means a new key, not a rewrite.
+- **`sessionStorage` + `Math.random` in render is impure** — `react-hooks/purity`
+  caught the bubble's `visitorKey` init; it lives in `currentVisitorKey()`
+  inside the submit handler now.
+- **A second `postgres()` client needs the extension too** — `platformDb`
+  threw `RUNTIME.MISSING_EXTENSION_PACK` until it shared `dbExtensions` from
+  `@/lib/db8` (lesson added).

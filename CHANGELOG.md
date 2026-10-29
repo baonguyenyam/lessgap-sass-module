@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.74.0] - 2026-10-29
+
+**Chatbot safety verified: injection-proof answers, tenant-isolated retrieval, and a measured cost — $0.17 per 1,000 messages at hosted-model prices.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **Injection-proof pipeline** — tenant content is DATA, never instructions; a document that tries to override the prompt can't change the tool path
+- **Cost ADR** — ~875 tokens/message measured; $0 local, ~$0.17 per 1,000 hosted; bounded by `chatbot.messages.monthly` and `feature.chatbot`
+
 ## [2.73.0] - 2026-10-29
 
 **The chat bubble is live on sites: questions stream in, answers come back sourced — and a platform kill switch can silence the bot everywhere.** This is a MINOR: `git pull`, `pnpm install`.
