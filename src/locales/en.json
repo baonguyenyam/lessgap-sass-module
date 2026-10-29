@@ -718,6 +718,22 @@
       "cancel": "Cancel",
       "complete": "Complete",
       "no_show": "No-show"
+    },
+    "customers": {
+      "title": "Customers",
+      "subtitle": "Everyone who booked, in one list",
+      "list": "{count} customers",
+      "empty": "No customers yet — bookings on the site create them.",
+      "no_contact": "no contact info",
+      "consent_marketing": "marketing ✓",
+      "consent_sms": "SMS ✓",
+      "export": "Export",
+      "delete": "Delete",
+      "confirm_delete": "Delete {name} and their bookings? This answers a privacy request.",
+      "done": {
+        "exported": "exported",
+        "deleted": "deleted"
+      }
     }
   },
   "platform": {

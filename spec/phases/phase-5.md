@@ -120,7 +120,7 @@ PHI).
   rows only, delete removes only that tenant's row, dedup holds.
 - **Checks:** `pnpm test`, `pnpm test:integration`, `pnpm modules:check`.
 - **Done when:** customers list, export, delete work per-tenant.
-- [ ] done
+- [x] done (`src/modules/customers/module.ts` + `/t/<slug>/customers` — the tenant's customer list (every booker deduplicated by email then phone) with marketing/SMS consent badges; `exportCustomer` returns the customer's rows as JSON, `deleteCustomer` removes the customer and their appointments as a privacy request — every action scopes to the member's tenant, audits, and never crosses `Customer` (the privacy boundary). `customers.view`/`customers.manage` gate; `module.customers` seeded. Integration `customers.test.ts` — lifecycle counts and purge touch only the tenant's own rows.)
 
 ### 5.6 — `notifications` module + `notify()` + templates page
 - **Goal:** `src/modules/notifications/module.ts`; `notify(ctx, template,

@@ -104,6 +104,9 @@ export function navGroups(
         ...(enabledModules && !enabledModules.has("booking")
           ? []
           : [{ key: "calendar", href: t("calendar"), icon: Calendar } satisfies NavItem]),
+        ...(enabledModules && !enabledModules.has("customers")
+          ? []
+          : [{ key: "customers", href: t("customers"), icon: Users } satisfies NavItem]),
         ...(customRoles ? [{ key: "roles", href: t("roles"), icon: KeyRound } satisfies NavItem] : []),
       ],
     },

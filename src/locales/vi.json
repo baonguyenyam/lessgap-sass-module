@@ -718,6 +718,22 @@
       "cancel": "Huỷ",
       "complete": "Hoàn thành",
       "no_show": "Vắng"
+    },
+    "customers": {
+      "title": "Khách hàng",
+      "subtitle": "Mọi người đã đặt lịch, trong một danh sách",
+      "list": "{count} khách hàng",
+      "empty": "Chưa có khách hàng — đặt lịch trên site sẽ tạo.",
+      "no_contact": "không có thông tin liên hệ",
+      "consent_marketing": "marketing ✓",
+      "consent_sms": "SMS ✓",
+      "export": "Xuất",
+      "delete": "Xoá",
+      "confirm_delete": "Xoá {name} và các cuộc hẹn của họ? Đây là yêu cầu quyền riêng tư.",
+      "done": {
+        "exported": "đã xuất",
+        "deleted": "đã xoá"
+      }
     }
   },
   "platform": {

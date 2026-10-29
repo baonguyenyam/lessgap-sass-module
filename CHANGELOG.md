@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.57.0] - 2026-10-29
+
+**The customers module: every booker in one list, with consent badges and a privacy export and delete.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`customers` module** (`/t/<slug>/customers`) — the tenant's customer list, deduplicated by email then phone, with marketing and SMS consent badges
+- **Privacy export and delete** — one click exports a customer's rows as JSON; delete removes the customer and their appointments, audited
+
 ## [2.56.0] - 2026-10-29
 
 **A visitor books a service on the tenant's site — service, staff, time, details — and manages it from a signed link.** This is a MINOR: `git pull`, `pnpm install`.
