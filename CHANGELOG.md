@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.69.0] - 2026-10-29
+
+**Proportional refunds and the payouts view: money in and out on the tenant's Stripe account.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`refundPayment`** — a Stripe refund with `refund_application_fee: true`; the `Refund` row records the fee returned proportionally
+- **`/t/<slug>/payments`** — the payouts view: every payment with its kind, fee, status and refunded total
+
 ## [2.68.0] - 2026-10-29
 
 **Booking deposits: a service can require payment up front — the appointment stays unpaid until Stripe confirms.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.

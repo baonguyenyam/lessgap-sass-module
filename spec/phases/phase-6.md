@@ -153,7 +153,7 @@ appointment), and booking deposits (`booking.deposits` wired at last).
 - **Checks:** `pnpm test`, `pnpm test:integration`.
 - **Done when:** a refund returns the fee proportionally and shows in the
   payouts view.
-- [ ] done
+- [x] done (`refundPayment` (billing.manage + `module.payments`): `stripe.refunds.create` with `refund_application_fee: true` on the connected account → Stripe returns the fee proportionally; `Refund` row records `amountCents` + `feeRefundCents` (from `refundFee`); `Payment` flips `refunded`/`partially_refunded`. `/t/<slug>/payments` — the payouts view: every Payment with kind, status, fee, and the refunded total, plus a Refund button on `succeeded` rows. Integration `refund.test.ts` — refund → row + proportional fee + `partially_refunded`, full → `refunded`, unsucceeded → `invalid_input`. `refundFee` math already unit-tested in `fee.test.ts`.)
 
 ## Exit criteria
 
@@ -168,4 +168,20 @@ appointment), and booking deposits (`booking.deposits` wired at last).
 
 ## Findings
 
-(none yet)
+- **Stripe test-mode E2E (book→checkout→refund proportional) is deferred** —
+  the mechanism is covered: `computeApplicationFee`/`refundFee` unit-tested for
+  every model and rounding; `connect-webhook.test.ts` signs payloads with
+  Stripe's own `generateTestHeaderString` and proves idempotent replay +
+  tenant mapping by account id; `refund.test.ts` proves `refund_application_fee`
+  and the proportional `feeRefundCents` row. A live Stripe E2E needs test keys
+  and a built app — recorded here, not run.
+- **`orders` permission covers shop + ordering + quotes dashboards** — `shop`
+  is not its own TENANT_PERMISSIONS resource; `orders.view`/`orders.manage`
+  gates the sales surfaces (decision — a tenant's "orders" are the cross-module
+  sales record).
+- **Convert quotes to Order only** — spec/07 says "order or appointment"; the
+  multi-line shape maps to `Order`/`OrderLine`; an appointment conversion is
+  a single-appointment subset left out of v1.
+- **Booking deposits**: `Service.depositCents` + `booking.deposits` +
+  `canCharge` — an unpaid deposit books `requested`, not `confirmed`; the
+  webhook flips it.

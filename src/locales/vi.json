@@ -781,6 +781,16 @@
       "empty": "Chưa có báo giá.",
       "convert": "Chuyển thành đơn",
       "converted": "đã chuyển"
+    },
+    "payments": {
+      "title": "Thanh toán",
+      "subtitle": "Tiền vào và ra trên tài khoản Stripe",
+      "money_in": "{count} khoản",
+      "empty": "Chưa có khoản nào — cọc, đơn và báo giá sẽ hiện ở đây.",
+      "fee": "phí",
+      "refund": "Hoàn tiền",
+      "refunded": "đã hoàn",
+      "refunded_done": "đã hoàn"
     }
   },
   "platform": {
@@ -1566,7 +1576,8 @@
     "backToTop": "Về đầu trang",
     "reservations": "Đặt bàn",
     "orders": "Đơn hàng",
-    "quotes": "Báo giá"
+    "quotes": "Báo giá",
+    "payments": "Thanh toán"
   },
   "faq": {
     "title": "Các câu hỏi thường gặp",

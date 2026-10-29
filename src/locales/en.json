@@ -781,6 +781,16 @@
       "empty": "No quotes yet.",
       "convert": "Convert to order",
       "converted": "converted"
+    },
+    "payments": {
+      "title": "Payments",
+      "subtitle": "Money in and out on your Stripe account",
+      "money_in": "{count} payments",
+      "empty": "No payments yet — deposits, orders and quotes land here.",
+      "fee": "fee",
+      "refund": "Refund",
+      "refunded": "refunded",
+      "refunded_done": "refunded"
     }
   },
   "platform": {
@@ -1566,7 +1576,8 @@
     "backToTop": "Back to top",
     "reservations": "Reservations",
     "orders": "Orders",
-    "quotes": "Quotes"
+    "quotes": "Quotes",
+    "payments": "Payments"
   },
   "faq": {
     "title": "Frequently asked questions",
