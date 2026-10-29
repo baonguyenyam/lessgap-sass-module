@@ -90,7 +90,7 @@ that measurement, not guessed.
   `src/app/(platform)/platform/usage/page.tsx`.
 - **Done when:** the page renders per-tenant usage + job metrics without
   scanning a table.
-- [ ] done
+- [x] done (`/platform/usage` — four metric cards (queue depth = `QUEUED` `Job` count, jobs in last 24h, `FAILED` count, `ErrorReport` occurrence sum in 24h) + per-tenant `UsageCounter` list (`limitKey`, `used`, `periodStart`, tenant name via include) + jobs-by-kind aggregate. All reads are row reads — no log scanning. Integration `platform-usage.test.ts` 1/1 — counters/jobs/errors read back with tenant names.)
 
 ### 8.6 — Load fixture + measurement
 - **Goal:** `scripts/load/` — seed N tenants + published sites, autocannon

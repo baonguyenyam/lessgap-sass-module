@@ -1084,6 +1084,17 @@
         "restore_failed": "Restore failed.",
         "snapshot_not_restorable": "Not restorable."
       }
+    },
+    "usage": {
+      "title": "Usage",
+      "subtitle": "Counters, job throughput, error rate, queue depth",
+      "queue_depth": "Queue depth",
+      "jobs_24h": "Jobs (24h)",
+      "failed_jobs": "Failed jobs",
+      "errors_24h": "Errors (24h)",
+      "counters": "{count} usage counters",
+      "counters_empty": "No counters yet — limits consume them as tenants use features.",
+      "job_kinds": "Jobs by kind (24h)"
     }
   },
   "admin": {
@@ -1627,7 +1638,8 @@
     "payments": "Payments",
     "chatbot": "Chatbot",
     "domains": "Domains",
-    "backups": "Backups"
+    "backups": "Backups",
+    "usage": "Usage"
   },
   "faq": {
     "title": "Frequently asked questions",

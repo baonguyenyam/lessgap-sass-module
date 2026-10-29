@@ -1084,6 +1084,17 @@
         "restore_failed": "Phục hồi thất bại.",
         "snapshot_not_restorable": "Không thể phục hồi."
       }
+    },
+    "usage": {
+      "title": "Sử dụng",
+      "subtitle": "Counter, throughput job, tỉ lệ lỗi, độ sâu hàng đợi",
+      "queue_depth": "Độ sâu hàng đợi",
+      "jobs_24h": "Jobs (24h)",
+      "failed_jobs": "Job lỗi",
+      "errors_24h": "Lỗi (24h)",
+      "counters": "{count} counters",
+      "counters_empty": "Chưa có counter — limit consume khi tenant dùng tính năng.",
+      "job_kinds": "Jobs theo loại (24h)"
     }
   },
   "admin": {
@@ -1627,7 +1638,8 @@
     "payments": "Thanh toán",
     "chatbot": "Chatbot",
     "domains": "Tên miền",
-    "backups": "Sao lưu"
+    "backups": "Sao lưu",
+    "usage": "Sử dụng"
   },
   "faq": {
     "title": "Các câu hỏi thường gặp",

@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.79.0] - 2026-10-29
+
+**`/platform/usage` — counters, job throughput, error rate and queue depth on one page, read from rows not log streams.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`/platform/usage`** — queue depth, 24-hour job throughput and failures, error occurrences, every tenant's usage counters, jobs by kind
+
 ## [2.78.0] - 2026-10-29
 
 **A snapshot restores into a brand-new tenant — every row, every relation remapped, the source untouched — and `/platform/backups` is where it happens.** This is a MINOR: `git pull`, `pnpm install`.
