@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.63.0] - 2026-10-29
+
+**Tenant payment records: `Payment` and `Refund`, plus connected-account state on `Tenant`.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **`Payment`** — a charge on the tenant's connected account: kind, Stripe session/intent ids, amount, application fee, status, and links to its appointment, order or quote; `checkoutSessionId` is the idempotency key
+- **`Refund`** — a refund against a payment, recording the fee returned proportionally
+- **`Tenant`** — `connectOnboardingStatus` and `payoutsEnabled` now track the Connect lifecycle (the account id and `chargesEnabled` were already there)
+
 ## [2.62.0] - 2026-10-29
 
 **The application-fee engine: `computeApplicationFee` — the pure function every tenant charge consults.** This is a MINOR: `git pull`, `pnpm install`.

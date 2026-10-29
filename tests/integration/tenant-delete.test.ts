@@ -34,6 +34,8 @@ describe("tenant deletion (T9)", () => {
       Customer,
       Media,
       NotificationLog,
+      Payment,
+      Refund,
       Reservation,
       ReservationRule,
       Resource,
@@ -163,6 +165,9 @@ describe("tenant deletion (T9)", () => {
         })
       ),
       ReservationRule.create({ tenantId: tenant.id, weekday: 2, startMinute: 660, endMinute: 840 }),
+      Payment.create({ tenantId: tenant.id, kind: "deposit", amountCents: 2000, feeCents: 58 }).then((p) =>
+        Refund.create({ tenantId: tenant.id, paymentId: p.id, amountCents: 1000, feeRefundCents: 29 })
+      ),
       AppointmentEvent.create({ tenantId: tenant.id, appointmentId: appointment.id, toStatus: "confirmed" }),
       NotificationLog.create({
         tenantId: tenant.id,
@@ -194,6 +199,8 @@ describe("tenant deletion (T9)", () => {
       ["NotificationLog", NotificationLog, "tenantId"],
       ["Resource", Resource, "tenantId"],
       ["TimeOff", TimeOff, "tenantId"],
+      ["Payment", Payment, "tenantId"],
+      ["Refund", Refund, "tenantId"],
       ["Reservation", Reservation, "tenantId"],
       ["ReservationRule", ReservationRule, "tenantId"],
       ["Table", Table, "tenantId"],

@@ -297,6 +297,8 @@ trialEndsAt          TimestampString(3)?
     status           pg.enum(TenantStatus) @default("PROVISIONING")
     graceUntil       TimestampString(3)?
     verticalKey      String                @default("generic")
+    connectOnboardingStatus String           @default("not_started")
+    payoutsEnabled       Boolean               @default(false)
     timeZone         String                @default("America/Chicago")
     currency         String                @default("usd")
     defaultLanguage  String                @default("en")
@@ -995,5 +997,51 @@ trialEndsAt          TimestampString(3)?
 
     @@index([tenantId], map: "Reservation_tenantId_idx")
     @@index([tableId, startTs], map: "Reservation_tableId_startTs_idx")
+    @@rls
+  }
+
+  // Tenant payments (ADR 0006): a charge on the tenant's connected account
+  // with our application fee. `kind` + the optional foreign ids link the
+  // payment to its Appointment, Order or Quote; `checkoutSessionId` is the
+  // idempotency key (one row per Stripe session).
+  model Payment {
+    id                 String             @id(map: "Payment_pkey") @onCreate(cuid(2))
+    tenantId           String
+    kind               String
+    checkoutSessionId  String?            @unique(map: "Payment_checkoutSessionId_key")
+    paymentIntentId    String?
+    amountCents        Int
+    feeCents           Int                @default(0)
+    currency           String             @default("usd")
+    status             String             @default("pending")
+    customerId         String?
+    appointmentId      String?
+    orderId            String?
+    quoteId            String?
+    createdAt          TimestampString(3) @default(now())
+    updatedAt          TimestampString(3) @default(now()) @onUpdate(now())
+    tenant             Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Payment_tenantId_fkey")
+    refunds            Refund[]
+
+    @@index([tenantId], map: "Payment_tenantId_idx")
+    @@rls
+  }
+
+  // A refund returns money to the customer and the application fee
+  // proportionally (`feeRefundCents` — refundFee() in src/lib/billing/fee).
+  model Refund {
+    id             String             @id(map: "Refund_pkey") @onCreate(cuid(2))
+    tenantId       String
+    paymentId      String
+    stripeRefundId String?
+    amountCents    Int
+    feeRefundCents Int                @default(0)
+    status         String             @default("succeeded")
+    createdAt      TimestampString(3) @default(now())
+    tenant         Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Refund_tenantId_fkey")
+    payment        Payment            @relation(fields: [paymentId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Refund_paymentId_fkey")
+
+    @@index([tenantId], map: "Refund_tenantId_idx")
+    @@index([paymentId], map: "Refund_paymentId_idx")
     @@rls
   }

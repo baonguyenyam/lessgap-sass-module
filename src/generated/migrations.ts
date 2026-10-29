@@ -32,4 +32,5 @@ export const MIGRATIONS: readonly MigrationEdge[] = [
   { name: "20261029T1318_platform_catalog_team", from: "490f0a52e29460c65326faa854170b4ed62587f83cfc97a0a4437594a7a26946", to: "fbe31af42d7f7dc1ef9b38c780668a91c5f5239ea57a845ed0136c4f4c9eef77" },
   { name: "20261029T1420_platform_booking_schema", from: "fbe31af42d7f7dc1ef9b38c780668a91c5f5239ea57a845ed0136c4f4c9eef77", to: "27d182806550c6bb5a79b7bf9b157de4132b906dff71bd3dd1f127788c5af306" },
   { name: "20261029T1504_platform_reservations", from: "27d182806550c6bb5a79b7bf9b157de4132b906dff71bd3dd1f127788c5af306", to: "34f15eb65e525bbddaac943d73971524dffd8887e35050f30b07b78d16c237c4" },
+  { name: "20261029T1532_platform_payments", from: "34f15eb65e525bbddaac943d73971524dffd8887e35050f30b07b78d16c237c4", to: "8b160a2262b77bb3af151d73f1b67aba17fbbff57a8c586b0c7d88712efb724d" },
 ]

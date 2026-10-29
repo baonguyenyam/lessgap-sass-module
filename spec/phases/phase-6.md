@@ -67,7 +67,7 @@ appointment), and booking deposits (`booking.deposits` wired at last).
 - **Tests:** T9 extension — delete cleans Payment/Refund.
 - **Checks:** `pnpm db:emit`, `pnpm audit:tenancy`, `pnpm test:integration`.
 - **Done when:** migration applied, 51 models classified.
-- [ ] done
+- [x] done (`Tenant` — `connectOnboardingStatus` + `payoutsEnabled` added (`stripeAccountId` + `chargesEnabled` already existed from phase 2's tenant billing — decision 6-A kept). `Payment` (tenantId, kind, `checkoutSessionId` unique = idempotency key, paymentIntentId, amountCents, feeCents, currency, status, optional customerId/appointmentId/orderId/quoteId links) and `Refund` (paymentId FK, amountCents, `feeRefundCents`, status) — `@@rls` cascade, 50 models classified, `deleteTenant` covers both, T9 green. Migration `20261029T1532_platform_payments` → `8b160a22`.)
 
 ### 6.3 — `payments` module: onboarding, webhook, chargesEnabled gate
 - **Goal:** Connect onboarding link (Settings → Payments), Connect webhook
