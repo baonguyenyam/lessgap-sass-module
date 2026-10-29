@@ -1,5 +1,5 @@
 import type { Route } from "next"
-import { DASHBOARD, tenantPath } from "@/lib/tenant-paths"
+import { Calendar, DASHBOARD, tenantPath } from "@/lib/tenant-paths"
 import {
   Boxes,
   Globe,
@@ -100,6 +100,9 @@ export function navGroups(
         ...(enabledModules && !enabledModules.has("team")
           ? []
           : [{ key: "team", href: t("team"), icon: Users } satisfies NavItem]),
+        ...(enabledModules && !enabledModules.has("booking")
+          ? []
+          : [{ key: "calendar", href: t("calendar"), icon: Calendar } satisfies NavItem]),
         ...(customRoles ? [{ key: "roles", href: t("roles"), icon: KeyRound } satisfies NavItem] : []),
       ],
     },

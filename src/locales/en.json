@@ -707,6 +707,17 @@
         "add": "Add staff",
         "remove": "Remove"
       }
+    },
+    "calendar": {
+      "title": "Calendar",
+      "subtitle": "Appointments by day",
+      "empty": "No appointments yet.",
+      "filter": "Staff",
+      "all_staff": "All staff",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "complete": "Complete",
+      "no_show": "No-show"
     }
   },
   "platform": {

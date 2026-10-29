@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.55.0] - 2026-10-29
+
+**The booking module and a dashboard calendar: appointments create, confirm, cancel, complete — the book is managed.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`booking` module** — resources, weekly availability rules, time-off and appointments; `createAppointment` honours `booking.manual_approval` (instant confirmation or review) and `booking.staff.max`; `booking.monthly`, `booking.sms_reminders` and `booking.deposits` declared as feature keys
+- **Dashboard calendar** (`/t/<slug>/calendar`) — appointments grouped by day with a staff filter and status actions (confirm, cancel, complete, no-show); every status change writes an `AppointmentEvent` and an audit row
+
 ## [2.54.0] - 2026-10-29
 
 **Bookings get a schema: resources, availability rules, appointments, customers — and the database refuses a double booking.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.

@@ -136,6 +136,8 @@ async function main() {
     await db8.orm.public.PlatformSwitch.upsert({
       conflictOn: { key: "module.team" },
       create: { key: "module.team", value: true, updatedById: "seed" },
+      conflictOn: { key: "module.booking" },
+      create: { key: "module.booking", value: true, updatedById: "seed" },
       update: {},
     })
     console.log(`Seed complete: ${examplePlans.length} example plans upserted`)

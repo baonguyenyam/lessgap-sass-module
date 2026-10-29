@@ -23,6 +23,14 @@ export const FEATURES = {
   // Catalog module (spec/07): the free plan caps how many services a tenant
   // publishes; counted from live rows, not metered.
   "catalog.services.max": { kind: "limit", default: null },
+  // Booking module (spec/07): the capability, a per-staff cap, a monthly
+  // appointment cap, and the workflow sub-features.
+  booking: { kind: "boolean", default: true },
+  "booking.staff.max": { kind: "limit", default: null, requires: ["booking"] },
+  "booking.monthly": { kind: "limit", default: null, requires: ["booking"] },
+  "booking.manual_approval": { kind: "boolean", default: false, requires: ["booking"] },
+  "booking.sms_reminders": { kind: "boolean", default: false, requires: ["booking"] },
+  "booking.deposits": { kind: "boolean", default: false, requires: ["booking"] },
 } as const satisfies Record<string, FeatureDefinition>
 
 export type FeatureKey = keyof typeof FEATURES

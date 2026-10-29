@@ -90,7 +90,7 @@ PHI).
   create respects `booking.manual_approval` (instant vs requested).
 - **Checks:** `pnpm test`, `pnpm test:integration`, `pnpm modules:check`.
 - **Done when:** appointments create/cancel/complete with audit + events.
-- [ ] done
+- [x] done (`src/modules/booking/module.ts` — manifest + lifecycle for `Resource`/`AvailabilityRule`/`TimeOff`/`Appointment`/`AppointmentEvent` (Customer is the customers module's). `src/app/actions/appointments.ts` — `createAppointment` re-checks availability (the exclusion constraint is the last word), honours `booking.manual_approval` (instant `confirmed` vs `requested`) and `booking.staff.max`; `setAppointmentStatus` follows `requested→confirmed→completed|canceled|no_show` with an `AppointmentEvent` and an audit row; `addAvailabilityRule`/`removeAvailabilityRule`/`addTimeOff` manage the book. `/t/<slug>/calendar` — a day-grouped list-calendar with a `?staff=` member filter + `AppointmentActions` status buttons. `bookings.view`/`bookings.manage` gate everything; `booking`/`booking.staff.max`/`booking.monthly`/`booking.manual_approval`/`booking.sms_reminders`/`booking.deposits` declared in FEATURES. L-test green; `module.booking` seeded.)
 
 ### 5.4 — Site booking flow
 - **Goal:** `/sites/[host]/book` — pick a service, staff (or "any"), a slot

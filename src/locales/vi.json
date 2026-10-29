@@ -707,6 +707,17 @@
         "add": "Thêm nhân viên",
         "remove": "Xóa"
       }
+    },
+    "calendar": {
+      "title": "Lịch hẹn",
+      "subtitle": "Cuộc hẹn theo ngày",
+      "empty": "Chưa có cuộc hẹn nào.",
+      "filter": "Nhân viên",
+      "all_staff": "Tất cả nhân viên",
+      "confirm": "Xác nhận",
+      "cancel": "Huỷ",
+      "complete": "Hoàn thành",
+      "no_show": "Vắng"
     }
   },
   "platform": {
