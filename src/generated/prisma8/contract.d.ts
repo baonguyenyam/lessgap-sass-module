@@ -28,9 +28,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'f2ad8164887818bf08456ffe4efec064f341c452ce2aebdc128ab643f16f6db9'>;
+  StorageHashBase<'ca7d656ada716165ba7ca4a931b65571b72018fc2a9257c7390c905935a47ca3'>;
 export type ExecutionHash =
-  ExecutionHashBase<'509fc6eedb1b7e32cfb508ffb879657554b711151c4f1150dd10700823243987'>;
+  ExecutionHashBase<'42db3cdfabb33da0d2da0d72bcaa9e3b3487fff7f73b44e2e23c10e08d25f314'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -1292,6 +1292,20 @@ export namespace Models {
     tenant: public_Tenant;
     readonly [RelationKeys]?: 'tenant';
   };
+  export type public_TenantSnapshot = {
+    completedAt: FieldOutputTypes['public']['TenantSnapshot']['completedAt'];
+    createdAt: FieldOutputTypes['public']['TenantSnapshot']['createdAt'];
+    error: FieldOutputTypes['public']['TenantSnapshot']['error'];
+    id: FieldOutputTypes['public']['TenantSnapshot']['id'];
+    r2Key: FieldOutputTypes['public']['TenantSnapshot']['r2Key'];
+    requestedBy: FieldOutputTypes['public']['TenantSnapshot']['requestedBy'];
+    rowCounts: FieldOutputTypes['public']['TenantSnapshot']['rowCounts'];
+    sizeBytes: FieldOutputTypes['public']['TenantSnapshot']['sizeBytes'];
+    status: FieldOutputTypes['public']['TenantSnapshot']['status'];
+    tenantId: FieldOutputTypes['public']['TenantSnapshot']['tenantId'];
+    tenant: public_Tenant;
+    readonly [RelationKeys]?: 'tenant';
+  };
   export type public_TimeOff = {
     createdAt: FieldOutputTypes['public']['TimeOff']['createdAt'];
     endTs: FieldOutputTypes['public']['TimeOff']['endTs'];
@@ -1435,6 +1449,7 @@ export declare const models: {
     TenantAddOn: Models.public_TenantAddOn;
     TenantModule: Models.public_TenantModule;
     TenantSetting: Models.public_TenantSetting;
+    TenantSnapshot: Models.public_TenantSnapshot;
     TimeOff: Models.public_TimeOff;
     TwoFactor: Models.public_TwoFactor;
     UsageCounter: Models.public_UsageCounter;
@@ -7932,6 +7947,112 @@ type ContractBase = Omit<
                 },
               ];
             };
+            readonly TenantSnapshot: {
+              columns: {
+                readonly completedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly error: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly r2Key: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly requestedBy: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly rowCounts: {
+                  readonly dataType: 'pg/json';
+                  readonly codecId: 'pg/json@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/json@1', {}>;
+                  };
+                  readonly many: false;
+                };
+                readonly sizeBytes: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                  readonly many: false;
+                };
+                readonly status: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'running'>;
+                  };
+                  readonly many: false;
+                };
+                readonly tenantId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: {
+                readonly columns: readonly ['id'];
+                readonly name: 'TenantSnapshot_pkey';
+              };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'TenantSnapshot_tenantId_idx';
+                  readonly columns: readonly ['tenantId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'TenantSnapshot';
+                    readonly columns: readonly ['tenantId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Tenant';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'TenantSnapshot_tenantId_fkey';
+                },
+              ];
+            };
             readonly TimeOff: {
               columns: {
                 readonly createdAt: {
@@ -8680,6 +8801,10 @@ type ContractBase = Omit<
     readonly TenantSetting: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'TenantSetting';
+    };
+    readonly TenantSnapshot: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'TenantSnapshot';
     };
     readonly TimeOff: { readonly namespace: 'public' & NamespaceId; readonly model: 'TimeOff' };
     readonly TwoFactor: { readonly namespace: 'public' & NamespaceId; readonly model: 'TwoFactor' };
@@ -14307,6 +14432,88 @@ type ContractBase = Omit<
               };
             };
           };
+          readonly TenantSnapshot: {
+            readonly fields: {
+              readonly completedAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly error: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly r2Key: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly requestedBy: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly rowCounts: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
+              };
+              readonly sizeBytes: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly status: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly tenantId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: {
+              readonly tenant: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Tenant';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['tenantId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'TenantSnapshot';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly completedAt: { readonly column: 'completedAt' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly error: { readonly column: 'error' };
+                readonly id: { readonly column: 'id' };
+                readonly r2Key: { readonly column: 'r2Key' };
+                readonly requestedBy: { readonly column: 'requestedBy' };
+                readonly rowCounts: { readonly column: 'rowCounts' };
+                readonly sizeBytes: { readonly column: 'sizeBytes' };
+                readonly status: { readonly column: 'status' };
+                readonly tenantId: { readonly column: 'tenantId' };
+              };
+            };
+          };
           readonly TimeOff: {
             readonly fields: {
               readonly createdAt: {
@@ -15757,6 +15964,14 @@ type ContractBase = Omit<
           readonly ref: {
             readonly entry: 'TenantSetting';
             readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'TenantSnapshot';
+            readonly field: 'id';
             readonly namespace: 'public';
           };
         },

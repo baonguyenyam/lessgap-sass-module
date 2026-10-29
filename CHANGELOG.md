@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.77.0] - 2026-10-29
+
+**A tenant's whole database becomes one gzipped bundle in R2 — on demand and nightly — with a row recording every table's count.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **`TenantSnapshot`** — status, per-table row counts, size, and the R2 key for every backup
+- **`platform.tenant.snapshot` + `platform.tenant.snapshot_nightly`** — on demand and 3 a.m. per active tenant, every `tenant-owned` table into one gzip
+
 ## [2.76.0] - 2026-10-29
 
 **Domains reconcile themselves daily — a Vercel drift between provider and rows shows on `/platform/domains`, not at the next incident.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.

@@ -1657,3 +1657,29 @@ trialEndsAt          TimestampString(3)?
     @@index([conversationId], map: "ChatMessage_conversationId_idx")
     @@rls
   }
+
+  // A tenant's backup (task 8.3): every tenant-owned table, gzipped to
+  // snapshots/<tenantId>/<id>.json.gz in R2. The row is the audit trail —
+  // status, row counts, size — the bundle is the data (decision 8-C).
+  model TenantSnapshot {
+    id          String             @id(map: "TenantSnapshot_pkey") @onCreate(cuid(2))
+    tenantId    String
+    status      String             @default("running")
+    rowCounts   Json               @default(json`{}`)
+    sizeBytes   Int                @default(0)
+    r2Key       String?
+    requestedBy String?
+    error       String?
+    createdAt   TimestampString(3) @default(now())
+    completedAt TimestampString(3)?
+    tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "TenantSnapshot_tenantId_fkey")
+
+    @@index([tenantId], map: "TenantSnapshot_tenantId_idx")
+    @@rls
+  }
+
+  policy_all tenant_snapshot_isolation {
+    target    = TenantSnapshot
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }

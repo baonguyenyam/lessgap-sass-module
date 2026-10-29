@@ -252,6 +252,10 @@
       "model": "TenantSetting",
       "namespace": "public"
     },
+    "TenantSnapshot": {
+      "model": "TenantSnapshot",
+      "namespace": "public"
+    },
     "TimeOff": {
       "model": "TimeOff",
       "namespace": "public"
@@ -9153,6 +9157,140 @@
               "table": "TenantSetting"
             }
           },
+          "TenantSnapshot": {
+            "fields": {
+              "completedAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "error": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "r2Key": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "requestedBy": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "rowCounts": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
+              "sizeBytes": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "tenant": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "tenantId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tenant",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "completedAt": {
+                  "column": "completedAt"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "error": {
+                  "column": "error"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "r2Key": {
+                  "column": "r2Key"
+                },
+                "requestedBy": {
+                  "column": "requestedBy"
+                },
+                "rowCounts": {
+                  "column": "rowCounts"
+                },
+                "sizeBytes": {
+                  "column": "sizeBytes"
+                },
+                "status": {
+                  "column": "status"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "TenantSnapshot"
+            }
+          },
           "TimeOff": {
             "fields": {
               "createdAt": {
@@ -10589,6 +10727,18 @@
               "using": "\"tenantId\" = current_setting('app.tenant_id', true)",
               "withCheck": "\"tenantId\" = current_setting('app.tenant_id', true)"
             },
+            "tenant_snapshot_isolation": {
+              "kind": "policy",
+              "name": "tenant_snapshot_isolation_c516f4ff",
+              "namespaceId": "public",
+              "operation": "all",
+              "permissive": true,
+              "prefix": "tenant_snapshot_isolation",
+              "roles": [],
+              "tableName": "TenantSnapshot",
+              "using": "\"tenantId\" = current_setting('app.tenant_id', true)",
+              "withCheck": "\"tenantId\" = current_setting('app.tenant_id', true)"
+            },
             "time_off_isolation": {
               "kind": "policy",
               "name": "time_off_isolation_c516f4ff",
@@ -10849,6 +10999,11 @@
               "kind": "rls",
               "namespaceId": "public",
               "tableName": "TenantSetting"
+            },
+            "TenantSnapshot": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "TenantSnapshot"
             },
             "TimeOff": {
               "kind": "rls",
@@ -18692,6 +18847,122 @@
               },
               "uniques": []
             },
+            "TenantSnapshot": {
+              "columns": {
+                "completedAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "error": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "r2Key": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "requestedBy": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "rowCounts": {
+                  "codecId": "pg/json@1",
+                  "dataType": "pg/json",
+                  "default": {
+                    "kind": "literal",
+                    "value": {}
+                  },
+                  "nullable": false
+                },
+                "sizeBytes": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nullable": false
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "default": {
+                    "kind": "literal",
+                    "value": "running"
+                  },
+                  "nullable": false
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "TenantSnapshot_tenantId_idx"
+                  },
+                  "name": "TenantSnapshot_tenantId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "tenantId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "TenantSnapshot"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tenant"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "tenantId"
+                  ],
+                  "name": "TenantSnapshot_tenantId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "TenantSnapshot_pkey"
+              },
+              "uniques": []
+            },
             "TimeOff": {
               "columns": {
                 "createdAt": {
@@ -19431,10 +19702,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "f2ad8164887818bf08456ffe4efec064f341c452ce2aebdc128ab643f16f6db9"
+    "storageHash": "ca7d656ada716165ba7ca4a931b65571b72018fc2a9257c7390c905935a47ca3"
   },
   "execution": {
-    "executionHash": "509fc6eedb1b7e32cfb508ffb879657554b711151c4f1150dd10700823243987",
+    "executionHash": "42db3cdfabb33da0d2da0d72bcaa9e3b3487fff7f73b44e2e23c10e08d25f314",
     "mutations": {
       "defaults": [
         {
@@ -20628,6 +20899,17 @@
           "ref": {
             "entry": "TenantSetting",
             "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "TenantSnapshot",
+            "field": "id",
             "namespace": "public"
           }
         },

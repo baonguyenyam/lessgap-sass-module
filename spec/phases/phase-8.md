@@ -69,7 +69,7 @@ that measurement, not guessed.
   tenant-owned table's rows.
 - **Done when:** a snapshot request produces a gzipped bundle in R2 and a
   `TenantSnapshot` row.
-- [ ] done
+- [x] done (`TenantSnapshot` (tenant-owned + `@@rls` + `policy_all`): status, rowCounts, sizeBytes, r2Key, requestedBy — migration `ca7d656a`. `src/platform/backup/snapshot.ts` — `snapshotTenant` dumps every `tenant-owned` model per `MODEL_CLASSIFICATION` → gzipped `SnapshotBundle` → `putObject(snapshots/<tenantId>/<id>.json.gz)` when `storageConfigured()` → row marked `done`; error → `failed` + rethrow. JOBS: `platform.tenant.snapshot` (payload) + `platform.tenant.snapshot_nightly` (`0 3 * * *`, every ACTIVE tenant). O5 test 3/3 — every tenant-owned table in rowCounts, second tenant's rows never enter, storage → `snapshots/` key.)
 
 ### 8.4 — Restore-to-new + O6 + `/platform/backups`
 - **Goal:** import a bundle into a fresh tenant — ids remapped via a

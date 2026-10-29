@@ -113,6 +113,25 @@ export const JOBS: JobRegistry = {
       await reconcileDomains()
     },
   },
+  // Tenant snapshot (task 8.3): on demand from the console, and nightly
+  // per active tenant once the format has survived drills.
+  "platform.tenant.snapshot": {
+    handler: async (payload, context) => {
+      const tenantId = (payload as { tenantId?: string }).tenantId ?? context.tenantId
+      if (!tenantId) throw new Error("platform.tenant.snapshot without a tenant id")
+      const { snapshotTenant } = await import("@/platform/backup/snapshot")
+      await snapshotTenant(tenantId, (payload as { requestedBy?: string }).requestedBy)
+    },
+  },
+  "platform.tenant.snapshot_nightly": {
+    schedule: "0 3 * * *",
+    handler: async () => {
+      const { db8 } = await import("@/lib/db8")
+      const { snapshotTenant } = await import("@/platform/backup/snapshot")
+      const tenants = await db8.orm.public.Tenant.where({ status: "ACTIVE" }).all()
+      for (const tenant of tenants) await snapshotTenant(tenant.id)
+    },
+  },
   // Tenant deletion (task 1.14): the console action enqueues one row per
   // tenant; the purge itself lives in src/platform/tenancy/delete-tenant.ts.
   // Idempotent — deleting a missing tenant is a no-op.
