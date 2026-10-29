@@ -15,7 +15,7 @@ vi.mock("@/platform/tenancy/require-member", async (importOriginal) => {
 vi.mock("@/lib/stripe", () => ({
   stripe: {
     refunds: {
-      create: vi.fn(async (_input: { payment_intent: string; amount: number; refund_application_fee: boolean }) => ({
+      create: vi.fn(async () => ({
         id: "re_1",
         status: "succeeded",
       })),

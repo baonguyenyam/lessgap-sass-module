@@ -92,6 +92,17 @@ export const JOBS: JobRegistry = {
       await sendReminders()
     },
   },
+  // Chatbot re-index (task 7.2): a page/FAQ/document save enqueues one
+  // row per tenant; the pipeline in src/platform/chatbot/ingest.ts is
+  // idempotent per source checksum.
+  "platform.chatbot.reindex": {
+    handler: async (payload, context) => {
+      const tenantId = (payload as { tenantId?: string }).tenantId ?? context.tenantId
+      if (!tenantId) throw new Error("platform.chatbot.reindex without a tenant id")
+      const { reindexTenant } = await import("@/platform/chatbot/ingest")
+      await reindexTenant(tenantId)
+    },
+  },
   // Tenant deletion (task 1.14): the console action enqueues one row per
   // tenant; the purge itself lives in src/platform/tenancy/delete-tenant.ts.
   // Idempotent — deleting a missing tenant is a no-op.

@@ -40,6 +40,11 @@ export const FEATURES = {
   quotes: { kind: "boolean", default: true },
   "quotes.monthly": { kind: "limit", default: null, period: "month", requires: ["quotes"] },
   "quotes.online_acceptance": { kind: "boolean", default: true, requires: ["quotes"] },
+  chatbot: { kind: "boolean", default: true },
+  "chatbot.messages.monthly": { kind: "limit", default: null, period: "month", requires: ["chatbot"] },
+  "chatbot.documents.max": { kind: "limit", default: null, requires: ["chatbot"] },
+  "chatbot.languages.max": { kind: "limit", default: null, requires: ["chatbot"] },
+  "chatbot.handoff.sms": { kind: "boolean", default: false, requires: ["chatbot"] },
 } as const satisfies Record<string, FeatureDefinition>
 
 export type FeatureKey = keyof typeof FEATURES

@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.71.0] - 2026-10-29
+
+**The chatbot ingest pipeline: pages and FAQs are chunked, embedded, and re-indexed — idempotent by checksum.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`reindexTenant`** — site pages and `chatbot.faq` entries become `KnowledgeChunk`s with embeddings; an unchanged checksum is a no-op, a changed one re-embeds
+- **`ChatProvider`** — the LLM and embedder interface; `local` is deterministic for tests and dev, `openai` lands behind env keys
+- **`platform.chatbot.reindex`** — the job that refreshes a tenant's knowledge after a save or upload
+
 ## [2.70.0] - 2026-10-29
 
 **The chatbot's knowledge base: pgvector sources, chunks and conversations — in the same RLS database.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (installs the `vector` extension).

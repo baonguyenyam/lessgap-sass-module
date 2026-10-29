@@ -67,7 +67,7 @@ abstraction (`chatbot.provider`) keeps the LLM and embedder swappable.
 - **Checks:** `pnpm test`, `pnpm test:integration`, `pnpm modules:check`.
 - **Done when:** `reindex` populates `KnowledgeChunk` per tenant and is
   idempotent.
-- [ ] done
+- [x] done (`src/lib/chatbot/chunk.ts` — `chunkText` (paragraph/heading boundaries, token cap ≈ 4 chars/token, hard-splits oversized blocks) + `estimateTokens`. `src/platform/chatbot/provider.ts` — `ChatProvider` (embed + chat + tools); `localProvider` = deterministic 384-dim hash embedding + stub chat that calls `get_services`/`get_hours`/`find_slots` by keyword (moved from `src/modules/chatbot/server/` — the kernel can't import modules, lint rule). `src/platform/chatbot/ingest.ts` — `collectSources` (published `Page`s + `chatbot.faq` TenantSetting) + `reindexTenant` (checksum+embeddingModel → upsert source, delete+re-chunk+embed). `src/modules/chatbot/module.ts` lifecycle. `platform.chatbot.reindex` JOBS. Feature keys `chatbot`, `chatbot.messages.monthly`, `chatbot.documents.max`, `chatbot.languages.max`, `chatbot.handoff.sms` + `module.chatbot` + `feature.chatbot` seeded. Unit `chunk.test.ts` 4/4; integration `chatbot-ingest.test.ts` 4/4 — tenant-keyed chunks, checksum no-op/change re-embeds, FAQ, tenant isolation.)
 
 ### 7.3 — Answer pipeline: prompt, tools, stream, log
 - **Goal:** `answerChat(ctx, question)` — rate-limit
