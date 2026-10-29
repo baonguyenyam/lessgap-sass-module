@@ -101,7 +101,7 @@ abstraction (`chatbot.provider`) keeps the LLM and embedder swappable.
 - **Checks:** `pnpm test:integration`, `pnpm modules:check`.
 - **Done when:** a tenant configures the bot, sees its conversations, and
   can be silenced platform-wide.
-- [ ] done
+- [x] done (`src/components/chatbot/chat-bubble.tsx` — bubble → sheet → messages; `visitorKey` lazy in `currentVisitorKey()` inside `ask()` (sessionStorage in a render call is impure — react-hooks/purity). Mounted on `/sites/[host]` inside `<Layout>` when `chatbotEnabled` — `getSiteData` computes it from `TenantModule(chatbot)` + `PlatformSwitch(feature.chatbot)` (`SiteData.chatbotEnabled`). `/t/<slug>/chatbot` — sources + chunks count, `ReindexButton` (enqueues `platform.chatbot.reindex`), `ChatbotSettingsForm` (tone + languages → `chatbot.settings` TenantSetting), conversation log. Nav gated by `enabledModules`. `reindexNow` + `saveChatbotSettings` server actions audited. Integration `chatbot-kill-switch.test.ts` 3/3 — `feature.chatbot` off → API 403 + widget flag false; on → 200; `reindexNow` enqueues a `platform.chatbot.reindex` job row.)
 
 ### 7.5 — Required tests + cost record
 - **Goal:** spec/08's three required tests pass, and cost per 1,000

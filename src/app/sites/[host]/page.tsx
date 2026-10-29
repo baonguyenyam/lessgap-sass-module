@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation"
+import { ChatBubble } from "@/components/chatbot/chat-bubble"
 import { headers } from "next/headers"
 import { cacheLife, cacheTag } from "next/cache"
 import { db8 } from "@/lib/db8"
@@ -22,11 +23,13 @@ async function getSiteData(tenantId: string): Promise<SiteData | null> {
   cacheLife("minutes")
   const tenant = await db8.orm.public.Tenant.where({ id: tenantId }).first()
   if (!tenant) return null
-  const [site, settings, moduleOn, teamOn] = await Promise.all([
+  const [site, settings, moduleOn, teamOn, chatbotOn, chatbotFeature] = await Promise.all([
     db8.orm.public.Site.where({ tenantId }).first(),
     db8.orm.public.SiteSettings.where({ tenantId }).first(),
     db8.orm.public.TenantModule.where({ tenantId, moduleKey: "catalog", enabled: true }).first(),
     db8.orm.public.TenantModule.where({ tenantId, moduleKey: "team", enabled: true }).first(),
+    db8.orm.public.TenantModule.where({ tenantId, moduleKey: "chatbot", enabled: true }).first(),
+    db8.orm.public.PlatformSwitch.where({ key: "feature.chatbot" }).first(),
   ])
   const catalog = moduleOn
     ? {
@@ -70,6 +73,7 @@ async function getSiteData(tenantId: string): Promise<SiteData | null> {
     },
     catalog,
     team,
+    chatbotEnabled: chatbotOn != null && chatbotFeature?.value !== false,
   }
 }
 
@@ -96,6 +100,7 @@ export default async function SitePage() {
     <Layout data={data}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Page data={data} />
+      {data.chatbotEnabled && <ChatBubble />}
     </Layout>
   )
 }

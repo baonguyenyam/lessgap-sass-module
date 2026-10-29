@@ -791,6 +791,23 @@
       "refund": "Refund",
       "refunded": "refunded",
       "refunded_done": "refunded"
+    },
+    "chatbot": {
+      "title": "Chatbot",
+      "subtitle": "Your site's assistant — sources, settings, conversations",
+      "reindex": "Re-index",
+      "reindexing": "Indexing…",
+      "reindexed": "Indexed",
+      "sources": "{count} sources",
+      "sources_empty": "No sources — pages and FAQs index on save or with Re-index.",
+      "settings": "Settings",
+      "tone": "Tone",
+      "languages": "Languages (comma-separated)",
+      "save": "Save",
+      "saved": "Saved.",
+      "conversations": "{count} conversations",
+      "conversations_empty": "No conversations yet.",
+      "messages": "messages"
     }
   },
   "platform": {
@@ -1577,7 +1594,8 @@
     "reservations": "Reservations",
     "orders": "Orders",
     "quotes": "Quotes",
-    "payments": "Payments"
+    "payments": "Payments",
+    "chatbot": "Chatbot"
   },
   "faq": {
     "title": "Frequently asked questions",
@@ -2022,6 +2040,21 @@
         "forbidden": "Not allowed.",
         "limit_reached": "Too many requests — try later.",
         "conflict": "Try again."
+      }
+    },
+    "chat": {
+      "open": "Chat with us",
+      "title": "Questions?",
+      "greeting": "Ask about services, hours or availability.",
+      "placeholder": "Type your question…",
+      "send": "Send",
+      "sources": "sources",
+      "error": {
+        "forbidden": "Chat is offline.",
+        "invalid_input": "Try again.",
+        "not_found": "Not found.",
+        "limit_reached": "Too many messages — try later.",
+        "unknown": "Something went wrong."
       }
     }
   }

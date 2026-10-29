@@ -113,6 +113,9 @@ export function navGroups(
         ...(enabledModules && !enabledModules.has("shop")
           ? []
           : [{ key: "orders", href: t("orders"), icon: Boxes } satisfies NavItem]),
+        ...(enabledModules && !enabledModules.has("chatbot")
+          ? []
+          : [{ key: "chatbot", href: t("chatbot"), icon: Boxes } satisfies NavItem]),
         ...(customRoles ? [{ key: "roles", href: t("roles"), icon: KeyRound } satisfies NavItem] : []),
       ],
     },

@@ -791,6 +791,23 @@
       "refund": "Hoàn tiền",
       "refunded": "đã hoàn",
       "refunded_done": "đã hoàn"
+    },
+    "chatbot": {
+      "title": "Chatbot",
+      "subtitle": "Trợ lý của site — nguồn, cài đặt, hội thoại",
+      "reindex": "Đánh index lại",
+      "reindexing": "Đang index…",
+      "reindexed": "Đã index",
+      "sources": "{count} nguồn",
+      "sources_empty": "Chưa có nguồn — trang và FAQ index khi lưu hoặc bấm Đánh index lại.",
+      "settings": "Cài đặt",
+      "tone": "Giọng điệu",
+      "languages": "Ngôn ngữ (cách nhau bởi dấu phẩy)",
+      "save": "Lưu",
+      "saved": "Đã lưu.",
+      "conversations": "{count} hội thoại",
+      "conversations_empty": "Chưa có hội thoại.",
+      "messages": "tin nhắn"
     }
   },
   "platform": {
@@ -1577,7 +1594,8 @@
     "reservations": "Đặt bàn",
     "orders": "Đơn hàng",
     "quotes": "Báo giá",
-    "payments": "Thanh toán"
+    "payments": "Thanh toán",
+    "chatbot": "Chatbot"
   },
   "faq": {
     "title": "Các câu hỏi thường gặp",
@@ -2022,6 +2040,21 @@
         "forbidden": "Không được phép.",
         "limit_reached": "Quá nhiều yêu cầu — thử lại sau.",
         "conflict": "Thử lại."
+      }
+    },
+    "chat": {
+      "open": "Chat với chúng tôi",
+      "title": "Câu hỏi?",
+      "greeting": "Hỏi về dịch vụ, giờ mở cửa hoặc lịch trống.",
+      "placeholder": "Nhập câu hỏi…",
+      "send": "Gửi",
+      "sources": "nguồn",
+      "error": {
+        "forbidden": "Chat đang tắt.",
+        "invalid_input": "Thử lại.",
+        "not_found": "Không tìm thấy.",
+        "limit_reached": "Quá nhiều tin nhắn — thử lại sau.",
+        "unknown": "Có lỗi xảy ra."
       }
     }
   }

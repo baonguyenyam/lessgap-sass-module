@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.73.0] - 2026-10-29
+
+**The chat bubble is live on sites: questions stream in, answers come back sourced — and a platform kill switch can silence the bot everywhere.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **Site chat bubble** — a floating button opens a sheet; questions POST to `/api/chat`, answers render with their sources; `visitorKey` persists the conversation
+- **Dashboard → Chatbot** — sources + re-index, tone/languages settings, the conversation log
+- **Kill switches** — `module.chatbot` per tenant and `feature.chatbot` platform-wide; either off hides the bubble and refuses the API
+
 ## [2.72.0] - 2026-10-29
 
 **The chatbot's answer pipeline: rate-limited, prompt-templated, tool-grounded, logged.** This is a MINOR: `git pull`, `pnpm install`.
