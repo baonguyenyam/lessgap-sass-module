@@ -7,6 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.84.0] - 2026-10-29
+
+**The booking journey runs as a Playwright spec — site page on a real host, appointment, signed manage link, reschedule — and `manageAppointment` no longer breaks outside a request.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Fixed
+
+- **`manageAppointment` outside a request** — `revalidatePath("/sites")` threw `static generation store missing` for non-request callers (jobs, specs); it now revalidates only when a store exists
+
+### Added
+
+- **`tests/e2e/booking.spec.ts`** — the book → manage → reschedule journey (bookAppointment's own path stays integration-covered — it needs a request store)
+
 ## [2.83.0] - 2026-10-29
 
 **Module changes reach the site immediately — `enableModule`/`disableModule` now invalidate the site's cache — plus the E8 downgrade E2E.** This is a MINOR: `git pull`, `pnpm install`.

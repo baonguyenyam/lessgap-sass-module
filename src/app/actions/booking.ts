@@ -254,7 +254,13 @@ export async function manageAppointment(input: { token: string; toStatus?: strin
       })
       await audit(c, { action: "booking.appointment_rescheduled", targetType: "Appointment", targetId: appointment.id })
     }
-    revalidatePath("/sites")
+    // Specs and jobs call the action without a request store — revalidate
+    // when there is one, never break the write over it.
+    try {
+      revalidatePath("/sites")
+    } catch {
+      /* no request store — nothing to revalidate */
+    }
     return {}
   } catch (error) {
     if (error instanceof AppError) return { error: error.code }

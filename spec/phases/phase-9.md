@@ -71,7 +71,7 @@ exists.
 **Tests:** Playwright spec — book → appointment row → manage link →
 `rescheduled`; outbox row present.
 **Done when:** the journey passes end-to-end in the browser.
-- [ ] done
+- [x] done (`tests/e2e/booking.spec.ts` 1/1 — provision + booking module + staff + service + availability + published site → `/book` renders on the Host header → `Appointment` `requested` → `signManageToken` manage page resolves → `manageAppointment` reschedules (ISO strings — `availableSlots` emits ISO, not TimestampString). `bookAppointment` reads `headers()` for `siteCtx` — a spec can't build a request store, and `vi.mock` is Vitest-only; `site-booking.test.ts` (8 integration tests) covers the action body. `manageAppointment`'s `revalidatePath` wrapped for non-request callers — `static generation store missing` outside a request.)
 
 ### 9.4 Ordering + quote request E2E
 
