@@ -10,7 +10,7 @@ visitor's name — when a slot frees, the waitlisted get first pick.
 
 ## Scope
 
-- Phase 11: in progress.
+- Phase 11: done.
 
 ## Tasks
 
@@ -52,7 +52,7 @@ the themes render them.
 **Tests:** e2e — the waitlist join shows when a day is full; a published
 review appears on the site, a pending one doesn't.
 **Done when:** both surfaces render correctly.
-- [ ] done
+- [x] done (`tests/e2e/site-surfaces.spec.ts` 1/1 — the booking page's empty `slots` swaps the form for the waitlist join, `getSiteData` reads `published` `Review` rows into `SiteData.reviews` and both themes' `reviews` sections render them.)
 
 ## Exit criteria
 

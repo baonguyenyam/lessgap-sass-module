@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import { Checkbox } from "@/components/ui/checkbox"
-import { bookAppointment } from "@/app/actions/booking"
+import { bookAppointment, joinWaitlist } from "@/app/actions/booking"
 
 /** The site booking form (task 5.4): service → staff → slot → details →
  * consent → submit. Server-side validation is the authority. */
@@ -57,6 +57,8 @@ export function BookingForm({
     else setDone(res)
   }
   if (done) return <p role="status">{done.status === "requested" ? t("requested") : t("confirmed")}</p>
+  // No open slots — offer the waitlist instead of a dead end (task 11.1/11.3).
+  if (slots.length === 0) return <WaitlistJoin serviceId={serviceId} services={services} t={t} />
   return (
     <form onSubmit={submit} className="space-y-4">
       <div className="space-y-1.5">
@@ -117,6 +119,72 @@ export function BookingForm({
       {error && <p className="text-sm text-destructive">{t(`error.${error}`)}</p>}
       <Button type="submit" disabled={pending || !serviceId || !slot || !name || (!email && !phone)}>
         {pending ? t("booking") : t("book")}
+      </Button>
+    </form>
+  )
+}
+
+type JoinT = (key: string) => string
+function WaitlistJoin({
+  serviceId,
+  services,
+  t,
+}: {
+  serviceId: string
+  services: { id: string; name: string }[]
+  t: JoinT
+}) {
+  const [email, setEmail] = useState("")
+  const [phone, setPhone] = useState("")
+  const [date, setDate] = useState("")
+  const [svc, setSvc] = useState(serviceId)
+  const [joined, setJoined] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [pending, setPending] = useState(false)
+  async function submit(e: React.FormEvent) {
+    e.preventDefault()
+    setPending(true)
+    setError(null)
+    const res = await joinWaitlist({
+      email: email || undefined,
+      phone: phone || undefined,
+      serviceId: svc || undefined,
+      wantedDate: date,
+    })
+    setPending(false)
+    if (res.error) setError(res.error)
+    else setJoined(true)
+  }
+  if (joined) return <p role="status">{t("waitlist_joined")}</p>
+  return (
+    <form onSubmit={submit} className="space-y-4">
+      <p>{t("waitlist_offer")}</p>
+      <div className="space-y-1.5">
+        <Label htmlFor="wl-date">{t("waitlist_date")}</Label>
+        <Input id="wl-date" type="date" required value={date} onChange={(e) => setDate(e.target.value)} />
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="wl-svc">{t("service")}</Label>
+        <NativeSelect id="wl-svc" value={svc} onChange={(e) => setSvc(e.target.value)}>
+          <NativeSelectOption value="">{t("any_staff")}</NativeSelectOption>
+          {services.map((s) => (
+            <NativeSelectOption key={s.id} value={s.id}>
+              {s.name}
+            </NativeSelectOption>
+          ))}
+        </NativeSelect>
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="wl-email">{t("email")}</Label>
+        <Input id="wl-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="wl-phone">{t("phone")}</Label>
+        <Input id="wl-phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+      </div>
+      {error && <p role="alert">{error}</p>}
+      <Button type="submit" disabled={pending || (!email && !phone)}>
+        {pending ? t("waitlist_joining") : t("waitlist_join")}
       </Button>
     </form>
   )

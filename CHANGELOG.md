@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.92.0] - 2026-10-29
+
+**The site surfaces the waitlist and the reviews — a full day offers the join form, and approved reviews render.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **Waitlist join on the booking page** — when `availableSlots` is empty the booking form swaps to the join form (email or phone, the day they wanted, the service)
+- **`SiteData.reviews`** — `getSiteData` reads `published` `Review` rows; both themes' `reviews` sections render them on the home page
+- **`site-surfaces.spec.ts`** — waitlist join shows on a full day; a published review renders
+
 ## [2.91.0] - 2026-10-29
 
 **A real customer can leave a review after a completed appointment — and nothing goes on the site until the tenant approves it.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.

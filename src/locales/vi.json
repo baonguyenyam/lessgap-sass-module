@@ -2013,7 +2013,12 @@
       "manage_title": "Quản lý lịch hẹn",
       "new_slot": "Giờ mới",
       "reschedule": "Đổi giờ",
-      "host": "Host"
+      "host": "Host",
+      "waitlist_offer": "Ngày này đã kín — để lại thông tin, chúng tôi sẽ ưu tiên bạn khi có chỗ trống.",
+      "waitlist_date": "Ngày bạn muốn",
+      "waitlist_join": "Tham gia danh sách chờ",
+      "waitlist_joining": "Đang thêm…",
+      "waitlist_joined": "Bạn đã vào danh sách — chúng tôi sẽ báo khi có chỗ."
     },
     "order": {
       "title": "Đặt mang về",

@@ -3,6 +3,7 @@ import HeroSection from "@/themes/classic/sections/hero"
 import HoursSection from "@/themes/classic/sections/hours"
 import ServicesSection from "@/themes/classic/sections/services"
 import TeamSection from "@/themes/classic/sections/team"
+import ReviewsSection from "@/themes/classic/sections/reviews"
 
 export default function HomePage({ data }: { data: SiteData }) {
   return (
@@ -10,6 +11,7 @@ export default function HomePage({ data }: { data: SiteData }) {
       <HeroSection data={data} />
       <ServicesSection data={data} />
       <TeamSection data={data} />
+      <ReviewsSection data={data} />
       <HoursSection data={data} />
       <section className="py-6 text-center text-sm text-stone-600">
         {data.settings.profile.phone && <p>{data.settings.profile.phone}</p>}

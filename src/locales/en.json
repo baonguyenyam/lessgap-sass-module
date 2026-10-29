@@ -2013,7 +2013,12 @@
       "manage_title": "Manage your appointment",
       "new_slot": "New time",
       "reschedule": "Reschedule",
-      "host": "Host"
+      "host": "Host",
+      "waitlist_offer": "This day is fully booked — leave your details and we'll offer you the next free slot.",
+      "waitlist_date": "Day you wanted",
+      "waitlist_join": "Join the waitlist",
+      "waitlist_joining": "Joining…",
+      "waitlist_joined": "You're on the list — we'll let you know when a slot frees."
     },
     "order": {
       "title": "Order for pickup",

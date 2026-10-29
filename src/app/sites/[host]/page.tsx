@@ -25,15 +25,20 @@ async function getSiteData(tenantId: string): Promise<SiteData | null> {
   cacheLife("minutes")
   const tenant = await db8.orm.public.Tenant.where({ id: tenantId }).first()
   if (!tenant) return null
-  const [site, settings, moduleOn, teamOn, chatbotOn, analyticsOn, chatbotFeature] = await Promise.all([
-    db8.orm.public.Site.where({ tenantId }).first(),
-    db8.orm.public.SiteSettings.where({ tenantId }).first(),
-    db8.orm.public.TenantModule.where({ tenantId, moduleKey: "catalog", enabled: true }).first(),
-    db8.orm.public.TenantModule.where({ tenantId, moduleKey: "team", enabled: true }).first(),
-    db8.orm.public.TenantModule.where({ tenantId, moduleKey: "chatbot", enabled: true }).first(),
-    db8.orm.public.TenantModule.where({ tenantId, moduleKey: "analytics", enabled: true }).first(),
-    db8.orm.public.PlatformSwitch.where({ key: "feature.chatbot" }).first(),
-  ])
+  const [site, settings, moduleOn, teamOn, chatbotOn, analyticsOn, chatbotFeature, publishedReviews] =
+    await Promise.all([
+      db8.orm.public.Site.where({ tenantId }).first(),
+      db8.orm.public.SiteSettings.where({ tenantId }).first(),
+      db8.orm.public.TenantModule.where({ tenantId, moduleKey: "catalog", enabled: true }).first(),
+      db8.orm.public.TenantModule.where({ tenantId, moduleKey: "team", enabled: true }).first(),
+      db8.orm.public.TenantModule.where({ tenantId, moduleKey: "chatbot", enabled: true }).first(),
+      db8.orm.public.TenantModule.where({ tenantId, moduleKey: "analytics", enabled: true }).first(),
+      db8.orm.public.PlatformSwitch.where({ key: "feature.chatbot" }).first(),
+      db8.orm.public.Review.where({ tenantId, status: "published" }).all(),
+    ])
+  const customersById = new Map(
+    (publishedReviews.length ? await db8.orm.public.Customer.where({ tenantId }).all() : []).map((x) => [x.id, x])
+  )
   const catalog = moduleOn
     ? {
         categories: (await db8.orm.public.ServiceCategory.where({ tenantId }).all()).map((x) => ({
@@ -76,6 +81,13 @@ async function getSiteData(tenantId: string): Promise<SiteData | null> {
     },
     catalog,
     team,
+    reviews:
+      publishedReviews.length > 0
+        ? publishedReviews.map((r) => {
+            const customer = customersById.get(r.customerId)
+            return { id: r.id, rating: r.rating, body: r.body, name: customer?.name?.split(" ")[0] ?? "—" }
+          })
+        : undefined,
     chatbotEnabled: chatbotOn != null && chatbotFeature?.value !== false,
     analyticsEnabled: analyticsOn != null,
   }

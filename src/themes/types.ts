@@ -19,6 +19,9 @@ export type SiteData = {
   /** Present when the `team` module is enabled (task 4.3) — the site's
    * staff list. */
   team?: { id: string; name: string; photo: string | null; bio: string | null }[]
+  /** `published` `Review` rows (task 11.2/11.3) — the customer's first
+   * name, never the whole row. */
+  reviews?: { id: string; rating: number; body: string | null; name: string }[]
   chatbotEnabled?: boolean
   analyticsEnabled?: boolean
   catalog?: {
