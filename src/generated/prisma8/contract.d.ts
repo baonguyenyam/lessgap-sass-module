@@ -23,7 +23,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'0c841be9954d48a5fd4fb5444ad1f301dd2683a64814313616704d87d02d9a2d'>;
+  StorageHashBase<'374f3050ec67ee3e667e52179b395e16555f73ad14a1781f942ca906cd583602'>;
 export type ExecutionHash =
   ExecutionHashBase<'00ccc65aa01566f9dab33fce5330d0b903213065cbd5d2a78651e4c811142246'>;
 export type ProfileHash =
@@ -1015,6 +1015,7 @@ export namespace Models {
     categoryId: FieldOutputTypes['public']['Service']['categoryId'];
     createdAt: FieldOutputTypes['public']['Service']['createdAt'];
     currency: FieldOutputTypes['public']['Service']['currency'];
+    depositCents: FieldOutputTypes['public']['Service']['depositCents'];
     description: FieldOutputTypes['public']['Service']['description'];
     durationMinutes: FieldOutputTypes['public']['Service']['durationMinutes'];
     id: FieldOutputTypes['public']['Service']['id'];
@@ -5996,6 +5997,12 @@ type ContractBase = Omit<
                     readonly kind: 'literal';
                     readonly value: DefaultLiteralValue<'pg/text@1', 'usd'>;
                   };
+                  readonly many: false;
+                };
+                readonly depositCents: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
                   readonly many: false;
                 };
                 readonly description: {
@@ -12070,6 +12077,10 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
+              readonly depositCents: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
               readonly description: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
@@ -12170,6 +12181,7 @@ type ContractBase = Omit<
                 readonly categoryId: { readonly column: 'categoryId' };
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly currency: { readonly column: 'currency' };
+                readonly depositCents: { readonly column: 'depositCents' };
                 readonly description: { readonly column: 'description' };
                 readonly durationMinutes: { readonly column: 'durationMinutes' };
                 readonly id: { readonly column: 'id' };

@@ -8,6 +8,7 @@ import { requireModule } from "@/platform/modules/runtime"
 import { audit } from "@/platform/audit"
 import { systemContext } from "@/platform/tenancy/context"
 import { upsertCustomer } from "@/platform/booking/customer"
+import { canCharge, createCheckout } from "@/platform/payments/connect"
 import { notify } from "@/platform/notify"
 import { availableSlots } from "@/lib/availability"
 import { signManageToken, verifyManageToken } from "@/lib/booking/manage-token"
@@ -104,7 +105,20 @@ export async function bookAppointment(input: {
       smsConsent: input.smsConsent,
       source: "site",
     })
-    const status = (await getEntitlements(c)).has("booking.manual_approval") ? "requested" : "confirmed"
+    // A deposit-gated service (booking.deposits + Service.depositCents)
+    // stays `requested` — unpaid — until the Stripe session succeeds and
+    // the webhook flips it (spec/05, hidden not broken).
+    const depositDue =
+      service.depositCents != null &&
+      service.depositCents > 0 &&
+      (await getEntitlements(c)).has("booking.deposits") &&
+      tenant != null &&
+      canCharge(tenant)
+    const status = depositDue
+      ? "requested"
+      : (await getEntitlements(c)).has("booking.manual_approval")
+        ? "requested"
+        : "confirmed"
     let appointment
     try {
       appointment = await db8.orm.public.Appointment.create({
@@ -132,6 +146,18 @@ export async function bookAppointment(input: {
     })
     const staffName = staff.find((s) => s.id === match.staffId)?.name ?? ""
     const manageUrl = `${site.origin}/sites/${site.slug}/book/manage/${signManageToken(appointment.id)}`
+    if (depositDue) {
+      const checkout = await createCheckout(c, {
+        kind: "deposit",
+        amountCents: service.depositCents!,
+        description: `${service.name} deposit`,
+        successUrl: `${site.origin}/sites/${site.slug}/book/confirmed?a=${appointment.id}`,
+        cancelUrl: `${site.origin}/sites/${site.slug}/book`,
+        customerEmail: input.email,
+        appointmentId: appointment.id,
+      })
+      return { id: appointment.id, checkoutUrl: checkout.checkoutUrl }
+    }
     const ics = icsFile({
       uid: appointment.id,
       title: service.name,

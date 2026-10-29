@@ -738,6 +738,7 @@ trialEndsAt          TimestampString(3)?
     description     String?
     durationMinutes Int              @default(60)
     priceCents      Int              @default(0)
+    depositCents    Int?
     currency        String           @default("usd")
     imageKey        String?
     isSample        Boolean          @default(false)

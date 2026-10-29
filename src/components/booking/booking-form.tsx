@@ -29,7 +29,7 @@ export function BookingForm({
   const [phone, setPhone] = useState("")
   const [marketing, setMarketing] = useState(false)
   const [sms, setSms] = useState(false)
-  const [done, setDone] = useState<{ id: string; status: string } | null>(null)
+  const [done, setDone] = useState<{ id: string; status?: string; checkoutUrl?: string } | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
 
@@ -53,6 +53,7 @@ export function BookingForm({
     })
     setPending(false)
     if (res.error) setError(res.error)
+    else if (res.checkoutUrl) window.location.href = res.checkoutUrl
     else setDone(res)
   }
   if (done) return <p role="status">{done.status === "requested" ? t("requested") : t("confirmed")}</p>

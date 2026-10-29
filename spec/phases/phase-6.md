@@ -141,7 +141,7 @@ appointment), and booking deposits (`booking.deposits` wired at last).
 - **Checks:** `pnpm test:integration`.
 - **Done when:** a deposit-gated service takes payment before
   confirmation.
-- [ ] done
+- [x] done (`Service.depositCents` — contract + migration `20261029T1607_platform_service_deposit`. `bookAppointment` computes `depositDue` (depositCents + `booking.deposits` + `canCharge`) BEFORE `Appointment.create` — unpaid books as `requested`, not `confirmed`; the branch returns `{id, checkoutUrl}` via `createCheckout` (kind `deposit`, `appointmentId` link). `markPaymentSucceeded` flips a `requested` appointment to `confirmed` + `AppointmentEvent` (actor `system`). `BookingForm` redirects to `checkoutUrl` when present. Integration — deposit service → `checkoutUrl` + `requested` until payment → `confirmed`; deposit-free service books exactly like before.)
 
 ### 6.8 — Proportional refunds + payouts view
 - **Goal:** `/t/<slug>/payments` — money in/out list; refund action calls

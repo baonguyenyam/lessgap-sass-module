@@ -133,8 +133,21 @@ export async function markPaymentSucceeded(sessionId: string, paymentIntentId: s
     status: "succeeded",
     paymentIntentId: paymentIntentId ?? payment.paymentIntentId,
   })
-  // The row's link ids tell us what paid — an order flips to paid.
+  // The row's link ids tell us what paid — an order flips to paid, a
+  // deposit-gated appointment flips to confirmed (booking.deposits).
   if (payment.orderId) {
     await db8.orm.public.Order.where({ id: payment.orderId }).update({ status: "paid" })
+  }
+  if (payment.appointmentId) {
+    const appointment = await db8.orm.public.Appointment.where({ id: payment.appointmentId }).first()
+    if (appointment && appointment.status === "requested") {
+      await db8.orm.public.Appointment.where({ id: appointment.id }).update({ status: "confirmed" })
+      await db8.orm.public.AppointmentEvent.create({
+        tenantId: payment.tenantId,
+        appointmentId: appointment.id,
+        toStatus: "confirmed",
+        actor: "system",
+      })
+    }
   }
 }

@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.68.0] - 2026-10-29
+
+**Booking deposits: a service can require payment up front — the appointment stays unpaid until Stripe confirms.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **`Service.depositCents`** — with `booking.deposits` and a connected Stripe account, booking redirects to a deposit checkout; the appointment is `requested` — unpaid — until the webhook flips it to `confirmed`
+- **`markPaymentSucceeded`** — a deposit payment confirms its appointment and records the `AppointmentEvent`
+
 ## [2.67.0] - 2026-10-29
 
 **The quotes module: schema-driven requests → priced quotes → signed accept link → optional deposit → converted order.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.

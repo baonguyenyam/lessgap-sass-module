@@ -20,8 +20,13 @@ vi.mock("@/lib/email-transport", async (importOriginal) => {
   const mod = await importOriginal<typeof import("@/lib/email-transport")>()
   return { ...mod, sendEmail: vi.fn(async () => true) }
 })
+vi.mock("@/platform/payments/connect", async (importOriginal) => {
+  const mod = await importOriginal<typeof import("@/platform/payments/connect")>()
+  return { ...mod, createCheckout: vi.fn(async () => ({ paymentId: "p1", checkoutUrl: "https://pay.test/x" })) }
+})
 
 const { bookAppointment, manageAppointment } = await import("@/app/actions/booking")
+const { createCheckout, markPaymentSucceeded } = await import("@/platform/payments/connect")
 
 afterAll(async () => db8.close())
 const { resolveHost } = await import("@/platform/tenancy/host")
@@ -185,5 +190,78 @@ describe("exclusion constraint race (5.9)", () => {
       notes: "my tooth hurts",
     })
     expect(res.error).toBe("invalid_input")
+  })
+})
+
+describe("booking deposits (6.7)", () => {
+  beforeEach(resetDatabase)
+
+  async function provisionDeposit() {
+    const { tenant, staff, service } = await provision()
+    await db8.orm.public.Tenant.where({ id: tenant.id }).update({
+      chargesEnabled: true,
+      stripeAccountId: `acct_${tenant.id.slice(-8)}`,
+    })
+    await db8.orm.public.Service.where({ id: service.id }).update({ depositCents: 1000 })
+    await db8.orm.public.EntitlementOverride.create({
+      tenantId: tenant.id,
+      featureKey: "booking.deposits",
+      value: true,
+      reason: "test",
+      createdById: "test",
+    })
+    await db8.orm.public.TenantModule.create({ tenantId: tenant.id, moduleKey: "payments", enabled: true })
+    await db8.orm.public.PlatformSwitch.upsert({
+      conflictOn: { key: "module.payments" },
+      create: { key: "module.payments", value: true, updatedById: "test" },
+      update: {},
+    })
+    return { tenant, staff, service }
+  }
+
+  it("a deposit-gated service returns a checkout and stays unpaid until Payment succeeds", async () => {
+    const { tenant, service } = await provisionDeposit()
+    const res = await bookAppointment({
+      serviceId: service.id,
+      startTs: "2027-03-08T15:00:00.000Z",
+      endTs: "2027-03-08T15:30:00.000Z",
+      name: "Ana",
+      email: "ana@x.test",
+    })
+    expect(res.error).toBeUndefined()
+    expect(res.checkoutUrl).toBe("https://pay.test/x")
+    expect(createCheckout).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ kind: "deposit", amountCents: 1000 })
+    )
+    // The appointment is unpaid — `requested`, not confirmed.
+    const appointment = await db8.orm.public.Appointment.where({ tenantId: tenant.id }).first()
+    expect(appointment!.status).toBe("requested")
+    // The webhook lands — the payment flips it.
+    const payment = await db8.orm.public.Payment.create({
+      tenantId: tenant.id,
+      kind: "deposit",
+      checkoutSessionId: `cs_${Date.now()}`,
+      appointmentId: appointment!.id,
+      amountCents: 1000,
+      status: "pending",
+    })
+    await markPaymentSucceeded(payment.checkoutSessionId!, "pi_1")
+    const after = await db8.orm.public.Appointment.where({ id: appointment!.id }).first()
+    expect(after!.status).toBe("confirmed")
+  })
+
+  it("a service without a deposit books exactly like before", async () => {
+    const { service } = await provision()
+    const res = await bookAppointment({
+      serviceId: service.id,
+      startTs: "2027-03-08T15:00:00.000Z",
+      endTs: "2027-03-08T15:30:00.000Z",
+      name: "Ana",
+      email: "ana@x.test",
+    })
+    expect(res.error).toBeUndefined()
+    expect(res.checkoutUrl).toBeUndefined()
+    expect(res.status).toBe("confirmed")
   })
 })
