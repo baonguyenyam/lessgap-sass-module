@@ -10,7 +10,7 @@ visitor's name — when a slot frees, the waitlisted get first pick.
 
 ## Scope
 
-- Phase 11: done.
+- Phase 11: in progress.
 
 ## Tasks
 
@@ -53,6 +53,18 @@ the themes render them.
 review appears on the site, a pending one doesn't.
 **Done when:** both surfaces render correctly.
 - [x] done (`tests/e2e/site-surfaces.spec.ts` 1/1 — the booking page's empty `slots` swaps the form for the waitlist join, `getSiteData` reads `published` `Review` rows into `SiteData.reviews` and both themes' `reviews` sections render them.)
+
+### 11.4 The dashboard surfaces the reviews and the waitlist
+
+11.2 and 11.3 wrote the rows and the actions; the tenant can't reach
+either — `moderateReview` and `WaitlistEntry` have no UI. A `/t/<slug>/reviews`
+page lists the `pending` `Review` rows with approve/reject buttons, and the
+`WaitlistEntry` rows for the coming days so the tenant knows who's waiting.
+
+**Tests:** e2e — a pending review appears on the page; approving it shows it
+on the site; the waitlist rows list.
+**Done when:** both lists render and the approve action works end-to-end.
+- [ ] done
 
 ## Exit criteria
 
