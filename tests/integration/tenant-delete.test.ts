@@ -43,6 +43,10 @@ describe("tenant deletion (T9)", () => {
       ProductCategory,
       ProductModifier,
       ProductModifierGroup,
+      Quote,
+      QuoteEvent,
+      QuoteLine,
+      QuoteRequest,
       ProductVariant,
       Refund,
       Reservation,
@@ -177,6 +181,20 @@ describe("tenant deletion (T9)", () => {
       ProductCategory.create({ tenantId: tenant.id, name: "Gifts" }).then((c) =>
         Product.create({ tenantId: tenant.id, categoryId: c.id, name: "Card" }).then((p) =>
           Promise.all([
+            QuoteRequest.create({ tenantId: tenant.id, customerName: "Ana", customerEmail: "a@x.test" }).then((qr) =>
+              Quote.create({
+                tenantId: tenant.id,
+                requestId: qr.id,
+                customerName: "Ana",
+                customerEmail: "a@x.test",
+                accessToken: `tok_${Date.now()}`,
+              }).then((q) =>
+                Promise.all([
+                  QuoteLine.create({ tenantId: tenant.id, quoteId: q.id, name: "Work", unitPriceCents: 100 }),
+                  QuoteEvent.create({ tenantId: tenant.id, quoteId: q.id, kind: "sent" }),
+                ])
+              )
+            ),
             ProductModifierGroup.create({ tenantId: tenant.id, productId: p.id, name: "Size" }).then((g) =>
               ProductModifier.create({ tenantId: tenant.id, groupId: g.id, name: "Large", priceCents: 200 })
             ),
@@ -233,6 +251,10 @@ describe("tenant deletion (T9)", () => {
       ["ProductCategory", ProductCategory, "tenantId"],
       ["ProductModifier", ProductModifier, "tenantId"],
       ["ProductModifierGroup", ProductModifierGroup, "tenantId"],
+      ["Quote", Quote, "tenantId"],
+      ["QuoteEvent", QuoteEvent, "tenantId"],
+      ["QuoteLine", QuoteLine, "tenantId"],
+      ["QuoteRequest", QuoteRequest, "tenantId"],
       ["ProductVariant", ProductVariant, "tenantId"],
       ["Payment", Payment, "tenantId"],
       ["Refund", Refund, "tenantId"],

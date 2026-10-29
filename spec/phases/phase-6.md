@@ -127,7 +127,7 @@ appointment), and booking deposits (`booking.deposits` wired at last).
   full flow request→price→accept(+deposit)→convert; `quotes.monthly` cap.
 - **Checks:** `pnpm test:integration`, `pnpm modules:check`.
 - **Done when:** a customer's request becomes a paid, converted quote.
-- [ ] done
+- [x] done (4 models — `QuoteRequest` (schema-driven `answersJson`), `Quote` (lines, `depositCents`, `validUntil`, `accessToken` unique signed link, status draft→sent→accepted→declined→converted), `QuoteLine`, `QuoteEvent` — @@rls cascade, 63 models classified, `deleteTenant` + T9 cover all. `src/lib/quotes/form.ts` — `validateFormAnswers` (text/number/select/date/file, required, wrong-type/select-not-an-option/bad-date → `invalid_input`) + `quoteTotal`. `submitQuoteRequest` validates the tenant's `quotes.form` definition server-side + `quotes.monthly` cap. `sendQuote` prices lines → total → `quotes.sent` email with the signed token link. `acceptQuote` — token + validity check + deposit → `createCheckout`. `declineQuote`, `convertQuote` → `Order`+`OrderLine`s. `QuoteEvent` records every transition. `/sites/[host]/quote` (schema-driven render), `/sites/[host]/quote/accept/[token]`, `/t/<slug>/quotes` list + convert button. Feature keys `quotes`, `quotes.monthly`, `quotes.online_acceptance`. Unit `quote-form.test.ts` 5/5; integration `quotes.test.ts` — full request→price→accept(+deposit)→convert, bad token → `not_found`, form validation.)
 
 ### 6.7 — Booking deposits
 - **Goal:** `booking.deposits` finally wired — a deposit amount on the

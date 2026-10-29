@@ -57,6 +57,24 @@ export const templates: Record<string, TemplateDef> = {
       html: p([`Chào ${esc(d.name)},`, `cuộc hẹn ${esc(d.service)} lúc ${d.time} đã bị huỷ.`]),
     }),
   },
+  "quotes.sent": {
+    en: (d) => ({
+      subject: `Your quote from ${d.business}`,
+      html: p([
+        `Hi ${esc(d.name)},`,
+        `${esc(d.business)} priced your request — total ${d.totalCents}.`,
+        `<a href="${d.acceptUrl}">View and accept your quote</a>`,
+      ]),
+    }),
+    vi: (d) => ({
+      subject: `Báo giá từ ${d.business}`,
+      html: p([
+        `Chào ${esc(d.name)},`,
+        `${esc(d.business)} đã báo giá — tổng ${d.totalCents}.`,
+        `<a href="${d.acceptUrl}">Xem và chấp nhận báo giá</a>`,
+      ]),
+    }),
+  },
   "customer.export": {
     en: (d) => ({
       subject: "Your data export",

@@ -37,6 +37,9 @@ export const FEATURES = {
   "shop.shipping": { kind: "boolean", default: false, requires: ["shop"] },
   "shop.gift_cards": { kind: "boolean", default: false, requires: ["shop"] },
   ordering: { kind: "boolean", default: true },
+  quotes: { kind: "boolean", default: true },
+  "quotes.monthly": { kind: "limit", default: null, period: "month", requires: ["quotes"] },
+  "quotes.online_acceptance": { kind: "boolean", default: true, requires: ["quotes"] },
 } as const satisfies Record<string, FeatureDefinition>
 
 export type FeatureKey = keyof typeof FEATURES

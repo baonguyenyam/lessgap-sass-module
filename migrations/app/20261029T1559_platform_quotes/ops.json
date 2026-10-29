@@ -1,0 +1,1102 @@
+[
+  {
+    "id": "table.Quote",
+    "label": "Create table \"Quote\"",
+    "summary": "Creates table \"Quote\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Quote"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Quote\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Quote\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"Quote\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Quote\"",
+        "sql": "CREATE TABLE \"public\".\"Quote\" (\n  \"accessToken\" text NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"currency\" text DEFAULT 'usd' NOT NULL,\n  \"customerEmail\" text NOT NULL,\n  \"customerId\" text,\n  \"customerName\" text NOT NULL,\n  \"depositCents\" int4,\n  \"id\" text NOT NULL,\n  \"paymentId\" text,\n  \"requestId\" text,\n  \"status\" text DEFAULT 'draft' NOT NULL,\n  \"tenantId\" text NOT NULL,\n  \"terms\" text,\n  \"totalCents\" int4 DEFAULT 0 NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"validUntil\" timestamp(3),\n  CONSTRAINT \"Quote_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Quote\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"Quote\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"Quote\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.QuoteEvent",
+    "label": "Create table \"QuoteEvent\"",
+    "summary": "Creates table \"QuoteEvent\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "QuoteEvent"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"QuoteEvent\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"QuoteEvent\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"QuoteEvent\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"QuoteEvent\"",
+        "sql": "CREATE TABLE \"public\".\"QuoteEvent\" (\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"dataJson\" json DEFAULT '{}'::json NOT NULL,\n  \"id\" text NOT NULL,\n  \"kind\" text NOT NULL,\n  \"quoteId\" text NOT NULL,\n  \"tenantId\" text NOT NULL,\n  CONSTRAINT \"QuoteEvent_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"QuoteEvent\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"QuoteEvent\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"QuoteEvent\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.QuoteLine",
+    "label": "Create table \"QuoteLine\"",
+    "summary": "Creates table \"QuoteLine\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "QuoteLine"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"QuoteLine\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"QuoteLine\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"QuoteLine\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"QuoteLine\"",
+        "sql": "CREATE TABLE \"public\".\"QuoteLine\" (\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"name\" text NOT NULL,\n  \"quantity\" int4 DEFAULT 1 NOT NULL,\n  \"quoteId\" text NOT NULL,\n  \"tenantId\" text NOT NULL,\n  \"unitPriceCents\" int4 NOT NULL,\n  CONSTRAINT \"QuoteLine_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"QuoteLine\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"QuoteLine\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"QuoteLine\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.QuoteRequest",
+    "label": "Create table \"QuoteRequest\"",
+    "summary": "Creates table \"QuoteRequest\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "QuoteRequest"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"QuoteRequest\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"QuoteRequest\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"QuoteRequest\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"QuoteRequest\"",
+        "sql": "CREATE TABLE \"public\".\"QuoteRequest\" (\n  \"answersJson\" json DEFAULT '{}'::json NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"customerEmail\" text NOT NULL,\n  \"customerName\" text NOT NULL,\n  \"customerPhone\" text,\n  \"id\" text NOT NULL,\n  \"status\" text DEFAULT 'new' NOT NULL,\n  \"tenantId\" text NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  CONSTRAINT \"QuoteRequest_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"QuoteRequest\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"QuoteRequest\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"QuoteRequest\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "unique.Quote.Quote_accessToken_key",
+    "label": "Add unique constraint on \"Quote\" (accessToken)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Quote_accessToken_key",
+        "table": "Quote"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Quote_accessToken_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Quote_accessToken_key",
+          "public",
+          "\"public\".\"Quote\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"Quote_accessToken_key\" on \"Quote\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Quote_accessToken_key\"",
+        "sql": "ALTER TABLE \"public\".\"Quote\" ADD CONSTRAINT \"Quote_accessToken_key\" UNIQUE (\"accessToken\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify unique constraint \"Quote_accessToken_key\" exists on (accessToken)",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb)) AS \"result\"",
+        "params": [
+          "Quote_accessToken_key",
+          "public",
+          "\"public\".\"Quote\"",
+          "u",
+          "[\"accessToken\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Quote.Quote_requestId_idx_fd667f92",
+    "label": "Create index \"Quote_requestId_idx_fd667f92\" on \"Quote\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Quote_requestId_idx_fd667f92",
+        "table": "Quote"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Quote_requestId_idx_fd667f92\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Quote_requestId_idx_fd667f92\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Quote_requestId_idx_fd667f92\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Quote_requestId_idx_fd667f92\"",
+        "sql": "CREATE INDEX \"Quote_requestId_idx_fd667f92\" ON \"public\".\"Quote\" (\"requestId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Quote_requestId_idx_fd667f92\" exists on \"Quote\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Quote_requestId_idx_fd667f92\"",
+          "i",
+          "I",
+          "\"public\".\"Quote\"",
+          "btree",
+          "[\"requestId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Quote.Quote_tenantId_idx",
+    "label": "Create index \"Quote_tenantId_idx\" on \"Quote\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Quote_tenantId_idx",
+        "table": "Quote"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Quote_tenantId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Quote_tenantId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Quote_tenantId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Quote_tenantId_idx\"",
+        "sql": "CREATE INDEX \"Quote_tenantId_idx\" ON \"public\".\"Quote\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Quote_tenantId_idx\" exists on \"Quote\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Quote_tenantId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"Quote\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.QuoteEvent.QuoteEvent_quoteId_idx",
+    "label": "Create index \"QuoteEvent_quoteId_idx\" on \"QuoteEvent\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "QuoteEvent_quoteId_idx",
+        "table": "QuoteEvent"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"QuoteEvent_quoteId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"QuoteEvent_quoteId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"QuoteEvent_quoteId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"QuoteEvent_quoteId_idx\"",
+        "sql": "CREATE INDEX \"QuoteEvent_quoteId_idx\" ON \"public\".\"QuoteEvent\" (\"quoteId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"QuoteEvent_quoteId_idx\" exists on \"QuoteEvent\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"QuoteEvent_quoteId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"QuoteEvent\"",
+          "btree",
+          "[\"quoteId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.QuoteEvent.QuoteEvent_tenantId_idx",
+    "label": "Create index \"QuoteEvent_tenantId_idx\" on \"QuoteEvent\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "QuoteEvent_tenantId_idx",
+        "table": "QuoteEvent"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"QuoteEvent_tenantId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"QuoteEvent_tenantId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"QuoteEvent_tenantId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"QuoteEvent_tenantId_idx\"",
+        "sql": "CREATE INDEX \"QuoteEvent_tenantId_idx\" ON \"public\".\"QuoteEvent\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"QuoteEvent_tenantId_idx\" exists on \"QuoteEvent\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"QuoteEvent_tenantId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"QuoteEvent\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.QuoteLine.QuoteLine_quoteId_idx",
+    "label": "Create index \"QuoteLine_quoteId_idx\" on \"QuoteLine\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "QuoteLine_quoteId_idx",
+        "table": "QuoteLine"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"QuoteLine_quoteId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"QuoteLine_quoteId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"QuoteLine_quoteId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"QuoteLine_quoteId_idx\"",
+        "sql": "CREATE INDEX \"QuoteLine_quoteId_idx\" ON \"public\".\"QuoteLine\" (\"quoteId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"QuoteLine_quoteId_idx\" exists on \"QuoteLine\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"QuoteLine_quoteId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"QuoteLine\"",
+          "btree",
+          "[\"quoteId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.QuoteLine.QuoteLine_tenantId_idx",
+    "label": "Create index \"QuoteLine_tenantId_idx\" on \"QuoteLine\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "QuoteLine_tenantId_idx",
+        "table": "QuoteLine"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"QuoteLine_tenantId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"QuoteLine_tenantId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"QuoteLine_tenantId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"QuoteLine_tenantId_idx\"",
+        "sql": "CREATE INDEX \"QuoteLine_tenantId_idx\" ON \"public\".\"QuoteLine\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"QuoteLine_tenantId_idx\" exists on \"QuoteLine\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"QuoteLine_tenantId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"QuoteLine\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.QuoteRequest.QuoteRequest_tenantId_idx",
+    "label": "Create index \"QuoteRequest_tenantId_idx\" on \"QuoteRequest\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "QuoteRequest_tenantId_idx",
+        "table": "QuoteRequest"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"QuoteRequest_tenantId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"QuoteRequest_tenantId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"QuoteRequest_tenantId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"QuoteRequest_tenantId_idx\"",
+        "sql": "CREATE INDEX \"QuoteRequest_tenantId_idx\" ON \"public\".\"QuoteRequest\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"QuoteRequest_tenantId_idx\" exists on \"QuoteRequest\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"QuoteRequest_tenantId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"QuoteRequest\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Quote.Quote_tenantId_fkey",
+    "label": "Add foreign key \"Quote_tenantId_fkey\" on \"Quote\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Quote_tenantId_fkey",
+        "table": "Quote"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Quote_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Quote_tenantId_fkey",
+          "public",
+          "\"public\".\"Quote\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Quote_tenantId_fkey\" on \"Quote\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Quote_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Quote\"\nADD CONSTRAINT \"Quote_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Quote_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Quote_tenantId_fkey",
+          "public",
+          "\"public\".\"Quote\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Quote.Quote_requestId_fkey",
+    "label": "Add foreign key \"Quote_requestId_fkey\" on \"Quote\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Quote_requestId_fkey",
+        "table": "Quote"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Quote_requestId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Quote_requestId_fkey",
+          "public",
+          "\"public\".\"Quote\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Quote_requestId_fkey\" on \"Quote\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Quote_requestId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Quote\"\nADD CONSTRAINT \"Quote_requestId_fkey\"\nFOREIGN KEY (\"requestId\")\nREFERENCES \"public\".\"QuoteRequest\" (\"id\")\nON DELETE SET NULL\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Quote_requestId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Quote_requestId_fkey",
+          "public",
+          "\"public\".\"Quote\"",
+          "f",
+          "[\"requestId\"]",
+          "\"public\".\"QuoteRequest\"",
+          "[\"id\"]",
+          "n",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.QuoteEvent.QuoteEvent_tenantId_fkey",
+    "label": "Add foreign key \"QuoteEvent_tenantId_fkey\" on \"QuoteEvent\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "QuoteEvent_tenantId_fkey",
+        "table": "QuoteEvent"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"QuoteEvent_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "QuoteEvent_tenantId_fkey",
+          "public",
+          "\"public\".\"QuoteEvent\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"QuoteEvent_tenantId_fkey\" on \"QuoteEvent\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"QuoteEvent_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"QuoteEvent\"\nADD CONSTRAINT \"QuoteEvent_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"QuoteEvent_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "QuoteEvent_tenantId_fkey",
+          "public",
+          "\"public\".\"QuoteEvent\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.QuoteEvent.QuoteEvent_quoteId_fkey",
+    "label": "Add foreign key \"QuoteEvent_quoteId_fkey\" on \"QuoteEvent\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "QuoteEvent_quoteId_fkey",
+        "table": "QuoteEvent"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"QuoteEvent_quoteId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "QuoteEvent_quoteId_fkey",
+          "public",
+          "\"public\".\"QuoteEvent\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"QuoteEvent_quoteId_fkey\" on \"QuoteEvent\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"QuoteEvent_quoteId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"QuoteEvent\"\nADD CONSTRAINT \"QuoteEvent_quoteId_fkey\"\nFOREIGN KEY (\"quoteId\")\nREFERENCES \"public\".\"Quote\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"QuoteEvent_quoteId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "QuoteEvent_quoteId_fkey",
+          "public",
+          "\"public\".\"QuoteEvent\"",
+          "f",
+          "[\"quoteId\"]",
+          "\"public\".\"Quote\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.QuoteLine.QuoteLine_tenantId_fkey",
+    "label": "Add foreign key \"QuoteLine_tenantId_fkey\" on \"QuoteLine\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "QuoteLine_tenantId_fkey",
+        "table": "QuoteLine"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"QuoteLine_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "QuoteLine_tenantId_fkey",
+          "public",
+          "\"public\".\"QuoteLine\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"QuoteLine_tenantId_fkey\" on \"QuoteLine\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"QuoteLine_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"QuoteLine\"\nADD CONSTRAINT \"QuoteLine_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"QuoteLine_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "QuoteLine_tenantId_fkey",
+          "public",
+          "\"public\".\"QuoteLine\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.QuoteLine.QuoteLine_quoteId_fkey",
+    "label": "Add foreign key \"QuoteLine_quoteId_fkey\" on \"QuoteLine\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "QuoteLine_quoteId_fkey",
+        "table": "QuoteLine"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"QuoteLine_quoteId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "QuoteLine_quoteId_fkey",
+          "public",
+          "\"public\".\"QuoteLine\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"QuoteLine_quoteId_fkey\" on \"QuoteLine\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"QuoteLine_quoteId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"QuoteLine\"\nADD CONSTRAINT \"QuoteLine_quoteId_fkey\"\nFOREIGN KEY (\"quoteId\")\nREFERENCES \"public\".\"Quote\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"QuoteLine_quoteId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "QuoteLine_quoteId_fkey",
+          "public",
+          "\"public\".\"QuoteLine\"",
+          "f",
+          "[\"quoteId\"]",
+          "\"public\".\"Quote\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.QuoteRequest.QuoteRequest_tenantId_fkey",
+    "label": "Add foreign key \"QuoteRequest_tenantId_fkey\" on \"QuoteRequest\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "QuoteRequest_tenantId_fkey",
+        "table": "QuoteRequest"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"QuoteRequest_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "QuoteRequest_tenantId_fkey",
+          "public",
+          "\"public\".\"QuoteRequest\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"QuoteRequest_tenantId_fkey\" on \"QuoteRequest\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"QuoteRequest_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"QuoteRequest\"\nADD CONSTRAINT \"QuoteRequest_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"QuoteRequest_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "QuoteRequest_tenantId_fkey",
+          "public",
+          "\"public\".\"QuoteRequest\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.Quote",
+    "label": "Enable row-level security on \"Quote\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "Quote"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"Quote\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Quote"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"Quote\"",
+        "sql": "ALTER TABLE \"public\".\"Quote\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"Quote\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "Quote"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.QuoteEvent",
+    "label": "Enable row-level security on \"QuoteEvent\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "QuoteEvent"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"QuoteEvent\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "QuoteEvent"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"QuoteEvent\"",
+        "sql": "ALTER TABLE \"public\".\"QuoteEvent\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"QuoteEvent\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "QuoteEvent"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.QuoteLine",
+    "label": "Enable row-level security on \"QuoteLine\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "QuoteLine"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"QuoteLine\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "QuoteLine"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"QuoteLine\"",
+        "sql": "ALTER TABLE \"public\".\"QuoteLine\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"QuoteLine\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "QuoteLine"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.QuoteRequest",
+    "label": "Enable row-level security on \"QuoteRequest\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "QuoteRequest"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"QuoteRequest\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "QuoteRequest"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"QuoteRequest\"",
+        "sql": "ALTER TABLE \"public\".\"QuoteRequest\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"QuoteRequest\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "QuoteRequest"
+        ]
+      }
+    ]
+  }
+]

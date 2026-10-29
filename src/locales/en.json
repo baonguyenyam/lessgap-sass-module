@@ -772,6 +772,15 @@
         "ready": "Ready",
         "done": "Done"
       }
+    },
+    "quotes": {
+      "title": "Quotes",
+      "subtitle": "Requests and priced quotes",
+      "requests": "{count} requests",
+      "quotes": "{count} quotes",
+      "empty": "No quotes yet.",
+      "convert": "Convert to order",
+      "converted": "converted"
     }
   },
   "platform": {
@@ -1556,7 +1565,8 @@
     "openMenu": "Open menu",
     "backToTop": "Back to top",
     "reservations": "Reservations",
-    "orders": "Orders"
+    "orders": "Orders",
+    "quotes": "Quotes"
   },
   "faq": {
     "title": "Frequently asked questions",
@@ -1974,6 +1984,33 @@
         "invalid_input": "Check the form.",
         "not_found": "Page not found.",
         "conflict": "That slot is full — pick another."
+      }
+    },
+    "quote": {
+      "title": "Request a quote",
+      "subtitle": "Tell us what you need — we price it",
+      "name": "Your name",
+      "email": "Email",
+      "phone": "Phone",
+      "choose": "Choose…",
+      "submit": "Send request",
+      "sending": "Sending…",
+      "submitted": "Request sent — we'll price it and send you a link.",
+      "accept_title": "Your quote",
+      "total": "total {amount}",
+      "valid_until": "valid until",
+      "deposit": "Deposit due on acceptance: {amount}",
+      "accept": "Accept",
+      "decline": "Decline",
+      "accepted": "Quote accepted.",
+      "declined": "Quote declined.",
+      "expired": "This quote has expired.",
+      "error": {
+        "invalid_input": "Check the form.",
+        "not_found": "Quote not found.",
+        "forbidden": "Not allowed.",
+        "limit_reached": "Too many requests — try later.",
+        "conflict": "Try again."
       }
     }
   }

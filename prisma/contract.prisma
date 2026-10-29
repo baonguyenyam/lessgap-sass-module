@@ -1209,3 +1209,82 @@ trialEndsAt          TimestampString(3)?
     @@index([groupId], map: "ProductModifier_groupId_idx")
     @@rls
   }
+
+  // The quotes module (spec/07): a customer fills the tenant's
+  // schema-driven form → a `QuoteRequest`; the tenant prices it → a
+  // `Quote` with lines, a validity window and a signed access token; the
+  // customer accepts (and pays a deposit) → it converts to an order or
+  // appointment. `QuoteEvent` records every transition.
+  model QuoteRequest {
+    id            String             @id(map: "QuoteRequest_pkey") @onCreate(cuid(2))
+    tenantId      String
+    customerName  String
+    customerEmail String
+    customerPhone String?
+    answersJson   Json               @default(json`{}`)
+    status        String             @default("new")
+    createdAt     TimestampString(3) @default(now())
+    updatedAt     TimestampString(3) @default(now()) @onUpdate(now())
+    tenant        Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "QuoteRequest_tenantId_fkey")
+    quotes        Quote[]
+
+    @@index([tenantId], map: "QuoteRequest_tenantId_idx")
+    @@rls
+  }
+
+  model Quote {
+    id            String             @id(map: "Quote_pkey") @onCreate(cuid(2))
+    tenantId      String
+    requestId     String?
+    customerName  String
+    customerEmail String
+    customerId    String?
+    totalCents    Int                @default(0)
+    depositCents  Int?
+    currency      String             @default("usd")
+    validUntil    TimestampString(3)?
+    terms         String?
+    status        String             @default("draft")
+    accessToken   String             @unique(map: "Quote_accessToken_key")
+    paymentId     String?
+    createdAt     TimestampString(3) @default(now())
+    updatedAt     TimestampString(3) @default(now()) @onUpdate(now())
+    tenant        Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Quote_tenantId_fkey")
+    request       QuoteRequest?      @relation(fields: [requestId], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "Quote_requestId_fkey")
+    lines         QuoteLine[]
+    events        QuoteEvent[]
+
+    @@index([tenantId], map: "Quote_tenantId_idx")
+    @@rls
+  }
+
+  model QuoteLine {
+    id             String             @id(map: "QuoteLine_pkey") @onCreate(cuid(2))
+    tenantId       String
+    quoteId        String
+    name           String
+    quantity       Int                @default(1)
+    unitPriceCents Int
+    createdAt      TimestampString(3) @default(now())
+    tenant         Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "QuoteLine_tenantId_fkey")
+    quote          Quote              @relation(fields: [quoteId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "QuoteLine_quoteId_fkey")
+
+    @@index([tenantId], map: "QuoteLine_tenantId_idx")
+    @@index([quoteId], map: "QuoteLine_quoteId_idx")
+    @@rls
+  }
+
+  model QuoteEvent {
+    id        String             @id(map: "QuoteEvent_pkey") @onCreate(cuid(2))
+    tenantId  String
+    quoteId   String
+    kind      String
+    dataJson  Json               @default(json`{}`)
+    createdAt TimestampString(3) @default(now())
+    tenant    Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "QuoteEvent_tenantId_fkey")
+    quote     Quote              @relation(fields: [quoteId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "QuoteEvent_quoteId_fkey")
+
+    @@index([tenantId], map: "QuoteEvent_tenantId_idx")
+    @@index([quoteId], map: "QuoteEvent_quoteId_idx")
+    @@rls
+  }

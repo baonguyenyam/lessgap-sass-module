@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.67.0] - 2026-10-29
+
+**The quotes module: schema-driven requests → priced quotes → signed accept link → optional deposit → converted order.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **`quotes` module** — `QuoteRequest` (the tenant's schema-driven form — never free HTML), `Quote` + `QuoteLine` + `QuoteEvent`; statuses draft→sent→accepted→declined→converted
+- **Site quote flow** — `/sites/[host]/quote` request form, `/sites/[host]/quote/accept/[token]` signed link; a deposit quote goes through the tenant's connected checkout
+- **`/t/<slug>/quotes`** — requests, priced quotes, and a convert-to-order action
+
 ## [2.66.0] - 2026-10-29
 
 **The ordering module: restaurant pickup ordering — menu items with modifiers, capacity-bounded pickup slots, and a kitchen board.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.

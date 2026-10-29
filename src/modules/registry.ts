@@ -6,9 +6,10 @@ import module_3 from "./newsletter/module"
 import module_4 from "./notifications/module"
 import module_5 from "./ordering/module"
 import module_6 from "./payments/module"
-import module_7 from "./reservations/module"
-import module_8 from "./shop/module"
-import module_9 from "./team/module"
+import module_7 from "./quotes/module"
+import module_8 from "./reservations/module"
+import module_9 from "./shop/module"
+import module_10 from "./team/module"
 
 export const moduleRegistry = {
   "booking": module_0,
@@ -18,8 +19,9 @@ export const moduleRegistry = {
   "notifications": module_4,
   "ordering": module_5,
   "payments": module_6,
-  "reservations": module_7,
-  "shop": module_8,
-  "team": module_9,
+  "quotes": module_7,
+  "reservations": module_8,
+  "shop": module_9,
+  "team": module_10,
 } as const
 export type ModuleKey = keyof typeof moduleRegistry

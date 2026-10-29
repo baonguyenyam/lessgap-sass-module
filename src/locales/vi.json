@@ -772,6 +772,15 @@
         "ready": "Sẵn sàng",
         "done": "Xong"
       }
+    },
+    "quotes": {
+      "title": "Báo giá",
+      "subtitle": "Yêu cầu và báo giá",
+      "requests": "{count} yêu cầu",
+      "quotes": "{count} báo giá",
+      "empty": "Chưa có báo giá.",
+      "convert": "Chuyển thành đơn",
+      "converted": "đã chuyển"
     }
   },
   "platform": {
@@ -1556,7 +1565,8 @@
     "openMenu": "Mở menu",
     "backToTop": "Về đầu trang",
     "reservations": "Đặt bàn",
-    "orders": "Đơn hàng"
+    "orders": "Đơn hàng",
+    "quotes": "Báo giá"
   },
   "faq": {
     "title": "Các câu hỏi thường gặp",
@@ -1974,6 +1984,33 @@
         "invalid_input": "Kiểm tra lại thông tin.",
         "not_found": "Không tìm thấy trang.",
         "conflict": "Khung giờ đầy — chọn giờ khác."
+      }
+    },
+    "quote": {
+      "title": "Yêu cầu báo giá",
+      "subtitle": "Cho chúng tôi biết nhu cầu — chúng tôi sẽ báo giá",
+      "name": "Tên của bạn",
+      "email": "Email",
+      "phone": "Điện thoại",
+      "choose": "Chọn…",
+      "submit": "Gửi yêu cầu",
+      "sending": "Đang gửi…",
+      "submitted": "Đã gửi — chúng tôi sẽ báo giá và gửi link.",
+      "accept_title": "Báo giá của bạn",
+      "total": "tổng {amount}",
+      "valid_until": "hiệu lực đến",
+      "deposit": "Đặt cọc khi chấp nhận: {amount}",
+      "accept": "Chấp nhận",
+      "decline": "Từ chối",
+      "accepted": "Đã chấp nhận báo giá.",
+      "declined": "Đã từ chối báo giá.",
+      "expired": "Báo giá đã hết hạn.",
+      "error": {
+        "invalid_input": "Kiểm tra lại thông tin.",
+        "not_found": "Không tìm thấy báo giá.",
+        "forbidden": "Không được phép.",
+        "limit_reached": "Quá nhiều yêu cầu — thử lại sau.",
+        "conflict": "Thử lại."
       }
     }
   }
