@@ -1791,5 +1791,22 @@
       "rejected": "This invitation was declined.",
       "canceled": "This invitation was withdrawn."
     }
+  },
+  "onboarding": {
+    "title": "Set up your site",
+    "subtitle": "A few details and your site is live.",
+    "name": "Business name",
+    "vertical": "Business type",
+    "slug": "Site address",
+    "phone": "Phone (optional)",
+    "address": "Address (optional)",
+    "finish": "Create my site",
+    "errors": {
+      "unauthorized": "Sign in first",
+      "already_has_tenant": "You already have a tenant",
+      "invalid_input": "Fill in the required fields",
+      "conflict": "That address is taken",
+      "tenant_creation_failed": "Could not create the tenant"
+    }
   }
 }

@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.51.0] - 2026-10-29
+
+**A new tenant walks through the onboarding wizard: name, vertical, site address, and their site is live.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **Onboarding wizard** (`/onboarding`) — business name, vertical, subdomain preview, phone and address; the submit creates the tenant, applies the vertical's sample data, creates the site and lands on the dashboard
+- **New users go through the wizard** — the dashboard redirects a member-less user to `/onboarding` instead of auto-creating a workspace
+
 ## [2.50.0] - 2026-10-29
 
 **A tenant starts from a vertical preset: the right services, staff and words for their business.** This is a MINOR: `git pull`, `pnpm install`.

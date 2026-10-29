@@ -1791,5 +1791,22 @@
       "rejected": "Lời mời này đã bị từ chối.",
       "canceled": "Lời mời này đã bị thu hồi."
     }
+  },
+  "onboarding": {
+    "title": "Thiết lập trang web",
+    "subtitle": "Vài chi tiết và trang web của bạn hoạt động.",
+    "name": "Tên doanh nghiệp",
+    "vertical": "Loại hình kinh doanh",
+    "slug": "Địa chỉ trang",
+    "phone": "Điện thoại (tuỳ chọn)",
+    "address": "Địa chỉ (tuỳ chọn)",
+    "finish": "Tạo trang web",
+    "errors": {
+      "unauthorized": "Đăng nhập trước",
+      "already_has_tenant": "Bạn đã có tenant",
+      "invalid_input": "Điền các trường bắt buộc",
+      "conflict": "Địa chỉ đã được dùng",
+      "tenant_creation_failed": "Không tạo được tenant"
+    }
   }
 }

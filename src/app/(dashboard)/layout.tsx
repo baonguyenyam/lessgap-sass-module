@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation"
 import { headers } from "next/headers"
 import { requireUser } from "@/lib/auth"
 import { isRoot } from "@/lib/roles"
@@ -9,7 +10,7 @@ import { toDate } from "@/lib/timestamps"
 import { isModuleActive } from "@/platform/modules/runtime"
 import { getEntitlements } from "@/platform/entitlements"
 import { TENANT_SLUG_HEADER } from "@/platform/request-context"
-import { ensureTenant, listMemberTenants } from "@/platform/tenancy/require-member"
+import { ensureTenant, getMembership, listMemberTenants } from "@/platform/tenancy/require-member"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -23,6 +24,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
   // The tenant on screen: the one in the `/t/<slug>` path, else (account
   // pages) the one `/dashboard` would open. `t/[slug]/layout.tsx` checks the
   // membership; an unknown slug here only means no entry is marked current.
+  // A user with no tenant goes through the onboarding wizard first (task
+  // 4.5); `ensureTenant` still covers the staff-created and legacy paths.
+  const existing = await getMembership(user.id)
+  if (!existing) redirect("/onboarding")
   const slug = (await headers()).get(TENANT_SLUG_HEADER) ?? (await ensureTenant(user)).tenant.slug
   const tenants = await listMemberTenants(user.id)
   const current = tenants.find((t) => t.slug === slug)

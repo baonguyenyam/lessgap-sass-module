@@ -93,7 +93,7 @@ holds for two designs.
   signup → wizard → site live.
 - **Checks:** `pnpm test`, `pnpm test:integration`, E2E.
 - **Done when:** the signup→wizard→site exit path is green.
-- [ ] done
+- [x] done (`/onboarding` — a user with no tenant goes through the wizard (`src/app/onboarding/page.tsx`); the dashboard layout redirects no-membership users there before `ensureTenant` runs. `startOnboarding` creates the organization with the chosen name+slug, assigns the free plan, activates it, applies the vertical's preset (sample rows, terminology, suggested modules), creates `Site` + `SiteSettings`, audits, and lands on `/t/<slug>`. Second call refused (`already_has_tenant`); slug conflicts rejected. Integration `onboarding.test.ts` — tenant + site + sample rows all written. `dismissOnboarding` restored for the checklist.)
 
 ### 4.6 — Second shared theme `classic`
 - **Goal:** a second `kind: "shared"` theme with its own layout/tokens that
