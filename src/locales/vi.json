@@ -524,7 +524,8 @@
       "modules": "Tiện ích",
       "site": "Trang web",
       "domains": "Tên miền",
-      "catalog": "Danh mục"
+      "catalog": "Danh mục",
+      "team": "Nhân viên"
     },
     "members": {
       "title": "Thành viên",
@@ -693,6 +694,17 @@
       "actions": {
         "add": "Thêm dịch vụ",
         "addCategory": "Thêm danh mục",
+        "remove": "Xóa"
+      }
+    },
+    "team": {
+      "title": "Nhân viên",
+      "subtitle": "Những người hiển thị trên trang web — không phải tài khoản.",
+      "staffName": "Tên",
+      "staffBio": "Giới thiệu",
+      "empty": "Chưa có nhân viên nào.",
+      "actions": {
+        "add": "Thêm nhân viên",
         "remove": "Xóa"
       }
     }

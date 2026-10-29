@@ -97,6 +97,9 @@ export function navGroups(
         ...(enabledModules && !enabledModules.has("catalog")
           ? []
           : [{ key: "catalog", href: t("catalog"), icon: List } satisfies NavItem]),
+        ...(enabledModules && !enabledModules.has("team")
+          ? []
+          : [{ key: "team", href: t("team"), icon: Users } satisfies NavItem]),
         ...(customRoles ? [{ key: "roles", href: t("roles"), icon: KeyRound } satisfies NavItem] : []),
       ],
     },

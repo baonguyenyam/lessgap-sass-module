@@ -16,6 +16,9 @@ export type SiteData = {
   }
   /** Present when the `catalog` module is enabled (task 4.2) — the site's
    * service list, grouped by category. */
+  /** Present when the `team` module is enabled (task 4.3) — the site's
+   * staff list. */
+  team?: { id: string; name: string; photo: string | null; bio: string | null }[]
   catalog?: {
     categories: { id: string; name: string; sortOrder: number }[]
     services: {

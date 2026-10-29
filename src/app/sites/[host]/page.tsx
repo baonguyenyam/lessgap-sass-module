@@ -22,10 +22,11 @@ async function getSiteData(tenantId: string): Promise<SiteData | null> {
   cacheLife("minutes")
   const tenant = await db8.orm.public.Tenant.where({ id: tenantId }).first()
   if (!tenant) return null
-  const [site, settings, moduleOn] = await Promise.all([
+  const [site, settings, moduleOn, teamOn] = await Promise.all([
     db8.orm.public.Site.where({ tenantId }).first(),
     db8.orm.public.SiteSettings.where({ tenantId }).first(),
     db8.orm.public.TenantModule.where({ tenantId, moduleKey: "catalog", enabled: true }).first(),
+    db8.orm.public.TenantModule.where({ tenantId, moduleKey: "team", enabled: true }).first(),
   ])
   const catalog = moduleOn
     ? {
@@ -46,6 +47,14 @@ async function getSiteData(tenantId: string): Promise<SiteData | null> {
         })),
       }
     : undefined
+  const team = teamOn
+    ? (await db8.orm.public.StaffMember.where({ tenantId }).all()).map((x) => ({
+        id: x.id,
+        name: x.name,
+        photo: x.photo,
+        bio: x.bio,
+      }))
+    : undefined
   return {
     tenant: { name: tenant.name, slug: tenant.slug },
     site: {
@@ -60,6 +69,7 @@ async function getSiteData(tenantId: string): Promise<SiteData | null> {
       appearance: (settings?.appearance as { accentColor?: string }) ?? {},
     },
     catalog,
+    team,
   }
 }
 

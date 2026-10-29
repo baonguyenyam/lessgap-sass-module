@@ -524,7 +524,8 @@
       "modules": "Modules",
       "site": "Site",
       "domains": "Domains",
-      "catalog": "Catalog"
+      "catalog": "Catalog",
+      "team": "Team"
     },
     "members": {
       "title": "Members",
@@ -693,6 +694,17 @@
       "actions": {
         "add": "Add service",
         "addCategory": "Add category",
+        "remove": "Remove"
+      }
+    },
+    "team": {
+      "title": "Team",
+      "subtitle": "The people your site shows — staff, not logins.",
+      "staffName": "Name",
+      "staffBio": "Bio",
+      "empty": "No staff yet.",
+      "actions": {
+        "add": "Add staff",
         "remove": "Remove"
       }
     }

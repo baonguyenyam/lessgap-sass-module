@@ -43,10 +43,15 @@ describe("catalog module (4.2)", () => {
     })
 
     const mod = (await import("@/modules/catalog/module")).default
-    const desc = await mod.lifecycle.describeData(ctx)
+    const lifecycle = mod.lifecycle as {
+      describeData: (c: typeof ctx) => Promise<Record<string, number>>
+      onExport: (c: typeof ctx) => Promise<Record<string, string>>
+      onPurge: (c: typeof ctx, o: { batch: number }) => Promise<number>
+    }
+    const desc = await lifecycle.describeData(ctx)
     expect(desc).toEqual({ "catalog.categories": 1, "catalog.services": 1, "catalog.variants": 0 })
 
-    await mod.lifecycle.onPurge(ctx, { batch: 100 })
+    await lifecycle.onPurge(ctx, { batch: 100 })
     expect(await db8.orm.public.Service.where({ tenantId: tenant.id }).all()).toHaveLength(0)
     expect(await db8.orm.public.Service.where({ tenantId: other.tenant.id }).all()).toHaveLength(1)
     expect(await db8.orm.public.ServiceCategory.where({ tenantId: tenant.id }).all()).toHaveLength(0)
@@ -55,8 +60,10 @@ describe("catalog module (4.2)", () => {
   it("onExport returns one JSON file per model", async () => {
     const { tenant, ctx } = await provision()
     await db8.orm.public.Service.create({ tenantId: tenant.id, name: "Pedi", durationMinutes: 60, priceCents: 3600 })
-    const mod = (await import("@/modules/catalog/module")).default
-    const files = await mod.lifecycle.onExport(ctx)
+    const lifecycle = (await import("@/modules/catalog/module")).default.lifecycle as {
+      onExport: (c: typeof ctx) => Promise<Record<string, string>>
+    }
+    const files = await lifecycle.onExport(ctx)
     expect(Object.keys(files)).toEqual(["catalog.categories.json", "catalog.services.json", "catalog.variants.json"])
     expect(JSON.parse(files["catalog.services.json"])).toHaveLength(1)
   })

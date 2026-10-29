@@ -65,7 +65,7 @@ holds for two designs.
   (no Member/User row needed).
 - **Checks:** `pnpm test`, `pnpm test:integration`, `pnpm modules:check`.
 - **Done when:** staff list on the dashboard, show on the site, purge works.
-- [ ] done
+- [x] done (`src/modules/team/module.ts` manifest (`StaffMember`, `StaffService`) + lifecycle; `/t/<slug>/team` manages staff — a `StaffMember` is not a `Member`/`User`, it may never have a login (integration-tested). `team` is a `TenantResource` (`view`/`manage`) in the `workspace` group; managers hold `team.*`. The `main` theme's `team` section renders `SiteData.team` when `module.team` is on; fixtures carry sample staff. Registry regenerated — three modules.)
 
 ### 4.4 — Vertical presets + sample data
 - **Goal:** `src/verticals/<key>.ts` typed objects for `nail_salon`,

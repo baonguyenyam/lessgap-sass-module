@@ -28,6 +28,8 @@ const EXPECTED: Record<string, TenantPermission[]> = {
     "media.manage",
     "catalog.view",
     "catalog.manage",
+    "team.view",
+    "team.manage",
     "bookings.view",
     "bookings.manage",
     "orders.view",

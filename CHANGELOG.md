@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.49.0] - 2026-10-29
+
+**A tenant's team — staff the site shows — is the third module through the lifecycle.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`team` module** — staff profiles with photo and bio; a `StaffMember` is not a tenant member — it may never have a login (purged tenant-scoped, exported as JSON, gated by `module.team`)
+- **Settings → Team** (`/t/<slug>/team`) — add staff; `team` is a permission resource (`view`/`manage`) managers hold
+- **Site team section** — the `main` theme shows staff when the module is on
+
 ## [2.48.0] - 2026-10-29
 
 **A tenant's catalog — services with duration and price — is the second module through the lifecycle.** This is a MINOR: `git pull`, `pnpm install`.

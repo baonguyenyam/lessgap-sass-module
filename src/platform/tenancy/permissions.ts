@@ -25,6 +25,7 @@ export const TENANT_PERMISSIONS = {
   pages: ["manage"],
   media: ["manage"],
   catalog: ["view", "manage"],
+  team: ["view", "manage"],
   bookings: ["view", "manage"],
   orders: ["view", "manage"],
   quotes: ["view", "manage"],
@@ -43,7 +44,7 @@ export type TenantResource = keyof typeof TENANT_PERMISSIONS
  * group when it lands.
  */
 export const PERMISSION_GROUPS = {
-  workspace: ["members", "roles", "settings", "billing", "notifications"],
+  workspace: ["members", "roles", "settings", "billing", "notifications", "team"],
   website: ["site", "pages", "media"],
   bookings: ["bookings", "customers"],
   sales: ["catalog", "orders", "quotes"],
@@ -140,6 +141,7 @@ export const ROLE_PERMISSIONS: Record<string, RoleGrants> = {
     pages: ["manage"],
     media: ["manage"],
     catalog: ["view", "manage"],
+    team: ["view", "manage"],
     bookings: ["view", "manage"],
     orders: ["view", "manage"],
     quotes: ["view", "manage"],
