@@ -35,7 +35,7 @@ gate in the platform layout, then E2E it.
 **Tests:** `tests/e2e/` — staff without 2FA can't open `/platform`; with it,
 they can.
 **Done when:** the gate exists and the spec passes.
-- [ ] done
+- [x] done (`tests/e2e/platform-2fa.spec.ts` 1/1 — `requirePlatformRole` reads `twoFactorEnabled` and redirects staff without it to `/dashboard/account/security`. The gate's first target was `/2fa` — that's the sign-in challenge page, an AUTH route the proxy bounces a signed-in user away from; the setup surface is the account-security page.)
 
 ### 10.3 L2 — the module-disable checks E8 didn't reach
 

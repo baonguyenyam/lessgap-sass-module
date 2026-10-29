@@ -7,6 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.88.0] - 2026-10-29
+
+**The platform console requires a second factor — staff without `twoFactorEnabled` are sent to their security settings before `/platform` opens.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Changed
+
+- **`/platform` requires 2FA** (O8, spec/11) — `requirePlatformRole` now reads `twoFactorEnabled` and redirects staff without it to `/dashboard/account/security`; the `/2fa` route is the sign-in challenge, not the setup
+
+### Added
+
+- **`tests/e2e/platform-2fa.spec.ts`** — staff without 2FA is refused `/platform`, with it the console opens
+
 ## [2.87.0] - 2026-10-29
 
 **Every shared theme's fixture renders on a preview route — and the axe suite scans each with zero serious violations.** This is a MINOR: `git pull`, `pnpm install`.
