@@ -3,13 +3,15 @@ import module_0 from "./booking/module"
 import module_1 from "./catalog/module"
 import module_2 from "./customers/module"
 import module_3 from "./newsletter/module"
-import module_4 from "./team/module"
+import module_4 from "./notifications/module"
+import module_5 from "./team/module"
 
 export const moduleRegistry = {
   "booking": module_0,
   "catalog": module_1,
   "customers": module_2,
   "newsletter": module_3,
-  "team": module_4,
+  "notifications": module_4,
+  "team": module_5,
 } as const
 export type ModuleKey = keyof typeof moduleRegistry

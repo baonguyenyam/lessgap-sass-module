@@ -914,6 +914,14 @@
         "notFound": "Không tìm thấy email.",
         "noPayload": "Không có nội dung đã lưu để gửi lại.",
         "sendFailed": "Gửi lại thất bại — xem bản ghi mới để biết lỗi."
+      },
+      "templates": {
+        "title": "Mẫu email",
+        "subtitle": "Mọi mẫu, mọi ngôn ngữ — xem trước và gửi thử",
+        "send_to": "Gửi thử đến…",
+        "send_test": "Gửi thử",
+        "sending": "Đang gửi…",
+        "sent": "đã gửi thử"
       }
     },
     "errors": {

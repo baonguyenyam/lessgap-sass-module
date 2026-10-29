@@ -914,6 +914,14 @@
         "notFound": "Email not found.",
         "noPayload": "No stored body to resend.",
         "sendFailed": "The resend failed — see the new row for the error."
+      },
+      "templates": {
+        "title": "Email templates",
+        "subtitle": "Every template, every locale — preview and send-test",
+        "send_to": "Send test to…",
+        "send_test": "Send test",
+        "sending": "Sending…",
+        "sent": "test sent"
       }
     },
     "errors": {

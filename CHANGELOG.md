@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.58.0] - 2026-10-29
+
+**One sender for every message: `notify()` renders a template per locale, logs it, and sends it.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`notify(ctx, template, recipient, data)`** — resolves the template (a tenant's `TenantSetting` override wins, else the code default per locale), sends through `sendEmail()`, and writes `NotificationLog` every time
+- **Code email templates** — `booking.confirmation`, `booking.reminder`, `booking.canceled`, `customer.export` in English and Vietnamese
+- **`/platform/emails/templates`** — a staff page that previews every template in every locale and sends a test to a typed address
+
 ## [2.57.0] - 2026-10-29
 
 **The customers module: every booker in one list, with consent badges and a privacy export and delete.** This is a MINOR: `git pull`, `pnpm install`.

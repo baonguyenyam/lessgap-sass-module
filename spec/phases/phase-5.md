@@ -136,7 +136,7 @@ PHI).
   integration — `notify` never crosses tenants, missing template falls back.
 - **Checks:** `pnpm test`, `pnpm test:integration`, `pnpm modules:check`.
 - **Done when:** every template previews per locale and `notify` logs.
-- [ ] done
+- [x] done (`src/emails/templates/` — 4 code templates (booking.confirmation, booking.reminder, booking.canceled, customer.export) per locale; `renderTemplate` resolves a tenant's `notify.template.<key>.<locale>` `TenantSetting` override, else the code default. `notify` renders, sends via `sendEmail()`, and writes `NotificationLog` (sent/failed) — every call scoped to the tenant. `src/modules/notifications/module.ts` — NotificationLog lifecycle. `/platform/emails/templates` — a standalone staff page (not a settings tab) with a per-locale preview + `sendTestEmail` to a typed address. Integration `notify.test.ts` — render+send+log, tenant override wins, missing template fails the log and never sends.)
 
 ### 5.7 — Reminders job + SMS consent gate
 - **Goal:** `platform.booking.remind` job — appointments `confirmed` with
