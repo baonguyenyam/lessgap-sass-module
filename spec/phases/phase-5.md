@@ -200,3 +200,12 @@ PHI).
 
 - Decision 5-D: the dental vertical collects name/contact/preferred time
   only — no clinical intake — per spec/10's v1 no-PHI decision.
+- E2E deferred: book → confirmation email → manage-link reschedule →
+  reminder send is covered as mechanisms by `site-booking.test.ts`
+  (book→NotificationLog, manage reschedule+cancel) and `reminders.test.ts`
+  (job sends once per window, SMS consent gate) — not as one Playwright
+  journey. A deployed-run E2E remains a finding (the site needs a running
+  server + mail capture).
+- Finding: `ops.json` is emitted, never hand-edited — raw-SQL ops belong in
+  `migration.ts`; self-emit (`node <pkg>/migration.ts`) regenerates ops.json
+  + migrationHash (5.2's constraints only actually applied in 5.9).
