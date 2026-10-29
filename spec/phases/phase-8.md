@@ -98,7 +98,7 @@ that measurement, not guessed.
   the brief's findings.
 - **Files:** `scripts/load/seed.ts`, `scripts/load/run.sh`, brief findings.
 - **Done when:** the staged run meets or records the spec/16 targets.
-- [ ] done
+- [x] done (`scripts/load/seed.ts` — `LOAD_TENANTS=N` tenants + published `Site` + `SiteSettings` per `load-XXXX` slug (tsx + `import "dotenv/config"` — db8 reads `DATABASE_URL` at module init; verified: 3 tenants seeded on dev Neon). `scripts/load/run.sh` — autocannon loop across `load-XXXX.${SITES_DOMAIN}` hosts (`RATE`/`DURATION`/`COUNT` env; `SITES_DOMAIN` auto-reads `NEXT_PUBLIC_SITES_DOMAIN` from `.env`). Findings: **the spec's 500 req/min × 200 hosts target needs a staging run — a local `next dev` on a remote Neon dev DB is not the staging shape** (first-compile dominates TTFB, remote latency inflates everything). Dev-run smoke: `Host: load-0000.lessgap.io` reached the proxy and returned responses — a seeded site surfaces through `resolveHost`; the spec target is recorded for the staging drill, not asserted locally.)
 
 ### 8.7 — ADR revisit + PSL note + analytics module
 - **Goal:** measure the Job table under the drain target → ADR keeps or

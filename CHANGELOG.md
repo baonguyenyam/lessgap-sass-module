@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.80.0] - 2026-10-29
+
+**The site surface gets a load fixture: `LOAD_TENANTS=N` seeds published sites, `scripts/load/run.sh` drives autocannon across the hosts at the spec's rate.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`scripts/load/`** — `seed.ts` (N tenants, each with a published site, `load-XXXX` slugs) and `run.sh` (autocannon across `load-XXXX.${SITES_DOMAIN}` at `RATE`/`DURATION`/`COUNT`)
+
 ## [2.79.0] - 2026-10-29
 
 **`/platform/usage` — counters, job throughput, error rate and queue depth on one page, read from rows not log streams.** This is a MINOR: `git pull`, `pnpm install`.
