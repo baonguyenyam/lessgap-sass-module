@@ -7,6 +7,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.54.0] - 2026-10-29
+
+**Bookings get a schema: resources, availability rules, appointments, customers — and the database refuses a double booking.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **Booking schema** — `Resource` (chair, room, station), `AvailabilityRule` (weekly hours per staff or resource), `TimeOff`, `Appointment` (UTC start/end, `requested`/`confirmed`/`completed`/`canceled`/`no_show`, source), `AppointmentEvent` (status history)
+- **Customers** — `Customer` (name, email, phone, language) with recorded consent stamps — marketing and SMS, each with time and source; deduplicated per tenant by email then phone
+- **Notification log** — `NotificationLog` records every outbound message: channel, template, recipient, provider status
+- **Double booking is a database rule** — exclusion constraints on `tsrange(start,end)` per staff member and per resource refuse an overlapping non-canceled appointment; no code race can create one
+
 ## [2.53.0] - 2026-10-29
 
 **The availability engine — the pure function every booking starts from.** This is a MINOR: `git pull`, `pnpm install`.

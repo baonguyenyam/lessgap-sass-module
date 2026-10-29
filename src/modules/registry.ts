@@ -4,8 +4,8 @@ import module_1 from "./newsletter/module"
 import module_2 from "./team/module"
 
 export const moduleRegistry = {
-  catalog: module_0,
-  newsletter: module_1,
-  team: module_2,
+  "catalog": module_0,
+  "newsletter": module_1,
+  "team": module_2,
 } as const
 export type ModuleKey = keyof typeof moduleRegistry

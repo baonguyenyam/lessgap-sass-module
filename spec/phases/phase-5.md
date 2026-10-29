@@ -72,7 +72,7 @@ PHI).
 - **Checks:** `pnpm db:emit`, `pnpm db:plan`, `pnpm db:migrate`,
   `pnpm audit:tenancy`.
 - **Done when:** models + constraints exist, deletion verified.
-- [ ] done
+- [x] done (7 tenant-owned models in `contract.prisma` — `Resource`, `AvailabilityRule` (weekday + local minutes), `TimeOff`, `Customer` (consent stamps: `marketingConsentAt/Source`, `smsConsentAt/Source`), `Appointment` (UTC `startTs`/`endTs`, `requested→confirmed→completed|canceled|no_show`, `source`, `remindedAt`), `AppointmentEvent` (status history), `NotificationLog` (channel/template/recipient/provider status) — all `@@rls` cascade, all classified (45 models), all in `deleteTenant`, T9 green. `appointment_no_double_staff` + `appointment_no_double_resource` exclusion constraints on `tsrange(startTs,endTs)` `status <> 'canceled'` — `btree_gist` for the text keys. Raw-SQL ops written as literal `SqlMigrationPlanOperation` objects — the `sql` tagged-template is for column expressions, not migration ops.)
 
 ### 5.3 — `booking` module + dashboard calendar
 - **Goal:** `src/modules/booking/module.ts` manifest + lifecycle;

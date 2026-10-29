@@ -798,3 +798,142 @@ trialEndsAt          TimestampString(3)?
     @@index([staffMemberId, serviceId], map: "StaffService_staffMemberId_serviceId_key", unique: true)
     @@rls
   }
+
+  // The booking module (spec/07): resources (chair/room/station), weekly
+  // availability rules, time-off, appointments and their status history.
+  // All times are UTC instants; a `tsrange` exclusion constraint on staff
+  // and on resource makes double booking impossible (decision 5-A).
+  model Resource {
+    id        String             @id(map: "Resource_pkey") @onCreate(cuid(2))
+    tenantId  String
+    name      String
+    kind      String             @default("room")
+    createdAt TimestampString(3) @default(now())
+    updatedAt TimestampString(3) @default(now()) @onUpdate(now())
+    tenant    Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Resource_tenantId_fkey")
+    rules     AvailabilityRule[]
+    timeOff   TimeOff[]
+    appointments Appointment[]
+
+    @@index([tenantId], map: "Resource_tenantId_idx")
+    @@rls
+  }
+
+  model AvailabilityRule {
+    id          String             @id(map: "AvailabilityRule_pkey") @onCreate(cuid(2))
+    tenantId    String
+    staffId     String?
+    resourceId  String?
+    weekday     Int
+    startMinute Int
+    endMinute   Int
+    createdAt   TimestampString(3) @default(now())
+    updatedAt   TimestampString(3) @default(now()) @onUpdate(now())
+    tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "AvailabilityRule_tenantId_fkey")
+    staff       StaffMember?       @relation(fields: [staffId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "AvailabilityRule_staffId_fkey")
+    resource    Resource?          @relation(fields: [resourceId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "AvailabilityRule_resourceId_fkey")
+
+    @@index([tenantId], map: "AvailabilityRule_tenantId_idx")
+    @@rls
+  }
+
+  model TimeOff {
+    id         String             @id(map: "TimeOff_pkey") @onCreate(cuid(2))
+    tenantId   String
+    staffId    String?
+    resourceId String?
+    startTs    TimestampString(3)
+    endTs      TimestampString(3)
+    reason     String?
+    createdAt  TimestampString(3) @default(now())
+    updatedAt  TimestampString(3) @default(now()) @onUpdate(now())
+    tenant     Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "TimeOff_tenantId_fkey")
+    staff      StaffMember?       @relation(fields: [staffId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "TimeOff_staffId_fkey")
+    resource   Resource?          @relation(fields: [resourceId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "TimeOff_resourceId_fkey")
+
+    @@index([tenantId], map: "TimeOff_tenantId_idx")
+    @@rls
+  }
+
+  model Customer {
+    id                     String             @id(map: "Customer_pkey") @onCreate(cuid(2))
+    tenantId               String
+    name                   String
+    email                  String?
+    phone                  String?
+    language               String             @default("en")
+    marketingConsentAt     TimestampString(3)?
+    marketingConsentSource String?
+    smsConsentAt           TimestampString(3)?
+    smsConsentSource       String?
+    createdAt              TimestampString(3) @default(now())
+    updatedAt              TimestampString(3) @default(now()) @onUpdate(now())
+    tenant                 Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Customer_tenantId_fkey")
+    appointments           Appointment[]
+
+    @@index([tenantId], map: "Customer_tenantId_idx")
+    @@index([tenantId, email], map: "Customer_tenantId_email_idx")
+    @@rls
+  }
+
+  model Appointment {
+    id           String             @id(map: "Appointment_pkey") @onCreate(cuid(2))
+    tenantId     String
+    customerId   String
+    serviceId    String?
+    staffId      String
+    resourceId   String?
+    startTs      TimestampString(3)
+    endTs        TimestampString(3)
+    status       String             @default("requested")
+    source       String             @default("site")
+    notes        String?
+    remindedAt   TimestampString(3)?
+    createdAt    TimestampString(3) @default(now())
+    updatedAt    TimestampString(3) @default(now()) @onUpdate(now())
+    tenant       Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Appointment_tenantId_fkey")
+    customer     Customer           @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Appointment_customerId_fkey")
+    service      Service?           @relation(fields: [serviceId], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "Appointment_serviceId_fkey")
+    staff        StaffMember        @relation(fields: [staffId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Appointment_staffId_fkey")
+    resource     Resource?          @relation(fields: [resourceId], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "Appointment_resourceId_fkey")
+    events       AppointmentEvent[]
+
+    @@index([tenantId], map: "Appointment_tenantId_idx")
+    @@index([staffId, startTs], map: "Appointment_staffId_startTs_idx")
+    @@rls
+  }
+
+  model AppointmentEvent {
+    id            String             @id(map: "AppointmentEvent_pkey") @onCreate(cuid(2))
+    tenantId      String
+    appointmentId String
+    fromStatus    String?
+    toStatus      String
+    actor         String             @default("system")
+    note          String?
+    createdAt     TimestampString(3) @default(now())
+    tenant        Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "AppointmentEvent_tenantId_fkey")
+    appointment   Appointment        @relation(fields: [appointmentId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "AppointmentEvent_appointmentId_fkey")
+
+    @@index([appointmentId], map: "AppointmentEvent_appointmentId_idx")
+    @@rls
+  }
+
+  // The notifications module (spec/07): every outbound message logged with
+  // its provider status — the audit trail of email and SMS sends.
+  model NotificationLog {
+    id         String             @id(map: "NotificationLog_pkey") @onCreate(cuid(2))
+    tenantId   String
+    channel    String
+    template   String
+    recipient  String
+    status     String             @default("queued")
+    providerId String?
+    payload    Json?
+    sentAt     TimestampString(3)?
+    createdAt  TimestampString(3) @default(now())
+    tenant     Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "NotificationLog_tenantId_fkey")
+
+    @@index([tenantId], map: "NotificationLog_tenantId_idx")
+    @@rls
+  }

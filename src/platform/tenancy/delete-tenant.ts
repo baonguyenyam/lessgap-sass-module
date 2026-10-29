@@ -22,8 +22,15 @@ export async function deleteTenant(tenantId: string): Promise<void> {
   }
 
   const {
+    Appointment,
+    AppointmentEvent,
+    AvailabilityRule,
+    Customer,
     Domain,
     Media,
+    NotificationLog,
+    Resource,
+    TimeOff,
     ModuleExport,
     ModulePurge,
     NewsletterSubscriber,
@@ -50,8 +57,15 @@ export async function deleteTenant(tenantId: string): Promise<void> {
 
   // Tenant-owned tables (MODEL_CLASSIFICATION).
   await Promise.all([
+    Appointment.where({ tenantId }).deleteAndCount(),
+    AppointmentEvent.where({ tenantId }).deleteAndCount(),
+    AvailabilityRule.where({ tenantId }).deleteAndCount(),
+    Customer.where({ tenantId }).deleteAndCount(),
     Domain.where({ tenantId }).deleteAndCount(),
     Media.where({ tenantId }).deleteAndCount(),
+    NotificationLog.where({ tenantId }).deleteAndCount(),
+    Resource.where({ tenantId }).deleteAndCount(),
+    TimeOff.where({ tenantId }).deleteAndCount(),
     ModuleExport.where({ tenantId }).deleteAndCount(),
     ModulePurge.where({ tenantId }).deleteAndCount(),
     NewsletterSubscriber.where({ tenantId }).deleteAndCount(),

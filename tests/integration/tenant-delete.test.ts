@@ -28,7 +28,14 @@ describe("tenant deletion (T9)", () => {
 
   it("leaves no row with the tenant's id in any tenant-owned or tenant-identity table", async () => {
     const {
+      Appointment,
+      AppointmentEvent,
+      AvailabilityRule,
+      Customer,
       Media,
+      NotificationLog,
+      Resource,
+      TimeOff,
       ModuleExport,
       ModulePurge,
       NewsletterSubscriber,
@@ -64,6 +71,17 @@ describe("tenant deletion (T9)", () => {
 
     const service = await Service.create({ tenantId: tenant.id, name: "Manicure" })
     const staff = await StaffMember.create({ tenantId: tenant.id, name: "Mia" })
+    const customer = await Customer.create({ tenantId: tenant.id, name: "Ana" })
+    const resource = await Resource.create({ tenantId: tenant.id, name: "Chair 1" })
+    const appointment = await Appointment.create({
+      tenantId: tenant.id,
+      customerId: customer.id,
+      staffId: staff.id,
+      resourceId: resource.id,
+      startTs: nowTs(),
+      endTs: toTs(new Date(Date.now() + 30 * 60 * 1000)),
+      status: "confirmed",
+    })
     const serviceId = service.id
     const staffId = staff.id
     await Promise.all([
@@ -123,6 +141,21 @@ describe("tenant deletion (T9)", () => {
         createdById: "staff-1",
       }),
       UsageCounter.create({ tenantId: tenant.id, limitKey: "demo", periodStart: nowTs(), used: 1 }),
+      AvailabilityRule.create({
+        tenantId: tenant.id,
+        staffId: staff.id,
+        weekday: 1,
+        startMinute: 540,
+        endMinute: 1020,
+      }),
+      TimeOff.create({ tenantId: tenant.id, staffId: staff.id, startTs: nowTs(), endTs: nowTs() }),
+      AppointmentEvent.create({ tenantId: tenant.id, appointmentId: appointment.id, toStatus: "confirmed" }),
+      NotificationLog.create({
+        tenantId: tenant.id,
+        channel: "email",
+        template: "booking.confirmation",
+        recipient: "a@b.c",
+      }),
     ])
 
     await deleteTenant(tenant.id)
@@ -140,6 +173,13 @@ describe("tenant deletion (T9)", () => {
       ["Member", Member, "organizationId"],
       ["Invitation", Invitation, "organizationId"],
       ["OrganizationRole", OrganizationRole, "organizationId"],
+      ["Appointment", Appointment, "tenantId"],
+      ["AppointmentEvent", AppointmentEvent, "tenantId"],
+      ["AvailabilityRule", AvailabilityRule, "tenantId"],
+      ["Customer", Customer, "tenantId"],
+      ["NotificationLog", NotificationLog, "tenantId"],
+      ["Resource", Resource, "tenantId"],
+      ["TimeOff", TimeOff, "tenantId"],
     ] as const) {
       const row = await (model as typeof NewsletterSubscriber).where({ [field]: tenant.id } as never).first()
       expect(row, name).toBeNull()
