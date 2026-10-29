@@ -521,6 +521,42 @@ trialEndsAt          TimestampString(3)?
     using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
     withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
   }
+
+  policy_all package_isolation {
+    target    = Package
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all customer_package_isolation {
+    target    = CustomerPackage
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all package_ledger_isolation {
+    target    = PackageLedger
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all membership_isolation {
+    target    = Membership
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all customer_membership_isolation {
+    target    = CustomerMembership
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all membership_ledger_isolation {
+    target    = MembershipLedger
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
   policy_all knowledge_chunk_isolation {
     target    = KnowledgeChunk
     using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
@@ -1224,6 +1260,103 @@ trialEndsAt          TimestampString(3)?
 
     @@index([tenantId], map: "Appointment_tenantId_idx")
     @@index([staffId, startTs], map: "Appointment_staffId_startTs_idx")
+    @@rls
+  }
+
+  model Package {
+    id          String            @id(map: "Package_pkey") @onCreate(cuid(2))
+    tenantId    String
+    name        String
+    sessions    Int
+    priceCents  Int
+    currency    String            @default("usd")
+    createdAt   TimestampString(3) @default(now())
+    updatedAt   TimestampString(3) @default(now()) @onUpdate(now())
+    tenant      Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Package_tenantId_fkey")
+    holdings    CustomerPackage[]
+
+    @@index([tenantId], map: "Package_tenantId_idx")
+    @@rls
+  }
+
+  model CustomerPackage {
+    id            String           @id(map: "CustomerPackage_pkey") @onCreate(cuid(2))
+    tenantId      String
+    packageId     String
+    customerId    String
+    sessionsLeft  Int
+    active        Boolean          @default(true)
+    createdAt     TimestampString(3) @default(now())
+    updatedAt     TimestampString(3) @default(now()) @onUpdate(now())
+    tenant        Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "CustomerPackage_tenantId_fkey")
+    package       Package          @relation(fields: [packageId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "CustomerPackage_packageId_fkey")
+    customer      Customer         @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "CustomerPackage_customerId_fkey")
+    ledger        PackageLedger[]
+
+    @@index([tenantId, customerId], map: "CustomerPackage_tenantCustomer_idx")
+    @@rls
+  }
+
+  model PackageLedger {
+    id            String           @id(map: "PackageLedger_pkey") @onCreate(cuid(2))
+    tenantId      String
+    holdingId     String
+    deltaSessions Int
+    reason        String
+    appointmentId String?
+    createdAt     TimestampString(3) @default(now())
+    tenant        Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "PackageLedger_tenantId_fkey")
+    holding       CustomerPackage  @relation(fields: [holdingId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "PackageLedger_holdingId_fkey")
+
+    @@index([holdingId], map: "PackageLedger_holdingId_idx")
+    @@index([tenantId], map: "PackageLedger_tenantId_idx")
+    @@rls
+  }
+
+  model Membership {
+    id          String              @id(map: "Membership_pkey") @onCreate(cuid(2))
+    tenantId    String
+    name        String
+    priceCents  Int
+    currency    String              @default("usd")
+    createdAt   TimestampString(3)  @default(now())
+    updatedAt   TimestampString(3)  @default(now()) @onUpdate(now())
+    tenant      Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Membership_tenantId_fkey")
+    holdings    CustomerMembership[]
+
+    @@index([tenantId], map: "Membership_tenantId_idx")
+    @@rls
+  }
+
+  model CustomerMembership {
+    id           String           @id(map: "CustomerMembership_pkey") @onCreate(cuid(2))
+    tenantId     String
+    membershipId String
+    customerId   String
+    active       Boolean          @default(true)
+    createdAt    TimestampString(3) @default(now())
+    updatedAt    TimestampString(3) @default(now()) @onUpdate(now())
+    tenant       Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "CustomerMembership_tenantId_fkey")
+    membership   Membership       @relation(fields: [membershipId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "CustomerMembership_membershipId_fkey")
+    customer     Customer         @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "CustomerMembership_customerId_fkey")
+    ledger       MembershipLedger[]
+
+    @@index([tenantId, customerId], map: "CustomerMembership_tenantCustomer_idx")
+    @@rls
+  }
+
+  model MembershipLedger {
+    id           String           @id(map: "MembershipLedger_pkey") @onCreate(cuid(2))
+    tenantId     String
+    holdingId    String
+    deltaCents   Int
+    reason       String
+    createdAt    TimestampString(3) @default(now())
+    tenant       Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "MembershipLedger_tenantId_fkey")
+    holding      CustomerMembership @relation(fields: [holdingId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "MembershipLedger_holdingId_fkey")
+
+    @@index([holdingId], map: "MembershipLedger_holdingId_idx")
+    @@index([tenantId], map: "MembershipLedger_tenantId_idx")
     @@rls
   }
 

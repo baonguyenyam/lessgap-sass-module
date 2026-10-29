@@ -1,0 +1,2126 @@
+[
+  {
+    "id": "table.CustomerMembership",
+    "label": "Create table \"CustomerMembership\"",
+    "summary": "Creates table \"CustomerMembership\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "CustomerMembership"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"CustomerMembership\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerMembership\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"CustomerMembership\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"CustomerMembership\"",
+        "sql": "CREATE TABLE \"public\".\"CustomerMembership\" (\n  \"active\" bool DEFAULT true NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"customerId\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"membershipId\" text NOT NULL,\n  \"tenantId\" text NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  CONSTRAINT \"CustomerMembership_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"CustomerMembership\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerMembership\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"CustomerMembership\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.CustomerPackage",
+    "label": "Create table \"CustomerPackage\"",
+    "summary": "Creates table \"CustomerPackage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "CustomerPackage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"CustomerPackage\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerPackage\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"CustomerPackage\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"CustomerPackage\"",
+        "sql": "CREATE TABLE \"public\".\"CustomerPackage\" (\n  \"active\" bool DEFAULT true NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"customerId\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"packageId\" text NOT NULL,\n  \"sessionsLeft\" int4 NOT NULL,\n  \"tenantId\" text NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  CONSTRAINT \"CustomerPackage_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"CustomerPackage\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerPackage\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"CustomerPackage\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.Membership",
+    "label": "Create table \"Membership\"",
+    "summary": "Creates table \"Membership\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Membership"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Membership\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Membership\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"Membership\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Membership\"",
+        "sql": "CREATE TABLE \"public\".\"Membership\" (\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"currency\" text DEFAULT 'usd' NOT NULL,\n  \"id\" text NOT NULL,\n  \"name\" text NOT NULL,\n  \"priceCents\" int4 NOT NULL,\n  \"tenantId\" text NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  CONSTRAINT \"Membership_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Membership\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"Membership\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"Membership\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.MembershipLedger",
+    "label": "Create table \"MembershipLedger\"",
+    "summary": "Creates table \"MembershipLedger\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "MembershipLedger"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"MembershipLedger\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"MembershipLedger\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"MembershipLedger\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"MembershipLedger\"",
+        "sql": "CREATE TABLE \"public\".\"MembershipLedger\" (\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"deltaCents\" int4 NOT NULL,\n  \"holdingId\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"reason\" text NOT NULL,\n  \"tenantId\" text NOT NULL,\n  CONSTRAINT \"MembershipLedger_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"MembershipLedger\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"MembershipLedger\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"MembershipLedger\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.Package",
+    "label": "Create table \"Package\"",
+    "summary": "Creates table \"Package\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Package"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Package\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Package\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"Package\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Package\"",
+        "sql": "CREATE TABLE \"public\".\"Package\" (\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"currency\" text DEFAULT 'usd' NOT NULL,\n  \"id\" text NOT NULL,\n  \"name\" text NOT NULL,\n  \"priceCents\" int4 NOT NULL,\n  \"sessions\" int4 NOT NULL,\n  \"tenantId\" text NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  CONSTRAINT \"Package_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Package\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"Package\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"Package\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.PackageLedger",
+    "label": "Create table \"PackageLedger\"",
+    "summary": "Creates table \"PackageLedger\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "PackageLedger"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"PackageLedger\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"PackageLedger\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"PackageLedger\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"PackageLedger\"",
+        "sql": "CREATE TABLE \"public\".\"PackageLedger\" (\n  \"appointmentId\" text,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"deltaSessions\" int4 NOT NULL,\n  \"holdingId\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"reason\" text NOT NULL,\n  \"tenantId\" text NOT NULL,\n  CONSTRAINT \"PackageLedger_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"PackageLedger\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"PackageLedger\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"PackageLedger\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "index.CustomerMembership.CustomerMembership_customerId_idx_b2a8a46c",
+    "label": "Create index \"CustomerMembership_customerId_idx_b2a8a46c\" on \"CustomerMembership\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "CustomerMembership_customerId_idx_b2a8a46c",
+        "table": "CustomerMembership"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"CustomerMembership_customerId_idx_b2a8a46c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerMembership_customerId_idx_b2a8a46c\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"CustomerMembership_customerId_idx_b2a8a46c\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"CustomerMembership_customerId_idx_b2a8a46c\"",
+        "sql": "CREATE INDEX \"CustomerMembership_customerId_idx_b2a8a46c\" ON \"public\".\"CustomerMembership\" (\"customerId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"CustomerMembership_customerId_idx_b2a8a46c\" exists on \"CustomerMembership\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerMembership_customerId_idx_b2a8a46c\"",
+          "i",
+          "I",
+          "\"public\".\"CustomerMembership\"",
+          "btree",
+          "[\"customerId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.CustomerMembership.CustomerMembership_membershipId_idx_fdcfb7b5",
+    "label": "Create index \"CustomerMembership_membershipId_idx_fdcfb7b5\" on \"CustomerMembership\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "CustomerMembership_membershipId_idx_fdcfb7b5",
+        "table": "CustomerMembership"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"CustomerMembership_membershipId_idx_fdcfb7b5\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerMembership_membershipId_idx_fdcfb7b5\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"CustomerMembership_membershipId_idx_fdcfb7b5\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"CustomerMembership_membershipId_idx_fdcfb7b5\"",
+        "sql": "CREATE INDEX \"CustomerMembership_membershipId_idx_fdcfb7b5\" ON \"public\".\"CustomerMembership\" (\"membershipId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"CustomerMembership_membershipId_idx_fdcfb7b5\" exists on \"CustomerMembership\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerMembership_membershipId_idx_fdcfb7b5\"",
+          "i",
+          "I",
+          "\"public\".\"CustomerMembership\"",
+          "btree",
+          "[\"membershipId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.CustomerMembership.CustomerMembership_tenantCustomer_idx",
+    "label": "Create index \"CustomerMembership_tenantCustomer_idx\" on \"CustomerMembership\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "CustomerMembership_tenantCustomer_idx",
+        "table": "CustomerMembership"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"CustomerMembership_tenantCustomer_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerMembership_tenantCustomer_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"CustomerMembership_tenantCustomer_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"CustomerMembership_tenantCustomer_idx\"",
+        "sql": "CREATE INDEX \"CustomerMembership_tenantCustomer_idx\" ON \"public\".\"CustomerMembership\" (\"tenantId\", \"customerId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"CustomerMembership_tenantCustomer_idx\" exists on \"CustomerMembership\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerMembership_tenantCustomer_idx\"",
+          "i",
+          "I",
+          "\"public\".\"CustomerMembership\"",
+          "btree",
+          "[\"tenantId\",\"customerId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.CustomerMembership.CustomerMembership_tenantId_idx_c93ed4f1",
+    "label": "Create index \"CustomerMembership_tenantId_idx_c93ed4f1\" on \"CustomerMembership\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "CustomerMembership_tenantId_idx_c93ed4f1",
+        "table": "CustomerMembership"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"CustomerMembership_tenantId_idx_c93ed4f1\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerMembership_tenantId_idx_c93ed4f1\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"CustomerMembership_tenantId_idx_c93ed4f1\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"CustomerMembership_tenantId_idx_c93ed4f1\"",
+        "sql": "CREATE INDEX \"CustomerMembership_tenantId_idx_c93ed4f1\" ON \"public\".\"CustomerMembership\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"CustomerMembership_tenantId_idx_c93ed4f1\" exists on \"CustomerMembership\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerMembership_tenantId_idx_c93ed4f1\"",
+          "i",
+          "I",
+          "\"public\".\"CustomerMembership\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.CustomerPackage.CustomerPackage_customerId_idx_b2a8a46c",
+    "label": "Create index \"CustomerPackage_customerId_idx_b2a8a46c\" on \"CustomerPackage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "CustomerPackage_customerId_idx_b2a8a46c",
+        "table": "CustomerPackage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"CustomerPackage_customerId_idx_b2a8a46c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerPackage_customerId_idx_b2a8a46c\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"CustomerPackage_customerId_idx_b2a8a46c\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"CustomerPackage_customerId_idx_b2a8a46c\"",
+        "sql": "CREATE INDEX \"CustomerPackage_customerId_idx_b2a8a46c\" ON \"public\".\"CustomerPackage\" (\"customerId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"CustomerPackage_customerId_idx_b2a8a46c\" exists on \"CustomerPackage\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerPackage_customerId_idx_b2a8a46c\"",
+          "i",
+          "I",
+          "\"public\".\"CustomerPackage\"",
+          "btree",
+          "[\"customerId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.CustomerPackage.CustomerPackage_packageId_idx_51f866f4",
+    "label": "Create index \"CustomerPackage_packageId_idx_51f866f4\" on \"CustomerPackage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "CustomerPackage_packageId_idx_51f866f4",
+        "table": "CustomerPackage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"CustomerPackage_packageId_idx_51f866f4\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerPackage_packageId_idx_51f866f4\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"CustomerPackage_packageId_idx_51f866f4\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"CustomerPackage_packageId_idx_51f866f4\"",
+        "sql": "CREATE INDEX \"CustomerPackage_packageId_idx_51f866f4\" ON \"public\".\"CustomerPackage\" (\"packageId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"CustomerPackage_packageId_idx_51f866f4\" exists on \"CustomerPackage\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerPackage_packageId_idx_51f866f4\"",
+          "i",
+          "I",
+          "\"public\".\"CustomerPackage\"",
+          "btree",
+          "[\"packageId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.CustomerPackage.CustomerPackage_tenantCustomer_idx",
+    "label": "Create index \"CustomerPackage_tenantCustomer_idx\" on \"CustomerPackage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "CustomerPackage_tenantCustomer_idx",
+        "table": "CustomerPackage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"CustomerPackage_tenantCustomer_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerPackage_tenantCustomer_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"CustomerPackage_tenantCustomer_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"CustomerPackage_tenantCustomer_idx\"",
+        "sql": "CREATE INDEX \"CustomerPackage_tenantCustomer_idx\" ON \"public\".\"CustomerPackage\" (\"tenantId\", \"customerId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"CustomerPackage_tenantCustomer_idx\" exists on \"CustomerPackage\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerPackage_tenantCustomer_idx\"",
+          "i",
+          "I",
+          "\"public\".\"CustomerPackage\"",
+          "btree",
+          "[\"tenantId\",\"customerId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.CustomerPackage.CustomerPackage_tenantId_idx_c93ed4f1",
+    "label": "Create index \"CustomerPackage_tenantId_idx_c93ed4f1\" on \"CustomerPackage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "CustomerPackage_tenantId_idx_c93ed4f1",
+        "table": "CustomerPackage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"CustomerPackage_tenantId_idx_c93ed4f1\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerPackage_tenantId_idx_c93ed4f1\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"CustomerPackage_tenantId_idx_c93ed4f1\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"CustomerPackage_tenantId_idx_c93ed4f1\"",
+        "sql": "CREATE INDEX \"CustomerPackage_tenantId_idx_c93ed4f1\" ON \"public\".\"CustomerPackage\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"CustomerPackage_tenantId_idx_c93ed4f1\" exists on \"CustomerPackage\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"CustomerPackage_tenantId_idx_c93ed4f1\"",
+          "i",
+          "I",
+          "\"public\".\"CustomerPackage\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Membership.Membership_tenantId_idx",
+    "label": "Create index \"Membership_tenantId_idx\" on \"Membership\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Membership_tenantId_idx",
+        "table": "Membership"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Membership_tenantId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Membership_tenantId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Membership_tenantId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Membership_tenantId_idx\"",
+        "sql": "CREATE INDEX \"Membership_tenantId_idx\" ON \"public\".\"Membership\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Membership_tenantId_idx\" exists on \"Membership\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Membership_tenantId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"Membership\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.MembershipLedger.MembershipLedger_holdingId_idx",
+    "label": "Create index \"MembershipLedger_holdingId_idx\" on \"MembershipLedger\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "MembershipLedger_holdingId_idx",
+        "table": "MembershipLedger"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"MembershipLedger_holdingId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"MembershipLedger_holdingId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"MembershipLedger_holdingId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"MembershipLedger_holdingId_idx\"",
+        "sql": "CREATE INDEX \"MembershipLedger_holdingId_idx\" ON \"public\".\"MembershipLedger\" (\"holdingId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"MembershipLedger_holdingId_idx\" exists on \"MembershipLedger\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"MembershipLedger_holdingId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"MembershipLedger\"",
+          "btree",
+          "[\"holdingId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.MembershipLedger.MembershipLedger_tenantId_idx",
+    "label": "Create index \"MembershipLedger_tenantId_idx\" on \"MembershipLedger\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "MembershipLedger_tenantId_idx",
+        "table": "MembershipLedger"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"MembershipLedger_tenantId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"MembershipLedger_tenantId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"MembershipLedger_tenantId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"MembershipLedger_tenantId_idx\"",
+        "sql": "CREATE INDEX \"MembershipLedger_tenantId_idx\" ON \"public\".\"MembershipLedger\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"MembershipLedger_tenantId_idx\" exists on \"MembershipLedger\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"MembershipLedger_tenantId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"MembershipLedger\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Package.Package_tenantId_idx",
+    "label": "Create index \"Package_tenantId_idx\" on \"Package\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Package_tenantId_idx",
+        "table": "Package"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Package_tenantId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Package_tenantId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Package_tenantId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Package_tenantId_idx\"",
+        "sql": "CREATE INDEX \"Package_tenantId_idx\" ON \"public\".\"Package\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Package_tenantId_idx\" exists on \"Package\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Package_tenantId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"Package\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.PackageLedger.PackageLedger_holdingId_idx",
+    "label": "Create index \"PackageLedger_holdingId_idx\" on \"PackageLedger\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "PackageLedger_holdingId_idx",
+        "table": "PackageLedger"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"PackageLedger_holdingId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"PackageLedger_holdingId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"PackageLedger_holdingId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"PackageLedger_holdingId_idx\"",
+        "sql": "CREATE INDEX \"PackageLedger_holdingId_idx\" ON \"public\".\"PackageLedger\" (\"holdingId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"PackageLedger_holdingId_idx\" exists on \"PackageLedger\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"PackageLedger_holdingId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"PackageLedger\"",
+          "btree",
+          "[\"holdingId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.PackageLedger.PackageLedger_tenantId_idx",
+    "label": "Create index \"PackageLedger_tenantId_idx\" on \"PackageLedger\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "PackageLedger_tenantId_idx",
+        "table": "PackageLedger"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"PackageLedger_tenantId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"PackageLedger_tenantId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"PackageLedger_tenantId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"PackageLedger_tenantId_idx\"",
+        "sql": "CREATE INDEX \"PackageLedger_tenantId_idx\" ON \"public\".\"PackageLedger\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"PackageLedger_tenantId_idx\" exists on \"PackageLedger\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"PackageLedger_tenantId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"PackageLedger\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.CustomerMembership.CustomerMembership_tenantId_fkey",
+    "label": "Add foreign key \"CustomerMembership_tenantId_fkey\" on \"CustomerMembership\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "CustomerMembership_tenantId_fkey",
+        "table": "CustomerMembership"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"CustomerMembership_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "CustomerMembership_tenantId_fkey",
+          "public",
+          "\"public\".\"CustomerMembership\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"CustomerMembership_tenantId_fkey\" on \"CustomerMembership\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"CustomerMembership_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"CustomerMembership\"\nADD CONSTRAINT \"CustomerMembership_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"CustomerMembership_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "CustomerMembership_tenantId_fkey",
+          "public",
+          "\"public\".\"CustomerMembership\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.CustomerMembership.CustomerMembership_membershipId_fkey",
+    "label": "Add foreign key \"CustomerMembership_membershipId_fkey\" on \"CustomerMembership\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "CustomerMembership_membershipId_fkey",
+        "table": "CustomerMembership"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"CustomerMembership_membershipId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "CustomerMembership_membershipId_fkey",
+          "public",
+          "\"public\".\"CustomerMembership\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"CustomerMembership_membershipId_fkey\" on \"CustomerMembership\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"CustomerMembership_membershipId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"CustomerMembership\"\nADD CONSTRAINT \"CustomerMembership_membershipId_fkey\"\nFOREIGN KEY (\"membershipId\")\nREFERENCES \"public\".\"Membership\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"CustomerMembership_membershipId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "CustomerMembership_membershipId_fkey",
+          "public",
+          "\"public\".\"CustomerMembership\"",
+          "f",
+          "[\"membershipId\"]",
+          "\"public\".\"Membership\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.CustomerMembership.CustomerMembership_customerId_fkey",
+    "label": "Add foreign key \"CustomerMembership_customerId_fkey\" on \"CustomerMembership\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "CustomerMembership_customerId_fkey",
+        "table": "CustomerMembership"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"CustomerMembership_customerId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "CustomerMembership_customerId_fkey",
+          "public",
+          "\"public\".\"CustomerMembership\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"CustomerMembership_customerId_fkey\" on \"CustomerMembership\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"CustomerMembership_customerId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"CustomerMembership\"\nADD CONSTRAINT \"CustomerMembership_customerId_fkey\"\nFOREIGN KEY (\"customerId\")\nREFERENCES \"public\".\"Customer\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"CustomerMembership_customerId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "CustomerMembership_customerId_fkey",
+          "public",
+          "\"public\".\"CustomerMembership\"",
+          "f",
+          "[\"customerId\"]",
+          "\"public\".\"Customer\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.CustomerPackage.CustomerPackage_tenantId_fkey",
+    "label": "Add foreign key \"CustomerPackage_tenantId_fkey\" on \"CustomerPackage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "CustomerPackage_tenantId_fkey",
+        "table": "CustomerPackage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"CustomerPackage_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "CustomerPackage_tenantId_fkey",
+          "public",
+          "\"public\".\"CustomerPackage\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"CustomerPackage_tenantId_fkey\" on \"CustomerPackage\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"CustomerPackage_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"CustomerPackage\"\nADD CONSTRAINT \"CustomerPackage_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"CustomerPackage_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "CustomerPackage_tenantId_fkey",
+          "public",
+          "\"public\".\"CustomerPackage\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.CustomerPackage.CustomerPackage_packageId_fkey",
+    "label": "Add foreign key \"CustomerPackage_packageId_fkey\" on \"CustomerPackage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "CustomerPackage_packageId_fkey",
+        "table": "CustomerPackage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"CustomerPackage_packageId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "CustomerPackage_packageId_fkey",
+          "public",
+          "\"public\".\"CustomerPackage\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"CustomerPackage_packageId_fkey\" on \"CustomerPackage\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"CustomerPackage_packageId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"CustomerPackage\"\nADD CONSTRAINT \"CustomerPackage_packageId_fkey\"\nFOREIGN KEY (\"packageId\")\nREFERENCES \"public\".\"Package\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"CustomerPackage_packageId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "CustomerPackage_packageId_fkey",
+          "public",
+          "\"public\".\"CustomerPackage\"",
+          "f",
+          "[\"packageId\"]",
+          "\"public\".\"Package\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.CustomerPackage.CustomerPackage_customerId_fkey",
+    "label": "Add foreign key \"CustomerPackage_customerId_fkey\" on \"CustomerPackage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "CustomerPackage_customerId_fkey",
+        "table": "CustomerPackage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"CustomerPackage_customerId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "CustomerPackage_customerId_fkey",
+          "public",
+          "\"public\".\"CustomerPackage\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"CustomerPackage_customerId_fkey\" on \"CustomerPackage\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"CustomerPackage_customerId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"CustomerPackage\"\nADD CONSTRAINT \"CustomerPackage_customerId_fkey\"\nFOREIGN KEY (\"customerId\")\nREFERENCES \"public\".\"Customer\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"CustomerPackage_customerId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "CustomerPackage_customerId_fkey",
+          "public",
+          "\"public\".\"CustomerPackage\"",
+          "f",
+          "[\"customerId\"]",
+          "\"public\".\"Customer\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Membership.Membership_tenantId_fkey",
+    "label": "Add foreign key \"Membership_tenantId_fkey\" on \"Membership\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Membership_tenantId_fkey",
+        "table": "Membership"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Membership_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Membership_tenantId_fkey",
+          "public",
+          "\"public\".\"Membership\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Membership_tenantId_fkey\" on \"Membership\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Membership_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Membership\"\nADD CONSTRAINT \"Membership_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Membership_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Membership_tenantId_fkey",
+          "public",
+          "\"public\".\"Membership\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.MembershipLedger.MembershipLedger_tenantId_fkey",
+    "label": "Add foreign key \"MembershipLedger_tenantId_fkey\" on \"MembershipLedger\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "MembershipLedger_tenantId_fkey",
+        "table": "MembershipLedger"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"MembershipLedger_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "MembershipLedger_tenantId_fkey",
+          "public",
+          "\"public\".\"MembershipLedger\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"MembershipLedger_tenantId_fkey\" on \"MembershipLedger\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"MembershipLedger_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"MembershipLedger\"\nADD CONSTRAINT \"MembershipLedger_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"MembershipLedger_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "MembershipLedger_tenantId_fkey",
+          "public",
+          "\"public\".\"MembershipLedger\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.MembershipLedger.MembershipLedger_holdingId_fkey",
+    "label": "Add foreign key \"MembershipLedger_holdingId_fkey\" on \"MembershipLedger\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "MembershipLedger_holdingId_fkey",
+        "table": "MembershipLedger"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"MembershipLedger_holdingId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "MembershipLedger_holdingId_fkey",
+          "public",
+          "\"public\".\"MembershipLedger\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"MembershipLedger_holdingId_fkey\" on \"MembershipLedger\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"MembershipLedger_holdingId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"MembershipLedger\"\nADD CONSTRAINT \"MembershipLedger_holdingId_fkey\"\nFOREIGN KEY (\"holdingId\")\nREFERENCES \"public\".\"CustomerMembership\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"MembershipLedger_holdingId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "MembershipLedger_holdingId_fkey",
+          "public",
+          "\"public\".\"MembershipLedger\"",
+          "f",
+          "[\"holdingId\"]",
+          "\"public\".\"CustomerMembership\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Package.Package_tenantId_fkey",
+    "label": "Add foreign key \"Package_tenantId_fkey\" on \"Package\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Package_tenantId_fkey",
+        "table": "Package"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Package_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Package_tenantId_fkey",
+          "public",
+          "\"public\".\"Package\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Package_tenantId_fkey\" on \"Package\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Package_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Package\"\nADD CONSTRAINT \"Package_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Package_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Package_tenantId_fkey",
+          "public",
+          "\"public\".\"Package\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.PackageLedger.PackageLedger_tenantId_fkey",
+    "label": "Add foreign key \"PackageLedger_tenantId_fkey\" on \"PackageLedger\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "PackageLedger_tenantId_fkey",
+        "table": "PackageLedger"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"PackageLedger_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "PackageLedger_tenantId_fkey",
+          "public",
+          "\"public\".\"PackageLedger\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"PackageLedger_tenantId_fkey\" on \"PackageLedger\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"PackageLedger_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"PackageLedger\"\nADD CONSTRAINT \"PackageLedger_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"PackageLedger_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "PackageLedger_tenantId_fkey",
+          "public",
+          "\"public\".\"PackageLedger\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.PackageLedger.PackageLedger_holdingId_fkey",
+    "label": "Add foreign key \"PackageLedger_holdingId_fkey\" on \"PackageLedger\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "PackageLedger_holdingId_fkey",
+        "table": "PackageLedger"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"PackageLedger_holdingId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "PackageLedger_holdingId_fkey",
+          "public",
+          "\"public\".\"PackageLedger\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"PackageLedger_holdingId_fkey\" on \"PackageLedger\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"PackageLedger_holdingId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"PackageLedger\"\nADD CONSTRAINT \"PackageLedger_holdingId_fkey\"\nFOREIGN KEY (\"holdingId\")\nREFERENCES \"public\".\"CustomerPackage\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"PackageLedger_holdingId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "PackageLedger_holdingId_fkey",
+          "public",
+          "\"public\".\"PackageLedger\"",
+          "f",
+          "[\"holdingId\"]",
+          "\"public\".\"CustomerPackage\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.CustomerMembership",
+    "label": "Enable row-level security on \"CustomerMembership\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "CustomerMembership"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"CustomerMembership\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "CustomerMembership"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"CustomerMembership\"",
+        "sql": "ALTER TABLE \"public\".\"CustomerMembership\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"CustomerMembership\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "CustomerMembership"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.CustomerPackage",
+    "label": "Enable row-level security on \"CustomerPackage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "CustomerPackage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"CustomerPackage\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "CustomerPackage"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"CustomerPackage\"",
+        "sql": "ALTER TABLE \"public\".\"CustomerPackage\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"CustomerPackage\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "CustomerPackage"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.Membership",
+    "label": "Enable row-level security on \"Membership\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "Membership"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"Membership\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Membership"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"Membership\"",
+        "sql": "ALTER TABLE \"public\".\"Membership\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"Membership\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "Membership"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.MembershipLedger",
+    "label": "Enable row-level security on \"MembershipLedger\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "MembershipLedger"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"MembershipLedger\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "MembershipLedger"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"MembershipLedger\"",
+        "sql": "ALTER TABLE \"public\".\"MembershipLedger\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"MembershipLedger\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "MembershipLedger"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.Package",
+    "label": "Enable row-level security on \"Package\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "Package"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"Package\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Package"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"Package\"",
+        "sql": "ALTER TABLE \"public\".\"Package\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"Package\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "Package"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.PackageLedger",
+    "label": "Enable row-level security on \"PackageLedger\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "PackageLedger"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"PackageLedger\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "PackageLedger"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"PackageLedger\"",
+        "sql": "ALTER TABLE \"public\".\"PackageLedger\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"PackageLedger\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "PackageLedger"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.CustomerMembership.customer_membership_isolation_c516f4ff",
+    "label": "Create RLS policy \"customer_membership_isolation_c516f4ff\" on \"CustomerMembership\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "customer_membership_isolation_c516f4ff",
+        "table": "CustomerMembership"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"customer_membership_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "CustomerMembership",
+          "customer_membership_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"customer_membership_isolation_c516f4ff\" on \"CustomerMembership\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"customer_membership_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"customer_membership_isolation_c516f4ff\" ON \"public\".\"CustomerMembership\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"customer_membership_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "CustomerMembership",
+          "customer_membership_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.CustomerPackage.customer_package_isolation_c516f4ff",
+    "label": "Create RLS policy \"customer_package_isolation_c516f4ff\" on \"CustomerPackage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "customer_package_isolation_c516f4ff",
+        "table": "CustomerPackage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"customer_package_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "CustomerPackage",
+          "customer_package_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"customer_package_isolation_c516f4ff\" on \"CustomerPackage\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"customer_package_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"customer_package_isolation_c516f4ff\" ON \"public\".\"CustomerPackage\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"customer_package_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "CustomerPackage",
+          "customer_package_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Membership.membership_isolation_c516f4ff",
+    "label": "Create RLS policy \"membership_isolation_c516f4ff\" on \"Membership\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "membership_isolation_c516f4ff",
+        "table": "Membership"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"membership_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Membership",
+          "membership_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"membership_isolation_c516f4ff\" on \"Membership\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"membership_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"membership_isolation_c516f4ff\" ON \"public\".\"Membership\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"membership_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Membership",
+          "membership_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.MembershipLedger.membership_ledger_isolation_c516f4ff",
+    "label": "Create RLS policy \"membership_ledger_isolation_c516f4ff\" on \"MembershipLedger\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "membership_ledger_isolation_c516f4ff",
+        "table": "MembershipLedger"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"membership_ledger_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "MembershipLedger",
+          "membership_ledger_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"membership_ledger_isolation_c516f4ff\" on \"MembershipLedger\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"membership_ledger_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"membership_ledger_isolation_c516f4ff\" ON \"public\".\"MembershipLedger\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"membership_ledger_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "MembershipLedger",
+          "membership_ledger_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.Package.package_isolation_c516f4ff",
+    "label": "Create RLS policy \"package_isolation_c516f4ff\" on \"Package\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "package_isolation_c516f4ff",
+        "table": "Package"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"package_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Package",
+          "package_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"package_isolation_c516f4ff\" on \"Package\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"package_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"package_isolation_c516f4ff\" ON \"public\".\"Package\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"package_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "Package",
+          "package_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.PackageLedger.package_ledger_isolation_c516f4ff",
+    "label": "Create RLS policy \"package_ledger_isolation_c516f4ff\" on \"PackageLedger\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "package_ledger_isolation_c516f4ff",
+        "table": "PackageLedger"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"package_ledger_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "PackageLedger",
+          "package_ledger_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"package_ledger_isolation_c516f4ff\" on \"PackageLedger\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"package_ledger_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"package_ledger_isolation_c516f4ff\" ON \"public\".\"PackageLedger\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"package_ledger_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "PackageLedger",
+          "package_ledger_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  }
+]

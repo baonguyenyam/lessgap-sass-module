@@ -41,7 +41,7 @@ hours). A `PackageLedger`/`MembershipLedger` row per change.
 **Tests:** integration — a package debits sessions when spent; an empty
 package stops; membership activates and bills monthly.
 **Done when:** package spends + membership activates correctly.
-- [ ] done
+- [x] done (`tests/integration/packages-memberships.test.ts` 2/2 — `buyPackage` holds `sessionsLeft` against the package's sessions, `spendPackage` debits one per appointment (empty refuses); `activateMembership` joins and `billMembership` charges the month's `priceCents` — ledgers are the twin of each holding's state.)
 
 ## Exit criteria
 

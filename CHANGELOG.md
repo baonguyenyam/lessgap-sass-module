@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.95.0] - 2026-10-29
+
+**A tenant can sell a prepaid bundle of sessions and a recurring membership — the ledgers keep each holding's twin.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **`Package`/`CustomerPackage`/`PackageLedger`** — a prepaid session bundle: `buyPackage` holds the sessions, `spendPackage` debits one per `completed` appointment (an empty package refuses)
+- **`Membership`/`CustomerMembership`/`MembershipLedger`** — a recurring membership: `activateMembership` joins, `billMembership` charges the month
+
 ## [2.94.0] - 2026-10-29
 
 **A customer can buy a prepaid balance and spend it against an appointment — the ledger keeps the balance's twin.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
