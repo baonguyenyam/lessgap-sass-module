@@ -1,5 +1,6 @@
 "use server"
 
+import { updateTag } from "next/cache"
 import { revalidatePath } from "next/cache"
 import { db8 } from "@/lib/db8"
 import { AppError } from "@/platform/errors"
@@ -20,6 +21,7 @@ async function guard(fn: (c: TenantContext) => Promise<unknown>): Promise<{ erro
     const c = await ctx()
     await requireModule(c, "team")
     await fn(c)
+    updateTag(`site:${c.tenantId}`)
     revalidatePath("/t")
     return {}
   } catch (error) {

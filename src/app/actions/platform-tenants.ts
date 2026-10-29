@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 import { getTranslations } from "next-intl/server"
 import { auth } from "@/auth"
 import { db8 } from "@/lib/db8"
@@ -70,6 +70,7 @@ export async function setTenantStatus(
   if (status === "SUSPENDED" && !trimmed) return { error: t("reasonRequired") }
 
   await db8.orm.public.Tenant.where({ id: tenantId }).update({ status })
+  updateTag(`site:${tenantId}`)
   await audit(platformAuditContext(user.id, tenantId), {
     action: status === "SUSPENDED" ? "platform.tenant.suspended" : "platform.tenant.reactivated",
     targetType: "tenant",

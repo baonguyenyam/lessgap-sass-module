@@ -7,6 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.86.0] - 2026-10-29
+
+**Every site-content write now invalidates the site's cache — a saved setting, a new service, a staff change or a suspension reaches the published site inside its cache window.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Fixed
+
+- **Stale site content after writes** — `catalog` (services/categories), `team` (staff) and `platform-tenants` suspend/reactivate now `updateTag("site:<tenantId>")`; the suspended check reads `Tenant.status` from the cached `getSiteData`, so a suspension previously kept serving the normal site until the cache expired
+
+### Added
+
+- **`tests/e2e/revalidate.spec.ts`** — the D7 check: save a settings value through the form, the published site serves it inside the cache window
+
 ## [2.85.0] - 2026-10-29
 
 **The ordering and quote surfaces run as a Playwright spec — and the spec flushed out a class of latent site-page bugs: unstable render values, missing translations, a module dependency nobody had exercised.** This is a MINOR: `git pull`, `pnpm install`.
