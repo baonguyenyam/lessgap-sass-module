@@ -7,12 +7,14 @@ import { getEntitlements } from "@/platform/entitlements"
 import { requireModule } from "@/platform/modules/runtime"
 import { audit } from "@/platform/audit"
 import { systemContext } from "@/platform/tenancy/context"
+import type { TenantContext } from "@/platform/tenancy/context"
 import { upsertCustomer } from "@/platform/booking/customer"
 import { canCharge, createCheckout } from "@/platform/payments/connect"
 import { notify } from "@/platform/notify"
 import { availableSlots } from "@/lib/availability"
 import { signManageToken, verifyManageToken } from "@/lib/booking/manage-token"
 import { icsFile } from "@/lib/ics"
+import { z } from "zod"
 import { resolveHost } from "@/platform/tenancy/host"
 import { bookingInputError } from "@/lib/booking/dental"
 
@@ -207,6 +209,7 @@ export async function manageAppointment(input: { token: string; toStatus?: strin
         actor: "customer",
       })
       await audit(c, { action: "booking.appointment_canceled", targetType: "Appointment", targetId: appointment.id })
+      await notifyWaitlist(c, appointment)
     } else if (input.startTs && input.endTs) {
       // Reschedule — re-check the slot is still free.
       const [rules, timeOff, existing] = await Promise.all([
@@ -265,5 +268,63 @@ export async function manageAppointment(input: { token: string; toStatus?: strin
   } catch (error) {
     if (error instanceof AppError) return { error: error.code }
     throw error
+  }
+}
+
+/**
+ * Join the waitlist when a day is fully booked (task 11.1). The visitor
+ * leaves an email or phone; the next free slot is offered to them first —
+ * `manageAppointment`'s cancel calls `notifyWaitlist`.
+ */
+export async function joinWaitlist(input: { email?: string; phone?: string; serviceId?: string; wantedDate: string }) {
+  try {
+    const site = await siteCtx()
+    const c = systemContext(site.tenantId, "customer")
+    await requireModule(c, "booking")
+    const parsed = z
+      .object({
+        email: z.string().email().optional(),
+        phone: z.string().min(5).optional(),
+        serviceId: z.string().optional(),
+        wantedDate: z.string().min(8),
+      })
+      .safeParse(input)
+    if (!parsed.success || (!parsed.data.email && !parsed.data.phone)) throw new AppError("invalid_input")
+    const entry = await db8.orm.public.WaitlistEntry.create({
+      tenantId: c.tenantId,
+      email: parsed.data.email ?? null,
+      phone: parsed.data.phone ?? null,
+      serviceId: parsed.data.serviceId ?? null,
+      wantedDate: parsed.data.wantedDate,
+    })
+    await audit(c, { action: "booking.waitlist_joined", targetType: "WaitlistEntry", targetId: entry.id })
+    return { id: entry.id }
+  } catch (error) {
+    if (error instanceof AppError) return { error: error.code }
+    throw error
+  }
+}
+
+/**
+ * A freed slot's waitlist gets the first offer — one notification per
+ * waiting entry on the freed day, then the entry goes `notified` (no
+ * repeat sends).
+ */
+async function notifyWaitlist(c: TenantContext, appointment: { id: string; tenantId: string; startTs: string }) {
+  const day = appointment.startTs.slice(0, 10)
+  const waiting = await db8.orm.public.WaitlistEntry.where({
+    tenantId: appointment.tenantId,
+    wantedDate: day,
+    status: "waiting",
+  }).all()
+  const site = await siteCtx()
+  for (const entry of waiting) {
+    const bookUrl = `${site.origin}/sites/${site.slug}/book`
+    if (entry.email) {
+      await notify(c, "booking.waitlist_open", entry.email, { day, bookUrl })
+    } else if (entry.phone) {
+      await notify(c, "booking.waitlist_open", entry.phone, { day, bookUrl })
+    }
+    await db8.orm.public.WaitlistEntry.where({ id: entry.id }).update({ status: "notified" })
   }
 }

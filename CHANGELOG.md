@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.90.0] - 2026-10-29
+
+**A fully booked day can take names — the waitlist joins and the next free slot is offered to it first.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **`WaitlistEntry`** — a visitor leaves an email or phone for the day they wanted; `joinWaitlist` writes it (booking module's route, so it's off when booking is)
+- **`notifyWaitlist`** — `manageAppointment`'s cancel notifies each waiting entry for the freed day and flips it to `notified` (no repeat sends)
+- **`tests/integration/waitlist.test.ts`** — join → row; cancel → notified + outbox row
+
 ## [2.89.0] - 2026-10-29
 
 **A disabled module's site routes now 404 instead of 500ing, and its scheduled work pauses — L2's full disable surface is covered.** This is a MINOR: `git pull`, `pnpm install`.

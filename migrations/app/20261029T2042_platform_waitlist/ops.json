@@ -1,0 +1,388 @@
+[
+  {
+    "id": "table.WaitlistEntry",
+    "label": "Create table \"WaitlistEntry\"",
+    "summary": "Creates table \"WaitlistEntry\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "WaitlistEntry"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"WaitlistEntry\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"WaitlistEntry\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"WaitlistEntry\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"WaitlistEntry\"",
+        "sql": "CREATE TABLE \"public\".\"WaitlistEntry\" (\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"email\" text,\n  \"id\" text NOT NULL,\n  \"manageToken\" text NOT NULL,\n  \"phone\" text,\n  \"serviceId\" text,\n  \"status\" text DEFAULT 'waiting' NOT NULL,\n  \"tenantId\" text NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"wantedDate\" text NOT NULL,\n  CONSTRAINT \"WaitlistEntry_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"WaitlistEntry\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"WaitlistEntry\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"WaitlistEntry\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "index.WaitlistEntry.WaitlistEntry_serviceId_idx_b5d9acbf",
+    "label": "Create index \"WaitlistEntry_serviceId_idx_b5d9acbf\" on \"WaitlistEntry\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "WaitlistEntry_serviceId_idx_b5d9acbf",
+        "table": "WaitlistEntry"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"WaitlistEntry_serviceId_idx_b5d9acbf\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"WaitlistEntry_serviceId_idx_b5d9acbf\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"WaitlistEntry_serviceId_idx_b5d9acbf\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"WaitlistEntry_serviceId_idx_b5d9acbf\"",
+        "sql": "CREATE INDEX \"WaitlistEntry_serviceId_idx_b5d9acbf\" ON \"public\".\"WaitlistEntry\" (\"serviceId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"WaitlistEntry_serviceId_idx_b5d9acbf\" exists on \"WaitlistEntry\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"WaitlistEntry_serviceId_idx_b5d9acbf\"",
+          "i",
+          "I",
+          "\"public\".\"WaitlistEntry\"",
+          "btree",
+          "[\"serviceId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.WaitlistEntry.WaitlistEntry_tenantDate_idx",
+    "label": "Create index \"WaitlistEntry_tenantDate_idx\" on \"WaitlistEntry\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "WaitlistEntry_tenantDate_idx",
+        "table": "WaitlistEntry"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"WaitlistEntry_tenantDate_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"WaitlistEntry_tenantDate_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"WaitlistEntry_tenantDate_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"WaitlistEntry_tenantDate_idx\"",
+        "sql": "CREATE INDEX \"WaitlistEntry_tenantDate_idx\" ON \"public\".\"WaitlistEntry\" (\"tenantId\", \"wantedDate\", \"status\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"WaitlistEntry_tenantDate_idx\" exists on \"WaitlistEntry\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"WaitlistEntry_tenantDate_idx\"",
+          "i",
+          "I",
+          "\"public\".\"WaitlistEntry\"",
+          "btree",
+          "[\"tenantId\",\"wantedDate\",\"status\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.WaitlistEntry.WaitlistEntry_tenantId_idx_c93ed4f1",
+    "label": "Create index \"WaitlistEntry_tenantId_idx_c93ed4f1\" on \"WaitlistEntry\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "WaitlistEntry_tenantId_idx_c93ed4f1",
+        "table": "WaitlistEntry"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"WaitlistEntry_tenantId_idx_c93ed4f1\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"WaitlistEntry_tenantId_idx_c93ed4f1\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"WaitlistEntry_tenantId_idx_c93ed4f1\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"WaitlistEntry_tenantId_idx_c93ed4f1\"",
+        "sql": "CREATE INDEX \"WaitlistEntry_tenantId_idx_c93ed4f1\" ON \"public\".\"WaitlistEntry\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"WaitlistEntry_tenantId_idx_c93ed4f1\" exists on \"WaitlistEntry\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"WaitlistEntry_tenantId_idx_c93ed4f1\"",
+          "i",
+          "I",
+          "\"public\".\"WaitlistEntry\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.WaitlistEntry.WaitlistEntry_tenantId_fkey",
+    "label": "Add foreign key \"WaitlistEntry_tenantId_fkey\" on \"WaitlistEntry\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "WaitlistEntry_tenantId_fkey",
+        "table": "WaitlistEntry"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"WaitlistEntry_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "WaitlistEntry_tenantId_fkey",
+          "public",
+          "\"public\".\"WaitlistEntry\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"WaitlistEntry_tenantId_fkey\" on \"WaitlistEntry\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"WaitlistEntry_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"WaitlistEntry\"\nADD CONSTRAINT \"WaitlistEntry_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"WaitlistEntry_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "WaitlistEntry_tenantId_fkey",
+          "public",
+          "\"public\".\"WaitlistEntry\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.WaitlistEntry.WaitlistEntry_serviceId_fkey",
+    "label": "Add foreign key \"WaitlistEntry_serviceId_fkey\" on \"WaitlistEntry\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "WaitlistEntry_serviceId_fkey",
+        "table": "WaitlistEntry"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"WaitlistEntry_serviceId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "WaitlistEntry_serviceId_fkey",
+          "public",
+          "\"public\".\"WaitlistEntry\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"WaitlistEntry_serviceId_fkey\" on \"WaitlistEntry\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"WaitlistEntry_serviceId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"WaitlistEntry\"\nADD CONSTRAINT \"WaitlistEntry_serviceId_fkey\"\nFOREIGN KEY (\"serviceId\")\nREFERENCES \"public\".\"Service\" (\"id\")\nON DELETE SET NULL\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"WaitlistEntry_serviceId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "WaitlistEntry_serviceId_fkey",
+          "public",
+          "\"public\".\"WaitlistEntry\"",
+          "f",
+          "[\"serviceId\"]",
+          "\"public\".\"Service\"",
+          "[\"id\"]",
+          "n",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.WaitlistEntry",
+    "label": "Enable row-level security on \"WaitlistEntry\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "WaitlistEntry"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"WaitlistEntry\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "WaitlistEntry"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"WaitlistEntry\"",
+        "sql": "ALTER TABLE \"public\".\"WaitlistEntry\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"WaitlistEntry\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "WaitlistEntry"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.WaitlistEntry.waitlist_entry_isolation_c516f4ff",
+    "label": "Create RLS policy \"waitlist_entry_isolation_c516f4ff\" on \"WaitlistEntry\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "waitlist_entry_isolation_c516f4ff",
+        "table": "WaitlistEntry"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"waitlist_entry_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "WaitlistEntry",
+          "waitlist_entry_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"waitlist_entry_isolation_c516f4ff\" on \"WaitlistEntry\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"waitlist_entry_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"waitlist_entry_isolation_c516f4ff\" ON \"public\".\"WaitlistEntry\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"waitlist_entry_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "WaitlistEntry",
+          "waitlist_entry_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  }
+]

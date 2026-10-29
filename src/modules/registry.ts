@@ -14,18 +14,18 @@ import module_11 from "./shop/module"
 import module_12 from "./team/module"
 
 export const moduleRegistry = {
-  "analytics": module_0,
-  "booking": module_1,
-  "catalog": module_2,
-  "chatbot": module_3,
-  "customers": module_4,
-  "newsletter": module_5,
-  "notifications": module_6,
-  "ordering": module_7,
-  "payments": module_8,
-  "quotes": module_9,
-  "reservations": module_10,
-  "shop": module_11,
-  "team": module_12,
+  analytics: module_0,
+  booking: module_1,
+  catalog: module_2,
+  chatbot: module_3,
+  customers: module_4,
+  newsletter: module_5,
+  notifications: module_6,
+  ordering: module_7,
+  payments: module_8,
+  quotes: module_9,
+  reservations: module_10,
+  shop: module_11,
+  team: module_12,
 } as const
 export type ModuleKey = keyof typeof moduleRegistry

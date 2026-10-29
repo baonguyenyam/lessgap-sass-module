@@ -28,9 +28,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'1b46c0536ccb09069f977f41afb953dbda65fc88964a49b459b4bf92cf793bec'>;
+  StorageHashBase<'fd706e17e65f164f410f3c846447ae89619040423ed7ece8ff2f6328f966685c'>;
 export type ExecutionHash =
-  ExecutionHashBase<'7247520e7377f36b18ff4ea11a43e7ade3d75de87c0707c2c7d60a47fe0bc3b3'>;
+  ExecutionHashBase<'2356ff2c3ecf2263bc047ee44fb991b2c2f904f04bee9838adc96a7ff68de7a9'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -1394,6 +1394,21 @@ export namespace Models {
     value: FieldOutputTypes['public']['Verification']['value'];
     readonly [RelationKeys]?: never;
   };
+  export type public_WaitlistEntry = {
+    createdAt: FieldOutputTypes['public']['WaitlistEntry']['createdAt'];
+    email: FieldOutputTypes['public']['WaitlistEntry']['email'];
+    id: FieldOutputTypes['public']['WaitlistEntry']['id'];
+    manageToken: FieldOutputTypes['public']['WaitlistEntry']['manageToken'];
+    phone: FieldOutputTypes['public']['WaitlistEntry']['phone'];
+    serviceId: FieldOutputTypes['public']['WaitlistEntry']['serviceId'];
+    status: FieldOutputTypes['public']['WaitlistEntry']['status'];
+    tenantId: FieldOutputTypes['public']['WaitlistEntry']['tenantId'];
+    updatedAt: FieldOutputTypes['public']['WaitlistEntry']['updatedAt'];
+    wantedDate: FieldOutputTypes['public']['WaitlistEntry']['wantedDate'];
+    service: public_Service | null;
+    tenant: public_Tenant;
+    readonly [RelationKeys]?: 'service' | 'tenant';
+  };
 }
 
 export declare const models: {
@@ -1468,6 +1483,7 @@ export declare const models: {
     User: Models.public_User;
     UserSetting: Models.public_UserSetting;
     Verification: Models.public_Verification;
+    WaitlistEntry: Models.public_WaitlistEntry;
   };
 };
 
@@ -8673,6 +8689,130 @@ type ContractBase = Omit<
               ];
               foreignKeys: readonly [];
             };
+            readonly WaitlistEntry: {
+              columns: {
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly email: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly manageToken: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly phone: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly serviceId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly status: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'waiting'>;
+                  };
+                  readonly many: false;
+                };
+                readonly tenantId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly wantedDate: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: {
+                readonly columns: readonly ['id'];
+                readonly name: 'WaitlistEntry_pkey';
+              };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'WaitlistEntry_serviceId_idx_b5d9acbf';
+                  readonly prefix: 'WaitlistEntry_serviceId_idx';
+                  readonly columns: readonly ['serviceId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'WaitlistEntry_tenantDate_idx';
+                  readonly columns: readonly ['tenantId', 'wantedDate', 'status'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'WaitlistEntry_tenantId_idx_c93ed4f1';
+                  readonly prefix: 'WaitlistEntry_tenantId_idx';
+                  readonly columns: readonly ['tenantId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'WaitlistEntry';
+                    readonly columns: readonly ['tenantId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Tenant';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'WaitlistEntry_tenantId_fkey';
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'WaitlistEntry';
+                    readonly columns: readonly ['serviceId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Service';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'WaitlistEntry_serviceId_fkey';
+                },
+              ];
+            };
           };
           readonly valueSet: {
             readonly BillingInterval: {
@@ -8928,6 +9068,10 @@ type ContractBase = Omit<
     readonly Verification: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'Verification';
+    };
+    readonly WaitlistEntry: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'WaitlistEntry';
     };
   };
   readonly domain: {
@@ -15196,6 +15340,100 @@ type ContractBase = Omit<
               };
             };
           };
+          readonly WaitlistEntry: {
+            readonly fields: {
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly email: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly manageToken: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly phone: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly serviceId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly status: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly tenantId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly wantedDate: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: {
+              readonly service: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Service';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['serviceId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly tenant: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Tenant';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['tenantId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'WaitlistEntry';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly email: { readonly column: 'email' };
+                readonly id: { readonly column: 'id' };
+                readonly manageToken: { readonly column: 'manageToken' };
+                readonly phone: { readonly column: 'phone' };
+                readonly serviceId: { readonly column: 'serviceId' };
+                readonly status: { readonly column: 'status' };
+                readonly tenantId: { readonly column: 'tenantId' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+                readonly wantedDate: { readonly column: 'wantedDate' };
+              };
+            };
+          };
         };
         readonly enum: {
           readonly SiteStatus: {
@@ -16244,6 +16482,30 @@ type ContractBase = Omit<
           readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'Verification';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'WaitlistEntry';
+            readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'WaitlistEntry';
+            readonly field: 'manageToken';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'WaitlistEntry';
             readonly field: 'updatedAt';
             readonly namespace: 'public';
           };

@@ -26,7 +26,7 @@ flow.
 **Tests:** integration — join → row; cancel → next entry notified (outbox
 row); waitlisted book lands the appointment.
 **Done when:** the join and notify paths work end-to-end.
-- [ ] done
+- [x] done (`tests/integration/waitlist.test.ts` 1/1 — `joinWaitlist` writes the entry; `manageAppointment`'s cancel calls `notifyWaitlist`, which `notify`s each waiting entry for the freed day and flips it to `notified`.)
 
 ## Exit criteria
 

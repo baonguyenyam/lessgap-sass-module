@@ -497,6 +497,12 @@ trialEndsAt          TimestampString(3)?
     using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
     withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
   }
+
+  policy_all waitlist_entry_isolation {
+    target    = WaitlistEntry
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
   policy_all knowledge_chunk_isolation {
     target    = KnowledgeChunk
     using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
@@ -1201,6 +1207,25 @@ trialEndsAt          TimestampString(3)?
     @@index([tenantId], map: "Appointment_tenantId_idx")
     @@index([staffId, startTs], map: "Appointment_staffId_startTs_idx")
     @@rls
+  }
+
+  model WaitlistEntry {
+    id         String           @id(map: "WaitlistEntry_pkey") @onCreate(cuid(2))
+    tenantId   String
+    email      String?
+    phone      String?
+    serviceId  String?
+    wantedDate String
+    status     String           @default("waiting")
+    manageToken String          @onCreate(cuid(2))
+    createdAt  TimestampString(3) @default(now())
+    updatedAt  TimestampString(3) @default(now()) @onUpdate(now())
+    tenant     Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "WaitlistEntry_tenantId_fkey")
+    service    Service?         @relation(fields: [serviceId], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "WaitlistEntry_serviceId_fkey")
+
+    @@index([tenantId, wantedDate, status], map: "WaitlistEntry_tenantDate_idx")
+    @@rls
+
   }
 
   model AppointmentEvent {
