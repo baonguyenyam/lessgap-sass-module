@@ -86,6 +86,8 @@ export const MODEL_CLASSIFICATION = {
   TenantModule: { kind: "tenant-owned", reason: "Which modules one tenant has turned on." },
   WaitlistEntry: { kind: "tenant-owned", reason: "A visitor's name on a fully booked day's waitlist." },
   Review: { kind: "tenant-owned", reason: "A customer's review of a completed appointment, pending moderation." },
+  GiftCard: { kind: "tenant-owned", reason: "A prepaid balance a customer buys and spends with the tenant." },
+  GiftCardLedger: { kind: "tenant-owned", reason: "The audit trail of a gift card's balance changes." },
   TenantSetting: { kind: "tenant-owned", reason: "Settings belong to one tenant." },
   UsageCounter: { kind: "tenant-owned", reason: "Metered usage belongs to one tenant." },
   TwoFactor: { kind: "identity", reason: "Better Auth two-factor credentials." },

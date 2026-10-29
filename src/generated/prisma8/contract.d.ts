@@ -28,9 +28,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'3a1f89116d98e2693b2a090f7b823d71dd0b951be76bce02aa1ba771dcb54366'>;
+  StorageHashBase<'64f6f33d3169d45439706f6ed2f56db2f9f8b97444d2c7c0a8c0dee5ea6a3fec'>;
 export type ExecutionHash =
-  ExecutionHashBase<'74e089713fa1ca68897f500763ebbd1e6d8cdce956474868ed0f2be6bab1b517'>;
+  ExecutionHashBase<'b5a0cc0c96e4ce25cb25643dca8588d2d2fb48449cc959892a04197e4bf70f90'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -621,6 +621,33 @@ export namespace Models {
     source: FieldOutputTypes['public']['ErrorReport']['source'];
     tenantId: FieldOutputTypes['public']['ErrorReport']['tenantId'];
     readonly [RelationKeys]?: never;
+  };
+  export type public_GiftCard = {
+    active: FieldOutputTypes['public']['GiftCard']['active'];
+    balanceCents: FieldOutputTypes['public']['GiftCard']['balanceCents'];
+    buyerEmail: FieldOutputTypes['public']['GiftCard']['buyerEmail'];
+    buyerName: FieldOutputTypes['public']['GiftCard']['buyerName'];
+    code: FieldOutputTypes['public']['GiftCard']['code'];
+    createdAt: FieldOutputTypes['public']['GiftCard']['createdAt'];
+    id: FieldOutputTypes['public']['GiftCard']['id'];
+    stripeCheckoutSessionId: FieldOutputTypes['public']['GiftCard']['stripeCheckoutSessionId'];
+    tenantId: FieldOutputTypes['public']['GiftCard']['tenantId'];
+    updatedAt: FieldOutputTypes['public']['GiftCard']['updatedAt'];
+    ledger: public_GiftCardLedger[];
+    tenant: public_Tenant;
+    readonly [RelationKeys]?: 'ledger' | 'tenant';
+  };
+  export type public_GiftCardLedger = {
+    appointmentId: FieldOutputTypes['public']['GiftCardLedger']['appointmentId'];
+    cardId: FieldOutputTypes['public']['GiftCardLedger']['cardId'];
+    createdAt: FieldOutputTypes['public']['GiftCardLedger']['createdAt'];
+    deltaCents: FieldOutputTypes['public']['GiftCardLedger']['deltaCents'];
+    id: FieldOutputTypes['public']['GiftCardLedger']['id'];
+    reason: FieldOutputTypes['public']['GiftCardLedger']['reason'];
+    tenantId: FieldOutputTypes['public']['GiftCardLedger']['tenantId'];
+    card: public_GiftCard;
+    tenant: public_Tenant;
+    readonly [RelationKeys]?: 'card' | 'tenant';
   };
   export type public_Invitation = {
     createdAt: FieldOutputTypes['public']['Invitation']['createdAt'];
@@ -1444,6 +1471,8 @@ export declare const models: {
     EmailMessage: Models.public_EmailMessage;
     EntitlementOverride: Models.public_EntitlementOverride;
     ErrorReport: Models.public_ErrorReport;
+    GiftCard: Models.public_GiftCard;
+    GiftCardLedger: Models.public_GiftCardLedger;
     Invitation: Models.public_Invitation;
     Job: Models.public_Job;
     KnowledgeChunk: Models.public_KnowledgeChunk;
@@ -3165,6 +3194,201 @@ type ContractBase = Omit<
                 },
               ];
               foreignKeys: readonly [];
+            };
+            readonly GiftCard: {
+              columns: {
+                readonly active: {
+                  readonly dataType: 'pg/bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                  readonly many: false;
+                };
+                readonly balanceCents: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly buyerEmail: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly buyerName: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly code: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly stripeCheckoutSessionId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly tenantId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id']; readonly name: 'GiftCard_pkey' };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'GiftCard_tenantCode_idx';
+                  readonly columns: readonly ['tenantId', 'code'];
+                  readonly unique: true;
+                },
+                {
+                  readonly name: 'GiftCard_tenantId_idx_c93ed4f1';
+                  readonly prefix: 'GiftCard_tenantId_idx';
+                  readonly columns: readonly ['tenantId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'GiftCard';
+                    readonly columns: readonly ['tenantId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Tenant';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'GiftCard_tenantId_fkey';
+                },
+              ];
+            };
+            readonly GiftCardLedger: {
+              columns: {
+                readonly appointmentId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly cardId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly deltaCents: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly reason: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly tenantId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: {
+                readonly columns: readonly ['id'];
+                readonly name: 'GiftCardLedger_pkey';
+              };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'GiftCardLedger_cardId_idx';
+                  readonly columns: readonly ['cardId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'GiftCardLedger_tenantId_idx';
+                  readonly columns: readonly ['tenantId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'GiftCardLedger';
+                    readonly columns: readonly ['tenantId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Tenant';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'GiftCardLedger_tenantId_fkey';
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'GiftCardLedger';
+                    readonly columns: readonly ['cardId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'GiftCard';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'GiftCardLedger_cardId_fkey';
+                },
+              ];
             };
             readonly Invitation: {
               columns: {
@@ -9066,6 +9290,11 @@ type ContractBase = Omit<
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'ErrorReport';
     };
+    readonly GiftCard: { readonly namespace: 'public' & NamespaceId; readonly model: 'GiftCard' };
+    readonly GiftCardLedger: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'GiftCardLedger';
+    };
     readonly Invitation: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'Invitation';
@@ -10624,6 +10853,174 @@ type ContractBase = Omit<
                 readonly requestId: { readonly column: 'requestId' };
                 readonly resolvedAt: { readonly column: 'resolvedAt' };
                 readonly source: { readonly column: 'source' };
+                readonly tenantId: { readonly column: 'tenantId' };
+              };
+            };
+          };
+          readonly GiftCard: {
+            readonly fields: {
+              readonly active: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly balanceCents: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly buyerEmail: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly buyerName: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly code: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly stripeCheckoutSessionId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly tenantId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly ledger: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'GiftCardLedger';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['cardId'];
+                };
+              };
+              readonly tenant: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Tenant';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['tenantId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'GiftCard';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly active: { readonly column: 'active' };
+                readonly balanceCents: { readonly column: 'balanceCents' };
+                readonly buyerEmail: { readonly column: 'buyerEmail' };
+                readonly buyerName: { readonly column: 'buyerName' };
+                readonly code: { readonly column: 'code' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly id: { readonly column: 'id' };
+                readonly stripeCheckoutSessionId: { readonly column: 'stripeCheckoutSessionId' };
+                readonly tenantId: { readonly column: 'tenantId' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+              };
+            };
+          };
+          readonly GiftCardLedger: {
+            readonly fields: {
+              readonly appointmentId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly cardId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly deltaCents: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly reason: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly tenantId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: {
+              readonly card: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'GiftCard';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['cardId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly tenant: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Tenant';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['tenantId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'GiftCardLedger';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly appointmentId: { readonly column: 'appointmentId' };
+                readonly cardId: { readonly column: 'cardId' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly deltaCents: { readonly column: 'deltaCents' };
+                readonly id: { readonly column: 'id' };
+                readonly reason: { readonly column: 'reason' };
                 readonly tenantId: { readonly column: 'tenantId' };
               };
             };
@@ -15976,6 +16373,30 @@ type ContractBase = Omit<
           readonly onCreate: { readonly id: 'uuidv7'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'ErrorReport';
+            readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'GiftCard';
+            readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'GiftCard';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'GiftCardLedger';
             readonly field: 'id';
             readonly namespace: 'public';
           };

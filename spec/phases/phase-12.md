@@ -28,7 +28,7 @@ booking's `orderId` stays `null` — the card pays, not Stripe). A
 **Tests:** integration — a card debits when spent; a spent-down card stops;
 the ledger's balance matches the card's.
 **Done when:** buy → card → spend → ledger hold together.
-- [ ] done
+- [x] done (`tests/integration/gift-cards.test.ts` 1/1 — `buyGiftCard` sells a card at the till, `redeemGiftCard` debits against a `completed` appointment (the ledger's running sum is the balance's twin; one debit per appointment; a spent-down card refuses); `Review`'s missing `policy_all` was caught and added in the same migration.)
 
 ## Exit criteria
 

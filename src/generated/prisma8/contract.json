@@ -68,6 +68,14 @@
       "model": "ErrorReport",
       "namespace": "public"
     },
+    "GiftCard": {
+      "model": "GiftCard",
+      "namespace": "public"
+    },
+    "GiftCardLedger": {
+      "model": "GiftCardLedger",
+      "namespace": "public"
+    },
     "Invitation": {
       "model": "Invitation",
       "namespace": "public"
@@ -2538,6 +2546,272 @@
               },
               "namespaceId": "public",
               "table": "ErrorReport"
+            }
+          },
+          "GiftCard": {
+            "fields": {
+              "active": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "balanceCents": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "buyerEmail": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "buyerName": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "code": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "stripeCheckoutSessionId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              }
+            },
+            "relations": {
+              "ledger": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "cardId"
+                  ]
+                },
+                "to": {
+                  "model": "GiftCardLedger",
+                  "namespace": "public"
+                }
+              },
+              "tenant": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "tenantId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tenant",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "active": {
+                  "column": "active"
+                },
+                "balanceCents": {
+                  "column": "balanceCents"
+                },
+                "buyerEmail": {
+                  "column": "buyerEmail"
+                },
+                "buyerName": {
+                  "column": "buyerName"
+                },
+                "code": {
+                  "column": "code"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "stripeCheckoutSessionId": {
+                  "column": "stripeCheckoutSessionId"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "GiftCard"
+            }
+          },
+          "GiftCardLedger": {
+            "fields": {
+              "appointmentId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "cardId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "deltaCents": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "reason": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "card": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "cardId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "GiftCard",
+                  "namespace": "public"
+                }
+              },
+              "tenant": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "tenantId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tenant",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "appointmentId": {
+                  "column": "appointmentId"
+                },
+                "cardId": {
+                  "column": "cardId"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "deltaCents": {
+                  "column": "deltaCents"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "reason": {
+                  "column": "reason"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "GiftCardLedger"
             }
           },
           "Invitation": {
@@ -10705,6 +10979,30 @@
               "using": "\"tenantId\" = current_setting('app.tenant_id', true)",
               "withCheck": "\"tenantId\" = current_setting('app.tenant_id', true)"
             },
+            "gift_card_isolation": {
+              "kind": "policy",
+              "name": "gift_card_isolation_c516f4ff",
+              "namespaceId": "public",
+              "operation": "all",
+              "permissive": true,
+              "prefix": "gift_card_isolation",
+              "roles": [],
+              "tableName": "GiftCard",
+              "using": "\"tenantId\" = current_setting('app.tenant_id', true)",
+              "withCheck": "\"tenantId\" = current_setting('app.tenant_id', true)"
+            },
+            "gift_card_ledger_isolation": {
+              "kind": "policy",
+              "name": "gift_card_ledger_isolation_c516f4ff",
+              "namespaceId": "public",
+              "operation": "all",
+              "permissive": true,
+              "prefix": "gift_card_ledger_isolation",
+              "roles": [],
+              "tableName": "GiftCardLedger",
+              "using": "\"tenantId\" = current_setting('app.tenant_id', true)",
+              "withCheck": "\"tenantId\" = current_setting('app.tenant_id', true)"
+            },
             "knowledge_chunk_isolation": {
               "kind": "policy",
               "name": "knowledge_chunk_isolation_c516f4ff",
@@ -11005,6 +11303,18 @@
               "using": "\"tenantId\" = current_setting('app.tenant_id', true)",
               "withCheck": "\"tenantId\" = current_setting('app.tenant_id', true)"
             },
+            "review_isolation": {
+              "kind": "policy",
+              "name": "review_isolation_c516f4ff",
+              "namespaceId": "public",
+              "operation": "all",
+              "permissive": true,
+              "prefix": "review_isolation",
+              "roles": [],
+              "tableName": "Review",
+              "using": "\"tenantId\" = current_setting('app.tenant_id', true)",
+              "withCheck": "\"tenantId\" = current_setting('app.tenant_id', true)"
+            },
             "service_category_isolation": {
               "kind": "policy",
               "name": "service_category_isolation_c516f4ff",
@@ -11260,6 +11570,16 @@
               "kind": "rls",
               "namespaceId": "public",
               "tableName": "EntitlementOverride"
+            },
+            "GiftCard": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "GiftCard"
+            },
+            "GiftCardLedger": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "GiftCardLedger"
             },
             "KnowledgeChunk": {
               "kind": "rls",
@@ -13469,6 +13789,242 @@
                   "id"
                 ],
                 "name": "ErrorReport_pkey"
+              },
+              "uniques": []
+            },
+            "GiftCard": {
+              "columns": {
+                "active": {
+                  "codecId": "pg/bool@1",
+                  "dataType": "pg/bool",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nullable": false
+                },
+                "balanceCents": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": false
+                },
+                "buyerEmail": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "buyerName": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "code": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "stripeCheckoutSessionId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "GiftCard_tenantId_idx_c93ed4f1"
+                  },
+                  "name": "GiftCard_tenantId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "tenantId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "GiftCard"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tenant"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "tenantId",
+                    "code"
+                  ],
+                  "name": "GiftCard_tenantCode_idx",
+                  "unique": true
+                },
+                {
+                  "columns": [
+                    "tenantId"
+                  ],
+                  "name": "GiftCard_tenantId_idx_c93ed4f1",
+                  "prefix": "GiftCard_tenantId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "GiftCard_pkey"
+              },
+              "uniques": []
+            },
+            "GiftCardLedger": {
+              "columns": {
+                "appointmentId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "cardId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "deltaCents": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "reason": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "GiftCardLedger_tenantId_idx"
+                  },
+                  "name": "GiftCardLedger_tenantId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "tenantId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "GiftCardLedger"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tenant"
+                  }
+                },
+                {
+                  "index": {
+                    "name": "GiftCardLedger_cardId_idx"
+                  },
+                  "name": "GiftCardLedger_cardId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "cardId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "GiftCardLedger"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "GiftCard"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "cardId"
+                  ],
+                  "name": "GiftCardLedger_cardId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "tenantId"
+                  ],
+                  "name": "GiftCardLedger_tenantId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "GiftCardLedger_pkey"
               },
               "uniques": []
             },
@@ -20606,10 +21162,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "3a1f89116d98e2693b2a090f7b823d71dd0b951be76bce02aa1ba771dcb54366"
+    "storageHash": "64f6f33d3169d45439706f6ed2f56db2f9f8b97444d2c7c0a8c0dee5ea6a3fec"
   },
   "execution": {
-    "executionHash": "74e089713fa1ca68897f500763ebbd1e6d8cdce956474868ed0f2be6bab1b517",
+    "executionHash": "b5a0cc0c96e4ce25cb25643dca8588d2d2fb48449cc959892a04197e4bf70f90",
     "mutations": {
       "defaults": [
         {
@@ -20898,6 +21454,39 @@
           },
           "ref": {
             "entry": "ErrorReport",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "GiftCard",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onUpdate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "GiftCard",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "GiftCardLedger",
             "field": "id",
             "namespace": "public"
           }

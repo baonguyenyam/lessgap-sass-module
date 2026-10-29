@@ -503,6 +503,24 @@ trialEndsAt          TimestampString(3)?
     using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
     withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
   }
+
+  policy_all review_isolation {
+    target    = Review
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all gift_card_isolation {
+    target    = GiftCard
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all gift_card_ledger_isolation {
+    target    = GiftCardLedger
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
   policy_all knowledge_chunk_isolation {
     target    = KnowledgeChunk
     using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
@@ -1206,6 +1224,40 @@ trialEndsAt          TimestampString(3)?
 
     @@index([tenantId], map: "Appointment_tenantId_idx")
     @@index([staffId, startTs], map: "Appointment_staffId_startTs_idx")
+    @@rls
+  }
+
+  model GiftCard {
+    id                      String           @id(map: "GiftCard_pkey") @onCreate(cuid(2))
+    tenantId                String
+    code                    String
+    balanceCents            Int
+    buyerName               String?
+    buyerEmail              String?
+    stripeCheckoutSessionId String?
+    active                  Boolean          @default(true)
+    createdAt               TimestampString(3) @default(now())
+    updatedAt               TimestampString(3) @default(now()) @onUpdate(now())
+    tenant                  Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "GiftCard_tenantId_fkey")
+    ledger                  GiftCardLedger[]
+
+    @@index([tenantId, code], map: "GiftCard_tenantCode_idx", unique: true)
+    @@rls
+  }
+
+  model GiftCardLedger {
+    id            String           @id(map: "GiftCardLedger_pkey") @onCreate(cuid(2))
+    tenantId      String
+    cardId        String
+    deltaCents    Int
+    reason        String
+    appointmentId String?
+    createdAt     TimestampString(3) @default(now())
+    tenant        Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "GiftCardLedger_tenantId_fkey")
+    card          GiftCard         @relation(fields: [cardId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "GiftCardLedger_cardId_fkey")
+
+    @@index([cardId], map: "GiftCardLedger_cardId_idx")
+    @@index([tenantId], map: "GiftCardLedger_tenantId_idx")
     @@rls
   }
 

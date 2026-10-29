@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.94.0] - 2026-10-29
+
+**A customer can buy a prepaid balance and spend it against an appointment — the ledger keeps the balance's twin.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **`GiftCard` + `GiftCardLedger`** — a tenant-owned prepaid balance (`buyGiftCard` sells at the till, `redeemGiftCard` debits against a `completed` appointment — one debit per appointment, a spent-down card refuses)
+- **`Review`'s `policy_all`** — the model's RLS was missing since 11.2; caught and added in the same migration
+
 ## [2.93.0] - 2026-10-29
 
 **The dashboard surfaces the reviews and the waitlist — pending reviews wait for an approve, and the waitlist's coming days sit alongside.** This is a MINOR: `git pull`, `pnpm install`.
