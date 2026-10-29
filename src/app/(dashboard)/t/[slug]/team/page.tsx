@@ -28,7 +28,10 @@ export default async function TeamPage() {
           <Card key={s.id}>
             <CardContent className="flex items-start justify-between pt-4">
               <div>
-                <p className="font-medium">{s.name}</p>
+                <p className="font-medium">
+                  {s.name}
+                  {s.isSample ? ` ${"· sample"}` : ""}
+                </p>
                 {s.bio && <p className="text-sm text-muted-foreground">{s.bio}</p>}
               </div>
               <TeamActions remove staffId={s.id} />

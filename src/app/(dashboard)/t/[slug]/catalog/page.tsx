@@ -38,7 +38,10 @@ export default async function CatalogPage() {
               .map((s) => (
                 <div key={s.id} className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium">{s.name}</p>
+                    <p className="font-medium">
+                      {s.name}
+                      {s.isSample ? ` ${"· sample"}` : ""}
+                    </p>
                     <p className="text-sm text-muted-foreground">
                       {s.durationMinutes} min · {formatPrice(s.priceCents, s.currency)}
                     </p>

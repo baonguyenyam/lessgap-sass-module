@@ -80,7 +80,7 @@ holds for two designs.
 - **Checks:** `pnpm test`, `pnpm test:integration`.
 - **Done when:** applying `nail_salon` gives a tenant sample services it can
   remove in one click.
-- [ ] done
+- [x] done (`src/verticals/` — `defineVertical` + presets for `nail_salon`, `barber`, `restaurant`, `dental`, `generic` (terminology, suggested modules, defaultTheme, sample categories/services/staff). `getVertical` falls back to `generic` + logs an unknown key. `applyVertical` writes `vertical.key`/`vertical.terminology` settings, enables suggested `TenantModule`s, writes categories + `isSample` services/staff. `removeSampleData` deletes only `isSample` rows; `removeTenantSampleData` is the dashboard action. Sample rows show "· sample" on the catalog/team pages. Integration `verticals.test.ts` — apply writes the rows, remove keeps real ones.)
 
 ### 4.5 — Onboarding wizard
 - **Goal:** `/onboarding` — business name, vertical, slug (live preview),

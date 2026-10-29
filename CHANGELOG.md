@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.50.0] - 2026-10-29
+
+**A tenant starts from a vertical preset: the right services, staff and words for their business.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **Verticals** (`src/verticals/`) — presets for `nail_salon`, `barber`, `restaurant`, `dental`, `generic`: terminology, suggested modules, a default theme, sample services and staff
+- **`applyVertical`** — writes the preset once: terminology into settings, suggested modules on, sample rows marked `isSample`
+- **Sample data removal** — one click deletes every `isSample` row; the dashboard labels them
+
 ## [2.49.0] - 2026-10-29
 
 **A tenant's team — staff the site shows — is the third module through the lifecycle.** This is a MINOR: `git pull`, `pnpm install`.
