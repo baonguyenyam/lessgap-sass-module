@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.62.0] - 2026-10-29
+
+**The application-fee engine: `computeApplicationFee` — the pure function every tenant charge consults.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`computeApplicationFee(model, amount)`** — `none`, `percent`, `fixed`, `percent_fixed`, `percent_capped` and `per_booking` (metered on the platform invoice, not a cut of the charge); the fee is clamped to [0, amount]
+- **`refundFee(fee, amount, refundAmount)`** — refunds return the application fee proportionally
+
 ## [2.61.0] - 2026-10-29
 
 **The double-booking guarantee is proven in the database: two simultaneous bookings for one slot — exactly one succeeds.** This is a MINOR: `git pull`, `pnpm install`.

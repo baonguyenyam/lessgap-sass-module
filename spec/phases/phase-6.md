@@ -57,7 +57,7 @@ appointment), and booking deposits (`booking.deposits` wired at last).
   charge, `refundFee` proportional on partial refunds.
 - **Checks:** `pnpm test`, `pnpm typecheck`.
 - **Done when:** fee math is unit-tested per spec/05's table.
-- [ ] done
+- [x] done (`src/lib/billing/fee.ts` — `computeApplicationFee(model, amount)`: `none` 0, `percent` bps/10000 round-half-up, `fixed` constant, `percent_fixed` both, `percent_capped` min(pct,cap), `per_booking` meters (fee 0 + `metered: true` — it bills on the platform invoice, not the charge). Fee is clamped [0, amount]. `refundFee` returns the fee proportionally (round-half-up). `Plan.feeModel` JSON already held the config — no schema needed (decision 6-C simplified: plan JSON + TenantSetting override later). 9 unit tests — every model, rounding, zero, cap, refund.)
 
 ### 6.2 — Connect + Payment schema
 - **Goal:** connected-account state on `Tenant`, `Payment` and `Refund`
