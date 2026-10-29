@@ -1054,6 +1054,18 @@
         "stage": "Stage",
         "version": "Version"
       }
+    },
+    "domains": {
+      "title": "Domains",
+      "subtitle": "Provider reconciliation and every domain row",
+      "drift": "Latest reconcile — {count} drifts",
+      "no_drift": "No drift — provider and rows match.",
+      "rows": "{count} domain rows",
+      "primary": "primary",
+      "kind": {
+        "missing_provider": "row exists, provider lost it",
+        "extra_provider": "provider has it, no row"
+      }
     }
   },
   "admin": {
@@ -1595,7 +1607,8 @@
     "orders": "Orders",
     "quotes": "Quotes",
     "payments": "Payments",
-    "chatbot": "Chatbot"
+    "chatbot": "Chatbot",
+    "domains": "Domains"
   },
   "faq": {
     "title": "Frequently asked questions",

@@ -34,6 +34,7 @@ export const MODEL_CLASSIFICATION = {
   AvailabilityRule: { kind: "tenant-owned", reason: "A tenant's weekly opening hours (booking module)." },
   Customer: { kind: "tenant-owned", reason: "A tenant's customer list — the privacy boundary." },
   Domain: { kind: "tenant-owned", reason: "A tenant's custom domain for its site." },
+  DomainCheck: { kind: "platform-private", reason: "A daily reconcile row between the provider and Domain rows." },
   ModuleExport: { kind: "tenant-owned", reason: "A tenant's exported data, a 7-day link." },
   NotificationLog: { kind: "tenant-owned", reason: "A tenant's outbound message log." },
   ModulePurge: { kind: "tenant-owned", reason: "A scheduled or finished module deletion for one tenant." },

@@ -52,6 +52,10 @@
       "model": "Domain",
       "namespace": "public"
     },
+    "DomainCheck": {
+      "model": "DomainCheck",
+      "namespace": "public"
+    },
     "EmailMessage": {
       "model": "EmailMessage",
       "namespace": "public"
@@ -2037,6 +2041,80 @@
               },
               "namespaceId": "public",
               "table": "Domain"
+            }
+          },
+          "DomainCheck": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "hostname": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "kind": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "runId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "tenantId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {},
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "hostname": {
+                  "column": "hostname"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "kind": {
+                  "column": "kind"
+                },
+                "runId": {
+                  "column": "runId"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "DomainCheck"
             }
           },
           "EmailMessage": {
@@ -12380,6 +12458,64 @@
               },
               "uniques": []
             },
+            "DomainCheck": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "hostname": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "kind": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "runId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [
+                {
+                  "columns": [
+                    "runId"
+                  ],
+                  "name": "DomainCheck_runId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "DomainCheck_pkey"
+              },
+              "uniques": []
+            },
             "EmailMessage": {
               "columns": {
                 "createdAt": {
@@ -19295,10 +19431,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "6b0e2b0a00fb3889a1c34ee1bb2ae5c2f6d51509ab92c6cc5a3e955f231f9edc"
+    "storageHash": "f2ad8164887818bf08456ffe4efec064f341c452ce2aebdc128ab643f16f6db9"
   },
   "execution": {
-    "executionHash": "90b7a2de8d74c604ca6a41b5af8de90f928d03b321038b8d53d253bf28154bcb",
+    "executionHash": "509fc6eedb1b7e32cfb508ffb879657554b711151c4f1150dd10700823243987",
     "mutations": {
       "defaults": [
         {
@@ -19533,6 +19669,17 @@
           "ref": {
             "entry": "Domain",
             "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "DomainCheck",
+            "field": "id",
             "namespace": "public"
           }
         },

@@ -103,6 +103,16 @@ export const JOBS: JobRegistry = {
       await reindexTenant(tenantId)
     },
   },
+  // Domain reconciliation (task 8.2): daily diff between the domain
+  // provider's list and Domain rows; drifts land in DomainCheck for
+  // /platform/domains.
+  "platform.domain.reconcile": {
+    schedule: "0 4 * * *",
+    handler: async () => {
+      const { reconcileDomains } = await import("@/platform/domains/reconcile")
+      await reconcileDomains()
+    },
+  },
   // Tenant deletion (task 1.14): the console action enqueues one row per
   // tenant; the purge itself lives in src/platform/tenancy/delete-tenant.ts.
   // Idempotent — deleting a missing tenant is a no-op.

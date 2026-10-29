@@ -28,9 +28,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'6b0e2b0a00fb3889a1c34ee1bb2ae5c2f6d51509ab92c6cc5a3e955f231f9edc'>;
+  StorageHashBase<'f2ad8164887818bf08456ffe4efec064f341c452ce2aebdc128ab643f16f6db9'>;
 export type ExecutionHash =
-  ExecutionHashBase<'90b7a2de8d74c604ca6a41b5af8de90f928d03b321038b8d53d253bf28154bcb'>;
+  ExecutionHashBase<'509fc6eedb1b7e32cfb508ffb879657554b711151c4f1150dd10700823243987'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -569,6 +569,15 @@ export namespace Models {
     verifiedAt: FieldOutputTypes['public']['Domain']['verifiedAt'];
     tenant: public_Tenant;
     readonly [RelationKeys]?: 'tenant';
+  };
+  export type public_DomainCheck = {
+    createdAt: FieldOutputTypes['public']['DomainCheck']['createdAt'];
+    hostname: FieldOutputTypes['public']['DomainCheck']['hostname'];
+    id: FieldOutputTypes['public']['DomainCheck']['id'];
+    kind: FieldOutputTypes['public']['DomainCheck']['kind'];
+    runId: FieldOutputTypes['public']['DomainCheck']['runId'];
+    tenantId: FieldOutputTypes['public']['DomainCheck']['tenantId'];
+    readonly [RelationKeys]?: never;
   };
   export type public_EmailMessage = {
     createdAt: FieldOutputTypes['public']['EmailMessage']['createdAt'];
@@ -1376,6 +1385,7 @@ export declare const models: {
     ChatMessage: Models.public_ChatMessage;
     Customer: Models.public_Customer;
     Domain: Models.public_Domain;
+    DomainCheck: Models.public_DomainCheck;
     EmailMessage: Models.public_EmailMessage;
     EntitlementOverride: Models.public_EntitlementOverride;
     ErrorReport: Models.public_ErrorReport;
@@ -2745,6 +2755,58 @@ type ContractBase = Omit<
                   readonly name: 'Domain_tenantId_fkey';
                 },
               ];
+            };
+            readonly DomainCheck: {
+              columns: {
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly hostname: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly kind: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly runId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly tenantId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id']; readonly name: 'DomainCheck_pkey' };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'DomainCheck_runId_idx';
+                  readonly columns: readonly ['runId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [];
             };
             readonly EmailMessage: {
               columns: {
@@ -8479,6 +8541,10 @@ type ContractBase = Omit<
     };
     readonly Customer: { readonly namespace: 'public' & NamespaceId; readonly model: 'Customer' };
     readonly Domain: { readonly namespace: 'public' & NamespaceId; readonly model: 'Domain' };
+    readonly DomainCheck: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'DomainCheck';
+    };
     readonly EmailMessage: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'EmailMessage';
@@ -9745,6 +9811,51 @@ type ContractBase = Omit<
                 readonly updatedAt: { readonly column: 'updatedAt' };
                 readonly verification: { readonly column: 'verification' };
                 readonly verifiedAt: { readonly column: 'verifiedAt' };
+              };
+            };
+          };
+          readonly DomainCheck: {
+            readonly fields: {
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly hostname: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly kind: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly runId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly tenantId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: Record<string, never>;
+            readonly storage: {
+              readonly table: 'DomainCheck';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly hostname: { readonly column: 'hostname' };
+                readonly id: { readonly column: 'id' };
+                readonly kind: { readonly column: 'kind' };
+                readonly runId: { readonly column: 'runId' };
+                readonly tenantId: { readonly column: 'tenantId' };
               };
             };
           };
@@ -14960,6 +15071,14 @@ type ContractBase = Omit<
           readonly ref: {
             readonly entry: 'Domain';
             readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'DomainCheck';
+            readonly field: 'id';
             readonly namespace: 'public';
           };
         },

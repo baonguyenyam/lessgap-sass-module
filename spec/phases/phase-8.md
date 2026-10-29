@@ -56,7 +56,7 @@ that measurement, not guessed.
   `src/app/(platform)/platform/domains/page.tsx`, contract `DomainCheck`.
 - **Done when:** a drift (Vercel has a domain the row doesn't, or vice
   versa) shows on the page within a day.
-- [ ] done
+- [x] done (`DomainProvider.listDomains?()` — Vercel `/v9/projects/<id>/domains` GET, DO `/v2/domains` GET; local has none → `reconcileDomains` skips rather than guesses. `DomainCheck` (platform-private, `runId`-batched): `missing_provider` (row exists, provider lacks it) / `extra_provider` (provider has it, no row). `platform.domain.reconcile` daily `0 4 * * *`. `/platform/domains` — latest run's drifts + every `Domain` row's status. Integration `domain-reconcile.test.ts` 3/3 — both drift kinds, matching → clean, unlisted provider → skip.)
 
 ### 8.3 — `TenantSnapshot` + snapshot job + R2 bundle (O5)
 - **Goal:** on-demand and nightly snapshot — every tenant-owned table →

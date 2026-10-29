@@ -1,0 +1,99 @@
+[
+  {
+    "id": "table.DomainCheck",
+    "label": "Create table \"DomainCheck\"",
+    "summary": "Creates table \"DomainCheck\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "DomainCheck"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"DomainCheck\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"DomainCheck\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"DomainCheck\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"DomainCheck\"",
+        "sql": "CREATE TABLE \"public\".\"DomainCheck\" (\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"hostname\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"kind\" text NOT NULL,\n  \"runId\" text NOT NULL,\n  \"tenantId\" text,\n  CONSTRAINT \"DomainCheck_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"DomainCheck\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"DomainCheck\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"DomainCheck\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "index.DomainCheck.DomainCheck_runId_idx",
+    "label": "Create index \"DomainCheck_runId_idx\" on \"DomainCheck\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "DomainCheck_runId_idx",
+        "table": "DomainCheck"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"DomainCheck_runId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"DomainCheck_runId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"DomainCheck_runId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"DomainCheck_runId_idx\"",
+        "sql": "CREATE INDEX \"DomainCheck_runId_idx\" ON \"public\".\"DomainCheck\" (\"runId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"DomainCheck_runId_idx\" exists on \"DomainCheck\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"DomainCheck_runId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"DomainCheck\"",
+          "btree",
+          "[\"runId\"]"
+        ]
+      }
+    ]
+  }
+]

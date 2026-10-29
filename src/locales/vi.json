@@ -1054,6 +1054,18 @@
         "stage": "Giai đoạn",
         "version": "Phiên bản"
       }
+    },
+    "domains": {
+      "title": "Tên miền",
+      "subtitle": "Đối chiếu provider và các dòng domain",
+      "drift": "Đối chiếu gần nhất — {count} lệch",
+      "no_drift": "Không lệch — provider và dòng khớp.",
+      "rows": "{count} dòng domain",
+      "primary": "chính",
+      "kind": {
+        "missing_provider": "dòng tồn tại, provider mất",
+        "extra_provider": "provider có, không có dòng"
+      }
     }
   },
   "admin": {
@@ -1595,7 +1607,8 @@
     "orders": "Đơn hàng",
     "quotes": "Báo giá",
     "payments": "Thanh toán",
-    "chatbot": "Chatbot"
+    "chatbot": "Chatbot",
+    "domains": "Tên miền"
   },
   "faq": {
     "title": "Các câu hỏi thường gặp",

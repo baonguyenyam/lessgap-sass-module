@@ -68,6 +68,21 @@ user                  User                @relation(fields: [userId], references
     @@rls
   }
 
+  // Daily domain reconciliation (task 8.2): one row per drift found by
+  // the `platform.domain.reconcile` job — a Domain row the provider lacks
+  // ("missing_provider") or a provider hostname no row claims
+  // ("extra_provider"). Platform-private: the latest run is the report.
+  model DomainCheck {
+    id        String             @id(map: "DomainCheck_pkey") @onCreate(cuid(2))
+    runId     String
+    hostname  String
+    kind      String
+    tenantId  String?
+    createdAt TimestampString(3) @default(now())
+
+    @@index([runId], map: "DomainCheck_runId_idx")
+  }
+
   // Kit Plan, extended with entitlements (spec/09-data-model.md, phase 2).
   // `features` is the entitlement map the resolver reads — { [FeatureKey]:
   // boolean | number | null } validated against the feature registry.

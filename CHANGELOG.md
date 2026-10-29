@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [2.76.0] - 2026-10-29
+
+**Domains reconcile themselves daily — a Vercel drift between provider and rows shows on `/platform/domains`, not at the next incident.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **`platform.domain.reconcile`** — a daily job diffs the provider's `listDomains()` against `Domain` rows; drifts land in `DomainCheck`
+- **`/platform/domains`** — the latest reconcile run plus every domain row's status
+
 ## [2.75.0] - 2026-10-29
 
 **A test now guards RLS on every tenant table — and it caught 47 tables running enabled but policy-less.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate` (adds the missing isolation policies).

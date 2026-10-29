@@ -13,6 +13,9 @@ export interface DomainProvider {
   addDomain(hostname: string): Promise<ProviderResult>
   checkDomain(hostname: string): Promise<ProviderResult>
   removeDomain(hostname: string): Promise<void>
+  /** Reconciliation needs the provider's own view (task 8.2); a provider
+   * without a list endpoint skips the daily diff instead of guessing. */
+  listDomains?(): Promise<string[]>
 }
 
 const VERCEL_TOKEN = process.env.VERCEL_TOKEN ?? ""
@@ -50,6 +53,11 @@ export const vercelProvider: DomainProvider = {
   async removeDomain(hostname) {
     await vercelApi(`/v9/projects/${VERCEL_PROJECT}/domains/${hostname}`, { method: "DELETE" })
   },
+  async listDomains() {
+    const data = await vercelApi(`/v9/projects/${VERCEL_PROJECT}/domains`, { method: "GET" })
+    const domains = (data.domains as { name: string }[] | undefined) ?? []
+    return domains.map((d) => d.name)
+  },
 }
 
 /** DigitalOcean — production host (decision 3-A). */
@@ -74,6 +82,14 @@ export const digitalOceanProvider: DomainProvider = {
       headers: { Authorization: `Bearer ${process.env.DO_API_TOKEN ?? ""}` },
     })
     if (!res.ok && res.status !== 404) throw new Error(`do domains delete: ${res.status}`)
+  },
+  async listDomains() {
+    const res = await fetch("https://api.digitalocean.com/v2/domains", {
+      headers: { Authorization: `Bearer ${process.env.DO_API_TOKEN ?? ""}` },
+    })
+    if (!res.ok) throw new Error(`do domains list: ${res.status}`)
+    const data = (await res.json()) as { domains?: { name: string }[] }
+    return (data.domains ?? []).map((d) => d.name)
   },
 }
 
