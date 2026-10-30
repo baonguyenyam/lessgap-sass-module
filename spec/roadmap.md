@@ -209,6 +209,14 @@ D8 theme-axe (`/themes/[theme]` fixture + spec), O8 platform 2FA gate
 routes + jobs (`requireModuleRoute` 404s, `reindexTenant` pauses on
 `TenantModule`).
 
+## Phases 11–15 — Later-list features (done)
+
+Waitlist + reviews + site/dashboard surfaces (`86d5454`), gift cards +
+memberships/packages + in-place restore (`87e5437`), `/status` + Pusher
+realtime + `Location` (`534c991`), waitlist `booked` transition + booking
+pay path + surface e2e (`e65261e`), contact-only intake (ADR 0028,
+`de360fc`). Briefs: `spec/phases/phase-11.md` → `phase-15.md`.
+
 ## Phase 16 — Account, billing and notifications
 
 **Status:** approved by the owner (2026-10-30).
