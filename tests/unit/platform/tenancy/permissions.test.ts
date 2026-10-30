@@ -140,3 +140,21 @@ describe("grantedPermissions (the menu's view of a role)", () => {
     expect(await grantedPermissions("t1", "gone")).toEqual([])
   })
 })
+
+describe("roles page labels", () => {
+  // The roles page names every group, resource and verb of the catalog; a key
+  // added here without its label throws MISSING_MESSAGE on that page.
+  it("has an English label for every permission group, resource and verb", async () => {
+    const en = (await import("@/locales/en.json")).default as {
+      dashboard: {
+        roles: { groups: Record<string, string>; resources: Record<string, string>; verbs: Record<string, string> }
+      }
+    }
+    const { groups, resources, verbs } = en.dashboard.roles
+    for (const group of Object.keys(PERMISSION_GROUPS)) expect(groups, group).toHaveProperty([group])
+    for (const [resource, resourceVerbs] of Object.entries(TENANT_PERMISSIONS)) {
+      expect(resources, resource).toHaveProperty([resource])
+      for (const verb of resourceVerbs) expect(verbs, verb).toHaveProperty([verb])
+    }
+  })
+})

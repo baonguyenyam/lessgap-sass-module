@@ -1,3 +1,5 @@
-export default function Loading() {
-  return <div className="h-40 animate-pulse rounded-md bg-muted" />
+import { PageSkeleton } from "@/components/layout/page-skeleton"
+
+export default function PlatformPlansLoading() {
+  return <PageSkeleton variant="list" />
 }

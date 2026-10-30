@@ -6,6 +6,10 @@ import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { RefundButton } from "@/components/payments/refund-button"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Dashboard → Payments (task 6.8): money in (payments) and out (refunds) —
  * the payouts view. */
 export default async function PaymentsPage() {

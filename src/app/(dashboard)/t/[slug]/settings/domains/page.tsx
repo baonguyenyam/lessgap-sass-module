@@ -5,6 +5,10 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { DomainActions } from "@/components/settings/domain-actions"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Settings → Domains (task 3.7, spec/03): the tenant's custom domains —
  * pending with its DNS records, active as the primary/redirected hostname. */
 export default async function DomainsPage() {

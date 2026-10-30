@@ -1,4 +1,5 @@
 import { cookies, headers } from "next/headers"
+import { connection } from "next/server"
 import { getRequestConfig } from "next-intl/server"
 import { hasLocale } from "next-intl"
 import { routing } from "./routing"
@@ -55,6 +56,11 @@ function withFallback(source: Messages, translated: Messages): Messages {
  * That is what makes it reasonable to ship a locale covering only part of the
  * site: translate the pages that matter to you and leave the rest.
  */
+async function requestNow(): Promise<Date> {
+  await connection()
+  return new Date()
+}
+
 export default getRequestConfig(async ({ requestLocale }) => {
   const requested = await requestLocale
   // The public site follows the platform; the signed-in area follows the tenant.
@@ -74,7 +80,9 @@ export default getRequestConfig(async ({ requestLocale }) => {
   const shared = {
     timeZone: settings["display.time_zone"],
     formats: { dateTime: dateTimeFormats(settings) },
-    ...(hasLocale(routing.locales, requested) ? {} : { now: new Date() }),
+    // The sign-in pages may reach here before anything has read the request
+    // (their shell prerenders): wait for it before reading the clock.
+    ...(hasLocale(routing.locales, requested) ? {} : { now: await requestNow() }),
   }
 
   const source: Messages = (await import(`../locales/${routing.defaultLocale}.json`)).default

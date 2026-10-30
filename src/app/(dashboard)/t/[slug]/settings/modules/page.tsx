@@ -26,6 +26,10 @@ import { Badge } from "@/components/ui/badge"
 import { StatusBadge } from "@/components/data-table/status-badge"
 import { ModuleActions } from "@/components/modules/module-actions"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 const ICONS: Record<string, LucideIcon> = {
   analytics: BarChart3,
   booking: Calendar,

@@ -2,6 +2,12 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-30 · next · Console errors only the dev server shows
+- **Symptom:** the owner saw many console errors in `pnpm dev`: `MISSING_MESSAGE dashboard.roles.resources.team` on the roles page, "unstable value `new Date()` while prerendering" on /login, /signup and /forgot-password, and "uncached data accessed outside of `<Suspense>`" on 19 module pages. `pnpm build` and the tests showed none of them.
+- **Cause:** a `team` resource joined the permission catalog without its label; `src/i18n/request.ts` read the clock before the sign-in pages had read the request; the module pages had no `instant = false` and no `loading.tsx`, and the consistency test only scanned `(dashboard)/dashboard` and `(admin)`, so the `/t/[slug]` and `(platform)` pages were never checked.
+- **Fix:** the label in all nine locales and a test that every group, resource and verb has one; `await connection()` before `new Date()` in the request config; `instant = false` + a `PageSkeleton` loading on every page, with the test now scanning `(dashboard)`, `(admin)` and `(platform)` for both.
+- **Rule:** after adding pages, crawl them on the dev server with a Playwright script collecting `console` errors, `pageerror` and HTTP ≥ 400 per page; a clean build is not a clean console.
+
 ### 2026-10-30 · ui · A height override on one stock button breaks the row
 - **Symptom:** on the members page the facet pill, "View" and "Reset" stood taller than the search field and "Invite member".
 - **Cause:** those buttons were given `size="sm" className="h-9"` while inputs, selects and default buttons are the stock `h-8`.

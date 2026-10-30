@@ -5,6 +5,10 @@ import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { SalesActions } from "@/components/booking/sales-actions"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Dashboard → Sales (task 12.5): the till sells a `GiftCard`, a `Package`
  * onto a customer, activates a `Membership` — and the holdings list
  * alongside so staff sees what's outstanding. */

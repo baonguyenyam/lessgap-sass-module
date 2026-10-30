@@ -5,6 +5,10 @@ import { requirePlatformRole } from "@/platform/staff"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BackupActions } from "@/components/platform/backup-actions"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Platform → Backups (task 8.4): every `TenantSnapshot` — status, row
  * counts, size — plus request and restore-to-new actions per tenant. */
 export default async function PlatformBackupsPage() {

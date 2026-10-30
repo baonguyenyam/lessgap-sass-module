@@ -4,6 +4,10 @@ import { templates, templateKeys, templateLocales } from "@/emails/templates"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { TemplatePreview } from "@/components/platform/template-preview"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Platform → Email templates (task 5.6, spec/07): every template, every
  * locale — a staff page that renders each and can send-test it. Templates
  * stay code; a tenant's override lives in `TenantSetting`. */

@@ -65,7 +65,9 @@ describe("UI consistency", () => {
  * sibling pages, so each page folder needs one.
  */
 describe("page loading", () => {
-  const pageDirs = ["src/app/(dashboard)/dashboard", "src/app/(admin)/admin"].flatMap((dir) =>
+  // Every app area: the tenant dashboard (`/t/[slug]`, task 1.7), the account
+  // pages, the admin panel and the platform console.
+  const pageDirs = ["src/app/(dashboard)", "src/app/(admin)", "src/app/(platform)"].flatMap((dir) =>
     readdirSync(join(ROOT, dir), { withFileTypes: true, recursive: true })
       .filter((e) => e.isFile() && e.name === "page.tsx")
       .map((e) => e.parentPath)
@@ -79,6 +81,13 @@ describe("page loading", () => {
     const loading = join(dir, "loading.tsx")
     expect(readdirSync(dir)).toContain("loading.tsx")
     expect(readFileSync(loading, "utf8")).toContain("<PageSkeleton")
+  })
+
+  // Until a route is converted (spec/adr/0022), its page opts out of instant
+  // navigation; without it the dev server reports every request read outside
+  // <Suspense> as an error in the console.
+  it.each(pageDirs.map((dir) => [relative(ROOT, dir), dir]))("%s/page.tsx opts out of instant", (_, dir) => {
+    expect(readFileSync(join(dir, "page.tsx"), "utf8")).toMatch(/export const instant = false/)
   })
 })
 

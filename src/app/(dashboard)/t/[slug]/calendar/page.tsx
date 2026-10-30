@@ -7,6 +7,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AppointmentActions } from "@/components/booking/appointment-actions"
 import { BookingLiveUpdates } from "@/components/booking/live-updates"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Dashboard → Calendar (task 5.3): the tenant's appointments grouped by
  * day — a member sees the whole team's book, a staff member filters to
  * their own column via `?staff=`. */

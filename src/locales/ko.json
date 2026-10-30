@@ -759,7 +759,8 @@
         "quotes": "Quotes",
         "newsletter": "Newsletter",
         "chatbot": "Chatbot",
-        "reports": "Reports"
+        "reports": "Reports",
+        "team": "팀"
       },
       "verbs": {
         "view": "View",

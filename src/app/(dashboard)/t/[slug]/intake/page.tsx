@@ -5,6 +5,10 @@ import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { IntakeFormForm } from "@/components/booking/intake-form-form"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Dashboard → Intake (task 16.3): the contact-only forms a tenant asks
  * before a visit, plus the responses that landed on appointments. */
 export default async function IntakePage() {

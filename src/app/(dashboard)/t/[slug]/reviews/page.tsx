@@ -5,6 +5,10 @@ import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ReviewActions } from "@/components/booking/review-actions"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Dashboard → Reviews (task 11.4): `pending` `Review` rows wait for an
  * approve/reject; the waitlist's coming days sit alongside so the tenant
  * knows who's waiting when a slot frees. */

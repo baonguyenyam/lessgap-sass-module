@@ -5,6 +5,10 @@ import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CustomerActions } from "@/components/customers/customer-actions"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Dashboard → Customers (task 5.5): the tenant's customer list — every
  * booker deduplicated by email then phone, with their consent badges. */
 export default async function CustomersPage() {

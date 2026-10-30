@@ -5,6 +5,10 @@ import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent } from "@/components/ui/card"
 import { TeamActions } from "@/components/team/team-actions"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Dashboard → Team (task 4.3): the tenant's staff — the people the site
  * shows; not logins, not members. */
 export default async function TeamPage() {

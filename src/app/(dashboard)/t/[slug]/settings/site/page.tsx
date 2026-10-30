@@ -3,6 +3,10 @@ import { db8 } from "@/lib/db8"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { SiteSettingsForm } from "@/components/settings/site-form"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Settings → Site (task 3.3): the tenant's public-site content — company
  * profile, opening hours, appearance — saved through `saveSiteSettings`. */
 export default async function SiteSettingsPage() {

@@ -4,6 +4,10 @@ import { moduleRegistry } from "@/modules/registry"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /**
  * The module catalog (task 2.10, spec/15): every registered module, its stage
  * and version. Per-tenant operations — enable, disable, export, delete — run

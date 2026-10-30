@@ -4,6 +4,10 @@ import { toDate } from "@/lib/timestamps"
 import { requirePlatformRole } from "@/platform/staff"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Platform → Domains (task 8.2): the latest reconcile run's drift rows —
  * a Domain the provider lost ("missing_provider") or a provider hostname
  * no row claims ("extra_provider") — plus every Domain row's status. */

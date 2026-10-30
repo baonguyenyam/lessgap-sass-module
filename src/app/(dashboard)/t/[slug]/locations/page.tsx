@@ -5,6 +5,10 @@ import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { LocationForm } from "@/components/booking/location-form"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Dashboard → Locations (task 16.2): a tenant's physical branches —
  * name + address each, the `locationId` a staff/appointment carries. */
 export default async function LocationsPage() {

@@ -5,6 +5,10 @@ import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ConnectButton } from "@/components/payments/connect-button"
 
+// Cache Components adoption (spec/adr/0022): this segment may still block on
+// request data. Remove the opt-out when the route is converted (steps 3 and 4).
+export const instant = false
+
 /** Settings → Payments (task 6.3): Connect onboarding status + link, and
  * the paid-features gate explained while `chargesEnabled` is false. */
 export default async function PaymentsSettingsPage() {
