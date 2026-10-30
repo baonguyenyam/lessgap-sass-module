@@ -1,0 +1,52 @@
+[
+  {
+    "id": "rlsPolicy.public.MemberNotification.member_notification_isolation_c516f4ff",
+    "label": "Create RLS policy \"member_notification_isolation_c516f4ff\" on \"MemberNotification\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "member_notification_isolation_c516f4ff",
+        "table": "MemberNotification"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"member_notification_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "MemberNotification",
+          "member_notification_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"member_notification_isolation_c516f4ff\" on \"MemberNotification\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"member_notification_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"member_notification_isolation_c516f4ff\" ON \"public\".\"MemberNotification\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"member_notification_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "MemberNotification",
+          "member_notification_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  }
+]

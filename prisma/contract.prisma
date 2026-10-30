@@ -635,6 +635,12 @@ trialEndsAt          TimestampString(3)?
     withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
   }
 
+  policy_all member_notification_isolation {
+    target    = MemberNotification
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
   policy_all module_purge_isolation {
     target    = ModulePurge
     using     = sql`"tenantId" = current_setting('app.tenant_id', true)`

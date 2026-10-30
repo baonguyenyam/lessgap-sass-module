@@ -12505,6 +12505,18 @@
               "using": "\"tenantId\" = current_setting('app.tenant_id', true)",
               "withCheck": "\"tenantId\" = current_setting('app.tenant_id', true)"
             },
+            "member_notification_isolation": {
+              "kind": "policy",
+              "name": "member_notification_isolation_c516f4ff",
+              "namespaceId": "public",
+              "operation": "all",
+              "permissive": true,
+              "prefix": "member_notification_isolation",
+              "roles": [],
+              "tableName": "MemberNotification",
+              "using": "\"tenantId\" = current_setting('app.tenant_id', true)",
+              "withCheck": "\"tenantId\" = current_setting('app.tenant_id', true)"
+            },
             "membership_isolation": {
               "kind": "policy",
               "name": "membership_isolation_c516f4ff",
@@ -23990,7 +24002,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "00b73f1f528cf36de72a63ecdcc06381dd0e18804d485930075a3534fcf61950"
+    "storageHash": "6bf04ecc1667a327be6255ff2ff9399609f1aa86156e07ecd893b7e058854236"
   },
   "execution": {
     "executionHash": "abf5e474b6447ece552da6e427cb29dbb92a129f914fac0c23fa9eaf4bb53084",
