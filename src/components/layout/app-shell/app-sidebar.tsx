@@ -21,20 +21,18 @@ import {
 } from "@/components/ui/sidebar"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { ChevronRight } from "lucide-react"
-import type { NavUserProps } from "@/components/layout/app-shell/nav-user"
 import { isNavItemActive, navGroups, type NavArea } from "@/components/layout/app-shell/nav"
 import { tenantPath } from "@/lib/tenant-paths"
 import { TenantSwitcher, type TenantOption } from "@/components/layout/app-shell/tenant-switcher"
 
 /**
  * The app sidebar (spec/adr/0021, from Studio Admin): collapses to icons on
- * desktop, opens as a sheet on a phone, and keeps the signed-in user at the
- * bottom.
+ * desktop, opens as a sheet on a phone; the signed-in user sits in the
+ * header.
  */
 export function AppSidebar({
   area,
   showAdmin,
-  user,
   tenant,
   tenants,
   customRoles,
@@ -42,7 +40,6 @@ export function AppSidebar({
 }: {
   area: NavArea
   showAdmin: boolean
-  user: NavUserProps
   /** The tenant the dashboard area shows; null in the admin area. */
   tenant: TenantOption | null
   tenants: TenantOption[]

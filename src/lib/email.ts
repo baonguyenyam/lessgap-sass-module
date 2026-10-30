@@ -13,7 +13,7 @@ import { resendClient, sendEmail } from "@/lib/email-transport"
  * browser. Emails to a member pass `recipientLocale(to)` (their saved
  * preference, task 0.13); the rest use the default.
  */
-function emailStrings(locale: string = routing.defaultLocale) {
+function emailStrings(_locale: string = routing.defaultLocale) {
   // next-intl's getTranslations needs a request context the email senders
   // don't have — read the message file's `email` namespace directly. The
   // namespace's nested values answer `t.raw(key)` the same way next-intl's

@@ -49,7 +49,6 @@ export async function AppShell({
       <AppSidebar
         area={area}
         showAdmin={showAdmin}
-        user={user}
         tenant={tenant}
         tenants={tenants}
         customRoles={customRoles}
