@@ -116,7 +116,7 @@ describe("empty states", () => {
   // fills the list. Only the compact size (a board column) may skip it.
   it("gives every empty box a description", () => {
     const offenders = files.flatMap((file) =>
-      [...readFileSync(file, "utf8").matchAll(/<EmptyState\b[^>]*?\/>/gs)]
+      [...readFileSync(file, "utf8").matchAll(/<EmptyState\b[\s\S]*?\/>/g)]
         .filter(([tag]) => !/description=/.test(tag) && !/size="compact"/.test(tag) && !tag.includes("{...empty}"))
         .map(([tag]) => `${relative(ROOT, file)}: ${tag.replace(/\s+/g, " ").slice(0, 80)}`)
     )
