@@ -2,6 +2,16 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-30 · i18n · Message maps: `t.raw` returns strings/arrays only, leaf names never dots
+- **Symptom:** `t.raw("featureLabels")` over a `{"members.max": "…"}` object failed the messages test three ways: raw lookups must land on a string or array, every leaf must be read, and leaf names may not contain dots (next-intl reads a dot as nesting and throws INVALID_KEY over the whole file — `dashboard.emails.templates` shipped exactly that).
+- **Fix:** keep identifier-safe leaf names (`members_max`), nest real dotted concepts (`templates.booking.confirmation`), and read them with a computed template — `t(`featureLabels.${key.replaceAll(".", "_")}`)` — whose static prefix is the only thing shielding that subtree from the orphan check; a bare variable (`t(key)`) would shield the whole namespace.
+- **Rule:** a message map keyed by data values goes in as underscore/nested keys read through one computed `t()` call, plus a unit test that every key has a label — `t()` throws on a miss.
+
+### 2026-10-30 · react · `Date.now()` in a Server Component render trips react-hooks/purity
+- **Symptom:** eslint `react-hooks/purity` rejected `Date.now()` for a billing "days left" even with `export const instant = false` on the route.
+- **Fix:** compute inside a module-level helper (`daysUntil(date)`) — the rule only scans the component body.
+- **Rule:** request-time values in Server Components go in module-level functions; the compiler's purity check and Cache Components' prerender check are separate gates and both apply.
+
 ### 2026-10-30 · agents · Another agent commits whatever is in the working tree
 - **Symptom:** a temporary Playwright spec used only for screenshots (`tests/e2e/zz-shot.spec.ts`) landed in another agent's commit; and a new unit test with a regex `s` flag broke `pnpm build` (TS1501, the target is below es2018) because typecheck was not rerun after the test was added.
 - **Cause:** two agents share one checkout and one of them commits every change it finds; `vitest` runs without the TypeScript target check that `pnpm typecheck` / `pnpm build` apply.

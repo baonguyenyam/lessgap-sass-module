@@ -62,8 +62,13 @@ waitlist joined, quote accepted) and mark it read.
   renewal gains "· N days left" and subscribers a "View plans" link to
   `/pricing` (plan changes go through the portal — checkout refuses a
   second subscription). `members.max` added to `FEATURES` per spec/04's
-  catalogue. Unit `plan-usage.test.ts` 3/3; typecheck, eslint, prettier,
-  `check:messages` green.)
+  catalogue. Unit `plan-usage.test.ts` 4/4 incl. en.json label coverage;
+  typecheck, eslint, prettier, `check:messages` green. Also fixed along
+  the way: stale `emails` entry in `settingsPages` (page moved to
+  `/t/<slug>/emails`), dead `dashboard.settings.emails.title|customized`
+  keys, dotted leaf names in `dashboard.emails.templates` (an INVALID_KEY
+  crash risk — nested instead), and the module-registry generator now
+  emits prettier-clean keys.)
 
 ## Findings
 - 16.1 in-app notification feed landed (`fa26063`): `MemberNotification`
