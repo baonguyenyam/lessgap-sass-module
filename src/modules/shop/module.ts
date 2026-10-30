@@ -11,6 +11,7 @@ export default defineModule({
   name: "Shop",
   version: "1.0.0",
   stage: "stable",
+  dependsOn: ["payments"],
   models: ["ProductCategory", "Product", "ProductVariant", "Cart", "CartLine", "Order", "OrderLine"],
   dashboard: { nav: [{ href: "orders", label: "Orders", icon: "package" }] },
   lifecycle: {

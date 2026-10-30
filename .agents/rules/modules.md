@@ -97,3 +97,18 @@ Design: `spec/15-module-system.md` (read it before your first module task),
 ---
 
 Based on: `spec/15-module-system.md`, the modular-monolith pattern, and the "audit before code, one implementation per capability" rules of platform.madelab.io.
+
+## Module dependencies and completeness (devo / bellav / MADE conventions)
+
+- **Enabling a module requires its `dependsOn` chain enabled** — `enableModule`
+  must check every required dependency is active for the tenant and either
+  enable the chain or refuse with `dependency` (never a partial enable). A
+  shop without `payments` cannot sell; an `ordering` without `shop` has no
+  orders to queue.
+- **A module enabled is complete** — its manifest declares every part it
+  offers, and the parts exist: a `shop` is not a storefront alone but the
+  catalog, attributes, variants, inventory, tax, discounts and checkout its
+  manifest names. `pnpm modules:check` fails a module whose declared parts
+  have no model, service or route behind them.
+- **Disabling checks the reverse** — a module nothing depends on leaves
+  cleanly; a module others `dependsOn` refuses until the dependents are off.
