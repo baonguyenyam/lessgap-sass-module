@@ -120,6 +120,9 @@ behaviour for most pages. Both are references for structure and behaviour
 only — never copy their code, and keep the kit neutral (owner's rule,
 2026-10-30, `.agents/memory/requirements.md`).
 
+- **Sidebar header in a tenant's dashboard is the tenant switcher alone** — no
+  app logo above it (owner, 2026-10-30); the admin panel and the platform
+  console keep the app logo as their header.
 - **Sidebar header is a dropdown** — the current tenant's name + icon opens a
   menu of the user's tenants (icon + name + `⌘N` shortcut each) ending in an
   "Add team" row that starts tenant creation.

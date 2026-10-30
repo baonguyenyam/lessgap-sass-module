@@ -24,7 +24,6 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { ChevronRight } from "lucide-react"
 import { siteConfig } from "@/config/site"
 import { isNavItemActive, navGroups, type NavAccess, type NavArea } from "@/components/layout/app-shell/nav"
-import { tenantPath } from "@/lib/tenant-paths"
 import { TenantSwitcher, type TenantOption } from "@/components/layout/app-shell/tenant-switcher"
 
 /**
@@ -50,26 +49,21 @@ export function AppSidebar({
   return (
     <Sidebar collapsible="icon" variant="inset">
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild size="lg">
-              <Link
-                href={
-                  area === "admin"
-                    ? "/admin"
-                    : area === "platform"
-                      ? "/platform"
-                      : tenant
-                        ? tenantPath(tenant.slug)
-                        : "/dashboard"
-                }
-              >
-                <Logo animated wordmarkClassName="group-data-[collapsible=icon]:hidden" />
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-        {area === "dashboard" && tenant && <TenantSwitcher current={tenant} tenants={tenants} />}
+        {/* In a tenant's dashboard the tenant switcher heads the sidebar; the
+            app's logo heads the admin panel and the platform console. */}
+        {area === "dashboard" && tenant ? (
+          <TenantSwitcher current={tenant} tenants={tenants} />
+        ) : (
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild size="lg">
+                <Link href={area === "admin" ? "/admin" : area === "platform" ? "/platform" : "/dashboard"}>
+                  <Logo animated wordmarkClassName="group-data-[collapsible=icon]:hidden" />
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        )}
       </SidebarHeader>
       <SidebarContent>
         {navGroups(area, access).map((group) => (
