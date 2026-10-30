@@ -61,3 +61,35 @@ export function catalogServiceSchema(m: CatalogMessages) {
   })
 }
 export type CatalogServiceInput = z.infer<ReturnType<typeof catalogServiceSchema>>
+
+export function staffSchema(m: { nameRequired: string }) {
+  return z.object({ name: z.string().trim().min(1, m.nameRequired), bio: z.string().trim().optional() })
+}
+export type StaffInput = z.infer<ReturnType<typeof staffSchema>>
+
+export function locationSchema(m: { nameRequired: string }) {
+  return z.object({ name: z.string().trim().min(1, m.nameRequired), address: z.string().trim().optional() })
+}
+export type LocationInput = z.infer<ReturnType<typeof locationSchema>>
+
+export function intakeFormSchema(m: { nameRequired: string; fieldsRequired: string }) {
+  return z.object({
+    name: z.string().trim().min(1, m.nameRequired),
+    labels: z.string().trim().min(1, m.fieldsRequired),
+  })
+}
+export type IntakeFormInput = z.infer<ReturnType<typeof intakeFormSchema>>
+
+export function packageSchema(m: { nameRequired: string; sessionsInvalid: string; priceInvalid: string }) {
+  return z.object({
+    name: z.string().trim().min(1, m.nameRequired),
+    sessions: z.number().int().positive(m.sessionsInvalid),
+    price: z.number().min(0, m.priceInvalid),
+  })
+}
+export type PackageInput = z.infer<ReturnType<typeof packageSchema>>
+
+export function membershipSchema(m: { nameRequired: string; priceInvalid: string }) {
+  return z.object({ name: z.string().trim().min(1, m.nameRequired), price: z.number().min(0, m.priceInvalid) })
+}
+export type MembershipInput = z.infer<ReturnType<typeof membershipSchema>>

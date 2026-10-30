@@ -1,6 +1,7 @@
 "use server"
 
-import { z } from "zod"
+import { getTranslations } from "next-intl/server"
+import { locationSchema } from "@/lib/schemas/tenant"
 import { db8 } from "@/lib/db8"
 import { AppError } from "@/platform/errors"
 import { audit } from "@/platform/audit"
@@ -10,8 +11,9 @@ import { requireTenantContext } from "@/platform/tenancy/require-member"
 export async function createLocation(input: { name: string; address?: string }) {
   try {
     const m = await requireTenantContext("bookings", "manage")
-    const parsed = z.object({ name: z.string().min(1), address: z.string().optional() }).safeParse(input)
-    if (!parsed.success) throw new AppError("invalid_input")
+    const t = await getTranslations("dashboard.locations.errors")
+    const parsed = locationSchema({ nameRequired: t("nameRequired") }).safeParse(input)
+    if (!parsed.success) return { error: parsed.error.issues[0].message }
     const location = await db8.orm.public.Location.create({
       tenantId: m.tenantId,
       name: parsed.data.name,

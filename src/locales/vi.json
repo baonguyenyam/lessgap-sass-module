@@ -853,7 +853,19 @@
         "add": "Thêm nhân viên",
         "remove": "Xóa"
       },
-      "empty_hint": "Thêm những người hiển thị trên website và nhận lịch hẹn."
+      "empty_hint": "Thêm những người hiển thị trên website và nhận lịch hẹn.",
+      "search": "Tìm nhân viên…",
+      "colName": "Nhân viên",
+      "colActions": "Thao tác",
+      "sample": "mẫu",
+      "addHint": "Người này sẽ hiện trong danh sách đội ngũ trên website.",
+      "removeConfirm": {
+        "title": "Xóa người này?",
+        "description": "Họ sẽ biến mất khỏi danh sách đội ngũ."
+      },
+      "errors": {
+        "nameRequired": "Cần nhập tên."
+      }
     },
     "calendar": {
       "title": "Lịch hẹn",
@@ -1016,7 +1028,13 @@
       "add_button": "Thêm",
       "adding": "Đang thêm…",
       "none_hint": "Thêm chi nhánh để gắn nhân viên và lịch hẹn vào từng nơi.",
-      "subtitle": "Những địa điểm kinh doanh của bạn"
+      "subtitle": "Những địa điểm kinh doanh của bạn",
+      "search": "Tìm địa điểm…",
+      "colName": "Địa điểm",
+      "addHint": "Địa điểm sẽ hiện khi đặt lịch.",
+      "errors": {
+        "nameRequired": "Cần nhập tên."
+      }
     },
     "intake": {
       "title": "Biểu mẫu tiếp đón",
@@ -1032,7 +1050,12 @@
       "no_responses": "Chưa có câu trả lời",
       "none_hint": "Tạo biểu mẫu để thu thập thông tin khách trước buổi hẹn.",
       "no_responses_hint": "Câu trả lời sẽ hiện ở đây khi khách điền biểu mẫu.",
-      "subtitle": "Biểu mẫu khách điền trước buổi hẹn"
+      "subtitle": "Biểu mẫu khách điền trước buổi hẹn",
+      "errors": {
+        "nameRequired": "Cần nhập tên.",
+        "fieldsRequired": "Cần ít nhất một trường."
+      },
+      "addHint": "Biểu mẫu sẽ hiện trước buổi hẹn."
     },
     "products": {
       "title": "Danh mục bán hàng",
@@ -1047,7 +1070,14 @@
       "none": "Chưa có gói hoặc thẻ thành viên",
       "per_month": "/ tháng",
       "none_hint": "Tạo gói để bán buổi hẹn hoặc thẻ thành viên.",
-      "subtitle": "Gói trả trước và thành viên bạn bán"
+      "subtitle": "Gói trả trước và thành viên bạn bán",
+      "packageHint": "Gói trả trước nhiều buổi.",
+      "membershipHint": "Thành viên theo tháng khách có thể mua.",
+      "errors": {
+        "nameRequired": "Cần nhập tên.",
+        "sessionsInvalid": "Số buổi phải dương.",
+        "priceInvalid": "Giá không được âm."
+      }
     },
     "waitlist": {
       "title": "Danh sách chờ",

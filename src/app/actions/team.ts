@@ -3,6 +3,8 @@
 import { updateTag } from "next/cache"
 import { revalidatePath } from "next/cache"
 import { db8 } from "@/lib/db8"
+import { staffSchema } from "@/lib/schemas/tenant"
+import { getTranslations } from "next-intl/server"
 import { AppError } from "@/platform/errors"
 import { requireModule } from "@/platform/modules/runtime"
 import { audit } from "@/platform/audit"
@@ -31,6 +33,10 @@ async function guard(fn: (c: TenantContext) => Promise<unknown>): Promise<{ erro
 }
 
 export async function addStaff(input: { name: string; bio?: string }) {
+  const t = await getTranslations("dashboard.team.errors")
+  const parsed = staffSchema({ nameRequired: t("nameRequired") }).safeParse(input)
+  if (!parsed.success) return { error: parsed.error.issues[0].message }
+  input = parsed.data
   return guard(async (c) => {
     if (!input.name.trim()) throw new AppError("invalid_input", { field: "name" })
     await db8.orm.public.StaffMember.create({ tenantId: c.tenantId, name: input.name.trim(), bio: input.bio || null })

@@ -853,7 +853,19 @@
         "add": "Add staff",
         "remove": "Remove"
       },
-      "empty_hint": "Add the people shown on your site and booked for appointments."
+      "empty_hint": "Add the people shown on your site and booked for appointments.",
+      "search": "Search staff…",
+      "colName": "Staff",
+      "colActions": "Actions",
+      "sample": "sample",
+      "addHint": "The person appears on your site's team list.",
+      "removeConfirm": {
+        "title": "Remove this person?",
+        "description": "They disappear from the site's team list."
+      },
+      "errors": {
+        "nameRequired": "A name is required."
+      }
     },
     "calendar": {
       "title": "Calendar",
@@ -1016,7 +1028,13 @@
       "add_button": "Add",
       "adding": "Adding…",
       "none_hint": "Add your branches so staff and appointments can be placed in one.",
-      "subtitle": "The places your business runs"
+      "subtitle": "The places your business runs",
+      "search": "Search locations…",
+      "colName": "Location",
+      "addHint": "The place appears as a booking location.",
+      "errors": {
+        "nameRequired": "A name is required."
+      }
     },
     "intake": {
       "title": "Intake forms",
@@ -1032,7 +1050,12 @@
       "no_responses": "No responses yet",
       "none_hint": "Create a form to collect details from customers before a visit.",
       "no_responses_hint": "Answers arrive here when customers fill in a form.",
-      "subtitle": "Forms customers fill before their visit"
+      "subtitle": "Forms customers fill before their visit",
+      "errors": {
+        "nameRequired": "A name is required.",
+        "fieldsRequired": "List at least one field."
+      },
+      "addHint": "The form is offered before a visit."
     },
     "products": {
       "title": "Sellable catalog",
@@ -1047,7 +1070,14 @@
       "none": "No packages or memberships yet",
       "per_month": "/ month",
       "none_hint": "Create one to sell sessions or a membership.",
-      "subtitle": "Prepaid packages and memberships you sell"
+      "subtitle": "Prepaid packages and memberships you sell",
+      "packageHint": "A prepaid bundle of sessions.",
+      "membershipHint": "A monthly membership customers can buy.",
+      "errors": {
+        "nameRequired": "A name is required.",
+        "sessionsInvalid": "Sessions must be a positive number.",
+        "priceInvalid": "Price cannot be negative."
+      }
     },
     "waitlist": {
       "title": "Waitlist",

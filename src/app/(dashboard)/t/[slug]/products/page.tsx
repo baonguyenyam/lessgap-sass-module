@@ -5,7 +5,7 @@ import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ProductForm } from "@/components/booking/product-form"
+import { ProductAddButtons, ProductDrawers } from "@/components/booking/product-drawer"
 import { EmptyState } from "@/components/layout/empty-state"
 import { Ticket } from "lucide-react"
 
@@ -27,12 +27,10 @@ export default async function ProductsPage() {
   const memberships = await db8.orm.public.Membership.where({ tenantId: c.tenantId }).all()
   return (
     <div className="space-y-6">
-      <PageHeader title={t("title")} description={t("subtitle")} />
+      <PageHeader title={t("title")} description={t("subtitle")} actions={<ProductAddButtons />} />
       <Tabs defaultValue="catalog">
         <TabsList>
           <TabsTrigger value="catalog">{t("list")}</TabsTrigger>
-          <TabsTrigger value="package">{t("add_package")}</TabsTrigger>
-          <TabsTrigger value="membership">{t("add_membership")}</TabsTrigger>
         </TabsList>
         <TabsContent value="catalog" className="mt-4">
           {packages.length === 0 && memberships.length === 0 ? (
@@ -53,20 +51,6 @@ export default async function ProductsPage() {
               </CardContent>
             </Card>
           )}
-        </TabsContent>
-        <TabsContent value="package" className="mt-4">
-          <Card>
-            <CardContent className="pt-6">
-              <ProductForm kind="package" />
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="membership" className="mt-4">
-          <Card>
-            <CardContent className="pt-6">
-              <ProductForm kind="membership" />
-            </CardContent>
-          </Card>
         </TabsContent>
       </Tabs>
     </div>

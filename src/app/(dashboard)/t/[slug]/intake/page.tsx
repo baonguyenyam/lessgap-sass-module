@@ -5,7 +5,7 @@ import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { IntakeFormForm } from "@/components/booking/intake-form-form"
+import { IntakeAddButton, IntakeFormDrawer } from "@/components/booking/intake-drawer"
 import { EmptyState } from "@/components/layout/empty-state"
 import { ClipboardList, Inbox } from "lucide-react"
 
@@ -27,15 +27,7 @@ export default async function IntakePage() {
   const byForm = new Map(forms.map((x) => [x.id, x]))
   return (
     <div className="space-y-6">
-      <PageHeader title={t("title")} description={t("subtitle")} />
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("add")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <IntakeFormForm />
-        </CardContent>
-      </Card>
+      <PageHeader title={t("title")} description={t("subtitle")} actions={<IntakeAddButton />} />
       <Tabs defaultValue="forms">
         <TabsList>
           <TabsTrigger value="forms">{t("forms")}</TabsTrigger>
@@ -75,6 +67,7 @@ export default async function IntakePage() {
           )}
         </TabsContent>
       </Tabs>
+      <IntakeFormDrawer />
     </div>
   )
 }
