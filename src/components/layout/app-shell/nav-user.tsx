@@ -1,6 +1,7 @@
 "use client"
 
 import { CreditCard, EllipsisVertical, LogOut, Settings, UserRound } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
@@ -34,16 +35,9 @@ export function NavUser({
   const initial = (label[0] ?? "?").toUpperCase()
 
   const headerTrigger = (
-    <button
-      type="button"
-      aria-label={t("account")}
-      className="flex size-8 items-center justify-center rounded-full focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-    >
-      <Avatar className="h-8 w-8 rounded-lg">
-        {image ? <AvatarImage src={image} alt="" /> : null}
-        <AvatarFallback className="rounded-lg">{initial}</AvatarFallback>
-      </Avatar>
-    </button>
+    <Button variant="ghost" size="icon" aria-label={t("account")}>
+      <UserRound size={18} />
+    </Button>
   )
   const identity = (
     <>
