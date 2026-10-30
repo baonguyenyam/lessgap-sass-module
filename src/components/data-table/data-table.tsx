@@ -271,7 +271,7 @@ export function DataTable<TData extends RowData>({
           />
         ))}
         {narrowed && (
-          <Button variant="ghost" size="sm" className="h-9" onClick={clearFilters}>
+          <Button variant="ghost" onClick={clearFilters}>
             {t("reset")}
             <X />
           </Button>
@@ -281,7 +281,7 @@ export function DataTable<TData extends RowData>({
           {hideable.length > 0 && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="h-9">
+                <Button variant="outline">
                   <Settings2 />
                   {t("view")}
                 </Button>

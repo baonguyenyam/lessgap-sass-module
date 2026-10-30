@@ -2,6 +2,12 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-30 · ui · A height override on one stock button breaks the row
+- **Symptom:** on the members page the facet pill, "View" and "Reset" stood taller than the search field and "Invite member".
+- **Cause:** those buttons were given `size="sm" className="h-9"` while inputs, selects and default buttons are the stock `h-8`.
+- **Fix:** default size everywhere in `DataTable` and `FacetFilter`; every control in the heading, toolbar and footer measures 32px.
+- **Rule:** never set `h-*` or `size-*` on a stock control to match a reference; use the stock default size, and measure a row's controls (`getBoundingClientRect().height`) before calling it aligned.
+
 ### 2026-10-28 · tests · Forwarded `set-cookie` headers: the empty delete wins
 - **Symptom:** `auth.api.switchAsStop` answered BAD_REQUEST in an integration test that rebuilt a `cookie` header from the start response's `set-cookie` list.
 - **Cause:** the start endpoint emits `session_token=` (delete) before the real `session_token=<value>`; concatenating every `name=value` left the empty one first, and the parser took it.
