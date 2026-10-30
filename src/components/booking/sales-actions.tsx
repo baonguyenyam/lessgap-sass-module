@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -21,6 +22,7 @@ export function SalesActions({
   customers: { id: string; name: string }[]
 }) {
   const t = useTranslations("dashboard.sales")
+  const router = useRouter()
   const [amount, setAmount] = useState("")
   const [email, setEmail] = useState("")
   const [pkgId, setPkgId] = useState("")
@@ -39,6 +41,7 @@ export function SalesActions({
           : await activateMembership({ membershipId: memId, customerId })
     setPending(null)
     setDone("error" in res && res.error ? `error.${res.error}` : "ok")
+    router.refresh()
   }
   return (
     <div className="space-y-6">

@@ -18,7 +18,7 @@ export default async function ManagePage({ params }: { params: Promise<{ host: s
   const { host, token } = await params
   const verified = verifyManageToken(token)
   if (!verified) notFound()
-  const resolved = await resolveHost((await headers()).get("host") ?? host)
+  const resolved = await resolveHost(host)
   if (resolved.kind !== "site") notFound()
   const t = await getTranslations("site.booking")
   const appointment = await db8.orm.public.Appointment.where({

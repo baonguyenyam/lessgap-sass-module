@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [3.4.0] - 2026-10-29
+
+**The new surfaces are e2e-covered — sales sells and lists, the manage page asks for a review, `/status` renders.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Fixed
+
+- **Sales list refresh** — `SalesActions` re-renders the cards/holdings after a sell (`router.refresh()`)
+- **Manage-page host resolution** — `resolveHost(host)` matches the sibling site pages (the path param, not the request's Host header)
+
 ## [3.3.0] - 2026-10-29
 
 **A booking can carry a gift card code or a package — the debit lands against the appointment.** This is a MINOR: `git pull`, `pnpm install`.

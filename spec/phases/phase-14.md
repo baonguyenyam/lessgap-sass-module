@@ -11,7 +11,7 @@ integration.
 
 ## Scope
 
-- Phase 14: in progress.
+- Phase 14: done.
 
 ## Tasks
 
@@ -46,7 +46,7 @@ The sales page (`/t/<slug>/sales`), the manage-page review form, and
 
 **Tests:** e2e — the three surfaces render.
 **Done when:** the specs are green.
-- [ ] done
+- [x] done (`tests/e2e/phase14.spec.ts` 3/3 — the sales page sells a card and lists it (`router.refresh()` after a sell); a completed appointment's manage page renders the review form (via `request`'s Host header — `/sites/*` is proxy-internal) and `submitReview` lands `pending`; `/status` renders the `HealthCheck` rows.)
 
 ## Exit criteria
 
