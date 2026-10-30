@@ -101,7 +101,7 @@ the relation graph.
 
 | Class | Rule | Examples |
 | --- | --- | --- |
-| Tenant-owned | `tenantId` column, `@@index([tenantId, ...])`, RLS policy, scoped client only | Service, Appointment, Product, Order, Quote, Customer, KnowledgeChunk, Media |
+| Tenant-owned | `tenantId` column, `@@index([tenantId, ...])`, RLS policy, scoped client only | Service, Appointment, Product, Order, Quote, Customer, KnowledgeChunk, Media, MemberNotification |
 | Global | no `tenantId`, readable by all, writable by platform staff only | Plan, Theme, Vertical, PlatformSwitch, FeatureDefinition |
 | Identity | owned by Better Auth | User, Session, Account, Member, Invitation |
 | Platform-private | no `tenantId`, platform staff only | AuditLog (has nullable `tenantId` for filtering), PlatformInvoice |

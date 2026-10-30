@@ -41,6 +41,18 @@ waitlist joined, quote accepted) and mark it read.
   list already covered by `ActiveSessions` on the security page.
 
 ## Findings
+- 16.1 in-app notification feed landed (`fa26063`): `MemberNotification`
+  broadcast-or-addressed rows, header bell with unread count,
+  `/t/<slug>/notifications` with All/Unread tabs + category badges +
+  item links, mark-one/mark-all read; a member's `notify.<category>.in_app`
+  pref hides its category at read.
+- Multi-section pages take Tabs (reviews, quotes, chatbot, sales, intake,
+  products, tenant detail, platform domains/usage/backups) — the
+  convention lives in ui-accessibility.md; `{count}`-carrying tab labels
+  became plain names.
+- The sidebar footer carries © {year} {site name}, hidden on icon collapse.
+- Locales stay en + vi (owner, 2026-10-30): the seven seeded locale files
+  were removed; more languages come later, deliberately.
 - A member-address book (MADE shows it on the profile) needs a `User.address`
   column — flagged, not built: a schema change for one display field is the
   owner's call, not an unprompted add.
