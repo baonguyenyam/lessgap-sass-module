@@ -984,9 +984,11 @@
       "subtitle": "Your site's page views",
       "views_14d": "Views (14d)",
       "paths_tracked": "Paths tracked",
-      "top_paths": "Top {count} paths",
       "empty": "No views yet",
-      "empty_hint": "The count starts with the next visit to your site."
+      "empty_hint": "The count starts with the next visit to your site.",
+      "search": "Search paths…",
+      "colPath": "Path",
+      "colViews": "Views"
     },
     "reviews": {
       "title": "Reviews",

@@ -984,9 +984,11 @@
       "subtitle": "Lượt xem trang của site",
       "views_14d": "Lượt xem (14 ngày)",
       "paths_tracked": "Đường dẫn theo dõi",
-      "top_paths": "Top {count} đường dẫn",
       "empty": "Chưa có lượt xem",
-      "empty_hint": "Số liệu bắt đầu từ lượt truy cập tiếp theo vào website."
+      "empty_hint": "Số liệu bắt đầu từ lượt truy cập tiếp theo vào website.",
+      "search": "Tìm đường dẫn…",
+      "colPath": "Đường dẫn",
+      "colViews": "Lượt xem"
     },
     "reviews": {
       "title": "Đánh giá",

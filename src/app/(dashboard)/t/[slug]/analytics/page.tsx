@@ -4,8 +4,9 @@ import { db8 } from "@/lib/db8"
 import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { EmptyState } from "@/components/layout/empty-state"
-import { BarChart3 } from "lucide-react"
+import { TopPathsTable, type PathRow } from "@/components/analytics/top-paths-table"
+import { parseTableQuery, type TableQuerySpec } from "@/lib/table-query"
+import { getViewerSettings } from "@/platform/settings/tenant-store"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -13,13 +14,24 @@ export const instant = false
 
 /** Dashboard → Analytics (task 8.7): the tenant's site page views —
  * top paths and the last 14 days' total. */
-export default async function AnalyticsPage() {
+export default async function AnalyticsPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}) {
   const c = await requireTenantContext("settings", "manage")
   await requireModule(
     { tenantId: c.tenantId, actor: { kind: "member", userId: c.user.id, role: c.member.role } },
     "analytics"
   )
   const t = await getTranslations("dashboard.analytics")
+  const settings = await getViewerSettings()
+  const spec: TableQuerySpec = {
+    sortable: ["views", "path"],
+    defaultDir: "desc",
+    defaultPageSize: settings["display.page_size"],
+  }
+  const query = parseTableQuery(await searchParams, spec)
   const views = await db8.orm.public.SitePageView.where({ tenantId: c.tenantId })
     .orderBy((x) => x.count.desc())
     .all()
@@ -58,23 +70,21 @@ export default async function AnalyticsPage() {
           </CardContent>
         </Card>
       </div>
-      {top.length === 0 ? (
-        <EmptyState icon={BarChart3} title={t("empty")} description={t("empty_hint")} />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("top_paths", { count: top.length })}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-1">
-            {top.map(([path, count]) => (
-              <div key={path} className="flex items-center justify-between text-sm">
-                <span>{path}</span>
-                <span className="text-muted-foreground">{count}</span>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+      {(() => {
+        let rows: PathRow[] = top.map(([path, count]) => ({ path, views: count }))
+        if (query.q) {
+          const q = query.q.toLowerCase()
+          rows = rows.filter((r) => r.path.toLowerCase().includes(q))
+        }
+        rows.sort((a, b) => {
+          const dir = query.dir === "asc" ? 1 : -1
+          if (query.sort === "path") return dir * a.path.localeCompare(b.path)
+          return dir * (b.views - a.views)
+        })
+        const total = rows.length
+        rows = rows.slice((query.page - 1) * query.pageSize, query.page * query.pageSize)
+        return <TopPathsTable rows={rows} total={total} query={query} />
+      })()}
     </div>
   )
 }
