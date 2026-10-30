@@ -22,7 +22,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <AppShell
       area="admin"
       user={{ name: user.name, email: user.email, image: user.image }}
-      showAdmin
+      access={{ showAdmin: true }}
       breadcrumbs={{
         icon: <Shield className="h-4 w-4" />,
         base: { name: t("badge"), href: "/admin" },

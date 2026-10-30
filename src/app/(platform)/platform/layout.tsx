@@ -21,7 +21,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
     <AppShell
       area="platform"
       user={{ name: user.name, email: user.email, image: user.image }}
-      showAdmin={false}
+      access={{ showAdmin: false }}
       breadcrumbs={{
         icon: <Building2 className="h-4 w-4" />,
         base: { name: t("badge"), href: "/platform" },

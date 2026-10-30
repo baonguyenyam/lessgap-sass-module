@@ -11,6 +11,8 @@ import { isModuleActive } from "@/platform/modules/runtime"
 import { getEntitlements } from "@/platform/entitlements"
 import { TENANT_SLUG_HEADER } from "@/platform/request-context"
 import { ensureTenant, getMembership, listMemberTenants } from "@/platform/tenancy/require-member"
+import { grantedPermissions } from "@/platform/tenancy/permissions"
+import { hasPlatformRole } from "@/platform/staff"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -48,6 +50,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     "payments",
     "chatbot",
     "analytics",
+    "ordering",
   ]
   if (current) {
     for (const key of navModuleKeys) {
@@ -56,6 +59,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
       }
     }
   }
+
+  // The member's permissions in this tenant (one read for a custom role): the
+  // menu shows only the pages that would let them in. Not a member (a slug
+  // the proxy will 404) → nothing beyond the ungated entries.
+  const role =
+    current && existing.organizationId === current.id && existing.status !== "suspended" ? existing.role : null
+  const permissions = current && role ? await grantedPermissions(current.id, role) : []
 
   const pastDueUntil = current?.status === "PAST_DUE" && current.graceUntil ? toDate(current.graceUntil) : null
 
@@ -69,11 +79,15 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <AppShell
         area="dashboard"
         user={{ name: user.name, email: user.email, image: user.image }}
-        showAdmin={isRoot(user.role)}
+        access={{
+          showAdmin: isRoot(user.role),
+          showPlatform: await hasPlatformRole(user.id),
+          customRoles: entitlements.has("roles.custom"),
+          enabledModules: [...enabledModules],
+          permissions,
+        }}
         tenant={tenant}
         tenants={tenants.map(({ slug, name }) => ({ slug, name }))}
-        customRoles={entitlements.has("roles.custom")}
-        enabledModules={enabledModules}
         breadcrumbs={{
           icon: <LayoutGrid className="h-4 w-4" />,
           base: { name: tNav("dashboard"), href: tenantPath(slug) },

@@ -211,3 +211,18 @@ export async function memberCan<R extends TenantResource>(
   const permission = row?.permission as Record<string, string[]> | null | undefined
   return permission?.[resource]?.includes(verb) ?? false
 }
+
+/**
+ * Every permission `roleKey` holds in the tenant, as `<resource>.<verb>`:
+ * what the dashboard menu shows (one read for a custom role, none for a
+ * built-in one). The same answers `memberCan` gives, asked all at once.
+ */
+export async function grantedPermissions(organizationId: string, roleKey: string): Promise<TenantPermission[]> {
+  if (ROLE_PERMISSIONS[roleKey]) return roleGrants(roleKey)
+  const row = await db8.orm.public.OrganizationRole.where({ organizationId, role: roleKey }).first()
+  const permission = (row?.permission ?? {}) as Record<string, string[]>
+  return DECLARED_PERMISSIONS.filter((key) => {
+    const [resource, verb] = key.split(".")
+    return permission[resource]?.includes(verb) ?? false
+  })
+}

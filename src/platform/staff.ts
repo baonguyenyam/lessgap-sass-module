@@ -16,6 +16,12 @@ import type { PlatformRole } from "@/platform/tenancy/context"
  * dashboard, the way a non-ROOT is sent away from `/admin`; staff without
  * 2FA is sent to their security settings to set it up instead (O8).
  */
+/** Whether `userId` holds a platform role: the dashboard menu then links the console. */
+export async function hasPlatformRole(userId: string): Promise<boolean> {
+  const row = await db8.orm.public.User.select("platformRole").where({ id: userId }).first()
+  return Boolean(row?.platformRole)
+}
+
 export async function requirePlatformRole(): Promise<{ user: CurrentUser; platformRole: PlatformRole }> {
   const user = await requireUser()
   const row = await db8.orm.public.User.select("platformRole", "twoFactorEnabled").where({ id: user.id }).first()

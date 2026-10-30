@@ -43,12 +43,7 @@ export async function AppShell({
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
-      <AppSidebar
-        area={area}
-        access={nav}
-        tenant={tenant}
-        tenants={tenants}
-      />
+      <AppSidebar area={area} access={nav} tenant={tenant} tenants={tenants} />
       {/* min-w-0: a wide table scrolls inside its card instead of widening the page.
           md:border: the UI has no shadows, so the border sets the page apart from the sidebar.
           md:overflow-clip: rounds the sticky header's corners too; clip, not hidden, so sticky still works. */}
