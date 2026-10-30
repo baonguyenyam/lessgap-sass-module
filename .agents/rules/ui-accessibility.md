@@ -35,7 +35,8 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
   with a centered icon in a muted circle, bold centered title, muted centered
   description, and the next step when there is one. Its `tone` says what it
   means, on StatusBadge's scale (owner, 2026-10-30): `neutral` (the default,
-  a light grey box) for "nothing here yet"; `danger` (red) for an error or a
+  a light grey box whose icon circle is white, or black in dark mode, with no
+  ring, never grey on grey) for "nothing here yet"; `danger` (red) for an error or a
   failure; `success` (green) for done or in order ("up to date", "no drift");
   `info` (blue) for a fact; `warning` (orange) for something to set up or fix
   ("backups not configured"). The title is short with no

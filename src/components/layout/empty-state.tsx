@@ -11,8 +11,10 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTi
 export type EmptyTone = "neutral" | "danger" | "success" | "info" | "warning"
 
 const TONES: Record<EmptyTone, { box: string; media: string; title: string }> = {
+  // A grey box with the icon on the page colour (white, or black in dark mode),
+  // so the circle never blends into the box; no ring (owner, 2026-10-30).
   neutral: {
-    box: "border-border bg-muted/40 dark:bg-muted/20",
+    box: "border-border bg-muted dark:bg-muted/40",
     media: "bg-background text-muted-foreground",
     title: "",
   },
