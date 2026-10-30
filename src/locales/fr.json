@@ -1762,7 +1762,8 @@
     "signup": {
       "title": "Get the starter kit",
       "cta": "Get started",
-      "disabledNote": "Sign-up is disabled on this deployment."
+      "disabledNote": "Sign-up is disabled on this deployment.",
+      "sent": "Check your inbox."
     }
   },
   "about": {

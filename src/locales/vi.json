@@ -1762,7 +1762,8 @@
     "signup": {
       "title": "Dùng bộ khởi đầu",
       "cta": "Bắt đầu",
-      "disabledNote": "Đăng ký đã tắt trên deployment này."
+      "disabledNote": "Đăng ký đã tắt trên deployment này.",
+      "sent": "Kiểm tra hộp thư của bạn."
     }
   },
   "about": {
