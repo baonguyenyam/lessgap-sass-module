@@ -56,7 +56,7 @@ export async function AppShell({
             <SearchDialog area={area} access={nav} />
             <LanguageSwitcher locales={APP_LOCALES} />
             <ThemeToggle />
-            <NavUser {...user} />
+            <NavUser {...user} variant="header" />
           </div>
         </header>
         <main className="min-w-0 flex-1 p-4 md:p-6">

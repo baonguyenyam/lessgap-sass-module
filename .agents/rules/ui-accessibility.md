@@ -111,8 +111,10 @@ only — never copy their code, and keep the kit neutral (owner's rule,
   "Secured by Clerk" opens Sign In / Sign Up / User Management. Group items
   under a parent when they belong to the same domain rather than adding a flat
   sibling.
-- **Top-right chrome, in order** — theme toggle (sun/moon), the language
-  switcher, a settings or config button, then the account dropdown: avatar initials open a menu with
+- **Top-right chrome is a row of icon buttons** — search, language, theme,
+  account: all the same ghost icon button, no text and no field (owner,
+  2026-10-30). Search opens the command modal (click or ⌘K / Ctrl+K, shown
+  in its tooltip); account opens the dropdown below it: avatar initials open a menu with
   the user's name + email, Profile, Billing, Settings, "New team", and a red
   Sign out — each with its keyboard shortcut shown right-aligned.
 - **Account and settings pages share one layout** (platform.madelab.io's

@@ -15,6 +15,7 @@ import {
   CommandList,
 } from "@/components/ui/command"
 import { Kbd } from "@/components/ui/kbd"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { flatNavItems, navGroups, type NavAccess, type NavArea } from "@/components/layout/app-shell/nav"
 
 /** Go to any page of the area by name: the header search, opened with Cmd/Ctrl+K (from Studio Admin). */
@@ -37,19 +38,25 @@ export function SearchDialog({ area, access }: { area: NavArea; access: NavAcces
 
   return (
     <>
-      <Button
-        variant="outline"
-        className="size-8 justify-center px-0 text-muted-foreground sm:w-56 sm:justify-start sm:gap-2 sm:px-2"
-        onClick={() => setOpen(true)}
-      >
-        <Search />
-        <span className="sr-only sm:not-sr-only sm:flex-1 sm:text-left">{t("button")}</span>
-        {/* Decorative hint: kept out of the accessible name, which is the
-            button text — label-content-name-mismatch. */}
-        <Kbd className="hidden sm:inline-flex" aria-hidden="true">
-          ⌘K
-        </Kbd>
-      </Button>
+      {/* An icon like its neighbours (language, theme, account); the dialog
+          opens on click or Cmd/Ctrl+K, which the tooltip shows. */}
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={t("button")}
+            aria-keyshortcuts="Meta+K Control+K"
+            onClick={() => setOpen(true)}
+          >
+            <Search size={18} />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent className="flex items-center gap-2">
+          {t("button")}
+          <Kbd aria-hidden="true">⌘K</Kbd>
+        </TooltipContent>
+      </Tooltip>
       <CommandDialog open={open} onOpenChange={setOpen} title={t("title")} description={t("description")}>
         <Command>
           <CommandInput placeholder={t("placeholder")} />
