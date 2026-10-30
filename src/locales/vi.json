@@ -1059,6 +1059,12 @@
         "product_updates": "Cập nhật sản phẩm",
         "tips": "Mẹo"
       }
+    },
+    "upgrade": {
+      "title": "Nâng cấp gói",
+      "subtitle": "Tính năng này cần gói cao hơn.",
+      "featureNeeded": "Tính năng mà gói của bạn thiếu",
+      "noPlans": "Chưa có gói nào — hỏi nhân viên platform."
     }
   },
   "platform": {

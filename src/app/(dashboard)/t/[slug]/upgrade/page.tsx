@@ -49,7 +49,7 @@ export default async function UpgradeRequiredPage({
                 <span className="text-sm font-medium">
                   {(plan.price / 100).toFixed(2)} / {plan.interval}
                 </span>
-                <UpgradeButton planId={plan.id} />
+                {plan.stripePriceId && <UpgradeButton priceId={plan.stripePriceId} />}
               </CardContent>
             </Card>
           ))}

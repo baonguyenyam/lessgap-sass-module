@@ -1059,6 +1059,12 @@
         "product_updates": "Product updates",
         "tips": "Tips"
       }
+    },
+    "upgrade": {
+      "title": "Upgrade your plan",
+      "subtitle": "This feature needs a higher plan.",
+      "featureNeeded": "The feature your plan lacks",
+      "noPlans": "No plan offers this yet — ask platform staff."
     }
   },
   "platform": {
