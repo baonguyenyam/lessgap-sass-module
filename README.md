@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <a href="./ROADMAP.md"><img alt="Version" src="https://img.shields.io/badge/version-2.5.0-6366f1.svg" /></a>
+  <a href="./ROADMAP.md"><img alt="Version" src="https://img.shields.io/badge/version-3.7.1-6366f1.svg" /></a>
   <a href="./LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
   <a href="https://github.com/baonguyenyam/lessgap-sass-module/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/baonguyenyam/lessgap-sass-module/actions/workflows/ci.yml/badge.svg" /></a>
 </p>
@@ -16,7 +16,7 @@
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" />
   <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_v4-06B6D4?logo=tailwindcss&logoColor=white" />
   <img alt="Better Auth" src="https://img.shields.io/badge/Better_Auth-000000?logo=betterauth&logoColor=white" />
-  <img alt="Prisma" src="https://img.shields.io/badge/Prisma_7-2D3748?logo=prisma&logoColor=white" />
+  <img alt="Prisma" src="https://img.shields.io/badge/Prisma_8-2D3748?logo=prisma&logoColor=white" />
   <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white" />
   <img alt="Stripe" src="https://img.shields.io/badge/Stripe-635BFF?logo=stripe&logoColor=white" />
   <img alt="Resend" src="https://img.shields.io/badge/Resend-000000?logo=resend&logoColor=white" />
@@ -194,13 +194,13 @@ Set all environment variables in the Vercel dashboard. For Stripe webhooks in pr
 
 ### Make yourself Admin
 
-After signing in for the first time, run:
+After signing in for the first time, set your user's `role` to `ADMIN` — the demo seed ships one ready-made:
 
 ```bash
-pnpm prisma studio
+pnpm db:seed:demo   # demo admin + demo tenants
 ```
 
-Find your user in the `User` table and set `role` to `ADMIN`. You'll then see the Admin Panel shortcut in your dashboard.
+or update your row directly: `UPDATE "User" SET "role" = 'ADMIN' WHERE "email" = 'you@example.com'`. You'll then see the Admin Panel shortcut in your dashboard.
 
 ---
 
