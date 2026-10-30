@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server"
+import { PageHeader } from "@/components/layout/page-header"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { requireModule } from "@/platform/modules/runtime"
@@ -25,10 +26,7 @@ export default async function ReservationsPage() {
     .all()
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
-      </div>
+      <PageHeader title={t("title")} description={t("subtitle")} />
       {reservations.length === 0 ? (
         <EmptyState icon={Utensils} title={t("empty")} description={t("empty_hint")} />
       ) : (

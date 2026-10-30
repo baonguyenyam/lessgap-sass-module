@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server"
+import { PageHeader } from "@/components/layout/page-header"
 import { db8 } from "@/lib/db8"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { templates, templateKeys, templateLocales } from "@/emails/templates"
@@ -33,7 +34,7 @@ export default async function EmailSettingsPage() {
   )
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-semibold">{t("title")}</h1>
+      <PageHeader title={t("title")} />
       {rows.map((row) => (
         <Card key={`${row.key}-${row.locale}`}>
           <CardHeader>

@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server"
+import { PageHeader } from "@/components/layout/page-header"
 import { db8 } from "@/lib/db8"
 import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
@@ -28,11 +29,11 @@ export default async function CatalogPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
-      </div>
-      <CatalogActions addService categories={categories.map((x) => ({ id: x.id, name: x.name }))} />
+      <PageHeader
+        title={t("title")}
+        description={t("subtitle")}
+        actions={<CatalogActions addService categories={categories.map((x) => ({ id: x.id, name: x.name }))} />}
+      />
       {categories.length === 0 && services.length === 0 && (
         <EmptyState icon={List} title={t("empty")} description={t("empty_hint")} />
       )}
@@ -72,18 +73,29 @@ export default async function CatalogPage() {
           </Card>
         )
       })}
-      {services
-        .filter((s) => !s.categoryId)
-        .map((s) => (
-          <Card key={s.id}>
-            <CardContent className="flex items-center justify-between pt-4">
-              <p className="font-medium">{s.name}</p>
-              <p className="text-sm text-muted-foreground">
-                {s.durationMinutes} min · {formatPrice(s.priceCents, s.currency)}
-              </p>
+      {(() => {
+        const uncategorized = services.filter((s) => !s.categoryId)
+        return uncategorized.length > 0 ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("uncategorized")}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {uncategorized.map((s) => (
+                <div key={s.id} className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium">{s.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {s.durationMinutes} min · {formatPrice(s.priceCents, s.currency)}
+                    </p>
+                  </div>
+                  <CatalogActions remove serviceId={s.id} />
+                </div>
+              ))}
             </CardContent>
           </Card>
-        ))}
+        ) : null
+      })()}
     </div>
   )
 }

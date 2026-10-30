@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server"
+import { PageHeader } from "@/components/layout/page-header"
 import { db8 } from "@/lib/db8"
 import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
@@ -23,7 +24,7 @@ export default async function LocationsPage() {
   const locations = await db8.orm.public.Location.where({ tenantId: c.tenantId }).all()
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-semibold">{t("title")}</h1>
+      <PageHeader title={t("title")} description={t("subtitle")} />
       <Card>
         <CardHeader>
           <CardTitle>{t("add")}</CardTitle>

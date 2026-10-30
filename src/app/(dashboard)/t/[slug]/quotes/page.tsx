@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server"
+import { PageHeader } from "@/components/layout/page-header"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { requireModule } from "@/platform/modules/runtime"
@@ -33,10 +34,7 @@ export default async function QuotesPage() {
   ])
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
-      </div>
+      <PageHeader title={t("title")} description={t("subtitle")} />
       <Tabs defaultValue="requests">
         <TabsList>
           <TabsTrigger value="requests">{t("requests")}</TabsTrigger>

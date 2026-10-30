@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server"
+import { PageHeader } from "@/components/layout/page-header"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { requireModule } from "@/platform/modules/runtime"
@@ -43,12 +44,12 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
-        <BookingLiveUpdates tenantId={c.tenantId} />
-      </div>
-      <AppointmentActions staff={staff.map((s) => ({ id: s.id, name: s.name }))} />
+      <PageHeader
+        title={t("title")}
+        description={t("subtitle")}
+        actions={<AppointmentActions staff={staff.map((s) => ({ id: s.id, name: s.name }))} />}
+      />
+      <BookingLiveUpdates tenantId={c.tenantId} />
       {byDay.size === 0 ? (
         <EmptyState icon={CalendarDays} title={t("empty")} description={t("empty_hint")} />
       ) : (

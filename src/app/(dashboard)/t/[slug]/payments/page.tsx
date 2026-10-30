@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server"
+import { PageHeader } from "@/components/layout/page-header"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { requireModule } from "@/platform/modules/runtime"
@@ -33,10 +34,7 @@ export default async function PaymentsPage() {
   for (const r of refunds) refundByPayment.set(r.paymentId, (refundByPayment.get(r.paymentId) ?? 0) + r.amountCents)
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
-      </div>
+      <PageHeader title={t("title")} description={t("subtitle")} />
       {payments.length === 0 ? (
         <EmptyState icon={CreditCard} title={t("empty")} description={t("empty_hint")} />
       ) : (

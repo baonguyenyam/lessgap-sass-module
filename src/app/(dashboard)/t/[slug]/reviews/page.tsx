@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server"
+import { PageHeader } from "@/components/layout/page-header"
 import { db8 } from "@/lib/db8"
 import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
@@ -35,7 +36,7 @@ export default async function ReviewsPage() {
   const rest = reviews.filter((r) => r.status !== "pending")
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-semibold">{t("title")}</h1>
+      <PageHeader title={t("title")} description={t("subtitle")} />
       <Tabs defaultValue="pending">
         <TabsList>
           <TabsTrigger value="pending">{t("pending")}</TabsTrigger>

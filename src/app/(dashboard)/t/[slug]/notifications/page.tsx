@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/layout/page-header"
 import { and } from "@prisma/orm-postgres/orm-client"
 import { getTranslations, getFormatter } from "next-intl/server"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
@@ -66,10 +67,10 @@ export default async function NotificationsFeedPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <NotificationList.MarkAll tenantId={ctx.tenantId} disabled={unread.length === 0} />
-      </div>
+      <PageHeader
+        title={t("title")}
+        actions={<NotificationList.MarkAll tenantId={ctx.tenantId} disabled={unread.length === 0} />}
+      />
       <Tabs defaultValue="all">
         <TabsList>
           <TabsTrigger value="all">{t("all")}</TabsTrigger>

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 import { getFormatter, getTranslations } from "next-intl/server"
+import { PageHeader } from "@/components/layout/page-header"
 import { and } from "@prisma/orm-postgres/orm-client"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
@@ -173,10 +174,7 @@ export default async function BillingPage({
   return (
     <div className="space-y-6">
       <CheckoutStatusToast />
-      <div>
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
-      </div>
+      <PageHeader title={t("title")} description={t("subtitle")} />
 
       <Card>
         <CardHeader>

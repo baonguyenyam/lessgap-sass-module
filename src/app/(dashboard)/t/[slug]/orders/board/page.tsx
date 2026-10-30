@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server"
+import { PageHeader } from "@/components/layout/page-header"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { requireModule } from "@/platform/modules/runtime"
@@ -26,10 +27,7 @@ export default async function OrderBoardPage() {
   const columns = ["received", "preparing", "ready", "done"]
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">{t("board_title")}</h1>
-        <p className="text-muted-foreground">{t("board_subtitle")}</p>
-      </div>
+      <PageHeader title={t("board_title")} description={t("board_subtitle")} />
       <div className="grid gap-4 md:grid-cols-4">
         {columns.map((status) => (
           <Card key={status}>

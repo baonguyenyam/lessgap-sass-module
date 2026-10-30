@@ -144,8 +144,6 @@
       "upsellCta": "Xem các gói"
     },
     "settings": {
-      "title": "Cài đặt",
-      "subtitle": "Không gian làm việc, website, các module và cách ứng dụng hoạt động.",
       "profileTitle": "Hồ sơ",
       "profileDescription": "Cập nhật tên hiển thị và xem chi tiết tài khoản.",
       "methodsTitle": "Phương thức đăng nhập",
@@ -823,7 +821,9 @@
         "remove": "Xóa"
       },
       "empty": "Chưa có mục nào trong danh mục",
-      "empty_hint": "Thêm dịch vụ và nhóm dịch vụ mà website của bạn cung cấp."
+      "empty_hint": "Thêm dịch vụ và nhóm dịch vụ mà website của bạn cung cấp.",
+      "category": "Nhóm",
+      "uncategorized": "Chưa phân nhóm"
     },
     "team": {
       "title": "Nhân viên",
@@ -959,7 +959,8 @@
       "waitlist_booked": "đã đặt",
       "waitlist_canceled": "đã hủy",
       "none_pending_hint": "Đánh giá khách để lại sau buổi hẹn sẽ chờ duyệt ở đây.",
-      "none_waiting_hint": "Khách đăng ký chờ cho ngày đã kín lịch sẽ hiện ở đây."
+      "none_waiting_hint": "Khách đăng ký chờ cho ngày đã kín lịch sẽ hiện ở đây.",
+      "subtitle": "Khách nhận xét gì sau buổi hẹn"
     },
     "sales": {
       "title": "Bán hàng",
@@ -984,7 +985,8 @@
       "active": "đang dùng",
       "inactive": "ngừng",
       "no_cards_hint": "Phát hành thẻ để bán số dư khách có thể dùng sau.",
-      "no_holdings_hint": "Gói và thẻ thành viên khách đã mua được theo dõi ở đây."
+      "no_holdings_hint": "Gói và thẻ thành viên khách đã mua được theo dõi ở đây.",
+      "subtitle": "Thẻ quà tặng, gói và thành viên"
     },
     "locations": {
       "title": "Địa điểm",
@@ -995,7 +997,8 @@
       "address": "Địa chỉ",
       "add_button": "Thêm",
       "adding": "Đang thêm…",
-      "none_hint": "Thêm chi nhánh để gắn nhân viên và lịch hẹn vào từng nơi."
+      "none_hint": "Thêm chi nhánh để gắn nhân viên và lịch hẹn vào từng nơi.",
+      "subtitle": "Những địa điểm kinh doanh của bạn"
     },
     "intake": {
       "title": "Biểu mẫu tiếp đón",
@@ -1010,7 +1013,8 @@
       "responses": "Phản hồi",
       "no_responses": "Chưa có câu trả lời",
       "none_hint": "Tạo biểu mẫu để thu thập thông tin khách trước buổi hẹn.",
-      "no_responses_hint": "Câu trả lời sẽ hiện ở đây khi khách điền biểu mẫu."
+      "no_responses_hint": "Câu trả lời sẽ hiện ở đây khi khách điền biểu mẫu.",
+      "subtitle": "Biểu mẫu khách điền trước buổi hẹn"
     },
     "products": {
       "title": "Danh mục bán hàng",
@@ -1024,7 +1028,8 @@
       "list": "Danh mục của bạn",
       "none": "Chưa có gói hoặc thẻ thành viên",
       "per_month": "/ tháng",
-      "none_hint": "Tạo gói để bán buổi hẹn hoặc thẻ thành viên."
+      "none_hint": "Tạo gói để bán buổi hẹn hoặc thẻ thành viên.",
+      "subtitle": "Gói trả trước và thành viên bạn bán"
     },
     "waitlist": {
       "title": "Danh sách chờ",
@@ -1038,7 +1043,8 @@
         "booked": "Đã đặt",
         "canceled": "Đã huỷ"
       },
-      "none_hint": "Khách đăng ký chờ cho ngày đã kín lịch sẽ hiện ở đây."
+      "none_hint": "Khách đăng ký chờ cho ngày đã kín lịch sẽ hiện ở đây.",
+      "subtitle": "Khách chờ cho ngày đã kín lịch"
     },
     "notifications": {
       "title": "Thông báo",

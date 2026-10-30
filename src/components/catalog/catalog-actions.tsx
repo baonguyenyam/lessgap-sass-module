@@ -5,11 +5,13 @@ import { useTranslations } from "next-intl"
 import { addCategory, addService, deleteService } from "@/app/actions/catalog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { OptionSelect } from "@/components/form/option-select"
 
 /** The catalog add/remove actions (task 4.2): `addService` renders the add
  * form (name + optional category); `remove` renders a delete button. */
 export function CatalogActions({
   addService: addServiceFlag,
+  categories = [],
   serviceId,
 }: {
   addService?: boolean
@@ -22,6 +24,7 @@ export function CatalogActions({
   const [name, setName] = useState("")
   const [duration, setDuration] = useState("60")
   const [price, setPrice] = useState("0")
+  const [categoryId, setCategoryId] = useState("")
   const [error, setError] = useState<string | null>(null)
 
   const run = (fn: () => Promise<{ error?: string }>) =>
@@ -54,12 +57,30 @@ export function CatalogActions({
           onChange={(e) => setPrice(e.target.value)}
           className="w-28"
         />
+        {categories.length > 0 && (
+          <OptionSelect
+            aria-label={t("category")}
+            value={categoryId}
+            onValueChange={setCategoryId}
+            className="w-40"
+            placeholder={t("category")}
+            options={[
+              { value: "none", label: t("category") },
+              ...categories.map((c) => ({ value: c.id, label: c.name })),
+            ]}
+          />
+        )}
         <Button
           size="sm"
           disabled={pending || !name.trim()}
           onClick={() =>
             run(() =>
-              addService({ name, durationMinutes: Number(duration), priceCents: Math.round(Number(price) * 100) })
+              addService({
+                name,
+                durationMinutes: Number(duration),
+                priceCents: Math.round(Number(price) * 100),
+                categoryId: categoryId === "none" || !categoryId ? undefined : categoryId,
+              })
             )
           }
         >

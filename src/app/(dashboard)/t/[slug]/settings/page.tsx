@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server"
+import { PageHeader } from "@/components/layout/page-header"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { TenantGeneralForm } from "@/components/settings/tenant-general-form"
 import { memberCan } from "@/platform/tenancy/permissions"
@@ -15,14 +16,17 @@ export default async function GeneralSettingsPage() {
   const canManage = await memberCan(ctx.tenantId, ctx.member.role, "settings", "manage")
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t("generalTitle")}</CardTitle>
-        <CardDescription>{t("generalDescription")}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <TenantGeneralForm name={ctx.tenant.name} slug={ctx.tenant.slug} canManage={canManage} />
-      </CardContent>
-    </Card>
+    <div className="space-y-6">
+      <PageHeader title={t("generalTitle")} description={t("generalDescription")} />
+      <Card>
+        <CardHeader>
+          <CardTitle>{t("generalTitle")}</CardTitle>
+          <CardDescription>{t("generalDescription")}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <TenantGeneralForm name={ctx.tenant.name} slug={ctx.tenant.slug} canManage={canManage} />
+        </CardContent>
+      </Card>
+    </div>
   )
 }

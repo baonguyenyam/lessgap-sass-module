@@ -144,8 +144,6 @@
       "upsellCta": "See plans"
     },
     "settings": {
-      "title": "Settings",
-      "subtitle": "Your workspace, its site, its modules and how the app behaves.",
       "profileTitle": "Profile",
       "profileDescription": "Update your display name and view account details.",
       "methodsTitle": "Sign-in methods",
@@ -823,7 +821,9 @@
         "remove": "Remove"
       },
       "empty": "No catalog items yet",
-      "empty_hint": "Add the services and categories your site offers."
+      "empty_hint": "Add the services and categories your site offers.",
+      "category": "Category",
+      "uncategorized": "Uncategorized"
     },
     "team": {
       "title": "Team",
@@ -959,7 +959,8 @@
       "waitlist_booked": "booked",
       "waitlist_canceled": "canceled",
       "none_pending_hint": "Reviews customers leave after a visit wait here for approval.",
-      "none_waiting_hint": "Customers who join the waitlist for a full day appear here."
+      "none_waiting_hint": "Customers who join the waitlist for a full day appear here.",
+      "subtitle": "What customers say after a visit"
     },
     "sales": {
       "title": "Sales",
@@ -984,7 +985,8 @@
       "active": "active",
       "inactive": "inactive",
       "no_cards_hint": "Issue one to sell credit customers can spend later.",
-      "no_holdings_hint": "Packages and memberships customers buy are tracked here."
+      "no_holdings_hint": "Packages and memberships customers buy are tracked here.",
+      "subtitle": "Gift cards, packages and memberships"
     },
     "locations": {
       "title": "Locations",
@@ -995,7 +997,8 @@
       "address": "Address",
       "add_button": "Add",
       "adding": "Adding…",
-      "none_hint": "Add your branches so staff and appointments can be placed in one."
+      "none_hint": "Add your branches so staff and appointments can be placed in one.",
+      "subtitle": "The places your business runs"
     },
     "intake": {
       "title": "Intake forms",
@@ -1010,7 +1013,8 @@
       "responses": "Responses",
       "no_responses": "No responses yet",
       "none_hint": "Create a form to collect details from customers before a visit.",
-      "no_responses_hint": "Answers arrive here when customers fill in a form."
+      "no_responses_hint": "Answers arrive here when customers fill in a form.",
+      "subtitle": "Forms customers fill before their visit"
     },
     "products": {
       "title": "Sellable catalog",
@@ -1024,7 +1028,8 @@
       "list": "Your catalog",
       "none": "No packages or memberships yet",
       "per_month": "/ month",
-      "none_hint": "Create one to sell sessions or a membership."
+      "none_hint": "Create one to sell sessions or a membership.",
+      "subtitle": "Prepaid packages and memberships you sell"
     },
     "waitlist": {
       "title": "Waitlist",
@@ -1038,7 +1043,8 @@
         "booked": "Booked",
         "canceled": "Canceled"
       },
-      "none_hint": "Customers who join the waitlist for a full day appear here."
+      "none_hint": "Customers who join the waitlist for a full day appear here.",
+      "subtitle": "Customers waiting for a fully booked day"
     },
     "notifications": {
       "title": "Notifications",

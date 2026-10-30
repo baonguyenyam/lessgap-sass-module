@@ -13,7 +13,7 @@ export const instant = false
  * CTA — never a bare 403. */
 export default async function UpgradeRequiredPage({ searchParams }: { searchParams: Promise<{ feature?: string }> }) {
   const { feature } = await searchParams
-  const ctx = await requireTenantContext()
+  await requireTenantContext()
   const t = await getTranslations("dashboard.upgrade")
   const featureKey = feature && feature in FEATURES ? feature : null
   const plans = await db8.orm.public.Plan.where({ isActive: true, visibility: "PUBLIC" }).all()

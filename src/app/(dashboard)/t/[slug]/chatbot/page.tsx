@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server"
+import { PageHeader } from "@/components/layout/page-header"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { requireModule } from "@/platform/modules/runtime"
@@ -37,13 +38,7 @@ export default async function ChatbotPage() {
       : {}
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">{t("title")}</h1>
-          <p className="text-muted-foreground">{t("subtitle")}</p>
-        </div>
-        <ReindexButton />
-      </div>
+      <PageHeader title={t("title")} description={t("subtitle")} actions={<ReindexButton />} />
       <Tabs defaultValue="sources">
         <TabsList>
           <TabsTrigger value="sources">{t("sources")}</TabsTrigger>
