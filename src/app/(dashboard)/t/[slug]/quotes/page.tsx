@@ -3,7 +3,8 @@ import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ConvertButton } from "@/components/quotes/convert-button"
 import { EmptyState } from "@/components/layout/empty-state"
 import { FileText } from "lucide-react"
@@ -36,49 +37,53 @@ export default async function QuotesPage() {
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
-      {requests.length === 0 ? (
-        <EmptyState icon={FileText} title={t("empty")} />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("requests", { count: requests.length })}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {requests.map((r) => (
-              <div key={r.id} className="flex items-center justify-between text-sm">
-                <span>
-                  {r.customerName} · {r.customerEmail}
-                </span>
-                <span className="text-muted-foreground">
-                  {r.status} · {toDate(r.createdAt).toUTCString().slice(0, 16)}
-                </span>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-      {quotes.length === 0 ? (
-        <EmptyState icon={FileText} title={t("empty")} />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("quotes", { count: quotes.length })}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {quotes.map((q) => (
-              <div key={q.id} className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">{q.customerName}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {q.lines.map((l) => l.name).join(", ")} · {(q.totalCents / 100).toFixed(2)} · {q.status}
-                  </p>
-                </div>
-                {q.status === "accepted" && <ConvertButton quoteId={q.id} />}
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+      <Tabs defaultValue="requests">
+        <TabsList>
+          <TabsTrigger value="requests">{t("requests")}</TabsTrigger>
+          <TabsTrigger value="quotes">{t("quotes")}</TabsTrigger>
+        </TabsList>
+        <TabsContent value="requests" className="mt-4">
+          {requests.length === 0 ? (
+            <EmptyState icon={FileText} title={t("empty")} />
+          ) : (
+            <Card>
+              <CardContent className="space-y-2 pt-6">
+                {requests.map((r) => (
+                  <div key={r.id} className="flex items-center justify-between text-sm">
+                    <span>
+                      {r.customerName} · {r.customerEmail}
+                    </span>
+                    <span className="text-muted-foreground">
+                      {r.status} · {toDate(r.createdAt).toUTCString().slice(0, 16)}
+                    </span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+        <TabsContent value="quotes" className="mt-4">
+          {quotes.length === 0 ? (
+            <EmptyState icon={FileText} title={t("empty")} />
+          ) : (
+            <Card>
+              <CardContent className="space-y-3 pt-6">
+                {quotes.map((q) => (
+                  <div key={q.id} className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium">{q.customerName}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {q.lines.map((l) => l.name).join(", ")} · {(q.totalCents / 100).toFixed(2)} · {q.status}
+                      </p>
+                    </div>
+                    {q.status === "accepted" && <ConvertButton quoteId={q.id} />}
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { db8 } from "@/lib/db8"
 import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ReviewActions } from "@/components/booking/review-actions"
 import { EmptyState } from "@/components/layout/empty-state"
 import { Hourglass, Star } from "lucide-react"
@@ -35,56 +36,60 @@ export default async function ReviewsPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-xl font-semibold">{t("title")}</h1>
-      {pending.length === 0 ? (
-        <EmptyState icon={Star} title={t("none_pending")} />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("pending")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {pending.map((r) => (
-              <div key={r.id} className="space-y-1 border-b pb-4 last:border-0">
-                <p className="text-sm font-medium">
-                  {"★".repeat(r.rating)} · {(r.customer as { name?: string } | null)?.name ?? "—"}
-                </p>
-                {r.body && <p className="text-sm text-muted-foreground">&ldquo;{r.body}&rdquo;</p>}
-                <ReviewActions id={r.id} />
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-      {waiting.length === 0 ? (
-        <EmptyState icon={Hourglass} title={t("none_waiting")} />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("waitlist")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {waiting.map((w) => (
-              <p key={w.id} className="text-sm">
-                {w.wantedDate} · {w.email ?? w.phone ?? "—"} · {t(`waitlist_${w.status}`)}
-              </p>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-      {rest.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("history")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {rest.map((r) => (
-              <p key={r.id} className="text-sm">
-                {"★".repeat(r.rating)} · {(r.customer as { name?: string } | null)?.name ?? "—"} · {t(r.status)}
-              </p>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+      <Tabs defaultValue="pending">
+        <TabsList>
+          <TabsTrigger value="pending">{t("pending")}</TabsTrigger>
+          <TabsTrigger value="waitlist">{t("waitlist")}</TabsTrigger>
+        </TabsList>
+        <TabsContent value="pending" className="mt-4 space-y-6">
+          {pending.length === 0 ? (
+            <EmptyState icon={Star} title={t("none_pending")} />
+          ) : (
+            <Card>
+              <CardContent className="space-y-4 pt-6">
+                {pending.map((r) => (
+                  <div key={r.id} className="space-y-1 border-b pb-4 last:border-0">
+                    <p className="text-sm font-medium">
+                      {"★".repeat(r.rating)} · {(r.customer as { name?: string } | null)?.name ?? "—"}
+                    </p>
+                    {r.body && <p className="text-sm text-muted-foreground">&ldquo;{r.body}&rdquo;</p>}
+                    <ReviewActions id={r.id} />
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+          {rest.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("history")}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {rest.map((r) => (
+                  <p key={r.id} className="text-sm">
+                    {"★".repeat(r.rating)} · {(r.customer as { name?: string } | null)?.name ?? "—"} · {t(r.status)}
+                  </p>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+        <TabsContent value="waitlist" className="mt-4">
+          {waiting.length === 0 ? (
+            <EmptyState icon={Hourglass} title={t("none_waiting")} />
+          ) : (
+            <Card>
+              <CardContent className="space-y-2 pt-6">
+                {waiting.map((w) => (
+                  <p key={w.id} className="text-sm">
+                    {w.wantedDate} · {w.email ?? w.phone ?? "—"} · {t(`waitlist_${w.status}`)}
+                  </p>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

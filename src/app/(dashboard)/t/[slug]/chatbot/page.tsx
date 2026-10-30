@@ -4,6 +4,7 @@ import { toDate } from "@/lib/timestamps"
 import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ReindexButton } from "@/components/chatbot/reindex-button"
 import { ChatbotSettingsForm } from "@/components/chatbot/settings-form"
 import { EmptyState } from "@/components/layout/empty-state"
@@ -43,59 +44,66 @@ export default async function ChatbotPage() {
         </div>
         <ReindexButton />
       </div>
-      {sources.length === 0 ? (
-        <EmptyState icon={BookOpen} title={t("sources_empty")} />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("sources", { count: sources.length })}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {sources.map((s) => (
-              <div key={s.id} className="flex items-center justify-between text-sm">
-                <span>
-                  {s.title} <span className="text-muted-foreground">({s.type})</span>
-                </span>
-                <span className="text-muted-foreground">
-                  {s.chunks.length} chunks · {s.embeddingModel}
-                </span>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("settings")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChatbotSettingsForm tone={settings.tone ?? ""} languages={(settings.languages ?? []).join(",")} />
-        </CardContent>
-      </Card>
-      {conversations.length === 0 ? (
-        <EmptyState icon={MessageCircle} title={t("conversations_empty")} />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("conversations", { count: conversations.length })}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {conversations.slice(0, 20).map((conv) => (
-              <div key={conv.id} className="rounded-md border p-3 text-sm">
-                <p className="font-medium">
-                  {conv.visitorKey} · {conv.messages.length} {t("messages")} ·{" "}
-                  {toDate(conv.updatedAt).toUTCString().slice(0, 16)}
-                </p>
-                {conv.messages.slice(-3).map((m) => (
-                  <p key={m.id} className="mt-1 truncate text-muted-foreground">
-                    {m.role === "user" ? "→" : "←"} {m.content}
-                  </p>
+      <Tabs defaultValue="sources">
+        <TabsList>
+          <TabsTrigger value="sources">{t("sources")}</TabsTrigger>
+          <TabsTrigger value="conversations">{t("conversations")}</TabsTrigger>
+          <TabsTrigger value="settings">{t("settings")}</TabsTrigger>
+        </TabsList>
+        <TabsContent value="sources" className="mt-4">
+          {sources.length === 0 ? (
+            <EmptyState icon={BookOpen} title={t("sources_empty")} />
+          ) : (
+            <Card>
+              <CardContent className="space-y-2 pt-6">
+                {sources.map((s) => (
+                  <div key={s.id} className="flex items-center justify-between text-sm">
+                    <span>
+                      {s.title} <span className="text-muted-foreground">({s.type})</span>
+                    </span>
+                    <span className="text-muted-foreground">
+                      {s.chunks.length} chunks · {s.embeddingModel}
+                    </span>
+                  </div>
                 ))}
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+        <TabsContent value="conversations" className="mt-4">
+          {conversations.length === 0 ? (
+            <EmptyState icon={MessageCircle} title={t("conversations_empty")} />
+          ) : (
+            <Card>
+              <CardContent className="space-y-3 pt-6">
+                {conversations.slice(0, 20).map((conv) => (
+                  <div key={conv.id} className="rounded-md border p-3 text-sm">
+                    <p className="font-medium">
+                      {conv.visitorKey} · {conv.messages.length} {t("messages")} ·{" "}
+                      {toDate(conv.updatedAt).toUTCString().slice(0, 16)}
+                    </p>
+                    {conv.messages.slice(-3).map((m) => (
+                      <p key={m.id} className="mt-1 truncate text-muted-foreground">
+                        {m.role === "user" ? "→" : "←"} {m.content}
+                      </p>
+                    ))}
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+        <TabsContent value="settings" className="mt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("settings")}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ChatbotSettingsForm tone={settings.tone ?? ""} languages={(settings.languages ?? []).join(",")} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

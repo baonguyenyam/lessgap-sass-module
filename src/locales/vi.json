@@ -888,8 +888,8 @@
     "quotes": {
       "title": "Báo giá",
       "subtitle": "Yêu cầu và báo giá",
-      "requests": "{count} yêu cầu",
-      "quotes": "{count} báo giá",
+      "requests": "Yêu cầu",
+      "quotes": "Báo giá",
       "empty": "Chưa có báo giá.",
       "convert": "Chuyển thành đơn",
       "converted": "đã chuyển"
@@ -910,14 +910,14 @@
       "reindex": "Đánh index lại",
       "reindexing": "Đang index…",
       "reindexed": "Đã index",
-      "sources": "{count} nguồn",
+      "sources": "Nguồn",
       "sources_empty": "Chưa có nguồn — trang và FAQ index khi lưu hoặc bấm Đánh index lại.",
       "settings": "Cài đặt",
       "tone": "Giọng điệu",
       "languages": "Ngôn ngữ (cách nhau bởi dấu phẩy)",
       "save": "Lưu",
       "saved": "Đã lưu.",
-      "conversations": "{count} hội thoại",
+      "conversations": "Hội thoại",
       "conversations_empty": "Chưa có hội thoại.",
       "messages": "tin nhắn"
     },
@@ -1105,7 +1105,7 @@
         "vertical": "Ngành",
         "timeZone": "Múi giờ",
         "currency": "Tiền tệ",
-        "members": "Thành viên ({count})",
+        "members": "Thành viên",
         "memberStatus": {
           "active": "Hoạt động",
           "suspended": "Đã tạm ngưng"
@@ -1277,9 +1277,9 @@
     "domains": {
       "title": "Tên miền",
       "subtitle": "Đối chiếu provider và các dòng domain",
-      "drift": "Đối chiếu gần nhất — {count} lệch",
+      "drift": "Đối chiếu gần nhất",
       "no_drift": "Không lệch — provider và dòng khớp.",
-      "rows": "{count} dòng domain",
+      "rows": "Dòng domain",
       "rows_empty": "Chưa có dòng domain nào.",
       "primary": "chính",
       "kind": {
@@ -1296,7 +1296,7 @@
       "request": "Yêu cầu snapshot",
       "request_button": "Snapshot ngay",
       "request_empty": "Không có tenant nào đang hoạt động.",
-      "snapshots": "{count} snapshots",
+      "snapshots": "Snapshots",
       "empty": "Chưa có snapshot.",
       "rows": "dòng",
       "restore_to_new": "Phục hồi sang tenant mới",
@@ -1314,7 +1314,7 @@
       "jobs_24h": "Jobs (24h)",
       "failed_jobs": "Job lỗi",
       "errors_24h": "Lỗi (24h)",
-      "counters": "{count} counters",
+      "counters": "Counters",
       "counters_empty": "Chưa có counter — limit consume khi tenant dùng tính năng.",
       "job_kinds": "Jobs theo loại (24h)",
       "job_kinds_empty": "Không có job nào trong 24 giờ qua."

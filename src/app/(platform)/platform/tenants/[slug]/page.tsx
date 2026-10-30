@@ -5,6 +5,7 @@ import { toDate } from "@/lib/timestamps"
 import { requirePlatformRole } from "@/platform/staff"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { TenantStatusActions } from "@/components/platform/tenant-status-actions"
 import { TenantStatusBadge } from "@/components/platform/tenant-status-badge"
 import { TenantOverrides } from "@/components/platform/tenant-overrides"
@@ -22,6 +23,7 @@ export default async function PlatformTenantPage({ params }: { params: Promise<{
   await requirePlatformRole()
   const { slug } = await params
   const t = await getTranslations("platform.tenants")
+  const tOverrides = await getTranslations("platform.overrides")
   const format = await getFormatter()
 
   const tenant = await db8.orm.public.Tenant.where({ slug }).first()
@@ -83,29 +85,35 @@ export default async function PlatformTenantPage({ params }: { params: Promise<{
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("detail.members", { count: members.length })}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="divide-y divide-border text-sm">
-            {members.map((m) => (
-              <li key={m.id} className="flex items-center gap-3 py-2">
-                <span className="min-w-0 truncate">{m.user?.name || m.user?.email}</span>
-                <span className="min-w-0 truncate text-muted-foreground">{m.user?.email}</span>
-                <Badge variant={m.role === "owner" ? "default" : "outline"} className="ml-auto">
-                  {m.role}
-                </Badge>
-                <Badge variant={m.status === "suspended" ? "destructive" : "secondary"}>
-                  {t(`detail.memberStatus.${m.status === "suspended" ? "suspended" : "active"}`)}
-                </Badge>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
-
-      <TenantOverrides tenantId={tenant.id} rows={overrides} featureKeys={Object.keys(FEATURES)} />
+      <Tabs defaultValue="members">
+        <TabsList>
+          <TabsTrigger value="members">{t("detail.members")}</TabsTrigger>
+          <TabsTrigger value="overrides">{tOverrides("title")}</TabsTrigger>
+        </TabsList>
+        <TabsContent value="members" className="mt-4">
+          <Card>
+            <CardContent className="pt-6">
+              <ul className="divide-y divide-border text-sm">
+                {members.map((m) => (
+                  <li key={m.id} className="flex items-center gap-3 py-2">
+                    <span className="min-w-0 truncate">{m.user?.name || m.user?.email}</span>
+                    <span className="min-w-0 truncate text-muted-foreground">{m.user?.email}</span>
+                    <Badge variant={m.role === "owner" ? "default" : "outline"} className="ml-auto">
+                      {m.role}
+                    </Badge>
+                    <Badge variant={m.status === "suspended" ? "destructive" : "secondary"}>
+                      {t(`detail.memberStatus.${m.status === "suspended" ? "suspended" : "active"}`)}
+                    </Badge>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="overrides" className="mt-4">
+          <TenantOverrides tenantId={tenant.id} rows={overrides} featureKeys={Object.keys(FEATURES)} />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

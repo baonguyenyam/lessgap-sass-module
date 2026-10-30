@@ -3,6 +3,7 @@ import { db8 } from "@/lib/db8"
 import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SalesActions } from "@/components/booking/sales-actions"
 import { EmptyState } from "@/components/layout/empty-state"
 import { Gift, Wallet } from "lucide-react"
@@ -40,44 +41,48 @@ export default async function SalesPage() {
           <SalesActions packages={pkgs} memberships={memberships} customers={customers} />
         </CardContent>
       </Card>
-      {cards.length === 0 ? (
-        <EmptyState icon={Gift} title={t("no_cards")} />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("cards")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-1">
-            {cards.map((x) => (
-              <p key={x.id} className="text-sm">
-                {x.code} · {(x.balanceCents / 100).toFixed(2)} · {x.active ? t("active") : t("inactive")}
-              </p>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-      {pkgHolds.length === 0 && memHolds.length === 0 ? (
-        <EmptyState icon={Wallet} title={t("no_holdings")} />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("holdings")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-1">
-            {pkgHolds.map((x) => (
-              <p key={x.id} className="text-sm">
-                {t("pkg")} #{x.id.slice(0, 6)} · {x.sessionsLeft} {t("sessions_left")} ·{" "}
-                {x.active ? t("active") : t("inactive")}
-              </p>
-            ))}
-            {memHolds.map((x) => (
-              <p key={x.id} className="text-sm">
-                {t("mem")} #{x.id.slice(0, 6)} · {x.active ? t("active") : t("inactive")}
-              </p>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+      <Tabs defaultValue="cards">
+        <TabsList>
+          <TabsTrigger value="cards">{t("cards")}</TabsTrigger>
+          <TabsTrigger value="holdings">{t("holdings")}</TabsTrigger>
+        </TabsList>
+        <TabsContent value="cards" className="mt-4">
+          {cards.length === 0 ? (
+            <EmptyState icon={Gift} title={t("no_cards")} />
+          ) : (
+            <Card>
+              <CardContent className="space-y-1 pt-6">
+                {cards.map((x) => (
+                  <p key={x.id} className="text-sm">
+                    {x.code} · {(x.balanceCents / 100).toFixed(2)} · {x.active ? t("active") : t("inactive")}
+                  </p>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+        <TabsContent value="holdings" className="mt-4">
+          {pkgHolds.length === 0 && memHolds.length === 0 ? (
+            <EmptyState icon={Wallet} title={t("no_holdings")} />
+          ) : (
+            <Card>
+              <CardContent className="space-y-1 pt-6">
+                {pkgHolds.map((x) => (
+                  <p key={x.id} className="text-sm">
+                    {t("pkg")} #{x.id.slice(0, 6)} · {x.sessionsLeft} {t("sessions_left")} ·{" "}
+                    {x.active ? t("active") : t("inactive")}
+                  </p>
+                ))}
+                {memHolds.map((x) => (
+                  <p key={x.id} className="text-sm">
+                    {t("mem")} #{x.id.slice(0, 6)} · {x.active ? t("active") : t("inactive")}
+                  </p>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

@@ -206,7 +206,7 @@
         "thisDevice": "This device",
         "unknownDevice": "Unknown device",
         "revoke": "End session",
-        "revokeOthers": "End all other sessions ({count})",
+        "revokeOthers": "End all other sessions",
         "caveat": "An ended session can stay active on its device for up to a minute."
       },
       "accountTitle": "Account",
@@ -344,7 +344,7 @@
         "summary": "{total}개 중 {enabled}개 켜짐",
         "requires": "{modules} 필요",
         "purgeOn": "{date}에 데이터 삭제",
-        "dataKept": "데이터 {count}건 보관 중",
+        "dataKept": "데이터건 보관 중",
         "descriptions": {
           "analytics": "사이트의 페이지뷰와 방문자.",
           "booking": "온라인 예약, 직원 일정과 가능 시간.",
@@ -848,7 +848,7 @@
     "customers": {
       "title": "Customers",
       "subtitle": "Everyone who booked, in one list",
-      "list": "{count} customers",
+      "list": "customers",
       "empty": "No customers yet — bookings on the site create them.",
       "no_contact": "no contact info",
       "consent_marketing": "marketing ✓",
@@ -864,14 +864,14 @@
     "reservations": {
       "title": "Reservations",
       "subtitle": "Every table booking",
-      "list": "{count} reservations",
+      "list": "reservations",
       "empty": "No reservations yet — visitors book on the site's /reserve page.",
       "party": "party of {size}"
     },
     "orders": {
       "title": "Orders",
       "subtitle": "Every shop order",
-      "list": "{count} orders",
+      "list": "orders",
       "empty": "No orders yet — visitors buy on the site's /shop page."
     },
     "ordering": {
@@ -888,8 +888,8 @@
     "quotes": {
       "title": "Quotes",
       "subtitle": "Requests and priced quotes",
-      "requests": "{count} requests",
-      "quotes": "{count} quotes",
+      "requests": "Requests",
+      "quotes": "Quotes",
       "empty": "No quotes yet.",
       "convert": "Convert to order",
       "converted": "converted"
@@ -897,7 +897,7 @@
     "payments": {
       "title": "Payments",
       "subtitle": "Money in and out on your Stripe account",
-      "money_in": "{count} payments",
+      "money_in": "payments",
       "empty": "No payments yet — deposits, orders and quotes land here.",
       "fee": "fee",
       "refund": "Refund",
@@ -910,14 +910,14 @@
       "reindex": "Re-index",
       "reindexing": "Indexing…",
       "reindexed": "Indexed",
-      "sources": "{count} sources",
+      "sources": "Sources",
       "sources_empty": "No sources — pages and FAQs index on save or with Re-index.",
       "settings": "Settings",
       "tone": "Tone",
       "languages": "Languages (comma-separated)",
       "save": "Save",
       "saved": "Saved.",
-      "conversations": "{count} conversations",
+      "conversations": "Conversations",
       "conversations_empty": "No conversations yet.",
       "messages": "messages"
     },
@@ -926,7 +926,7 @@
       "subtitle": "Your site's page views",
       "views_14d": "Views (14d)",
       "paths_tracked": "Paths tracked",
-      "top_paths": "Top {count} paths",
+      "top_paths": "Top paths",
       "empty": "No views yet — the beacon starts counting on the next site visit."
     },
     "reviews": {
@@ -1105,7 +1105,7 @@
         "vertical": "Vertical",
         "timeZone": "Time zone",
         "currency": "Currency",
-        "members": "Members ({count})",
+        "members": "Members",
         "memberStatus": {
           "active": "Active",
           "suspended": "Suspended"
@@ -1277,9 +1277,9 @@
     "domains": {
       "title": "Domains",
       "subtitle": "Provider reconciliation and every domain row",
-      "drift": "Latest reconcile — {count} drifts",
+      "drift": "Latest reconcile",
       "no_drift": "No drift — provider and rows match.",
-      "rows": "{count} domain rows",
+      "rows": "Domain rows",
       "rows_empty": "No domain rows yet.",
       "primary": "primary",
       "kind": {
@@ -1296,7 +1296,7 @@
       "request": "Request a snapshot",
       "request_button": "Snapshot now",
       "request_empty": "No active tenants.",
-      "snapshots": "{count} snapshots",
+      "snapshots": "Snapshots",
       "empty": "No snapshots yet.",
       "rows": "rows",
       "restore_to_new": "Restore to new tenant",
@@ -1314,7 +1314,7 @@
       "jobs_24h": "Jobs (24h)",
       "failed_jobs": "Failed jobs",
       "errors_24h": "Errors (24h)",
-      "counters": "{count} usage counters",
+      "counters": "Usage counters",
       "counters_empty": "No counters yet — limits consume them as tenants use features.",
       "job_kinds": "Jobs by kind (24h)",
       "job_kinds_empty": "No jobs in the last 24 hours."

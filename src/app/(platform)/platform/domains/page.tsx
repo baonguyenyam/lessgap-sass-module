@@ -2,7 +2,8 @@ import { getTranslations } from "next-intl/server"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { requirePlatformRole } from "@/platform/staff"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { EmptyState } from "@/components/layout/empty-state"
 import { CircleCheck, Globe2 } from "lucide-react"
 
@@ -28,47 +29,51 @@ export default async function PlatformDomainsPage() {
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
-      {latest.length === 0 ? (
-        <EmptyState icon={CircleCheck} title={t("no_drift")} />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("drift", { count: latest.length })}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {latest.map((c) => (
-              <div key={c.id} className="flex items-center justify-between text-sm">
-                <span>{c.hostname}</span>
-                <span className="text-muted-foreground">
-                  {t(`kind.${c.kind}`)} · {toDate(c.createdAt).toUTCString().slice(0, 16)}
-                </span>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-      {domains.length === 0 ? (
-        <EmptyState icon={Globe2} title={t("rows_empty")} />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("rows", { count: domains.length })}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-1">
-            {domains.map((d) => (
-              <div key={d.id} className="flex items-center justify-between text-sm">
-                <span>
-                  {d.hostname} <span className="text-muted-foreground">({d.tenant.slug})</span>
-                </span>
-                <span className="text-muted-foreground">
-                  {d.status}
-                  {d.isPrimary ? ` · ${t("primary")}` : ""}
-                </span>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+      <Tabs defaultValue="drift">
+        <TabsList>
+          <TabsTrigger value="drift">{t("drift")}</TabsTrigger>
+          <TabsTrigger value="rows">{t("rows")}</TabsTrigger>
+        </TabsList>
+        <TabsContent value="drift" className="mt-4">
+          {latest.length === 0 ? (
+            <EmptyState icon={CircleCheck} title={t("no_drift")} />
+          ) : (
+            <Card>
+              <CardContent className="space-y-2 pt-6">
+                {latest.map((c) => (
+                  <div key={c.id} className="flex items-center justify-between text-sm">
+                    <span>{c.hostname}</span>
+                    <span className="text-muted-foreground">
+                      {t(`kind.${c.kind}`)} · {toDate(c.createdAt).toUTCString().slice(0, 16)}
+                    </span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+        <TabsContent value="rows" className="mt-4">
+          {domains.length === 0 ? (
+            <EmptyState icon={Globe2} title={t("rows_empty")} />
+          ) : (
+            <Card>
+              <CardContent className="space-y-1 pt-6">
+                {domains.map((d) => (
+                  <div key={d.id} className="flex items-center justify-between text-sm">
+                    <span>
+                      {d.hostname} <span className="text-muted-foreground">({d.tenant.slug})</span>
+                    </span>
+                    <span className="text-muted-foreground">
+                      {d.status}
+                      {d.isPrimary ? ` · ${t("primary")}` : ""}
+                    </span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

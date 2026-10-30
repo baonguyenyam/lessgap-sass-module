@@ -3,6 +3,7 @@ import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { requirePlatformRole } from "@/platform/staff"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BackupActions } from "@/components/platform/backup-actions"
 import { EmptyState } from "@/components/layout/empty-state"
 import { Database, Users } from "lucide-react"
@@ -43,47 +44,52 @@ export default async function PlatformBackupsPage() {
           </p>
         </CardContent>
       </Card>
-      {tenants.length === 0 ? (
-        <EmptyState icon={Users} title={t("request_empty")} />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("request")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {tenants.map((tenant) => (
-              <div key={tenant.id} className="flex items-center justify-between text-sm">
-                <span>
-                  {tenant.name} <span className="text-muted-foreground">({tenant.slug})</span>
-                </span>
-                <BackupActions tenantId={tenant.id} />
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-      {snapshots.length === 0 ? (
-        <EmptyState icon={Database} title={t("empty")} />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("snapshots", { count: snapshots.length })}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {snapshots.map((s) => (
-              <div key={s.id} className="flex items-center justify-between text-sm">
-                <span>
-                  {s.tenant?.name ?? s.tenantId} · {s.status} ·{" "}
-                  {Object.values((s.rowCounts as Record<string, number>) ?? {}).reduce((a, b) => a + b, 0)} {t("rows")}{" "}
-                  · {Math.round(s.sizeBytes / 1024)} KB · {toDate(s.createdAt).toUTCString().slice(0, 16)}
-                </span>
-                {s.status === "done" && s.r2Key && <BackupActions snapshotId={s.id} restore />}
-                {s.status === "done" && s.r2Key && <BackupActions snapshotId={s.id} inPlace />}
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+      <Tabs defaultValue="snapshots">
+        <TabsList>
+          <TabsTrigger value="snapshots">{t("snapshots")}</TabsTrigger>
+          <TabsTrigger value="request">{t("request")}</TabsTrigger>
+        </TabsList>
+        <TabsContent value="snapshots" className="mt-4">
+          {snapshots.length === 0 ? (
+            <EmptyState icon={Database} title={t("empty")} />
+          ) : (
+            <Card>
+              <CardContent className="space-y-2 pt-6">
+                {snapshots.map((s) => (
+                  <div key={s.id} className="flex items-center justify-between text-sm">
+                    <span>
+                      {s.tenant?.name ?? s.tenantId} · {s.status} ·{" "}
+                      {Object.values((s.rowCounts as Record<string, number>) ?? {}).reduce((a, b) => a + b, 0)}{" "}
+                      {t("rows")} · {Math.round(s.sizeBytes / 1024)} KB ·{" "}
+                      {toDate(s.createdAt).toUTCString().slice(0, 16)}
+                    </span>
+                    {s.status === "done" && s.r2Key && <BackupActions snapshotId={s.id} restore />}
+                    {s.status === "done" && s.r2Key && <BackupActions snapshotId={s.id} inPlace />}
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+        <TabsContent value="request" className="mt-4">
+          {tenants.length === 0 ? (
+            <EmptyState icon={Users} title={t("request_empty")} />
+          ) : (
+            <Card>
+              <CardContent className="space-y-2 pt-6">
+                {tenants.map((tenant) => (
+                  <div key={tenant.id} className="flex items-center justify-between text-sm">
+                    <span>
+                      {tenant.name} <span className="text-muted-foreground">({tenant.slug})</span>
+                    </span>
+                    <BackupActions tenantId={tenant.id} />
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

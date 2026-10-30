@@ -2,7 +2,8 @@ import { getTranslations } from "next-intl/server"
 import { db8 } from "@/lib/db8"
 import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ProductForm } from "@/components/booking/product-form"
 import { EmptyState } from "@/components/layout/empty-state"
 import { Ticket } from "lucide-react"
@@ -26,43 +27,47 @@ export default async function ProductsPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-xl font-semibold">{t("title")}</h1>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("add_package")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ProductForm kind="package" />
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("add_membership")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ProductForm kind="membership" />
-        </CardContent>
-      </Card>
-      {packages.length === 0 && memberships.length === 0 ? (
-        <EmptyState icon={Ticket} title={t("none")} />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("list")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {packages.map((x) => (
-              <p key={x.id} className="text-sm">
-                {x.name} · {x.sessions} {t("sessions")} · ${(x.priceCents / 100).toFixed(2)}
-              </p>
-            ))}
-            {memberships.map((x) => (
-              <p key={x.id} className="text-sm">
-                {x.name} · ${(x.priceCents / 100).toFixed(2)} {t("per_month")}
-              </p>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+      <Tabs defaultValue="catalog">
+        <TabsList>
+          <TabsTrigger value="catalog">{t("list")}</TabsTrigger>
+          <TabsTrigger value="package">{t("add_package")}</TabsTrigger>
+          <TabsTrigger value="membership">{t("add_membership")}</TabsTrigger>
+        </TabsList>
+        <TabsContent value="catalog" className="mt-4">
+          {packages.length === 0 && memberships.length === 0 ? (
+            <EmptyState icon={Ticket} title={t("none")} />
+          ) : (
+            <Card>
+              <CardContent className="space-y-2 pt-6">
+                {packages.map((x) => (
+                  <p key={x.id} className="text-sm">
+                    {x.name} · {x.sessions} {t("sessions")} · ${(x.priceCents / 100).toFixed(2)}
+                  </p>
+                ))}
+                {memberships.map((x) => (
+                  <p key={x.id} className="text-sm">
+                    {x.name} · ${(x.priceCents / 100).toFixed(2)} {t("per_month")}
+                  </p>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+        <TabsContent value="package" className="mt-4">
+          <Card>
+            <CardContent className="pt-6">
+              <ProductForm kind="package" />
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="membership" className="mt-4">
+          <Card>
+            <CardContent className="pt-6">
+              <ProductForm kind="membership" />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

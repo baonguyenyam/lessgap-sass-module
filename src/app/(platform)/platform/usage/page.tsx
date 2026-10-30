@@ -3,6 +3,7 @@ import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { requirePlatformRole } from "@/platform/staff"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { EmptyState } from "@/components/layout/empty-state"
 import { Gauge, ListChecks } from "lucide-react"
 
@@ -74,49 +75,53 @@ export default async function PlatformUsagePage() {
           </CardContent>
         </Card>
       </div>
-      {counters.length === 0 ? (
-        <EmptyState icon={Gauge} title={t("counters_empty")} />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("counters", { count: counters.length })}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-1">
-            {counters.slice(0, 50).map((c) => (
-              <div key={c.id} className="flex items-center justify-between text-sm">
-                <span>
-                  {c.tenant.name} · {c.limitKey}
-                </span>
-                <span className="text-muted-foreground">
-                  {c.used} · {toDate(c.periodStart).toUTCString().slice(5, 16)}
-                </span>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-      {jobsDay.length === 0 ? (
-        <EmptyState icon={ListChecks} title={t("job_kinds_empty")} />
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("job_kinds")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-1">
-            {Object.entries(
-              jobsDay.reduce<Record<string, number>>((acc, j) => {
-                acc[j.kind] = (acc[j.kind] ?? 0) + 1
-                return acc
-              }, {})
-            ).map(([kind, count]) => (
-              <div key={kind} className="flex items-center justify-between text-sm">
-                <span>{kind}</span>
-                <span className="text-muted-foreground">{count}</span>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+      <Tabs defaultValue="counters">
+        <TabsList>
+          <TabsTrigger value="counters">{t("counters")}</TabsTrigger>
+          <TabsTrigger value="job_kinds">{t("job_kinds")}</TabsTrigger>
+        </TabsList>
+        <TabsContent value="counters" className="mt-4">
+          {counters.length === 0 ? (
+            <EmptyState icon={Gauge} title={t("counters_empty")} />
+          ) : (
+            <Card>
+              <CardContent className="space-y-1 pt-6">
+                {counters.slice(0, 50).map((c) => (
+                  <div key={c.id} className="flex items-center justify-between text-sm">
+                    <span>
+                      {c.tenant.name} · {c.limitKey}
+                    </span>
+                    <span className="text-muted-foreground">
+                      {c.used} · {toDate(c.periodStart).toUTCString().slice(5, 16)}
+                    </span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+        <TabsContent value="job_kinds" className="mt-4">
+          {jobsDay.length === 0 ? (
+            <EmptyState icon={ListChecks} title={t("job_kinds_empty")} />
+          ) : (
+            <Card>
+              <CardContent className="space-y-1 pt-6">
+                {Object.entries(
+                  jobsDay.reduce<Record<string, number>>((acc, j) => {
+                    acc[j.kind] = (acc[j.kind] ?? 0) + 1
+                    return acc
+                  }, {})
+                ).map(([kind, count]) => (
+                  <div key={kind} className="flex items-center justify-between text-sm">
+                    <span>{kind}</span>
+                    <span className="text-muted-foreground">{count}</span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

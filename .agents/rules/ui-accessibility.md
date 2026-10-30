@@ -42,7 +42,11 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
   block, never a "0 items" heading above it (owner, 2026-10-30). Only a frame
   that must stay keeps it (a board column, a named category card): there the
   block is `size="compact"` and drops its own border (`className="border-0"`),
-  so it never reads as a box inside a box. Never a bare line
+  so it never reads as a box inside a box. A page that holds several sibling
+  list sections puts them in `Tabs` (`components/ui/tabs.tsx`), one box at a
+  time — the tab label is the section's name, never a count ("Requests", not
+  "0 requests"), and the card inside a tab drops its `CardHeader` (owner,
+  2026-10-30: two stacked empty boxes look like a bug). Never a bare line
   of grey text. Every module page follows this; a test in
   `tests/unit/ui-consistency.test.ts` fails on a bare empty line. Public sites
   (`src/app/sites`) are themed and exempt.
