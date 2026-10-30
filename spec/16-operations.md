@@ -289,3 +289,13 @@ different stack generation (Auth.js, Prisma 7) and is not ported.
 - Log drain provider (when retention forces it).
 - SMS provider is Twilio per the architecture table; quiet hours and consent
   live in [security-compliance](./10-security-compliance.md).
+
+
+## Later-phase additions
+
+- **`HealthCheck` + `/status`** — `platform.health_check` writes the probe's
+  rows (DB `SELECT 1` latency + a `RUNNING` job's stale `lockedUntil`);
+  `/status` renders the latest per kind (ADR 0029).
+- **Realtime** — Pusher Channels publishes `booking.changed` on
+  `private-tenant-<id>-booking`; `/api/pusher/auth` signs the channel;
+  `BookingLiveUpdates` refreshes the calendar (ADR 0026).

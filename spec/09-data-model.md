@@ -304,3 +304,20 @@ enum SnapshotStatus { QUEUED RUNNING READY FAILED }
 
 The migration for `Subscription` and `Purchase` creates one tenant per existing
 user with data, so a database that already has kit users keeps working.
+
+
+## Later-phase additions
+
+- **`WaitlistEntry`** — a visitor's name on a fully booked day;
+  `joinWaitlist` adds them, `manageAppointment`'s cancel notifies the day's
+  waiters, `bookAppointment`'s `booked` transition clears the entry.
+- **`Review`** — a customer's rating after a `completed` appointment;
+  `submitReview` lands `pending`, `moderateReview` publishes it.
+- **`IntakeForm`/`IntakeResponse`** — a contact-and-preferences form the
+  tenant asks before a visit (ADR 0028's contact-only scope — no PHI).
+- **`GiftCard`/`GiftCardLedger`, `Package`/`CustomerPackage`/`PackageLedger`,
+  `Membership`/`CustomerMembership`/`MembershipLedger`** — prepaid balances;
+  the ledger is the twin of each balance.
+- **`Location`** — a tenant's physical branch (ADR 0025); `StaffMember`,
+  `Appointment`, `AvailabilityRule`, `TimeOff` and `Order` carry
+  `locationId` nullable.
