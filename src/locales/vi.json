@@ -1016,7 +1016,14 @@
       "inactive": "ngừng",
       "no_cards_hint": "Phát hành thẻ để bán số dư khách có thể dùng sau.",
       "no_holdings_hint": "Gói và thẻ thành viên khách đã mua được theo dõi ở đây.",
-      "subtitle": "Thẻ quà tặng, gói và thành viên"
+      "subtitle": "Thẻ quà tặng, gói và thành viên",
+      "sellKind": "Bạn đang bán gì?",
+      "sellHint": "Thẻ quà, gói hoặc thành viên — giao dịch được ghi ở đây.",
+      "errors": {
+        "amountInvalid": "Cần số tiền lớn hơn 0.",
+        "emailInvalid": "Cần email hợp lệ.",
+        "selectRequired": "Chọn một mục trong danh sách."
+      }
     },
     "locations": {
       "title": "Địa điểm",

@@ -53,6 +53,7 @@ export default async function ProductsPage() {
           )}
         </TabsContent>
       </Tabs>
+      <ProductDrawers />
     </div>
   )
 }

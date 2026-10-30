@@ -93,3 +93,28 @@ export function membershipSchema(m: { nameRequired: string; priceInvalid: string
   return z.object({ name: z.string().trim().min(1, m.nameRequired), price: z.number().min(0, m.priceInvalid) })
 }
 export type MembershipInput = z.infer<ReturnType<typeof membershipSchema>>
+
+export function saleSchema(m: { amountInvalid: string; emailInvalid: string; selectRequired: string }) {
+  return z
+    .object({
+      kind: z.enum(["card", "pkg", "mem"]),
+      amount: z.number().optional(),
+      email: z.string().trim().optional(),
+      packageId: z.string().optional(),
+      membershipId: z.string().optional(),
+      customerId: z.string().optional(),
+    })
+    .superRefine((v, ctx) => {
+      if (v.kind === "card") {
+        if (!v.amount || v.amount <= 0) ctx.addIssue({ code: "custom", path: ["amount"], message: m.amountInvalid })
+        if (v.email && !v.email.includes("@"))
+          ctx.addIssue({ code: "custom", path: ["email"], message: m.emailInvalid })
+      } else {
+        const id = v.kind === "pkg" ? v.packageId : v.membershipId
+        const path = v.kind === "pkg" ? ["packageId"] : ["membershipId"]
+        if (!id) ctx.addIssue({ code: "custom", path, message: m.selectRequired })
+        if (!v.customerId) ctx.addIssue({ code: "custom", path: ["customerId"], message: m.selectRequired })
+      }
+    })
+}
+export type SaleInput = z.infer<ReturnType<typeof saleSchema>>

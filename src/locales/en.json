@@ -1016,7 +1016,14 @@
       "inactive": "inactive",
       "no_cards_hint": "Issue one to sell credit customers can spend later.",
       "no_holdings_hint": "Packages and memberships customers buy are tracked here.",
-      "subtitle": "Gift cards, packages and memberships"
+      "subtitle": "Gift cards, packages and memberships",
+      "sellKind": "What are you selling?",
+      "sellHint": "Gift card, package or membership — the sale is recorded here.",
+      "errors": {
+        "amountInvalid": "An amount above zero is required.",
+        "emailInvalid": "A valid email is required.",
+        "selectRequired": "Choose one from the list."
+      }
     },
     "locations": {
       "title": "Locations",
