@@ -22,10 +22,7 @@ export default async function PlatformModulesPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
-      </div>
+      <PageHeader title={t("title")} description={t("subtitle")} />
       {modules.length === 0 ? (
         <EmptyState icon={PackageOpen} title={t("empty")} description={t("empty_hint")} />
       ) : (
@@ -55,3 +52,4 @@ export default async function PlatformModulesPage() {
     </div>
   )
 }
+import { PageHeader } from "@/components/layout/page-header"

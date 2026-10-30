@@ -18,11 +18,9 @@ export default async function PlatformSettingsLayout({ children }: { children: R
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
-      </div>
+      <PageHeader title={t("title")} description={t("subtitle")} />
       <SectionLayout nav={<SectionNav items={items} label={t("tabsLabel")} />}>{children}</SectionLayout>
     </div>
   )
 }
+import { PageHeader } from "@/components/layout/page-header"

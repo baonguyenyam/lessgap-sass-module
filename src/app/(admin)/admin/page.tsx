@@ -49,10 +49,7 @@ export default async function AdminPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
-      </div>
+      <PageHeader title={t("title")} description={t("subtitle")} />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Card>
@@ -110,3 +107,4 @@ export default async function AdminPage() {
     </div>
   )
 }
+import { PageHeader } from "@/components/layout/page-header"

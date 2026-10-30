@@ -42,10 +42,7 @@ export default async function AdminDatabaseMigrationsPage({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">{t("migrations.title")}</h1>
-        <p className="mt-1 text-muted-foreground">{t("migrations.subtitle")}</p>
-      </div>
+      <PageHeader title={t("migrations.title")} description={t("migrations.subtitle")} />
       {status.state === "current" && <p className="text-sm text-muted-foreground">{t("migrations.current.title")}</p>}
       <DatabaseMigrations
         status={status.state}
@@ -59,3 +56,4 @@ export default async function AdminDatabaseMigrationsPage({
     </div>
   )
 }
+import { PageHeader } from "@/components/layout/page-header"

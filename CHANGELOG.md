@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ### Changed
 
+- **Every workspace page opens with the same heading** — `PageHeader` (title + description left, actions right) replaces the mixed `text-xl`/`text-2xl` hand-rolled headings and separate action rows on catalog, team, chatbot, notifications, orders, customers, payments, quotes, analytics, calendar, reservations, waitlist, reviews, sales, products, intake, locations, billing, settings subpages and the order board; the settings layout's duplicate "Settings" heading is gone and uncategorized services group into one card like named categories
+
+### Changed
+
 - **Every empty page and section looks like Newsletter's**: the same box with an icon, a short title and one sentence on what fills it, across calendar, orders, customers, quotes, reviews, sales, chatbot, analytics, team, locations, intake, payments, reservations, domains and the platform console
 - **Pages with several sections split them into tabs** — reviews (approval / waitlist), quotes (requests / quotes), chatbot (sources / conversations / settings), sales (gift cards / holdings), intake (forms / responses), products (catalog / add a package / add a membership), the tenant detail (members / overrides) and platform domains, usage and backups show one box at a time instead of stacked identical cards
 

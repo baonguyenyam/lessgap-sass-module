@@ -25,10 +25,7 @@ export default async function PlatformDomainsPage() {
   const latest = latestRun ? checks.filter((c) => c.runId === latestRun) : []
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
-      </div>
+      <PageHeader title={t("title")} description={t("subtitle")} />
       <Tabs defaultValue="drift">
         <TabsList>
           <TabsTrigger value="drift">{t("drift")}</TabsTrigger>
@@ -77,3 +74,4 @@ export default async function PlatformDomainsPage() {
     </div>
   )
 }
+import { PageHeader } from "@/components/layout/page-header"

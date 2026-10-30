@@ -79,10 +79,7 @@ export default async function PlatformErrorsPage({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
-      </div>
+      <PageHeader title={t("title")} description={t("subtitle")} />
       <ErrorsTable
         rows={rows}
         total={count.n}
@@ -93,3 +90,4 @@ export default async function PlatformErrorsPage({
     </div>
   )
 }
+import { PageHeader } from "@/components/layout/page-header"

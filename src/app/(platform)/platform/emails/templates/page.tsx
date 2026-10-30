@@ -27,10 +27,7 @@ export default async function TemplatesPage() {
   )
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
-      </div>
+      <PageHeader title={t("title")} description={t("subtitle")} />
       {previews.map((x) => (
         <Card key={`${x.key}.${x.locale}`}>
           <CardHeader>
@@ -51,3 +48,4 @@ export default async function TemplatesPage() {
     </div>
   )
 }
+import { PageHeader } from "@/components/layout/page-header"

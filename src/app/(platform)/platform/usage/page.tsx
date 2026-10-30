@@ -37,10 +37,7 @@ export default async function PlatformUsagePage() {
   const { jobsDay, queued, failed, errorCount } = computeMetrics(jobs, errors)
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
-      </div>
+      <PageHeader title={t("title")} description={t("subtitle")} />
       <div className="grid gap-4 sm:grid-cols-4">
         <Card>
           <CardHeader>
@@ -125,3 +122,4 @@ export default async function PlatformUsagePage() {
     </div>
   )
 }
+import { PageHeader } from "@/components/layout/page-header"
