@@ -1,6 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+import { and } from "@prisma/orm-postgres/orm-client"
 import { db8 } from "@/lib/db8"
 import { AppError } from "@/platform/errors"
 import { getEntitlements } from "@/platform/entitlements"
@@ -187,6 +188,17 @@ export async function bookAppointment(input: {
     })
     void ics
     void publishBookingChange(site.tenantId, { appointmentId: appointment.id, status })
+    // The waitlist's booked transition (task 14.1): a customer who booked
+    // from a notify's link (or on their own) clears their entry.
+    const bookedDay = input.startTs.slice(0, 10)
+    const waiting = await db8.orm.public.WaitlistEntry.where((w) =>
+      and(w.tenantId.eq(site.tenantId), w.wantedDate.eq(bookedDay), w.status.in(["waiting", "notified"]))
+    ).all()
+    for (const entry of waiting) {
+      if (input.email && entry.email === input.email) {
+        await db8.orm.public.WaitlistEntry.where({ id: entry.id }).update({ status: "booked" })
+      }
+    }
     return { id: appointment.id, status }
   } catch (error) {
     if (error instanceof AppError) return { error: error.code }

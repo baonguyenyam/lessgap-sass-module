@@ -20,7 +20,7 @@ vi.mock("next/cache", () => ({
 }))
 
 const TENANT = "wl-tenant"
-const siteHost = { kind: "site" as const, tenantId: TENANT, slug: "wl", suspend: false }
+const siteHost = { kind: "site" as const, tenantId: TENANT, slug: "wl" }
 
 async function provision() {
   const { resolveHost } = await import("@/platform/tenancy/host")
@@ -68,5 +68,53 @@ describe("waitlist (11.1)", () => {
     }).all()
     expect(log.length).toBe(1)
     expect(log[0].recipient).toBe("wait@example.test")
+  })
+})
+
+// Task 14.1 — the booked transition.
+describe("waitlist booked (14.1)", () => {
+  beforeEach(resetDatabase)
+
+  it("a customer who books after a notify clears their entry", async () => {
+    await provision()
+    const { bookAppointment } = await import("@/app/actions/booking")
+    const { resolveHost } = await import("@/platform/tenancy/host")
+    vi.mocked(resolveHost).mockResolvedValue({ kind: "site" as const, tenantId: TENANT, slug: "wl" })
+
+    // A waitlist entry for the day the customer later books.
+    await db8.orm.public.WaitlistEntry.create({
+      tenantId: TENANT,
+      email: "wait@example.test",
+      wantedDate: "2099-12-31",
+      status: "notified",
+    })
+    const staff = await db8.orm.public.StaffMember.create({ tenantId: TENANT, name: "S" })
+    await db8.orm.public.Service.create({
+      tenantId: TENANT,
+      name: "Cut",
+      durationMinutes: 60,
+      priceCents: 1,
+      currency: "usd",
+      id: "svc-1",
+    })
+    await db8.orm.public.AvailabilityRule.create({
+      tenantId: TENANT,
+      staffId: staff.id,
+      weekday: 4,
+      startMinute: 540,
+      endMinute: 720,
+    })
+
+    const book = await bookAppointment({
+      name: "W",
+      email: "wait@example.test",
+      serviceId: "svc-1",
+      staffId: staff.id,
+      startTs: "2099-12-31T09:00:00.000Z",
+      endTs: "2099-12-31T10:00:00.000Z",
+    })
+    expect("error" in book ? book.error : null).toBeNull()
+    const entry = await db8.orm.public.WaitlistEntry.where({ tenantId: TENANT, email: "wait@example.test" }).first()
+    expect(entry?.status).toBe("booked")
   })
 })

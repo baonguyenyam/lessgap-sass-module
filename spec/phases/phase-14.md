@@ -25,7 +25,7 @@ integration.
 **Tests:** integration — a waitlist entry the customer books from becomes
 `booked`.
 **Done when:** the transition lands.
-- [ ] done
+- [x] done (`tests/integration/waitlist.test.ts` 2/2 — `bookAppointment` marks the tenant's `WaitlistEntry` for the booked day + email `booked` when the customer books after a notify.)
 
 ### 14.2 The booking form can pay with a card or a package
 

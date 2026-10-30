@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [3.2.0] - 2026-10-29
+
+**A customer who books from a waitlist notify clears their entry — the waitlist's `booked` transition lands.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Fixed
+
+- **Waitlist `booked` transition** — `bookAppointment` marks the tenant's `WaitlistEntry` for the booked day + email `booked` when the customer books (the entry was stuck `notified`)
+
 ## [3.1.0] - 2026-10-29
 
 **A tenant's second branch is a `Location` — staff and appointments carry `locationId` so the same slot can hold at two addresses.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
