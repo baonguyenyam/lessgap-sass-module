@@ -943,7 +943,15 @@
       "empty": "No quotes yet",
       "convert": "Convert to order",
       "converted": "converted",
-      "empty_hint": "Requests from your site and the quotes you send appear here."
+      "empty_hint": "Requests from your site and the quotes you send appear here.",
+      "search": "Search…",
+      "colCustomer": "Customer",
+      "colEmail": "Email",
+      "colStatus": "Status",
+      "colWhen": "When",
+      "colItems": "Items",
+      "colTotal": "Total",
+      "colActions": "Actions"
     },
     "payments": {
       "title": "Payments",
@@ -992,11 +1000,9 @@
     },
     "reviews": {
       "title": "Reviews",
-      "pending": "Waiting for approval",
       "none_pending": "No reviews waiting",
       "waitlist": "Waitlist",
       "none_waiting": "Nobody is waiting",
-      "history": "History",
       "published": "published",
       "rejected": "rejected",
       "approve": "Approve",
@@ -1009,7 +1015,12 @@
       "waitlist_canceled": "canceled",
       "none_pending_hint": "Reviews customers leave after a visit wait here for approval.",
       "none_waiting_hint": "Customers who join the waitlist for a full day appear here.",
-      "subtitle": "What customers say after a visit"
+      "subtitle": "What customers say after a visit",
+      "search": "Search reviews…",
+      "colRating": "Rating",
+      "colCustomer": "Customer",
+      "colStatus": "Status",
+      "colActions": "Actions"
     },
     "sales": {
       "title": "Sales",

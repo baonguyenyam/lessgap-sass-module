@@ -17,9 +17,13 @@ export type TableQuery = {
   sort: string
   dir: SortDirection
   filters: Record<string, string>
+  /** Two tables on one page prefix their params (`req.page`, `req.q`…). */
+  prefix?: string
 }
 
 export type TableQuerySpec = {
+  /** Two tables on one page read their params under this prefix. */
+  prefix?: string
   /** Column keys the list may be sorted by; the first is the default. */
   sortable: readonly string[]
   defaultDir: SortDirection
@@ -37,24 +41,26 @@ const first = (value: string | string[] | undefined) => (Array.isArray(value) ? 
 export const MAX_SEARCH_LENGTH = 100
 
 export function parseTableQuery(params: Params, spec: TableQuerySpec): TableQuery {
-  const pageNumber = Number.parseInt(first(params.page) ?? "", 10)
-  const sizeNumber = Number.parseInt(first(params.size) ?? "", 10)
-  const sort = first(params.sort) ?? ""
-  const dir = first(params.dir)
+  const p = spec.prefix ?? ""
+  const pageNumber = Number.parseInt(first(params[`${p}page`]) ?? "", 10)
+  const sizeNumber = Number.parseInt(first(params[`${p}size`]) ?? "", 10)
+  const sort = first(params[`${p}sort`]) ?? ""
+  const dir = first(params[`${p}dir`])
 
   const filters: Record<string, string> = {}
   for (const [key, allowed] of Object.entries(spec.filters ?? {})) {
-    const value = first(params[key])
+    const value = first(params[`${p}${key}`])
     if (value && allowed.includes(value)) filters[key] = value
   }
 
   return {
     page: Number.isInteger(pageNumber) && pageNumber > 0 ? pageNumber : 1,
     pageSize: (PAGE_SIZES as readonly number[]).includes(sizeNumber) ? sizeNumber : spec.defaultPageSize,
-    q: (first(params.q) ?? "").trim().slice(0, MAX_SEARCH_LENGTH),
+    q: (first(params[`${p}q`]) ?? "").trim().slice(0, MAX_SEARCH_LENGTH),
     sort: spec.sortable.includes(sort) ? sort : spec.sortable[0],
     dir: dir === "asc" || dir === "desc" ? dir : spec.defaultDir,
     filters,
+    prefix: spec.prefix,
   }
 }
 
@@ -96,15 +102,17 @@ export function tableQueryHref(
     page: patch.page ?? (resetsPage ? 1 : current.page),
   }
 
+  const p = current.prefix ?? ""
   const params = new URLSearchParams()
-  if (next.q) params.set("q", next.q)
-  for (const [key, value] of Object.entries(filters).sort(([a], [b]) => a.localeCompare(b))) params.set(key, value)
+  if (next.q) params.set(`${p}q`, next.q)
+  for (const [key, value] of Object.entries(filters).sort(([a], [b]) => a.localeCompare(b)))
+    params.set(`${p}${key}`, value)
   if (next.sort !== defaults.sort || next.dir !== defaults.dir) {
-    params.set("sort", next.sort)
-    params.set("dir", next.dir)
+    params.set(`${p}sort`, next.sort)
+    params.set(`${p}dir`, next.dir)
   }
-  if (next.pageSize !== defaults.pageSize) params.set("size", String(next.pageSize))
-  if (next.page > 1) params.set("page", String(next.page))
+  if (next.pageSize !== defaults.pageSize) params.set(`${p}size`, String(next.pageSize))
+  if (next.page > 1) params.set(`${p}page`, String(next.page))
   const search = params.toString()
   return search ? `${pathname}?${search}` : pathname
 }

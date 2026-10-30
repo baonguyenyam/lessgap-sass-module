@@ -943,7 +943,15 @@
       "empty": "Chưa có báo giá",
       "convert": "Chuyển thành đơn",
       "converted": "đã chuyển",
-      "empty_hint": "Yêu cầu từ website và báo giá bạn gửi sẽ hiện ở đây."
+      "empty_hint": "Yêu cầu từ website và báo giá bạn gửi sẽ hiện ở đây.",
+      "search": "Tìm…",
+      "colCustomer": "Khách",
+      "colEmail": "Email",
+      "colStatus": "Trạng thái",
+      "colWhen": "Thời điểm",
+      "colItems": "Món",
+      "colTotal": "Tổng",
+      "colActions": "Thao tác"
     },
     "payments": {
       "title": "Thanh toán",
@@ -992,11 +1000,9 @@
     },
     "reviews": {
       "title": "Đánh giá",
-      "pending": "Chờ duyệt",
       "none_pending": "Chưa có đánh giá chờ duyệt",
       "waitlist": "Danh sách chờ",
       "none_waiting": "Chưa có ai chờ",
-      "history": "Lịch sử",
       "published": "đã đăng",
       "rejected": "đã từ chối",
       "approve": "Duyệt",
@@ -1009,7 +1015,12 @@
       "waitlist_canceled": "đã hủy",
       "none_pending_hint": "Đánh giá khách để lại sau buổi hẹn sẽ chờ duyệt ở đây.",
       "none_waiting_hint": "Khách đăng ký chờ cho ngày đã kín lịch sẽ hiện ở đây.",
-      "subtitle": "Khách nhận xét gì sau buổi hẹn"
+      "subtitle": "Khách nhận xét gì sau buổi hẹn",
+      "search": "Tìm đánh giá…",
+      "colRating": "Sao",
+      "colCustomer": "Khách",
+      "colStatus": "Trạng thái",
+      "colActions": "Thao tác"
     },
     "sales": {
       "title": "Bán hàng",
