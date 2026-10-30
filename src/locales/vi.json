@@ -145,7 +145,7 @@
     },
     "settings": {
       "title": "Cài đặt",
-      "subtitle": "Giao diện và ngôn ngữ của ứng dụng.",
+      "subtitle": "Không gian làm việc, website, các module và cách ứng dụng hoạt động.",
       "profileTitle": "Hồ sơ",
       "profileDescription": "Cập nhật tên hiển thị và xem chi tiết tài khoản.",
       "methodsTitle": "Phương thức đăng nhập",
@@ -315,7 +315,6 @@
       "modules": {
         "title": "Tiện ích",
         "subtitle": "Các tính năng workspace có thể bật và tắt.",
-        "purgeHint": "Đã lên lịch xoá — dữ liệu sẽ bị xoá sau thời gian gia hạn.",
         "status": {
           "enabled": "Đã bật",
           "disabled": "Đã tắt",
@@ -328,18 +327,50 @@
           "deprecated": "Ngừng dùng"
         },
         "actions": {
-          "enable": "Bật",
-          "disable": "Tắt",
           "export": "Xuất dữ liệu",
           "delete": "Xoá dữ liệu",
           "cancel": "Huỷ xoá",
           "confirmDelete": "Xác nhận xoá",
-          "typeName": "Nhập {name} để xác nhận"
+          "typeName": "Nhập {name} để xác nhận",
+          "enableNamed": "Bật {name}",
+          "disableNamed": "Tắt {name}",
+          "menu": "Thao tác khác cho {name}"
         },
         "errors": {
           "dependency": "Một tiện ích phụ thuộc vào nó vẫn đang bật, hoặc thiếu phụ thuộc.",
           "stillEnabled": "Hãy tắt tiện ích trước khi xoá dữ liệu.",
           "nameMismatch": "Tên nhập vào không khớp."
+        },
+        "summary": "Đang bật {enabled}/{total}.",
+        "requires": "Cần {modules}",
+        "purgeOn": "Dữ liệu bị xoá vào {date}",
+        "dataKept": "Đang giữ {count} bản ghi",
+        "descriptions": {
+          "analytics": "Lượt xem trang và khách truy cập trên website.",
+          "booking": "Đặt lịch hẹn online, lịch nhân viên và giờ làm.",
+          "catalog": "Dịch vụ và sản phẩm hiển thị trên website.",
+          "chatbot": "Trợ lý trên website trả lời dựa trên nội dung của bạn.",
+          "customers": "Hồ sơ khách hàng dùng chung cho lịch hẹn, đơn hàng và báo giá.",
+          "newsletter": "Thu thập người đăng ký và gửi bản tin.",
+          "notifications": "Email và tin nhắn gửi cho khách và nhân viên.",
+          "ordering": "Bảng theo dõi đơn hàng mới theo thời gian thực.",
+          "payments": "Nhận thanh toán thẻ và tiền đặt cọc.",
+          "quotes": "Gửi báo giá và chuyển báo giá được chấp nhận thành công việc.",
+          "reservations": "Đặt bàn cho nhà hàng.",
+          "shop": "Bán hàng online với giỏ hàng và thanh toán.",
+          "team": "Hồ sơ nhân viên hiển thị trên website."
+        },
+        "done": {
+          "enabled": "Đã bật module.",
+          "disabled": "Đã tắt module. Dữ liệu vẫn được giữ.",
+          "export": "Đã bắt đầu xuất dữ liệu. Link tải sẽ gửi qua email.",
+          "canceled": "Đã huỷ lịch xoá.",
+          "scheduled": "Đã lên lịch xoá dữ liệu."
+        },
+        "confirm": {
+          "title": "Xoá dữ liệu của {name}?",
+          "description": "Mọi dữ liệu module này lưu sẽ bị xoá sau thời gian chờ. Bạn có thể huỷ trước thời điểm đó.",
+          "keep": "Giữ dữ liệu"
         }
       },
       "site": {

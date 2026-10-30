@@ -145,7 +145,7 @@
     },
     "settings": {
       "title": "Settings",
-      "subtitle": "How the app looks and which language it speaks.",
+      "subtitle": "Your workspace, its site, its modules and how the app behaves.",
       "profileTitle": "Profile",
       "profileDescription": "Update your display name and view account details.",
       "methodsTitle": "Sign-in methods",
@@ -315,7 +315,6 @@
       "modules": {
         "title": "Modules",
         "subtitle": "Features your workspace can turn on and off.",
-        "purgeHint": "Deletion scheduled — data is removed after the grace period.",
         "status": {
           "enabled": "Enabled",
           "disabled": "Disabled",
@@ -328,18 +327,50 @@
           "deprecated": "Deprecated"
         },
         "actions": {
-          "enable": "Enable",
-          "disable": "Disable",
           "export": "Export data",
           "delete": "Delete data",
           "cancel": "Cancel deletion",
           "confirmDelete": "Confirm delete",
-          "typeName": "Type {name} to confirm"
+          "typeName": "Type {name} to confirm",
+          "enableNamed": "Turn on {name}",
+          "disableNamed": "Turn off {name}",
+          "menu": "More actions for {name}"
         },
         "errors": {
           "dependency": "A module that depends on this one is still enabled, or a dependency is missing.",
           "stillEnabled": "Disable the module before deleting its data.",
           "nameMismatch": "The typed name does not match."
+        },
+        "summary": "{enabled} of {total} on.",
+        "requires": "Requires {modules}",
+        "purgeOn": "Data deleted on {date}",
+        "dataKept": "{count, plural, one {# record kept} other {# records kept}}",
+        "descriptions": {
+          "analytics": "Page views and visitors on your site.",
+          "booking": "Online appointments, staff calendars and availability.",
+          "catalog": "Services and products shown on your site.",
+          "chatbot": "An assistant on your site that answers from your content.",
+          "customers": "Customer records shared by bookings, orders and quotes.",
+          "newsletter": "Collect subscribers and send them updates.",
+          "notifications": "Emails and messages sent to customers and staff.",
+          "ordering": "A live board for incoming orders.",
+          "payments": "Take card payments and deposits.",
+          "quotes": "Send quotes and turn accepted ones into work.",
+          "reservations": "Table reservations for restaurants.",
+          "shop": "Sell products online with a cart and checkout.",
+          "team": "Staff profiles shown on your site."
+        },
+        "done": {
+          "enabled": "Module turned on.",
+          "disabled": "Module turned off. Its data is kept.",
+          "export": "Export started. The download link arrives by email.",
+          "canceled": "Deletion canceled.",
+          "scheduled": "Deletion scheduled."
+        },
+        "confirm": {
+          "title": "Delete the data of {name}?",
+          "description": "Everything this module stored is deleted after a grace period. You can cancel until then.",
+          "keep": "Keep data"
         }
       },
       "site": {

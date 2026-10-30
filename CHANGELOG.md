@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ### Changed
 
+- **Settings → Modules redesigned**: one card listing every module with its icon, a one-line description, its status badge and what it requires; a switch turns it on or off, and a "…" menu exports its data or deletes it (confirmed in a dialog by typing the module's name) or cancels a scheduled deletion. Results show as toasts; kept data shows as a record count instead of raw keys
 - The header's search and account are icon buttons like language and theme; search opens the page finder (also on ⌘K / Ctrl+K), account opens its menu below the icon
 - **Every list takes shadcn-admin's layout**: the page's buttons sit to the right of its heading; the toolbar has the search, a dashed pill per filter opening a searchable list (with icons and counts where given) and a "View" menu to hide columns; the last column is right-aligned or a "…" menu; selecting rows shows a floating bar under the table (clear, count, icon actions, delete in red) instead of a strip above it; the pager has first, previous, numbered, next and last buttons
 - **Statuses are coloured badges with an icon**, from one shared component: tenants, subscriptions, jobs, emails, newsletter, errors, invoices, migrations, members and users

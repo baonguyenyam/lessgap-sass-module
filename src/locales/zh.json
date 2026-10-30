@@ -145,7 +145,7 @@
     },
     "settings": {
       "title": "Settings",
-      "subtitle": "How the app looks and which language it speaks.",
+      "subtitle": "你的工作区、站点、模块以及应用的行为。",
       "profileTitle": "Profile",
       "profileDescription": "Update your display name and view account details.",
       "methodsTitle": "Sign-in methods",
@@ -315,7 +315,6 @@
       "modules": {
         "title": "Modules",
         "subtitle": "Features your workspace can turn on and off.",
-        "purgeHint": "Deletion scheduled — data is removed after the grace period.",
         "status": {
           "enabled": "Enabled",
           "disabled": "Disabled",
@@ -328,18 +327,50 @@
           "deprecated": "Deprecated"
         },
         "actions": {
-          "enable": "Enable",
-          "disable": "Disable",
           "export": "Export data",
           "delete": "Delete data",
           "cancel": "Cancel deletion",
           "confirmDelete": "Confirm delete",
-          "typeName": "Type {name} to confirm"
+          "typeName": "Type {name} to confirm",
+          "enableNamed": "开启 {name}",
+          "disableNamed": "关闭 {name}",
+          "menu": "{name} 的更多操作"
         },
         "errors": {
           "dependency": "A module that depends on this one is still enabled, or a dependency is missing.",
           "stillEnabled": "Disable the module before deleting its data.",
           "nameMismatch": "The typed name does not match."
+        },
+        "summary": "已开启 {enabled}/{total}",
+        "requires": "需要 {modules}",
+        "purgeOn": "数据将于 {date} 删除",
+        "dataKept": "保留 {count} 条记录",
+        "descriptions": {
+          "analytics": "网站的浏览量和访客。",
+          "booking": "在线预约、员工日程和可预约时间。",
+          "catalog": "网站上展示的服务和商品。",
+          "chatbot": "根据你的内容回答问题的网站助手。",
+          "customers": "预约、订单和报价共用的客户资料。",
+          "newsletter": "收集订阅者并发送资讯。",
+          "notifications": "发给客户和员工的邮件与消息。",
+          "ordering": "实时显示新订单的看板。",
+          "payments": "收取银行卡付款和定金。",
+          "quotes": "发送报价并将已接受的报价转为工作。",
+          "reservations": "餐厅订座。",
+          "shop": "通过购物车和结账在线销售商品。",
+          "team": "网站上展示的员工资料。"
+        },
+        "done": {
+          "enabled": "已开启模块。",
+          "disabled": "已关闭模块，数据会保留。",
+          "export": "已开始导出，下载链接将通过邮件发送。",
+          "canceled": "已取消删除。",
+          "scheduled": "已安排删除。"
+        },
+        "confirm": {
+          "title": "删除 {name} 的数据？",
+          "description": "该模块保存的所有数据将在宽限期后删除，在此之前可以取消。",
+          "keep": "保留数据"
         }
       },
       "site": {

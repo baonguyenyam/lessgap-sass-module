@@ -145,7 +145,7 @@
     },
     "settings": {
       "title": "Settings",
-      "subtitle": "How the app looks and which language it speaks.",
+      "subtitle": "Votre espace de travail, son site, ses modules et le comportement de l'app.",
       "profileTitle": "Profile",
       "profileDescription": "Update your display name and view account details.",
       "methodsTitle": "Sign-in methods",
@@ -315,7 +315,6 @@
       "modules": {
         "title": "Modules",
         "subtitle": "Features your workspace can turn on and off.",
-        "purgeHint": "Deletion scheduled — data is removed after the grace period.",
         "status": {
           "enabled": "Enabled",
           "disabled": "Disabled",
@@ -328,18 +327,50 @@
           "deprecated": "Deprecated"
         },
         "actions": {
-          "enable": "Enable",
-          "disable": "Disable",
           "export": "Export data",
           "delete": "Delete data",
           "cancel": "Cancel deletion",
           "confirmDelete": "Confirm delete",
-          "typeName": "Type {name} to confirm"
+          "typeName": "Type {name} to confirm",
+          "enableNamed": "Activer {name}",
+          "disableNamed": "Désactiver {name}",
+          "menu": "Autres actions pour {name}"
         },
         "errors": {
           "dependency": "A module that depends on this one is still enabled, or a dependency is missing.",
           "stillEnabled": "Disable the module before deleting its data.",
           "nameMismatch": "The typed name does not match."
+        },
+        "summary": "{enabled} sur {total} activés.",
+        "requires": "Nécessite {modules}",
+        "purgeOn": "Données supprimées le {date}",
+        "dataKept": "{count, plural, one {# enregistrement conservé} other {# enregistrements conservés}}",
+        "descriptions": {
+          "analytics": "Pages vues et visiteurs de votre site.",
+          "booking": "Rendez-vous en ligne, agendas de l'équipe et disponibilités.",
+          "catalog": "Services et produits présentés sur votre site.",
+          "chatbot": "Un assistant sur votre site qui répond à partir de votre contenu.",
+          "customers": "Fiches clients partagées par rendez-vous, commandes et devis.",
+          "newsletter": "Collectez des abonnés et envoyez-leur des nouvelles.",
+          "notifications": "E-mails et messages aux clients et à l'équipe.",
+          "ordering": "Un tableau en direct des commandes entrantes.",
+          "payments": "Encaissez par carte et prenez des acomptes.",
+          "quotes": "Envoyez des devis et transformez les acceptés en travail.",
+          "reservations": "Réservations de tables pour restaurants.",
+          "shop": "Vendez en ligne avec panier et paiement.",
+          "team": "Profils de l'équipe sur votre site."
+        },
+        "done": {
+          "enabled": "Module activé.",
+          "disabled": "Module désactivé. Ses données sont conservées.",
+          "export": "Export lancé. Le lien arrive par e-mail.",
+          "canceled": "Suppression annulée.",
+          "scheduled": "Suppression programmée."
+        },
+        "confirm": {
+          "title": "Supprimer les données de {name} ?",
+          "description": "Tout ce que ce module a enregistré sera supprimé après un délai. Vous pouvez annuler d'ici là.",
+          "keep": "Garder les données"
         }
       },
       "site": {

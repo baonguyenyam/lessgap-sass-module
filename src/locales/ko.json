@@ -145,7 +145,7 @@
     },
     "settings": {
       "title": "Settings",
-      "subtitle": "How the app looks and which language it speaks.",
+      "subtitle": "워크스페이스, 사이트, 모듈과 앱 동작 방식.",
       "profileTitle": "Profile",
       "profileDescription": "Update your display name and view account details.",
       "methodsTitle": "Sign-in methods",
@@ -315,7 +315,6 @@
       "modules": {
         "title": "Modules",
         "subtitle": "Features your workspace can turn on and off.",
-        "purgeHint": "Deletion scheduled — data is removed after the grace period.",
         "status": {
           "enabled": "Enabled",
           "disabled": "Disabled",
@@ -328,18 +327,50 @@
           "deprecated": "Deprecated"
         },
         "actions": {
-          "enable": "Enable",
-          "disable": "Disable",
           "export": "Export data",
           "delete": "Delete data",
           "cancel": "Cancel deletion",
           "confirmDelete": "Confirm delete",
-          "typeName": "Type {name} to confirm"
+          "typeName": "Type {name} to confirm",
+          "enableNamed": "{name} 켜기",
+          "disableNamed": "{name} 끄기",
+          "menu": "{name} 추가 작업"
         },
         "errors": {
           "dependency": "A module that depends on this one is still enabled, or a dependency is missing.",
           "stillEnabled": "Disable the module before deleting its data.",
           "nameMismatch": "The typed name does not match."
+        },
+        "summary": "{total}개 중 {enabled}개 켜짐",
+        "requires": "{modules} 필요",
+        "purgeOn": "{date}에 데이터 삭제",
+        "dataKept": "데이터 {count}건 보관 중",
+        "descriptions": {
+          "analytics": "사이트의 페이지뷰와 방문자.",
+          "booking": "온라인 예약, 직원 일정과 가능 시간.",
+          "catalog": "사이트에 표시되는 서비스와 상품.",
+          "chatbot": "내 콘텐츠로 답하는 사이트 도우미.",
+          "customers": "예약·주문·견적에서 함께 쓰는 고객 정보.",
+          "newsletter": "구독자를 모으고 소식을 보내기.",
+          "notifications": "고객과 직원에게 보내는 이메일과 메시지.",
+          "ordering": "새 주문을 실시간으로 보는 보드.",
+          "payments": "카드 결제와 예약금 받기.",
+          "quotes": "견적을 보내고 수락된 견적을 작업으로 전환.",
+          "reservations": "레스토랑 테이블 예약.",
+          "shop": "장바구니와 결제로 온라인 판매.",
+          "team": "사이트에 표시되는 직원 프로필."
+        },
+        "done": {
+          "enabled": "모듈을 켰습니다.",
+          "disabled": "모듈을 껐습니다. 데이터는 보관됩니다.",
+          "export": "내보내기를 시작했습니다. 링크는 이메일로 옵니다.",
+          "canceled": "삭제를 취소했습니다.",
+          "scheduled": "삭제를 예약했습니다."
+        },
+        "confirm": {
+          "title": "{name}의 데이터를 삭제할까요?",
+          "description": "이 모듈이 저장한 모든 데이터는 유예 기간 후 삭제됩니다. 그전까지 취소할 수 있습니다.",
+          "keep": "데이터 유지"
         }
       },
       "site": {

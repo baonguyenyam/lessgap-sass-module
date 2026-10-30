@@ -145,7 +145,7 @@
     },
     "settings": {
       "title": "Settings",
-      "subtitle": "How the app looks and which language it speaks.",
+      "subtitle": "Seu espaço de trabalho, o site, os módulos e como o app se comporta.",
       "profileTitle": "Profile",
       "profileDescription": "Update your display name and view account details.",
       "methodsTitle": "Sign-in methods",
@@ -315,7 +315,6 @@
       "modules": {
         "title": "Modules",
         "subtitle": "Features your workspace can turn on and off.",
-        "purgeHint": "Deletion scheduled — data is removed after the grace period.",
         "status": {
           "enabled": "Enabled",
           "disabled": "Disabled",
@@ -328,18 +327,50 @@
           "deprecated": "Deprecated"
         },
         "actions": {
-          "enable": "Enable",
-          "disable": "Disable",
           "export": "Export data",
           "delete": "Delete data",
           "cancel": "Cancel deletion",
           "confirmDelete": "Confirm delete",
-          "typeName": "Type {name} to confirm"
+          "typeName": "Type {name} to confirm",
+          "enableNamed": "Ativar {name}",
+          "disableNamed": "Desativar {name}",
+          "menu": "Mais ações para {name}"
         },
         "errors": {
           "dependency": "A module that depends on this one is still enabled, or a dependency is missing.",
           "stillEnabled": "Disable the module before deleting its data.",
           "nameMismatch": "The typed name does not match."
+        },
+        "summary": "{enabled} de {total} ativos.",
+        "requires": "Requer {modules}",
+        "purgeOn": "Dados excluídos em {date}",
+        "dataKept": "{count, plural, one {# registro mantido} other {# registros mantidos}}",
+        "descriptions": {
+          "analytics": "Visualizações e visitantes do seu site.",
+          "booking": "Agendamentos online, agendas da equipe e disponibilidade.",
+          "catalog": "Serviços e produtos exibidos no site.",
+          "chatbot": "Um assistente no site que responde com base no seu conteúdo.",
+          "customers": "Clientes compartilhados por agendamentos, pedidos e orçamentos.",
+          "newsletter": "Reúna inscritos e envie novidades.",
+          "notifications": "E-mails e mensagens para clientes e equipe.",
+          "ordering": "Um painel ao vivo dos pedidos recebidos.",
+          "payments": "Receba pagamentos com cartão e sinais.",
+          "quotes": "Envie orçamentos e transforme os aceitos em trabalho.",
+          "reservations": "Reservas de mesa para restaurantes.",
+          "shop": "Venda produtos online com carrinho e checkout.",
+          "team": "Perfis da equipe exibidos no site."
+        },
+        "done": {
+          "enabled": "Módulo ativado.",
+          "disabled": "Módulo desativado. Os dados são mantidos.",
+          "export": "Exportação iniciada. O link chega por e-mail.",
+          "canceled": "Exclusão cancelada.",
+          "scheduled": "Exclusão agendada."
+        },
+        "confirm": {
+          "title": "Excluir os dados de {name}?",
+          "description": "Tudo o que este módulo guardou é excluído após um prazo. Você pode cancelar até lá.",
+          "keep": "Manter dados"
         }
       },
       "site": {

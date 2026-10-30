@@ -145,7 +145,7 @@
     },
     "settings": {
       "title": "Settings",
-      "subtitle": "How the app looks and which language it speaks.",
+      "subtitle": "ワークスペース、サイト、モジュール、アプリの動作。",
       "profileTitle": "Profile",
       "profileDescription": "Update your display name and view account details.",
       "methodsTitle": "Sign-in methods",
@@ -315,7 +315,6 @@
       "modules": {
         "title": "Modules",
         "subtitle": "Features your workspace can turn on and off.",
-        "purgeHint": "Deletion scheduled — data is removed after the grace period.",
         "status": {
           "enabled": "Enabled",
           "disabled": "Disabled",
@@ -328,18 +327,50 @@
           "deprecated": "Deprecated"
         },
         "actions": {
-          "enable": "Enable",
-          "disable": "Disable",
           "export": "Export data",
           "delete": "Delete data",
           "cancel": "Cancel deletion",
           "confirmDelete": "Confirm delete",
-          "typeName": "Type {name} to confirm"
+          "typeName": "Type {name} to confirm",
+          "enableNamed": "{name} をオン",
+          "disableNamed": "{name} をオフ",
+          "menu": "{name} のその他の操作"
         },
         "errors": {
           "dependency": "A module that depends on this one is still enabled, or a dependency is missing.",
           "stillEnabled": "Disable the module before deleting its data.",
           "nameMismatch": "The typed name does not match."
+        },
+        "summary": "{total} 件中 {enabled} 件がオン",
+        "requires": "{modules} が必要",
+        "purgeOn": "{date} にデータを削除",
+        "dataKept": "{count} 件のデータを保持",
+        "descriptions": {
+          "analytics": "サイトのページビューと訪問者。",
+          "booking": "オンライン予約、スタッフの予定と空き状況。",
+          "catalog": "サイトに表示するサービスと商品。",
+          "chatbot": "あなたのコンテンツをもとに答えるサイトのアシスタント。",
+          "customers": "予約・注文・見積もりで共有する顧客情報。",
+          "newsletter": "購読者を集めて最新情報を送信。",
+          "notifications": "顧客とスタッフへのメールとメッセージ。",
+          "ordering": "新しい注文をリアルタイムで表示するボード。",
+          "payments": "カード決済と前金の受け付け。",
+          "quotes": "見積もりを送り、承認されたものを作業に。",
+          "reservations": "レストランの席予約。",
+          "shop": "カートと決済で商品をオンライン販売。",
+          "team": "サイトに表示するスタッフのプロフィール。"
+        },
+        "done": {
+          "enabled": "モジュールをオンにしました。",
+          "disabled": "モジュールをオフにしました。データは保持されます。",
+          "export": "エクスポートを開始しました。リンクはメールで届きます。",
+          "canceled": "削除を取り消しました。",
+          "scheduled": "削除を予約しました。"
+        },
+        "confirm": {
+          "title": "{name} のデータを削除しますか?",
+          "description": "このモジュールが保存したデータは猶予期間の後に削除されます。それまでは取り消せます。",
+          "keep": "データを残す"
         }
       },
       "site": {
