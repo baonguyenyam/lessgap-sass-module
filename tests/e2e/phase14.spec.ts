@@ -38,12 +38,10 @@ test("the sales page sells a gift card and lists it", async ({ context }) => {
   })
 
   await page.goto(`/t/${slug}/sales`)
+  await page.getByRole("button", { name: /^sell$/i }).first().click()
   await page.locator('input[type="number"]').fill("80")
   await page.locator('input[type="email"]').fill("buyer@example.test")
-  await page
-    .getByRole("button", { name: /^sell$/i })
-    .first()
-    .click()
+  await page.getByRole("button", { name: /^save$/i }).click()
   await page.waitForLoadState("networkidle")
 
   await expect(page.locator("body")).toContainText("GC-")
