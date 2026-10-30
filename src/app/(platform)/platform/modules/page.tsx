@@ -27,7 +27,7 @@ export default async function PlatformModulesPage() {
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
       {modules.length === 0 ? (
-        <EmptyState icon={PackageOpen} title={t("empty")} />
+        <EmptyState icon={PackageOpen} title={t("empty")} description={t("empty_hint")} />
       ) : (
         <Table>
           <TableHeader>

@@ -61,7 +61,7 @@ export default async function AnalyticsPage() {
         </Card>
       </div>
       {top.length === 0 ? (
-        <EmptyState icon={BarChart3} title={t("empty")} />
+        <EmptyState icon={BarChart3} title={t("empty")} description={t("empty_hint")} />
       ) : (
         <Card>
           <CardHeader>

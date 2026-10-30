@@ -44,7 +44,7 @@ export default async function QuotesPage() {
         </TabsList>
         <TabsContent value="requests" className="mt-4">
           {requests.length === 0 ? (
-            <EmptyState icon={FileText} title={t("empty")} />
+            <EmptyState icon={FileText} title={t("empty")} description={t("empty_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-2 pt-6">
@@ -64,7 +64,7 @@ export default async function QuotesPage() {
         </TabsContent>
         <TabsContent value="quotes" className="mt-4">
           {quotes.length === 0 ? (
-            <EmptyState icon={FileText} title={t("empty")} />
+            <EmptyState icon={FileText} title={t("empty")} description={t("empty_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-3 pt-6">

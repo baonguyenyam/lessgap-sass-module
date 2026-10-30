@@ -52,7 +52,7 @@ export default async function ChatbotPage() {
         </TabsList>
         <TabsContent value="sources" className="mt-4">
           {sources.length === 0 ? (
-            <EmptyState icon={BookOpen} title={t("sources_empty")} />
+            <EmptyState icon={BookOpen} title={t("sources_empty")} description={t("sources_empty_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-2 pt-6">
@@ -72,7 +72,11 @@ export default async function ChatbotPage() {
         </TabsContent>
         <TabsContent value="conversations" className="mt-4">
           {conversations.length === 0 ? (
-            <EmptyState icon={MessageCircle} title={t("conversations_empty")} />
+            <EmptyState
+              icon={MessageCircle}
+              title={t("conversations_empty")}
+              description={t("conversations_empty_hint")}
+            />
           ) : (
             <Card>
               <CardContent className="space-y-3 pt-6">

@@ -27,7 +27,7 @@ export default async function WaitlistPage() {
     <div className="space-y-6">
       <h1 className="text-xl font-semibold">{t("title")}</h1>
       {sorted.length === 0 ? (
-        <EmptyState icon={Hourglass} title={t("none")} />
+        <EmptyState icon={Hourglass} title={t("none")} description={t("none_hint")} />
       ) : (
         <Card>
           <CardHeader>

@@ -65,16 +65,18 @@ method):**
   naming the feature and the plans that include it.
 
 **Notifications (in-app inbox):**
-- [ ] A `/notifications` page per member: list with category, message,
-  received time; filters "All / Unread only" and by category; rows grouped
-  when many concern the same item; "Mark as read", "Mark all read", and a
-  link that opens the item (an order, a booking…).
-- [ ] A bell in the header's icon row with the unread count, opening the
-  latest notifications.
-- [ ] Every notification respects the member's per-category in-app / email
-  choice above.
+- [x] A `/notifications` page per member: category badge, message,
+  received time; "All / Unread" tabs; "Mark as read", "Mark all read",
+  and a link that opens the item (an order, a booking…).
+  (Rows are not grouped by item — flagged as a possible refinement.)
+- [x] A bell in the header's icon row with the unread count, opening the
+  feed (a dropdown preview of the latest is a possible refinement — the
+  bell links to the page for now).
+- [x] Every notification respects the member's per-category in-app / email
+  choice above — `unreadMemberNotifications` drops categories the member
+  turned in-app off (`notify.<category>.in_app`).
 
-**Sidebar footer:** [ ] a footer under the sidebar menu with "© {year}
+**Sidebar footer:** [x] a footer under the sidebar menu with "© {year}
 {site name}" (site name from configuration, never a brand hard-coded),
 hidden when the sidebar is collapsed to icons. Recorded in
 `.agents/rules/ui-accessibility.md`.

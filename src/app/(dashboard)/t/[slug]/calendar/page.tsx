@@ -50,7 +50,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
       </div>
       <AppointmentActions staff={staff.map((s) => ({ id: s.id, name: s.name }))} />
       {byDay.size === 0 ? (
-        <EmptyState icon={CalendarDays} title={t("empty")} />
+        <EmptyState icon={CalendarDays} title={t("empty")} description={t("empty_hint")} />
       ) : (
         [...byDay.entries()].map(([day, list]) => (
           <Card key={day}>

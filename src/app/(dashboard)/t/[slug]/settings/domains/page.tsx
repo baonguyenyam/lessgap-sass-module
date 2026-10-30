@@ -50,7 +50,7 @@ export default async function DomainsPage() {
             </CardContent>
           </Card>
         ))}
-        {domains.length === 0 && <EmptyState icon={Globe2} title={t("empty")} />}
+        {domains.length === 0 && <EmptyState icon={Globe2} title={t("empty")} description={t("empty_hint")} />}
       </div>
       <DomainActions add />
     </div>

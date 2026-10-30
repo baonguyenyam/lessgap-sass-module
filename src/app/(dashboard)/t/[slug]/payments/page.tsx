@@ -38,7 +38,7 @@ export default async function PaymentsPage() {
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
       {payments.length === 0 ? (
-        <EmptyState icon={CreditCard} title={t("empty")} />
+        <EmptyState icon={CreditCard} title={t("empty")} description={t("empty_hint")} />
       ) : (
         <Card>
           <CardHeader>

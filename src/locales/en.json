@@ -409,7 +409,7 @@
       "domains": {
         "title": "Domains",
         "subtitle": "Connect a custom domain to your site.",
-        "empty": "No custom domains yet.",
+        "empty": "No custom domains yet",
         "primary": "Primary",
         "status": {
           "pending": "Pending — add the DNS records below",
@@ -422,7 +422,8 @@
           "check": "Check now",
           "primary": "Make primary",
           "remove": "Remove"
-        }
+        },
+        "empty_hint": "Add your own domain to serve your site from it."
       },
       "payments": {
         "title": "Payments",
@@ -821,35 +822,38 @@
         "addCategory": "Add category",
         "remove": "Remove"
       },
-      "empty": "No catalog items yet."
+      "empty": "No catalog items yet",
+      "empty_hint": "Add the services and categories your site offers."
     },
     "team": {
       "title": "Team",
       "subtitle": "The people your site shows — staff, not logins.",
       "staffName": "Name",
       "staffBio": "Bio",
-      "empty": "No staff yet.",
+      "empty": "No staff yet",
       "actions": {
         "add": "Add staff",
         "remove": "Remove"
-      }
+      },
+      "empty_hint": "Add the people shown on your site and booked for appointments."
     },
     "calendar": {
       "title": "Calendar",
       "subtitle": "Appointments by day",
-      "empty": "No appointments yet.",
+      "empty": "No appointments yet",
       "filter": "Staff",
       "all_staff": "All staff",
       "confirm": "Confirm",
       "cancel": "Cancel",
       "complete": "Complete",
-      "no_show": "No-show"
+      "no_show": "No-show",
+      "empty_hint": "Bookings from your site and the ones you add appear here, by day."
     },
     "customers": {
       "title": "Customers",
       "subtitle": "Everyone who booked, in one list",
       "list": "{count} customers",
-      "empty": "No customers yet — bookings on the site create them.",
+      "empty": "No customers yet",
       "no_contact": "no contact info",
       "consent_marketing": "marketing ✓",
       "consent_sms": "SMS ✓",
@@ -859,25 +863,28 @@
       "done": {
         "exported": "exported",
         "deleted": "deleted"
-      }
+      },
+      "empty_hint": "Bookings, orders and quotes on your site create them."
     },
     "reservations": {
       "title": "Reservations",
       "subtitle": "Every table booking",
       "list": "{count} reservations",
-      "empty": "No reservations yet — visitors book on the site's /reserve page.",
-      "party": "party of {size}"
+      "empty": "No reservations yet",
+      "party": "party of {size}",
+      "empty_hint": "Bookings made on your site's reservation page appear here."
     },
     "orders": {
       "title": "Orders",
       "subtitle": "Every shop order",
       "list": "{count} orders",
-      "empty": "No orders yet — visitors buy on the site's /shop page."
+      "empty": "No orders yet",
+      "empty_hint": "Orders placed on your site's shop page appear here."
     },
     "ordering": {
       "board_title": "Order board",
       "board_subtitle": "Kitchen queue — received to done",
-      "empty": "no orders",
+      "empty": "No orders",
       "status": {
         "received": "Received",
         "preparing": "Preparing",
@@ -890,19 +897,21 @@
       "subtitle": "Requests and priced quotes",
       "requests": "Requests",
       "quotes": "Quotes",
-      "empty": "No quotes yet.",
+      "empty": "No quotes yet",
       "convert": "Convert to order",
-      "converted": "converted"
+      "converted": "converted",
+      "empty_hint": "Requests from your site and the quotes you send appear here."
     },
     "payments": {
       "title": "Payments",
       "subtitle": "Money in and out on your Stripe account",
       "money_in": "{count} payments",
-      "empty": "No payments yet — deposits, orders and quotes land here.",
+      "empty": "No payments yet",
       "fee": "fee",
       "refund": "Refund",
       "refunded": "refunded",
-      "refunded_done": "refunded"
+      "refunded_done": "refunded",
+      "empty_hint": "Deposits, orders and paid quotes land here."
     },
     "chatbot": {
       "title": "Chatbot",
@@ -911,15 +920,17 @@
       "reindexing": "Indexing…",
       "reindexed": "Indexed",
       "sources": "Sources",
-      "sources_empty": "No sources — pages and FAQs index on save or with Re-index.",
+      "sources_empty": "No sources yet",
       "settings": "Settings",
       "tone": "Tone",
       "languages": "Languages (comma-separated)",
       "save": "Save",
       "saved": "Saved.",
       "conversations": "Conversations",
-      "conversations_empty": "No conversations yet.",
-      "messages": "messages"
+      "conversations_empty": "No conversations yet",
+      "messages": "messages",
+      "sources_empty_hint": "Pages and FAQs are indexed when you save them, or with Re-index.",
+      "conversations_empty_hint": "Chats visitors start on your site appear here."
     },
     "analytics": {
       "title": "Analytics",
@@ -927,14 +938,15 @@
       "views_14d": "Views (14d)",
       "paths_tracked": "Paths tracked",
       "top_paths": "Top {count} paths",
-      "empty": "No views yet — the beacon starts counting on the next site visit."
+      "empty": "No views yet",
+      "empty_hint": "The count starts with the next visit to your site."
     },
     "reviews": {
       "title": "Reviews",
       "pending": "Waiting for approval",
-      "none_pending": "No reviews waiting.",
+      "none_pending": "No reviews waiting",
       "waitlist": "Waitlist",
-      "none_waiting": "Nobody is waiting.",
+      "none_waiting": "Nobody is waiting",
       "history": "History",
       "published": "published",
       "rejected": "rejected",
@@ -945,7 +957,9 @@
       "waitlist_waiting": "waiting",
       "waitlist_notified": "notified",
       "waitlist_booked": "booked",
-      "waitlist_canceled": "canceled"
+      "waitlist_canceled": "canceled",
+      "none_pending_hint": "Reviews customers leave after a visit wait here for approval.",
+      "none_waiting_hint": "Customers who join the waitlist for a full day appear here."
     },
     "sales": {
       "title": "Sales",
@@ -961,24 +975,27 @@
       "selling": "Selling…",
       "sold": "Sold.",
       "cards": "Gift cards",
-      "no_cards": "No cards yet.",
+      "no_cards": "No gift cards yet",
       "holdings": "Holdings",
-      "no_holdings": "No holdings yet.",
+      "no_holdings": "No holdings yet",
       "pkg": "Package",
       "mem": "Membership",
       "sessions_left": "sessions left",
       "active": "active",
-      "inactive": "inactive"
+      "inactive": "inactive",
+      "no_cards_hint": "Issue one to sell credit customers can spend later.",
+      "no_holdings_hint": "Packages and memberships customers buy are tracked here."
     },
     "locations": {
       "title": "Locations",
       "add": "Add a location",
       "list": "Your locations",
-      "none": "No locations yet.",
+      "none": "No locations yet",
       "name": "Name",
       "address": "Address",
       "add_button": "Add",
-      "adding": "Adding…"
+      "adding": "Adding…",
+      "none_hint": "Add your branches so staff and appointments can be placed in one."
     },
     "intake": {
       "title": "Intake forms",
@@ -989,9 +1006,11 @@
       "add_button": "Add",
       "adding": "Adding…",
       "forms": "Your forms",
-      "none": "No forms yet.",
+      "none": "No forms yet",
       "responses": "Responses",
-      "no_responses": "No responses yet."
+      "no_responses": "No responses yet",
+      "none_hint": "Create a form to collect details from customers before a visit.",
+      "no_responses_hint": "Answers arrive here when customers fill in a form."
     },
     "products": {
       "title": "Sellable catalog",
@@ -1003,13 +1022,14 @@
       "add_button": "Add",
       "adding": "Adding…",
       "list": "Your catalog",
-      "none": "No packages or memberships yet.",
-      "per_month": "/ month"
+      "none": "No packages or memberships yet",
+      "per_month": "/ month",
+      "none_hint": "Create one to sell sessions or a membership."
     },
     "waitlist": {
       "title": "Waitlist",
       "list": "Waiting customers",
-      "none": "No one is waiting.",
+      "none": "No one is waiting",
       "mark_booked": "Mark booked",
       "mark_canceled": "Cancel",
       "status": {
@@ -1017,7 +1037,8 @@
         "notified": "Notified",
         "booked": "Booked",
         "canceled": "Canceled"
-      }
+      },
+      "none_hint": "Customers who join the waitlist for a full day appear here."
     },
     "notifications": {
       "title": "Notifications",
@@ -1026,6 +1047,17 @@
       "empty": {
         "title": "No notifications",
         "description": "Orders, bookings and waitlist joins show up here."
+      },
+      "all": "All",
+      "unread": "Unread",
+      "categories": {
+        "appointments": "Appointments",
+        "security": "Security",
+        "workspace": "Workspace",
+        "orders": "Orders",
+        "billing": "Billing",
+        "product_updates": "Product updates",
+        "tips": "Tips"
       }
     }
   },
@@ -1242,7 +1274,7 @@
       "newTitle": "New override",
       "editTitle": "Edit override",
       "description": "Override a feature for this tenant only: a JSON value (true, false, a number or null), the reason it deviates, and an optional expiry after which it stops applying.",
-      "empty": "No overrides. The tenant resolves its plan and the platform switches.",
+      "empty": "No overrides",
       "columns": {
         "feature": "Feature",
         "value": "Value",
@@ -1261,31 +1293,35 @@
         "reasonRequired": "A reason is required.",
         "badExpiry": "That is not a valid date.",
         "notFound": "Override not found."
-      }
+      },
+      "empty_hint": "The tenant resolves its plan and the platform switches."
     },
     "modules": {
       "title": "Modules",
       "subtitle": "The registered module catalog.",
-      "empty": "No modules registered.",
+      "empty": "No modules registered",
       "columns": {
         "key": "Key",
         "name": "Name",
         "stage": "Stage",
         "version": "Version"
-      }
+      },
+      "empty_hint": "Modules appear here once they are in the registry."
     },
     "domains": {
       "title": "Domains",
       "subtitle": "Provider reconciliation and every domain row",
       "drift": "Latest reconcile",
-      "no_drift": "No drift — provider and rows match.",
+      "no_drift": "No drift",
       "rows": "Domain rows",
-      "rows_empty": "No domain rows yet.",
+      "rows_empty": "No domain rows yet",
       "primary": "primary",
       "kind": {
         "missing_provider": "row exists, provider lost it",
         "extra_provider": "provider has it, no row"
-      }
+      },
+      "no_drift_hint": "The hosting provider and the domain rows match.",
+      "rows_empty_hint": "Domains tenants add appear here."
     },
     "backups": {
       "title": "Backups",
@@ -1295,9 +1331,9 @@
       "nightly_never": "Nightly snapshot job hasn't run yet.",
       "request": "Request a snapshot",
       "request_button": "Snapshot now",
-      "request_empty": "No active tenants.",
+      "request_empty": "No active tenants",
       "snapshots": "Snapshots",
-      "empty": "No snapshots yet.",
+      "empty": "No snapshots yet",
       "rows": "rows",
       "restore_to_new": "Restore to new tenant",
       "done": "Done.",
@@ -1305,7 +1341,9 @@
         "restore_failed": "Restore failed.",
         "snapshot_not_restorable": "Not restorable."
       },
-      "restore_in_place": "Restore in place"
+      "restore_in_place": "Restore in place",
+      "empty_hint": "Tenant snapshots appear here once one is taken.",
+      "request_empty_hint": "Snapshots can be requested for active tenants only."
     },
     "usage": {
       "title": "Usage",
@@ -1315,9 +1353,11 @@
       "failed_jobs": "Failed jobs",
       "errors_24h": "Errors (24h)",
       "counters": "Usage counters",
-      "counters_empty": "No counters yet — limits consume them as tenants use features.",
+      "counters_empty": "No counters yet",
       "job_kinds": "Jobs by kind (24h)",
-      "job_kinds_empty": "No jobs in the last 24 hours."
+      "job_kinds_empty": "No jobs in the last 24 hours",
+      "counters_empty_hint": "Limits create them as tenants use features.",
+      "job_kinds_empty_hint": "Background jobs that ran recently appear here."
     }
   },
   "admin": {
@@ -1554,7 +1594,8 @@
       "subtitle": "One-time purchases that add features on top of your plan.",
       "buy": "Buy",
       "owned": "Owned",
-      "empty": "No add-ons available right now."
+      "empty": "No add-ons available",
+      "empty_hint": "Add-ons offered on the platform will appear here."
     }
   },
   "email": {

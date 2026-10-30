@@ -68,7 +68,7 @@ export function TenantOverrides({
   return (
     <>
       {rows.length === 0 ? (
-        <EmptyState icon={SlidersHorizontal} title={t("empty")} action={newButton} />
+        <EmptyState icon={SlidersHorizontal} title={t("empty")} description={t("empty_hint")} action={newButton} />
       ) : (
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0">

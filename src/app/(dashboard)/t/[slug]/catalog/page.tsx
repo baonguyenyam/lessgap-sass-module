@@ -33,7 +33,9 @@ export default async function CatalogPage() {
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
       <CatalogActions addService categories={categories.map((x) => ({ id: x.id, name: x.name }))} />
-      {categories.length === 0 && services.length === 0 && <EmptyState icon={List} title={t("empty")} />}
+      {categories.length === 0 && services.length === 0 && (
+        <EmptyState icon={List} title={t("empty")} description={t("empty_hint")} />
+      )}
       {categories.map((cat) => {
         const catServices = services.filter((s) => s.categoryId === cat.id)
         return (
@@ -43,7 +45,13 @@ export default async function CatalogPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               {catServices.length === 0 ? (
-                <EmptyState icon={List} title={t("empty")} size="compact" className="border-0" />
+                <EmptyState
+                  icon={List}
+                  title={t("empty")}
+                  description={t("empty_hint")}
+                  size="compact"
+                  className="border-0"
+                />
               ) : (
                 catServices.map((s) => (
                   <div key={s.id} className="flex items-center justify-between">

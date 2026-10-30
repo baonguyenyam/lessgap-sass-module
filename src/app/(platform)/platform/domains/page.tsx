@@ -36,7 +36,7 @@ export default async function PlatformDomainsPage() {
         </TabsList>
         <TabsContent value="drift" className="mt-4">
           {latest.length === 0 ? (
-            <EmptyState icon={CircleCheck} title={t("no_drift")} />
+            <EmptyState icon={CircleCheck} title={t("no_drift")} description={t("no_drift_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-2 pt-6">
@@ -54,7 +54,7 @@ export default async function PlatformDomainsPage() {
         </TabsContent>
         <TabsContent value="rows" className="mt-4">
           {domains.length === 0 ? (
-            <EmptyState icon={Globe2} title={t("rows_empty")} />
+            <EmptyState icon={Globe2} title={t("rows_empty")} description={t("rows_empty_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-1 pt-6">

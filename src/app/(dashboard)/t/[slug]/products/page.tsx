@@ -35,7 +35,7 @@ export default async function ProductsPage() {
         </TabsList>
         <TabsContent value="catalog" className="mt-4">
           {packages.length === 0 && memberships.length === 0 ? (
-            <EmptyState icon={Ticket} title={t("none")} />
+            <EmptyState icon={Ticket} title={t("none")} description={t("none_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-2 pt-6">

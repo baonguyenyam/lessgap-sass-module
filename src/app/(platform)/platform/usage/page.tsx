@@ -82,7 +82,7 @@ export default async function PlatformUsagePage() {
         </TabsList>
         <TabsContent value="counters" className="mt-4">
           {counters.length === 0 ? (
-            <EmptyState icon={Gauge} title={t("counters_empty")} />
+            <EmptyState icon={Gauge} title={t("counters_empty")} description={t("counters_empty_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-1 pt-6">
@@ -102,7 +102,7 @@ export default async function PlatformUsagePage() {
         </TabsContent>
         <TabsContent value="job_kinds" className="mt-4">
           {jobsDay.length === 0 ? (
-            <EmptyState icon={ListChecks} title={t("job_kinds_empty")} />
+            <EmptyState icon={ListChecks} title={t("job_kinds_empty")} description={t("job_kinds_empty_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-1 pt-6">

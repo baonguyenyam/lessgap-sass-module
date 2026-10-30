@@ -409,7 +409,7 @@
       "domains": {
         "title": "Tên miền",
         "subtitle": "Kết nối tên miền riêng với trang web.",
-        "empty": "Chưa có tên miền riêng nào.",
+        "empty": "Chưa có tên miền riêng",
         "primary": "Chính",
         "status": {
           "pending": "Chờ — thêm các bản ghi DNS bên dưới",
@@ -422,7 +422,8 @@
           "check": "Kiểm tra ngay",
           "primary": "Đặt làm chính",
           "remove": "Gỡ"
-        }
+        },
+        "empty_hint": "Thêm tên miền riêng để website chạy trên tên miền đó."
       },
       "payments": {
         "title": "Thanh toán",
@@ -821,35 +822,38 @@
         "addCategory": "Thêm danh mục",
         "remove": "Xóa"
       },
-      "empty": "Chưa có mục danh mục nào."
+      "empty": "Chưa có mục nào trong danh mục",
+      "empty_hint": "Thêm dịch vụ và nhóm dịch vụ mà website của bạn cung cấp."
     },
     "team": {
       "title": "Nhân viên",
       "subtitle": "Những người hiển thị trên trang web — không phải tài khoản.",
       "staffName": "Tên",
       "staffBio": "Giới thiệu",
-      "empty": "Chưa có nhân viên nào.",
+      "empty": "Chưa có nhân viên",
       "actions": {
         "add": "Thêm nhân viên",
         "remove": "Xóa"
-      }
+      },
+      "empty_hint": "Thêm những người hiển thị trên website và nhận lịch hẹn."
     },
     "calendar": {
       "title": "Lịch hẹn",
       "subtitle": "Cuộc hẹn theo ngày",
-      "empty": "Chưa có cuộc hẹn nào.",
+      "empty": "Chưa có lịch hẹn",
       "filter": "Nhân viên",
       "all_staff": "Tất cả nhân viên",
       "confirm": "Xác nhận",
       "cancel": "Huỷ",
       "complete": "Hoàn thành",
-      "no_show": "Vắng"
+      "no_show": "Vắng",
+      "empty_hint": "Lịch hẹn từ website và lịch bạn thêm sẽ hiện ở đây, theo từng ngày."
     },
     "customers": {
       "title": "Khách hàng",
       "subtitle": "Mọi người đã đặt lịch, trong một danh sách",
       "list": "{count} khách hàng",
-      "empty": "Chưa có khách hàng — đặt lịch trên site sẽ tạo.",
+      "empty": "Chưa có khách hàng",
       "no_contact": "không có thông tin liên hệ",
       "consent_marketing": "marketing ✓",
       "consent_sms": "SMS ✓",
@@ -859,25 +863,28 @@
       "done": {
         "exported": "đã xuất",
         "deleted": "đã xoá"
-      }
+      },
+      "empty_hint": "Lịch hẹn, đơn hàng và báo giá trên website sẽ tạo khách hàng."
     },
     "reservations": {
       "title": "Đặt bàn",
       "subtitle": "Mọi đặt bàn",
       "list": "{count} đặt bàn",
-      "empty": "Chưa có đặt bàn — khách đặt trên trang /reserve của site.",
-      "party": "{size} người"
+      "empty": "Chưa có đặt bàn",
+      "party": "{size} người",
+      "empty_hint": "Lượt đặt bàn trên trang đặt bàn của website sẽ hiện ở đây."
     },
     "orders": {
       "title": "Đơn hàng",
       "subtitle": "Mọi đơn hàng",
       "list": "{count} đơn",
-      "empty": "Chưa có đơn — khách mua trên trang /shop của site."
+      "empty": "Chưa có đơn hàng",
+      "empty_hint": "Đơn đặt trên trang cửa hàng của website sẽ hiện ở đây."
     },
     "ordering": {
       "board_title": "Bảng đơn",
       "board_subtitle": "Hàng đợi bếp — nhận đến xong",
-      "empty": "không có đơn",
+      "empty": "Không có đơn",
       "status": {
         "received": "Đã nhận",
         "preparing": "Đang làm",
@@ -890,19 +897,21 @@
       "subtitle": "Yêu cầu và báo giá",
       "requests": "Yêu cầu",
       "quotes": "Báo giá",
-      "empty": "Chưa có báo giá.",
+      "empty": "Chưa có báo giá",
       "convert": "Chuyển thành đơn",
-      "converted": "đã chuyển"
+      "converted": "đã chuyển",
+      "empty_hint": "Yêu cầu từ website và báo giá bạn gửi sẽ hiện ở đây."
     },
     "payments": {
       "title": "Thanh toán",
       "subtitle": "Tiền vào và ra trên tài khoản Stripe",
       "money_in": "{count} khoản",
-      "empty": "Chưa có khoản nào — cọc, đơn và báo giá sẽ hiện ở đây.",
+      "empty": "Chưa có thanh toán",
       "fee": "phí",
       "refund": "Hoàn tiền",
       "refunded": "đã hoàn",
-      "refunded_done": "đã hoàn"
+      "refunded_done": "đã hoàn",
+      "empty_hint": "Tiền cọc, đơn hàng và báo giá đã thanh toán sẽ hiện ở đây."
     },
     "chatbot": {
       "title": "Chatbot",
@@ -911,15 +920,17 @@
       "reindexing": "Đang index…",
       "reindexed": "Đã index",
       "sources": "Nguồn",
-      "sources_empty": "Chưa có nguồn — trang và FAQ index khi lưu hoặc bấm Đánh index lại.",
+      "sources_empty": "Chưa có nguồn dữ liệu",
       "settings": "Cài đặt",
       "tone": "Giọng điệu",
       "languages": "Ngôn ngữ (cách nhau bởi dấu phẩy)",
       "save": "Lưu",
       "saved": "Đã lưu.",
       "conversations": "Hội thoại",
-      "conversations_empty": "Chưa có hội thoại.",
-      "messages": "tin nhắn"
+      "conversations_empty": "Chưa có cuộc trò chuyện",
+      "messages": "tin nhắn",
+      "sources_empty_hint": "Trang và câu hỏi thường gặp được lập chỉ mục khi bạn lưu, hoặc khi bấm Lập chỉ mục lại.",
+      "conversations_empty_hint": "Các cuộc trò chuyện khách bắt đầu trên website sẽ hiện ở đây."
     },
     "analytics": {
       "title": "Phân tích",
@@ -927,14 +938,15 @@
       "views_14d": "Lượt xem (14 ngày)",
       "paths_tracked": "Đường dẫn theo dõi",
       "top_paths": "Top {count} đường dẫn",
-      "empty": "Chưa có lượt xem — beacon bắt đầu đếm từ lượt ghé sau."
+      "empty": "Chưa có lượt xem",
+      "empty_hint": "Số liệu bắt đầu từ lượt truy cập tiếp theo vào website."
     },
     "reviews": {
       "title": "Đánh giá",
       "pending": "Chờ duyệt",
-      "none_pending": "Không có đánh giá nào chờ.",
+      "none_pending": "Chưa có đánh giá chờ duyệt",
       "waitlist": "Danh sách chờ",
-      "none_waiting": "Không ai đang chờ.",
+      "none_waiting": "Chưa có ai chờ",
       "history": "Lịch sử",
       "published": "đã đăng",
       "rejected": "đã từ chối",
@@ -945,7 +957,9 @@
       "waitlist_waiting": "đang chờ",
       "waitlist_notified": "đã báo",
       "waitlist_booked": "đã đặt",
-      "waitlist_canceled": "đã hủy"
+      "waitlist_canceled": "đã hủy",
+      "none_pending_hint": "Đánh giá khách để lại sau buổi hẹn sẽ chờ duyệt ở đây.",
+      "none_waiting_hint": "Khách đăng ký chờ cho ngày đã kín lịch sẽ hiện ở đây."
     },
     "sales": {
       "title": "Bán hàng",
@@ -961,24 +975,27 @@
       "selling": "Đang bán…",
       "sold": "Đã bán.",
       "cards": "Thẻ quà",
-      "no_cards": "Chưa có thẻ nào.",
+      "no_cards": "Chưa có thẻ quà tặng",
       "holdings": "Gói đã bán",
-      "no_holdings": "Chưa có gói nào.",
+      "no_holdings": "Chưa có gói đang dùng",
       "pkg": "Gói",
       "mem": "Membership",
       "sessions_left": "buổi còn lại",
       "active": "đang dùng",
-      "inactive": "ngừng"
+      "inactive": "ngừng",
+      "no_cards_hint": "Phát hành thẻ để bán số dư khách có thể dùng sau.",
+      "no_holdings_hint": "Gói và thẻ thành viên khách đã mua được theo dõi ở đây."
     },
     "locations": {
       "title": "Địa điểm",
       "add": "Thêm địa điểm",
       "list": "Các địa điểm",
-      "none": "Chưa có địa điểm.",
+      "none": "Chưa có chi nhánh",
       "name": "Tên",
       "address": "Địa chỉ",
       "add_button": "Thêm",
-      "adding": "Đang thêm…"
+      "adding": "Đang thêm…",
+      "none_hint": "Thêm chi nhánh để gắn nhân viên và lịch hẹn vào từng nơi."
     },
     "intake": {
       "title": "Biểu mẫu tiếp đón",
@@ -989,9 +1006,11 @@
       "add_button": "Thêm",
       "adding": "Đang thêm…",
       "forms": "Các biểu mẫu",
-      "none": "Chưa có biểu mẫu.",
+      "none": "Chưa có biểu mẫu",
       "responses": "Phản hồi",
-      "no_responses": "Chưa có phản hồi."
+      "no_responses": "Chưa có câu trả lời",
+      "none_hint": "Tạo biểu mẫu để thu thập thông tin khách trước buổi hẹn.",
+      "no_responses_hint": "Câu trả lời sẽ hiện ở đây khi khách điền biểu mẫu."
     },
     "products": {
       "title": "Danh mục bán hàng",
@@ -1003,13 +1022,14 @@
       "add_button": "Thêm",
       "adding": "Đang thêm…",
       "list": "Danh mục của bạn",
-      "none": "Chưa có gói hay thành viên.",
-      "per_month": "/ tháng"
+      "none": "Chưa có gói hoặc thẻ thành viên",
+      "per_month": "/ tháng",
+      "none_hint": "Tạo gói để bán buổi hẹn hoặc thẻ thành viên."
     },
     "waitlist": {
       "title": "Danh sách chờ",
       "list": "Khách đang chờ",
-      "none": "Không có ai chờ.",
+      "none": "Chưa có ai chờ",
       "mark_booked": "Đã đặt",
       "mark_canceled": "Huỷ",
       "status": {
@@ -1017,7 +1037,8 @@
         "notified": "Đã báo",
         "booked": "Đã đặt",
         "canceled": "Đã huỷ"
-      }
+      },
+      "none_hint": "Khách đăng ký chờ cho ngày đã kín lịch sẽ hiện ở đây."
     },
     "notifications": {
       "title": "Thông báo",
@@ -1026,6 +1047,17 @@
       "empty": {
         "title": "Chưa có thông báo",
         "description": "Đơn hàng, lịch hẹn và waitlist sẽ hiện ở đây."
+      },
+      "all": "Tất cả",
+      "unread": "Chưa đọc",
+      "categories": {
+        "appointments": "Lịch hẹn",
+        "security": "Bảo mật",
+        "workspace": "Không gian làm việc",
+        "orders": "Đơn hàng",
+        "billing": "Thanh toán",
+        "product_updates": "Cập nhật sản phẩm",
+        "tips": "Mẹo"
       }
     }
   },
@@ -1242,7 +1274,7 @@
       "newTitle": "Thêm ghi đè",
       "editTitle": "Sửa ghi đè",
       "description": "Ghi đè một tính năng riêng cho khách hàng này: giá trị JSON (true, false, số hoặc null), lý do, và ngày hết hạn tuỳ chọn mà sau đó nó ngừng áp dụng.",
-      "empty": "Chưa có ghi đè nào. Khách hàng nhận quyền theo gói và công tắc nền tảng.",
+      "empty": "Chưa có ghi đè",
       "columns": {
         "feature": "Tính năng",
         "value": "Giá trị",
@@ -1261,31 +1293,35 @@
         "reasonRequired": "Cần có lý do.",
         "badExpiry": "Ngày không hợp lệ.",
         "notFound": "Không tìm thấy ghi đè."
-      }
+      },
+      "empty_hint": "Tenant đang dùng gói của mình và các công tắc nền tảng."
     },
     "modules": {
       "title": "Tiện ích",
       "subtitle": "Danh mục tiện ích đã đăng ký.",
-      "empty": "Chưa có tiện ích nào.",
+      "empty": "Chưa có module nào",
       "columns": {
         "key": "Khoá",
         "name": "Tên",
         "stage": "Giai đoạn",
         "version": "Phiên bản"
-      }
+      },
+      "empty_hint": "Module sẽ hiện ở đây khi được đăng ký."
     },
     "domains": {
       "title": "Tên miền",
       "subtitle": "Đối chiếu provider và các dòng domain",
       "drift": "Đối chiếu gần nhất",
-      "no_drift": "Không lệch — provider và dòng khớp.",
+      "no_drift": "Không có sai lệch",
       "rows": "Dòng domain",
-      "rows_empty": "Chưa có dòng domain nào.",
+      "rows_empty": "Chưa có tên miền",
       "primary": "chính",
       "kind": {
         "missing_provider": "dòng tồn tại, provider mất",
         "extra_provider": "provider có, không có dòng"
-      }
+      },
+      "no_drift_hint": "Nhà cung cấp hosting và danh sách tên miền khớp nhau.",
+      "rows_empty_hint": "Tên miền các tenant thêm sẽ hiện ở đây."
     },
     "backups": {
       "title": "Sao lưu",
@@ -1295,9 +1331,9 @@
       "nightly_never": "Job snapshot hàng đêm chưa chạy.",
       "request": "Yêu cầu snapshot",
       "request_button": "Snapshot ngay",
-      "request_empty": "Không có tenant nào đang hoạt động.",
+      "request_empty": "Chưa có tenant đang hoạt động",
       "snapshots": "Snapshots",
-      "empty": "Chưa có snapshot.",
+      "empty": "Chưa có bản sao lưu",
       "rows": "dòng",
       "restore_to_new": "Phục hồi sang tenant mới",
       "done": "Xong.",
@@ -1305,7 +1341,9 @@
         "restore_failed": "Phục hồi thất bại.",
         "snapshot_not_restorable": "Không thể phục hồi."
       },
-      "restore_in_place": "Khôi phục tại chỗ"
+      "restore_in_place": "Khôi phục tại chỗ",
+      "empty_hint": "Bản sao lưu của tenant sẽ hiện ở đây khi được tạo.",
+      "request_empty_hint": "Chỉ yêu cầu sao lưu được cho tenant đang hoạt động."
     },
     "usage": {
       "title": "Sử dụng",
@@ -1315,9 +1353,11 @@
       "failed_jobs": "Job lỗi",
       "errors_24h": "Lỗi (24h)",
       "counters": "Counters",
-      "counters_empty": "Chưa có counter — limit consume khi tenant dùng tính năng.",
+      "counters_empty": "Chưa có bộ đếm",
       "job_kinds": "Jobs theo loại (24h)",
-      "job_kinds_empty": "Không có job nào trong 24 giờ qua."
+      "job_kinds_empty": "Không có tác vụ trong 24 giờ qua",
+      "counters_empty_hint": "Bộ đếm được tạo khi tenant sử dụng các tính năng có giới hạn.",
+      "job_kinds_empty_hint": "Các tác vụ nền chạy gần đây sẽ hiện ở đây."
     }
   },
   "admin": {
@@ -1554,7 +1594,8 @@
       "subtitle": "Mua một lần để mở thêm tính năng trên gói hiện tại.",
       "buy": "Mua",
       "owned": "Đã mua",
-      "empty": "Hiện chưa có tiện ích nào."
+      "empty": "Chưa có tiện ích bổ sung",
+      "empty_hint": "Tiện ích bổ sung có trên nền tảng sẽ hiện ở đây."
     }
   },
   "email": {

@@ -42,7 +42,7 @@ export default async function IntakePage() {
         </TabsList>
         <TabsContent value="forms" className="mt-4">
           {forms.length === 0 ? (
-            <EmptyState icon={ClipboardList} title={t("none")} />
+            <EmptyState icon={ClipboardList} title={t("none")} description={t("none_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-2 pt-6">
@@ -57,7 +57,7 @@ export default async function IntakePage() {
         </TabsContent>
         <TabsContent value="responses" className="mt-4">
           {responses.length === 0 ? (
-            <EmptyState icon={Inbox} title={t("no_responses")} />
+            <EmptyState icon={Inbox} title={t("no_responses")} description={t("no_responses_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-2 pt-6">

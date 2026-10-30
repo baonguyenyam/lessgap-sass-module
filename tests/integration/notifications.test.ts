@@ -39,4 +39,17 @@ describe("member notifications (17.1)", () => {
     await markAllNotificationsRead({ tenantId: TENANT })
     expect((await unreadMemberNotifications(TENANT, "u1")).length).toBe(0)
   })
+
+  it("a member's in_app=off category hides the row", async () => {
+    await db8.orm.public.Tenant.create({ id: TENANT, name: "NT", slug: "nt2", status: "ACTIVE" })
+    await db8.orm.public.User.create({ id: "u2", name: "V", email: "v@x.test" })
+    await db8.orm.public.UserSetting.create({ userId: "u2", key: "notify.orders.in_app", value: false })
+
+    const { notifyMember, unreadMemberNotifications } = await import("@/platform/notify/member")
+    await notifyMember(TENANT, "order.placed", "New order", { userId: "u2" })
+    await notifyMember(TENANT, "booking.created", "New booking", { userId: "u2" })
+
+    const unread = await unreadMemberNotifications(TENANT, "u2")
+    expect(unread.map((r) => r.kind)).toEqual(["booking.created"])
+  })
 })

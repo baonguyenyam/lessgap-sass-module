@@ -43,7 +43,7 @@ export default async function ReviewsPage() {
         </TabsList>
         <TabsContent value="pending" className="mt-4 space-y-6">
           {pending.length === 0 ? (
-            <EmptyState icon={Star} title={t("none_pending")} />
+            <EmptyState icon={Star} title={t("none_pending")} description={t("none_pending_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-4 pt-6">
@@ -76,7 +76,7 @@ export default async function ReviewsPage() {
         </TabsContent>
         <TabsContent value="waitlist" className="mt-4">
           {waiting.length === 0 ? (
-            <EmptyState icon={Hourglass} title={t("none_waiting")} />
+            <EmptyState icon={Hourglass} title={t("none_waiting")} description={t("none_waiting_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-2 pt-6">

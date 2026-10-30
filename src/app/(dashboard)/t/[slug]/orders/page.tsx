@@ -30,7 +30,7 @@ export default async function OrdersPage() {
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
       {orders.length === 0 ? (
-        <EmptyState icon={Package} title={t("empty")} />
+        <EmptyState icon={Package} title={t("empty")} description={t("empty_hint")} />
       ) : (
         <Card>
           <CardHeader>

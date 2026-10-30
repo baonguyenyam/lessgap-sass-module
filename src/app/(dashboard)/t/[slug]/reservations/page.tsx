@@ -30,7 +30,7 @@ export default async function ReservationsPage() {
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
       {reservations.length === 0 ? (
-        <EmptyState icon={Utensils} title={t("empty")} />
+        <EmptyState icon={Utensils} title={t("empty")} description={t("empty_hint")} />
       ) : (
         <Card>
           <CardHeader>

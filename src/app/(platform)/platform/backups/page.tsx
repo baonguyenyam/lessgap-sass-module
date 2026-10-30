@@ -51,7 +51,7 @@ export default async function PlatformBackupsPage() {
         </TabsList>
         <TabsContent value="snapshots" className="mt-4">
           {snapshots.length === 0 ? (
-            <EmptyState icon={Database} title={t("empty")} />
+            <EmptyState icon={Database} title={t("empty")} description={t("empty_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-2 pt-6">
@@ -73,7 +73,7 @@ export default async function PlatformBackupsPage() {
         </TabsContent>
         <TabsContent value="request" className="mt-4">
           {tenants.length === 0 ? (
-            <EmptyState icon={Users} title={t("request_empty")} />
+            <EmptyState icon={Users} title={t("request_empty")} description={t("request_empty_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-2 pt-6">

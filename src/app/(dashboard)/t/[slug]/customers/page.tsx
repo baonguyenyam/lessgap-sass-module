@@ -31,7 +31,7 @@ export default async function CustomersPage() {
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
       {customers.length === 0 ? (
-        <EmptyState icon={Users} title={t("empty")} />
+        <EmptyState icon={Users} title={t("empty")} description={t("empty_hint")} />
       ) : (
         <Card>
           <CardHeader>

@@ -33,7 +33,11 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
 - **Empty blocks:** match the tenant Newsletter page: `EmptyState`
   (`components/layout/empty-state.tsx`) is a standalone full-width dashed block
   with a centered icon in a muted circle, bold centered title, muted centered
-  description, and the next step when there is one. Lists pass it to `DataTable`
+  description, and the next step when there is one. The title is short with no
+  full stop ("No orders yet"); the description is one sentence on what fills
+  it ("Orders placed on your site's shop page appear here."), kept as a
+  `<key>_hint` string beside the title key. A test fails on a non-compact box
+  without a description. Lists pass it to `DataTable`
   as `empty`; an empty list is
   never drawn as a table (no header row, no pagination): with nothing yet the
   block replaces toolbar and table, with a search or filter active the toolbar

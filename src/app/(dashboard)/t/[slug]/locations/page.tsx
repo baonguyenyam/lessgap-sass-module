@@ -33,7 +33,7 @@ export default async function LocationsPage() {
         </CardContent>
       </Card>
       {locations.length === 0 ? (
-        <EmptyState icon={MapPin} title={t("none")} />
+        <EmptyState icon={MapPin} title={t("none")} description={t("none_hint")} />
       ) : (
         <Card>
           <CardHeader>

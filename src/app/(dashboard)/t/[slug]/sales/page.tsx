@@ -48,7 +48,7 @@ export default async function SalesPage() {
         </TabsList>
         <TabsContent value="cards" className="mt-4">
           {cards.length === 0 ? (
-            <EmptyState icon={Gift} title={t("no_cards")} />
+            <EmptyState icon={Gift} title={t("no_cards")} description={t("no_cards_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-1 pt-6">
@@ -63,7 +63,7 @@ export default async function SalesPage() {
         </TabsContent>
         <TabsContent value="holdings" className="mt-4">
           {pkgHolds.length === 0 && memHolds.length === 0 ? (
-            <EmptyState icon={Wallet} title={t("no_holdings")} />
+            <EmptyState icon={Wallet} title={t("no_holdings")} description={t("no_holdings_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-1 pt-6">

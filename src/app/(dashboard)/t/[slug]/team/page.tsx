@@ -30,7 +30,7 @@ export default async function TeamPage() {
       </div>
       <TeamActions add />
       {staff.length === 0 ? (
-        <EmptyState icon={UserSquare} title={t("empty")} />
+        <EmptyState icon={UserSquare} title={t("empty")} description={t("empty_hint")} />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
           {staff.map((s) => (

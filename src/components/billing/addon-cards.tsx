@@ -29,7 +29,7 @@ export function AddOnCards({ addOns, disabled }: { addOns: AddOnData[]; disabled
     if (json.url) window.location.assign(json.url)
   }
 
-  if (addOns.length === 0) return <EmptyState icon={Package} title={t("empty")} />
+  if (addOns.length === 0) return <EmptyState icon={Package} title={t("empty")} description={t("empty_hint")} />
 
   return (
     <Card>

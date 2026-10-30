@@ -7,6 +7,7 @@ import { Logo } from "@/components/logo"
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -21,6 +22,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { ChevronRight } from "lucide-react"
+import { siteConfig } from "@/config/site"
 import { isNavItemActive, navGroups, type NavAccess, type NavArea } from "@/components/layout/app-shell/nav"
 import { tenantPath } from "@/lib/tenant-paths"
 import { TenantSwitcher, type TenantOption } from "@/components/layout/app-shell/tenant-switcher"
@@ -125,6 +127,14 @@ export function AppSidebar({
           </SidebarGroup>
         ))}
       </SidebarContent>
+
+      {/* © year + site name, from configuration — hidden when the sidebar
+          collapses to icons (owner's sidebar-footer requirement). */}
+      <SidebarFooter className="px-4 py-3 group-data-[collapsible=icon]:hidden">
+        <p className="text-xs text-muted-foreground">
+          © {new Date().getFullYear()} {siteConfig.name}
+        </p>
+      </SidebarFooter>
 
       {/* Still folds the sidebar on click, without drawing a line on hover. */}
       <SidebarRail className="hover:after:bg-transparent" />
