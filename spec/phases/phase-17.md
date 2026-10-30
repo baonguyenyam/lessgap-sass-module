@@ -23,17 +23,21 @@ waitlist joined, quote accepted) and mark it read.
   `src/app/(dashboard)/t/[slug]/notifications/page.tsx`, header bell,
   `src/app/actions/notifications.ts`, locales.
 - **Tests:** emit-on-event + mark-read integration tests.
-- [ ] done
+- [x] done (`fa26063`)
 
 ### 17.2 — Billing parity audit
 - **Goal:** compare `/t/<slug>/billing` with MADE's billing (plan, seats,
   invoices, payment method, usage) and close what is missing.
-- [ ] done
+- [x] done — audit only: plan grid (`PlanCards`), invoices (`InvoicesTable`),
+  add-ons (`AddOnCards`), discounts (`getDiscounts`), subscription status and
+  Stripe Customer Portal (`ManageBillingButton` → `/api/billing/portal`)
+  already cover MADE's billing surface.
 
 ### 17.3 — Profile parity close-out
 - **Goal:** the account hero + groups already land (owner edit); verify the
   remaining MADE profile items (address book, sessions list) and add what
   is missing.
-- [ ] done
+- [ ] in progress — hero card and grouped menus landed; sessions list and
+  address book remain (MADE shows devices/sessions on the profile).
 
 ## Findings
