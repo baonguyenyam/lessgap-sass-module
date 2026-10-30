@@ -23,8 +23,12 @@ type SettingRow = { key: string; value: unknown }
  */
 async function readTenantRows(tenantId: string): Promise<SettingRow[]> {
   "use cache"
-  cacheTag(tenantSettingsTag(tenantId))
-  cacheLife("minutes")
+  try {
+    cacheTag(tenantSettingsTag(tenantId))
+    cacheLife("minutes")
+  } catch {
+    /* not every caller runs under Cache Components */
+  }
   // The platform client: cached across requests for one tenant id, outside any
   // tenant's transaction, so it reads past RLS (task 1.5) by design.
   return platformDb.orm.public.TenantSetting.select("key", "value").where({ tenantId }).all()
@@ -32,8 +36,12 @@ async function readTenantRows(tenantId: string): Promise<SettingRow[]> {
 
 async function readUserRows(userId: string): Promise<SettingRow[]> {
   "use cache"
-  cacheTag(userSettingsTag(userId))
-  cacheLife("minutes")
+  try {
+    cacheTag(userSettingsTag(userId))
+    cacheLife("minutes")
+  } catch {
+    /* not every caller runs under Cache Components */
+  }
   return db8.orm.public.UserSetting.select("key", "value").where({ userId }).all()
 }
 

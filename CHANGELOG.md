@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [3.7.0] - 2026-10-30
+
+**The sidebar finally fills — the dashboard's module-gated items show when the tenant's modules are on, and the console noise is gone.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Fixed
+
+- **Sidebar was empty** — `enabledModules` only ever checked `newsletter`; the other ten module-gated items (booking, catalog, team, customers, reservations, shop, quotes, payments, chatbot, analytics) never showed. The layout now asks `isModuleActive` for every key the nav gates on.
+- **`cacheTag()` console error** — `readRows`/`readUserRows` called `cacheTag` outside Cache-Components contexts (Better Auth's routes read settings); the tag hint is wrapped, the row still reads.
+- **`getTranslations` console error** — the email senders run in Better Auth's hook context where `next-intl`'s `getTranslations` has no request; `emailStrings` reads the `en.email` namespace directly (`t`/`t.raw` shim).
+
 ## [3.6.0] - 2026-10-30
 
 **The dashboard's sidebar covers the whole surface — every page a phase built has its item, every model has its page.** This is a MINOR: `git pull`, `pnpm install`.

@@ -36,11 +36,25 @@ export default async function DashboardLayout({ children }: { children: React.Re
   // Sidebar module gates (task 2.10): a module's items disappear when it is
   // disabled for the tenant, the same way its routes 404 (L2).
   const enabledModules = new Set<string>()
-  if (
-    current &&
-    (await isModuleActive({ tenantId: current.id, actor: { kind: "member", userId: user.id, role: "" } }, "newsletter"))
-  ) {
-    enabledModules.add("newsletter")
+  const navModuleKeys = [
+    "newsletter",
+    "catalog",
+    "team",
+    "booking",
+    "customers",
+    "reservations",
+    "shop",
+    "quotes",
+    "payments",
+    "chatbot",
+    "analytics",
+  ]
+  if (current) {
+    for (const key of navModuleKeys) {
+      if (await isModuleActive({ tenantId: current.id, actor: { kind: "member", userId: user.id, role: "" } }, key)) {
+        enabledModules.add(key)
+      }
+    }
   }
 
   const pastDueUntil = current?.status === "PAST_DUE" && current.graceUntil ? toDate(current.graceUntil) : null

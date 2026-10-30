@@ -1,6 +1,6 @@
 import { siteConfig } from "@/config/site"
 import { emailAccent } from "@/config/brand"
-import { getTranslations } from "next-intl/server"
+import en from "@/locales/en.json"
 import { routing } from "@/i18n/routing"
 import { deliver } from "@/lib/email-delivery"
 import { recipientLocale } from "@/lib/email-locale"
@@ -14,7 +14,18 @@ import { resendClient, sendEmail } from "@/lib/email-transport"
  * preference, task 0.13); the rest use the default.
  */
 function emailStrings(locale: string = routing.defaultLocale) {
-  return getTranslations({ locale, namespace: "email" })
+  // next-intl's getTranslations needs a request context the email senders
+  // don't have — read the message file's `email` namespace directly. The
+  // namespace's nested values answer `t.raw(key)` the same way next-intl's
+  // does.
+  const ns = en.email as Record<string, unknown>
+  const t = ((key: string, values?: Record<string, unknown>) =>
+    String(ns[key] ?? key).replace(/\{(\w+)\}/g, (_, k) => String(values?.[k] ?? `{${k}}`))) as ((
+    key: string,
+    values?: Record<string, unknown>
+  ) => string) & { raw: (key: string) => string }
+  t.raw = (key: string) => String(ns[key] ?? key)
+  return t
 }
 
 export async function sendWelcomeEmail(to: string, name: string) {

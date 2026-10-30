@@ -20,8 +20,12 @@ import { readSettings, type PlatformSettings, type SettingKey } from "@/platform
  */
 async function readRows(): Promise<{ key: string; value: unknown }[]> {
   "use cache"
-  cacheTag(PLATFORM_SETTINGS_TAG)
-  cacheLife("minutes")
+  try {
+    cacheTag(PLATFORM_SETTINGS_TAG)
+    cacheLife("minutes")
+  } catch {
+    /* not every caller runs under Cache Components */
+  }
   return db8.orm.public.PlatformSwitch.select("key", "value").all()
 }
 
