@@ -38,3 +38,18 @@ These rules exist so that it cannot happen by forgetting one `where`.
 ---
 
 Based on: `spec/02-tenancy.md` and ADR 0002, and the tenant isolation model proven in platform.madelab.io.
+
+## Email templates are managed in-system (MADE convention)
+
+- **Every template the system sends is managed, not buried in code** — the
+  platform console lists each template per locale (`/platform/emails/templates`),
+  renders a preview with fixture data, and can send a test; a tenant's own
+  copy lives in `TenantSetting` so the kit's default stays code while the
+  tenant edits.
+- **A new template ships with its management surface** — a key in
+  `src/emails/templates`, a locale per `templateLocales`, a preview entry and
+  the `NotificationLog`/`Email` row the send leaves, so the delivery log
+  answers what was sent.
+- **The send path renders through the template, never inline** — an action
+  that emails builds the subject/body from `templates[key][locale](vars)`,
+  so a template's edit changes what goes out without touching the action.
