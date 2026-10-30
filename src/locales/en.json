@@ -545,7 +545,8 @@
       "reviews": "Reviews",
       "sales": "Sales",
       "payments": "Payments",
-      "quotes": "Quotes"
+      "quotes": "Quotes",
+      "locations": "Locations"
     },
     "members": {
       "title": "Members",
@@ -863,6 +864,16 @@
       "sessions_left": "sessions left",
       "active": "active",
       "inactive": "inactive"
+    },
+    "locations": {
+      "title": "Locations",
+      "add": "Add a location",
+      "list": "Your locations",
+      "none": "No locations yet.",
+      "name": "Name",
+      "address": "Address",
+      "add_button": "Add",
+      "adding": "Adding…"
     }
   },
   "platform": {

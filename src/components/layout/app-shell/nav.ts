@@ -5,6 +5,7 @@ import {
   Calendar,
   Star,
   Gift,
+  MapPin,
   Globe,
   List,
   Globe2,
@@ -119,6 +120,9 @@ export function navGroups(
         ...(enabledModules && !enabledModules.has("payments")
           ? []
           : [{ key: "payments", href: t("payments"), icon: CreditCard } satisfies NavItem]),
+        ...(enabledModules && !enabledModules.has("booking")
+          ? []
+          : [{ key: "locations", href: t("locations"), icon: MapPin } satisfies NavItem]),
       ],
     },
     {

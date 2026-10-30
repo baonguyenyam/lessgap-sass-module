@@ -545,7 +545,8 @@
       "reviews": "Đánh giá",
       "sales": "Bán hàng",
       "payments": "Thanh toán",
-      "quotes": "Báo giá"
+      "quotes": "Báo giá",
+      "locations": "Địa điểm"
     },
     "members": {
       "title": "Thành viên",
@@ -863,6 +864,16 @@
       "sessions_left": "buổi còn lại",
       "active": "đang dùng",
       "inactive": "ngừng"
+    },
+    "locations": {
+      "title": "Địa điểm",
+      "add": "Thêm địa điểm",
+      "list": "Các địa điểm",
+      "none": "Chưa có địa điểm.",
+      "name": "Tên",
+      "address": "Địa chỉ",
+      "add_button": "Thêm",
+      "adding": "Đang thêm…"
     }
   },
   "platform": {

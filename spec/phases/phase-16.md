@@ -31,7 +31,7 @@ to the bookings the tenant quotes for).
 lets the tenant add one (name + address).
 
 **Done when:** the page lists and creates.
-- [ ] done
+- [x] done (`/t/<slug>/locations` lists and adds branches via `createLocation` — `Location` nav item in `operations`.)
 
 ### 16.3 `/t/<slug>/intake` — the forms and their responses
 
