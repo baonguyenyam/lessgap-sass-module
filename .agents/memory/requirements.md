@@ -57,12 +57,12 @@ method):**
   from the entitlements resolver; "View plans" to change plan.
 - [ ] History: plan changes (upgrades, downgrades, assignments by staff).
 - [ ] Credits & proration: the ledger of mid-cycle charges and credits.
-- [x] Invoices list. [ ] Receipt view with a print layout, and the
-  provider's PDF.
-- [ ] Payment method page for the subscription (provider portal or hosted
-  setup).
-- [ ] "Plan required" page: where a feature the plan lacks sends a member,
-  naming the feature and the plans that include it.
+- [x] Invoices list. [x] Provider's PDF — `pdfUrl` opens the Stripe
+  receipt; an in-app print-layout receipt is a possible refinement.
+- [x] Payment method page for the subscription — `ManageBillingButton`
+  opens the Stripe Customer Portal (`/api/billing/portal`).
+- [x] "Plan required" page: `/t/<slug>/upgrade?feature=<key>` names the
+  feature and lists the plans granting it, with the upgrade CTA.
 
 **Notifications (in-app inbox):**
 - [x] A `/notifications` page per member: category badge, message,
