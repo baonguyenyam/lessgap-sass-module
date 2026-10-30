@@ -6,6 +6,18 @@ requirement becomes spec, ADR, rule or test, the pointer is updated and this
 file stays the index — not the place requirements are defined.
 
 
+
+## 2026-10-30 — App shell and list UI follow shadcn-admin and platform.madelab.io
+
+The owner fixed the UI conventions: a dropdown in the sidebar header (tenant
+switcher with "Add team"), submenus on sidebar items, theme, language and
+account dropdown at the top right, list pages with the action buttons on the
+right of the heading, a faceted-filter toolbar with a View toggle, a floating
+selection bar and numbered pagination. Reference
+[satnaing/shadcn-admin](https://github.com/satnaing/shadcn-admin) and above
+all platform.madelab.io, which most pages (Profile, Settings, Tenants)
+should resemble; structure only, no code copied. Specified in
+`.agents/rules/ui-accessibility.md`, "Sidebar + header + list conventions".
 ## 2026-10-30 — Sidebar complete and permission-aware
 
 The owner asked for the dashboard sidebar to list every page and respect

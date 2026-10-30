@@ -96,7 +96,12 @@ Based on: [WCAG 2.1 AA](https://www.w3.org/TR/WCAG21/) and the Tailwind CSS 4 an
 ## Sidebar + header + list conventions (shadcn-admin)
 
 The app shell follows [satnaing/shadcn-admin](https://github.com/satnaing/shadcn-admin)
-conventions — check it before adding nav or list chrome.
+conventions — check it before adding nav or list chrome. For the pages
+themselves (Profile, Settings, Tenants and the other console and dashboard
+pages) the first reference is **platform.madelab.io**: match its layout and
+behaviour for most pages. Both are references for structure and behaviour
+only — never copy their code, and keep the kit neutral (owner's rule,
+2026-10-30, `.agents/memory/requirements.md`).
 
 - **Sidebar header is a dropdown** — the current tenant's name + icon opens a
   menu of the user's tenants (icon + name + `⌘N` shortcut each) ending in an
@@ -106,8 +111,8 @@ conventions — check it before adding nav or list chrome.
   "Secured by Clerk" opens Sign In / Sign Up / User Management. Group items
   under a parent when they belong to the same domain rather than adding a flat
   sibling.
-- **Top-right chrome, in order** — theme toggle (sun/moon), a settings or
-  config button, then the account dropdown: avatar initials open a menu with
+- **Top-right chrome, in order** — theme toggle (sun/moon), the language
+  switcher, a settings or config button, then the account dropdown: avatar initials open a menu with
   the user's name + email, Profile, Billing, Settings, "New team", and a red
   Sign out — each with its keyboard shortcut shown right-aligned.
 - **A list page's heading carries its actions on the right** — "Import" and a
@@ -115,8 +120,11 @@ conventions — check it before adding nav or list chrome.
 - **A table's toolbar carries filter pills + a view toggle** — a free-text
   search input, per-facet dropdown pills ("Status", "Priority") that open a
   checklist with counts, and a "View" column-visibility toggle on the right.
-- **A selected table row set shows a selection bar** — "N rows selected" with
-  the bulk actions and a destructive action tinted red; the bar replaces the
-  toolbar while rows are selected.
+- **A table row starts with a select checkbox and ends with a "…" menu** —
+  the header checkbox selects the page, sortable column headers show the
+  up/down chevrons, and per-row actions live in the trailing "…" menu.
+- **A selected table row set shows a selection bar** — a floating bar centred
+  under the table: a clear (×) button, the count as a badge ("N selected"),
+  icon buttons for the bulk actions, and the destructive one filled red.
 - **Pagination sits under the table** — "Rows per page" on the left, the page
   indicator ("Page X of Y") and chevron/number controls on the right.
