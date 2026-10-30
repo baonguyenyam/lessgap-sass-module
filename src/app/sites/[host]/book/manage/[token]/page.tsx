@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation"
-import { headers } from "next/headers"
 import { connection } from "next/server"
 import { getTranslations } from "next-intl/server"
 import { db8 } from "@/lib/db8"
