@@ -54,6 +54,8 @@ export async function bookAppointment(input: {
   marketingConsent?: boolean
   smsConsent?: boolean
   notes?: string
+  giftCardCode?: string
+  packageHoldingId?: string
 }) {
   try {
     const site = await siteCtx()
@@ -197,6 +199,43 @@ export async function bookAppointment(input: {
     for (const entry of waiting) {
       if (input.email && entry.email === input.email) {
         await db8.orm.public.WaitlistEntry.where({ id: entry.id }).update({ status: "booked" })
+      }
+    }
+    // The pay path (task 14.2): a card code debits against the appointment;
+    // a package holding spends one session.
+    if (input.giftCardCode) {
+      const card = await db8.orm.public.GiftCard.where((x) =>
+        and(x.tenantId.eq(site.tenantId), x.code.eq(input.giftCardCode!))
+      ).first()
+      if (card && card.active) {
+        const price = service.priceCents
+        if (card.balanceCents >= price) {
+          await db8.orm.public.GiftCardLedger.create({
+            tenantId: site.tenantId,
+            cardId: card.id,
+            deltaCents: -price,
+            reason: "spent",
+            appointmentId: appointment.id,
+          })
+          await db8.orm.public.GiftCard.where({ id: card.id }).update({ balanceCents: card.balanceCents - price })
+        }
+      }
+    }
+    if (input.packageHoldingId) {
+      const holding = await db8.orm.public.CustomerPackage.where((x) =>
+        and(x.tenantId.eq(site.tenantId), x.id.eq(input.packageHoldingId!))
+      ).first()
+      if (holding && holding.active && holding.sessionsLeft > 0) {
+        await db8.orm.public.PackageLedger.create({
+          tenantId: site.tenantId,
+          holdingId: holding.id,
+          deltaSessions: -1,
+          reason: "spent",
+          appointmentId: appointment.id,
+        })
+        await db8.orm.public.CustomerPackage.where({ id: holding.id }).update({
+          sessionsLeft: holding.sessionsLeft - 1,
+        })
       }
     }
     return { id: appointment.id, status }

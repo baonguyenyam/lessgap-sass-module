@@ -37,7 +37,7 @@ session.
 **Tests:** integration — the booking path can carry a card code / a
 package spend.
 **Done when:** the payment path works end-to-end.
-- [ ] done
+- [x] done (`tests/integration/booking-pay.test.ts` 2/2 — `bookAppointment` accepts `giftCardCode`/`packageHoldingId`: an active card's `balanceCents` debits the service's `priceCents`; an active holding spends one session — each writes its ledger row.)
 
 ### 14.3 E2E for the new surfaces
 

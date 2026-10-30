@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [3.3.0] - 2026-10-29
+
+**A booking can carry a gift card code or a package — the debit lands against the appointment.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **Booking pay path** — `bookAppointment` accepts `giftCardCode`/`packageHoldingId`: an active card's `balanceCents` debits the service's `priceCents`; an active holding spends one session — each writes its ledger row
+
 ## [3.2.0] - 2026-10-29
 
 **A customer who books from a waitlist notify clears their entry — the waitlist's `booked` transition lands.** This is a MINOR: `git pull`, `pnpm install`.
