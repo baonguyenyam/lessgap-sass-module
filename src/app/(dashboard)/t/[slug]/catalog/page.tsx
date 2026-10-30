@@ -1,12 +1,11 @@
 import { getTranslations } from "next-intl/server"
-import { PageHeader } from "@/components/layout/page-header"
 import { db8 } from "@/lib/db8"
 import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { CatalogActions } from "@/components/catalog/catalog-actions"
-import { EmptyState } from "@/components/layout/empty-state"
-import { List } from "lucide-react"
+import { memberCan } from "@/platform/tenancy/permissions"
+import { ServicesTable, type ServiceRow } from "@/components/catalog/services-table"
+import { parseTableQuery, type TableQuerySpec } from "@/lib/table-query"
+import { getViewerSettings } from "@/platform/settings/tenant-store"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -14,88 +13,67 @@ export const instant = false
 
 /** Dashboard → Catalog (task 4.2): the tenant's categories and services —
  * what the site's services section renders. */
-export default async function CatalogPage() {
+export default async function CatalogPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}) {
   const c = await requireTenantContext("catalog", "manage")
   await requireModule(
     { tenantId: c.tenantId, actor: { kind: "member", userId: c.user.id, role: c.member.role } },
     "catalog"
   )
   const t = await getTranslations("dashboard.catalog")
+  const settings = await getViewerSettings()
   const [categories, services] = await Promise.all([
     db8.orm.public.ServiceCategory.where({ tenantId: c.tenantId }).all(),
-    db8.orm.public.Service.where({ tenantId: c.tenantId }).include("variants").include("category").all(),
+    db8.orm.public.Service.where({ tenantId: c.tenantId }).include("category").all(),
   ])
-  const formatPrice = (cents: number, currency: string) => `${(cents / 100).toFixed(0)} ${currency.toUpperCase()}`
+  const categoryName = new Map(categories.map((x) => [x.id, x.name]))
+  const spec: TableQuerySpec = {
+    sortable: ["name", "priceCents", "durationMinutes"],
+    defaultDir: "asc",
+    filters: { category: categories.map((x) => x.name) },
+    defaultPageSize: settings["display.page_size"],
+  }
+  const query = parseTableQuery(await searchParams, spec)
+
+  let rows: ServiceRow[] = services.map((s) => ({
+    id: s.id,
+    name: s.name,
+    category: s.categoryId ? (categoryName.get(s.categoryId) ?? null) : null,
+    durationMinutes: s.durationMinutes,
+    priceCents: s.priceCents,
+    currency: s.currency,
+    isSample: s.isSample,
+  }))
+  if (query.q) {
+    const q = query.q.toLowerCase()
+    rows = rows.filter((r) => r.name.toLowerCase().includes(q))
+  }
+  const facet = query.filters.category
+  if (facet) rows = rows.filter((r) => r.category === facet)
+  rows.sort((a, b) => {
+    const dir = query.dir === "desc" ? -1 : 1
+    if (query.sort === "priceCents") return dir * (a.priceCents - b.priceCents)
+    if (query.sort === "durationMinutes") return dir * (a.durationMinutes - b.durationMinutes)
+    return dir * a.name.localeCompare(b.name)
+  })
+  const total = rows.length
+  rows = rows.slice((query.page - 1) * query.pageSize, query.page * query.pageSize)
+
+  const canManage = await memberCan(c.tenantId, c.member.role, "catalog", "manage")
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title={t("title")}
-        description={t("subtitle")}
-        actions={<CatalogActions addService categories={categories.map((x) => ({ id: x.id, name: x.name }))} />}
+      <ServicesTable
+        heading={{ title: t("title"), description: t("subtitle") }}
+        rows={rows}
+        total={total}
+        query={query}
+        categories={categories.map((x) => ({ id: x.id, name: x.name }))}
+        canManage={canManage}
       />
-      {categories.length === 0 && services.length === 0 && (
-        <EmptyState icon={List} title={t("empty")} description={t("empty_hint")} />
-      )}
-      {categories.map((cat) => {
-        const catServices = services.filter((s) => s.categoryId === cat.id)
-        return (
-          <Card key={cat.id}>
-            <CardHeader>
-              <CardTitle>{cat.name}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {catServices.length === 0 ? (
-                <EmptyState
-                  icon={List}
-                  title={t("empty")}
-                  description={t("empty_hint")}
-                  size="compact"
-                  className="border-0"
-                />
-              ) : (
-                catServices.map((s) => (
-                  <div key={s.id} className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">
-                        {s.name}
-                        {s.isSample ? ` ${"· sample"}` : ""}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {s.durationMinutes} min · {formatPrice(s.priceCents, s.currency)}
-                      </p>
-                    </div>
-                    <CatalogActions remove serviceId={s.id} />
-                  </div>
-                ))
-              )}
-            </CardContent>
-          </Card>
-        )
-      })}
-      {(() => {
-        const uncategorized = services.filter((s) => !s.categoryId)
-        return uncategorized.length > 0 ? (
-          <Card>
-            <CardHeader>
-              <CardTitle>{t("uncategorized")}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {uncategorized.map((s) => (
-                <div key={s.id} className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">{s.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {s.durationMinutes} min · {formatPrice(s.priceCents, s.currency)}
-                    </p>
-                  </div>
-                  <CatalogActions remove serviceId={s.id} />
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        ) : null
-      })()}
     </div>
   )
 }

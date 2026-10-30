@@ -44,3 +44,20 @@ export function foldPermissions(keys: string[]): Record<string, string[]> {
 export function permissionKeys(permission: Record<string, readonly string[]>): string[] {
   return Object.entries(permission).flatMap(([resource, verbs]) => verbs.map((verb) => `${resource}.${verb}`))
 }
+
+export type CatalogMessages = { nameRequired: string; durationInvalid: string; priceInvalid: string }
+
+export function catalogCategorySchema(m: CatalogMessages) {
+  return z.object({ name: z.string().trim().min(1, m.nameRequired) })
+}
+export type CatalogCategoryInput = z.infer<ReturnType<typeof catalogCategorySchema>>
+
+export function catalogServiceSchema(m: CatalogMessages) {
+  return z.object({
+    name: z.string().trim().min(1, m.nameRequired),
+    durationMinutes: z.number().int().positive(m.durationInvalid),
+    price: z.number().min(0, m.priceInvalid),
+    categoryId: z.string().optional(),
+  })
+}
+export type CatalogServiceInput = z.infer<ReturnType<typeof catalogServiceSchema>>

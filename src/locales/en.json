@@ -823,7 +823,25 @@
       "empty": "No catalog items yet",
       "empty_hint": "Add the services and categories your site offers.",
       "category": "Category",
-      "uncategorized": "Uncategorized"
+      "uncategorized": "Uncategorized",
+      "search": "Search services…",
+      "colName": "Service",
+      "colDuration": "Duration",
+      "colPrice": "Price",
+      "colActions": "Actions",
+      "categoryName": "Category name",
+      "sample": "sample",
+      "addServiceHint": "The service appears on your site's booking list.",
+      "addCategoryHint": "Categories group services on the site.",
+      "removeConfirm": {
+        "title": "Remove this service?",
+        "description": "It disappears from the site's catalog."
+      },
+      "errors": {
+        "nameRequired": "A name is required.",
+        "durationInvalid": "Duration must be a positive number of minutes.",
+        "priceInvalid": "Price cannot be negative."
+      }
     },
     "team": {
       "title": "Team",

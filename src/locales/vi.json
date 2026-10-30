@@ -823,7 +823,25 @@
       "empty": "Chưa có mục nào trong danh mục",
       "empty_hint": "Thêm dịch vụ và nhóm dịch vụ mà website của bạn cung cấp.",
       "category": "Nhóm",
-      "uncategorized": "Chưa phân nhóm"
+      "uncategorized": "Chưa phân nhóm",
+      "search": "Tìm dịch vụ…",
+      "colName": "Dịch vụ",
+      "colDuration": "Thời lượng",
+      "colPrice": "Giá",
+      "colActions": "Thao tác",
+      "categoryName": "Tên nhóm",
+      "sample": "mẫu",
+      "addServiceHint": "Dịch vụ sẽ hiện trong danh sách đặt lịch trên website.",
+      "addCategoryHint": "Nhóm dịch vụ gom các dịch vụ trên website.",
+      "removeConfirm": {
+        "title": "Xóa dịch vụ này?",
+        "description": "Dịch vụ sẽ biến mất khỏi danh mục website."
+      },
+      "errors": {
+        "nameRequired": "Cần nhập tên.",
+        "durationInvalid": "Thời lượng phải là số phút dương.",
+        "priceInvalid": "Giá không được âm."
+      }
     },
     "team": {
       "title": "Nhân viên",

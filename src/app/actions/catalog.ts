@@ -8,6 +8,8 @@ import { getEntitlements } from "@/platform/entitlements"
 import { requireModule } from "@/platform/modules/runtime"
 import { audit } from "@/platform/audit"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
+import { catalogCategorySchema, catalogServiceSchema } from "@/lib/schemas/tenant"
+import { getTranslations } from "next-intl/server"
 import type { TenantContext } from "@/platform/tenancy/context"
 
 /** Catalog actions (task 4.2): categories, services, variants — tenant-owned
@@ -32,10 +34,20 @@ async function guard(fn: (c: TenantContext) => Promise<unknown>): Promise<{ erro
 }
 
 export async function addCategory(input: { name: string }) {
+  const t = await getTranslations("dashboard.catalog.errors")
+  const parsed = catalogCategorySchema({
+    nameRequired: t("nameRequired"),
+    durationInvalid: "",
+    priceInvalid: "",
+  }).safeParse(input)
+  if (!parsed.success) return { error: parsed.error.issues[0].message }
   return guard(async (c) => {
-    if (!input.name.trim()) throw new AppError("invalid_input", { field: "name" })
-    await db8.orm.public.ServiceCategory.create({ tenantId: c.tenantId, name: input.name.trim() })
-    await audit(c, { action: "catalog.category_added", targetType: "ServiceCategory", data: { name: input.name } })
+    await db8.orm.public.ServiceCategory.create({ tenantId: c.tenantId, name: parsed.data.name })
+    await audit(c, {
+      action: "catalog.category_added",
+      targetType: "ServiceCategory",
+      data: { name: parsed.data.name },
+    })
   })
 }
 
@@ -45,17 +57,23 @@ export async function addService(input: {
   priceCents?: number
   categoryId?: string
 }) {
+  const t = await getTranslations("dashboard.catalog.errors")
+  const parsed = catalogServiceSchema({
+    nameRequired: t("nameRequired"),
+    durationInvalid: t("durationInvalid"),
+    priceInvalid: t("priceInvalid"),
+  }).safeParse({ ...input, price: (input.priceCents ?? 0) / 100 })
+  if (!parsed.success) return { error: parsed.error.issues[0].message }
   return guard(async (c) => {
-    if (!input.name.trim()) throw new AppError("invalid_input", { field: "name" })
     const count = await db8.orm.public.Service.where({ tenantId: c.tenantId }).aggregate((a) => ({ n: a.count() }))
     const max = (await getEntitlements(c)).limit("catalog.services.max")
     if (max !== null && count.n + 1 > max) throw new AppError("feature_unavailable")
     await db8.orm.public.Service.create({
       tenantId: c.tenantId,
-      name: input.name.trim(),
-      categoryId: input.categoryId || null,
-      durationMinutes: input.durationMinutes ?? 60,
-      priceCents: input.priceCents ?? 0,
+      name: parsed.data.name,
+      categoryId: parsed.data.categoryId || null,
+      durationMinutes: parsed.data.durationMinutes,
+      priceCents: Math.round(parsed.data.price * 100),
     })
     await audit(c, { action: "catalog.service_added", targetType: "Service", data: { name: input.name } })
   })
