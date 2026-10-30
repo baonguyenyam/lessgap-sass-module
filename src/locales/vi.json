@@ -907,9 +907,14 @@
     "orders": {
       "title": "Đơn hàng",
       "subtitle": "Mọi đơn hàng",
-      "list": "{count} đơn",
       "empty": "Chưa có đơn hàng",
-      "empty_hint": "Đơn đặt trên trang cửa hàng của website sẽ hiện ở đây."
+      "empty_hint": "Đơn đặt trên trang cửa hàng của website sẽ hiện ở đây.",
+      "search": "Tìm đơn…",
+      "colCustomer": "Khách",
+      "colItems": "Món",
+      "colTotal": "Tổng",
+      "colStatus": "Trạng thái",
+      "colWhen": "Thời điểm"
     },
     "ordering": {
       "board_title": "Bảng đơn",

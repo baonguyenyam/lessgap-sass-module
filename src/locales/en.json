@@ -907,9 +907,14 @@
     "orders": {
       "title": "Orders",
       "subtitle": "Every shop order",
-      "list": "{count} orders",
       "empty": "No orders yet",
-      "empty_hint": "Orders placed on your site's shop page appear here."
+      "empty_hint": "Orders placed on your site's shop page appear here.",
+      "search": "Search orders…",
+      "colCustomer": "Customer",
+      "colItems": "Items",
+      "colTotal": "Total",
+      "colStatus": "Status",
+      "colWhen": "When"
     },
     "ordering": {
       "board_title": "Order board",
