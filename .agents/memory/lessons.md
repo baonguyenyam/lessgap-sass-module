@@ -1501,3 +1501,21 @@ this class of bug.
 - `reindexTenant`-style per-tenant job checks belong on `TenantModule`,
   not `isModuleActive` — the platform switch's `cacheTag` fallback in
   non-request contexts makes `isModuleActive` always false.
+
+- A `Promise.all` destructure's order must match the array — adding a query to
+  the wrong position gives it the wrong type (the destructure names the
+  previous position's row).
+- Prisma 8's `where` object shorthand does equality only; `in` needs the
+  function-builder `x.field.in([...])` and multi-condition needs `and()`
+  from `@prisma/orm-postgres/orm-client`.
+- `/sites/*` is a proxy-internal rewrite path — a browser can't reach it;
+  site surfaces in e2e go through `request.get` with a `host` header or a
+  tenant-scoped context, never `page.goto("/sites/…")`.
+- `resolveHost(host)` reads the `[host]` path param on site pages —
+  `headers().get("host")` is the browser's real host (`localhost` in e2e)
+  and never matches a tenant domain.
+- `db8` is a `globalThis` singleton across a Playwright worker — a spec's
+  `afterAll(() => db8.close())` leaves the next spec with "Postgres client
+  is closed"; never close it in a spec.
+- `TimestampString` where-comparisons need `toTs(date)` not
+  `new Date().toISOString()` — the codec writes Postgres's text format.
