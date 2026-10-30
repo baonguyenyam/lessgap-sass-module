@@ -321,3 +321,9 @@ user with data, so a database that already has kit users keeps working.
 - **`Location`** — a tenant's physical branch (ADR 0025); `StaffMember`,
   `Appointment`, `AvailabilityRule`, `TimeOff` and `Order` carry
   `locationId` nullable.
+- **`HealthCheck`** — platform-private; the `platform.health_check` job's
+  probe rows the public `/status` page renders (ADR 0029).
+- **`MemberNotification`** — a member's in-app feed row (phase 17.1): one
+  per workspace event (`order.placed`, `booking.created`,
+  `waitlist.joined`), `userId` null broadcasts to everyone, `readAt` marks
+  it seen; `deleteTenant` sweeps the rows.

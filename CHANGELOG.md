@@ -17,6 +17,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 **The sidebar finally fills — the dashboard's module-gated items show when the tenant's modules are on, and the console noise is gone.** This is a MINOR: `git pull`, `pnpm install`.
 
+### Added
+
+- **In-app notification feed**: a bell in the dashboard header shows the unread count and opens `/t/<slug>/notifications` — one row per workspace event (order placed, booking created, waitlist joined) addressed to a member or broadcast to everyone, marked read one at a time or all at once
+
 ### Changed
 
 - **Settings → Emails manages the tenant's email templates**: every template the system sends, per locale, with subject and body edited in place; the tenant's copy overrides the kit default and can be reset, matching the platform console's template page

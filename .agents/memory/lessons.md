@@ -2,6 +2,12 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-30 · prisma-8 · `refs/db.json` does not follow the plan
+- **Symptom:** `pnpm db:migrate` failed `MIGRATION.PATH_UNREACHABLE` after a second plan on the same day.
+- **Cause:** `db:plan` reads `migrations/app/refs/db.json` for the parent hash but does not write the new `to` hash back — the first plan left the ref on the old hash, so the second plan branched from the wrong parent.
+- **Fix:** set the ref to the newest migration's `to` hash, delete the mis-parented migration, re-plan.
+- **Rule:** after every `pnpm db:plan`, write the new migration's `to` hash into `migrations/app/refs/db.json` before planning again or migrating (AGENTS.md says the ref must point at the newest `to` — the planner leaves that to you).
+
 ### 2026-10-30 · next · A running `pnpm dev` keeps a route's old segment config
 - **Symptom:** after `export const instant = false` was added to `/t/[slug]/settings/site`, the owner still saw "uncached data accessed outside of `<Suspense>`" for that route, while every page load and click on the same server came back clean, and a fresh dev server showed nothing.
 - **Cause:** the dev server had been running since before the change and kept reporting from the route's earlier compile.
