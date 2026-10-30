@@ -2,6 +2,12 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-30 · agents · Another agent commits whatever is in the working tree
+- **Symptom:** a temporary Playwright spec used only for screenshots (`tests/e2e/zz-shot.spec.ts`) landed in another agent's commit; and a new unit test with a regex `s` flag broke `pnpm build` (TS1501, the target is below es2018) because typecheck was not rerun after the test was added.
+- **Cause:** two agents share one checkout and one of them commits every change it finds; `vitest` runs without the TypeScript target check that `pnpm typecheck` / `pnpm build` apply.
+- **Fix:** the other agent removed the spec and rewrote the regex without `s`.
+- **Rule:** delete a temporary spec in the same command that runs it, never leave it between turns; rerun `pnpm typecheck` after editing any test file, not only source files.
+
 ### 2026-10-30 · prisma-8 · `refs/db.json` does not follow the plan
 - **Symptom:** `pnpm db:migrate` failed `MIGRATION.PATH_UNREACHABLE` after a second plan on the same day.
 - **Cause:** `db:plan` reads `migrations/app/refs/db.json` for the parent hash but does not write the new `to` hash back — the first plan left the ref on the old hash, so the second plan branched from the wrong parent.
