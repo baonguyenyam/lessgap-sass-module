@@ -563,6 +563,18 @@ trialEndsAt          TimestampString(3)?
     using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
     withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
   }
+
+  policy_all intake_form_isolation {
+    target    = IntakeForm
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
+
+  policy_all intake_response_isolation {
+    target    = IntakeResponse
+    using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
+    withCheck = sql`"tenantId" = current_setting('app.tenant_id', true)`
+  }
   policy_all knowledge_chunk_isolation {
     target    = KnowledgeChunk
     using     = sql`"tenantId" = current_setting('app.tenant_id', true)`
@@ -1900,6 +1912,38 @@ trialEndsAt          TimestampString(3)?
   // A tenant's backup (task 8.3): every tenant-owned table, gzipped to
   // snapshots/<tenantId>/<id>.json.gz in R2. The row is the audit trail —
   // status, row counts, size — the bundle is the data (decision 8-C).
+  model IntakeForm {
+    id        String           @id(map: "IntakeForm_pkey") @onCreate(cuid(2))
+    tenantId  String
+    name      String
+    fields    Json
+    active    Boolean          @default(true)
+    createdAt TimestampString(3) @default(now())
+    updatedAt TimestampString(3) @default(now()) @onUpdate(now())
+    tenant    Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "IntakeForm_tenantId_fkey")
+    responses IntakeResponse[]
+
+    @@index([tenantId], map: "IntakeForm_tenantId_idx")
+    @@rls
+  }
+
+  model IntakeResponse {
+    id            String           @id(map: "IntakeResponse_pkey") @onCreate(cuid(2))
+    tenantId      String
+    formId        String
+    appointmentId String?
+    customerId    String?
+    answers       Json
+    createdAt     TimestampString(3) @default(now())
+    tenant        Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "IntakeResponse_tenantId_fkey")
+    form          IntakeForm       @relation(fields: [formId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "IntakeResponse_formId_fkey")
+
+    @@index([tenantId], map: "IntakeResponse_tenantId_idx")
+    @@index([formId], map: "IntakeResponse_formId_idx")
+    @@index([appointmentId], map: "IntakeResponse_appointmentId_idx")
+    @@rls
+  }
+
   model Location {
     id        String           @id(map: "Location_pkey") @onCreate(cuid(2))
     tenantId  String

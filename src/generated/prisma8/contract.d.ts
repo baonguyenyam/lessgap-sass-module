@@ -28,9 +28,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'a5aea16fd0b8c87b1f0ab50693eadaf894257bfbcd10c3692ddf3721c46020a3'>;
+  StorageHashBase<'3a0b9ee191fc3e0f0964eea42712653d2c2ff05160d99f29d9c35176fc34f739'>;
 export type ExecutionHash =
-  ExecutionHashBase<'7d378d19a356f97050df79ea3271aa6c7cade2fc0a04ef6ddd135ce0e88be8a3'>;
+  ExecutionHashBase<'98b4f26b22c3922ad30bede59f0527b09d9b4208d9652747247fafadc5cca057'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -688,6 +688,30 @@ export namespace Models {
     latencyMs: FieldOutputTypes['public']['HealthCheck']['latencyMs'];
     status: FieldOutputTypes['public']['HealthCheck']['status'];
     readonly [RelationKeys]?: never;
+  };
+  export type public_IntakeForm = {
+    active: FieldOutputTypes['public']['IntakeForm']['active'];
+    createdAt: FieldOutputTypes['public']['IntakeForm']['createdAt'];
+    fields: FieldOutputTypes['public']['IntakeForm']['fields'];
+    id: FieldOutputTypes['public']['IntakeForm']['id'];
+    name: FieldOutputTypes['public']['IntakeForm']['name'];
+    tenantId: FieldOutputTypes['public']['IntakeForm']['tenantId'];
+    updatedAt: FieldOutputTypes['public']['IntakeForm']['updatedAt'];
+    responses: public_IntakeResponse[];
+    tenant: public_Tenant;
+    readonly [RelationKeys]?: 'responses' | 'tenant';
+  };
+  export type public_IntakeResponse = {
+    answers: FieldOutputTypes['public']['IntakeResponse']['answers'];
+    appointmentId: FieldOutputTypes['public']['IntakeResponse']['appointmentId'];
+    createdAt: FieldOutputTypes['public']['IntakeResponse']['createdAt'];
+    customerId: FieldOutputTypes['public']['IntakeResponse']['customerId'];
+    formId: FieldOutputTypes['public']['IntakeResponse']['formId'];
+    id: FieldOutputTypes['public']['IntakeResponse']['id'];
+    tenantId: FieldOutputTypes['public']['IntakeResponse']['tenantId'];
+    form: public_IntakeForm;
+    tenant: public_Tenant;
+    readonly [RelationKeys]?: 'form' | 'tenant';
   };
   export type public_Invitation = {
     createdAt: FieldOutputTypes['public']['Invitation']['createdAt'];
@@ -1577,6 +1601,8 @@ export declare const models: {
     GiftCard: Models.public_GiftCard;
     GiftCardLedger: Models.public_GiftCardLedger;
     HealthCheck: Models.public_HealthCheck;
+    IntakeForm: Models.public_IntakeForm;
+    IntakeResponse: Models.public_IntakeResponse;
     Invitation: Models.public_Invitation;
     Job: Models.public_Job;
     KnowledgeChunk: Models.public_KnowledgeChunk;
@@ -3822,6 +3848,182 @@ type ContractBase = Omit<
                 },
               ];
               foreignKeys: readonly [];
+            };
+            readonly IntakeForm: {
+              columns: {
+                readonly active: {
+                  readonly dataType: 'pg/bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                  readonly many: false;
+                };
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly fields: {
+                  readonly dataType: 'pg/json';
+                  readonly codecId: 'pg/json@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly name: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly tenantId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id']; readonly name: 'IntakeForm_pkey' };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'IntakeForm_tenantId_idx';
+                  readonly columns: readonly ['tenantId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'IntakeForm';
+                    readonly columns: readonly ['tenantId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Tenant';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'IntakeForm_tenantId_fkey';
+                },
+              ];
+            };
+            readonly IntakeResponse: {
+              columns: {
+                readonly answers: {
+                  readonly dataType: 'pg/json';
+                  readonly codecId: 'pg/json@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly appointmentId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly customerId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly formId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly tenantId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: {
+                readonly columns: readonly ['id'];
+                readonly name: 'IntakeResponse_pkey';
+              };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'IntakeResponse_appointmentId_idx';
+                  readonly columns: readonly ['appointmentId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'IntakeResponse_formId_idx';
+                  readonly columns: readonly ['formId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'IntakeResponse_tenantId_idx';
+                  readonly columns: readonly ['tenantId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'IntakeResponse';
+                    readonly columns: readonly ['tenantId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Tenant';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'IntakeResponse_tenantId_fkey';
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'IntakeResponse';
+                    readonly columns: readonly ['formId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'IntakeForm';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'IntakeResponse_formId_fkey';
+                },
+              ];
             };
             readonly Invitation: {
               columns: {
@@ -10168,6 +10370,14 @@ type ContractBase = Omit<
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'HealthCheck';
     };
+    readonly IntakeForm: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'IntakeForm';
+    };
+    readonly IntakeResponse: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'IntakeResponse';
+    };
     readonly Invitation: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'Invitation';
@@ -12173,6 +12383,159 @@ type ContractBase = Omit<
                 readonly kind: { readonly column: 'kind' };
                 readonly latencyMs: { readonly column: 'latencyMs' };
                 readonly status: { readonly column: 'status' };
+              };
+            };
+          };
+          readonly IntakeForm: {
+            readonly fields: {
+              readonly active: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly fields: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly name: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly tenantId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly responses: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'IntakeResponse';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['formId'];
+                };
+              };
+              readonly tenant: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Tenant';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['tenantId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'IntakeForm';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly active: { readonly column: 'active' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly fields: { readonly column: 'fields' };
+                readonly id: { readonly column: 'id' };
+                readonly name: { readonly column: 'name' };
+                readonly tenantId: { readonly column: 'tenantId' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+              };
+            };
+          };
+          readonly IntakeResponse: {
+            readonly fields: {
+              readonly answers: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
+              };
+              readonly appointmentId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly customerId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly formId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly tenantId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: {
+              readonly form: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'IntakeForm';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['formId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly tenant: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Tenant';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['tenantId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'IntakeResponse';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly answers: { readonly column: 'answers' };
+                readonly appointmentId: { readonly column: 'appointmentId' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly customerId: { readonly column: 'customerId' };
+                readonly formId: { readonly column: 'formId' };
+                readonly id: { readonly column: 'id' };
+                readonly tenantId: { readonly column: 'tenantId' };
               };
             };
           };
@@ -17971,6 +18334,30 @@ type ContractBase = Omit<
           readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'HealthCheck';
+            readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'IntakeForm';
+            readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'IntakeForm';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'IntakeResponse';
             readonly field: 'id';
             readonly namespace: 'public';
           };

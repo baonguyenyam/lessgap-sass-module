@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [3.5.0] - 2026-10-30
+
+**A tenant can ask a contact-only intake form before a visit — contact and preferences, never clinical data.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.
+
+### Added
+
+- **`IntakeForm`/`IntakeResponse`** — tenant-owned, `@@rls`: a `fields` Json (label/kind/required) the tenant asks; the visitor's `answers` land on the appointment — `intakeAnswerError` validates required fields (ADR 0028's contact-only scope)
+
 ## [3.4.0] - 2026-10-29
 
 **The new surfaces are e2e-covered — sales sells and lists, the manage page asks for a review, `/status` renders.** This is a MINOR: `git pull`, `pnpm install`.

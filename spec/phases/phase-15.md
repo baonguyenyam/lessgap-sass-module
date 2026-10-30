@@ -12,7 +12,7 @@ guard), spec/12-migrations-and-data.md.
 
 ## Scope
 
-- Phase 15: in progress.
+- Phase 15: done.
 
 ## Tasks
 
@@ -26,7 +26,7 @@ appointment.
 **Tests:** integration — a form's fields validate answers; a response
 lands on the appointment.
 **Done when:** the form + response models hold and validate.
-- [ ] done
+- [x] done (`tests/integration/intake.test.ts` 1/1 — `IntakeForm`/`IntakeResponse` (tenant-owned, `@@rls`, contact-only per ADR 0028); `intakeAnswerError` validates required fields; a response lands on the appointment.)
 
 ## Exit criteria
 

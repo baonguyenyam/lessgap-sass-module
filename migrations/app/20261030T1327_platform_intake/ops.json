@@ -1,0 +1,626 @@
+[
+  {
+    "id": "table.IntakeForm",
+    "label": "Create table \"IntakeForm\"",
+    "summary": "Creates table \"IntakeForm\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "IntakeForm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"IntakeForm\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"IntakeForm\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"IntakeForm\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"IntakeForm\"",
+        "sql": "CREATE TABLE \"public\".\"IntakeForm\" (\n  \"active\" bool DEFAULT true NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"fields\" json NOT NULL,\n  \"id\" text NOT NULL,\n  \"name\" text NOT NULL,\n  \"tenantId\" text NOT NULL,\n  \"updatedAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  CONSTRAINT \"IntakeForm_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"IntakeForm\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"IntakeForm\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"IntakeForm\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.IntakeResponse",
+    "label": "Create table \"IntakeResponse\"",
+    "summary": "Creates table \"IntakeResponse\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "IntakeResponse"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"IntakeResponse\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"IntakeResponse\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"IntakeResponse\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"IntakeResponse\"",
+        "sql": "CREATE TABLE \"public\".\"IntakeResponse\" (\n  \"answers\" json NOT NULL,\n  \"appointmentId\" text,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"customerId\" text,\n  \"formId\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"tenantId\" text NOT NULL,\n  CONSTRAINT \"IntakeResponse_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"IntakeResponse\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"IntakeResponse\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"IntakeResponse\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "index.IntakeForm.IntakeForm_tenantId_idx",
+    "label": "Create index \"IntakeForm_tenantId_idx\" on \"IntakeForm\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "IntakeForm_tenantId_idx",
+        "table": "IntakeForm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"IntakeForm_tenantId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"IntakeForm_tenantId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"IntakeForm_tenantId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"IntakeForm_tenantId_idx\"",
+        "sql": "CREATE INDEX \"IntakeForm_tenantId_idx\" ON \"public\".\"IntakeForm\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"IntakeForm_tenantId_idx\" exists on \"IntakeForm\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"IntakeForm_tenantId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"IntakeForm\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.IntakeResponse.IntakeResponse_appointmentId_idx",
+    "label": "Create index \"IntakeResponse_appointmentId_idx\" on \"IntakeResponse\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "IntakeResponse_appointmentId_idx",
+        "table": "IntakeResponse"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"IntakeResponse_appointmentId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"IntakeResponse_appointmentId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"IntakeResponse_appointmentId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"IntakeResponse_appointmentId_idx\"",
+        "sql": "CREATE INDEX \"IntakeResponse_appointmentId_idx\" ON \"public\".\"IntakeResponse\" (\"appointmentId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"IntakeResponse_appointmentId_idx\" exists on \"IntakeResponse\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"IntakeResponse_appointmentId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"IntakeResponse\"",
+          "btree",
+          "[\"appointmentId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.IntakeResponse.IntakeResponse_formId_idx",
+    "label": "Create index \"IntakeResponse_formId_idx\" on \"IntakeResponse\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "IntakeResponse_formId_idx",
+        "table": "IntakeResponse"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"IntakeResponse_formId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"IntakeResponse_formId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"IntakeResponse_formId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"IntakeResponse_formId_idx\"",
+        "sql": "CREATE INDEX \"IntakeResponse_formId_idx\" ON \"public\".\"IntakeResponse\" (\"formId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"IntakeResponse_formId_idx\" exists on \"IntakeResponse\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"IntakeResponse_formId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"IntakeResponse\"",
+          "btree",
+          "[\"formId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.IntakeResponse.IntakeResponse_tenantId_idx",
+    "label": "Create index \"IntakeResponse_tenantId_idx\" on \"IntakeResponse\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "IntakeResponse_tenantId_idx",
+        "table": "IntakeResponse"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"IntakeResponse_tenantId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"IntakeResponse_tenantId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"IntakeResponse_tenantId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"IntakeResponse_tenantId_idx\"",
+        "sql": "CREATE INDEX \"IntakeResponse_tenantId_idx\" ON \"public\".\"IntakeResponse\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"IntakeResponse_tenantId_idx\" exists on \"IntakeResponse\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"IntakeResponse_tenantId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"IntakeResponse\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.IntakeForm.IntakeForm_tenantId_fkey",
+    "label": "Add foreign key \"IntakeForm_tenantId_fkey\" on \"IntakeForm\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "IntakeForm_tenantId_fkey",
+        "table": "IntakeForm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"IntakeForm_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "IntakeForm_tenantId_fkey",
+          "public",
+          "\"public\".\"IntakeForm\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"IntakeForm_tenantId_fkey\" on \"IntakeForm\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"IntakeForm_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"IntakeForm\"\nADD CONSTRAINT \"IntakeForm_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"IntakeForm_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "IntakeForm_tenantId_fkey",
+          "public",
+          "\"public\".\"IntakeForm\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.IntakeResponse.IntakeResponse_tenantId_fkey",
+    "label": "Add foreign key \"IntakeResponse_tenantId_fkey\" on \"IntakeResponse\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "IntakeResponse_tenantId_fkey",
+        "table": "IntakeResponse"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"IntakeResponse_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "IntakeResponse_tenantId_fkey",
+          "public",
+          "\"public\".\"IntakeResponse\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"IntakeResponse_tenantId_fkey\" on \"IntakeResponse\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"IntakeResponse_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"IntakeResponse\"\nADD CONSTRAINT \"IntakeResponse_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"IntakeResponse_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "IntakeResponse_tenantId_fkey",
+          "public",
+          "\"public\".\"IntakeResponse\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.IntakeResponse.IntakeResponse_formId_fkey",
+    "label": "Add foreign key \"IntakeResponse_formId_fkey\" on \"IntakeResponse\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "IntakeResponse_formId_fkey",
+        "table": "IntakeResponse"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"IntakeResponse_formId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "IntakeResponse_formId_fkey",
+          "public",
+          "\"public\".\"IntakeResponse\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"IntakeResponse_formId_fkey\" on \"IntakeResponse\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"IntakeResponse_formId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"IntakeResponse\"\nADD CONSTRAINT \"IntakeResponse_formId_fkey\"\nFOREIGN KEY (\"formId\")\nREFERENCES \"public\".\"IntakeForm\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"IntakeResponse_formId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "IntakeResponse_formId_fkey",
+          "public",
+          "\"public\".\"IntakeResponse\"",
+          "f",
+          "[\"formId\"]",
+          "\"public\".\"IntakeForm\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.IntakeForm",
+    "label": "Enable row-level security on \"IntakeForm\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "IntakeForm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"IntakeForm\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "IntakeForm"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"IntakeForm\"",
+        "sql": "ALTER TABLE \"public\".\"IntakeForm\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"IntakeForm\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "IntakeForm"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.IntakeResponse",
+    "label": "Enable row-level security on \"IntakeResponse\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "IntakeResponse"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"IntakeResponse\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "IntakeResponse"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"IntakeResponse\"",
+        "sql": "ALTER TABLE \"public\".\"IntakeResponse\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"IntakeResponse\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "IntakeResponse"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.IntakeForm.intake_form_isolation_c516f4ff",
+    "label": "Create RLS policy \"intake_form_isolation_c516f4ff\" on \"IntakeForm\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "intake_form_isolation_c516f4ff",
+        "table": "IntakeForm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"intake_form_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "IntakeForm",
+          "intake_form_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"intake_form_isolation_c516f4ff\" on \"IntakeForm\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"intake_form_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"intake_form_isolation_c516f4ff\" ON \"public\".\"IntakeForm\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"intake_form_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "IntakeForm",
+          "intake_form_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rlsPolicy.public.IntakeResponse.intake_response_isolation_c516f4ff",
+    "label": "Create RLS policy \"intake_response_isolation_c516f4ff\" on \"IntakeResponse\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rlsPolicy",
+        "name": "intake_response_isolation_c516f4ff",
+        "table": "IntakeResponse"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS policy \"intake_response_isolation_c516f4ff\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "IntakeResponse",
+          "intake_response_isolation_c516f4ff"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "RLS policy \"intake_response_isolation_c516f4ff\" on \"IntakeResponse\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create RLS policy \"intake_response_isolation_c516f4ff\"",
+        "sql": "CREATE POLICY \"intake_response_isolation_c516f4ff\" ON \"public\".\"IntakeResponse\" AS PERMISSIVE FOR ALL TO PUBLIC USING (\"tenantId\" = current_setting('app.tenant_id', true)) WITH CHECK (\"tenantId\" = current_setting('app.tenant_id', true))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS policy \"intake_response_isolation_c516f4ff\" exists with the planned command, roles and permissiveness",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_policies\" WHERE (\"schemaname\" = $1 AND \"tablename\" = $2 AND \"policyname\" = $3 AND \"cmd\" = $4 AND \"permissive\" = $5 AND (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT policy_role::text COLLATE \"C\" AS role_name FROM unnest(\"roles\") AS policy_role) AS actual_roles) = (SELECT coalesce(jsonb_agg(role_name ORDER BY role_name), '[]'::jsonb) FROM (SELECT DISTINCT (CASE expected_role WHEN 'current_user' THEN current_user::text WHEN 'current_role' THEN current_role::text WHEN 'session_user' THEN session_user::text ELSE expected_role END) COLLATE \"C\" AS role_name FROM jsonb_array_elements_text(($6)::jsonb) AS expected_role) AS expected_roles))) AS \"result\"",
+        "params": [
+          "public",
+          "IntakeResponse",
+          "intake_response_isolation_c516f4ff",
+          "ALL",
+          "PERMISSIVE",
+          "[\"public\"]"
+        ]
+      }
+    ]
+  }
+]

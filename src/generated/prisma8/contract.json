@@ -88,6 +88,14 @@
       "model": "HealthCheck",
       "namespace": "public"
     },
+    "IntakeForm": {
+      "model": "IntakeForm",
+      "namespace": "public"
+    },
+    "IntakeResponse": {
+      "model": "IntakeResponse",
+      "namespace": "public"
+    },
     "Invitation": {
       "model": "Invitation",
       "namespace": "public"
@@ -3250,6 +3258,242 @@
               },
               "namespaceId": "public",
               "table": "HealthCheck"
+            }
+          },
+          "IntakeForm": {
+            "fields": {
+              "active": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "fields": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              }
+            },
+            "relations": {
+              "responses": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "formId"
+                  ]
+                },
+                "to": {
+                  "model": "IntakeResponse",
+                  "namespace": "public"
+                }
+              },
+              "tenant": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "tenantId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tenant",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "active": {
+                  "column": "active"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "fields": {
+                  "column": "fields"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "name": {
+                  "column": "name"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "IntakeForm"
+            }
+          },
+          "IntakeResponse": {
+            "fields": {
+              "answers": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
+              "appointmentId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "customerId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "formId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "form": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "formId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "IntakeForm",
+                  "namespace": "public"
+                }
+              },
+              "tenant": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "tenantId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tenant",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "answers": {
+                  "column": "answers"
+                },
+                "appointmentId": {
+                  "column": "appointmentId"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "customerId": {
+                  "column": "customerId"
+                },
+                "formId": {
+                  "column": "formId"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "IntakeResponse"
             }
           },
           "Invitation": {
@@ -12061,6 +12305,30 @@
               "using": "\"tenantId\" = current_setting('app.tenant_id', true)",
               "withCheck": "\"tenantId\" = current_setting('app.tenant_id', true)"
             },
+            "intake_form_isolation": {
+              "kind": "policy",
+              "name": "intake_form_isolation_c516f4ff",
+              "namespaceId": "public",
+              "operation": "all",
+              "permissive": true,
+              "prefix": "intake_form_isolation",
+              "roles": [],
+              "tableName": "IntakeForm",
+              "using": "\"tenantId\" = current_setting('app.tenant_id', true)",
+              "withCheck": "\"tenantId\" = current_setting('app.tenant_id', true)"
+            },
+            "intake_response_isolation": {
+              "kind": "policy",
+              "name": "intake_response_isolation_c516f4ff",
+              "namespaceId": "public",
+              "operation": "all",
+              "permissive": true,
+              "prefix": "intake_response_isolation",
+              "roles": [],
+              "tableName": "IntakeResponse",
+              "using": "\"tenantId\" = current_setting('app.tenant_id', true)",
+              "withCheck": "\"tenantId\" = current_setting('app.tenant_id', true)"
+            },
             "knowledge_chunk_isolation": {
               "kind": "policy",
               "name": "knowledge_chunk_isolation_c516f4ff",
@@ -12708,6 +12976,16 @@
               "kind": "rls",
               "namespaceId": "public",
               "tableName": "GiftCardLedger"
+            },
+            "IntakeForm": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "IntakeForm"
+            },
+            "IntakeResponse": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "IntakeResponse"
             },
             "KnowledgeChunk": {
               "kind": "rls",
@@ -15588,6 +15866,225 @@
                   "id"
                 ],
                 "name": "HealthCheck_pkey"
+              },
+              "uniques": []
+            },
+            "IntakeForm": {
+              "columns": {
+                "active": {
+                  "codecId": "pg/bool@1",
+                  "dataType": "pg/bool",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "fields": {
+                  "codecId": "pg/json@1",
+                  "dataType": "pg/json",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "IntakeForm_tenantId_idx"
+                  },
+                  "name": "IntakeForm_tenantId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "tenantId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "IntakeForm"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tenant"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "tenantId"
+                  ],
+                  "name": "IntakeForm_tenantId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "IntakeForm_pkey"
+              },
+              "uniques": []
+            },
+            "IntakeResponse": {
+              "columns": {
+                "answers": {
+                  "codecId": "pg/json@1",
+                  "dataType": "pg/json",
+                  "nullable": false
+                },
+                "appointmentId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "customerId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "formId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "IntakeResponse_tenantId_idx"
+                  },
+                  "name": "IntakeResponse_tenantId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "tenantId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "IntakeResponse"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tenant"
+                  }
+                },
+                {
+                  "index": {
+                    "name": "IntakeResponse_formId_idx"
+                  },
+                  "name": "IntakeResponse_formId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "formId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "IntakeResponse"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "IntakeForm"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "appointmentId"
+                  ],
+                  "name": "IntakeResponse_appointmentId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "formId"
+                  ],
+                  "name": "IntakeResponse_formId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "tenantId"
+                  ],
+                  "name": "IntakeResponse_tenantId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "IntakeResponse_pkey"
               },
               "uniques": []
             },
@@ -23252,10 +23749,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "a5aea16fd0b8c87b1f0ab50693eadaf894257bfbcd10c3692ddf3721c46020a3"
+    "storageHash": "3a0b9ee191fc3e0f0964eea42712653d2c2ff05160d99f29d9c35176fc34f739"
   },
   "execution": {
-    "executionHash": "7d378d19a356f97050df79ea3271aa6c7cade2fc0a04ef6ddd135ce0e88be8a3",
+    "executionHash": "98b4f26b22c3922ad30bede59f0527b09d9b4208d9652747247fafadc5cca057",
     "mutations": {
       "defaults": [
         {
@@ -23632,6 +24129,39 @@
           },
           "ref": {
             "entry": "HealthCheck",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "IntakeForm",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onUpdate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "IntakeForm",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "IntakeResponse",
             "field": "id",
             "namespace": "public"
           }

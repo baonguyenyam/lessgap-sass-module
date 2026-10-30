@@ -46,6 +46,11 @@ export const MODEL_CLASSIFICATION = {
   Table: { kind: "tenant-owned", reason: "A restaurant's tables (reservations module)." },
   HealthCheck: { kind: "platform-private", reason: "The latest probe result per kind — the status page reads it." },
   Location: { kind: "tenant-owned", reason: "A tenant's physical branch (ADR 0025)." },
+  IntakeForm: {
+    kind: "tenant-owned",
+    reason: "A contact-and-preferences form the tenant asks before a visit (no PHI — ADR 0028).",
+  },
+  IntakeResponse: { kind: "tenant-owned", reason: "A visitor's answers to an intake form, tied to the appointment." },
   TenantSnapshot: { kind: "tenant-owned", reason: "A backup bundle of one tenant's rows." },
   SitePageView: { kind: "tenant-owned", reason: "A tenant's site page-view counter (analytics module)." },
   Resource: { kind: "tenant-owned", reason: "A tenant's bookable resources (booking module)." },
