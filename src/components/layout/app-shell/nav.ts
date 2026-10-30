@@ -7,6 +7,7 @@ import {
   Gift,
   MapPin,
   ClipboardList,
+  Package,
   Globe,
   List,
   Globe2,
@@ -127,6 +128,9 @@ export function navGroups(
         ...(enabledModules && !enabledModules.has("booking")
           ? []
           : [{ key: "intake", href: t("intake"), icon: ClipboardList } satisfies NavItem]),
+        ...(enabledModules && !enabledModules.has("booking")
+          ? []
+          : [{ key: "products", href: t("products"), icon: Package } satisfies NavItem]),
       ],
     },
     {

@@ -547,7 +547,8 @@
       "payments": "Thanh toán",
       "quotes": "Báo giá",
       "locations": "Địa điểm",
-      "intake": "Biểu mẫu"
+      "intake": "Biểu mẫu",
+      "products": "Sản phẩm"
     },
     "members": {
       "title": "Thành viên",
@@ -888,6 +889,19 @@
       "none": "Chưa có biểu mẫu.",
       "responses": "Phản hồi",
       "no_responses": "Chưa có phản hồi."
+    },
+    "products": {
+      "title": "Danh mục bán hàng",
+      "add_package": "Thêm gói buổi",
+      "add_membership": "Thêm thành viên",
+      "name": "Tên",
+      "sessions": "Số buổi",
+      "price": "Giá ($)",
+      "add_button": "Thêm",
+      "adding": "Đang thêm…",
+      "list": "Danh mục của bạn",
+      "none": "Chưa có gói hay thành viên.",
+      "per_month": "/ tháng"
     }
   },
   "platform": {

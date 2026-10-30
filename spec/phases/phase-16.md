@@ -48,7 +48,7 @@ fields JSON), and shows the responses per form.
 sell — a page creates and lists them (name + sessions/priceCents).
 
 **Done when:** the definitions exist so the till can sell them.
-- [ ] done
+- [x] done (`/t/<slug>/products` lists and creates `Package`/`Membership` — `products` nav item in `operations`.)
 
 ### 16.5 `/t/<slug>/waitlist` — the waitlist's own page
 

@@ -547,7 +547,8 @@
       "payments": "Payments",
       "quotes": "Quotes",
       "locations": "Locations",
-      "intake": "Intake"
+      "intake": "Intake",
+      "products": "Products"
     },
     "members": {
       "title": "Members",
@@ -888,6 +889,19 @@
       "none": "No forms yet.",
       "responses": "Responses",
       "no_responses": "No responses yet."
+    },
+    "products": {
+      "title": "Sellable catalog",
+      "add_package": "Add a package",
+      "add_membership": "Add a membership",
+      "name": "Name",
+      "sessions": "Sessions",
+      "price": "Price ($)",
+      "add_button": "Add",
+      "adding": "Adding…",
+      "list": "Your catalog",
+      "none": "No packages or memberships yet.",
+      "per_month": "/ month"
     }
   },
   "platform": {
