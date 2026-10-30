@@ -48,7 +48,7 @@ import { Spinner } from "@/components/ui/spinner"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { OptionSelect } from "@/components/form/option-select"
-import { EmptyState } from "@/components/layout/empty-state"
+import { EmptyState, type EmptyTone } from "@/components/layout/empty-state"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ConfirmDialog, type ConfirmCopy } from "@/components/data-table/confirm-dialog"
 import { PAGE_SIZES, pageCountOf, tableQueryHref, type TableQuery, type TableQueryPatch } from "@/lib/table-query"
@@ -121,7 +121,7 @@ type DataTableProps<TData extends RowData> = {
    * stays and the block says "no results" instead, with a way to clear them,
    * so every list says it the same way. An empty list is never drawn as a table.
    */
-  empty: { icon: LucideIcon; title: string; description?: string; action?: React.ReactNode }
+  empty: { icon: LucideIcon; title: string; description?: string; action?: React.ReactNode; tone?: EmptyTone }
 }
 
 export function DataTable<TData extends RowData>({

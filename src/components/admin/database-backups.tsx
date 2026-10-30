@@ -98,10 +98,24 @@ export function DatabaseBackups({
   }, [t, format])
 
   if (!configured) {
-    return <EmptyState icon={CloudOff} title={t("notConfigured.title")} description={t("notConfigured.description")} />
+    return (
+      <EmptyState
+        tone="warning"
+        icon={CloudOff}
+        title={t("notConfigured.title")}
+        description={t("notConfigured.description")}
+      />
+    )
   }
   if (failed) {
-    return <EmptyState icon={TriangleAlert} title={t("listFailed.title")} description={t("listFailed.description")} />
+    return (
+      <EmptyState
+        tone="danger"
+        icon={TriangleAlert}
+        title={t("listFailed.title")}
+        description={t("listFailed.description")}
+      />
+    )
   }
 
   return (

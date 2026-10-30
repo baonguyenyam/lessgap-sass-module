@@ -20,6 +20,9 @@ export const FEATURES = {
   "roles.max": { kind: "limit", default: 10, requires: ["roles.custom"] },
   // Metered example wired to the subscribers CSV export (task 2.3).
   "newsletter.exports.monthly": { kind: "limit", default: null, period: "month" },
+  // Members (spec/04 catalogue): how many seats the tenant may fill;
+  // counted from live rows.
+  "members.max": { kind: "limit", default: null },
   // Catalog module (spec/07): the free plan caps how many services a tenant
   // publishes; counted from live rows, not metered.
   "catalog.services.max": { kind: "limit", default: null },

@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ## [3.7.1] - 2026-10-30
 
+### Added
+
+- **Billing shows what the plan gives and what it has used** — the workspace billing page gains a "Plan usage" card (used/limit for every capped feature: members, services, staff, products, roles, knowledge sources and the monthly counters) and an "Included in your plan" grid listing every registry feature as a check, a limit or "Unlimited"; the renewal line now says how many days are left and paying tenants get a "View plans" link
+
 ### Changed
 
 - **Every workspace page opens with the same heading** — `PageHeader` (title + description left, actions right) replaces the mixed `text-xl`/`text-2xl` hand-rolled headings and separate action rows on catalog, team, chatbot, notifications, orders, customers, payments, quotes, analytics, calendar, reservations, waitlist, reviews, sales, products, intake, locations, billing, settings subpages and the order board; the settings layout's duplicate "Settings" heading is gone and uncategorized services group into one card like named categories

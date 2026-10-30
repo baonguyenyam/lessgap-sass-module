@@ -97,7 +97,12 @@ export function DatabaseMigrations({
   return (
     <div className="space-y-4">
       {status === "current" && (
-        <EmptyState icon={CircleCheck} title={t("current.title")} description={t("current.description")} />
+        <EmptyState
+          tone="success"
+          icon={CircleCheck}
+          title={t("current.title")}
+          description={t("current.description")}
+        />
       )}
       {status === "unknown" && (
         <Alert variant="destructive">

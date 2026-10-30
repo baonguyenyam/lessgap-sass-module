@@ -168,7 +168,7 @@ PHI).
 - **Checks:** `pnpm db:emit`, `pnpm test`, `pnpm test:integration`,
   `pnpm modules:check`, `pnpm audit:tenancy`.
 - **Done when:** a restaurant takes a reservation on the site.
-- [ ] done
+- [x] done (`Table`/`ReservationRule`/`Reservation` tenant-owned; `reservationSlots` in `src/lib/booking/reservations.ts` walks the service-period rules and refuses capacity-short tables plus turn-time overlap; `/sites/[host]/reserve` and `/t/<slug>/reservations` land; unit `reservation-slots.test.ts` 4/4, integration `reservations.test.ts` 2/2 — second reservation on a taken slot refused; `modules:check` 4/4 and `audit:tenancy` pass, verified 2026-10-30)
 
 ### 5.9 — Exclusion constraints + dental PHI restrictions
 - **Goal:** prove the database refuses overlap — two simultaneous bookings

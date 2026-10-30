@@ -33,7 +33,7 @@ export default async function PlatformDomainsPage() {
         </TabsList>
         <TabsContent value="drift" className="mt-4">
           {latest.length === 0 ? (
-            <EmptyState icon={CircleCheck} title={t("no_drift")} description={t("no_drift_hint")} />
+            <EmptyState tone="success" icon={CircleCheck} title={t("no_drift")} description={t("no_drift_hint")} />
           ) : (
             <Card>
               <CardContent className="space-y-2 pt-6">

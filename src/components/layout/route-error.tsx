@@ -17,6 +17,7 @@ export function RouteError({ error, retry }: { error: unknown; retry: () => void
 
   return (
     <EmptyState
+      tone="danger"
       icon={TriangleAlert}
       title={t("title")}
       description={t("description")}

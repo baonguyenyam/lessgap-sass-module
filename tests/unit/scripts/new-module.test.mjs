@@ -38,7 +38,7 @@ describe("scaffoldModule", () => {
       "site/README.md",
     ])
     expect(readFileSync(path.join(modulePath, "module.ts"), "utf8")).toContain('stage: "experimental"')
-    expect(readFileSync(path.join(modulesPath, "registry.ts"), "utf8")).toContain('"demo_check": module_0,')
+    expect(readFileSync(path.join(modulesPath, "registry.ts"), "utf8")).toContain("demo_check: module_0,")
   })
 
   it("rejects invalid keys before creating a folder", () => {

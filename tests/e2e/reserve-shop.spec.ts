@@ -22,7 +22,8 @@ test.beforeAll(async () => {
 
 async function provision(slug: string) {
   const tenant = await db8.orm.public.Tenant.create({ name: "E2E Surface", slug, status: "ACTIVE" })
-  for (const key of ["reservations", "shop"]) {
+  // shop → payments: the dependency chain needs the whole path enabled.
+  for (const key of ["reservations", "payments", "shop"]) {
     const tm = await db8.orm.public.TenantModule.where({ tenantId: tenant.id, moduleKey: key }).first()
     if (!tm) await db8.orm.public.TenantModule.create({ tenantId: tenant.id, moduleKey: key, enabled: true })
     await db8.orm.public.PlatformSwitch.upsert({

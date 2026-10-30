@@ -35,7 +35,6 @@ const SETTINGS_PAGES = [
   { key: "domains", group: "workspace", permission: "settings.manage" },
   { key: "modules", group: "features", permission: "settings.manage" },
   { key: "payments", group: "features", permission: "settings.manage", module: "payments" },
-  { key: "emails", group: "features", permission: "settings.manage" },
   { key: "localization", group: "preferences" },
   { key: "display", group: "preferences" },
 ] as const

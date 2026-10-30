@@ -33,7 +33,12 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
 - **Empty blocks:** match the tenant Newsletter page: `EmptyState`
   (`components/layout/empty-state.tsx`) is a standalone full-width dashed block
   with a centered icon in a muted circle, bold centered title, muted centered
-  description, and the next step when there is one. The title is short with no
+  description, and the next step when there is one. Its `tone` says what it
+  means, on StatusBadge's scale (owner, 2026-10-30): `neutral` (the default,
+  a light grey box) for "nothing here yet"; `danger` (red) for an error or a
+  failure; `success` (green) for done or in order ("up to date", "no drift");
+  `info` (blue) for a fact; `warning` (orange) for something to set up or fix
+  ("backups not configured"). The title is short with no
   full stop ("No orders yet"); the description is one sentence on what fills
   it ("Orders placed on your site's shop page appear here."), kept as a
   `<key>_hint` string beside the title key. A test fails on a non-compact box

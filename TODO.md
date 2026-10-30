@@ -68,3 +68,10 @@ Ghi rule này vào AI
 Các trang forbiden, 404, 500, errot phải có giao diện độc đáo và riêng
 
 Ghi rule này vào AI 
+
+
+= 
+
+Làm hệ thống cảnh báo lỗi tương tự platform.madelab.io 
+Sidebar có nên them phân cấp theo platform.madelab.io
+Nói chung platform.madelab.io có nhiều cái UI để học lắm nhưng ko học code, chỉ học logic, học UI nha... Học mọi thứ như sản phẩm, inventory, payment... các logic về payment  method, lưu method...

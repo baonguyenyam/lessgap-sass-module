@@ -40,6 +40,31 @@ waitlist joined, quote accepted) and mark it read.
 - [x] done — hero card and grouped menus landed (owner edit); sessions
   list already covered by `ActiveSessions` on the security page.
 
+### 17.4 — Billing: plan usage + "Included in your plan"
+- **Goal:** the billing page shows what the plan meters — a "Plan usage"
+  card (used/limit for every capped feature: members, services, staff,
+  products, roles, knowledge sources, monthly counters) and an "Included
+  in your plan" grid (every registry feature: check/cross or its limit),
+  plus days-left on the renewal line and a "View plans" link for paying
+  tenants.
+- **Files:** `src/lib/plan-usage.ts` + unit test, billing page, locales
+  (en, vi), `FEATURES` gains `members.max` (spec/04 declares it; the
+  registry lacked it).
+- **Tests:** unit — `includedInPlan` maps every registry key;
+  `usageRows` keeps only capped limits.
+- **Checks:** `pnpm typecheck`, `pnpm lint`, `pnpm test`.
+- [x] done (`src/lib/plan-usage.ts` — `includedInPlan` walks every
+  `FEATURES` key to a check/cross/limit row, `usageRows` keeps capped
+  limits; the billing page renders "Plan usage" (Member, Service,
+  StaffMember, Product, OrganizationRole, KnowledgeSource counts, the
+  current-period `UsageCounter` rows, month-to-date QuoteRequest and
+  Appointment, `chatbot.settings` languages) and the included grid;
+  renewal gains "· N days left" and subscribers a "View plans" link to
+  `/pricing` (plan changes go through the portal — checkout refuses a
+  second subscription). `members.max` added to `FEATURES` per spec/04's
+  catalogue. Unit `plan-usage.test.ts` 3/3; typecheck, eslint, prettier,
+  `check:messages` green.)
+
 ## Findings
 - 16.1 in-app notification feed landed (`fa26063`): `MemberNotification`
   broadcast-or-addressed rows, header bell with unread count,
@@ -56,3 +81,12 @@ waitlist joined, quote accepted) and mark it read.
 - A member-address book (MADE shows it on the profile) needs a `User.address`
   column — flagged, not built: a schema change for one display field is the
   owner's call, not an unprompted add.
+- 17.4 surface notes: `booking.staff.max` is displayed as a staff count
+  (spec/04's intent) but enforced as non-canceled appointments per staff in
+  `bookAppointment` — a semantics mismatch worth an ADR or a code fix;
+  `booking.monthly` is declared without `period` and nothing consumes or
+  counts it, so its usage row is informational only; `quotes.monthly`
+  compares `createdAt` with `toISOString()` where the TimestampString
+  lesson wants `toTs` (left as found); no storage limit or usage counter
+  exists anywhere, so "storage" has nothing to display — adding a
+  `storage.max` feature plus an uploads meter is a task of its own.

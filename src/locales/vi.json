@@ -443,8 +443,6 @@
         "preferences": "Tuỳ chọn"
       },
       "emails": {
-        "title": "Biểu mẫu email",
-        "customized": "đã tuỳ chỉnh",
         "subject": "Tiêu đề",
         "body": "Nội dung (HTML)",
         "save": "Lưu",
@@ -550,7 +548,41 @@
         "uncollectible": "Không thể thu hồi",
         "void": "Vô hiệu"
       },
-      "noInvoicesTitle": "Chưa có hóa đơn"
+      "noInvoicesTitle": "Chưa có hóa đơn",
+      "planUsage": "Mức sử dụng gói",
+      "planUsageHint": "Những gì không gian làm việc đã dùng so với giới hạn của gói.",
+      "includedInPlan": "Có trong gói của bạn",
+      "unlimited": "Không giới hạn",
+      "viewPlans": "Xem các gói",
+      "usedOf": "{used} trên {limit}",
+      "daysLeft": "{count, plural, other {Còn # ngày}}",
+      "featureLabels": {
+        "roles_custom": "Vai trò tùy chỉnh",
+        "roles_max": "Vai trò tùy chỉnh",
+        "members_max": "Thành viên",
+        "newsletter_exports_monthly": "Lượt xuất newsletter mỗi tháng",
+        "catalog_services_max": "Dịch vụ đã đăng",
+        "booking": "Đặt lịch",
+        "booking_staff_max": "Nhân viên nhận lịch",
+        "booking_monthly": "Lịch hẹn mỗi tháng",
+        "booking_manual_approval": "Duyệt lịch thủ công",
+        "booking_sms_reminders": "Nhắc lịch qua SMS",
+        "booking_deposits": "Đặt cọc",
+        "payments_connect": "Thanh toán kết nối",
+        "shop": "Cửa hàng",
+        "shop_products_max": "Sản phẩm",
+        "shop_shipping": "Vận chuyển",
+        "shop_gift_cards": "Thẻ quà tặng",
+        "ordering": "Đặt món mang đi",
+        "quotes": "Báo giá",
+        "quotes_monthly": "Yêu cầu báo giá mỗi tháng",
+        "quotes_online_acceptance": "Chấp nhận báo giá trực tuyến",
+        "chatbot": "Chatbot",
+        "chatbot_messages_monthly": "Tin nhắn chatbot mỗi tháng",
+        "chatbot_documents_max": "Nguồn tri thức",
+        "chatbot_languages_max": "Ngôn ngữ chatbot",
+        "chatbot_handoff_sms": "Chuyển giao qua SMS"
+      }
     },
     "profile": {
       "updated": "Đã cập nhật hồ sơ",
@@ -1164,11 +1196,17 @@
       "saving": "Đang lưu…",
       "customized": "đã tùy chỉnh",
       "templates": {
-        "booking.confirmation": "Xác nhận lịch hẹn",
-        "booking.reminder": "Nhắc lịch hẹn",
-        "booking.canceled": "Huỷ lịch hẹn",
-        "quotes.sent": "Báo giá đã gửi",
-        "customer.export": "Xuất dữ liệu khách hàng"
+        "booking": {
+          "confirmation": "Xác nhận lịch hẹn",
+          "reminder": "Nhắc lịch hẹn",
+          "canceled": "Huỷ lịch hẹn"
+        },
+        "quotes": {
+          "sent": "Báo giá đã gửi"
+        },
+        "customer": {
+          "export": "Xuất dữ liệu khách hàng"
+        }
       }
     }
   },

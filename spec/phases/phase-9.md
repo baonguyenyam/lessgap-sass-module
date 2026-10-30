@@ -81,7 +81,7 @@ in `/t/<slug>/quotes` `requested`.
 
 **Tests:** Playwright spec — both surfaces land in the dashboard.
 **Done when:** the spec passes.
-- [ ] done
+- [x] done (`tests/e2e/orders.spec.ts` 1/1 on 2026-10-30 — `/order` and `/quote` resolve on the host; the `Order`/`Quote` rows the visitor's submit writes are the set the dashboard reads. **The spec caught a stale setup**: `shop` gained a `payments` dependency after the spec was written, so `ordering → shop` stayed inactive and `/order` 404'd — the spec now enables `payments` too, and the same fix landed in `reserve-shop.spec.ts` which had drifted the same way.)
 
 ### 9.5 Revalidation E2E (D7)
 
@@ -91,7 +91,7 @@ mechanism; the spec asserts the page content updates).
 
 **Tests:** Playwright spec — save → fetch the site → new hours.
 **Done when:** the spec passes.
-- [ ] done
+- [x] done (`tests/e2e/revalidate.spec.ts` 1/1 on 2026-10-30 — warm render shows "Before Name", saving through `/t/<slug>/settings/site` re-renders the host with "After Name" via `updateTag("site:<tenantId>")`.)
 
 ### 9.6 Stripe test-mode + PSL + load — the owner's deployed-run list
 

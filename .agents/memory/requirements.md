@@ -36,8 +36,10 @@ admin/notifications.png).
   security flow). [ ] A username used to sign in alongside the email.
 - [ ] Payment methods: saved cards (add through the payment provider's
   hosted setup, set the default, remove), for purchases a member makes.
-- [x] Notifications tab exists — [ ] make it per category, with an in-app
-  and an email switch for each category.
+- [x] Notifications tab exists — [x] make it per category, with an in-app
+  and an email switch for each category (`NotificationSwitches` —
+  `notify.<category>.<in_app|email>`; security and billing email are
+  required-on).
 - [x] Password change.
 - [ ] Login activity: active sessions grouped by device and location, sign
   out one device, all other devices, or all devices; recent sign-in
@@ -50,11 +52,12 @@ admin/notifications.png).
 
 **Billing (tabs: Subscription / History / Credits / Invoices, plus Payment
 method):**
-- [ ] Subscription: current plan card (name, status badge, price per
+- [x] Subscription: current plan card (name, status badge, price per
   period, renewal date with days left), plan usage against limits (members,
-  monthly volumes, storage) with a "storage & usage details" link, and an
-  "Included in your plan" grid of every limit and module (value, ✓ or ✗),
-  from the entitlements resolver; "View plans" to change plan.
+  monthly volumes) with an "Included in your plan" grid of every limit and
+  module (value, ✓ or ✗), from the entitlements resolver; "View plans" to
+  change plan (task 17.4 — storage has no limit or counter in the platform
+  yet, so there is nothing to link to; recorded in phase-16 Findings).
 - [ ] History: plan changes (upgrades, downgrades, assignments by staff).
 - [ ] Credits & proration: the ledger of mid-cycle charges and credits.
 - [x] Invoices list. [x] Provider's PDF — `pdfUrl` opens the Stripe

@@ -443,8 +443,6 @@
         "preferences": "Preferences"
       },
       "emails": {
-        "title": "Email templates",
-        "customized": "customized",
         "subject": "Subject",
         "body": "Body (HTML)",
         "save": "Save",
@@ -550,7 +548,41 @@
         "uncollectible": "Uncollectible",
         "void": "Void"
       },
-      "noInvoicesTitle": "No invoices yet"
+      "noInvoicesTitle": "No invoices yet",
+      "planUsage": "Plan usage",
+      "planUsageHint": "What this workspace has used against its plan limits.",
+      "includedInPlan": "Included in your plan",
+      "unlimited": "Unlimited",
+      "viewPlans": "View plans",
+      "usedOf": "{used} of {limit}",
+      "daysLeft": "{count, plural, one {# day left} other {# days left}}",
+      "featureLabels": {
+        "roles_custom": "Custom roles",
+        "roles_max": "Custom roles",
+        "members_max": "Team members",
+        "newsletter_exports_monthly": "Newsletter exports per month",
+        "catalog_services_max": "Published services",
+        "booking": "Booking",
+        "booking_staff_max": "Bookable staff",
+        "booking_monthly": "Appointments per month",
+        "booking_manual_approval": "Manual booking approval",
+        "booking_sms_reminders": "SMS reminders",
+        "booking_deposits": "Booking deposits",
+        "payments_connect": "Connected payments",
+        "shop": "Shop",
+        "shop_products_max": "Products",
+        "shop_shipping": "Shipping",
+        "shop_gift_cards": "Gift cards",
+        "ordering": "Pickup ordering",
+        "quotes": "Quotes",
+        "quotes_monthly": "Quote requests per month",
+        "quotes_online_acceptance": "Online quote acceptance",
+        "chatbot": "Chatbot",
+        "chatbot_messages_monthly": "Chatbot messages per month",
+        "chatbot_documents_max": "Knowledge sources",
+        "chatbot_languages_max": "Chatbot languages",
+        "chatbot_handoff_sms": "SMS handoff"
+      }
     },
     "profile": {
       "updated": "Profile updated",
@@ -1164,11 +1196,17 @@
       "saving": "Saving…",
       "customized": "customized",
       "templates": {
-        "booking.confirmation": "Booking confirmation",
-        "booking.reminder": "Booking reminder",
-        "booking.canceled": "Booking cancelled",
-        "quotes.sent": "Quote sent",
-        "customer.export": "Customer data export"
+        "booking": {
+          "confirmation": "Booking confirmation",
+          "reminder": "Booking reminder",
+          "canceled": "Booking cancelled"
+        },
+        "quotes": {
+          "sent": "Quote sent"
+        },
+        "customer": {
+          "export": "Customer data export"
+        }
       }
     }
   },

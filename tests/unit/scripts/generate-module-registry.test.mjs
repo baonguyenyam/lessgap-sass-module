@@ -7,7 +7,7 @@ describe("generateRegistrySource", () => {
   })
 
   it("imports each module and uses its declared key", () => {
-    expect(generateRegistrySource(["booking"])).toContain('"booking": module_0,')
+    expect(generateRegistrySource(["booking"])).toContain("booking: module_0,")
     expect(generateRegistrySource(["booking"])).toContain('import module_0 from "./booking/module"')
   })
 
