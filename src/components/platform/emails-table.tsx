@@ -3,11 +3,12 @@
 import { Mail } from "lucide-react"
 import Link from "next/link"
 import { useFormatter, useTranslations } from "next-intl"
-import { useMemo, type ComponentProps } from "react"
+import { useMemo } from "react"
 import type { TableQuery } from "@/lib/table-query"
 import type { EmailStatus } from "@/lib/job-status"
 import { DataTable, dataTableColumns } from "@/components/data-table/data-table"
-import { Badge } from "@/components/ui/badge"
+import { StatusBadge, type StatusMap } from "@/components/data-table/status-badge"
+import { Ban, CircleCheck, CircleX, Clock } from "lucide-react"
 
 export type EmailRow = {
   id: string
@@ -20,12 +21,12 @@ export type EmailRow = {
   createdAt: string
 }
 
-const VARIANTS = {
-  QUEUED: "outline",
-  SENT: "secondary",
-  REFUSED: "secondary",
-  FAILED: "destructive",
-} as const satisfies Record<EmailStatus, ComponentProps<typeof Badge>["variant"]>
+const STATUSES: StatusMap<EmailStatus> = {
+  QUEUED: { tone: "muted", icon: Clock },
+  SENT: { tone: "success", icon: CircleCheck },
+  REFUSED: { tone: "warning", icon: Ban },
+  FAILED: { tone: "danger", icon: CircleX },
+}
 
 type Props = {
   rows: EmailRow[]
@@ -64,7 +65,9 @@ export function EmailsTable({ rows, total, query, defaults, kinds, tenants }: Pr
       col.accessor("status", {
         id: "status",
         header: t("colStatus"),
-        cell: ({ row }) => <Badge variant={VARIANTS[row.original.status]}>{t(`status.${row.original.status}`)}</Badge>,
+        cell: ({ row }) => (
+          <StatusBadge {...STATUSES[row.original.status]}>{t(`status.${row.original.status}`)}</StatusBadge>
+        ),
       }),
       col.accessor("provider", {
         header: t("colProvider"),

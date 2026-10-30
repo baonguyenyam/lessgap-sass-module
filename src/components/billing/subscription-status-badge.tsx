@@ -1,13 +1,14 @@
+import { CircleAlert, CircleCheck, CircleDashed, CircleX, Clock, TriangleAlert } from "lucide-react"
 import { getTranslations } from "next-intl/server"
-import { Badge } from "@/components/ui/badge"
+import { StatusBadge, type StatusMap } from "@/components/data-table/status-badge"
 
-const STATUS_VARIANTS: Record<string, "success" | "default" | "destructive" | "secondary"> = {
-  ACTIVE: "success",
-  TRIALING: "default",
-  PAST_DUE: "destructive",
-  CANCELED: "secondary",
-  UNPAID: "destructive",
-  INCOMPLETE: "secondary",
+const STATUSES: StatusMap<string> = {
+  ACTIVE: { tone: "success", icon: CircleCheck },
+  TRIALING: { tone: "info", icon: Clock },
+  PAST_DUE: { tone: "warning", icon: TriangleAlert },
+  CANCELED: { tone: "muted", icon: CircleX },
+  UNPAID: { tone: "danger", icon: CircleAlert },
+  INCOMPLETE: { tone: "neutral", icon: CircleDashed },
 }
 
 // Subscription statuses come from Stripe as stable codes; their labels live
@@ -16,9 +17,10 @@ const STATUS_VARIANTS: Record<string, "success" | "default" | "destructive" | "s
 // same wherever it appears. An unknown code is shown as it came.
 export async function SubscriptionStatusBadge({ status }: { status: string }) {
   const t = await getTranslations("dashboard.billing")
+  const known = status in STATUSES
   return (
-    <Badge variant={STATUS_VARIANTS[status] ?? "secondary"}>
-      {status in STATUS_VARIANTS ? t(`status.${status}`) : status}
-    </Badge>
+    <StatusBadge {...(known ? STATUSES[status] : { tone: "neutral" as const })}>
+      {known ? t(`status.${status}`) : status}
+    </StatusBadge>
   )
 }

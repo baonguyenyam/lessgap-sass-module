@@ -151,11 +151,17 @@ only — never copy their code, and keep the kit neutral (owner's rule,
 - **Pagination sits under the table** — "Rows per page" on the left, the page
   indicator ("Page X of Y") and first / previous / numbered pages (with "…")
   / next / last buttons on the right, the current page filled.
-- **Badges come from one component, in colour** — every status, kind or
-  priority is drawn by the shared badge (`src/components/ui/badge.tsx`
-  variants), never a feature's own coloured `<span>`. A status has a tone
-  (neutral, info, success, warning, destructive) mapped in one place per
-  domain, and may lead with an icon (`data-icon="inline-start"`), as the
-  Status and Priority columns do (check-circle Done, arrow-up High). Feature
-  badges such as `tenant-status-badge.tsx` or `subscription-status-badge.tsx`
-  are only thin maps from a value to that badge's tone, label and icon.
+- **Badges come from one component, in colour** — every status is drawn by
+  `StatusBadge` (`src/components/data-table/status-badge.tsx`), never a
+  feature's own coloured `<span>` or a raw `<Badge variant>` per status. A
+  domain keeps one `StatusMap` (value → tone + leading icon) and passes the
+  translated label; tones are neutral, info, success, warning, danger,
+  muted (the `info` / `warning` / `success` Badge variants back them). Kinds
+  and roles that are not statuses may stay plain `Badge`.
+- **List building blocks** — `DataTable` draws all of the above: pass
+  `heading` (title, description) and `actions` to get the heading with its
+  buttons on the right; `filters` become `FacetFilter` pills (options take an
+  optional `icon` and `count`); data columns with a text header appear in
+  "View"; the pager uses `pageItems` from `src/lib/pagination.ts`. A page
+  without a table uses `PageHeader` (`src/components/layout/page-header.tsx`)
+  for the same heading.

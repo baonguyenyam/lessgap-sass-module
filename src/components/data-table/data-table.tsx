@@ -3,6 +3,7 @@
 import type { Route } from "next"
 import { useMutation } from "@tanstack/react-query"
 import {
+  columnVisibilityFeature,
   createColumnHelper,
   rowSelectionFeature,
   tableFeatures,
@@ -16,8 +17,11 @@ import {
   ArrowUpDown,
   ChevronLeft,
   ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
   Search,
   SearchX,
+  Settings2,
   X,
   type LucideIcon,
 } from "lucide-react"
@@ -25,7 +29,21 @@ import { useTranslations } from "next-intl"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useMemo, useRef, useState, useTransition } from "react"
 import { toast } from "sonner"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Separator } from "@/components/ui/separator"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { FacetFilter, type FacetOption } from "@/components/data-table/facet-filter"
+import { PageHeader } from "@/components/layout/page-header"
+import { pageItems } from "@/lib/pagination"
 import { Spinner } from "@/components/ui/spinner"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
@@ -33,14 +51,7 @@ import { OptionSelect } from "@/components/form/option-select"
 import { EmptyState } from "@/components/layout/empty-state"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ConfirmDialog, type ConfirmCopy } from "@/components/data-table/confirm-dialog"
-import {
-  PAGE_SIZES,
-  offsetOf,
-  pageCountOf,
-  tableQueryHref,
-  type TableQuery,
-  type TableQueryPatch,
-} from "@/lib/table-query"
+import { PAGE_SIZES, pageCountOf, tableQueryHref, type TableQuery, type TableQueryPatch } from "@/lib/table-query"
 import { cn } from "@/lib/utils"
 
 /**
@@ -50,10 +61,16 @@ import { cn } from "@/lib/utils"
  * page size are links, so a list can be shared, bookmarked and reloaded.
  *
  * Columns are TanStack Table v9 definitions built with `dataTableColumns<T>()`.
- * Selection is the only state the table owns; bulk actions run through
- * TanStack Query mutations and refresh the page when they succeed.
+ * Selection and which columns are shown are the only state the table owns;
+ * bulk actions run through TanStack Query mutations and refresh the page when
+ * they succeed.
+ *
+ * The layout is shadcn-admin's list (.agents/rules/ui-accessibility.md):
+ * heading with its buttons on the right, a toolbar of search, facet pills and
+ * "View", the table with a trailing "…" column or a right-aligned last
+ * column, and a footer of rows per page, the floating bulk bar and the pager.
  */
-export const dataTableFeatures = tableFeatures({ rowSelectionFeature })
+export const dataTableFeatures = tableFeatures({ rowSelectionFeature, columnVisibilityFeature })
 type Features = typeof dataTableFeatures
 
 /** The column helper for a table of `TData` rows. */
@@ -63,7 +80,10 @@ export function dataTableColumns<TData extends RowData>() {
 
 export type DataTableColumns<TData extends RowData> = ColumnDef<Features, TData, any>[] // eslint-disable-line @typescript-eslint/no-explicit-any
 
-export type DataTableFilter = { key: string; label: string; options: { value: string; label: string }[] }
+export type DataTableFilter = { key: string; label: string; options: FacetOption[] }
+
+/** A list page's title and description, drawn by the table with its buttons on the right. */
+export type TableHeading = { title: string; description?: React.ReactNode }
 
 export type BulkAction = {
   label: string
@@ -87,7 +107,13 @@ type DataTableProps<TData extends RowData> = {
   searchPlaceholder?: string
   filters?: DataTableFilter[]
   bulkActions?: BulkAction[]
-  /** Buttons at the right of the toolbar, such as "New". */
+  /**
+   * The page's title and description: given, the table draws the heading with
+   * `actions` on its right. Left out (a table inside a card), `actions` sit
+   * at the right of the toolbar.
+   */
+  heading?: TableHeading
+  /** The page's buttons, such as "Import" and the primary "Create", last. */
   actions?: React.ReactNode
   /**
    * What the list shows when it has no rows at all: one block in place of the
@@ -97,8 +123,6 @@ type DataTableProps<TData extends RowData> = {
    */
   empty: { icon: LucideIcon; title: string; description?: string; action?: React.ReactNode }
 }
-
-const ALL = "__all"
 
 export function DataTable<TData extends RowData>({
   columns,
@@ -111,6 +135,7 @@ export function DataTable<TData extends RowData>({
   searchPlaceholder,
   filters = [],
   bulkActions = [],
+  heading,
   actions,
   empty,
 }: DataTableProps<TData>) {
@@ -186,15 +211,34 @@ export function DataTable<TData extends RowData>({
   }
 
   const pages = pageCountOf(total, query.pageSize)
-  const from = total === 0 ? 0 : offsetOf(query) + 1
-  const to = Math.min(offsetOf(query) + data.length, total)
+
+  const header = heading && <PageHeader title={heading.title} description={heading.description} actions={actions} />
+  // The columns "View" can hide: data columns with a text header.
+  const hideable = table
+    .getAllLeafColumns()
+    .filter(
+      (column) => column.id !== "select" && column.id !== "actions" && typeof column.columnDef.header === "string"
+    )
+  const visible = table.getVisibleLeafColumns()
+  const lastId = visible[visible.length - 1]?.id
+  const alignOf = (id: string) =>
+    cn(id === "select" && "w-10", id === lastId && "text-right", id === "actions" && "w-12")
 
   // Nothing at all yet: no toolbar, no table, only the block and its next step.
-  if (data.length === 0 && !narrowed) return <EmptyState {...empty} />
+  if (data.length === 0 && !narrowed)
+    return header ? (
+      <div className="space-y-4">
+        {header}
+        <EmptyState {...empty} />
+      </div>
+    ) : (
+      <EmptyState {...empty} />
+    )
 
   return (
-    <div className="space-y-3">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+    <div className="space-y-4">
+      {header}
+      <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
         {searchPlaceholder && (
           <div className="relative sm:w-72">
             {/* The search is a field waiting for data while the new rows load:
@@ -218,43 +262,48 @@ export function DataTable<TData extends RowData>({
           </div>
         )}
         {filters.map((filter) => (
-          <OptionSelect
+          <FacetFilter
             key={filter.key}
-            value={query.filters[filter.key] ?? ALL}
-            onValueChange={(value) => go({ filters: { [filter.key]: value === ALL ? null : value } })}
-            options={[{ value: ALL, label: t("all", { label: filter.label }) }, ...filter.options]}
-            aria-label={filter.label}
-            className="sm:w-44"
+            label={filter.label}
+            options={filter.options}
+            value={query.filters[filter.key]}
+            onChange={(value) => go({ filters: { [filter.key]: value } })}
           />
         ))}
-        {actions && <div className="flex gap-2 sm:ml-auto">{actions}</div>}
-      </div>
-
-      {selectable && selectedIds.length > 0 && (
-        <div
-          role="region"
-          aria-label={t("bulkActions")}
-          className="flex flex-wrap items-center gap-2 rounded-[var(--radius)] border border-primary/30 bg-primary/5 px-3 py-2 text-sm"
-        >
-          <span className="font-medium">{t("selected", { count: selectedIds.length })}</span>
-          {bulkActions.map((action) => (
-            <Button
-              key={action.label}
-              size="sm"
-              variant={action.variant === "destructive" ? "destructive" : "outline"}
-              disabled={bulk.isPending}
-              onClick={() => runBulk(action)}
-            >
-              {bulk.isPending && bulk.variables?.action === action ? <Spinner /> : <action.icon />}
-              {action.label}
-            </Button>
-          ))}
-          <Button size="sm" variant="ghost" className="ml-auto" onClick={() => table.resetRowSelection()}>
+        {narrowed && (
+          <Button variant="ghost" size="sm" className="h-9" onClick={clearFilters}>
+            {t("reset")}
             <X />
-            {t("clearSelection")}
           </Button>
+        )}
+        <div className="flex gap-2 sm:ml-auto">
+          {!heading && actions}
+          {hideable.length > 0 && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="h-9">
+                  <Settings2 />
+                  {t("view")}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-44">
+                <DropdownMenuLabel>{t("toggleColumns")}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {hideable.map((column) => (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) => column.toggleVisibility(value === true)}
+                    onSelect={(event) => event.preventDefault()}
+                  >
+                    {String(column.columnDef.header)}
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
-      )}
+      </div>
 
       {data.length === 0 ? (
         <EmptyState
@@ -284,7 +333,7 @@ export function DataTable<TData extends RowData>({
                         <TableHead
                           key={header.id}
                           aria-sort={active ? (query.dir === "asc" ? "ascending" : "descending") : undefined}
-                          className={cn(id === "select" && "w-10", id === "actions" && "w-12 text-right")}
+                          className={alignOf(id)}
                         >
                           {header.isPlaceholder ? null : canSort ? (
                             <button
@@ -315,8 +364,8 @@ export function DataTable<TData extends RowData>({
               <TableBody>
                 {table.getRowModel().rows.map((row) => (
                   <TableRow key={row.id} data-state={row.getIsSelected() ? "selected" : undefined}>
-                    {row.getAllCells().map((cell) => (
-                      <TableCell key={cell.id} className={cn(cell.column.id === "actions" && "text-right")}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id} className={alignOf(cell.column.id)}>
                         <table.FlexRender cell={cell} />
                       </TableCell>
                     ))}
@@ -326,10 +375,10 @@ export function DataTable<TData extends RowData>({
             </Table>
           </div>
 
-          <div className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-            <span>{t("showing", { from, to, total })}</span>
+          {/* The footer: rows per page, the bulk bar while rows are selected
+              (under the table, never above it), then the pager. */}
+          <div className="flex flex-col gap-3 text-sm lg:grid lg:grid-cols-[1fr_auto_1fr] lg:items-center">
             <div className="flex items-center gap-2">
-              <span className="hidden sm:inline">{t("rowsPerPage")}</span>
               <OptionSelect
                 value={String(query.pageSize)}
                 onValueChange={(value) => go({ pageSize: Number(value) })}
@@ -337,26 +386,105 @@ export function DataTable<TData extends RowData>({
                 aria-label={t("rowsPerPage")}
                 className="w-20"
               />
-              <span className="px-1 whitespace-nowrap">{t("page", { page: query.page, pages })}</span>
-              <Button
-                size="icon"
-                variant="outline"
-                aria-label={t("previous")}
-                disabled={query.page <= 1}
-                onClick={() => go({ page: query.page - 1 })}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <Button
-                size="icon"
-                variant="outline"
-                aria-label={t("next")}
-                disabled={query.page >= pages}
-                onClick={() => go({ page: query.page + 1 })}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
+              <span className="font-medium whitespace-nowrap">{t("rowsPerPage")}</span>
             </div>
+
+            <div className="flex justify-center">
+              {selectable && selectedIds.length > 0 && (
+                <div
+                  role="toolbar"
+                  aria-label={t("bulkActions")}
+                  className="flex items-center gap-1.5 rounded-xl border border-border bg-background p-1.5"
+                >
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="size-8 rounded-full"
+                    aria-label={t("clearSelection")}
+                    onClick={() => table.resetRowSelection()}
+                  >
+                    <X />
+                  </Button>
+                  <Separator orientation="vertical" className="h-5" />
+                  <span className="flex items-center gap-1.5 px-1 whitespace-nowrap">
+                    <Badge className="tabular-nums">{selectedIds.length}</Badge>
+                    {t("selectedLabel", { count: selectedIds.length })}
+                  </span>
+                  <Separator orientation="vertical" className="h-5" />
+                  {bulkActions.map((action) => {
+                    const destructive = action.variant === "destructive"
+                    return (
+                      <Tooltip key={action.label}>
+                        <TooltipTrigger asChild>
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            aria-label={action.label}
+                            className={cn(
+                              "size-8",
+                              destructive &&
+                                "border-destructive bg-destructive text-white hover:bg-destructive/90 hover:text-white"
+                            )}
+                            disabled={bulk.isPending}
+                            onClick={() => runBulk(action)}
+                          >
+                            {bulk.isPending && bulk.variables?.action === action ? <Spinner /> : <action.icon />}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>{action.label}</TooltipContent>
+                      </Tooltip>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+
+            <nav aria-label={t("pagination")} className="flex items-center justify-between gap-3 lg:justify-end">
+              <span className="font-medium whitespace-nowrap">{t("page", { page: query.page, pages })}</span>
+              <div className="flex items-center gap-1">
+                <PagerButton label={t("first")} disabled={query.page <= 1} onClick={() => go({ page: 1 })}>
+                  <ChevronsLeft />
+                </PagerButton>
+                <PagerButton
+                  label={t("previous")}
+                  disabled={query.page <= 1}
+                  onClick={() => go({ page: query.page - 1 })}
+                >
+                  <ChevronLeft />
+                </PagerButton>
+                <div className="hidden items-center gap-1 sm:flex">
+                  {pageItems(query.page, pages).map((item, index) =>
+                    item === "gap" ? (
+                      <span key={`gap-${index}`} aria-hidden="true" className="px-1 text-muted-foreground">
+                        …
+                      </span>
+                    ) : (
+                      <Button
+                        key={item}
+                        size="icon"
+                        variant={item === query.page ? "default" : "outline"}
+                        className="size-8 tabular-nums"
+                        aria-label={t("goToPage", { page: item })}
+                        aria-current={item === query.page ? "page" : undefined}
+                        onClick={() => go({ page: item })}
+                      >
+                        {item}
+                      </Button>
+                    )
+                  )}
+                </div>
+                <PagerButton
+                  label={t("next")}
+                  disabled={query.page >= pages}
+                  onClick={() => go({ page: query.page + 1 })}
+                >
+                  <ChevronRight />
+                </PagerButton>
+                <PagerButton label={t("last")} disabled={query.page >= pages} onClick={() => go({ page: pages })}>
+                  <ChevronsRight />
+                </PagerButton>
+              </div>
+            </nav>
           </div>
         </>
       )}
@@ -406,5 +534,23 @@ function SelectRow({ checked, onChange }: { checked: boolean; onChange: (value: 
   const t = useTranslations("dataTable")
   return (
     <Checkbox aria-label={t("selectRow")} checked={checked} onCheckedChange={(value) => onChange(value === true)} />
+  )
+}
+
+function PagerButton({
+  label,
+  disabled,
+  onClick,
+  children,
+}: {
+  label: string
+  disabled: boolean
+  onClick: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <Button size="icon" variant="outline" className="size-8" aria-label={label} disabled={disabled} onClick={onClick}>
+      {children}
+    </Button>
   )
 }

@@ -11,7 +11,7 @@ import { createTenantSchema, type CreateTenantInput } from "@/lib/schemas/platfo
 import type { TableQuery } from "@/lib/table-query"
 import type { TenantStatus } from "@/lib/tenant-status"
 import { useDrawer } from "@/stores/drawer"
-import { DataTable, dataTableColumns } from "@/components/data-table/data-table"
+import { DataTable, dataTableColumns, type TableHeading } from "@/components/data-table/data-table"
 import { FormDrawer } from "@/components/data-table/form-drawer"
 import { TenantStatusBadge } from "@/components/platform/tenant-status-badge"
 import { Button } from "@/components/ui/button"
@@ -38,7 +38,7 @@ type Props = {
   defaults: { sort: string; dir: "asc" | "desc"; pageSize: number }
 }
 
-export function TenantsTable({ rows, total, query, defaults }: Props) {
+export function TenantsTable({ heading, rows, total, query, defaults }: { heading?: TableHeading } & Props) {
   const t = useTranslations("platform.tenants")
   const format = useFormatter()
   const openDrawer = useDrawer((s) => s.open)
@@ -84,6 +84,7 @@ export function TenantsTable({ rows, total, query, defaults }: Props) {
   return (
     <>
       <DataTable
+        heading={heading}
         columns={columns}
         data={rows}
         total={total}

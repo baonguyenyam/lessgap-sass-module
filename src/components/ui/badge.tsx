@@ -15,8 +15,11 @@ const badgeVariants = cva(
         outline: "border-border text-foreground [a]:hover:bg-muted [a]:hover:text-muted-foreground",
         ghost: "hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
         link: "text-primary underline-offset-4 hover:underline",
-        // Extension (spec/adr/0021): a positive status. green-700 clears 4.5:1 on its own tint.
+        // Extensions (spec/adr/0021; owner's rule 2026-10-30: badges in colour):
+        // status tones. Each -700 text clears 4.5:1 on its own tint.
         success: "bg-green-500/10 text-green-700 dark:text-green-400",
+        info: "bg-sky-500/10 text-sky-700 dark:text-sky-400",
+        warning: "bg-amber-500/15 text-amber-800 dark:text-amber-400",
       },
     },
     defaultVariants: {

@@ -2036,11 +2036,8 @@
     "reference": "Reference: {digest}"
   },
   "dataTable": {
-    "all": "{label}: All",
     "bulkActions": "Bulk actions",
-    "selected": "{count, plural, one {# selected} other {# selected}}",
     "clearSelection": "Clear",
-    "showing": "{from}–{to} of {total}",
     "rowsPerPage": "Rows per page",
     "page": "Page {page} of {pages}",
     "previous": "Previous page",
@@ -2058,7 +2055,17 @@
       "title": "No results",
       "description": "Nothing matches this search or these filters.",
       "clear": "Clear filters"
-    }
+    },
+    "reset": "Reset",
+    "view": "View",
+    "toggleColumns": "Toggle columns",
+    "selectedLabel": "{count, plural, one {row selected} other {rows selected}}",
+    "pagination": "Pagination",
+    "first": "First page",
+    "last": "Last page",
+    "goToPage": "Page {page}",
+    "noOptions": "No matches.",
+    "clearFilter": "Clear filter"
   },
   "ui": {
     "searchableSelect": {

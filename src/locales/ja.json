@@ -2036,11 +2036,8 @@
     "reference": "Reference: {digest}"
   },
   "dataTable": {
-    "all": "{label}: All",
     "bulkActions": "Bulk actions",
-    "selected": "{count, plural, one {# selected} other {# selected}}",
     "clearSelection": "Clear",
-    "showing": "{from}–{to} of {total}",
     "rowsPerPage": "Rows per page",
     "page": "Page {page} of {pages}",
     "previous": "Previous page",
@@ -2058,7 +2055,17 @@
       "title": "No results",
       "description": "Nothing matches this search or these filters.",
       "clear": "Clear filters"
-    }
+    },
+    "reset": "リセット",
+    "view": "表示",
+    "toggleColumns": "列の表示切替",
+    "selectedLabel": "行を選択中",
+    "pagination": "ページ送り",
+    "first": "最初のページ",
+    "last": "最後のページ",
+    "goToPage": "{page} ページ",
+    "noOptions": "一致なし",
+    "clearFilter": "フィルターを解除"
   },
   "ui": {
     "searchableSelect": {

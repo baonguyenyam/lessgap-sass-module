@@ -2036,11 +2036,8 @@
     "reference": "Reference: {digest}"
   },
   "dataTable": {
-    "all": "{label}: All",
     "bulkActions": "Bulk actions",
-    "selected": "{count, plural, one {# selected} other {# selected}}",
     "clearSelection": "Clear",
-    "showing": "{from}–{to} of {total}",
     "rowsPerPage": "Rows per page",
     "page": "Page {page} of {pages}",
     "previous": "Previous page",
@@ -2058,7 +2055,17 @@
       "title": "No results",
       "description": "Nothing matches this search or these filters.",
       "clear": "Clear filters"
-    }
+    },
+    "reset": "Redefinir",
+    "view": "Exibir",
+    "toggleColumns": "Alternar colunas",
+    "selectedLabel": "{count, plural, one {linha selecionada} other {linhas selecionadas}}",
+    "pagination": "Paginação",
+    "first": "Primeira página",
+    "last": "Última página",
+    "goToPage": "Página {page}",
+    "noOptions": "Nenhum resultado.",
+    "clearFilter": "Limpar filtro"
   },
   "ui": {
     "searchableSelect": {

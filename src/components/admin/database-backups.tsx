@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { useMemo } from "react"
 import { toast } from "sonner"
 import { backUpDatabase, backupDownloadUrl } from "@/app/actions/database"
-import { DataTable, dataTableColumns } from "@/components/data-table/data-table"
+import { DataTable, dataTableColumns, type TableHeading } from "@/components/data-table/data-table"
 import { RowActions } from "@/components/data-table/row-actions"
 import { EmptyState } from "@/components/layout/empty-state"
 import { Button } from "@/components/ui/button"
@@ -19,13 +19,14 @@ export type BackupRow = { key: string; takenAt: string; size: number }
 
 /** Admin → Database → Backups (spec/adr/0023): take one, list them, download one. */
 export function DatabaseBackups({
+  heading,
   configured,
   failed,
   rows,
   total,
   query,
   defaults,
-}: {
+}: { heading?: TableHeading } & {
   configured: boolean
   /** The bucket is configured but could not be listed (wrong keys, network). */
   failed: boolean
@@ -105,6 +106,7 @@ export function DatabaseBackups({
 
   return (
     <DataTable
+      heading={heading}
       columns={columns}
       data={rows}
       total={total}

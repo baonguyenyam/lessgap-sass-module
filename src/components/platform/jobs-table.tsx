@@ -2,13 +2,14 @@
 
 import { ListChecks, Play, RotateCcw } from "lucide-react"
 import { useFormatter, useTranslations } from "next-intl"
-import { useMemo, type ComponentProps } from "react"
+import { useMemo } from "react"
 import { retryJobAction, runJobNowAction } from "@/app/actions/platform-ops"
 import type { TableQuery } from "@/lib/table-query"
 import type { JobStatus } from "@/lib/job-status"
 import { DataTable, dataTableColumns } from "@/components/data-table/data-table"
 import { RowActions } from "@/components/data-table/row-actions"
-import { Badge } from "@/components/ui/badge"
+import { StatusBadge, type StatusMap } from "@/components/data-table/status-badge"
+import { CircleCheck, CircleX, Clock, LoaderCircle } from "lucide-react"
 
 export type JobRow = {
   id: string
@@ -22,12 +23,12 @@ export type JobRow = {
   finishedAt: string | null
 }
 
-const VARIANTS = {
-  QUEUED: "outline",
-  RUNNING: "default",
-  SUCCEEDED: "secondary",
-  FAILED: "destructive",
-} as const satisfies Record<JobStatus, ComponentProps<typeof Badge>["variant"]>
+const STATUSES: StatusMap<JobStatus> = {
+  QUEUED: { tone: "muted", icon: Clock },
+  RUNNING: { tone: "info", icon: LoaderCircle },
+  SUCCEEDED: { tone: "success", icon: CircleCheck },
+  FAILED: { tone: "danger", icon: CircleX },
+}
 
 type Props = {
   rows: JobRow[]
@@ -51,7 +52,9 @@ export function JobsTable({ rows, total, query, defaults, kinds }: Props) {
       col.accessor("status", {
         id: "status",
         header: t("colStatus"),
-        cell: ({ row }) => <Badge variant={VARIANTS[row.original.status]}>{t(`status.${row.original.status}`)}</Badge>,
+        cell: ({ row }) => (
+          <StatusBadge {...STATUSES[row.original.status]}>{t(`status.${row.original.status}`)}</StatusBadge>
+        ),
       }),
       col.accessor("attempts", {
         header: t("colAttempts"),

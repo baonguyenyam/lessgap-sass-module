@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl"
 import { useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { deleteTenantRoles, saveTenantRole } from "@/app/actions/roles"
-import { DataTable, dataTableColumns, type BulkAction } from "@/components/data-table/data-table"
+import { DataTable, dataTableColumns, type BulkAction, type TableHeading } from "@/components/data-table/data-table"
 import { FormDrawer } from "@/components/data-table/form-drawer"
 import { RowActions, type RowAction } from "@/components/data-table/row-actions"
 import { Badge } from "@/components/ui/badge"
@@ -24,13 +24,14 @@ type Catalog = Array<{ group: string; resources: Array<{ resource: string; verbs
 const DRAWER = "tenant-role"
 
 export function RolesTable({
+  heading,
   rows,
   total,
   query,
   defaults,
   catalog,
   canManage,
-}: {
+}: { heading?: TableHeading } & {
   rows: RoleRow[]
   total: number
   query: TableQuery
@@ -118,6 +119,7 @@ export function RolesTable({
   return (
     <>
       <DataTable
+        heading={heading}
         columns={columns}
         data={rows}
         total={total}

@@ -7,7 +7,7 @@ import { useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { inviteMember, removeMembers, setMemberRole, setMembersSuspended } from "@/app/actions/members"
-import { DataTable, dataTableColumns, type BulkAction } from "@/components/data-table/data-table"
+import { DataTable, dataTableColumns, type BulkAction, type TableHeading } from "@/components/data-table/data-table"
 import { FormDrawer } from "@/components/data-table/form-drawer"
 import { RowActions } from "@/components/data-table/row-actions"
 import { Badge } from "@/components/ui/badge"
@@ -18,6 +18,8 @@ import { OptionSelect } from "@/components/form/option-select"
 import { inviteMemberSchema, type InviteMemberInput } from "@/lib/schemas/tenant"
 import type { TableQuery } from "@/lib/table-query"
 import { useDrawer } from "@/stores/drawer"
+import { StatusBadge } from "@/components/data-table/status-badge"
+import { Ban, CircleCheck } from "lucide-react"
 
 export type MemberRow = {
   id: string
@@ -47,6 +49,7 @@ type Props = {
 }
 
 export function MembersTable({
+  heading,
   rows,
   total,
   query,
@@ -56,7 +59,7 @@ export function MembersTable({
   canManage,
   canInvite,
   viewerUserId,
-}: Props) {
+}: { heading?: TableHeading } & Props) {
   const t = useTranslations("dashboard.members")
   const format = useFormatter()
   const openDrawer = useDrawer((s) => s.open)
@@ -94,9 +97,12 @@ export function MembersTable({
       col.accessor("status", {
         header: t("list.colStatus"),
         cell: ({ row }) => (
-          <Badge variant={row.original.status === "suspended" ? "destructive" : "secondary"}>
+          <StatusBadge
+            tone={row.original.status === "suspended" ? "danger" : "success"}
+            icon={row.original.status === "suspended" ? Ban : CircleCheck}
+          >
             {t(`list.status.${row.original.status}`)}
-          </Badge>
+          </StatusBadge>
         ),
       }),
       col.accessor("lastActiveAt", {
@@ -179,6 +185,7 @@ export function MembersTable({
   return (
     <>
       <DataTable
+        heading={heading}
         columns={columns}
         data={rows}
         total={total}

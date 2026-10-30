@@ -2036,11 +2036,8 @@
     "reference": "Reference: {digest}"
   },
   "dataTable": {
-    "all": "{label}: All",
     "bulkActions": "Bulk actions",
-    "selected": "{count, plural, one {# selected} other {# selected}}",
     "clearSelection": "Clear",
-    "showing": "{from}–{to} of {total}",
     "rowsPerPage": "Rows per page",
     "page": "Page {page} of {pages}",
     "previous": "Previous page",
@@ -2058,7 +2055,17 @@
       "title": "No results",
       "description": "Nothing matches this search or these filters.",
       "clear": "Clear filters"
-    }
+    },
+    "reset": "초기화",
+    "view": "보기",
+    "toggleColumns": "열 표시 전환",
+    "selectedLabel": "행 선택됨",
+    "pagination": "페이지 이동",
+    "first": "첫 페이지",
+    "last": "마지막 페이지",
+    "goToPage": "{page} 페이지",
+    "noOptions": "결과 없음",
+    "clearFilter": "필터 해제"
   },
   "ui": {
     "searchableSelect": {

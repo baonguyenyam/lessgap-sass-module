@@ -2036,11 +2036,8 @@
     "reference": "Mã tham chiếu: {digest}"
   },
   "dataTable": {
-    "all": "{label}: Tất cả",
     "bulkActions": "Thao tác hàng loạt",
-    "selected": "Đã chọn {count}",
     "clearSelection": "Bỏ chọn",
-    "showing": "{from}–{to} trên {total}",
     "rowsPerPage": "Số dòng mỗi trang",
     "page": "Trang {page}/{pages}",
     "previous": "Trang trước",
@@ -2058,7 +2055,17 @@
       "title": "Không có kết quả",
       "description": "Không có gì khớp với tìm kiếm hoặc bộ lọc này.",
       "clear": "Xóa bộ lọc"
-    }
+    },
+    "reset": "Đặt lại",
+    "view": "Hiển thị",
+    "toggleColumns": "Ẩn/hiện cột",
+    "selectedLabel": "dòng đã chọn",
+    "pagination": "Phân trang",
+    "first": "Trang đầu",
+    "last": "Trang cuối",
+    "goToPage": "Trang {page}",
+    "noOptions": "Không có kết quả.",
+    "clearFilter": "Bỏ lọc"
   },
   "ui": {
     "searchableSelect": {

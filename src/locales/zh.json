@@ -2036,11 +2036,8 @@
     "reference": "Reference: {digest}"
   },
   "dataTable": {
-    "all": "{label}: All",
     "bulkActions": "Bulk actions",
-    "selected": "{count, plural, one {# selected} other {# selected}}",
     "clearSelection": "Clear",
-    "showing": "{from}–{to} of {total}",
     "rowsPerPage": "Rows per page",
     "page": "Page {page} of {pages}",
     "previous": "Previous page",
@@ -2058,7 +2055,17 @@
       "title": "No results",
       "description": "Nothing matches this search or these filters.",
       "clear": "Clear filters"
-    }
+    },
+    "reset": "重置",
+    "view": "视图",
+    "toggleColumns": "显示/隐藏列",
+    "selectedLabel": "行已选择",
+    "pagination": "分页",
+    "first": "第一页",
+    "last": "最后一页",
+    "goToPage": "第 {page} 页",
+    "noOptions": "无匹配项",
+    "clearFilter": "清除筛选"
   },
   "ui": {
     "searchableSelect": {

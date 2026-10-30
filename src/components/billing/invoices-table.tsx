@@ -5,10 +5,21 @@ import { useFormatter, useTranslations } from "next-intl"
 import { useMemo } from "react"
 import { DataTable, dataTableColumns } from "@/components/data-table/data-table"
 import { RowActions, type RowAction } from "@/components/data-table/row-actions"
-import { Badge } from "@/components/ui/badge"
 import type { TableQuery } from "@/lib/table-query"
+import { StatusBadge, type StatusMap } from "@/components/data-table/status-badge"
+import { CircleAlert, CircleCheck, CircleDashed, CircleX, Clock } from "lucide-react"
 
 export const INVOICE_STATUSES = ["draft", "open", "paid", "uncollectible", "void"] as const
+
+type InvoiceStatus = (typeof INVOICE_STATUSES)[number]
+
+const INVOICE_TONES: StatusMap<InvoiceStatus> = {
+  draft: { tone: "muted", icon: CircleDashed },
+  open: { tone: "info", icon: Clock },
+  paid: { tone: "success", icon: CircleCheck },
+  uncollectible: { tone: "danger", icon: CircleAlert },
+  void: { tone: "muted", icon: CircleX },
+}
 
 export type InvoiceRow = {
   id: string
@@ -62,11 +73,15 @@ export function InvoicesTable({
         cell: ({ row }) => {
           const status = row.original.status
           return (
-            <Badge variant={status === "paid" ? "success" : "secondary"}>
+            <StatusBadge
+              {...(status && status in INVOICE_TONES
+                ? INVOICE_TONES[status as InvoiceStatus]
+                : { tone: "neutral" as const })}
+            >
               {status && (INVOICE_STATUSES as readonly string[]).includes(status)
                 ? t(`invoiceStatus.${status}`)
                 : (status ?? t("statusUnknown"))}
-            </Badge>
+            </StatusBadge>
           )
         },
       }),

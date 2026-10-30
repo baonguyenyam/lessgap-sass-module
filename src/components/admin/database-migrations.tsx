@@ -1,7 +1,7 @@
 "use client"
 
 import { useMutation } from "@tanstack/react-query"
-import { CircleCheck, CircleHelp, DatabaseZap, X } from "lucide-react"
+import { CircleCheck, CircleHelp, Clock, DatabaseZap, X } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 import { useMemo, useState } from "react"
@@ -10,7 +10,6 @@ import { applyDatabaseMigrations } from "@/app/actions/database"
 import { DataTable, dataTableColumns } from "@/components/data-table/data-table"
 import { EmptyState } from "@/components/layout/empty-state"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -26,6 +25,7 @@ import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
 import type { TableQuery } from "@/lib/table-query"
 import type { MigrationStatus } from "@/platform/database/migration-status"
+import { StatusBadge } from "@/components/data-table/status-badge"
 
 const CONFIRM_WORD = "MIGRATE"
 
@@ -71,9 +71,12 @@ export function DatabaseMigrations({
         header: t("colStatus"),
         // Badge
         cell: ({ row }) => (
-          <Badge variant={row.original.status === "applied" ? "success" : "default"}>
+          <StatusBadge
+            tone={row.original.status === "applied" ? "success" : "warning"}
+            icon={row.original.status === "applied" ? CircleCheck : Clock}
+          >
             {t(`state.${row.original.status}`)}
-          </Badge>
+          </StatusBadge>
         ),
       }),
     ])

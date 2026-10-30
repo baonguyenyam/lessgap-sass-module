@@ -45,11 +45,8 @@ export default async function AdminDatabaseBackupsPage({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">{t("backups.title")}</h1>
-        <p className="mt-1 text-muted-foreground">{t("backups.subtitle")}</p>
-      </div>
       <DatabaseBackups
+        heading={{ title: t("backups.title"), description: t("backups.subtitle") }}
         configured={configured}
         failed={failed}
         rows={page}

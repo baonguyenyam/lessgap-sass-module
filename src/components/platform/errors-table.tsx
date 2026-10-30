@@ -9,6 +9,8 @@ import type { TableQuery } from "@/lib/table-query"
 import { DataTable, dataTableColumns } from "@/components/data-table/data-table"
 import { RowActions } from "@/components/data-table/row-actions"
 import { Badge } from "@/components/ui/badge"
+import { StatusBadge } from "@/components/data-table/status-badge"
+import { CircleAlert, CircleCheck } from "lucide-react"
 
 export type ErrorRow = {
   id: string
@@ -83,9 +85,13 @@ export function ErrorsTable({ rows, total, query, defaults, sources }: Props) {
         header: t("colResolved"),
         cell: ({ row }) =>
           row.original.resolvedAt ? (
-            <Badge variant="secondary">{t("resolved")}</Badge>
+            <StatusBadge tone="success" icon={CircleCheck}>
+              {t("resolved")}
+            </StatusBadge>
           ) : (
-            <Badge variant="destructive">{t("open")}</Badge>
+            <StatusBadge tone="danger" icon={CircleAlert}>
+              {t("open")}
+            </StatusBadge>
           ),
       }),
       col.display({

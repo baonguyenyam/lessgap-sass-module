@@ -5,20 +5,26 @@ import { useFormatter, useTranslations } from "next-intl"
 import { useMemo, type ReactNode } from "react"
 import { toast } from "sonner"
 import { unsubscribeSubscribers } from "@/app/actions/newsletter-admin"
-import { DataTable, dataTableColumns, type BulkAction } from "@/components/data-table/data-table"
+import { DataTable, dataTableColumns, type BulkAction, type TableHeading } from "@/components/data-table/data-table"
 import { RowActions } from "@/components/data-table/row-actions"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import type { TableQuery } from "@/lib/table-query"
+import { StatusBadge, type StatusMap } from "@/components/data-table/status-badge"
+import { CircleCheck, CircleMinus, Clock } from "lucide-react"
 
 export const NEWSLETTER_STATUSES = ["pending", "confirmed", "unsubscribed"] as const
 type Status = (typeof NEWSLETTER_STATUSES)[number]
 
 export type SubscriberRow = { id: string; email: string; source: string; createdAt: string; status: Status }
 
-const STATUS_VARIANT = { pending: "secondary", confirmed: "success", unsubscribed: "outline" } as const
+const STATUSES = {
+  pending: { tone: "warning", icon: Clock },
+  confirmed: { tone: "success", icon: CircleCheck },
+  unsubscribed: { tone: "muted", icon: CircleMinus },
+} as const satisfies StatusMap<"pending" | "confirmed" | "unsubscribed">
 
 export function NewsletterTable({
+  heading,
   rows,
   total,
   query,
@@ -27,7 +33,7 @@ export function NewsletterTable({
   exportHref = "/api/admin/newsletter-export",
   canManage = true,
   toolbar,
-}: {
+}: { heading?: TableHeading } & {
   rows: SubscriberRow[]
   total: number
   query: TableQuery
@@ -61,7 +67,7 @@ export function NewsletterTable({
       col.accessor("status", {
         header: t("colStatus"),
         cell: ({ row }) => (
-          <Badge variant={STATUS_VARIANT[row.original.status]}>{t(`status.${row.original.status}`)}</Badge>
+          <StatusBadge {...STATUSES[row.original.status]}>{t(`status.${row.original.status}`)}</StatusBadge>
         ),
       }),
       col.accessor("createdAt", {
@@ -127,6 +133,7 @@ export function NewsletterTable({
 
   return (
     <DataTable
+      heading={heading}
       columns={columns}
       data={rows}
       total={total}

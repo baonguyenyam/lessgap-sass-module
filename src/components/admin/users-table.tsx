@@ -20,6 +20,8 @@ import { ASSIGNABLE_ROLES, ROLES, canChangeRole, canSwitchAs, isAdmin, type Role
 import { userSchema } from "@/lib/schemas/user"
 import type { TableQuery } from "@/lib/table-query"
 import { useDrawer } from "@/stores/drawer"
+import { StatusBadge } from "@/components/data-table/status-badge"
+import { CircleCheck } from "lucide-react"
 
 export type UserRow = {
   id: string
@@ -77,7 +79,12 @@ export function UsersTable({
         header: t("colStatus"),
         cell: ({ row }) =>
           row.original.status ? (
-            <Badge variant={row.original.status === "ACTIVE" ? "success" : "secondary"}>{row.original.status}</Badge>
+            <StatusBadge
+              tone={row.original.status === "ACTIVE" ? "success" : "neutral"}
+              icon={row.original.status === "ACTIVE" ? CircleCheck : undefined}
+            >
+              {row.original.status}
+            </StatusBadge>
           ) : (
             <Badge variant="secondary">{t("free")}</Badge>
           ),
