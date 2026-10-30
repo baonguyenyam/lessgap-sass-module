@@ -212,6 +212,7 @@ export function navGroups(area: NavArea, access: NavAccess): NavGroup[] {
           ? []
           : [{ key: "roles", href: t("roles"), icon: KeyRound, permission: "roles.view" } satisfies NavItem]),
         { key: "billing", href: t("billing"), icon: CreditCard, permission: "billing.manage" },
+        { key: "emails", href: t("emails"), icon: Mail, permission: "settings.manage" },
         {
           key: "settings",
           href: t("settings"),
