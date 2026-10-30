@@ -1,0 +1,2253 @@
+{
+  "auth": {
+    "verifyRequest": {
+      "title": "Check your email",
+      "body": "We sent you a sign-in link. It's valid for 15 minutes and can be used once.",
+      "spam": "Nothing in your inbox? Check the spam folder, or <retry>try again</retry>."
+    },
+    "forgotPassword": {
+      "title": "Reset your password",
+      "subtitle": "Enter your email and we'll send you a reset link",
+      "demoNotice": "This live demo has no email service attached, so password reset is disabled here.",
+      "$kit": {
+        "demoNoticeExtra": "In your own deployment, wire an email provider (the kit ships with <resend>Resend</resend>) and this flow goes live.",
+        "noEmailService": "Password reset needs an email service. Set <code>RESEND_API_KEY</code> to enable it (the kit ships with Resend, see <code>docs/configuration.md</code>)."
+      },
+      "$product": {
+        "demoNoticeExtra": "Everything else works as it would in production.",
+        "noEmailService": "Password reset needs an email service. Set <code>RESEND_API_KEY</code> to enable it."
+      },
+      "sent": "If an account exists for that email, a reset link is on its way. It's valid for 30 minutes.",
+      "emailPlaceholder": "you@example.com",
+      "submit": "Send reset link",
+      "backToSignIn": "Back to sign in"
+    },
+    "resetPassword": {
+      "title": "Choose a new password",
+      "expired": "This reset link is invalid or has expired.",
+      "requestNew": "Request a new one",
+      "policy": "Passwords must be 8 to 72 characters.",
+      "passwordPlaceholder": "New password (min 8 characters)",
+      "submit": "Update password"
+    },
+    "signup": {
+      "title": "Create your account",
+      "subtitleVerified": "We'll email you a link to verify your address and sign you in",
+      "subtitlePassword": "Sign up with your email and a password",
+      "demoNotice": "This live demo has no email service attached, so sign-up is disabled here.",
+      "$kit": {
+        "demoNoticeExtra": "In your own deployment, wire an email provider (the kit ships with <resend>Resend</resend>) and this flow goes live.",
+        "noEmailService": "No email service is configured, so accounts are created without email verification. Set <code>RESEND_API_KEY</code> to enable it (the kit ships with Resend, see <code>docs/configuration.md</code>)."
+      },
+      "$product": {
+        "demoNoticeExtra": "Everything else works as it would in production.",
+        "noEmailService": "No email service is configured, so accounts are created without email verification. Set <code>RESEND_API_KEY</code> to enable it."
+      },
+      "namePlaceholder": "Name (optional)",
+      "emailPlaceholder": "you@example.com",
+      "passwordPlaceholder": "Password (min 8 characters)",
+      "submit": "Create account",
+      "haveAccount": "Already have an account? <signin>Sign in</signin>",
+      "legal": "By signing up, you agree to our <terms>Terms</terms> and <privacy>Privacy Policy</privacy>.",
+      "errors": {
+        "invalid": "Check your details: valid email and a password of at least 8 characters.",
+        "exists": "An account with this email already exists. Sign in instead.",
+        "rate": "Too many attempts. Try again in a few minutes.",
+        "generic": "Something went wrong. Try again.",
+        "closed": "Sign-ups are closed right now."
+      },
+      "closedNotice": "New accounts cannot be created right now. If you already have one, sign in."
+    },
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to your account to continue",
+      "subtitleDemo": "This is a live demo - jump straight in",
+      "google": "Continue with Google",
+      "github": "Continue with GitHub",
+      "demoOauth": "OAuth sign-in is enabled in your own deployment - this demo uses shared accounts.",
+      "demoEmailFlows": "Curious about the email flows? <signup>Preview sign-up</signup> and <reset>password reset</reset>.",
+      "dividerEmail": "or continue with email",
+      "passwordUpdated": "Password updated. Sign in with your new password.",
+      "emailPlaceholder": "you@example.com",
+      "passwordPlaceholder": "Password",
+      "submit": "Sign in",
+      "magicLink": "Email me a sign-in link",
+      "magicLinkTwoFactorNote": "Accounts with two-factor authentication sign in with their password and a code, not with a link.",
+      "forgot": "Forgot password?",
+      "noAccount": "No account? Sign up",
+      "dividerDemo": "try the demo",
+      "exploreUser": "Explore as User",
+      "exploreAdmin": "Explore as Admin",
+      "demoAccounts": "One click, no email - shared accounts with fake data, reset periodically.",
+      "errors": {
+        "credentials": "Invalid email or password.",
+        "email": "Enter a valid email address.",
+        "rate": "Too many attempts. Try again in a few minutes.",
+        "Verification": "That sign-in link is invalid or has expired. Request a new one.",
+        "generic": "Something went wrong. Try again.",
+        "2fa": "This account uses two-factor authentication, so it signs in with a password and a code from your authenticator app.",
+        "two_factor_linking": "This account uses two-factor authentication, so a provider cannot attach itself to it here. Sign in with your password and a code, then connect the provider from Settings.",
+        "signup_closed": "Sign-ups are closed, so no new account was created. If you already have one, sign in with it."
+      }
+    },
+    "twoFactor": {
+      "title": "Two-factor authentication",
+      "subtitle": "Enter the six digit code from your authenticator app.",
+      "codeLabel": "Code",
+      "submit": "Verify",
+      "useBackup": "Use a backup code",
+      "useApp": "Use your authenticator app",
+      "backupTitle": "Backup code",
+      "backupSubtitle": "Enter one code from the list you saved. Each code works once, and using it does not affect the others.",
+      "backupLabel": "Backup code",
+      "backToLogin": "Back to sign in",
+      "errors": {
+        "code": "That code is wrong or has expired. Codes change every 30 seconds.",
+        "backup": "That backup code is wrong, or has already been used.",
+        "rate": "Too many attempts. Try again in a few minutes.",
+        "expired": "That sign-in timed out. Start again.",
+        "generic": "Something went wrong. Try again.",
+        "multiple": "That is the whole list. Enter a single code from it, in the form ABCDE-FGHJK: the others stay valid."
+      },
+      "backupLost": "Lost your phone and these codes? There is no way to reset this yourself: ask whoever runs this site to remove the second factor from your account."
+    }
+  },
+  "dashboard": {
+    "home": {
+      "greeting": "Welcome back, {name}",
+      "greetingFallback": "there",
+      "subtitle": "Here's what's happening with your account.",
+      "currentPlan": "Current Plan",
+      "planFree": "Free",
+      "status": "Status",
+      "statusLifetime": "Lifetime",
+      "statusFree": "Free tier",
+      "nextBilling": "Next Billing",
+      "none": "None",
+      "$product": {
+        "upsellTitle": "Do more with a plan",
+        "upsellBody": "Unlock the full workspace for you and your team. Change or cancel whenever you like.",
+        "upsellCta": "See plans"
+      },
+      "$kit": {
+        "upsellTitle": "Teams, coming soon",
+        "upsellBody": "Multi-tenancy, roles and team billing are on the way. Tell us what you'd need.",
+        "upsellCta": "Learn more"
+      },
+      "checklistTitle": "Get started",
+      "checklistProgress": "{done} of {total} complete",
+      "checklistDismiss": "Dismiss checklist",
+      "checklistName": "Add your name",
+      "checklistBilling": "Set up billing"
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "How the app looks and which language it speaks.",
+      "profileTitle": "Profile",
+      "profileDescription": "Update your display name and view account details.",
+      "methodsTitle": "Sign-in methods",
+      "methodsDescription": "Ways to sign in to this account.",
+      "email": {
+        "label": "Email address",
+        "hint": "Confirmed from both the current and the new address before it changes.",
+        "placeholder": "new@example.com",
+        "submit": "Change email"
+      },
+      "connected": "Connected",
+      "disconnect": "Disconnect",
+      "connect": "Connect",
+      "password": "Password",
+      "passwordSet": "Set",
+      "passwordNotSet": "Not set",
+      "currentPasswordPlaceholder": "Current password",
+      "newPasswordPlaceholder": "New password (8+ characters)",
+      "setPasswordPlaceholder": "New password (8+ characters)",
+      "changePassword": "Change password",
+      "setPassword": "Set password",
+      "passwordHint": "Lets you sign in without Google or GitHub.",
+      "twoFactor": {
+        "title": "Two-factor authentication",
+        "description": "Ask for a code from an authenticator app at sign-in.",
+        "status": "Two-factor authentication",
+        "on": "On",
+        "passwordLabel": "Current password",
+        "turnOn": "Turn on",
+        "turnOff": "Turn off",
+        "turnOffTitle": "Turn off two-factor authentication?",
+        "turnOffDescription": "Turning it back on later means pairing your app again.",
+        "cancel": "Cancel",
+        "scan": "Scan with an authenticator app: Google Authenticator, 1Password, Bitwarden or Authy.",
+        "manualEntry": "Cannot scan it? Enter this key instead:",
+        "codeLabel": "Code from the app",
+        "confirm": "Confirm",
+        "regenerate": "New backup codes",
+        "codesTitle": "Backup codes",
+        "codesWarning": "Shown once. Each code signs you in one time if you lose your phone.",
+        "copy": "Copy",
+        "copied": "Copied",
+        "download": "Download",
+        "needsPassword": "Set a password first to turn on two-factor authentication.",
+        "demo": "Not available on the demo.",
+        "errors": {
+          "password": "That password is wrong.",
+          "code": "That code is wrong or has expired. Codes change every 30 seconds.",
+          "rate": "Too many attempts. Try again in a few minutes.",
+          "demo": "Not available on the demo.",
+          "generic": "Something went wrong. Try again."
+        },
+        "regenerateHint": "Replaces your backup codes; the old ones stop working."
+      },
+      "sessions": {
+        "title": "Active sessions",
+        "description": "Devices signed in to your account.",
+        "thisDevice": "This device",
+        "unknownDevice": "Unknown device",
+        "revoke": "End session",
+        "revokeOthers": "End all other sessions ({count})",
+        "caveat": "An ended session can stay active on its device for up to a minute."
+      },
+      "accountTitle": "Account",
+      "accountDescription": "Account information and metadata.",
+      "memberSince": "Member since",
+      "messages": {
+        "unlinked": "Account disconnected.",
+        "password": "Password updated.",
+        "last-method": "You can't disconnect your only sign-in method. Set a password first.",
+        "unlink": "That account could not be disconnected.",
+        "policy": "Passwords must be 8 to 72 characters.",
+        "current": "The current password you entered is wrong.",
+        "demo": "Account deletion is disabled on the demo.",
+        "confirm": "The address did not match, so nothing was deleted.",
+        "subscription": "Your subscription could not be cancelled, so nothing was deleted. Cancel it in the billing portal and try again.",
+        "last-admin": "You are the only administrator. Promote someone else before deleting this account.",
+        "2fa-enabled": "Two-factor authentication is on.",
+        "2fa-disabled": "Two-factor authentication is off.",
+        "2fa-password": "That password is wrong, so nothing changed.",
+        "backup-used": "You signed in with a backup code, and that code is now spent. If the list is running low, generate a new set below.",
+        "session-revoked": "That session was ended.",
+        "sessions-revoked": "Every other session was ended.",
+        "session": "That session could not be found, so nothing changed.",
+        "email-sent": "If that address can be used, we have sent a confirmation to your current one. The account moves only after you confirm there and then on the new address.",
+        "email-invalid": "That does not look like an email address.",
+        "email-same": "That is already your address.",
+        "email-change": "The address could not be changed. Try again in a moment.",
+        "rate": "Too many attempts. Try again in a few minutes.",
+        "last-root": "You are the only ROOT account. Add another one to ROOT_EMAILS and run the seed before deleting this account."
+      },
+      "deleteAccount": {
+        "heading": "Delete this account",
+        "blurb": "Removes your account, your projects and your sign-in methods, and cancels any active subscription immediately. This cannot be undone.",
+        "trigger": "Delete account",
+        "title": "Delete your account?",
+        "description": "Your profile, projects, sessions and linked sign-in methods are removed permanently, and any active subscription is cancelled at once. There is no undo.",
+        "confirmLabel": "Type {email} to confirm",
+        "cancel": "Keep my account",
+        "confirm": "Delete permanently"
+      },
+      "dangerZone": {
+        "title": "Danger zone",
+        "blurb": "Some actions cannot be undone. Proceed with care."
+      },
+      "nav": {
+        "label": "Settings sections",
+        "general": "General",
+        "localization": "Localization",
+        "display": "Display"
+      },
+      "backup": {
+        "title": "Back up your data",
+        "description": "Download a copy of everything this app holds about you, as a JSON file you can keep or take elsewhere.",
+        "includes": {
+          "profile": "Your profile: name, email address, role and when the account was created",
+          "security": "Your sign-in methods and the sessions on record, with their devices and IP addresses",
+          "projects": "Your projects",
+          "billing": "Your subscription, purchases and newsletter status"
+        },
+        "excludes": "Passwords, sign-in tokens, two-factor secrets and backup codes are never included.",
+        "download": "Download my data"
+      },
+      "logs": {
+        "title": "Account activity",
+        "description": "Sign-ins and changes to how you get into your account, newest first. Sessions drop off this list once they are revoked or cleaned up after expiring.",
+        "accountCreated": "Account created",
+        "methodAdded": "{method} connected",
+        "passwordAdded": "Password set",
+        "twoFactorEnabled": "Two-factor authentication turned on",
+        "signedIn": "Signed in on {device}",
+        "switchedIn": "Opened by an administrator with Switch As, on {device}",
+        "unknownDevice": "an unknown device",
+        "thisDevice": "This device",
+        "ended": "Ended"
+      },
+      "preferences": {
+        "languageTitle": "Language",
+        "languageDescription": "Your own language, time zone and date format. They override your workspace's.",
+        "themeTitle": "Appearance",
+        "themeDescription": "Light, dark, or the same as your system."
+      },
+      "tenant": {
+        "generalTitle": "Workspace",
+        "generalDescription": "The name and URL slug of this workspace.",
+        "name": "Name",
+        "slug": "Slug",
+        "slugHint": "Lowercase letters, digits and dashes.",
+        "localizationTitle": "Localization",
+        "localizationDescription": "Language, time zone and date format for everyone in this workspace.",
+        "displayTitle": "Display",
+        "displayDescription": "How lists are shown across this workspace.",
+        "readOnly": "Only members allowed to manage settings can change this.",
+        "save": "Save",
+        "saved": "Settings saved.",
+        "errors": {
+          "invalidName": "Enter a name of up to 80 characters.",
+          "invalidSlug": "Use lowercase letters, digits and single dashes, up to 48 characters.",
+          "slugTaken": "That slug is already taken.",
+          "failed": "Something went wrong. Nothing was changed."
+        }
+      },
+      "modules": {
+        "title": "Modules",
+        "subtitle": "Features your workspace can turn on and off.",
+        "purgeHint": "Deletion scheduled — data is removed after the grace period.",
+        "status": {
+          "enabled": "Enabled",
+          "disabled": "Disabled",
+          "purgeScheduled": "Deletion scheduled"
+        },
+        "stage": {
+          "experimental": "Experimental",
+          "beta": "Beta",
+          "stable": "Stable",
+          "deprecated": "Deprecated"
+        },
+        "actions": {
+          "enable": "Enable",
+          "disable": "Disable",
+          "export": "Export data",
+          "delete": "Delete data",
+          "cancel": "Cancel deletion",
+          "confirmDelete": "Confirm delete",
+          "typeName": "Type {name} to confirm"
+        },
+        "errors": {
+          "dependency": "A module that depends on this one is still enabled, or a dependency is missing.",
+          "stillEnabled": "Disable the module before deleting its data.",
+          "nameMismatch": "The typed name does not match."
+        }
+      },
+      "site": {
+        "title": "Site",
+        "subtitle": "What your public site says about the business.",
+        "profile": "Company profile",
+        "hours": "Opening hours",
+        "appearance": "Appearance",
+        "fields": {
+          "name": "Business name",
+          "tagline": "Tagline",
+          "phone": "Phone",
+          "email": "Email",
+          "address": "Address",
+          "accentColor": "Accent colour"
+        },
+        "days": {
+          "mon": "Mon",
+          "tue": "Tue",
+          "wed": "Wed",
+          "thu": "Thu",
+          "fri": "Fri",
+          "sat": "Sat",
+          "sun": "Sun"
+        },
+        "hoursPlaceholder": "09:00-17:00",
+        "hoursHint": "Leave empty for closed",
+        "save": "Save",
+        "saving": "Saving…",
+        "saved": "Saved.",
+        "errors": {
+          "nameRequired": "Business name is required.",
+          "hoursInvalid": "Hours for {day} must look like 09:00-17:00."
+        }
+      },
+      "domains": {
+        "title": "Domains",
+        "subtitle": "Connect a custom domain to your site.",
+        "empty": "No custom domains yet.",
+        "primary": "Primary",
+        "status": {
+          "pending": "Pending — add the DNS records below",
+          "active": "Active",
+          "failed": "Failed"
+        },
+        "addPlaceholder": "example.com",
+        "actions": {
+          "add": "Add domain",
+          "check": "Check now",
+          "primary": "Make primary",
+          "remove": "Remove"
+        }
+      },
+      "payments": {
+        "title": "Payments",
+        "subtitle": "Take deposits and payments from your customers",
+        "not_connected": "Not connected",
+        "connected": "Connected",
+        "gate_hint": "Deposits, shop checkout and paid quotes stay hidden until your Stripe account can take charges.",
+        "connected_hint": "Your Stripe account can take charges — paid features are live.",
+        "connect": "Connect Stripe",
+        "connecting": "Connecting…",
+        "account": "Account",
+        "payouts": "payouts",
+        "yes": "yes",
+        "no": "no"
+      }
+    },
+    "account": {
+      "title": "Account",
+      "subtitle": "Your profile, how you sign in, and your data.",
+      "nav": {
+        "label": "Account sections",
+        "profile": "Profile",
+        "security": "Security",
+        "backup": "Backup",
+        "activity": "Activity",
+        "preferences": "Preferences",
+        "notifications": "Notifications"
+      },
+      "notifications": {
+        "title": "Email notifications",
+        "description": "Choose which emails you get.",
+        "productUpdates": "Product updates",
+        "productUpdatesHint": "New features and changes to the app.",
+        "tips": "Tips",
+        "tipsHint": "Occasional advice on getting more out of your workspace.",
+        "alwaysSent": "Security and billing emails are always sent.",
+        "saved": "Saved.",
+        "failed": "That could not be saved."
+      }
+    },
+    "billing": {
+      "title": "Billing",
+      "subtitle": "Manage your plan and payment history.",
+      "checkoutDisabledDemo": "Checkout is disabled in the public demo.",
+      "checkoutDisabledStripe": "Connect Stripe to enable checkout: set STRIPE_SECRET_KEY and the price IDs, then reseed.",
+      "currentPlan": "Current Plan",
+      "purchasedOn": "Purchased on {date}",
+      "renewsOn": "Renews on {date}",
+      "trialEndsOn": "Free trial ends on {date}",
+      "onFreePlan": "You are on the free plan",
+      "free": "Free",
+      "lifetimeAccess": "Lifetime access",
+      "cancelsAtPeriodEnd": "Cancels at end of billing period",
+      "oneTime": "one time",
+      "perMonth": "/ month",
+      "alsoSubscribed": "You also have a {plan} subscription. Since lifetime access covers everything, you can cancel it in the billing portal.",
+      "portalHint": "Switch plans or update your payment method in the billing portal.",
+      "availablePlans": "Available plans",
+      "availablePlansHint": "These are the seeded example plans: replace them with your own pricing.",
+      "invoiceHistory": "Invoice History",
+      "invoiceHistoryHint": "Your past payments and invoices.",
+      "noInvoices": "No invoices yet.",
+      "noInvoicesStripe": "Connect Stripe to see your invoice history.",
+      "colDate": "Date",
+      "colAmount": "Amount",
+      "colStatus": "Status",
+      "colInvoice": "Invoice",
+      "statusUnknown": "unknown",
+      "viewInvoice": "View",
+      "downloadPdf": "PDF",
+      "discount": "Discount: {discount} {duration}",
+      "discountPercent": "{percent}% off",
+      "discountAmount": "{amount} off",
+      "discountOnce": "on the next invoice",
+      "discountUntil": "until {date}",
+      "discountForever": "on every invoice",
+      "discountCode": "code {code}",
+      "status": {
+        "ACTIVE": "Active",
+        "TRIALING": "Trial",
+        "PAST_DUE": "Past Due",
+        "CANCELED": "Canceled",
+        "UNPAID": "Unpaid",
+        "INCOMPLETE": "Incomplete"
+      },
+      "invoiceStatus": {
+        "draft": "Draft",
+        "open": "Open",
+        "paid": "Paid",
+        "uncollectible": "Uncollectible",
+        "void": "Void"
+      },
+      "noInvoicesTitle": "No invoices yet"
+    },
+    "profile": {
+      "updated": "Profile updated",
+      "avatarAlt": "Avatar",
+      "displayName": "Display name",
+      "namePlaceholder": "Your name",
+      "avatarFrom": "Photo from {provider}",
+      "avatarCurrent": "Current profile photo",
+      "avatarNone": "No profile photo yet",
+      "email": "Email",
+      "emailHint": "The address you sign in with. Change it under Settings → Security.",
+      "save": "Save changes"
+    },
+    "signOut": {
+      "title": "Sign out?",
+      "pending": "Signing out…",
+      "confirm": "Sign out",
+      "cancel": "Cancel",
+      "description": "You will be signed out and returned to the homepage."
+    },
+    "userMenu": {
+      "open": "Open account menu",
+      "signOut": "Sign out"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "billing": "Billing",
+      "settings": "Settings",
+      "overview": "Overview",
+      "adminPanel": "Admin Panel",
+      "more": "More",
+      "backToDashboard": "Back to Dashboard",
+      "openNavigation": "Open navigation",
+      "members": "Members",
+      "roles": "Roles",
+      "users": "Users",
+      "newsletter": "Newsletter",
+      "database": "Database",
+      "databaseMigrations": "Migrations",
+      "databaseBackups": "Backups",
+      "platformSettings": "Settings",
+      "tenants": "Tenants",
+      "jobs": "Jobs",
+      "emails": "Emails",
+      "errors": "Errors",
+      "plans": "Plans",
+      "groups": {
+        "main": "Overview",
+        "workspace": "Workspace",
+        "account": "Account",
+        "admin": "Administration",
+        "platform": "Platform",
+        "back": "Back",
+        "operations": "Operations",
+        "content": "Content",
+        "operationsPlatform": "Operations",
+        "booking": "Booking",
+        "sales": "Sales",
+        "customers": "Customers",
+        "site": "Site",
+        "setup": "Setup"
+      },
+      "account": "Account",
+      "switchWorkspace": "Switch workspace",
+      "pastDueBanner": "A payment failed — access continues until {date}. Update billing to keep working.",
+      "modules": "Modules",
+      "site": "Site",
+      "domains": "Domains",
+      "catalog": "Catalog",
+      "team": "Team",
+      "reviews": "Reviews",
+      "sales": "Sales",
+      "payments": "Payments",
+      "quotes": "Quotes",
+      "locations": "Locations",
+      "intake": "Intake",
+      "products": "Products",
+      "waitlist": "Waitlist",
+      "addTeam": "Add team",
+      "analytics": "Analytics",
+      "backups": "Backups",
+      "calendar": "Calendar",
+      "chatbot": "Chatbot",
+      "customers": "Customers",
+      "display": "Display",
+      "emailLog": "Delivery log",
+      "emailTemplates": "Templates",
+      "general": "General",
+      "localization": "Localization",
+      "orderBoard": "Order board",
+      "orderList": "All orders",
+      "orders": "Orders",
+      "paymentsSettings": "Payment settings",
+      "platformConsole": "Platform console",
+      "reservations": "Reservations",
+      "usage": "Usage"
+    },
+    "members": {
+      "title": "Members",
+      "subtitle": "People with access to {tenant}",
+      "invite": {
+        "title": "Invite member",
+        "description": "They get an email to join with the role you pick.",
+        "emailPlaceholder": "person@example.com",
+        "email": "Email"
+      },
+      "list": {
+        "colMember": "Member",
+        "colRole": "Role",
+        "remove": "Remove",
+        "colJoined": "Joined",
+        "colActions": "Actions",
+        "changeRole": "Change role",
+        "search": "Search by name or email…",
+        "empty": {
+          "title": "Only you so far",
+          "description": "Invite people to work with you in this workspace."
+        },
+        "colStatus": "Status",
+        "colLastActive": "Last active",
+        "never": "Never",
+        "suspend": "Suspend",
+        "reactivate": "Reactivate",
+        "status": {
+          "active": "Active",
+          "suspended": "Suspended"
+        }
+      },
+      "invitations": {
+        "title": "Pending invitations",
+        "status": {
+          "pending": "Pending",
+          "accepted": "Accepted",
+          "rejected": "Declined",
+          "canceled": "Canceled"
+        },
+        "revoke": "Revoke the invitation for {email}",
+        "revoked": "Invitation revoked."
+      },
+      "removeConfirm": {
+        "title": "Remove the selected members?",
+        "description": "They lose access to this workspace at once. You and the last owner are never removed."
+      },
+      "errors": {
+        "invalidEmail": "Enter a valid email address.",
+        "roleRequired": "Choose a role.",
+        "unknownRole": "That role does not exist in this workspace.",
+        "notFound": "That member is no longer in this workspace.",
+        "lastOwner": "The last owner cannot be given another role.",
+        "forbidden": "You cannot invite people to this workspace.",
+        "ownerOnly": "Only an owner can make someone an owner, or change an owner's role.",
+        "alreadyMember": "That person is already a member of this workspace.",
+        "alreadyInvited": "That address already has a pending invitation."
+      },
+      "suspendConfirm": {
+        "title": "Suspend the selected members?",
+        "description": "They keep their seat but lose access until reactivated. Owners and you are skipped."
+      }
+    },
+    "roles": {
+      "title": "Roles",
+      "subtitle": "Permission groups for this workspace.",
+      "custom": {
+        "delete": "Delete"
+      },
+      "create": {
+        "title": "Create a role",
+        "namePlaceholder": "role-name",
+        "description": "A group of permissions you can give to members.",
+        "name": "Name",
+        "nameHint": "Lowercase letters, digits and hyphens. It cannot be changed later."
+      },
+      "colRole": "Role",
+      "colPermissions": "Permissions",
+      "colMembers": "Members",
+      "colActions": "Actions",
+      "builtInTag": "Built-in",
+      "edit": "Edit permissions",
+      "editTitle": "Edit role",
+      "search": "Search roles…",
+      "kind": {
+        "label": "Type",
+        "builtIn": "Built-in",
+        "custom": "Custom"
+      },
+      "deleteConfirm": {
+        "title": "Delete the selected roles?",
+        "description": "Built-in roles and roles that still have members are kept."
+      },
+      "errors": {
+        "roleKey": "Use lowercase letters, digits and hyphens.",
+        "permissionsRequired": "Choose at least one permission.",
+        "builtIn": "That name belongs to a built-in role.",
+        "unknownPermission": "One of the permissions does not exist.",
+        "limitReached": "This workspace has reached its number of custom roles ({max}).",
+        "featureUnavailable": "Custom roles are not available for this workspace."
+      },
+      "empty": {
+        "title": "No roles",
+        "description": "The built-in roles and your custom ones appear here."
+      },
+      "groups": {
+        "workspace": "Workspace",
+        "website": "Website",
+        "bookings": "Bookings and customers",
+        "sales": "Catalog and sales",
+        "marketing": "Marketing",
+        "insights": "Reports"
+      },
+      "resources": {
+        "members": "Members",
+        "roles": "Roles",
+        "settings": "Settings",
+        "billing": "Billing",
+        "notifications": "Notifications",
+        "site": "Site",
+        "pages": "Pages",
+        "media": "Media",
+        "bookings": "Bookings",
+        "customers": "Customers",
+        "catalog": "Catalog",
+        "orders": "Orders",
+        "quotes": "Quotes",
+        "newsletter": "Newsletter",
+        "chatbot": "Chatbot",
+        "reports": "Reports"
+      },
+      "verbs": {
+        "view": "View",
+        "invite": "Invite",
+        "manage": "Manage"
+      }
+    },
+    "search": {
+      "button": "Search…",
+      "title": "Search",
+      "description": "Go to any page by name.",
+      "placeholder": "Type a page name…",
+      "empty": "No page matches."
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "subtitle": "The people on this workspace's mailing list.",
+      "add": "Add subscriber",
+      "addTitle": "Add a subscriber",
+      "addDescription": "We email them a link; they join the list once they confirm.",
+      "email": "Email",
+      "send": "Send invitation",
+      "cancel": "Cancel",
+      "added": "Confirmation email sent.",
+      "errors": {
+        "invalidEmail": "Enter a valid email address.",
+        "exists": "That address is already on the list."
+      }
+    },
+    "catalog": {
+      "title": "Catalog",
+      "subtitle": "Services and prices your site shows.",
+      "serviceName": "Service name",
+      "duration": "Minutes",
+      "price": "Price ($)",
+      "actions": {
+        "add": "Add service",
+        "addCategory": "Add category",
+        "remove": "Remove"
+      }
+    },
+    "team": {
+      "title": "Team",
+      "subtitle": "The people your site shows — staff, not logins.",
+      "staffName": "Name",
+      "staffBio": "Bio",
+      "empty": "No staff yet.",
+      "actions": {
+        "add": "Add staff",
+        "remove": "Remove"
+      }
+    },
+    "calendar": {
+      "title": "Calendar",
+      "subtitle": "Appointments by day",
+      "empty": "No appointments yet.",
+      "filter": "Staff",
+      "all_staff": "All staff",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "complete": "Complete",
+      "no_show": "No-show"
+    },
+    "customers": {
+      "title": "Customers",
+      "subtitle": "Everyone who booked, in one list",
+      "list": "{count} customers",
+      "empty": "No customers yet — bookings on the site create them.",
+      "no_contact": "no contact info",
+      "consent_marketing": "marketing ✓",
+      "consent_sms": "SMS ✓",
+      "export": "Export",
+      "delete": "Delete",
+      "confirm_delete": "Delete {name} and their bookings? This answers a privacy request.",
+      "done": {
+        "exported": "exported",
+        "deleted": "deleted"
+      }
+    },
+    "reservations": {
+      "title": "Reservations",
+      "subtitle": "Every table booking",
+      "list": "{count} reservations",
+      "empty": "No reservations yet — visitors book on the site's /reserve page.",
+      "party": "party of {size}"
+    },
+    "orders": {
+      "title": "Orders",
+      "subtitle": "Every shop order",
+      "list": "{count} orders",
+      "empty": "No orders yet — visitors buy on the site's /shop page."
+    },
+    "ordering": {
+      "board_title": "Order board",
+      "board_subtitle": "Kitchen queue — received to done",
+      "empty": "no orders",
+      "status": {
+        "received": "Received",
+        "preparing": "Preparing",
+        "ready": "Ready",
+        "done": "Done"
+      }
+    },
+    "quotes": {
+      "title": "Quotes",
+      "subtitle": "Requests and priced quotes",
+      "requests": "{count} requests",
+      "quotes": "{count} quotes",
+      "empty": "No quotes yet.",
+      "convert": "Convert to order",
+      "converted": "converted"
+    },
+    "payments": {
+      "title": "Payments",
+      "subtitle": "Money in and out on your Stripe account",
+      "money_in": "{count} payments",
+      "empty": "No payments yet — deposits, orders and quotes land here.",
+      "fee": "fee",
+      "refund": "Refund",
+      "refunded": "refunded",
+      "refunded_done": "refunded"
+    },
+    "chatbot": {
+      "title": "Chatbot",
+      "subtitle": "Your site's assistant — sources, settings, conversations",
+      "reindex": "Re-index",
+      "reindexing": "Indexing…",
+      "reindexed": "Indexed",
+      "sources": "{count} sources",
+      "sources_empty": "No sources — pages and FAQs index on save or with Re-index.",
+      "settings": "Settings",
+      "tone": "Tone",
+      "languages": "Languages (comma-separated)",
+      "save": "Save",
+      "saved": "Saved.",
+      "conversations": "{count} conversations",
+      "conversations_empty": "No conversations yet.",
+      "messages": "messages"
+    },
+    "analytics": {
+      "title": "Analytics",
+      "subtitle": "Your site's page views",
+      "views_14d": "Views (14d)",
+      "paths_tracked": "Paths tracked",
+      "top_paths": "Top {count} paths",
+      "empty": "No views yet — the beacon starts counting on the next site visit."
+    },
+    "reviews": {
+      "title": "Reviews",
+      "pending": "Waiting for approval",
+      "none_pending": "No reviews waiting.",
+      "waitlist": "Waitlist",
+      "none_waiting": "Nobody is waiting.",
+      "history": "History",
+      "published": "published",
+      "rejected": "rejected",
+      "approve": "Approve",
+      "reject": "Reject",
+      "publishing": "Publishing…",
+      "rejecting": "Rejecting…",
+      "waitlist_waiting": "waiting",
+      "waitlist_notified": "notified",
+      "waitlist_booked": "booked",
+      "waitlist_canceled": "canceled"
+    },
+    "sales": {
+      "title": "Sales",
+      "sell": "Sell",
+      "sell_card": "Sell a gift card",
+      "sell_pkg": "Sell a package",
+      "sell_mem": "Activate a membership",
+      "amount": "Amount",
+      "email": "Buyer email",
+      "choose_pkg": "Choose a package…",
+      "choose_mem": "Choose a membership…",
+      "choose_customer": "Choose a customer…",
+      "selling": "Selling…",
+      "sold": "Sold.",
+      "cards": "Gift cards",
+      "no_cards": "No cards yet.",
+      "holdings": "Holdings",
+      "no_holdings": "No holdings yet.",
+      "pkg": "Package",
+      "mem": "Membership",
+      "sessions_left": "sessions left",
+      "active": "active",
+      "inactive": "inactive"
+    },
+    "locations": {
+      "title": "Locations",
+      "add": "Add a location",
+      "list": "Your locations",
+      "none": "No locations yet.",
+      "name": "Name",
+      "address": "Address",
+      "add_button": "Add",
+      "adding": "Adding…"
+    },
+    "intake": {
+      "title": "Intake forms",
+      "add": "Add a form",
+      "form_name": "Form name",
+      "fields": "Fields (comma-separated)",
+      "fields_placeholder": "Preferred pronouns, First visit?",
+      "add_button": "Add",
+      "adding": "Adding…",
+      "forms": "Your forms",
+      "none": "No forms yet.",
+      "responses": "Responses",
+      "no_responses": "No responses yet."
+    },
+    "products": {
+      "title": "Sellable catalog",
+      "add_package": "Add a package",
+      "add_membership": "Add a membership",
+      "name": "Name",
+      "sessions": "Sessions",
+      "price": "Price ($)",
+      "add_button": "Add",
+      "adding": "Adding…",
+      "list": "Your catalog",
+      "none": "No packages or memberships yet.",
+      "per_month": "/ month"
+    },
+    "waitlist": {
+      "title": "Waitlist",
+      "list": "Waiting customers",
+      "none": "No one is waiting.",
+      "mark_booked": "Mark booked",
+      "mark_canceled": "Cancel",
+      "status": {
+        "waiting": "Waiting",
+        "notified": "Notified",
+        "booked": "Booked",
+        "canceled": "Canceled"
+      }
+    }
+  },
+  "platform": {
+    "badge": "Platform",
+    "plans": {
+      "title": "Plans",
+      "subtitle": "What each plan sells: the feature map the resolver reads, visibility on the pricing page and the one-time setup fee.",
+      "columns": {
+        "name": "Plan",
+        "price": "Price",
+        "visibility": "Visibility",
+        "features": "Feature map",
+        "subscribers": "Tenants"
+      },
+      "edit": "Edit",
+      "editTitle": "Edit plan",
+      "editDescription": "Changes to {name} apply to the {subscribers} tenants subscribed to it on their next request.",
+      "setupFee": "Setup fee (cents, empty for none)",
+      "errors": {
+        "notFound": "Plan not found.",
+        "badVisibility": "Visibility must be PUBLIC, UNLISTED or ARCHIVED.",
+        "badSetupFee": "Setup fee must be a whole number of cents.",
+        "badFeatures": "Invalid feature map ({detail}).",
+        "badJson": "The feature map is not valid JSON."
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Platform switches: signup gates, maintenance flags, feature kill switches and module states. Changes apply without a restart.",
+      "columns": {
+        "key": "Key",
+        "value": "Value",
+        "group": "Group"
+      },
+      "edit": "Edit",
+      "editTitle": "Edit switch",
+      "editDescription": "Set a new JSON value for {key}: true, false, a number, a string in quotes, or an array.",
+      "errors": {
+        "keyRequired": "A key is required.",
+        "invalidValue": "That is not a valid value for this setting.",
+        "unknownKey": "Unknown key. Typed settings must exist in the registry; custom keys must start with feature. or module."
+      }
+    },
+    "tenants": {
+      "title": "Tenants",
+      "subtitle": "Every workspace on the platform.",
+      "search": "Search by name or slug…",
+      "colTenant": "Tenant",
+      "colStatus": "Status",
+      "colMembers": "Members",
+      "colCreated": "Created",
+      "empty": {
+        "title": "No tenants yet",
+        "description": "Workspaces created by staff appear here."
+      },
+      "status": {
+        "PROVISIONING": "Provisioning",
+        "ACTIVE": "Active",
+        "PAST_DUE": "Past due",
+        "SUSPENDED": "Suspended",
+        "CANCELED": "Canceled"
+      },
+      "create": {
+        "title": "New tenant",
+        "description": "Create a workspace for an existing account; that account becomes its owner.",
+        "name": "Name",
+        "namePlaceholder": "Rosy Nails",
+        "ownerEmail": "Owner email",
+        "ownerEmailPlaceholder": "owner@example.com"
+      },
+      "detail": {
+        "overview": "Overview",
+        "slug": "Slug",
+        "created": "Created",
+        "owner": "Owner",
+        "vertical": "Vertical",
+        "timeZone": "Time zone",
+        "currency": "Currency",
+        "members": "Members ({count})",
+        "memberStatus": {
+          "active": "Active",
+          "suspended": "Suspended"
+        }
+      },
+      "suspend": {
+        "action": "Suspend",
+        "title": "Suspend tenant",
+        "description": "Suspend {name}? Its members lose access on their next request.",
+        "reason": "Reason",
+        "reasonPlaceholder": "Why is this tenant being suspended?"
+      },
+      "reactivate": {
+        "action": "Reactivate",
+        "title": "Reactivate tenant",
+        "description": "Reactivate {name}? Its members get access back on their next request.",
+        "reason": "Note (optional)"
+      },
+      "delete": {
+        "action": "Delete",
+        "title": "Delete tenant",
+        "description": "Delete {name} and all of its data for good. Its members lose access immediately. Type the slug {slug} to confirm.",
+        "confirmLabel": "Slug"
+      },
+      "impersonate": {
+        "action": "Impersonate",
+        "title": "Impersonate tenant",
+        "description": "Open {name} as its owner. A written reason is required and recorded.",
+        "reason": "Reason",
+        "reasonPlaceholder": "Why are you opening this tenant's dashboard?"
+      },
+      "errors": {
+        "nameRequired": "Name is required.",
+        "invalidEmail": "Enter a valid email address.",
+        "ownerNotFound": "No account exists with that email.",
+        "notFound": "Tenant not found.",
+        "invalidStatus": "Unknown status.",
+        "forbidden": "Your role cannot do this.",
+        "reasonRequired": "A reason is required.",
+        "confirmRequired": "Type the slug to confirm.",
+        "confirmMismatch": "That is not the tenant's slug."
+      }
+    },
+    "jobs": {
+      "title": "Jobs",
+      "subtitle": "Due, running and failed background work.",
+      "search": "Search by kind…",
+      "colKind": "Kind",
+      "colStatus": "Status",
+      "colAttempts": "Attempts",
+      "colRunAt": "Run at",
+      "colLastError": "Last error",
+      "colActions": "Actions",
+      "retry": "Retry",
+      "runNow": "Run now",
+      "empty": {
+        "title": "No jobs yet",
+        "description": "Queued and finished runs appear here."
+      },
+      "status": {
+        "QUEUED": "Queued",
+        "RUNNING": "Running",
+        "SUCCEEDED": "Succeeded",
+        "FAILED": "Failed"
+      }
+    },
+    "emails": {
+      "title": "Emails",
+      "subtitle": "Every delivery attempt, with its stored body.",
+      "search": "Search by address or subject…",
+      "colTo": "To",
+      "subject": "Subject",
+      "colKind": "Kind",
+      "colStatus": "Status",
+      "colProvider": "Provider",
+      "providerMessageId": "Provider ID",
+      "colTenant": "Tenant",
+      "colCreatedAt": "Created",
+      "sentAt": "Sent at",
+      "lastError": "Last error",
+      "details": "Delivery",
+      "payload": "Body preview",
+      "payloadDescription": "The rendered body kept on the row.",
+      "payloadEmpty": "This message predates body capture; nothing to preview.",
+      "resend": "Resend",
+      "resending": "Resending…",
+      "resent": "Queued for resend",
+      "empty": {
+        "title": "No email yet",
+        "description": "Delivery attempts appear here."
+      },
+      "status": {
+        "QUEUED": "Queued",
+        "SENT": "Sent",
+        "REFUSED": "Refused",
+        "FAILED": "Failed"
+      },
+      "errors": {
+        "notFound": "Email not found.",
+        "noPayload": "No stored body to resend.",
+        "sendFailed": "The resend failed — see the new row for the error."
+      },
+      "templates": {
+        "title": "Email templates",
+        "subtitle": "Every template, every locale — preview and send-test",
+        "send_to": "Send test to…",
+        "send_test": "Send test",
+        "sending": "Sending…",
+        "sent": "test sent"
+      }
+    },
+    "errors": {
+      "title": "Errors",
+      "subtitle": "Masked error groups, one row per digest.",
+      "search": "Search by name or message…",
+      "colName": "Error",
+      "colSource": "Source",
+      "colCount": "Occurrences",
+      "colTenant": "Tenant",
+      "colLastSeen": "Last seen",
+      "colResolved": "State",
+      "colActions": "Actions",
+      "open": "Open",
+      "resolved": "Resolved",
+      "resolve": "Resolve",
+      "empty": {
+        "title": "No errors yet",
+        "description": "Masked error digests appear here."
+      }
+    },
+    "overrides": {
+      "title": "Entitlement overrides",
+      "new": "New override",
+      "newTitle": "New override",
+      "editTitle": "Edit override",
+      "description": "Override a feature for this tenant only: a JSON value (true, false, a number or null), the reason it deviates, and an optional expiry after which it stops applying.",
+      "empty": "No overrides. The tenant resolves its plan and the platform switches.",
+      "columns": {
+        "feature": "Feature",
+        "value": "Value",
+        "reason": "Reason",
+        "expires": "Expires"
+      },
+      "ignoresSwitch": "ignores switch",
+      "ignoresSwitchLabel": "Applies even when the platform kill switch is off",
+      "edit": "Edit",
+      "revoke": "Revoke",
+      "revokeTitle": "Revoke override",
+      "revokeDescription": "Revoke the override on {key}? The plan and platform layers take over again.",
+      "errors": {
+        "unknownFeature": "That feature is not declared in the registry.",
+        "badValue": "The value does not match the feature's kind.",
+        "reasonRequired": "A reason is required.",
+        "badExpiry": "That is not a valid date.",
+        "notFound": "Override not found."
+      }
+    },
+    "modules": {
+      "title": "Modules",
+      "subtitle": "The registered module catalog.",
+      "empty": "No modules registered.",
+      "columns": {
+        "key": "Key",
+        "name": "Name",
+        "stage": "Stage",
+        "version": "Version"
+      }
+    },
+    "domains": {
+      "title": "Domains",
+      "subtitle": "Provider reconciliation and every domain row",
+      "drift": "Latest reconcile — {count} drifts",
+      "no_drift": "No drift — provider and rows match.",
+      "rows": "{count} domain rows",
+      "primary": "primary",
+      "kind": {
+        "missing_provider": "row exists, provider lost it",
+        "extra_provider": "provider has it, no row"
+      }
+    },
+    "backups": {
+      "title": "Backups",
+      "subtitle": "Tenant snapshots and restore-to-new",
+      "nightly": "Nightly snapshots",
+      "nightly_last": "Last run {at} — {status}",
+      "nightly_never": "Nightly snapshot job hasn't run yet.",
+      "request": "Request a snapshot",
+      "request_button": "Snapshot now",
+      "snapshots": "{count} snapshots",
+      "empty": "No snapshots yet.",
+      "rows": "rows",
+      "restore_to_new": "Restore to new tenant",
+      "done": "Done.",
+      "error": {
+        "restore_failed": "Restore failed.",
+        "snapshot_not_restorable": "Not restorable."
+      },
+      "restore_in_place": "Restore in place"
+    },
+    "usage": {
+      "title": "Usage",
+      "subtitle": "Counters, job throughput, error rate, queue depth",
+      "queue_depth": "Queue depth",
+      "jobs_24h": "Jobs (24h)",
+      "failed_jobs": "Failed jobs",
+      "errors_24h": "Errors (24h)",
+      "counters": "{count} usage counters",
+      "counters_empty": "No counters yet — limits consume them as tenants use features.",
+      "job_kinds": "Jobs by kind (24h)"
+    }
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "badge": "Admin",
+    "subtitle": "Manage users and monitor business metrics.",
+    "totalUsers": "Total Users",
+    "activeSubscriptions": "Active Subscriptions",
+    "mrr": "MRR (estimated)",
+    "revenueTitle": "Recurring revenue",
+    "revenueSubtitle": "Monthly recurring revenue over the last 12 weeks.",
+    "revenueTooltip": "MRR",
+    "waitlistTitle": "Waitlist",
+    "users": {
+      "title": "Users",
+      "subtitle": "Every account, with its plan and role.",
+      "search": "Search by email or name…",
+      "colUser": "User",
+      "colPlan": "Plan",
+      "colStatus": "Status",
+      "colRole": "Role",
+      "colJoined": "Joined",
+      "colActions": "Actions",
+      "free": "Free",
+      "empty": {
+        "title": "No users yet",
+        "description": "Accounts appear here as soon as people sign up."
+      },
+      "edit": "Edit",
+      "switchAs": "Switch as this user",
+      "copyEmail": "Copy email",
+      "copied": "Email copied",
+      "exportCsv": "Export CSV",
+      "setRole": {
+        "USER": "Make user",
+        "ADMIN": "Make admin"
+      },
+      "setRoleConfirm": {
+        "title": "Change the role of the selected users?",
+        "USER": "They lose access to the admin panel at their next request. ROOT accounts and your own are left as they are.",
+        "ADMIN": "They get access to the admin panel. ROOT accounts and your own are left as they are."
+      },
+      "drawer": {
+        "title": "Edit user",
+        "name": "Name",
+        "role": "Role",
+        "roleHint": "Only ROOT changes roles, and never to or from ROOT.",
+        "roleLocked": "You cannot change this role."
+      }
+    },
+    "waitlistSummary": "{confirmed} confirmed · {pending} pending confirmation",
+    "waitlistOpen": "Open the list",
+    "newsletter": {
+      "title": "Newsletter",
+      "subtitle": "Every address that asked to join, with its consent dates.",
+      "search": "Search by email…",
+      "colEmail": "Email",
+      "colSource": "Source",
+      "colStatus": "Status",
+      "colRequested": "Requested",
+      "colActions": "Actions",
+      "status": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "unsubscribed": "Unsubscribed"
+      },
+      "empty": {
+        "title": "No subscribers yet",
+        "description": "Addresses appear here when people join from the signup form."
+      },
+      "copyEmail": "Copy email",
+      "copied": "Email copied",
+      "unsubscribe": "Unsubscribe",
+      "unsubscribeConfirm": {
+        "title": "Unsubscribe the selected addresses?",
+        "description": "They stop receiving the newsletter and are removed from the mailing audience. They can sign up again themselves."
+      },
+      "exportSelected": "Export selected",
+      "exportAll": "Export all (CSV)"
+    },
+    "database": {
+      "migrations": {
+        "title": "Migrations",
+        "subtitle": "Changes to the database structure that ship with each release, applied in order.",
+        "colName": "Migration",
+        "colStatus": "Status",
+        "search": "Search migrations...",
+        "empty": {
+          "title": "No migrations found",
+          "description": "Try a different search term."
+        },
+        "state": {
+          "applied": "Applied",
+          "pending": "Pending",
+          "unknown": "Unknown"
+        },
+        "current": {
+          "title": "The database is up to date",
+          "description": "It matches the version of the app that is running. Nothing to apply."
+        },
+        "unknown": {
+          "title": "This release does not recognise the database's state",
+          "description": "Its recorded version is on no path to this release: it was changed outside the migration system, or built from another branch. Nothing is applied from here; check it with pnpm db:status."
+        },
+        "behind": "{count, plural, one {# migration is} other {# migrations are}} waiting, oldest first.",
+        "apply": "{count, plural, one {Apply # migration} other {Apply # migrations}}",
+        "backupFirst": "A backup is taken first; the migration does not start if it fails.",
+        "noBackup": "Storage is not configured, so no backup is taken first. This is allowed outside production only.",
+        "confirm": {
+          "title": "{count, plural, one {Apply # migration?} other {Apply # migrations?}}",
+          "description": "A backup is taken first. Migrations change the database for everyone and cannot be undone from here.",
+          "descriptionNoBackup": "No backup will be taken. Migrations change the database for everyone and cannot be undone from here.",
+          "label": "Type {word} to confirm"
+        },
+        "applied": "{count, plural, =0 {Already up to date} one {# migration applied} other {# migrations applied}}",
+        "failed": "The migration could not be run."
+      },
+      "backups": {
+        "title": "Backups",
+        "subtitle": "Copies of every table's data, kept in your storage bucket. A backup is restored from a terminal; the steps are in spec/adr/0023.",
+        "backUpNow": "Back up now",
+        "done": "Backup saved",
+        "failed": "The backup could not be taken.",
+        "colTakenAt": "Taken",
+        "colSize": "Size",
+        "colActions": "Actions",
+        "download": "Download",
+        "empty": {
+          "title": "No backups yet",
+          "description": "Take the first one now. It is stored in your bucket under platform-backups/."
+        },
+        "notConfigured": {
+          "title": "Storage is not configured",
+          "description": "Backups are kept in an R2 bucket. Set R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET and R2_ACCOUNT_ID, then restart the server."
+        },
+        "listFailed": {
+          "title": "The backups could not be listed",
+          "description": "The bucket did not answer. Check the R2 keys and the bucket name; the server log has the details."
+        }
+      },
+      "errors": {
+        "noStorage": "Storage is not configured, so there is nowhere to put a backup.",
+        "rate": "Too many backups in the last hour. Try again later.",
+        "backupFailed": "The backup could not be taken. The server log has the details.",
+        "notFound": "That backup does not exist.",
+        "confirm": "Type MIGRATE to confirm.",
+        "locked": "A migration is already running. Wait for it to finish.",
+        "unknownState": "This release does not recognise the database's state. Nothing was applied.",
+        "noStorageForMigrate": "In production a backup is required before migrating, and storage is not configured.",
+        "migrateFailed": "The migration failed ({code}). Nothing after the failing step was applied; the server log has the details."
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "How the whole system displays dates and lists, which language it speaks, and who may join.",
+      "tabsLabel": "Settings sections",
+      "tabs": {
+        "display": "Display",
+        "language": "Language",
+        "access": "Access"
+      },
+      "descriptions": {
+        "display": "Applies to every list and every date, for everyone.",
+        "language": "The language of the dashboard, the admin panel and the sign-in pages. The public site follows its URL.",
+        "access": "Who can create an account."
+      },
+      "fields": {
+        "display": {
+          "page_size": {
+            "label": "Rows per page",
+            "description": "How many rows a list shows before the next page. Anyone can change it for one list from the table footer."
+          },
+          "date_style": {
+            "label": "Date format",
+            "description": "How dates are written."
+          },
+          "hour_cycle": {
+            "label": "Time format",
+            "description": "12-hour or 24-hour clock."
+          },
+          "time_zone": {
+            "label": "Time zone",
+            "description": "Every date and time is shown in this zone."
+          }
+        },
+        "locale": {
+          "app": {
+            "label": "Language",
+            "description": "The default language. Anyone can switch it from the header."
+          }
+        },
+        "signup": {
+          "enabled": {
+            "label": "Open sign-ups",
+            "description": "When off, no new account can be created, by email or through Google or GitHub. Existing accounts still sign in."
+          }
+        }
+      },
+      "save": "Save changes",
+      "saved": "Settings saved",
+      "rootOnly": "Only ROOT can change these settings.",
+      "errors": {
+        "unknown": "That setting does not exist.",
+        "forbidden": "You are not allowed to change one of these settings.",
+        "invalid": "One of the values is not valid.",
+        "failed": "The settings could not be saved."
+      }
+    }
+  },
+  "switchAs": {
+    "banner": "You are using the app as {email}. Every change you make is real.",
+    "impersonationBanner": "You are viewing this tenant as {email}. Reason: {reason}.",
+    "endImpersonation": "End impersonation",
+    "back": "Switch back"
+  },
+  "billing": {
+    "checkout": {
+      "paid": "Payment successful. Your plan updates in a few seconds.",
+      "canceled": "Checkout canceled. You have not been charged."
+    },
+    "upgrade": {
+      "error": "Something went wrong. Please try again.",
+      "upgrade": "Upgrade"
+    },
+    "plans": {
+      "current": "Current plan",
+      "payOnce": "Pay once",
+      "upgradeTo": "Upgrade to {plan}",
+      "get": "Get {plan}",
+      "trial": "{days}-day free trial"
+    },
+    "addons": {
+      "title": "Add-ons",
+      "subtitle": "One-time purchases that add features on top of your plan.",
+      "buy": "Buy",
+      "owned": "Owned",
+      "empty": "No add-ons available right now."
+    }
+  },
+  "email": {
+    "welcome": "Welcome to {site}!",
+    "subscriptionActive": "Your {plan} subscription is active",
+    "trialStarted": "Your {plan} free trial has started",
+    "purchaseConfirmed": "Your {plan} purchase is confirmed",
+    "magicLink": "Sign in to {site}",
+    "passwordReset": "Reset your {site} password",
+    "changeEmail": "Confirm the change of address on {site}",
+    "subscriptionCancelled": "Your {site} subscription has been cancelled",
+    "contact": "Contact form: {from}",
+    "newsletterConfirm": "Confirm your spot on the {site} waitlist",
+    "newsletterWelcome": "You're on the list",
+    "welcomeBody": {
+      "hello": "Hey {name}",
+      "helloFallback": "there",
+      "$product": {
+        "intro": "Welcome to {site}! Your account is ready and there is nothing left to set up.",
+        "bullets": "<p> <strong>Start a project</strong>: create your first one and invite your team</p>\n      <p> <strong>Make it yours</strong>: add your name and preferences in settings</p>\n      <p> <strong>Pick a plan</strong>: upgrade when you need more, cancel any time</p>"
+      },
+      "$kit": {
+        "intro": "Welcome to {site}! Your account is ready. You're now part of a community of developers shipping SaaS products faster.",
+        "bullets": "<p> <strong>Authentication</strong>: Google & GitHub OAuth, fully configured</p>\n      <p> <strong>Billing</strong>: Stripe checkout ready to go</p>\n      <p> <strong>Dashboard</strong>: Track your subscription and account</p>"
+      },
+      "whatNext": "Here's what you can do right now:",
+      "ready": "Ready to dive in?",
+      "cta": "Go to Dashboard →",
+      "help": "If you have any questions, just reply to this email. We're happy to help."
+    },
+    "magicLinkBody": {
+      "hello": "Hey there",
+      "intro": "Click the button below to sign in to {site}. The link is valid for 15 minutes and can be used once.",
+      "cta": "Sign in to {site} →",
+      "ignore": "If you didn't request this email, you can safely ignore it: nothing happens unless the link is clicked."
+    },
+    "passwordResetBody": {
+      "hello": "Hey there,",
+      "intro": "We received a request to reset your {site} password. Click the button below to choose a new one. The link is valid for 30 minutes and can be used once.",
+      "cta": "Reset password →",
+      "ignore": "If you didn't request a password reset, you can safely ignore this email: your password will not change."
+    },
+    "changeEmailBody": {
+      "hello": "Hey there,",
+      "intro": "Somebody asked to move this {site} account to {newEmail}. This message went to your current address on purpose: nothing changes until you approve it here.",
+      "cta": "Confirm this change →",
+      "next": "After you confirm, we send one more email to the new address. The account moves only when that one is confirmed too, so a mistyped address cannot lock you out.",
+      "ignore": "If this was not you, ignore this email and nothing will change — but do check that your password is still yours, because whoever asked was signed in as you."
+    },
+    "subscriptionBody": {
+      "hello": "Hey {name}",
+      "intro": "Your <strong>{plan}</strong> subscription is now active. Thanks for subscribing!",
+      "introTrial": "Your <strong>{plan}</strong> free trial has started. Nothing is charged until <strong>{date}</strong>, and you can cancel before then from your billing page.",
+      "labelPlan": "Plan:",
+      "labelAmount": "Amount:",
+      "labelRenewal": "Next renewal:",
+      "labelTrialEnd": "Trial ends:",
+      "access": "You have full access to all {site} features.",
+      "cta": "Manage Billing →",
+      "changes": "Need to make changes? You can manage your subscription anytime from your billing page."
+    },
+    "purchaseBody": {
+      "hello": "Hey {name}",
+      "intro": "Your <strong>{plan}</strong> purchase is confirmed. It was a one-time payment: no renewals, no recurring billing.",
+      "labelPlan": "Plan:",
+      "labelAmount": "Amount:",
+      "oneTime": "(one time)",
+      "access": "You now have full access to all {site} features.",
+      "cta": "View billing →",
+      "receipt": "Your receipt is available on the billing page. Questions? Just reply to this email."
+    },
+    "cancellationBody": {
+      "hello": "Hey {name},",
+      "intro": "Your {site} subscription has been cancelled. You'll continue to have access until <strong>{date}</strong>.",
+      "labelEnds": "Access ends:",
+      "dataSafe": "Your data is safe and will remain available.",
+      "changedMind": "Changed your mind? You can resubscribe anytime before your access expires.",
+      "cta": "Resubscribe →",
+      "feedback": "If you'd like to share feedback on why you cancelled, just reply to this email - we read every response."
+    },
+    "newsletterConfirmBody": {
+      "intro": {
+        "$kit": "You asked to join the {site} waitlist. Click below to confirm, and your launch price arrives in the next email. If it is not in your inbox, look in Promotions or Spam.",
+        "$product": "You asked to join the {site} waitlist. Click below to confirm."
+      },
+      "cta": "Confirm my spot →",
+      "expiry": "The link expires in 7 days. If this was not you, just ignore this email and nothing will happen."
+    },
+    "newsletterWelcomeBody": {
+      "intro": "You're in. Here is the deal:",
+      "$product": {
+        "bullets": "<p> <strong>One short email</strong> when there is real news to share.</p>\n      <p> <strong>Early access</strong> when what you signed up for goes live.</p>"
+      },
+      "$kit": {
+        "bullets": "<p> <strong>One short email</strong> when there is real news on the Pro.</p>\n      <p> <strong>The launch price</strong> of Pro and Pro Studio, before the public announcement on October 31.</p>"
+      },
+      "noSpam": "No spam, no daily drip. Unsubscribe anytime with one click.",
+      "unsubscribe": "Unsubscribe"
+    },
+    "tenantInvitation": "You are invited to join {tenant}",
+    "tenantInvitationBody": {
+      "hello": "Hello",
+      "intro": "{inviter} invited you to join {tenant}.",
+      "role": "Your role: <strong>{role}</strong>",
+      "cta": "See the invitation",
+      "expires": "The invitation is valid for seven days. Sign in or create an account with this email address to accept it.",
+      "ignore": "If you were not expecting it, you can ignore this email."
+    }
+  },
+  "hero": {
+    "$kit": {
+      "headlineHead": "Your Next.js SaaS Starter Kit.",
+      "headlineAccent": "Production-ready. Free.",
+      "subtitle": "Auth, payments, dashboard and admin panel, ready for production and free for life. It is plain Next.js: no compiler, no config layer, nothing new to learn before you can change a line.",
+      "cta": "Start free",
+      "pill": "Open Source & Free · Pro and Pro Studio on November 19"
+    },
+    "$product": {
+      "headlineHead": "",
+      "headlineAccent": "",
+      "subtitle": "One workspace for your projects, your customers and your billing. Invite your team and get back to the work that matters.",
+      "cta": "Get started",
+      "trust": "Set up in minutes · No credit card required · Cancel anytime",
+      "pill": "Now in public beta"
+    },
+    "mock": {
+      "navDashboard": "Dashboard",
+      "navProjects": "Projects",
+      "navBilling": "Billing",
+      "navSettings": "Settings",
+      "navAdmin": "Admin Panel",
+      "statPlan": "Current Plan",
+      "statStatus": "Status",
+      "statStatusValue": "Active",
+      "statBilling": "Next Billing"
+    }
+  },
+  "setupVideo": {
+    "$kit": {
+      "title": "From git clone to a running SaaS",
+      "subtitle": "Recorded on a fresh clone: a few commands, two values in a file, and the whole app runs on your machine. Not a demo shell.",
+      "videoLabel": "Recording of a terminal: the kit is cloned, installed, connected to a database and started, then the browser signs in to the dashboard.",
+      "play": "Play the recording",
+      "pause": "Pause the recording",
+      "guide": "Follow the same steps in the Getting started guide"
+    }
+  },
+  "features": {
+    "$product": {
+      "title": "Everything you need, in one place",
+      "subtitle": "The essentials done properly, so you can get on with the work.",
+      "c1": {
+        "title": "Sign in, your way",
+        "description": "Google, GitHub, a password or a one-time link in your inbox. Pick what suits your team and switch whenever you want."
+      },
+      "c2": {
+        "title": "Billing without the back and forth",
+        "description": "Upgrade, downgrade or cancel in a click. Invoices and receipts arrive on their own, and the payment details stay with Stripe."
+      },
+      "c3": {
+        "title": "Your data stays yours",
+        "description": "Everything lives in one database you control. Nothing is held hostage, and leaving is as easy as arriving."
+      },
+      "c4": {
+        "title": "Light and dark",
+        "description": "The interface follows your system theme, or you pick one and it stays. Easy on the eyes at 9am and at midnight."
+      },
+      "c5": {
+        "title": "Private by default",
+        "description": "Your workspace is visible to you and the people you invite, and to nobody else. Sessions expire, access is checked on every request."
+      },
+      "c6": {
+        "title": "Admin controls",
+        "description": "See every member, their role and their plan in one place. Promote, review and step in when something needs a decision."
+      }
+    },
+    "$kit": {
+      "title": "Everything you need to ship",
+      "subtitle": "Stop reinventing auth and payments. Start building your product.",
+      "c1": {
+        "title": "Auth out of the box",
+        "description": "Google and GitHub OAuth with Better Auth. Sessions stored in your own database. No third-party auth service required."
+      },
+      "c2": {
+        "title": "Stripe payments",
+        "description": "Subscription checkout, webhooks, and Customer Portal. Handles upgrades, downgrades, and cancellations automatically."
+      },
+      "c3": {
+        "title": "Prisma + PostgreSQL",
+        "description": "Type-safe database layer with Prisma 7. Works with Neon, Supabase, Railway, or any PostgreSQL provider."
+      },
+      "c4": {
+        "title": "Dark mode",
+        "description": "System-aware dark mode with a toggle. Tailwind 4 CSS variables let you customize your brand colors in one file."
+      },
+      "c5": {
+        "title": "Route protection",
+        "description": "Middleware-based auth guards. Public, auth, dashboard, and admin route groups with zero boilerplate per page."
+      },
+      "c6": {
+        "title": "Admin panel",
+        "description": "User management with role-based access. View all users, their plans, and subscription status in one place."
+      },
+      "c7": {
+        "title": "1-click Vercel deploy",
+        "description": "Deploy button in the README. From clone to production in under an hour, plus a built-in demo mode to showcase your product, like this site's live demo."
+      },
+      "c8": {
+        "title": "Plain Next.js, nothing to learn",
+        "description": "No compiler step, no config DSL, no proprietary CLI. The App Router, Server Actions and Prisma work as documented, so your Next.js knowledge transfers on day one, and every component stays swappable."
+      },
+      "c9": {
+        "title": "Transactional emails",
+        "description": "Welcome, receipt, and password reset emails via Resend. React Email templates included, branded and responsive."
+      }
+    }
+  },
+  "footer": {
+    "blurb": {
+      "$kit": "{tagline}. Production-ready boilerplate in plain Next.js."
+    },
+    "github": "GitHub",
+    "product": "Product",
+    "features": "Features",
+    "pricing": "Pricing",
+    "changelog": "Changelog",
+    "about": "About",
+    "aboutLink": "About",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "openSource": "Open Source",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "cookies": "Cookie Policy",
+    "copyright": "© {year} {site}. All rights reserved.",
+    "license": "MIT License · Built with Next.js",
+    "signup": {
+      "$kit": {
+        "title": "Pro launches November 19.",
+        "cta": "Join",
+        "disabledNote": "The waitlist opens shortly."
+      },
+      "$product": {
+        "title": "Get product updates by email.",
+        "cta": "Subscribe",
+        "disabledNote": "Forms are disabled in the live demo."
+      },
+      "sent": "Almost there: check your inbox to confirm."
+    }
+  },
+  "about": {
+    "$kit": {
+      "title": "About {site}",
+      "whatTitle": "What it is",
+      "whoTitle": "Who it is for",
+      "principlesTitle": "Principles",
+      "maintainerTitle": "Who builds it",
+      "maintainerIntro": "{site} is created and maintained by",
+      "maintainerBody": ". One person, working in the open: the roadmap says what is coming, the changelog says what already shipped, and every release is a tag you can read. Issues and questions are answered by the person who wrote the code.",
+      "noteTitle": "This is a placeholder.",
+      "noteBody": "Tell your story here: what you are building, who it is for, and why it exists. Edit this page in <path>src/app/[locale]/(public)/about/page.tsx</path>.",
+      "what": "A complete starting point for a SaaS, not a demo of one. Authentication with OAuth, magic links and passwords. Stripe subscriptions, one-time payments and webhooks whose signature is verified before anything reaches the database. An admin panel with real revenue figures, transactional email and the marketing site around it. It is the plumbing every product needs and nobody enjoys writing twice, in a codebase small enough to read in an afternoon and yours to change.",
+      "who": "People shipping on their own or in a small team, who would rather spend the weekend on the part that makes their product different than on wiring a checkout for the tenth time. It assumes you know Next.js, and that you would rather own the code than rent a platform.",
+      "principles": [
+        "Plain Next.js: no compiler, no config layer, nothing to learn before you own it.",
+        "Payments belong in the free tier, not behind a paywall.",
+        "Honest by default: real features, no smoke and mirrors.",
+        "Nothing is held back to sell later: what the kit does, it does for free."
+      ]
+    },
+    "$product": {
+      "title": "About {site}",
+      "whatTitle": "What it is",
+      "whoTitle": "Who it is for",
+      "principlesTitle": "Principles",
+      "maintainerTitle": "Who builds it",
+      "maintainerIntro": "{site} is created and maintained by",
+      "maintainerBody": ". One person, working in the open: the roadmap says what is coming, the changelog says what already shipped, and every release is a tag you can read. Issues and questions are answered by the person who wrote the code.",
+      "noteTitle": "This is a placeholder.",
+      "noteBody": "Tell your story here: what you are building, who it is for, and why it exists. Edit this page in <path>src/app/[locale]/(public)/about/page.tsx</path>.",
+      "what": "One place for the work your team does every day: projects, the people involved, and the billing that keeps it running. No tab juggling, no spreadsheet of record.",
+      "who": "Small teams who would rather spend the afternoon on the work itself than on the tools around it.",
+      "principles": [
+        "Your data is yours: take it with you whenever you want.",
+        "Clear pricing, no surprises on the invoice.",
+        "Honest by default: real features, no smoke and mirrors."
+      ]
+    }
+  },
+  "nav": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "changelog": "Changelog",
+    "signIn": "Sign in",
+    "demo": "Demo",
+    "getStarted": "Get started",
+    "openMenu": "Open menu",
+    "backToTop": "Back to top",
+    "reservations": "Reservations",
+    "orders": "Orders",
+    "quotes": "Quotes",
+    "payments": "Payments",
+    "chatbot": "Chatbot",
+    "domains": "Domains",
+    "backups": "Backups",
+    "usage": "Usage",
+    "analytics": "Analytics"
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "$product": {
+      "items": [
+        {
+          "question": "How do I get started?",
+          "answer": "Create an account, name your first project and you are in. {site} works in the browser, there is nothing to install, and you can invite the rest of your team whenever you are ready."
+        },
+        {
+          "question": "How does billing work?",
+          "answer": "You pick a plan and pay by card. Upgrades and downgrades take effect right away and are prorated, invoices land in your inbox automatically, and you can see and change everything from the billing page in your account."
+        },
+        {
+          "question": "Who can see my data?",
+          "answer": "You, and the people you invite. Your data lives in our own database rather than being scattered across third parties, card details are held by Stripe and never touch our servers, and we do not sell any of it."
+        }
+      ]
+    },
+    "$kit": {
+      "items": [
+        {
+          "question": "What exactly do I get?",
+          "answer": "You get a production-ready Next.js 16 codebase with Better Auth, Stripe, Prisma, and Tailwind pre-configured. Clone the repo, set your env variables, and deploy. Everything works out of the box."
+        },
+        {
+          "question": "Why {site} instead of other apps?",
+          "answer": "{site} uses a best-of-breed stack where every component is independent. No Supabase lock-in, no proprietary auth layer. If a dependency releases a breaking change, you update one package, not the entire stack."
+        },
+        {
+          "question": "Which database providers are supported?",
+          "answer": "Any PostgreSQL provider: Neon (recommended, cheapest), Supabase, Railway, PlanetScale (via Postgres mode), or self-hosted. Just set your DATABASE_URL and run the migration."
+        },
+        {
+          "question": "Do I need a Stripe account?",
+          "answer": "Yes. Stripe is used for subscription payments. You'll need to create products and prices in your Stripe dashboard and add the price IDs to your env vars. The setup guide covers this step by step."
+        },
+        {
+          "question": "Can I use this for client projects?",
+          "answer": "Yes, MIT license. Use it for as many projects as you want, including client work. No per-project fees."
+        },
+        {
+          "question": "What if I need help or find a bug?",
+          "answer": "Open an issue on GitHub. It's open source, so you get every update and bug fix by pulling the latest main. For direct support, reach out via email."
+        },
+        {
+          "question": "What are Pro and Pro Studio, and when do they launch?",
+          "answer": "The paid tier, built on this kit for products where people work together: teams, invitations, roles and team billing. A one-time purchase with updates for life. Pro is for one person and their own products; Pro Studio is for an organization, client work included, with up to five people on the repository. The waitlist gets the launch price by email as soon as you confirm, and it is announced publicly on October 31. On November 19 both launch for the waitlist at that price, until November 27. From November 28 they are on sale to everyone at the full price."
+        }
+      ]
+    }
+  },
+  "pricing": {
+    "$kit": {
+      "title": "Start free, scale when you grow",
+      "subtitle": "Open source and free forever: auth, payments, admin and emails included. Teams arrive with Pro on November 19.",
+      "freeTitle": "Free",
+      "freeDescription": "Open source, the complete core",
+      "forever": "forever",
+      "getOnGithub": "Get it on GitHub",
+      "noSignup": "Clone, star, and ship. No signup required",
+      "proTitle": "Pro · Pro Studio · Teams",
+      "statusBadge": "Waitlist open",
+      "proDescription": "For apps that need teams, and for studios that build them.",
+      "launchDate": "November 19",
+      "launchOffer": "Launch day, at a launch price for the waitlist. Confirm your email and the price is in your inbox right away, before the public announcement on October 31.",
+      "waitlistCta": "Join the Pro & Pro Studio waitlist",
+      "waitlistNote": "One short email when there is real news, and the launch price as soon as you confirm. Unsubscribe anytime, one click.",
+      "formsDisabled": "Forms are disabled in the live demo.",
+      "freeFeatures": [
+        "Next.js 16 + TypeScript + Tailwind 4",
+        "Better Auth: Google & GitHub OAuth",
+        "Prisma 7 + PostgreSQL schema",
+        "Stripe Checkout + webhooks + Customer Portal",
+        "Admin panel (users, metrics, roles)",
+        "Transactional emails (Resend)",
+        "Dashboard, dark mode, route protection",
+        "1-click Vercel deploy",
+        "Demo mode: one-click sign-in, sample data, reset",
+        "MIT license, use in client projects"
+      ],
+      "proFeatures": [
+        "Everything in Free, plus:",
+        "Teams and organizations",
+        "Invitations and ownership transfer",
+        "Roles: owner, admin, member, and your own",
+        "Team billing with seats",
+        "Email support and private Discord",
+        "Everything we add after launch, included"
+      ]
+    }
+  },
+  "planPricing": {
+    "$product": {
+      "title": "Simple, transparent pricing",
+      "subtitleDemo": "These are example plans, rendered live from the database with monthly and yearly tiers. Sign in to the demo to see the full billing flow, including a one-time lifetime purchase.",
+      "subtitle": "Start free and upgrade when you need more. Every plan below comes straight from your database, so your pricing changes without a deploy."
+    }
+  },
+  "setup": {
+    "title": "Almost there",
+    "subtitle": "The app is running. It needs a database before it can show anything else.",
+    "step1Title": "Create a database and fill .env.local",
+    "step1Body": "First create a PostgreSQL database (Neon has a free tier). Then copy .env.example to .env.local next to this project: .env.local is the file you edit, the example stays as it is. Put the connection string in DATABASE_URL, and fill AUTH_SECRET with what this command prints.",
+    "step1Note": "Every time you change .env.local, stop the dev server (Ctrl+C) and start it again: the values are read when it boots.",
+    "step1Unreachable": "DATABASE_URL is set, but the database did not answer. Check the connection string in .env.local: the host, the password, and that the database still exists.",
+    "step2Title": "Apply the migrations",
+    "step2Body": "The first creates the tables, the second adds the example plans.",
+    "step2Note": "Seeing an SSL warning in the terminal? The string Neon gives you ends with sslmode=require: change it to sslmode=verify-full in .env.local.",
+    "step3Title": "Restart",
+    "step3Body": "Stop the dev server and start it again. The landing page comes back, and Sign in has a Dev Login (Admin) button that needs no OAuth app. The Google and GitHub buttons appear once their keys are in .env.local.",
+    "guideCta": "Read the full guide",
+    "devOnly": "This page only appears in development, while the database is not ready."
+  },
+  "waitlist": {
+    "cta": "Join the waitlist",
+    "note": "One short email when there is something worth telling you. Unsubscribe anytime, one click.",
+    "disabledNote": "Forms are disabled in the live demo.",
+    "consent": "By joining you agree to our <privacy>Privacy Policy</privacy>.",
+    "sent": "Almost there: check your inbox to confirm your spot.",
+    "emailPlaceholder": "Your email",
+    "emailLabel": "Email address",
+    "sending": "Joining…"
+  },
+  "contactForm": {
+    "sentTitle": "Thanks, your message is on its way.",
+    "sentBody": "We read everything and reply fast.",
+    "name": "Name <opt>(optional)</opt>",
+    "email": "Email",
+    "message": "Message",
+    "namePlaceholder": "Ada Lovelace",
+    "emailPlaceholder": "you@company.com",
+    "messagePlaceholder": "How can we help?",
+    "sending": "Sending…",
+    "submit": "Send message"
+  },
+  "contactDialog": {
+    "copied": "Email address copied",
+    "copyFailed": "Couldn't copy - the address is shown above",
+    "title": "Get in touch",
+    "copiedShort": "Copied!",
+    "copy": "Copy email"
+  },
+  "changelog": {
+    "title": "Changelog",
+    "latest": "Latest",
+    "unreleased": "Unreleased"
+  },
+  "contact": {
+    "title": "Get in touch",
+    "intro": "Questions, feedback, ideas: we read everything and reply fast. Prefer email? Write to",
+    "formsDisabled": "Forms are disabled in the live demo."
+  },
+  "loading": {
+    "default": "Loading",
+    "admin": "Loading admin…",
+    "workspace": "Loading your workspace…"
+  },
+  "code": {
+    "copy": "Copy",
+    "copied": "Copied"
+  },
+  "common": {
+    "starOnGitHub": "Star on GitHub"
+  },
+  "theme": {
+    "label": "Change theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "demo": {
+    "banner": "You're viewing the live demo - jump into the app"
+  },
+  "notFound": {
+    "badge": "404 Error",
+    "title": "Page not found",
+    "body": "Sorry, we couldn't find the page you're looking for. Perhaps you've mistyped the URL or the page has been moved.",
+    "home": "Back to Home",
+    "redirecting": "Redirecting to homepage in <strong>{seconds}s</strong>..."
+  },
+  "newsletter": {
+    "confirmTitle": "Confirm subscription",
+    "unsubscribeTitle": "Unsubscribe",
+    "confirmedHeading": "You're in",
+    "confirmedBody": {
+      "$kit": "Check your inbox: the launch price of Pro and Pro Studio is on its way. If it is not there in a minute, look in Promotions or Spam. After that, one short email when there is real news. Unsubscribe anytime, one click.",
+      "$product": "One short email when there is real news, and a discount waiting for you at launch. Unsubscribe anytime, one click."
+    },
+    "expiredHeading": "This link has expired",
+    "expiredBody": "Confirmation links are valid for 7 days. Subscribe again and we will send you a fresh one.",
+    "invalidHeading": "Link not valid",
+    "invalidBody": "This confirmation link is not valid anymore. Subscribe again to get a new one.",
+    "unsubscribedHeading": "You're unsubscribed",
+    "unsubscribedBody": "No more emails from us, effective immediately. Changed your mind? You can subscribe again anytime.",
+    "unknownHeading": "Link not valid",
+    "unknownBody": "This unsubscribe link does not match any subscription. If you keep receiving emails, reply to one of them and we will remove you by hand.",
+    "backToSite": "Back to the site",
+    "backToPricing": "Back to pricing"
+  },
+  "enterprise": {
+    "name": "Enterprise",
+    "description": "For large teams and organizations",
+    "priceLabel": "Custom",
+    "note": "billed your way",
+    "yearlyNote": "on an annual contract",
+    "features": [
+      "Everything in Pro",
+      "Unlimited team members",
+      "SSO and audit logs",
+      "Dedicated support",
+      "Custom invoicing and SLA"
+    ],
+    "ctaLabel": "Contact us",
+    "ctaSubject": "{site} Enterprise: let's talk",
+    "ctaBody": "Team size:\n\nWhat we need:"
+  },
+  "errors": {
+    "unauthorized": "Unauthorized",
+    "forbidden": "You are not allowed to do that.",
+    "not_found": "That item could not be found.",
+    "invalid_input": "Check the information and try again.",
+    "conflict": "This change conflicts with existing data.",
+    "limit_reached": "This account has reached its limit.",
+    "feature_unavailable": "This feature is not available.",
+    "module_inactive": "This feature is currently turned off.",
+    "rate_limited": "Too many requests. Try again in a few minutes.",
+    "payment_required": "Update the plan to continue.",
+    "internal": "Something went wrong. Try again.",
+    "nameRequired": "Name is required",
+    "nameTooLong": "Name too long",
+    "invalidEmail": "Enter a valid email address",
+    "messageTooShort": "Tell us a bit more (at least 10 characters)",
+    "checkTheForm": "Check the form and try again",
+    "tooManyMessages": "Too many messages from this connection. Try again in a few minutes.",
+    "contactSendFailed": "Something went wrong on our side. Email us directly at {email}.",
+    "userNotFound": "That user no longer exists."
+  },
+  "errorPage": {
+    "title": "Something went wrong",
+    "description": "This page could not be loaded. Try again; if it keeps happening, send the reference below to whoever runs this app.",
+    "retry": "Try again",
+    "reference": "Reference: {digest}"
+  },
+  "dataTable": {
+    "all": "{label}: All",
+    "bulkActions": "Bulk actions",
+    "selected": "{count, plural, one {# selected} other {# selected}}",
+    "clearSelection": "Clear",
+    "showing": "{from}–{to} of {total}",
+    "rowsPerPage": "Rows per page",
+    "page": "Page {page} of {pages}",
+    "previous": "Previous page",
+    "next": "Next page",
+    "selectAll": "Select all rows on this page",
+    "selectRow": "Select row",
+    "actionsFor": "Actions for {label}",
+    "cancel": "Cancel",
+    "done": "Done",
+    "failed": "Something went wrong. Nothing was changed.",
+    "save": "Save",
+    "saving": "Saving…",
+    "actions": "Actions",
+    "noResults": {
+      "title": "No results",
+      "description": "Nothing matches this search or these filters.",
+      "clear": "Clear filters"
+    }
+  },
+  "ui": {
+    "searchableSelect": {
+      "placeholder": "Select an option…",
+      "searchPlaceholder": "Search options…",
+      "empty": "No options found.",
+      "loading": "Loading options…"
+    },
+    "close": "Close",
+    "sidebar": "Sidebar",
+    "sidebarDescription": "The main navigation.",
+    "toggleSidebar": "Toggle sidebar",
+    "pagination": "Pagination",
+    "previous": "Previous",
+    "next": "Next",
+    "previousPage": "Go to the previous page",
+    "nextPage": "Go to the next page",
+    "morePages": "More pages",
+    "breadcrumb": "Breadcrumb",
+    "more": "More"
+  },
+  "language": {
+    "label": "Change language"
+  },
+  "invite": {
+    "title": "Join {tenant}",
+    "summary": "{inviter} invited {email} to join as {role}.",
+    "signedOut": "Sign in or create an account with {email}. You will come back here to accept.",
+    "signUp": "Create an account",
+    "signIn": "Sign in",
+    "wrongAccount": "You are signed in as {current}. This invitation is for {email}: sign out and sign in with that address to accept it.",
+    "accept": "Accept the invitation",
+    "decline": "Decline",
+    "toDashboard": "Go to the dashboard",
+    "toHome": "Go to the home page",
+    "state": {
+      "expired": "This invitation has expired. Ask {inviter} to send a new one.",
+      "accepted": "This invitation has already been accepted.",
+      "rejected": "This invitation was declined.",
+      "canceled": "This invitation was withdrawn."
+    }
+  },
+  "onboarding": {
+    "title": "Set up your site",
+    "subtitle": "A few details and your site is live.",
+    "name": "Business name",
+    "vertical": "Business type",
+    "slug": "Site address",
+    "phone": "Phone (optional)",
+    "address": "Address (optional)",
+    "finish": "Create my site",
+    "errors": {
+      "unauthorized": "Sign in first",
+      "already_has_tenant": "You already have a tenant",
+      "invalid_input": "Fill in the required fields",
+      "conflict": "That address is taken",
+      "tenant_creation_failed": "Could not create the tenant"
+    }
+  },
+  "site": {
+    "maintenance": {
+      "title": "We're temporarily closed",
+      "body": "This site is undergoing maintenance. Please check back soon."
+    },
+    "booking": {
+      "title": "Book an appointment",
+      "no_phi": "Please do not include medical details.",
+      "service": "Service",
+      "choose": "Choose…",
+      "staff": "Staff",
+      "any_staff": "Any staff",
+      "slot": "Time",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "marketing_consent": "I'd like offers and updates.",
+      "sms_consent": "Text me about this appointment.",
+      "notes": "Notes",
+      "book": "Book",
+      "requested": "Requested — we'll confirm shortly.",
+      "confirmed": "Confirmed — see you then.",
+      "error": {
+        "invalid_input": "Please check the details.",
+        "conflict": "That slot was just taken — pick another.",
+        "module_inactive": "Booking is unavailable.",
+        "rate_limited": "Too many tries — wait a minute.",
+        "unauthorized": "Please sign in first.",
+        "not_found": "Not found.",
+        "unknown": "Something went wrong."
+      },
+      "appointment": "Appointment",
+      "booking": "Booking",
+      "cancel": "Cancel",
+      "manage_title": "Manage your appointment",
+      "new_slot": "New time",
+      "reschedule": "Reschedule",
+      "host": "Host",
+      "waitlist_offer": "This day is fully booked — leave your details and we'll offer you the next free slot.",
+      "waitlist_date": "Day you wanted",
+      "waitlist_join": "Join the waitlist",
+      "waitlist_joining": "Joining…",
+      "waitlist_joined": "You're on the list — we'll let you know when a slot frees.",
+      "review_title": "How was your visit?",
+      "review_rating": "Rating (1–5)",
+      "review_body": "A note (optional)",
+      "review_submit": "Leave a review",
+      "review_submitting": "Sending…",
+      "review_thanks": "Thanks — the review waits for the tenant's approval.",
+      "review_pending": "Your review is waiting for approval.",
+      "review_published": "Your review is live — thank you!",
+      "review_rejected": "Your review wasn't published."
+    },
+    "order": {
+      "title": "Order for pickup",
+      "menu": "Menu",
+      "cart": "Your order",
+      "add": "Add",
+      "name": "Name",
+      "phone": "Phone",
+      "time": "Pickup time",
+      "place_order": "Place order",
+      "empty": "Nothing here yet.",
+      "total": "Total",
+      "placed": "Order placed — we'll see you at pickup.",
+      "error": {
+        "invalid_input": "Please check the details.",
+        "conflict": "That slot was just taken — pick another.",
+        "module_inactive": "Ordering is unavailable.",
+        "rate_limited": "Too many tries — wait a minute.",
+        "not_found": "Not found.",
+        "unknown": "Something went wrong."
+      },
+      "choose": "Choose…",
+      "host": "Host",
+      "item": "Item",
+      "offline": "Ordering is offline for this shop right now.",
+      "ordered": "Order placed — see you at pickup.",
+      "pickup_slot": "Pickup time",
+      "placing": "Placing…"
+    },
+    "quote": {
+      "title": "Request a quote",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "details": "What do you need?",
+      "submit": "Request quote",
+      "sent": "Request received — we'll get back to you.",
+      "error": {
+        "invalid_input": "Please check the details.",
+        "module_inactive": "Quotes are unavailable.",
+        "rate_limited": "Too many tries — wait a minute.",
+        "not_found": "Not found.",
+        "unknown": "Something went wrong."
+      },
+      "subtitle": "Tell us what you need and we'll send a quote.",
+      "accept": "Accept",
+      "accept_title": "Your quote",
+      "choose": "Choose…",
+      "decline": "Decline",
+      "expired": "This quote has expired.",
+      "host": "Host",
+      "sending": "Sending…",
+      "submitted": "Sent — we'll get back to you.",
+      "valid_until": "Valid until"
+    },
+    "reserve": {
+      "title": "Reserve a table",
+      "party": "Party size",
+      "date": "Date",
+      "time": "Time",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "reserve": "Reserve",
+      "confirmed": "Reserved — see you then.",
+      "error": {
+        "invalid_input": "Please check the details.",
+        "conflict": "That slot was just taken — pick another.",
+        "module_inactive": "Reservations are unavailable.",
+        "not_found": "Not found.",
+        "unknown": "Something went wrong."
+      },
+      "choose": "Choose…",
+      "host": "Host",
+      "party_size": "Party size",
+      "reserving": "Reserving…",
+      "slot": "Time"
+    },
+    "shop": {
+      "title": "Shop",
+      "cart": "Cart",
+      "add": "Add to cart",
+      "checkout": "Checkout",
+      "empty": "Nothing here yet.",
+      "total": "Total",
+      "error": {
+        "not_found": "Not found.",
+        "unknown": "Something went wrong."
+      },
+      "email": "Email",
+      "host": "Host",
+      "name": "Name",
+      "offline": "Checkout is offline for this shop right now.",
+      "ordered": "Order placed — check your email.",
+      "paying": "Paying…"
+    }
+  }
+}

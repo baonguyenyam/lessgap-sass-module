@@ -42,4 +42,12 @@ export const MIGRATIONS: readonly MigrationEdge[] = [
   { name: "20261029T1655_platform_rls_policies", from: "893b1472ff25622df296557ccb8476cec8acc2cfaa4340d979a2c29cdd4c50ea", to: "6b0e2b0a00fb3889a1c34ee1bb2ae5c2f6d51509ab92c6cc5a3e955f231f9edc" },
   { name: "20261029T1658_platform_domain_check", from: "6b0e2b0a00fb3889a1c34ee1bb2ae5c2f6d51509ab92c6cc5a3e955f231f9edc", to: "f2ad8164887818bf08456ffe4efec064f341c452ce2aebdc128ab643f16f6db9" },
   { name: "20261029T1701_platform_tenant_snapshot", from: "f2ad8164887818bf08456ffe4efec064f341c452ce2aebdc128ab643f16f6db9", to: "ca7d656ada716165ba7ca4a931b65571b72018fc2a9257c7390c905935a47ca3" },
+  { name: "20261029T1728_platform_site_page_view", from: "ca7d656ada716165ba7ca4a931b65571b72018fc2a9257c7390c905935a47ca3", to: "1b46c0536ccb09069f977f41afb953dbda65fc88964a49b459b4bf92cf793bec" },
+  { name: "20261029T2042_platform_waitlist", from: "1b46c0536ccb09069f977f41afb953dbda65fc88964a49b459b4bf92cf793bec", to: "fd706e17e65f164f410f3c846447ae89619040423ed7ece8ff2f6328f966685c" },
+  { name: "20261029T2048_platform_review", from: "fd706e17e65f164f410f3c846447ae89619040423ed7ece8ff2f6328f966685c", to: "3a1f89116d98e2693b2a090f7b823d71dd0b951be76bce02aa1ba771dcb54366" },
+  { name: "20261029T2111_platform_gift_card", from: "3a1f89116d98e2693b2a090f7b823d71dd0b951be76bce02aa1ba771dcb54366", to: "64f6f33d3169d45439706f6ed2f56db2f9f8b97444d2c7c0a8c0dee5ea6a3fec" },
+  { name: "20261029T2115_platform_package_membership", from: "64f6f33d3169d45439706f6ed2f56db2f9f8b97444d2c7c0a8c0dee5ea6a3fec", to: "eae0f2648e7a4f9867cebfc77f0def0324e49876dce0d1896ee7f7d0dc0f661d" },
+  { name: "20261029T2137_platform_health_check", from: "eae0f2648e7a4f9867cebfc77f0def0324e49876dce0d1896ee7f7d0dc0f661d", to: "cc5471f9c3edd9617c076bef7278bef74dddfae3193b78cf4e80852b88bebb5e" },
+  { name: "20261029T2149_platform_location", from: "cc5471f9c3edd9617c076bef7278bef74dddfae3193b78cf4e80852b88bebb5e", to: "a5aea16fd0b8c87b1f0ab50693eadaf894257bfbcd10c3692ddf3721c46020a3" },
+  { name: "20261030T1327_platform_intake", from: "a5aea16fd0b8c87b1f0ab50693eadaf894257bfbcd10c3692ddf3721c46020a3", to: "3a0b9ee191fc3e0f0964eea42712653d2c2ff05160d99f29d9c35176fc34f739" },
 ]

@@ -5,6 +5,15 @@ requirement is specified so agents read the source, not this summary. When a
 requirement becomes spec, ADR, rule or test, the pointer is updated and this
 file stays the index — not the place requirements are defined.
 
+
+## 2026-10-30 — Sidebar complete and permission-aware
+
+The owner asked for the dashboard sidebar to list every page and respect
+permissions (structure inspired by platform.madelab.io, no code copied).
+Specified in `src/components/layout/app-shell/nav.ts` (each item's `module`
+and `permission` mirror its page's guards) and tested in
+`tests/unit/components/layout/app-shell/nav.test.ts` and
+`tests/e2e/sidebar.spec.ts`.
 ## 2026-10-28 — Continue phase 1 with task 1.8b
 
 The owner asked to continue with task 1.8b (tenant roles page) after 1.8.

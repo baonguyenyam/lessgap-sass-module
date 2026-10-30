@@ -11,8 +11,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 **The sidebar finally fills — the dashboard's module-gated items show when the tenant's modules are on, and the console noise is gone.** This is a MINOR: `git pull`, `pnpm install`.
 
+### Changed
+
+- **The sidebar follows the member's permissions.** Each item names the module that owns its page and the permission that page checks, so a member sees only what would let them in: staff no longer sees Members, Roles, Billing, Catalog or the admin settings pages; a custom role sees exactly its grants. The search dialog offers the same list
+- Orders gains its board (module `ordering`) as a sub-item; Settings lists General, Site, Domains, Modules, Payment settings, Localization and Display
+- Platform staff get a link to the platform console from the dashboard, and the console menu now lists Overview, Usage, Domains, Email templates and Backups
+
 ### Fixed
 
+- **The billing page opened for any member**: it now requires `billing.manage` (the owner by default), like the other pages
+- Seventeen sidebar labels were missing from the message files (Calendar, Customers, Orders, Chatbot, Analytics and others) and showed as raw keys
 - **Sidebar was empty** — `enabledModules` only ever checked `newsletter`; the other ten module-gated items (booking, catalog, team, customers, reservations, shop, quotes, payments, chatbot, analytics) never showed. The layout now asks `isModuleActive` for every key the nav gates on.
 - **`cacheTag()` console error** — `readRows`/`readUserRows` called `cacheTag` outside Cache-Components contexts (Better Auth's routes read settings); the tag hint is wrapped, the row still reads.
 - **`getTranslations` console error** — the email senders run in Better Auth's hook context where `next-intl`'s `getTranslations` has no request; `emailStrings` reads the `en.email` namespace directly (`t`/`t.raw` shim).
