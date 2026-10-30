@@ -16,7 +16,7 @@ beforeEach(() => db.reset())
 
 describe("requirePlatformRole (task 1.10, T10)", () => {
   it("lets a platform staff member through with their role", async () => {
-    db.fn("User.first").mockResolvedValue({ platformRole: "SUPPORT" })
+    db.fn("User.first").mockResolvedValue({ platformRole: "SUPPORT", twoFactorEnabled: true })
     await expect(requirePlatformRole()).resolves.toEqual({ user: { id: "u1" }, platformRole: "SUPPORT" })
   })
 

@@ -1,6 +1,7 @@
 import { siteConfig } from "@/config/site"
 import { emailAccent } from "@/config/brand"
 import en from "@/locales/en.json"
+import { getTranslations } from "next-intl/server"
 import { routing } from "@/i18n/routing"
 import { deliver } from "@/lib/email-delivery"
 import { recipientLocale } from "@/lib/email-locale"
@@ -13,20 +14,22 @@ import { resendClient, sendEmail } from "@/lib/email-transport"
  * browser. Emails to a member pass `recipientLocale(to)` (their saved
  * preference, task 0.13); the rest use the default.
  */
-function emailStrings(_locale: string = routing.defaultLocale) {
-  void _locale // the shim always reads en — the arg stays for the callers.
-  // next-intl's getTranslations needs a request context the email senders
-  // don't have — read the message file's `email` namespace directly. The
-  // namespace's nested values answer `t.raw(key)` the same way next-intl's
-  // does.
-  const ns = en.email as Record<string, unknown>
-  const t = ((key: string, values?: Record<string, unknown>) =>
-    String(ns[key] ?? key).replace(/\{(\w+)\}/g, (_, k) => String(values?.[k] ?? `{${k}}`))) as ((
-    key: string,
-    values?: Record<string, unknown>
-  ) => string) & { raw: (key: string) => string }
-  t.raw = (key: string) => String(ns[key] ?? key)
-  return t
+async function emailStrings(locale: string = routing.defaultLocale) {
+  // next-intl's getTranslations answers in a request context; the email
+  // senders also run in Better Auth's hook context where it throws — the
+  // message file's `email` namespace is the fallback, `t.raw` included.
+  try {
+    return await getTranslations({ locale, namespace: "email" })
+  } catch {
+    const ns = en.email as Record<string, unknown>
+    const t = ((key: string, values?: Record<string, unknown>) =>
+      String(ns[key] ?? key).replace(/\{(\w+)\}/g, (_, k) => String(values?.[k] ?? `{${k}}`))) as ((
+      key: string,
+      values?: Record<string, unknown>
+    ) => string) & { raw: (key: string) => string }
+    t.raw = (key: string) => String(ns[key] ?? key)
+    return t
+  }
 }
 
 export async function sendWelcomeEmail(to: string, name: string) {

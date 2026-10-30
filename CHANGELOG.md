@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ### Fixed
 
+- **Empty states follow the Newsletter page** — standalone empty blocks share its dashed outline, centered icon, title and description; the module catalog no longer renders an empty table row
 - **Console errors across the app**: the roles page failed on a missing label for the Team permissions; the sign-in pages read the clock too early; 26 module and console pages loaded without a skeleton and logged data-loading errors. Every page now has its loading skeleton, and tests check labels and page setup
 - **The billing page opened for any member**: it now requires `billing.manage` (the owner by default), like the other pages
 - Seventeen sidebar labels were missing from the message files (Calendar, Customers, Orders, Chatbot, Analytics and others) and showed as raw keys

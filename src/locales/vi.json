@@ -455,8 +455,6 @@
       }
     },
     "account": {
-      "title": "Tài khoản",
-      "subtitle": "Hồ sơ, cách đăng nhập và dữ liệu của bạn.",
       "nav": {
         "label": "Các mục tài khoản",
         "profile": "Hồ sơ",
@@ -2186,7 +2184,6 @@
       "phone": "Điện thoại",
       "marketing_consent": "Tôi muốn nhận ưu đãi.",
       "sms_consent": "Nhắn tin về lịch hẹn này.",
-      "notes": "Ghi chú",
       "book": "Đặt lịch",
       "requested": "Đã gửi — chúng tôi sẽ xác nhận sớm.",
       "confirmed": "Đã xác nhận — hẹn gặp bạn.",
@@ -2205,7 +2202,6 @@
       "manage_title": "Quản lý lịch hẹn",
       "new_slot": "Giờ mới",
       "reschedule": "Đổi giờ",
-      "host": "Host",
       "waitlist_offer": "Ngày này đã kín — để lại thông tin, chúng tôi sẽ ưu tiên bạn khi có chỗ trống.",
       "waitlist_date": "Ngày bạn muốn",
       "waitlist_join": "Tham gia danh sách chờ",
@@ -2216,23 +2212,13 @@
       "review_body": "Ghi chú (không bắt buộc)",
       "review_submit": "Gửi đánh giá",
       "review_submitting": "Đang gửi…",
-      "review_thanks": "Cảm ơn — đánh giá đang chờ duyệt.",
-      "review_pending": "Đánh giá của bạn đang chờ duyệt.",
-      "review_published": "Đánh giá của bạn đã đăng — cảm ơn!",
-      "review_rejected": "Đánh giá của bạn không được đăng."
+      "review_thanks": "Cảm ơn — đánh giá đang chờ duyệt."
     },
     "order": {
       "title": "Đặt mang về",
-      "menu": "Thực đơn",
-      "cart": "Đơn của bạn",
-      "add": "Thêm",
       "name": "Tên",
       "phone": "Điện thoại",
-      "time": "Giờ lấy",
       "place_order": "Đặt đơn",
-      "empty": "Chưa có gì.",
-      "total": "Tổng",
-      "placed": "Đã đặt — hẹn bạn lúc lấy hàng.",
       "error": {
         "invalid_input": "Kiểm tra lại thông tin.",
         "conflict": "Slot vừa bị đặt — chọn giờ khác.",
@@ -2242,12 +2228,12 @@
         "unknown": "Có lỗi xảy ra."
       },
       "choose": "Chọn…",
-      "host": "Host",
       "item": "Món",
       "offline": "Cửa hàng đang tạm ngưng nhận đơn.",
       "ordered": "Đã đặt — hẹn bạn lúc lấy hàng.",
       "pickup_slot": "Giờ lấy",
-      "placing": "Đang đặt…"
+      "placing": "Đang đặt…",
+      "left": "còn lại"
     },
     "quote": {
       "title": "Yêu cầu báo giá",
@@ -2273,15 +2259,13 @@
       "host": "Host",
       "sending": "Đang gửi…",
       "submitted": "Đã gửi — chúng tôi sẽ phản hồi.",
-      "valid_until": "Hiệu lực đến"
+      "valid_until": "Hiệu lực đến",
+      "total": "Tổng",
+      "deposit": "Đặt cọc"
     },
     "reserve": {
       "title": "Đặt bàn",
-      "party": "Số khách",
-      "date": "Ngày",
-      "time": "Giờ",
       "name": "Họ tên",
-      "email": "Email",
       "phone": "Điện thoại",
       "reserve": "Đặt bàn",
       "confirmed": "Đã đặt — hẹn gặp bạn.",
@@ -2293,7 +2277,6 @@
         "unknown": "Có lỗi xảy ra."
       },
       "choose": "Chọn…",
-      "host": "Host",
       "party_size": "Số khách",
       "reserving": "Đang đặt…",
       "slot": "Giờ"
@@ -2301,16 +2284,12 @@
     "shop": {
       "title": "Cửa hàng",
       "cart": "Giỏ hàng",
-      "add": "Thêm vào giỏ",
       "checkout": "Thanh toán",
-      "empty": "Chưa có gì.",
-      "total": "Tổng",
       "error": {
         "not_found": "Không tìm thấy.",
         "unknown": "Có lỗi xảy ra."
       },
       "email": "Email",
-      "host": "Host",
       "name": "Tên",
       "offline": "Cửa hàng đang tạm ngưng thanh toán.",
       "ordered": "Đã đặt — kiểm tra email.",

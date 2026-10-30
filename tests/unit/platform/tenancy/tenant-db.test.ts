@@ -58,10 +58,7 @@ describe("scopeCollection (T4)", () => {
 
 // Exceptions are tenant-owned tables still shared with platform-level rows;
 // each has a Finding in spec/phases/phase-1.md and leaves this list when fixed.
-const RLS_PENDING: Record<string, string> = {
-  NewsletterSubscriber:
-    "the platform list (tenantId null) shares the table; its readers move to the platform client first",
-}
+const RLS_PENDING: Record<string, string> = {}
 
 describe("row-level security on tenant-owned tables (M3)", () => {
   const tenantOwned = Object.entries(MODEL_CLASSIFICATION)

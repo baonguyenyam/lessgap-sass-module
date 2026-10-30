@@ -6,7 +6,7 @@ const staff = { user: { id: "staff-1" }, platformRole: "ADMIN" }
 const enqueueJob = vi.fn(async () => "job-1")
 
 vi.mock("@/auth", () => ({ auth: { api } }))
-vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }))
+vi.mock("next/cache", () => ({ revalidatePath: vi.fn(), updateTag: vi.fn() }))
 vi.mock("next-intl/server", () => ({ getTranslations: async () => (key: string) => key }))
 vi.mock("@/platform/staff", () => ({ requirePlatformRole: async () => staff }))
 vi.mock("@/platform/jobs/runner", () => ({ enqueueJob }))

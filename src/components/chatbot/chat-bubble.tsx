@@ -53,12 +53,12 @@ export function ChatBubble() {
         type="button"
         aria-label={t("open")}
         onClick={() => setOpen(!open)}
-        className="fixed right-4 bottom-4 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg"
+        className="border-lg fixed right-4 bottom-4 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground"
       >
         {open ? <X className="h-5 w-5" /> : <MessageCircle className="h-5 w-5" />}
       </button>
       {open && (
-        <div className="fixed right-4 bottom-20 z-40 flex h-96 w-80 flex-col rounded-lg border bg-background shadow-xl">
+        <div className="border-xl fixed right-4 bottom-20 z-40 flex h-96 w-80 flex-col rounded-lg border bg-background">
           <div className="border-b p-3 text-sm font-medium">{t("title")}</div>
           <div className="flex-1 space-y-2 overflow-y-auto p-3">
             {messages.length === 0 && <p className="text-sm text-muted-foreground">{t("greeting")}</p>}

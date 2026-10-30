@@ -455,8 +455,6 @@
       }
     },
     "account": {
-      "title": "Account",
-      "subtitle": "Your profile, how you sign in, and your data.",
       "nav": {
         "label": "Account sections",
         "profile": "Profile",
@@ -2186,7 +2184,6 @@
       "phone": "Phone",
       "marketing_consent": "I'd like offers and updates.",
       "sms_consent": "Text me about this appointment.",
-      "notes": "Notes",
       "book": "Book",
       "requested": "Requested — we'll confirm shortly.",
       "confirmed": "Confirmed — see you then.",
@@ -2205,7 +2202,6 @@
       "manage_title": "Manage your appointment",
       "new_slot": "New time",
       "reschedule": "Reschedule",
-      "host": "Host",
       "waitlist_offer": "This day is fully booked — leave your details and we'll offer you the next free slot.",
       "waitlist_date": "Day you wanted",
       "waitlist_join": "Join the waitlist",
@@ -2216,23 +2212,13 @@
       "review_body": "A note (optional)",
       "review_submit": "Leave a review",
       "review_submitting": "Sending…",
-      "review_thanks": "Thanks — the review waits for the tenant's approval.",
-      "review_pending": "Your review is waiting for approval.",
-      "review_published": "Your review is live — thank you!",
-      "review_rejected": "Your review wasn't published."
+      "review_thanks": "Thanks — the review waits for the tenant's approval."
     },
     "order": {
       "title": "Order for pickup",
-      "menu": "Menu",
-      "cart": "Your order",
-      "add": "Add",
       "name": "Name",
       "phone": "Phone",
-      "time": "Pickup time",
       "place_order": "Place order",
-      "empty": "Nothing here yet.",
-      "total": "Total",
-      "placed": "Order placed — we'll see you at pickup.",
       "error": {
         "invalid_input": "Please check the details.",
         "conflict": "That slot was just taken — pick another.",
@@ -2242,12 +2228,12 @@
         "unknown": "Something went wrong."
       },
       "choose": "Choose…",
-      "host": "Host",
       "item": "Item",
       "offline": "Ordering is offline for this shop right now.",
       "ordered": "Order placed — see you at pickup.",
       "pickup_slot": "Pickup time",
-      "placing": "Placing…"
+      "placing": "Placing…",
+      "left": "left"
     },
     "quote": {
       "title": "Request a quote",
@@ -2273,15 +2259,13 @@
       "host": "Host",
       "sending": "Sending…",
       "submitted": "Sent — we'll get back to you.",
-      "valid_until": "Valid until"
+      "valid_until": "Valid until",
+      "total": "Total",
+      "deposit": "Deposit"
     },
     "reserve": {
       "title": "Reserve a table",
-      "party": "Party size",
-      "date": "Date",
-      "time": "Time",
       "name": "Name",
-      "email": "Email",
       "phone": "Phone",
       "reserve": "Reserve",
       "confirmed": "Reserved — see you then.",
@@ -2293,7 +2277,6 @@
         "unknown": "Something went wrong."
       },
       "choose": "Choose…",
-      "host": "Host",
       "party_size": "Party size",
       "reserving": "Reserving…",
       "slot": "Time"
@@ -2301,16 +2284,12 @@
     "shop": {
       "title": "Shop",
       "cart": "Cart",
-      "add": "Add to cart",
       "checkout": "Checkout",
-      "empty": "Nothing here yet.",
-      "total": "Total",
       "error": {
         "not_found": "Not found.",
         "unknown": "Something went wrong."
       },
       "email": "Email",
-      "host": "Host",
       "name": "Name",
       "offline": "Checkout is offline for this shop right now.",
       "ordered": "Order placed — check your email.",

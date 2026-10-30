@@ -18,6 +18,7 @@ describe("account and settings pages", () => {
       "/t/acme/settings/domains",
       "/t/acme/settings/modules",
       "/t/acme/settings/payments",
+      "/t/acme/settings/emails",
       "/t/acme/settings/localization",
       "/t/acme/settings/display",
     ])

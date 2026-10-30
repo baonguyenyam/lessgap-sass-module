@@ -30,9 +30,11 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
   DataTable search); a form being saved locks its fields and puts the spinner in
   the submit button only. Never a frozen field with no sign of life, and never
   a spinner in every field of a page.
-- **Empty blocks:** `EmptyState` (`components/layout/empty-state.tsx`): a
-  standalone dashed block with an icon, a title, one sentence and the next step
-  when there is one. Lists pass it to `DataTable` as `empty`; an empty list is
+- **Empty blocks:** match the tenant Newsletter page: `EmptyState`
+  (`components/layout/empty-state.tsx`) is a standalone full-width dashed block
+  with a centered icon in a muted circle, bold centered title, muted centered
+  description, and the next step when there is one. Lists pass it to `DataTable`
+  as `empty`; an empty list is
   never drawn as a table (no header row, no pagination): with nothing yet the
   block replaces toolbar and table, with a search or filter active the toolbar
   stays and the block says "no results" with "Clear filters". Never a bare line

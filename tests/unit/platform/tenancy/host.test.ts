@@ -15,7 +15,7 @@ beforeEach(() => {
   process.env = { ...original }
 })
 
-const active = { id: "t1", slug: "pho" }
+const active = { id: "t1", slug: "pho", status: "ACTIVE" }
 const tenant = (status = "ACTIVE") => db.fn("Tenant.first").mockResolvedValue(status === "ACTIVE" ? active : null)
 
 describe("normaliseHost", () => {

@@ -3,6 +3,7 @@ import type { Db8Mock } from "@tests/helpers/db8-mock"
 
 const resolved = vi.fn()
 vi.mock("next/headers", () => ({ headers: async () => new Headers({ host: "x.test" }) }))
+vi.mock("next/server", () => ({ connection: async () => {} }))
 vi.mock("@/platform/tenancy/host", () => ({ resolveHost: (...args: unknown[]) => resolved(...args) }))
 vi.mock("@/lib/db8", async () => (await import("@tests/helpers/db8-mock")).createDb8Mock())
 vi.mock("@/platform/tenancy/site-origin", () => ({ siteOrigin: (slug: string) => `https://${slug}.lessgap.io` }))

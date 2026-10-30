@@ -1,7 +1,9 @@
 import { getTranslations } from "next-intl/server"
 import { requirePlatformRole } from "@/platform/staff"
 import { moduleRegistry } from "@/modules/registry"
+import { EmptyState } from "@/components/layout/empty-state"
 import { Badge } from "@/components/ui/badge"
+import { PackageOpen } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
@@ -16,6 +18,7 @@ export const instant = false
 export default async function PlatformModulesPage() {
   await requirePlatformRole()
   const t = await getTranslations("platform.modules")
+  const modules = Object.entries(moduleRegistry)
 
   return (
     <div className="space-y-6">
@@ -23,35 +26,32 @@ export default async function PlatformModulesPage() {
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>{t("columns.key")}</TableHead>
-            <TableHead>{t("columns.name")}</TableHead>
-            <TableHead>{t("columns.stage")}</TableHead>
-            <TableHead>{t("columns.version")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {Object.entries(moduleRegistry).map(([key, m]) => (
-            <TableRow key={key}>
-              <TableCell className="font-mono text-sm">{key}</TableCell>
-              <TableCell className="font-medium">{m.name}</TableCell>
-              <TableCell>
-                <Badge variant={m.stage === "stable" ? "default" : "secondary"}>{m.stage}</Badge>
-              </TableCell>
-              <TableCell className="font-mono text-sm">{m.version}</TableCell>
-            </TableRow>
-          ))}
-          {Object.keys(moduleRegistry).length === 0 && (
+      {modules.length === 0 ? (
+        <EmptyState icon={PackageOpen} title={t("empty")} />
+      ) : (
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={4} className="text-center text-muted-foreground">
-                {t("empty")}
-              </TableCell>
+              <TableHead>{t("columns.key")}</TableHead>
+              <TableHead>{t("columns.name")}</TableHead>
+              <TableHead>{t("columns.stage")}</TableHead>
+              <TableHead>{t("columns.version")}</TableHead>
             </TableRow>
-          )}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {modules.map(([key, m]) => (
+              <TableRow key={key}>
+                <TableCell className="font-mono text-sm">{key}</TableCell>
+                <TableCell className="font-medium">{m.name}</TableCell>
+                <TableCell>
+                  <Badge variant={m.stage === "stable" ? "default" : "secondary"}>{m.stage}</Badge>
+                </TableCell>
+                <TableCell className="font-mono text-sm">{m.version}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </div>
   )
 }
