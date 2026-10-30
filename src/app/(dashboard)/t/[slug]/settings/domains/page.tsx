@@ -4,6 +4,8 @@ import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { DomainActions } from "@/components/settings/domain-actions"
+import { EmptyState } from "@/components/layout/empty-state"
+import { Globe2 } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -48,7 +50,7 @@ export default async function DomainsPage() {
             </CardContent>
           </Card>
         ))}
-        {domains.length === 0 && <p className="text-sm text-muted-foreground">{t("empty")}</p>}
+        {domains.length === 0 && <EmptyState icon={Globe2} title={t("empty")} />}
       </div>
       <DomainActions add />
     </div>

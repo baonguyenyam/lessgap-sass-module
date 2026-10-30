@@ -36,7 +36,11 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
   never drawn as a table (no header row, no pagination): with nothing yet the
   block replaces toolbar and table, with a search or filter active the toolbar
   stays and the block says "no results" with "Clear filters". Never a bare line
-  of grey text.
+  of grey text: a section inside a card shows the same block under its header
+  (as Billing → Invoice history does), and a narrow place (a board column, a
+  short list) uses `size="compact"`. Every module page follows this; a test in
+  `tests/unit/ui-consistency.test.ts` fails on a bare empty line. Public sites
+  (`src/app/sites`) are themed and exempt.
 - **Page loading:** every page under `/dashboard` and `/admin` has a
   `loading.tsx` rendering `PageSkeleton` (`components/layout/page-skeleton.tsx`)
   in the page's shape (`list`, `form`, `cards`). Skeletons are grey blocks only: no

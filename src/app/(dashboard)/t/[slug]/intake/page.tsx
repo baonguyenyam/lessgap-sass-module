@@ -4,6 +4,8 @@ import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { IntakeFormForm } from "@/components/booking/intake-form-form"
+import { EmptyState } from "@/components/layout/empty-state"
+import { ClipboardList, Inbox } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -37,7 +39,7 @@ export default async function IntakePage() {
           <CardTitle>{t("forms")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          {forms.length === 0 && <p className="text-sm text-muted-foreground">{t("none")}</p>}
+          {forms.length === 0 && <EmptyState icon={ClipboardList} title={t("none")} />}
           {forms.map((x) => (
             <p key={x.id} className="text-sm">
               {x.name} · {(x.fields as { label: string }[]).map((f) => f.label).join(", ")}
@@ -50,7 +52,7 @@ export default async function IntakePage() {
           <CardTitle>{t("responses")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          {responses.length === 0 && <p className="text-sm text-muted-foreground">{t("no_responses")}</p>}
+          {responses.length === 0 && <EmptyState icon={Inbox} title={t("no_responses")} />}
           {responses.map((x) => (
             <div key={x.id} className="rounded-md border p-2 text-sm">
               <p className="font-medium">{byForm.get(x.formId)?.name ?? x.formId}</p>

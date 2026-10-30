@@ -6,6 +6,8 @@ import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ReindexButton } from "@/components/chatbot/reindex-button"
 import { ChatbotSettingsForm } from "@/components/chatbot/settings-form"
+import { EmptyState } from "@/components/layout/empty-state"
+import { BookOpen, MessageCircle } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -47,7 +49,7 @@ export default async function ChatbotPage() {
         </CardHeader>
         <CardContent className="space-y-2">
           {sources.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("sources_empty")}</p>
+            <EmptyState icon={BookOpen} title={t("sources_empty")} />
           ) : (
             sources.map((s) => (
               <div key={s.id} className="flex items-center justify-between text-sm">
@@ -76,7 +78,7 @@ export default async function ChatbotPage() {
         </CardHeader>
         <CardContent className="space-y-3">
           {conversations.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("conversations_empty")}</p>
+            <EmptyState icon={MessageCircle} title={t("conversations_empty")} />
           ) : (
             conversations.slice(0, 20).map((conv) => (
               <div key={conv.id} className="rounded-md border p-3 text-sm">

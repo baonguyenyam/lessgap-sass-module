@@ -5,6 +5,8 @@ import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { RefundButton } from "@/components/payments/refund-button"
+import { EmptyState } from "@/components/layout/empty-state"
+import { CreditCard } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -41,7 +43,7 @@ export default async function PaymentsPage() {
         </CardHeader>
         <CardContent className="space-y-3">
           {payments.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("empty")}</p>
+            <EmptyState icon={CreditCard} title={t("empty")} />
           ) : (
             payments.map((p) => (
               <div key={p.id} className="flex items-center justify-between">

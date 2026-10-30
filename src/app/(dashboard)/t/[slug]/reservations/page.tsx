@@ -4,6 +4,8 @@ import { toDate } from "@/lib/timestamps"
 import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { EmptyState } from "@/components/layout/empty-state"
+import { Utensils } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -33,7 +35,7 @@ export default async function ReservationsPage() {
         </CardHeader>
         <CardContent className="space-y-3">
           {reservations.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("empty")}</p>
+            <EmptyState icon={Utensils} title={t("empty")} />
           ) : (
             reservations.map((r) => (
               <div key={r.id} className="flex items-center justify-between">

@@ -4,6 +4,8 @@ import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { SalesActions } from "@/components/booking/sales-actions"
+import { EmptyState } from "@/components/layout/empty-state"
+import { Gift, Wallet } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -43,7 +45,7 @@ export default async function SalesPage() {
           <CardTitle>{t("cards")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-1">
-          {cards.length === 0 && <p className="text-sm text-muted-foreground">{t("no_cards")}</p>}
+          {cards.length === 0 && <EmptyState icon={Gift} title={t("no_cards")} />}
           {cards.map((x) => (
             <p key={x.id} className="text-sm">
               {x.code} · {(x.balanceCents / 100).toFixed(2)} · {x.active ? t("active") : t("inactive")}
@@ -56,9 +58,7 @@ export default async function SalesPage() {
           <CardTitle>{t("holdings")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-1">
-          {pkgHolds.length === 0 && memHolds.length === 0 && (
-            <p className="text-sm text-muted-foreground">{t("no_holdings")}</p>
-          )}
+          {pkgHolds.length === 0 && memHolds.length === 0 && <EmptyState icon={Wallet} title={t("no_holdings")} />}
           {pkgHolds.map((x) => (
             <p key={x.id} className="text-sm">
               {t("pkg")} #{x.id.slice(0, 6)} · {x.sessionsLeft} {t("sessions_left")} ·{" "}

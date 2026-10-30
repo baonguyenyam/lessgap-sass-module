@@ -4,6 +4,8 @@ import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { LocationForm } from "@/components/booking/location-form"
+import { EmptyState } from "@/components/layout/empty-state"
+import { MapPin } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -35,7 +37,7 @@ export default async function LocationsPage() {
           <CardTitle>{t("list")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          {locations.length === 0 && <p className="text-sm text-muted-foreground">{t("none")}</p>}
+          {locations.length === 0 && <EmptyState icon={MapPin} title={t("none")} />}
           {locations.map((x) => (
             <p key={x.id} className="text-sm">
               {x.name}

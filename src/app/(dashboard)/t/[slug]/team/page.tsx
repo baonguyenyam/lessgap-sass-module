@@ -4,6 +4,8 @@ import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent } from "@/components/ui/card"
 import { TeamActions } from "@/components/team/team-actions"
+import { EmptyState } from "@/components/layout/empty-state"
+import { UserSquare } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -42,7 +44,7 @@ export default async function TeamPage() {
             </CardContent>
           </Card>
         ))}
-        {staff.length === 0 && <p className="text-sm text-muted-foreground">{t("empty")}</p>}
+        {staff.length === 0 && <EmptyState icon={UserSquare} title={t("empty")} />}
       </div>
     </div>
   )

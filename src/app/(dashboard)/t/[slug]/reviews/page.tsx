@@ -4,6 +4,8 @@ import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ReviewActions } from "@/components/booking/review-actions"
+import { EmptyState } from "@/components/layout/empty-state"
+import { Hourglass, Star } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -38,7 +40,7 @@ export default async function ReviewsPage() {
           <CardTitle>{t("pending")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {pending.length === 0 && <p className="text-sm text-muted-foreground">{t("none_pending")}</p>}
+          {pending.length === 0 && <EmptyState icon={Star} title={t("none_pending")} />}
           {pending.map((r) => (
             <div key={r.id} className="space-y-1 border-b pb-4 last:border-0">
               <p className="text-sm font-medium">
@@ -55,7 +57,7 @@ export default async function ReviewsPage() {
           <CardTitle>{t("waitlist")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          {waiting.length === 0 && <p className="text-sm text-muted-foreground">{t("none_waiting")}</p>}
+          {waiting.length === 0 && <EmptyState icon={Hourglass} title={t("none_waiting")} />}
           {waiting.map((w) => (
             <p key={w.id} className="text-sm">
               {w.wantedDate} · {w.email ?? w.phone ?? "—"} · {t(`waitlist_${w.status}`)}

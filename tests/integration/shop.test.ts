@@ -48,11 +48,14 @@ async function provision(chargesEnabled = true) {
     stripeAccountId: `acct_${tenant.id.slice(-8)}`,
   })
   await db8.orm.public.TenantModule.create({ tenantId: tenant.id, moduleKey: "shop", enabled: true })
-  await db8.orm.public.PlatformSwitch.upsert({
-    conflictOn: { key: "module.shop" },
-    create: { key: "module.shop", value: true, updatedById: "test" },
-    update: {},
-  })
+  await db8.orm.public.TenantModule.create({ tenantId: tenant.id, moduleKey: "payments", enabled: true })
+  for (const key of ["module.shop", "module.payments"]) {
+    await db8.orm.public.PlatformSwitch.upsert({
+      conflictOn: { key },
+      create: { key, value: true, updatedById: "test" },
+      update: {},
+    })
+  }
   const product = await db8.orm.public.Product.create({ tenantId: tenant.id, name: "Card", type: "physical" })
   const variant = await db8.orm.public.ProductVariant.create({
     tenantId: tenant.id,

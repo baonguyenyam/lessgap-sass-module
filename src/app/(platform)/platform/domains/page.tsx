@@ -3,6 +3,8 @@ import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { requirePlatformRole } from "@/platform/staff"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { EmptyState } from "@/components/layout/empty-state"
+import { CircleCheck } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -32,7 +34,7 @@ export default async function PlatformDomainsPage() {
         </CardHeader>
         <CardContent>
           {latest.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("no_drift")}</p>
+            <EmptyState icon={CircleCheck} title={t("no_drift")} />
           ) : (
             latest.map((c) => (
               <div key={c.id} className="flex items-center justify-between text-sm">

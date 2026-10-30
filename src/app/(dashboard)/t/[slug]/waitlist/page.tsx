@@ -4,6 +4,8 @@ import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { WaitlistActions } from "@/components/booking/waitlist-actions"
+import { EmptyState } from "@/components/layout/empty-state"
+import { Hourglass } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -29,7 +31,7 @@ export default async function WaitlistPage() {
           <CardTitle>{t("list")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          {sorted.length === 0 && <p className="text-sm text-muted-foreground">{t("none")}</p>}
+          {sorted.length === 0 && <EmptyState icon={Hourglass} title={t("none")} />}
           {sorted.map((x) => (
             <div key={x.id} className="flex items-center justify-between rounded-md border p-2">
               <p className="text-sm">

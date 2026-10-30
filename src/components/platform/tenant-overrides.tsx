@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Pencil, Plus, Trash2 } from "lucide-react"
+import { Pencil, Plus, SlidersHorizontal, Trash2 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input"
 import { OptionSelect } from "@/components/form/option-select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { EmptyState } from "@/components/layout/empty-state"
 
 export type OverrideRow = {
   id: string
@@ -68,7 +69,7 @@ export function TenantOverrides({
       </CardHeader>
       <CardContent>
         {rows.length === 0 ? (
-          <p className="py-4 text-sm text-muted-foreground">{t("empty")}</p>
+          <EmptyState icon={SlidersHorizontal} title={t("empty")} />
         ) : (
           <Table>
             <TableHeader>

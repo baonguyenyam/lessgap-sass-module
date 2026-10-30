@@ -91,6 +91,33 @@ describe("page loading", () => {
   })
 })
 
+/**
+ * An empty list or section draws the shared `EmptyState` (the same dashed box
+ * as an empty invoice history), never a bare grey line such as
+ * `<p className="text-muted-foreground">{t("empty")}</p>`.
+ */
+describe("empty states", () => {
+  const files = ["src/app", "src/components"].flatMap((dir) =>
+    readdirSync(join(ROOT, dir), { withFileTypes: true, recursive: true })
+      // Public sites are drawn by tenant themes, not the app's design.
+      .filter(
+        (e) =>
+          e.isFile() &&
+          e.name.endsWith(".tsx") &&
+          !e.parentPath.includes("components/ui") &&
+          !e.parentPath.includes(join("src", "app", "sites"))
+      )
+      .map((e) => join(e.parentPath, e.name))
+  )
+  const bareEmpty =
+    /<(p|li|div|span)\s+className="[^"]*text-muted-foreground[^"]*">\s*\{t\("(empty|none|no_[a-z_]+|[a-z_]+_empty|none_[a-z_]+)"\)\}\s*<\/\1>/
+
+  it("never renders an empty message as plain text", () => {
+    const offenders = files.filter((file) => bareEmpty.test(readFileSync(file, "utf8"))).map((f) => relative(ROOT, f))
+    expect(offenders).toEqual([])
+  })
+})
+
 describe("page errors", () => {
   it.each(["src/app/(dashboard)/dashboard", "src/app/(admin)/admin"])("%s catches errors with RouteError", (dir) => {
     expect(readFileSync(join(ROOT, dir, "error.tsx"), "utf8")).toContain("<RouteError")

@@ -3,6 +3,8 @@ import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { requirePlatformRole } from "@/platform/staff"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { EmptyState } from "@/components/layout/empty-state"
+import { Gauge } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -78,7 +80,7 @@ export default async function PlatformUsagePage() {
         </CardHeader>
         <CardContent className="space-y-1">
           {counters.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("counters_empty")}</p>
+            <EmptyState icon={Gauge} title={t("counters_empty")} />
           ) : (
             counters.slice(0, 50).map((c) => (
               <div key={c.id} className="flex items-center justify-between text-sm">

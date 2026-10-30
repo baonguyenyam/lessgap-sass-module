@@ -6,6 +6,8 @@ import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AppointmentActions } from "@/components/booking/appointment-actions"
 import { BookingLiveUpdates } from "@/components/booking/live-updates"
+import { EmptyState } from "@/components/layout/empty-state"
+import { CalendarDays } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -48,7 +50,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
       </div>
       <AppointmentActions staff={staff.map((s) => ({ id: s.id, name: s.name }))} />
       {byDay.size === 0 ? (
-        <p className="text-sm text-muted-foreground">{t("empty")}</p>
+        <EmptyState icon={CalendarDays} title={t("empty")} />
       ) : (
         [...byDay.entries()].map(([day, list]) => (
           <Card key={day}>

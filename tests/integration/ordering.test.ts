@@ -52,7 +52,8 @@ async function provision() {
   })
   await db8.orm.public.TenantModule.create({ tenantId: tenant.id, moduleKey: "ordering", enabled: true })
   await db8.orm.public.TenantModule.create({ tenantId: tenant.id, moduleKey: "shop", enabled: true })
-  for (const key of ["module.ordering", "module.shop"]) {
+  await db8.orm.public.TenantModule.create({ tenantId: tenant.id, moduleKey: "payments", enabled: true })
+  for (const key of ["module.ordering", "module.shop", "module.payments"]) {
     await db8.orm.public.PlatformSwitch.upsert({
       conflictOn: { key },
       create: { key, value: true, updatedById: "test" },

@@ -14,16 +14,25 @@ export function EmptyState({
   title,
   description,
   action,
+  size = "default",
   className,
 }: {
   icon: LucideIcon
   title: string
   description?: string
   action?: React.ReactNode
+  /** `compact` for a narrow place, such as a board column or a short list inside a card. */
+  size?: "default" | "compact"
   className?: string
 }) {
   return (
-    <Empty className={cn("min-h-64 border border-border md:p-12", className)}>
+    <Empty
+      className={cn(
+        "border border-border",
+        size === "compact" ? "min-h-32 gap-3 p-4 md:p-6" : "min-h-64 md:p-12",
+        className
+      )}
+    >
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <Icon />

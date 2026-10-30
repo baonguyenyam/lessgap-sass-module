@@ -4,6 +4,8 @@ import { useState } from "react"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { setOrderStatus } from "@/app/actions/ordering"
+import { EmptyState } from "@/components/layout/empty-state"
+import { ClipboardList } from "lucide-react"
 
 /** One board column (task 6.5): each card advances its order one status. */
 export function BoardColumn({
@@ -15,7 +17,7 @@ export function BoardColumn({
 }) {
   const t = useTranslations("dashboard.ordering")
   const [pending, setPending] = useState<string | null>(null)
-  if (orders.length === 0) return <p className="text-xs text-muted-foreground">{t("empty")}</p>
+  if (orders.length === 0) return <EmptyState icon={ClipboardList} title={t("empty")} size="compact" />
   return (
     <>
       {orders.map((o) => (

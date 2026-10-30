@@ -4,6 +4,8 @@ import { useTranslations } from "next-intl"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { EmptyState } from "@/components/layout/empty-state"
+import { Package } from "lucide-react"
 
 export type AddOnData = {
   id: string
@@ -52,8 +54,8 @@ export function AddOnCards({ addOns, disabled }: { addOns: AddOnData[]; disabled
               </div>
             </li>
           ))}
-          {addOns.length === 0 && <li className="py-3 text-sm text-muted-foreground">{t("empty")}</li>}
         </ul>
+        {addOns.length === 0 && <EmptyState icon={Package} title={t("empty")} size="compact" />}
       </CardContent>
     </Card>
   )

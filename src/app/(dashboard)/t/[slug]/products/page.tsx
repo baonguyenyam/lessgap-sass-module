@@ -4,6 +4,8 @@ import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ProductForm } from "@/components/booking/product-form"
+import { EmptyState } from "@/components/layout/empty-state"
+import { Ticket } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -45,9 +47,7 @@ export default async function ProductsPage() {
           <CardTitle>{t("list")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          {packages.length === 0 && memberships.length === 0 && (
-            <p className="text-sm text-muted-foreground">{t("none")}</p>
-          )}
+          {packages.length === 0 && memberships.length === 0 && <EmptyState icon={Ticket} title={t("none")} />}
           {packages.map((x) => (
             <p key={x.id} className="text-sm">
               {x.name} · {x.sessions} {t("sessions")} · ${(x.priceCents / 100).toFixed(2)}
