@@ -8,6 +8,64 @@ file stays the index — not the place requirements are defined.
 
 
 
+
+## 2026-10-30 — Profile, billing and notifications as complete as platform.madelab.io (to build)
+
+The owner wants the account, billing and notifications areas to offer what
+platform.madelab.io's `/profile`, `/billing` and `/notifications` offer —
+the features and their behaviour, never its code. Not built yet: write it
+as phase brief tasks (`spec/phases/`) before coding, and tick items here as
+they land. Reference for behaviour only: the local checkout's screenshots in
+`docs/release-screenshots/` (profile-tabs/, admin/billing*,
+admin/notifications.png).
+
+**Profile (account pages, one tab each, grouped Account / Security / Access):**
+- [x] Edit profile: name, photo, email shown read-only (change through the
+  security flow). [ ] A username used to sign in alongside the email.
+- [ ] Payment methods: saved cards (add through the payment provider's
+  hosted setup, set the default, remove), for purchases a member makes.
+- [x] Notifications tab exists — [ ] make it per category, with an in-app
+  and an email switch for each category.
+- [x] Password change.
+- [ ] Login activity: active sessions grouped by device and location, sign
+  out one device, all other devices, or all devices; recent sign-in
+  attempts including failed ones (today: sessions + an activity list).
+- [x] Two-factor (TOTP + backup codes). [ ] Passkeys as a sign-in method.
+- [ ] Roles & permissions: the roles this account holds in the current
+  tenant and what each grants, read-only (from the permission catalog).
+- [ ] Platform access (staff only): what the platform role allows —
+  impersonation, the console, all tenants.
+
+**Billing (tabs: Subscription / History / Credits / Invoices, plus Payment
+method):**
+- [ ] Subscription: current plan card (name, status badge, price per
+  period, renewal date with days left), plan usage against limits (members,
+  monthly volumes, storage) with a "storage & usage details" link, and an
+  "Included in your plan" grid of every limit and module (value, ✓ or ✗),
+  from the entitlements resolver; "View plans" to change plan.
+- [ ] History: plan changes (upgrades, downgrades, assignments by staff).
+- [ ] Credits & proration: the ledger of mid-cycle charges and credits.
+- [x] Invoices list. [ ] Receipt view with a print layout, and the
+  provider's PDF.
+- [ ] Payment method page for the subscription (provider portal or hosted
+  setup).
+- [ ] "Plan required" page: where a feature the plan lacks sends a member,
+  naming the feature and the plans that include it.
+
+**Notifications (in-app inbox):**
+- [ ] A `/notifications` page per member: list with category, message,
+  received time; filters "All / Unread only" and by category; rows grouped
+  when many concern the same item; "Mark as read", "Mark all read", and a
+  link that opens the item (an order, a booking…).
+- [ ] A bell in the header's icon row with the unread count, opening the
+  latest notifications.
+- [ ] Every notification respects the member's per-category in-app / email
+  choice above.
+
+**Sidebar footer:** [ ] a footer under the sidebar menu with "© {year}
+{site name}" (site name from configuration, never a brand hard-coded),
+hidden when the sidebar is collapsed to icons. Recorded in
+`.agents/rules/ui-accessibility.md`.
 ## 2026-10-30 — Badges, bulk bar, action column and list toolbar
 
 The owner added list-page rules: badges in colour from one shared component,

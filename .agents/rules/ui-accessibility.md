@@ -106,6 +106,9 @@ only — never copy their code, and keep the kit neutral (owner's rule,
 - **Sidebar header is a dropdown** — the current tenant's name + icon opens a
   menu of the user's tenants (icon + name + `⌘N` shortcut each) ending in an
   "Add team" row that starts tenant creation.
+- **Sidebar ends in a copyright footer** — "© {year} {site name}" under the
+  menu (`SidebarFooter`, site name from `siteConfig`, year from the shared
+  current-year helper), hidden when the sidebar is collapsed to icons.
 - **Sidebar items can carry a submenu** — a parent item with `children` renders
   a chevron that expands/collapses the children (`NavCollapsible`), the way
   "Secured by Clerk" opens Sign In / Sign Up / User Management. Group items
