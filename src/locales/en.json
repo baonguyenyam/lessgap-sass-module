@@ -548,7 +548,8 @@
       "quotes": "Quotes",
       "locations": "Locations",
       "intake": "Intake",
-      "products": "Products"
+      "products": "Products",
+      "waitlist": "Waitlist"
     },
     "members": {
       "title": "Members",
@@ -902,6 +903,19 @@
       "list": "Your catalog",
       "none": "No packages or memberships yet.",
       "per_month": "/ month"
+    },
+    "waitlist": {
+      "title": "Waitlist",
+      "list": "Waiting customers",
+      "none": "No one is waiting.",
+      "mark_booked": "Mark booked",
+      "mark_canceled": "Cancel",
+      "status": {
+        "waiting": "Waiting",
+        "notified": "Notified",
+        "booked": "Booked",
+        "canceled": "Canceled"
+      }
     }
   },
   "platform": {

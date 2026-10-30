@@ -8,6 +8,7 @@ import {
   MapPin,
   ClipboardList,
   Package,
+  Hourglass,
   Globe,
   List,
   Globe2,
@@ -131,6 +132,9 @@ export function navGroups(
         ...(enabledModules && !enabledModules.has("booking")
           ? []
           : [{ key: "products", href: t("products"), icon: Package } satisfies NavItem]),
+        ...(enabledModules && !enabledModules.has("booking")
+          ? []
+          : [{ key: "waitlist", href: t("waitlist"), icon: Hourglass } satisfies NavItem]),
       ],
     },
     {

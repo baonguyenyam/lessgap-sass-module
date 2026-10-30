@@ -12,7 +12,7 @@ spec/13-conventions.md.
 
 ## Scope
 
-- Phase 16: in progress.
+- Phase 16: done.
 
 ## Tasks
 
@@ -56,7 +56,7 @@ The waitlist rows live on `/t/<slug>/reviews` — a dedicated page lists
 them by `wantedDate` and lets the tenant mark one `canceled`/`booked`.
 
 **Done when:** the waitlist's list renders and the actions land.
-- [ ] done
+- [x] done (`/t/<slug>/waitlist` lists by `wantedDate` and `WaitlistActions` marks `booked`/`canceled` — `waitlist` nav item in `operations`.)
 
 ## Exit criteria
 

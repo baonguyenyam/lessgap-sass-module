@@ -548,7 +548,8 @@
       "quotes": "Báo giá",
       "locations": "Địa điểm",
       "intake": "Biểu mẫu",
-      "products": "Sản phẩm"
+      "products": "Sản phẩm",
+      "waitlist": "Danh sách chờ"
     },
     "members": {
       "title": "Thành viên",
@@ -902,6 +903,19 @@
       "list": "Danh mục của bạn",
       "none": "Chưa có gói hay thành viên.",
       "per_month": "/ tháng"
+    },
+    "waitlist": {
+      "title": "Danh sách chờ",
+      "list": "Khách đang chờ",
+      "none": "Không có ai chờ.",
+      "mark_booked": "Đã đặt",
+      "mark_canceled": "Huỷ",
+      "status": {
+        "waiting": "Đang chờ",
+        "notified": "Đã báo",
+        "booked": "Đã đặt",
+        "canceled": "Đã huỷ"
+      }
     }
   },
   "platform": {
