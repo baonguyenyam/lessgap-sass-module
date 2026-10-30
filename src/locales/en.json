@@ -1151,6 +1151,25 @@
       "subtitle": "This feature needs a higher plan.",
       "featureNeeded": "The feature your plan lacks",
       "noPlans": "No plan offers this yet — ask platform staff."
+    },
+    "emails": {
+      "title": "Emails",
+      "subtitle": "The design your emails send in and every template's copy",
+      "design": {
+        "title": "Send design",
+        "label": "Design",
+        "plain": "Plain — the body only",
+        "branded": "Branded — your name as the header and footer"
+      },
+      "saving": "Saving…",
+      "customized": "customized",
+      "templates": {
+        "booking.confirmation": "Booking confirmation",
+        "booking.reminder": "Booking reminder",
+        "booking.canceled": "Booking cancelled",
+        "quotes.sent": "Quote sent",
+        "customer.export": "Customer data export"
+      }
     }
   },
   "platform": {
@@ -1989,7 +2008,8 @@
     "domains": "Domains",
     "backups": "Backups",
     "usage": "Usage",
-    "analytics": "Analytics"
+    "analytics": "Analytics",
+    "emails": "Emails"
   },
   "faq": {
     "title": "Frequently asked questions",

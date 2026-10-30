@@ -2,6 +2,7 @@ import { db8 } from "@/lib/db8"
 import { nowTs } from "@/lib/timestamps"
 import { sendEmail } from "@/lib/email-transport"
 import { templates, type TemplateData, type RenderedTemplate } from "@/emails/templates"
+import { wrapEmail, type EmailDesign } from "@/emails/layout"
 import type { TenantContext } from "@/platform/tenancy/context"
 
 /** The one sender (task 5.6, spec/07): modules never call the email provider
@@ -21,12 +22,21 @@ export async function renderTemplate(
     tenantId: ctx.tenantId,
     key: `notify.template.${key}.${locale}`,
   }).first()
+  const [designRow, tenant] = await Promise.all([
+    db8.orm.public.TenantSetting.where({ tenantId: ctx.tenantId, key: "notify.design" }).first(),
+    db8.orm.public.Tenant.where({ id: ctx.tenantId }).first(),
+  ])
+  const design = (designRow?.value as EmailDesign) ?? "plain"
+  const business = tenant?.name ?? ""
+  const wrap = (rendered: RenderedTemplate | null) =>
+    rendered ? { ...rendered, html: wrapEmail(design, business, rendered.html) } : null
+
   if (override) {
     const value = override.value as { subject?: string; html?: string }
-    return { subject: value.subject ?? "", html: value.html ?? "" }
+    return wrap({ subject: value.subject ?? "", html: value.html ?? "" })
   }
   const def = templates[key]?.[locale] ?? templates[key]?.en
-  return def ? def(data) : null
+  return wrap(def ? def(data) : null)
 }
 
 export async function notify(

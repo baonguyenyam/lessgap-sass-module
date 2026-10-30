@@ -1,6 +1,7 @@
 "use server"
 
 import { z } from "zod"
+import { revalidatePath } from "next/cache"
 import { db8 } from "@/lib/db8"
 import { AppError } from "@/platform/errors"
 import { audit } from "@/platform/audit"
@@ -53,4 +54,15 @@ export async function resetEmailTemplate(values: { templateKey: string; locale: 
     if (error instanceof AppError) return { error: error.code }
     throw error
   }
+}
+
+/** The tenant's send design — `notify.design` in TenantSetting. */
+export async function saveEmailDesign(design: string) {
+  const c = await requireTenantContext("settings", "manage")
+  await db8.orm.public.TenantSetting.upsert({
+    conflictOn: { tenantId: c.tenantId, key: "notify.design" } as never,
+    create: { tenantId: c.tenantId, key: "notify.design", value: design },
+    update: { value: design },
+  })
+  revalidatePath("/t")
 }

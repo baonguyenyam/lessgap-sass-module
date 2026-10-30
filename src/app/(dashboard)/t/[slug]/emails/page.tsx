@@ -1,28 +1,33 @@
 import { getTranslations } from "next-intl/server"
-import { PageHeader } from "@/components/layout/page-header"
 import { db8 } from "@/lib/db8"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
-import { templates, templateKeys, templateLocales } from "@/emails/templates"
+import { memberCan } from "@/platform/tenancy/permissions"
+import { PageHeader } from "@/components/layout/page-header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { EmailTemplateEditor } from "@/components/settings/email-template-editor"
+import { EmailDesignPicker } from "@/components/settings/email-design-picker"
+import { templates, templateKeys, templateLocales } from "@/emails/templates"
+import { EMAIL_DESIGNS, type EmailDesign } from "@/emails/layout"
 
 export const instant = false
 
-/** Settings → Emails (the in-system management rule): every template the
- * system sends, per locale — the tenant edits its copy; the kit's default
- * stays the fallback (notify.template.<key>.<locale> in TenantSetting). */
-export default async function EmailSettingsPage() {
-  const m = await requireTenantContext("settings", "manage")
-  const t = await getTranslations("dashboard.settings.emails")
-  const overrides = await db8.orm.public.TenantSetting.where({ tenantId: m.tenantId }).all()
+/** Emails (the in-system management rule, now its own section): the send
+ * design + every template × locale — the tenant edits its copy and picks a
+ * layout; the kit's defaults stay the fallback. */
+export default async function EmailsPage() {
+  const ctx = await requireTenantContext()
+  const t = await getTranslations("dashboard.emails")
+  const overrides = await db8.orm.public.TenantSetting.where({ tenantId: ctx.tenantId }).all()
   const overrideBy = new Map(overrides.filter((x) => x.key.startsWith("notify.template.")).map((x) => [x.key, x.value]))
+  const design = (overrides.find((x) => x.key === "notify.design")?.value as EmailDesign) ?? "plain"
   const sample = {
     name: "Ana",
     service: "Manicure",
-    staff: "Mia",
-    time: "2027-03-08 15:00 UTC",
-    manageUrl: "https://example.test",
-    business: "Fixture Co",
+    time: "10:00 Saturday",
+    manageUrl: "#",
+    business: ctx.tenant.name,
+    totalCents: "$120",
+    acceptUrl: "#",
   }
   const rows = templateKeys.flatMap((key) =>
     templateLocales(key).map((locale) => {
@@ -32,14 +37,24 @@ export default async function EmailSettingsPage() {
       return { key, locale, override, fallbackSubject: def.subject, fallbackHtml: def.html }
     })
   )
+  const canManage = await memberCan(ctx.tenantId, ctx.member.role, "settings", "manage")
+
   return (
     <div className="space-y-6">
-      <PageHeader title={t("title")} />
+      <PageHeader title={t("title")} description={t("subtitle")} />
+      <Card>
+        <CardHeader>
+          <CardTitle>{t("design.title")}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <EmailDesignPicker current={design} designs={EMAIL_DESIGNS} canManage={canManage} />
+        </CardContent>
+      </Card>
       {rows.map((row) => (
         <Card key={`${row.key}-${row.locale}`}>
           <CardHeader>
             <CardTitle className="text-base">
-              {row.key} · {row.locale}
+              {t(`templates.${row.key}`)} · {row.locale}
               {row.override && <span className="ml-2 text-xs text-muted-foreground">({t("customized")})</span>}
             </CardTitle>
           </CardHeader>

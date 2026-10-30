@@ -1151,6 +1151,25 @@
       "subtitle": "Tính năng này cần gói cao hơn.",
       "featureNeeded": "Tính năng mà gói của bạn thiếu",
       "noPlans": "Chưa có gói nào — hỏi nhân viên platform."
+    },
+    "emails": {
+      "title": "Email",
+      "subtitle": "Giao diện gửi email và nội dung từng mẫu",
+      "design": {
+        "title": "Giao diện gửi",
+        "label": "Giao diện",
+        "plain": "Đơn giản — chỉ nội dung",
+        "branded": "Thương hiệu — tên doanh nghiệp ở đầu và cuối"
+      },
+      "saving": "Đang lưu…",
+      "customized": "đã tùy chỉnh",
+      "templates": {
+        "booking.confirmation": "Xác nhận lịch hẹn",
+        "booking.reminder": "Nhắc lịch hẹn",
+        "booking.canceled": "Huỷ lịch hẹn",
+        "quotes.sent": "Báo giá đã gửi",
+        "customer.export": "Xuất dữ liệu khách hàng"
+      }
     }
   },
   "platform": {
@@ -1989,7 +2008,8 @@
     "domains": "Tên miền",
     "backups": "Sao lưu",
     "usage": "Sử dụng",
-    "analytics": "Phân tích"
+    "analytics": "Phân tích",
+    "emails": "Email"
   },
   "faq": {
     "title": "Các câu hỏi thường gặp",
