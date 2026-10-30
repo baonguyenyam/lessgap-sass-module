@@ -4,7 +4,7 @@ import { useMemo } from "react"
 import { useTranslations } from "next-intl"
 import { Star } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import { DataTable, dataTableColumns, type TableHeading } from "@/components/data-table/data-table"
+import { DataTable, dataTableColumns } from "@/components/data-table/data-table"
 import { ReviewActions } from "@/components/booking/review-actions"
 import type { TableQuery } from "@/lib/table-query"
 

@@ -3,7 +3,7 @@
 import { useMemo } from "react"
 import { useTranslations } from "next-intl"
 import { BarChart3 } from "lucide-react"
-import { DataTable, dataTableColumns, type TableHeading } from "@/components/data-table/data-table"
+import { DataTable, dataTableColumns } from "@/components/data-table/data-table"
 import type { TableQuery } from "@/lib/table-query"
 
 export type PathRow = { path: string; views: number }

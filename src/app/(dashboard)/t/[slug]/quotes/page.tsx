@@ -43,14 +43,14 @@ export default async function QuotesPage({
     db8.orm.public.Quote.where({ tenantId: c.tenantId }).include("lines").all(),
   ])
 
-  let reqRows: RequestRow[] = requests.map((r) => ({
+  const reqRows: RequestRow[] = requests.map((r) => ({
     id: r.id,
     customerName: r.customerName,
     customerEmail: r.customerEmail,
     status: r.status,
     createdAt: r.createdAt,
   }))
-  let qRows: QuoteRow[] = quotes.map((r) => ({
+  const qRows: QuoteRow[] = quotes.map((r) => ({
     id: r.id,
     customerName: r.customerName,
     items: r.lines.map((l) => l.name).join(", "),

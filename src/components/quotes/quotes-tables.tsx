@@ -4,7 +4,7 @@ import { useMemo } from "react"
 import { useFormatter, useTranslations } from "next-intl"
 import { FileText } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import { DataTable, dataTableColumns, type TableHeading } from "@/components/data-table/data-table"
+import { DataTable, dataTableColumns } from "@/components/data-table/data-table"
 import { ConvertButton } from "@/components/quotes/convert-button"
 import type { TableQuery } from "@/lib/table-query"
 import { toDate } from "@/lib/timestamps"
@@ -64,7 +64,6 @@ export function RequestsTable({ rows, total, query }: { rows: RequestRow[]; tota
 
 export function QuotesTable({ rows, total, query }: { rows: QuoteRow[]; total: number; query: TableQuery }) {
   const t = useTranslations("dashboard.quotes")
-  const format = useFormatter()
   const columns = useMemo(() => {
     const col = dataTableColumns<QuoteRow>()
     return col.columns([
