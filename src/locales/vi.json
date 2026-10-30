@@ -138,7 +138,10 @@
       "checklistProgress": "Hoàn thành {done} / {total}",
       "checklistDismiss": "Ẩn danh sách công việc",
       "checklistName": "Thêm tên của bạn",
-      "checklistBilling": "Thiết lập thanh toán"
+      "checklistBilling": "Thiết lập thanh toán",
+      "upsellTitle": "Nâng cấp Pro",
+      "upsellBody": "Mở báo cáo, thêm ghế đội ngũ và hỗ trợ ưu tiên.",
+      "upsellCta": "Xem các gói"
     },
     "settings": {
       "title": "Cài đặt",
@@ -500,7 +503,8 @@
     },
     "userMenu": {
       "open": "Mở menu tài khoản",
-      "signOut": "Đăng xuất"
+      "signOut": "Đăng xuất",
+      "account": "Tài khoản"
     },
     "nav": {
       "dashboard": "Bảng điều khiển",
@@ -1703,17 +1707,9 @@
     "copyright": "© {year} {site}. Bảo lưu mọi quyền.",
     "license": "Giấy phép MIT · Xây dựng với Next.js",
     "signup": {
-      "$kit": {
-        "title": "Bản Pro ra mắt vào 19 tháng 11.",
-        "cta": "Tham gia",
-        "disabledNote": "Danh sách chờ sẽ mở sớm."
-      },
-      "$product": {
-        "title": "Nhận cập nhật sản phẩm qua email.",
-        "cta": "Đăng ký",
-        "disabledNote": "Biểu mẫu bị vô hiệu hóa trong bản demo."
-      },
-      "sent": "Sắp hoàn tất: kiểm tra hộp thư đến để xác nhận."
+      "title": "Dùng bộ khởi đầu",
+      "cta": "Bắt đầu",
+      "disabledNote": "Đăng ký đã tắt trên deployment này."
     }
   },
   "about": {
@@ -2248,6 +2244,17 @@
       "offline": "Cửa hàng đang tạm ngưng thanh toán.",
       "ordered": "Đã đặt — kiểm tra email.",
       "paying": "Đang thanh toán…"
+    },
+    "chat": {
+      "open": "Mở trợ lý",
+      "title": "Chúng tôi có thể giúp gì?",
+      "greeting": "Chào — hỏi tôi bất cứ điều gì về giờ mở, dịch vụ hay đặt lịch.",
+      "sources": "Nguồn",
+      "placeholder": "Nhập tin nhắn…",
+      "send": "Gửi",
+      "error": {
+        "unknown": "Có lỗi xảy ra — thử lại sau một lúc."
+      }
     }
   }
 }

@@ -138,7 +138,10 @@
       "checklistProgress": "{done} of {total} complete",
       "checklistDismiss": "Dismiss checklist",
       "checklistName": "Add your name",
-      "checklistBilling": "Set up billing"
+      "checklistBilling": "Set up billing",
+      "upsellTitle": "Grow with Pro",
+      "upsellBody": "Unlock reports, more team seats and priority support.",
+      "upsellCta": "See plans"
     },
     "settings": {
       "title": "Settings",
@@ -500,7 +503,8 @@
     },
     "userMenu": {
       "open": "Open account menu",
-      "signOut": "Sign out"
+      "signOut": "Sign out",
+      "account": "Account"
     },
     "nav": {
       "dashboard": "Dashboard",
@@ -1703,17 +1707,9 @@
     "copyright": "© {year} {site}. All rights reserved.",
     "license": "MIT License · Built with Next.js",
     "signup": {
-      "$kit": {
-        "title": "Pro launches November 19.",
-        "cta": "Join",
-        "disabledNote": "The waitlist opens shortly."
-      },
-      "$product": {
-        "title": "Get product updates by email.",
-        "cta": "Subscribe",
-        "disabledNote": "Forms are disabled in the live demo."
-      },
-      "sent": "Almost there: check your inbox to confirm."
+      "title": "Get the starter kit",
+      "cta": "Get started",
+      "disabledNote": "Sign-up is disabled on this deployment."
     }
   },
   "about": {
@@ -2248,6 +2244,17 @@
       "offline": "Checkout is offline for this shop right now.",
       "ordered": "Order placed — check your email.",
       "paying": "Paying…"
+    },
+    "chat": {
+      "open": "Open the assistant",
+      "title": "How can we help?",
+      "greeting": "Hi — ask me anything about our hours, services or bookings.",
+      "sources": "Sources",
+      "placeholder": "Type a message…",
+      "send": "Send",
+      "error": {
+        "unknown": "Something went wrong — try again in a moment."
+      }
     }
   }
 }
