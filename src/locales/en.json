@@ -549,7 +549,8 @@
       "locations": "Locations",
       "intake": "Intake",
       "products": "Products",
-      "waitlist": "Waitlist"
+      "waitlist": "Waitlist",
+      "addTeam": "Add team"
     },
     "members": {
       "title": "Members",

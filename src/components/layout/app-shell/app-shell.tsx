@@ -3,6 +3,7 @@ import { HeaderBreadcrumbs } from "@/components/dashboard/header-breadcrumbs"
 import { PoweredBy } from "@/components/powered-by"
 import { SwitchAsBanner } from "@/components/switch-as-banner"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { NavUser } from "@/components/layout/app-shell/nav-user"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/layout/app-shell/app-sidebar"
 import type { NavUserProps } from "@/components/layout/app-shell/nav-user"
@@ -66,6 +67,7 @@ export async function AppShell({
             <SearchDialog area={area} showAdmin={showAdmin} slug={tenant?.slug ?? ""} customRoles={customRoles} />
             <LanguageSwitcher locales={APP_LOCALES} />
             <ThemeToggle />
+            <NavUser {...user} />
           </div>
         </header>
         <main className="min-w-0 flex-1 p-4 md:p-6">

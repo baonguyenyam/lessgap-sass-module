@@ -7,7 +7,6 @@ import { Logo } from "@/components/logo"
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -15,9 +14,14 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { NavUser, type NavUserProps } from "@/components/layout/app-shell/nav-user"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { ChevronRight } from "lucide-react"
+import type { NavUserProps } from "@/components/layout/app-shell/nav-user"
 import { isNavItemActive, navGroups, type NavArea } from "@/components/layout/app-shell/nav"
 import { tenantPath } from "@/lib/tenant-paths"
 import { TenantSwitcher, type TenantOption } from "@/components/layout/app-shell/tenant-switcher"
@@ -81,6 +85,37 @@ export function AppSidebar({
                 {group.items.map((item) => {
                   const Icon = item.icon
                   const active = isNavItemActive(item, pathname)
+                  if (item.children?.length) {
+                    return (
+                      <Collapsible key={item.href} asChild defaultOpen={active} className="group/collapsible">
+                        <SidebarMenuItem>
+                          <CollapsibleTrigger asChild>
+                            <SidebarMenuButton isActive={active} tooltip={t(item.key)}>
+                              <Icon />
+                              <span>{t(item.key)}</span>
+                              <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                            </SidebarMenuButton>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <SidebarMenuSub>
+                              {item.children.map((child) => {
+                                const childActive = isNavItemActive(child, pathname)
+                                return (
+                                  <SidebarMenuSubItem key={child.href}>
+                                    <SidebarMenuSubButton asChild isActive={childActive}>
+                                      <Link href={child.href} aria-current={childActive ? "page" : undefined}>
+                                        <span>{t(child.key)}</span>
+                                      </Link>
+                                    </SidebarMenuSubButton>
+                                  </SidebarMenuSubItem>
+                                )
+                              })}
+                            </SidebarMenuSub>
+                          </CollapsibleContent>
+                        </SidebarMenuItem>
+                      </Collapsible>
+                    )
+                  }
                   return (
                     <SidebarMenuItem key={item.href}>
                       <SidebarMenuButton asChild isActive={active} tooltip={t(item.key)}>
@@ -97,9 +132,7 @@ export function AppSidebar({
           </SidebarGroup>
         ))}
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser {...user} />
-      </SidebarFooter>
+
       {/* Still folds the sidebar on click, without drawing a line on hover. */}
       <SidebarRail className="hover:after:bg-transparent" />
     </Sidebar>

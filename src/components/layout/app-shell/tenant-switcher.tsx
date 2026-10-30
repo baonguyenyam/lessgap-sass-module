@@ -1,6 +1,6 @@
 "use client"
 
-import { Check, ChevronsUpDown } from "lucide-react"
+import { Check, ChevronsUpDown, Plus } from "lucide-react"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 import {
@@ -70,6 +70,12 @@ export function TenantSwitcher({ current, tenants }: { current: TenantOption; te
                 </Link>
               </DropdownMenuItem>
             ))}
+            <DropdownMenuItem asChild>
+              <Link href="/onboarding">
+                <Plus className="mr-1 size-4" />
+                <span className="text-muted-foreground">{t("addTeam")}</span>
+              </Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

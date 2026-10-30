@@ -92,3 +92,31 @@ Applies to `src/components/`, `src/app/**/*.tsx`, `src/app/globals.css`.
 ---
 
 Based on: [WCAG 2.1 AA](https://www.w3.org/TR/WCAG21/) and the Tailwind CSS 4 and Radix UI docs.
+
+## Sidebar + header + list conventions (shadcn-admin)
+
+The app shell follows [satnaing/shadcn-admin](https://github.com/satnaing/shadcn-admin)
+conventions — check it before adding nav or list chrome.
+
+- **Sidebar header is a dropdown** — the current tenant's name + icon opens a
+  menu of the user's tenants (icon + name + `⌘N` shortcut each) ending in an
+  "Add team" row that starts tenant creation.
+- **Sidebar items can carry a submenu** — a parent item with `children` renders
+  a chevron that expands/collapses the children (`NavCollapsible`), the way
+  "Secured by Clerk" opens Sign In / Sign Up / User Management. Group items
+  under a parent when they belong to the same domain rather than adding a flat
+  sibling.
+- **Top-right chrome, in order** — theme toggle (sun/moon), a settings or
+  config button, then the account dropdown: avatar initials open a menu with
+  the user's name + email, Profile, Billing, Settings, "New team", and a red
+  Sign out — each with its keyboard shortcut shown right-aligned.
+- **A list page's heading carries its actions on the right** — "Import" and a
+  primary "Create" sit at the heading's top-right, not under it.
+- **A table's toolbar carries filter pills + a view toggle** — a free-text
+  search input, per-facet dropdown pills ("Status", "Priority") that open a
+  checklist with counts, and a "View" column-visibility toggle on the right.
+- **A selected table row set shows a selection bar** — "N rows selected" with
+  the bulk actions and a destructive action tinted red; the bar replaces the
+  toolbar while rows are selected.
+- **Pagination sits under the table** — "Rows per page" on the left, the page
+  indicator ("Page X of Y") and chevron/number controls on the right.

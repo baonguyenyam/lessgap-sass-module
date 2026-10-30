@@ -35,7 +35,7 @@ import {
  * dialog and the mobile sheet all read it. Labels are keys under
  * `dashboard.nav`; group labels under `dashboard.nav.groups`.
  */
-export type NavItem = { key: string; href: Route; icon: LucideIcon; exact?: boolean }
+export type NavItem = { key: string; href: Route; icon: LucideIcon; exact?: boolean; children?: NavItem[] }
 export type NavGroup = { key: string; items: NavItem[] }
 export type NavArea = "dashboard" | "admin" | "platform"
 
@@ -171,9 +171,19 @@ export function navGroups(
       items: [
         { key: "billing", href: t("billing"), icon: CreditCard },
         { key: "account", href: "/dashboard/account", icon: UserRound },
-        { key: "settings", href: t("settings"), icon: SlidersHorizontal },
-        { key: "site", href: `${t("settings")}/site` as Route, icon: Globe },
-        { key: "domains", href: `${t("settings")}/domains` as Route, icon: Globe2 },
+        {
+          key: "settings",
+          href: t("settings"),
+          icon: SlidersHorizontal,
+          children: [
+            { key: "site", href: `${t("settings")}/site` as Route, icon: Globe },
+            { key: "domains", href: `${t("settings")}/domains` as Route, icon: Globe2 },
+            { key: "modules", href: `${t("settings")}/modules` as Route, icon: Boxes },
+            { key: "localization", href: `${t("settings")}/localization` as Route, icon: Globe },
+            { key: "display", href: `${t("settings")}/display` as Route, icon: SlidersHorizontal },
+            { key: "paymentsSettings", href: `${t("settings")}/payments` as Route, icon: CreditCard },
+          ],
+        },
         ...(showAdmin ? [{ key: "adminPanel", href: "/admin", icon: Shield } satisfies NavItem] : []),
       ],
     },

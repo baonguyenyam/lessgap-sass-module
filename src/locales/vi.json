@@ -549,7 +549,8 @@
       "locations": "Địa điểm",
       "intake": "Biểu mẫu",
       "products": "Sản phẩm",
-      "waitlist": "Danh sách chờ"
+      "waitlist": "Danh sách chờ",
+      "addTeam": "Thêm nhóm"
     },
     "members": {
       "title": "Thành viên",
