@@ -7,6 +7,16 @@ file stays the index — not the place requirements are defined.
 
 
 
+
+## 2026-10-30 — Badges, bulk bar, action column and list toolbar
+
+The owner added list-page rules: badges in colour from one shared component,
+some leading with an icon; bulk edit as a floating bar under the table (not
+a toggle above it); a last action column is a "…" dropdown, otherwise the
+last column is right-aligned; a list page has its button group on the right
+of the heading and a toolbar with the filter input, facet pills (status,
+priority…) and View. Specified in `.agents/rules/ui-accessibility.md`,
+"Sidebar + header + list conventions".
 ## 2026-10-30 — App shell and list UI follow shadcn-admin and platform.madelab.io
 
 The owner fixed the UI conventions: a dropdown in the sidebar header (tenant

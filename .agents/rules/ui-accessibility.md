@@ -128,16 +128,34 @@ only — never copy their code, and keep the kit neutral (owner's rule,
   `tests/unit/lib/settings-pages.test.ts`). A page's content is a card per
   topic: header with title + description, then the fields, then the
   actions right-aligned (secondary, then primary).
-- **A list page's heading carries its actions on the right** — "Import" and a
-  primary "Create" sit at the heading's top-right, not under it.
-- **A table's toolbar carries filter pills + a view toggle** — a free-text
-  search input, per-facet dropdown pills ("Status", "Priority") that open a
-  checklist with counts, and a "View" column-visibility toggle on the right.
+- **A list page's heading carries its actions on the right** — title and
+  description on the left, the button group on the right of the same row
+  (secondary such as "Import" first, the primary "Create" last), never under
+  the heading.
+- **A table's toolbar carries filter pills + a view toggle** — in one row
+  under the heading: the free-text filter input, then one dashed pill per
+  facet ("Status", "Priority", any enum the list has) opening a searchable
+  checklist with an icon and a count per option, and the "View"
+  column-visibility toggle at the far right.
 - **A table row starts with a select checkbox and ends with a "…" menu** —
   the header checkbox selects the page, sortable column headers show the
-  up/down chevrons, and per-row actions live in the trailing "…" menu.
-- **A selected table row set shows a selection bar** — a floating bar centred
-  under the table: a clear (×) button, the count as a badge ("N selected"),
-  icon buttons for the bulk actions, and the destructive one filled red.
+  up/down chevrons. When the last column holds the row's actions, they are a
+  "…" dropdown, never a row of buttons; when the last column is data, it is
+  right-aligned (header and cells).
+- **Bulk actions appear under the table, never above it** — selecting rows
+  shows a floating bar centred in the footer row, between "Rows per page" and
+  the pager: a clear (×) button, the count as a badge ("N selected"), icon
+  buttons for the bulk actions (each with a tooltip and an accessible name),
+  and the destructive one filled red. It does not replace or push the
+  toolbar, and it is not a toggle above the table (owner, 2026-10-30).
 - **Pagination sits under the table** — "Rows per page" on the left, the page
-  indicator ("Page X of Y") and chevron/number controls on the right.
+  indicator ("Page X of Y") and first / previous / numbered pages (with "…")
+  / next / last buttons on the right, the current page filled.
+- **Badges come from one component, in colour** — every status, kind or
+  priority is drawn by the shared badge (`src/components/ui/badge.tsx`
+  variants), never a feature's own coloured `<span>`. A status has a tone
+  (neutral, info, success, warning, destructive) mapped in one place per
+  domain, and may lead with an icon (`data-icon="inline-start"`), as the
+  Status and Priority columns do (check-circle Done, arrow-up High). Feature
+  badges such as `tenant-status-badge.tsx` or `subscription-status-badge.tsx`
+  are only thin maps from a value to that badge's tone, label and icon.
