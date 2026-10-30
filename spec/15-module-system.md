@@ -88,7 +88,10 @@ not load.
 A module is **active for a tenant** when it is available, entitled, enabled,
 and every `dependsOn` module is active for that tenant. One function answers
 it: `isModuleActive(ctx, key)`; `requireModule(ctx, key)` throws a not-found
-for routes and a typed error for actions.
+for routes and a typed error for actions. `enableModule` refuses a key whose
+dependencies are not enabled — a storefront cannot turn on without payments
+— and `disableModule` refuses a module something still enabled depends on;
+the chain holds in both directions.
 
 - `onEnable` runs once per tenant when the module becomes active the first
   time (default settings, sample rows). It is idempotent.
