@@ -467,10 +467,6 @@
       "notifications": {
         "title": "Email notifications",
         "description": "Choose which emails you get.",
-        "productUpdates": "Product updates",
-        "productUpdatesHint": "New features and changes to the app.",
-        "tips": "Tips",
-        "tipsHint": "Occasional advice on getting more out of your workspace.",
         "alwaysSent": "Security and billing emails are always sent.",
         "saved": "Saved.",
         "failed": "That could not be saved.",

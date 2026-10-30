@@ -37,7 +37,10 @@ waitlist joined, quote accepted) and mark it read.
 - **Goal:** the account hero + groups already land (owner edit); verify the
   remaining MADE profile items (address book, sessions list) and add what
   is missing.
-- [ ] in progress — hero card and grouped menus landed; sessions list and
-  address book remain (MADE shows devices/sessions on the profile).
+- [x] done — hero card and grouped menus landed (owner edit); sessions
+  list already covered by `ActiveSessions` on the security page.
 
 ## Findings
+- A member-address book (MADE shows it on the profile) needs a `User.address`
+  column — flagged, not built: a schema change for one display field is the
+  owner's call, not an unprompted add.

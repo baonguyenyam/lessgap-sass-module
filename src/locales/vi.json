@@ -467,10 +467,6 @@
       "notifications": {
         "title": "Thông báo qua email",
         "description": "Chọn những email bạn muốn nhận.",
-        "productUpdates": "Cập nhật sản phẩm",
-        "productUpdatesHint": "Tính năng mới và thay đổi của ứng dụng.",
-        "tips": "Mẹo",
-        "tipsHint": "Thỉnh thoảng gợi ý cách dùng workspace hiệu quả hơn.",
         "alwaysSent": "Email về bảo mật và thanh toán luôn được gửi.",
         "saved": "Đã lưu.",
         "failed": "Không lưu được.",
