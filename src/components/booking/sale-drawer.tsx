@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl"
 import { Plus } from "lucide-react"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -60,7 +60,7 @@ export function SaleDrawer({
     ),
     defaultValues: { kind: "card", amount: undefined, email: "", packageId: "", membershipId: "", customerId: "" },
   })
-  const kind = form.watch("kind")
+  const kind = useWatch({ control: form.control, name: "kind" })
   if (!open) return null
   return (
     <FormDrawer
