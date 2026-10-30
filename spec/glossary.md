@@ -50,5 +50,6 @@ for the same thing is how a codebase starts to drift.
 | Email message | `EmailMessage` | The delivery record of one `sendEmail()` call: kind, recipient, provider, status |
 | Error report | `ErrorReport` | One grouped application error: digest, source, masked message, count, first/last seen |
 | Snapshot | `TenantSnapshot` | A per-tenant backup bundle in R2, restorable into a new tenant |
+| Member notification | `MemberNotification` | One row in a member's in-app feed: a workspace event (order placed, booking made, waitlist joined) addressed to a member or broadcast to everyone, `readAt` marks it seen |
 | Request id | `requestId` | A uuid v7 stamped per request by the proxy, carried through logs, errors and job runs |
 | Phase brief | `spec/phases/phase-N.md` | The task list an agent works through, one task per change |

@@ -299,3 +299,6 @@ different stack generation (Auth.js, Prisma 7) and is not ported.
 - **Realtime** — Pusher Channels publishes `booking.changed` on
   `private-tenant-<id>-booking`; `/api/pusher/auth` signs the channel;
   `BookingLiveUpdates` refreshes the calendar (ADR 0026).
+- **Member notifications** — `notifyMember` writes `MemberNotification`
+  rows on workspace events; the header bell shows the unread count and
+  `/t/<slug>/notifications` lists and marks them (phase 17.1).
