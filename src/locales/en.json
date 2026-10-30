@@ -530,7 +530,9 @@
         "account": "Account",
         "admin": "Administration",
         "platform": "Platform",
-        "back": "Back"
+        "back": "Back",
+        "operations": "Operations",
+        "content": "Content"
       },
       "account": "Account",
       "switchWorkspace": "Switch workspace",

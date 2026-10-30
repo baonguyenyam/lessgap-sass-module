@@ -90,19 +90,11 @@ export function navGroups(
       items: [{ key: "dashboard", href: t(), icon: LayoutGrid, exact: true }],
     },
     {
-      key: "workspace",
+      key: "operations",
       items: [
-        { key: "members", href: t("members"), icon: Users },
-        // A disabled module's routes are hidden, same as its pages (L2).
-        ...(enabledModules && !enabledModules.has("newsletter")
-          ? []
-          : [{ key: "newsletter", href: t("newsletter"), icon: Mail } satisfies NavItem]),
-        ...(enabledModules && !enabledModules.has("catalog")
-          ? []
-          : [{ key: "catalog", href: t("catalog"), icon: List } satisfies NavItem]),
-        ...(enabledModules && !enabledModules.has("team")
-          ? []
-          : [{ key: "team", href: t("team"), icon: Users } satisfies NavItem]),
+        // The day-to-day work — the calendar's bookings, the reviews the
+        // visits leave, the till's sales and the customers it serves
+        // (shopify-style: operate first, sell/content second).
         ...(enabledModules && !enabledModules.has("booking")
           ? []
           : [{ key: "calendar", href: t("calendar"), icon: Calendar } satisfies NavItem]),
@@ -121,12 +113,34 @@ export function navGroups(
         ...(enabledModules && !enabledModules.has("shop")
           ? []
           : [{ key: "orders", href: t("orders"), icon: Boxes } satisfies NavItem]),
+      ],
+    },
+    {
+      key: "content",
+      items: [
+        // The site's content — the catalogue, the team, the newsletter, the
+        // chatbot and its analytics.
+        ...(enabledModules && !enabledModules.has("catalog")
+          ? []
+          : [{ key: "catalog", href: t("catalog"), icon: List } satisfies NavItem]),
+        ...(enabledModules && !enabledModules.has("team")
+          ? []
+          : [{ key: "team", href: t("team"), icon: Users } satisfies NavItem]),
+        ...(enabledModules && !enabledModules.has("newsletter")
+          ? []
+          : [{ key: "newsletter", href: t("newsletter"), icon: Mail } satisfies NavItem]),
         ...(enabledModules && !enabledModules.has("chatbot")
           ? []
           : [{ key: "chatbot", href: t("chatbot"), icon: Boxes } satisfies NavItem]),
         ...(enabledModules && !enabledModules.has("analytics")
           ? []
           : [{ key: "analytics", href: t("analytics"), icon: Boxes } satisfies NavItem]),
+      ],
+    },
+    {
+      key: "workspace",
+      items: [
+        { key: "members", href: t("members"), icon: Users },
         ...(customRoles ? [{ key: "roles", href: t("roles"), icon: KeyRound } satisfies NavItem] : []),
       ],
     },

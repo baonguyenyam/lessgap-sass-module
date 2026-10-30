@@ -530,7 +530,9 @@
         "account": "Tài khoản",
         "admin": "Quản trị",
         "platform": "Nền tảng",
-        "back": "Quay lại"
+        "back": "Quay lại",
+        "operations": "Vận hành",
+        "content": "Nội dung"
       },
       "account": "Tài khoản",
       "switchWorkspace": "Chuyển không gian làm việc",
