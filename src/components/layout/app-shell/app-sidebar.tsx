@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { ChevronRight } from "lucide-react"
-import { isNavItemActive, navGroups, type NavArea } from "@/components/layout/app-shell/nav"
+import { isNavItemActive, navGroups, type NavAccess, type NavArea } from "@/components/layout/app-shell/nav"
 import { tenantPath } from "@/lib/tenant-paths"
 import { TenantSwitcher, type TenantOption } from "@/components/layout/app-shell/tenant-switcher"
 
@@ -32,19 +32,15 @@ import { TenantSwitcher, type TenantOption } from "@/components/layout/app-shell
  */
 export function AppSidebar({
   area,
-  showAdmin,
+  access,
   tenant,
   tenants,
-  customRoles,
-  enabledModules,
 }: {
   area: NavArea
-  showAdmin: boolean
+  access: NavAccess
   /** The tenant the dashboard area shows; null in the admin area. */
   tenant: TenantOption | null
   tenants: TenantOption[]
-  customRoles: boolean
-  enabledModules?: ReadonlySet<string>
 }) {
   const t = useTranslations("dashboard.nav")
   const pathname = usePathname()
@@ -74,7 +70,7 @@ export function AppSidebar({
         {area === "dashboard" && tenant && <TenantSwitcher current={tenant} tenants={tenants} />}
       </SidebarHeader>
       <SidebarContent>
-        {navGroups(area, { showAdmin, slug: tenant?.slug ?? "", customRoles, enabledModules }).map((group) => (
+        {navGroups(area, access).map((group) => (
           <SidebarGroup key={group.key}>
             <SidebarGroupLabel>{t(`groups.${group.key}`)}</SidebarGroupLabel>
             <SidebarGroupContent>

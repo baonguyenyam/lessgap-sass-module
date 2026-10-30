@@ -7,7 +7,7 @@ import { NavUser } from "@/components/layout/app-shell/nav-user"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/layout/app-shell/app-sidebar"
 import type { NavUserProps } from "@/components/layout/app-shell/nav-user"
-import type { NavArea } from "@/components/layout/app-shell/nav"
+import type { NavAccess, NavArea } from "@/components/layout/app-shell/nav"
 import type { TenantOption } from "@/components/layout/app-shell/tenant-switcher"
 import { SearchDialog } from "@/components/layout/app-shell/search-dialog"
 import { LanguageSwitcher } from "@/components/layout/app-shell/language-switcher"
@@ -22,37 +22,32 @@ import { APP_LOCALES } from "@/platform/settings/registry"
 export async function AppShell({
   area,
   user,
-  showAdmin,
+  access,
   breadcrumbs,
   tenant = null,
   tenants = [],
-  customRoles = true,
-  enabledModules,
   children,
 }: {
   area: NavArea
   user: NavUserProps
-  showAdmin: boolean
+  /** What the menu may offer this viewer (see `NavAccess`); the slug comes from `tenant`. */
+  access: Omit<NavAccess, "slug">
   /** The tenant the dashboard area shows, and every tenant the person belongs to (task 1.7). */
   tenant?: TenantOption | null
   tenants?: TenantOption[]
-  /** The tenant's `roles.custom` feature: shows or hides the roles entry. */
-  customRoles?: boolean
-  enabledModules?: ReadonlySet<string>
   breadcrumbs: React.ComponentProps<typeof HeaderBreadcrumbs>
   children: React.ReactNode
 }) {
+  const nav: NavAccess = { ...access, slug: tenant?.slug ?? "" }
   const defaultOpen = (await cookies()).get("sidebar_state")?.value !== "false"
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar
         area={area}
-        showAdmin={showAdmin}
+        access={nav}
         tenant={tenant}
         tenants={tenants}
-        customRoles={customRoles}
-        enabledModules={enabledModules}
       />
       {/* min-w-0: a wide table scrolls inside its card instead of widening the page.
           md:border: the UI has no shadows, so the border sets the page apart from the sidebar.
@@ -63,7 +58,7 @@ export async function AppShell({
           <SidebarTrigger className="-ml-1" />
           <HeaderBreadcrumbs {...breadcrumbs} />
           <div className="ml-auto flex items-center gap-2">
-            <SearchDialog area={area} showAdmin={showAdmin} slug={tenant?.slug ?? ""} customRoles={customRoles} />
+            <SearchDialog area={area} access={nav} />
             <LanguageSwitcher locales={APP_LOCALES} />
             <ThemeToggle />
             <NavUser {...user} />

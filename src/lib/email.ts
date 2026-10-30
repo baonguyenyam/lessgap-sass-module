@@ -14,6 +14,7 @@ import { resendClient, sendEmail } from "@/lib/email-transport"
  * preference, task 0.13); the rest use the default.
  */
 function emailStrings(_locale: string = routing.defaultLocale) {
+  void _locale // the shim always reads en — the arg stays for the callers.
   // next-intl's getTranslations needs a request context the email senders
   // don't have — read the message file's `email` namespace directly. The
   // namespace's nested values answer `t.raw(key)` the same way next-intl's
