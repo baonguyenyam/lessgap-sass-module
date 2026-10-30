@@ -42,24 +42,27 @@ export default async function ProductsPage() {
           <ProductForm kind="membership" />
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("list")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          {packages.length === 0 && memberships.length === 0 && <EmptyState icon={Ticket} title={t("none")} />}
-          {packages.map((x) => (
-            <p key={x.id} className="text-sm">
-              {x.name} · {x.sessions} {t("sessions")} · ${(x.priceCents / 100).toFixed(2)}
-            </p>
-          ))}
-          {memberships.map((x) => (
-            <p key={x.id} className="text-sm">
-              {x.name} · ${(x.priceCents / 100).toFixed(2)} {t("per_month")}
-            </p>
-          ))}
-        </CardContent>
-      </Card>
+      {packages.length === 0 && memberships.length === 0 ? (
+        <EmptyState icon={Ticket} title={t("none")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("list")}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {packages.map((x) => (
+              <p key={x.id} className="text-sm">
+                {x.name} · {x.sessions} {t("sessions")} · ${(x.priceCents / 100).toFixed(2)}
+              </p>
+            ))}
+            {memberships.map((x) => (
+              <p key={x.id} className="text-sm">
+                {x.name} · ${(x.priceCents / 100).toFixed(2)} {t("per_month")}
+              </p>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

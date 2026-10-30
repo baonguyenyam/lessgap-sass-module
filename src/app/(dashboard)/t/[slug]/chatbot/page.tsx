@@ -43,15 +43,15 @@ export default async function ChatbotPage() {
         </div>
         <ReindexButton />
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("sources", { count: sources.length })}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          {sources.length === 0 ? (
-            <EmptyState icon={BookOpen} title={t("sources_empty")} />
-          ) : (
-            sources.map((s) => (
+      {sources.length === 0 ? (
+        <EmptyState icon={BookOpen} title={t("sources_empty")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("sources", { count: sources.length })}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {sources.map((s) => (
               <div key={s.id} className="flex items-center justify-between text-sm">
                 <span>
                   {s.title} <span className="text-muted-foreground">({s.type})</span>
@@ -60,10 +60,10 @@ export default async function ChatbotPage() {
                   {s.chunks.length} chunks · {s.embeddingModel}
                 </span>
               </div>
-            ))
-          )}
-        </CardContent>
-      </Card>
+            ))}
+          </CardContent>
+        </Card>
+      )}
       <Card>
         <CardHeader>
           <CardTitle>{t("settings")}</CardTitle>
@@ -72,15 +72,15 @@ export default async function ChatbotPage() {
           <ChatbotSettingsForm tone={settings.tone ?? ""} languages={(settings.languages ?? []).join(",")} />
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("conversations", { count: conversations.length })}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {conversations.length === 0 ? (
-            <EmptyState icon={MessageCircle} title={t("conversations_empty")} />
-          ) : (
-            conversations.slice(0, 20).map((conv) => (
+      {conversations.length === 0 ? (
+        <EmptyState icon={MessageCircle} title={t("conversations_empty")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("conversations", { count: conversations.length })}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {conversations.slice(0, 20).map((conv) => (
               <div key={conv.id} className="rounded-md border p-3 text-sm">
                 <p className="font-medium">
                   {conv.visitorKey} · {conv.messages.length} {t("messages")} ·{" "}
@@ -92,10 +92,10 @@ export default async function ChatbotPage() {
                   </p>
                 ))}
               </div>
-            ))
-          )}
-        </CardContent>
-      </Card>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

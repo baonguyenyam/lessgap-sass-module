@@ -4,7 +4,7 @@ import { toDate } from "@/lib/timestamps"
 import { requirePlatformRole } from "@/platform/staff"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { EmptyState } from "@/components/layout/empty-state"
-import { Gauge } from "lucide-react"
+import { Gauge, ListChecks } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -74,15 +74,15 @@ export default async function PlatformUsagePage() {
           </CardContent>
         </Card>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("counters", { count: counters.length })}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-1">
-          {counters.length === 0 ? (
-            <EmptyState icon={Gauge} title={t("counters_empty")} />
-          ) : (
-            counters.slice(0, 50).map((c) => (
+      {counters.length === 0 ? (
+        <EmptyState icon={Gauge} title={t("counters_empty")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("counters", { count: counters.length })}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-1">
+            {counters.slice(0, 50).map((c) => (
               <div key={c.id} className="flex items-center justify-between text-sm">
                 <span>
                   {c.tenant.name} · {c.limitKey}
@@ -91,28 +91,32 @@ export default async function PlatformUsagePage() {
                   {c.used} · {toDate(c.periodStart).toUTCString().slice(5, 16)}
                 </span>
               </div>
-            ))
-          )}
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("job_kinds")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-1">
-          {Object.entries(
-            jobsDay.reduce<Record<string, number>>((acc, j) => {
-              acc[j.kind] = (acc[j.kind] ?? 0) + 1
-              return acc
-            }, {})
-          ).map(([kind, count]) => (
-            <div key={kind} className="flex items-center justify-between text-sm">
-              <span>{kind}</span>
-              <span className="text-muted-foreground">{count}</span>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+      {jobsDay.length === 0 ? (
+        <EmptyState icon={ListChecks} title={t("job_kinds_empty")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("job_kinds")}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-1">
+            {Object.entries(
+              jobsDay.reduce<Record<string, number>>((acc, j) => {
+                acc[j.kind] = (acc[j.kind] ?? 0) + 1
+                return acc
+              }, {})
+            ).map(([kind, count]) => (
+              <div key={kind} className="flex items-center justify-between text-sm">
+                <span>{kind}</span>
+                <span className="text-muted-foreground">{count}</span>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

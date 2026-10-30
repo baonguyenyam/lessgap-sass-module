@@ -4,6 +4,8 @@ import { requireModule } from "@/platform/modules/runtime"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CatalogActions } from "@/components/catalog/catalog-actions"
+import { EmptyState } from "@/components/layout/empty-state"
+import { List } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -31,31 +33,37 @@ export default async function CatalogPage() {
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
       <CatalogActions addService categories={categories.map((x) => ({ id: x.id, name: x.name }))} />
-      {categories.map((cat) => (
-        <Card key={cat.id}>
-          <CardHeader>
-            <CardTitle>{cat.name}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {services
-              .filter((s) => s.categoryId === cat.id)
-              .map((s) => (
-                <div key={s.id} className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">
-                      {s.name}
-                      {s.isSample ? ` ${"· sample"}` : ""}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {s.durationMinutes} min · {formatPrice(s.priceCents, s.currency)}
-                    </p>
+      {categories.length === 0 && services.length === 0 && <EmptyState icon={List} title={t("empty")} />}
+      {categories.map((cat) => {
+        const catServices = services.filter((s) => s.categoryId === cat.id)
+        return (
+          <Card key={cat.id}>
+            <CardHeader>
+              <CardTitle>{cat.name}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {catServices.length === 0 ? (
+                <EmptyState icon={List} title={t("empty")} size="compact" className="border-0" />
+              ) : (
+                catServices.map((s) => (
+                  <div key={s.id} className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium">
+                        {s.name}
+                        {s.isSample ? ` ${"· sample"}` : ""}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {s.durationMinutes} min · {formatPrice(s.priceCents, s.currency)}
+                      </p>
+                    </div>
+                    <CatalogActions remove serviceId={s.id} />
                   </div>
-                  <CatalogActions remove serviceId={s.id} />
-                </div>
-              ))}
-          </CardContent>
-        </Card>
-      ))}
+                ))
+              )}
+            </CardContent>
+          </Card>
+        )
+      })}
       {services
         .filter((s) => !s.categoryId)
         .map((s) => (

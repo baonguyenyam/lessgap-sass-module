@@ -5,7 +5,7 @@ import { requirePlatformRole } from "@/platform/staff"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BackupActions } from "@/components/platform/backup-actions"
 import { EmptyState } from "@/components/layout/empty-state"
-import { Database } from "lucide-react"
+import { Database, Users } from "lucide-react"
 
 // Cache Components adoption (spec/adr/0022): this segment may still block on
 // request data. Remove the opt-out when the route is converted (steps 3 and 4).
@@ -43,30 +43,34 @@ export default async function PlatformBackupsPage() {
           </p>
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("request")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          {tenants.map((tenant) => (
-            <div key={tenant.id} className="flex items-center justify-between text-sm">
-              <span>
-                {tenant.name} <span className="text-muted-foreground">({tenant.slug})</span>
-              </span>
-              <BackupActions tenantId={tenant.id} />
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("snapshots", { count: snapshots.length })}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          {snapshots.length === 0 ? (
-            <EmptyState icon={Database} title={t("empty")} />
-          ) : (
-            snapshots.map((s) => (
+      {tenants.length === 0 ? (
+        <EmptyState icon={Users} title={t("request_empty")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("request")}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {tenants.map((tenant) => (
+              <div key={tenant.id} className="flex items-center justify-between text-sm">
+                <span>
+                  {tenant.name} <span className="text-muted-foreground">({tenant.slug})</span>
+                </span>
+                <BackupActions tenantId={tenant.id} />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+      {snapshots.length === 0 ? (
+        <EmptyState icon={Database} title={t("empty")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("snapshots", { count: snapshots.length })}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {snapshots.map((s) => (
               <div key={s.id} className="flex items-center justify-between text-sm">
                 <span>
                   {s.tenant?.name ?? s.tenantId} · {s.status} ·{" "}
@@ -76,10 +80,10 @@ export default async function PlatformBackupsPage() {
                 {s.status === "done" && s.r2Key && <BackupActions snapshotId={s.id} restore />}
                 {s.status === "done" && s.r2Key && <BackupActions snapshotId={s.id} inPlace />}
               </div>
-            ))
-          )}
-        </CardContent>
-      </Card>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

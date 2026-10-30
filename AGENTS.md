@@ -231,6 +231,7 @@ pnpm db:reset               # dev only: drop the database, apply every migration
 pnpm db:reset:demo          # the same, plus the demo seed
 pnpm db:adopt               # once per database Prisma 7 built: sign it at the baseline, then migrate
 pnpm check:deploy           # is this database ready for this checkout?
+pnpm check:messages         # every t() key resolves in en.json
 ```
 
 **Prisma 8 only.** The project runs Prisma ORM 8 (`prisma` CLI and

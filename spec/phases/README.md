@@ -51,3 +51,6 @@ tasks small enough for one agent session and one pull request each.
 | 13 | [phase-13.md](./phase-13.md) | done |
 | 14 | [phase-14.md](./phase-14.md) | done |
 | 15 | [phase-15.md](./phase-15.md) | done |
+| 16 | [phase-16.md](./phase-16.md) | done |
+| 17 | [phase-17.md](./phase-17.md) | in progress |
+| 16 | [phase-16.md](./phase-16.md) | approved |

@@ -37,15 +37,15 @@ export default async function PaymentsPage() {
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("money_in", { count: payments.length })}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {payments.length === 0 ? (
-            <EmptyState icon={CreditCard} title={t("empty")} />
-          ) : (
-            payments.map((p) => (
+      {payments.length === 0 ? (
+        <EmptyState icon={CreditCard} title={t("empty")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("money_in", { count: payments.length })}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {payments.map((p) => (
               <div key={p.id} className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">
@@ -60,10 +60,10 @@ export default async function PaymentsPage() {
                 </div>
                 {p.status === "succeeded" && <RefundButton paymentId={p.id} />}
               </div>
-            ))
-          )}
-        </CardContent>
-      </Card>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

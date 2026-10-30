@@ -28,9 +28,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'3a0b9ee191fc3e0f0964eea42712653d2c2ff05160d99f29d9c35176fc34f739'>;
+  StorageHashBase<'00b73f1f528cf36de72a63ecdcc06381dd0e18804d485930075a3534fcf61950'>;
 export type ExecutionHash =
-  ExecutionHashBase<'98b4f26b22c3922ad30bede59f0527b09d9b4208d9652747247fafadc5cca057'>;
+  ExecutionHashBase<'abf5e474b6447ece552da6e427cb29dbb92a129f914fac0c23fa9eaf4bb53084'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -807,6 +807,19 @@ export namespace Models {
     tenant: public_Tenant;
     user: public_User;
     readonly [RelationKeys]?: 'tenant' | 'user';
+  };
+  export type public_MemberNotification = {
+    body: FieldOutputTypes['public']['MemberNotification']['body'];
+    createdAt: FieldOutputTypes['public']['MemberNotification']['createdAt'];
+    href: FieldOutputTypes['public']['MemberNotification']['href'];
+    id: FieldOutputTypes['public']['MemberNotification']['id'];
+    kind: FieldOutputTypes['public']['MemberNotification']['kind'];
+    readAt: FieldOutputTypes['public']['MemberNotification']['readAt'];
+    tenantId: FieldOutputTypes['public']['MemberNotification']['tenantId'];
+    title: FieldOutputTypes['public']['MemberNotification']['title'];
+    userId: FieldOutputTypes['public']['MemberNotification']['userId'];
+    tenant: public_Tenant;
+    readonly [RelationKeys]?: 'tenant';
   };
   export type public_Membership = {
     createdAt: FieldOutputTypes['public']['Membership']['createdAt'];
@@ -1610,6 +1623,7 @@ export declare const models: {
     Location: Models.public_Location;
     Media: Models.public_Media;
     Member: Models.public_Member;
+    MemberNotification: Models.public_MemberNotification;
     Membership: Models.public_Membership;
     MembershipLedger: Models.public_MembershipLedger;
     ModuleExport: Models.public_ModuleExport;
@@ -4754,6 +4768,100 @@ type ContractBase = Omit<
                     readonly columns: readonly ['id'];
                   };
                   readonly name: 'Member_userId_fkey';
+                },
+              ];
+            };
+            readonly MemberNotification: {
+              columns: {
+                readonly body: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly href: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly kind: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly readAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly tenantId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly title: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly userId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+              };
+              primaryKey: {
+                readonly columns: readonly ['id'];
+                readonly name: 'MemberNotification_pkey';
+              };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'MemberNotification_tenantId_idx_c93ed4f1';
+                  readonly prefix: 'MemberNotification_tenantId_idx';
+                  readonly columns: readonly ['tenantId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'MemberNotification_tenant_user_idx';
+                  readonly columns: readonly ['tenantId', 'userId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'MemberNotification';
+                    readonly columns: readonly ['tenantId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Tenant';
+                    readonly columns: readonly ['id'];
+                  };
+                  readonly name: 'MemberNotification_tenantId_fkey';
                 },
               ];
             };
@@ -10394,6 +10502,10 @@ type ContractBase = Omit<
     readonly Location: { readonly namespace: 'public' & NamespaceId; readonly model: 'Location' };
     readonly Media: { readonly namespace: 'public' & NamespaceId; readonly model: 'Media' };
     readonly Member: { readonly namespace: 'public' & NamespaceId; readonly model: 'Member' };
+    readonly MemberNotification: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'MemberNotification';
+    };
     readonly Membership: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'Membership';
@@ -13127,6 +13239,83 @@ type ContractBase = Omit<
                 readonly role: { readonly column: 'role' };
                 readonly status: { readonly column: 'status' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
+                readonly userId: { readonly column: 'userId' };
+              };
+            };
+          };
+          readonly MemberNotification: {
+            readonly fields: {
+              readonly body: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly href: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly kind: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly readAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly tenantId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly title: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly userId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: {
+              readonly tenant: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Tenant';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['tenantId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'MemberNotification';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly body: { readonly column: 'body' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly href: { readonly column: 'href' };
+                readonly id: { readonly column: 'id' };
+                readonly kind: { readonly column: 'kind' };
+                readonly readAt: { readonly column: 'readAt' };
+                readonly tenantId: { readonly column: 'tenantId' };
+                readonly title: { readonly column: 'title' };
                 readonly userId: { readonly column: 'userId' };
               };
             };
@@ -18463,6 +18652,14 @@ type ContractBase = Omit<
           readonly ref: {
             readonly entry: 'Member';
             readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'MemberNotification';
+            readonly field: 'id';
             readonly namespace: 'public';
           };
         },

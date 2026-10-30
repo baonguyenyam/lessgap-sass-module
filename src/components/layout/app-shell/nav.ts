@@ -2,6 +2,7 @@ import type { Route } from "next"
 import { DASHBOARD, tenantPath } from "@/lib/tenant-paths"
 import type { TenantPermission } from "@/platform/tenancy/permissions"
 import {
+  Bell,
   ArrowLeft,
   BarChart3,
   Boxes,
@@ -157,6 +158,7 @@ export function navGroups(area: NavArea, access: NavAccess): NavGroup[] {
           permission: "bookings.view",
         },
         { key: "waitlist", href: t("waitlist"), icon: Hourglass, module: "booking", permission: "bookings.manage" },
+        { key: "notifications", href: t("notifications"), icon: Bell },
         { key: "reviews", href: t("reviews"), icon: Star, module: "booking", permission: "bookings.view" },
         { key: "customers", href: t("customers"), icon: Users, module: "customers", permission: "customers.view" },
         {

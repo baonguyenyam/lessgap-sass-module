@@ -29,15 +29,15 @@ export default async function OrdersPage() {
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("list", { count: orders.length })}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {orders.length === 0 ? (
-            <EmptyState icon={Package} title={t("empty")} />
-          ) : (
-            orders.map((o) => (
+      {orders.length === 0 ? (
+        <EmptyState icon={Package} title={t("empty")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("list", { count: orders.length })}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {orders.map((o) => (
               <div key={o.id} className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">{o.customerName}</p>
@@ -47,10 +47,10 @@ export default async function OrdersPage() {
                   </p>
                 </div>
               </div>
-            ))
-          )}
-        </CardContent>
-      </Card>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

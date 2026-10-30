@@ -18,6 +18,7 @@ out of scope, even when it looks small: write it down under "Later" instead.
 | 6 | Payments, shop, ordering, quotes | yes | not started |
 | 7 | Chatbot | yes | not started |
 | 8 | Hardening and scale | — | not started |
+| 16 | Account, billing and notifications | no | approved |
 
 ---
 
@@ -207,3 +208,22 @@ D8 theme-axe (`/themes/[theme]` fixture + spec), O8 platform 2FA gate
 (`/dashboard/account/security` — `/2fa` is the challenge page), L2
 routes + jobs (`requireModuleRoute` 404s, `reindexTenant` pauses on
 `TenantModule`).
+
+## Phase 16 — Account, billing and notifications
+
+**Status:** approved by the owner (2026-10-30).
+**Brief:** [phases/phase-16.md](./phases/phase-16.md)
+
+**Scope**
+- Complete profile identity, account access and session activity.
+- Per-category in-app and email preferences, notification inbox and event delivery.
+- Tenant subscription overview, usage, plan-required destination, history,
+  credits and invoice receipts.
+- Provider-hosted payment-method management after decision 16-A is settled.
+- Passkeys through Better Auth while preserving the current 2FA rules.
+
+**Exit criteria**
+- Every checklist item in `.agents/memory/requirements.md` for Profile,
+  Billing and Notifications is complete or has a specific documented decision.
+- Unit, integration and E2E checks for the tasks pass; RLS and tenancy audit
+  cover any new tenant-owned data.

@@ -26,22 +26,25 @@ export default async function WaitlistPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-xl font-semibold">{t("title")}</h1>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("list")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          {sorted.length === 0 && <EmptyState icon={Hourglass} title={t("none")} />}
-          {sorted.map((x) => (
-            <div key={x.id} className="flex items-center justify-between rounded-md border p-2">
-              <p className="text-sm">
-                {x.email ?? x.phone ?? "—"} · {x.wantedDate} · {t(`status.${x.status}`)}
-              </p>
-              <WaitlistActions entryId={x.id} status={x.status} />
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      {sorted.length === 0 ? (
+        <EmptyState icon={Hourglass} title={t("none")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("list")}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {sorted.map((x) => (
+              <div key={x.id} className="flex items-center justify-between rounded-md border p-2">
+                <p className="text-sm">
+                  {x.email ?? x.phone ?? "—"} · {x.wantedDate} · {t(`status.${x.status}`)}
+                </p>
+                <WaitlistActions entryId={x.id} status={x.status} />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

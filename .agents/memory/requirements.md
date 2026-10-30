@@ -16,6 +16,9 @@ full-width dashed block, centered icon in a muted circular background, bold
 centered title, and centered muted description. Keep the shared `EmptyState`
 component as the implementation; use its compact size only where the available
 space requires it. Lists with no rows show this block in place of the table.
+An empty list or section shows the block **instead of** its card: no box around
+the block, no "0 items" heading (owner, same day). Inside a frame that stays —
+a board column, a named category card — the block drops its own border.
 → `.agents/rules/ui-accessibility.md`, `src/components/layout/empty-state.tsx`.
 
 ## 2026-10-30 — Profile, billing and notifications as complete as platform.madelab.io (to build)

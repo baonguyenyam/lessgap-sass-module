@@ -1,0 +1,238 @@
+[
+  {
+    "id": "table.MemberNotification",
+    "label": "Create table \"MemberNotification\"",
+    "summary": "Creates table \"MemberNotification\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "MemberNotification"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"MemberNotification\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"MemberNotification\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"MemberNotification\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"MemberNotification\"",
+        "sql": "CREATE TABLE \"public\".\"MemberNotification\" (\n  \"body\" text,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"href\" text,\n  \"id\" text NOT NULL,\n  \"kind\" text NOT NULL,\n  \"readAt\" timestamp(3),\n  \"tenantId\" text NOT NULL,\n  \"title\" text NOT NULL,\n  \"userId\" text,\n  CONSTRAINT \"MemberNotification_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"MemberNotification\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"MemberNotification\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"MemberNotification\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "index.MemberNotification.MemberNotification_tenantId_idx_c93ed4f1",
+    "label": "Create index \"MemberNotification_tenantId_idx_c93ed4f1\" on \"MemberNotification\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "MemberNotification_tenantId_idx_c93ed4f1",
+        "table": "MemberNotification"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"MemberNotification_tenantId_idx_c93ed4f1\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"MemberNotification_tenantId_idx_c93ed4f1\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"MemberNotification_tenantId_idx_c93ed4f1\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"MemberNotification_tenantId_idx_c93ed4f1\"",
+        "sql": "CREATE INDEX \"MemberNotification_tenantId_idx_c93ed4f1\" ON \"public\".\"MemberNotification\" (\"tenantId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"MemberNotification_tenantId_idx_c93ed4f1\" exists on \"MemberNotification\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"MemberNotification_tenantId_idx_c93ed4f1\"",
+          "i",
+          "I",
+          "\"public\".\"MemberNotification\"",
+          "btree",
+          "[\"tenantId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.MemberNotification.MemberNotification_tenant_user_idx",
+    "label": "Create index \"MemberNotification_tenant_user_idx\" on \"MemberNotification\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "MemberNotification_tenant_user_idx",
+        "table": "MemberNotification"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"MemberNotification_tenant_user_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"MemberNotification_tenant_user_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"MemberNotification_tenant_user_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"MemberNotification_tenant_user_idx\"",
+        "sql": "CREATE INDEX \"MemberNotification_tenant_user_idx\" ON \"public\".\"MemberNotification\" (\"tenantId\", \"userId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"MemberNotification_tenant_user_idx\" exists on \"MemberNotification\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"MemberNotification_tenant_user_idx\"",
+          "i",
+          "I",
+          "\"public\".\"MemberNotification\"",
+          "btree",
+          "[\"tenantId\",\"userId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.MemberNotification.MemberNotification_tenantId_fkey",
+    "label": "Add foreign key \"MemberNotification_tenantId_fkey\" on \"MemberNotification\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "MemberNotification_tenantId_fkey",
+        "table": "MemberNotification"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"MemberNotification_tenantId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "MemberNotification_tenantId_fkey",
+          "public",
+          "\"public\".\"MemberNotification\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"MemberNotification_tenantId_fkey\" on \"MemberNotification\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"MemberNotification_tenantId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"MemberNotification\"\nADD CONSTRAINT \"MemberNotification_tenantId_fkey\"\nFOREIGN KEY (\"tenantId\")\nREFERENCES \"public\".\"Tenant\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"MemberNotification_tenantId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "MemberNotification_tenantId_fkey",
+          "public",
+          "\"public\".\"MemberNotification\"",
+          "f",
+          "[\"tenantId\"]",
+          "\"public\".\"Tenant\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rowLevelSecurity.public.MemberNotification",
+    "label": "Enable row-level security on \"MemberNotification\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "rowLevelSecurity",
+        "name": "MemberNotification"
+      }
+    },
+    "precheck": [
+      {
+        "description": "check RLS is not already enabled on \"MemberNotification\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND NOT (\"c\".\"relrowsecurity\"))) AS \"result\"",
+        "params": [
+          "public",
+          "MemberNotification"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "enable row-level security on \"MemberNotification\"",
+        "sql": "ALTER TABLE \"public\".\"MemberNotification\" ENABLE ROW LEVEL SECURITY"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify row-level security is enabled on \"MemberNotification\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"c\".\"relrowsecurity\")) AS \"result\"",
+        "params": [
+          "public",
+          "MemberNotification"
+        ]
+      }
+    ]
+  }
+]

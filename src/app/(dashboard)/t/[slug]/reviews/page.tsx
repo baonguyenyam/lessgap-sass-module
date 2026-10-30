@@ -35,36 +35,42 @@ export default async function ReviewsPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-xl font-semibold">{t("title")}</h1>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("pending")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {pending.length === 0 && <EmptyState icon={Star} title={t("none_pending")} />}
-          {pending.map((r) => (
-            <div key={r.id} className="space-y-1 border-b pb-4 last:border-0">
-              <p className="text-sm font-medium">
-                {"★".repeat(r.rating)} · {(r.customer as { name?: string } | null)?.name ?? "—"}
+      {pending.length === 0 ? (
+        <EmptyState icon={Star} title={t("none_pending")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("pending")}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {pending.map((r) => (
+              <div key={r.id} className="space-y-1 border-b pb-4 last:border-0">
+                <p className="text-sm font-medium">
+                  {"★".repeat(r.rating)} · {(r.customer as { name?: string } | null)?.name ?? "—"}
+                </p>
+                {r.body && <p className="text-sm text-muted-foreground">&ldquo;{r.body}&rdquo;</p>}
+                <ReviewActions id={r.id} />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+      {waiting.length === 0 ? (
+        <EmptyState icon={Hourglass} title={t("none_waiting")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("waitlist")}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {waiting.map((w) => (
+              <p key={w.id} className="text-sm">
+                {w.wantedDate} · {w.email ?? w.phone ?? "—"} · {t(`waitlist_${w.status}`)}
               </p>
-              {r.body && <p className="text-sm text-muted-foreground">&ldquo;{r.body}&rdquo;</p>}
-              <ReviewActions id={r.id} />
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("waitlist")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          {waiting.length === 0 && <EmptyState icon={Hourglass} title={t("none_waiting")} />}
-          {waiting.map((w) => (
-            <p key={w.id} className="text-sm">
-              {w.wantedDate} · {w.email ?? w.phone ?? "—"} · {t(`waitlist_${w.status}`)}
-            </p>
-          ))}
-        </CardContent>
-      </Card>
+            ))}
+          </CardContent>
+        </Card>
+      )}
       {rest.length > 0 && (
         <Card>
           <CardHeader>

@@ -1,6 +1,6 @@
 # 0028. Intake forms need a HIPAA decision first
 
-**Status:** proposed
+**Status:** accepted (implemented — see phase briefs 13–15)
 **Date:** 2026-10-29
 
 ## Context

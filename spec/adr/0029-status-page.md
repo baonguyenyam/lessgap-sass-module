@@ -1,6 +1,6 @@
 # 0029. The status page is a public page on the primary domain
 
-**Status:** proposed
+**Status:** accepted (implemented — see phase briefs 13–15)
 **Date:** 2026-10-29
 
 ## Context

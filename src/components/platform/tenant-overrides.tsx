@@ -58,71 +58,77 @@ export function TenantOverrides({
   const form = useForm<z.infer<typeof schema>>({ resolver: zodResolver(schema) })
   const options = featureKeys.map((k) => ({ value: k, label: k }))
 
+  const newButton = (
+    <Button size="sm" variant="outline" onClick={() => openDrawer(KIND)}>
+      <Plus className="mr-2 h-4 w-4" />
+      {t("new")}
+    </Button>
+  )
+
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0">
-        <CardTitle>{t("title")}</CardTitle>
-        <Button size="sm" variant="outline" onClick={() => openDrawer(KIND)}>
-          <Plus className="mr-2 h-4 w-4" />
-          {t("new")}
-        </Button>
-      </CardHeader>
-      <CardContent>
-        {rows.length === 0 ? (
-          <EmptyState icon={SlidersHorizontal} title={t("empty")} />
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("columns.feature")}</TableHead>
-                <TableHead>{t("columns.value")}</TableHead>
-                <TableHead>{t("columns.reason")}</TableHead>
-                <TableHead>{t("columns.expires")}</TableHead>
-                <TableHead className="w-20" />
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell className="font-mono text-sm">
-                    {row.featureKey}
-                    {row.ignoresSwitch && (
-                      <Badge variant="secondary" className="ml-2">
-                        {t("ignoresSwitch")}
-                      </Badge>
-                    )}
-                  </TableCell>
-                  <TableCell className="font-mono text-sm">{JSON.stringify(row.value)}</TableCell>
-                  <TableCell className="text-sm">{row.reason}</TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
-                    {row.expiresAt ? new Date(row.expiresAt).toLocaleDateString() : "—"}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-1">
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        aria-label={t("edit")}
-                        onClick={() => openDrawer(KIND, row.id)}
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        aria-label={t("revoke")}
-                        onClick={() => openDrawer(REVOKE, row.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
+    <>
+      {rows.length === 0 ? (
+        <EmptyState icon={SlidersHorizontal} title={t("empty")} action={newButton} />
+      ) : (
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0">
+            <CardTitle>{t("title")}</CardTitle>
+            {newButton}
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{t("columns.feature")}</TableHead>
+                  <TableHead>{t("columns.value")}</TableHead>
+                  <TableHead>{t("columns.reason")}</TableHead>
+                  <TableHead>{t("columns.expires")}</TableHead>
+                  <TableHead className="w-20" />
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </CardContent>
+              </TableHeader>
+              <TableBody>
+                {rows.map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell className="font-mono text-sm">
+                      {row.featureKey}
+                      {row.ignoresSwitch && (
+                        <Badge variant="secondary" className="ml-2">
+                          {t("ignoresSwitch")}
+                        </Badge>
+                      )}
+                    </TableCell>
+                    <TableCell className="font-mono text-sm">{JSON.stringify(row.value)}</TableCell>
+                    <TableCell className="text-sm">{row.reason}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {row.expiresAt ? new Date(row.expiresAt).toLocaleDateString() : "—"}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-1">
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          aria-label={t("edit")}
+                          onClick={() => openDrawer(KIND, row.id)}
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          aria-label={t("revoke")}
+                          onClick={() => openDrawer(REVOKE, row.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
       {revoking && current && (
         <FormDrawer
           kind={REVOKE}
@@ -228,6 +234,6 @@ export function TenantOverrides({
           />
         </FormDrawer>
       )}
-    </Card>
+    </>
   )
 }

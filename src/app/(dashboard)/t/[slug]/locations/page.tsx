@@ -32,20 +32,23 @@ export default async function LocationsPage() {
           <LocationForm />
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("list")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          {locations.length === 0 && <EmptyState icon={MapPin} title={t("none")} />}
-          {locations.map((x) => (
-            <p key={x.id} className="text-sm">
-              {x.name}
-              {x.address ? ` · ${x.address}` : ""}
-            </p>
-          ))}
-        </CardContent>
-      </Card>
+      {locations.length === 0 ? (
+        <EmptyState icon={MapPin} title={t("none")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("list")}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {locations.map((x) => (
+              <p key={x.id} className="text-sm">
+                {x.name}
+                {x.address ? ` · ${x.address}` : ""}
+              </p>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

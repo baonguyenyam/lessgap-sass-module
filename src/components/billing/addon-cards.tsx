@@ -29,6 +29,8 @@ export function AddOnCards({ addOns, disabled }: { addOns: AddOnData[]; disabled
     if (json.url) window.location.assign(json.url)
   }
 
+  if (addOns.length === 0) return <EmptyState icon={Package} title={t("empty")} />
+
   return (
     <Card>
       <CardHeader>
@@ -55,7 +57,6 @@ export function AddOnCards({ addOns, disabled }: { addOns: AddOnData[]; disabled
             </li>
           ))}
         </ul>
-        {addOns.length === 0 && <EmptyState icon={Package} title={t("empty")} size="compact" />}
       </CardContent>
     </Card>
   )

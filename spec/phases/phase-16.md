@@ -1,66 +1,44 @@
-# Phase 16 — the sidebar covers the surface
+# Phase 16 — Sidebar completeness and shell chrome
 
-Phases 11–15 built models and actions faster than the dashboard could
-hold them — the sidebar still skips what exists: `payments` and `quotes`
-have pages but no nav item, `Location`/`IntakeForm`/`Package`/`Membership`
-have models but no page, and `WaitlistEntry` is buried inside the reviews
-page.
+**Status:** done
+**Roadmap:** owner request — "hoàn thiện sidebar" and the shadcn-admin / MADE conventions
 
-**Read:** `src/components/layout/app-shell/nav.ts`,
-`src/app/(dashboard)/t/[slug]/`, spec/07-modules.md,
-spec/13-conventions.md.
-
-## Scope
-
-- Phase 16: done.
+## Goal
+Every dashboard page has a nav item, every model a page; the shell follows
+shadcn-admin (satnaing) and MADE (platform.madelab.io) conventions — tenant
+dropdown in the sidebar header, collapsible submenus, top-right chrome of
+search/language/theme/account, groups by business domain.
 
 ## Tasks
 
-### 16.1 The existing pages get their nav items
+### 16.1 — Nav items for pages that existed without them
+- [x] done (`7665115` — payments, quotes)
 
-`payments` and `quotes` have pages but no sidebar entry — the operations
-group needs them (`payments` next to the customers' money, `quotes` next
-to the bookings the tenant quotes for).
+### 16.2 — Locations page
+- [x] done (`ce144e7` — list + `createLocation`)
 
-**Done when:** the two items render under the right group.
-- [x] done (`payments` and `quotes` nav items in `operations` — `payments` next to the customers' money, `quotes` next to the bookings.)
+### 16.3 — Intake page
+- [x] done (`7f0d5f1` — contact-only forms + responses)
 
-### 16.2 `/t/<slug>/locations` — a tenant's branches
+### 16.4 — Products page
+- [x] done (`ec1c53f` — `Package`/`Membership` definitions)
 
-`Location` is a model without a surface — a page lists the branches and
-lets the tenant add one (name + address).
+### 16.5 — Waitlist page
+- [x] done (`35b3439` — list + `booked`/`canceled` actions)
 
-**Done when:** the page lists and creates.
-- [x] done (`/t/<slug>/locations` lists and adds branches via `createLocation` — `Location` nav item in `operations`.)
+### 16.6 — MADE-style domain grouping
+- [x] done (`5e697a8`, `de27f60` — booking/sales/customers/site/setup/workspace/account)
 
-### 16.3 `/t/<slug>/intake` — the forms and their responses
+### 16.7 — Shell chrome
+- [x] done — TenantSwitcher "Add team", `NavItem.children` + Collapsible
+  settings submenu, `NavUser` header variant (icon button), search icon
+  button with ⌘K tooltip (`588c921` → `0980d9b` + owner edits)
 
-`IntakeForm`/`IntakeResponse` exist; the tenant can't build a form or read
-the answers — a page lists the forms, lets the tenant add one (name +
-fields JSON), and shows the responses per form.
-
-**Done when:** the form's fields define and the answers land.
-- [x] done (`/t/<slug>/intake` lists forms + responses and adds a form via `createIntakeForm` — `intake` nav item in `operations`.)
-
-### 16.4 `/t/<slug>/products` — the sellable catalog
-
-`buyPackage`/`activateMembership` need `Package`/`Membership` rows to
-sell — a page creates and lists them (name + sessions/priceCents).
-
-**Done when:** the definitions exist so the till can sell them.
-- [x] done (`/t/<slug>/products` lists and creates `Package`/`Membership` — `products` nav item in `operations`.)
-
-### 16.5 `/t/<slug>/waitlist` — the waitlist's own page
-
-The waitlist rows live on `/t/<slug>/reviews` — a dedicated page lists
-them by `wantedDate` and lets the tenant mark one `canceled`/`booked`.
-
-**Done when:** the waitlist's list renders and the actions land.
-- [x] done (`/t/<slug>/waitlist` lists by `wantedDate` and `WaitlistActions` marks `booked`/`canceled` — `waitlist` nav item in `operations`.)
-
-## Exit criteria
-
-- Every page the dashboard's models need exists and is nav'd.
-- `pnpm typecheck`, `pnpm lint`, `pnpm test:integration` green.
+### 16.8 — Sidebar-empty root cause
+- [x] done (`588c921` — `enabledModules` checked only `newsletter`)
 
 ## Findings
+- `cacheTag()` throws outside Cache Components contexts — settings stores
+  wrap it so reads still work (Better Auth routes read settings).
+- `getTranslations` throws in Better Auth hook contexts — `emailStrings`
+  tries it first and falls back to reading `en.email` directly.

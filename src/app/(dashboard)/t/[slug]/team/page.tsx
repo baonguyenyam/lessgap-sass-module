@@ -29,23 +29,26 @@ export default async function TeamPage() {
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
       <TeamActions add />
-      <div className="grid gap-4 sm:grid-cols-2">
-        {staff.map((s) => (
-          <Card key={s.id}>
-            <CardContent className="flex items-start justify-between pt-4">
-              <div>
-                <p className="font-medium">
-                  {s.name}
-                  {s.isSample ? ` ${"· sample"}` : ""}
-                </p>
-                {s.bio && <p className="text-sm text-muted-foreground">{s.bio}</p>}
-              </div>
-              <TeamActions remove staffId={s.id} />
-            </CardContent>
-          </Card>
-        ))}
-        {staff.length === 0 && <EmptyState icon={UserSquare} title={t("empty")} />}
-      </div>
+      {staff.length === 0 ? (
+        <EmptyState icon={UserSquare} title={t("empty")} />
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2">
+          {staff.map((s) => (
+            <Card key={s.id}>
+              <CardContent className="flex items-start justify-between pt-4">
+                <div>
+                  <p className="font-medium">
+                    {s.name}
+                    {s.isSample ? ` ${"· sample"}` : ""}
+                  </p>
+                  {s.bio && <p className="text-sm text-muted-foreground">{s.bio}</p>}
+                </div>
+                <TeamActions remove staffId={s.id} />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

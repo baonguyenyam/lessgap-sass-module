@@ -40,38 +40,44 @@ export default async function SalesPage() {
           <SalesActions packages={pkgs} memberships={memberships} customers={customers} />
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("cards")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-1">
-          {cards.length === 0 && <EmptyState icon={Gift} title={t("no_cards")} />}
-          {cards.map((x) => (
-            <p key={x.id} className="text-sm">
-              {x.code} · {(x.balanceCents / 100).toFixed(2)} · {x.active ? t("active") : t("inactive")}
-            </p>
-          ))}
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("holdings")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-1">
-          {pkgHolds.length === 0 && memHolds.length === 0 && <EmptyState icon={Wallet} title={t("no_holdings")} />}
-          {pkgHolds.map((x) => (
-            <p key={x.id} className="text-sm">
-              {t("pkg")} #{x.id.slice(0, 6)} · {x.sessionsLeft} {t("sessions_left")} ·{" "}
-              {x.active ? t("active") : t("inactive")}
-            </p>
-          ))}
-          {memHolds.map((x) => (
-            <p key={x.id} className="text-sm">
-              {t("mem")} #{x.id.slice(0, 6)} · {x.active ? t("active") : t("inactive")}
-            </p>
-          ))}
-        </CardContent>
-      </Card>
+      {cards.length === 0 ? (
+        <EmptyState icon={Gift} title={t("no_cards")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("cards")}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-1">
+            {cards.map((x) => (
+              <p key={x.id} className="text-sm">
+                {x.code} · {(x.balanceCents / 100).toFixed(2)} · {x.active ? t("active") : t("inactive")}
+              </p>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+      {pkgHolds.length === 0 && memHolds.length === 0 ? (
+        <EmptyState icon={Wallet} title={t("no_holdings")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("holdings")}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-1">
+            {pkgHolds.map((x) => (
+              <p key={x.id} className="text-sm">
+                {t("pkg")} #{x.id.slice(0, 6)} · {x.sessionsLeft} {t("sessions_left")} ·{" "}
+                {x.active ? t("active") : t("inactive")}
+              </p>
+            ))}
+            {memHolds.map((x) => (
+              <p key={x.id} className="text-sm">
+                {t("mem")} #{x.id.slice(0, 6)} · {x.active ? t("active") : t("inactive")}
+              </p>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

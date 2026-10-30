@@ -34,33 +34,39 @@ export default async function IntakePage() {
           <IntakeFormForm />
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("forms")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          {forms.length === 0 && <EmptyState icon={ClipboardList} title={t("none")} />}
-          {forms.map((x) => (
-            <p key={x.id} className="text-sm">
-              {x.name} · {(x.fields as { label: string }[]).map((f) => f.label).join(", ")}
-            </p>
-          ))}
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("responses")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          {responses.length === 0 && <EmptyState icon={Inbox} title={t("no_responses")} />}
-          {responses.map((x) => (
-            <div key={x.id} className="rounded-md border p-2 text-sm">
-              <p className="font-medium">{byForm.get(x.formId)?.name ?? x.formId}</p>
-              <pre className="whitespace-pre-wrap text-muted-foreground">{JSON.stringify(x.answers, null, 2)}</pre>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      {forms.length === 0 ? (
+        <EmptyState icon={ClipboardList} title={t("none")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("forms")}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {forms.map((x) => (
+              <p key={x.id} className="text-sm">
+                {x.name} · {(x.fields as { label: string }[]).map((f) => f.label).join(", ")}
+              </p>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+      {responses.length === 0 ? (
+        <EmptyState icon={Inbox} title={t("no_responses")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("responses")}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {responses.map((x) => (
+              <div key={x.id} className="rounded-md border p-2 text-sm">
+                <p className="font-medium">{byForm.get(x.formId)?.name ?? x.formId}</p>
+                <pre className="whitespace-pre-wrap text-muted-foreground">{JSON.stringify(x.answers, null, 2)}</pre>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

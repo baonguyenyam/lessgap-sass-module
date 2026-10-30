@@ -30,15 +30,15 @@ export default async function CustomersPage() {
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("list", { count: customers.length })}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {customers.length === 0 ? (
-            <EmptyState icon={Users} title={t("empty")} />
-          ) : (
-            customers.map((x) => (
+      {customers.length === 0 ? (
+        <EmptyState icon={Users} title={t("empty")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("list", { count: customers.length })}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {customers.map((x) => (
               <div key={x.id} className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">{x.name}</p>
@@ -53,10 +53,10 @@ export default async function CustomersPage() {
                 </div>
                 <CustomerActions customerId={x.id} name={x.name} />
               </div>
-            ))
-          )}
-        </CardContent>
-      </Card>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

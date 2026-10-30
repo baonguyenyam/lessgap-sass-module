@@ -1,6 +1,6 @@
 # 0025. A tenant's second branch is a `Location`, not a second tenant
 
-**Status:** proposed
+**Status:** accepted (implemented — see phase briefs 13–15)
 **Date:** 2026-10-29
 
 ## Context

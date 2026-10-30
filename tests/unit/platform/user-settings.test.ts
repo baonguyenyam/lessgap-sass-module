@@ -21,13 +21,15 @@ describe("mergeUserSettings", () => {
 })
 
 describe("readNotifications", () => {
-  it("keeps every email on until turned off", () => {
-    expect(readNotifications([])).toEqual({ "notify.product_updates": true, "notify.tips": true })
-    expect(
-      readNotifications([
-        { key: "notify.tips", value: false },
-        { key: "notify.tips2", value: false },
-      ])["notify.tips"]
-    ).toBe(false)
+  it("keeps every channel on until turned off", () => {
+    const all = readNotifications([])
+    expect(Object.values(all).every((c) => c.in_app && c.email)).toBe(true)
+    // A legacy email-only row still lands on the right category.
+    const off = readNotifications([
+      { key: "notify.tips", value: false },
+      { key: "notify.tips2", value: false },
+    ])
+    expect(off.tips.email).toBe(false)
+    expect(off.tips.in_app).toBe(true)
   })
 })

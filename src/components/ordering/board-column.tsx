@@ -17,7 +17,9 @@ export function BoardColumn({
 }) {
   const t = useTranslations("dashboard.ordering")
   const [pending, setPending] = useState<string | null>(null)
-  if (orders.length === 0) return <EmptyState icon={ClipboardList} title={t("empty")} size="compact" />
+  // The column card already frames the block, so the block drops its border.
+  if (orders.length === 0)
+    return <EmptyState icon={ClipboardList} title={t("empty")} size="compact" className="border-0" />
   return (
     <>
       {orders.map((o) => (

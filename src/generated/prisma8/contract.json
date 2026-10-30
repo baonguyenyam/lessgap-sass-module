@@ -124,6 +124,10 @@
       "model": "Member",
       "namespace": "public"
     },
+    "MemberNotification": {
+      "model": "MemberNotification",
+      "namespace": "public"
+    },
     "Membership": {
       "model": "Membership",
       "namespace": "public"
@@ -4433,6 +4437,130 @@
               },
               "namespaceId": "public",
               "table": "Member"
+            }
+          },
+          "MemberNotification": {
+            "fields": {
+              "body": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "href": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "kind": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "readAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "tenantId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "title": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "userId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "tenant": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "tenantId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tenant",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "body": {
+                  "column": "body"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "href": {
+                  "column": "href"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "kind": {
+                  "column": "kind"
+                },
+                "readAt": {
+                  "column": "readAt"
+                },
+                "tenantId": {
+                  "column": "tenantId"
+                },
+                "title": {
+                  "column": "title"
+                },
+                "userId": {
+                  "column": "userId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "MemberNotification"
             }
           },
           "Membership": {
@@ -13007,6 +13135,11 @@
               "namespaceId": "public",
               "tableName": "Media"
             },
+            "MemberNotification": {
+              "kind": "rls",
+              "namespaceId": "public",
+              "tableName": "MemberNotification"
+            },
             "Membership": {
               "kind": "rls",
               "namespaceId": "public",
@@ -16984,6 +17117,114 @@
                   "id"
                 ],
                 "name": "Member_pkey"
+              },
+              "uniques": []
+            },
+            "MemberNotification": {
+              "columns": {
+                "body": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "href": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "kind": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "readAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "tenantId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "title": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "userId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "MemberNotification_tenantId_idx_c93ed4f1"
+                  },
+                  "name": "MemberNotification_tenantId_fkey",
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "tenantId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "MemberNotification"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tenant"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "tenantId"
+                  ],
+                  "name": "MemberNotification_tenantId_idx_c93ed4f1",
+                  "prefix": "MemberNotification_tenantId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "tenantId",
+                    "userId"
+                  ],
+                  "name": "MemberNotification_tenant_user_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ],
+                "name": "MemberNotification_pkey"
               },
               "uniques": []
             },
@@ -23749,10 +23990,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "3a0b9ee191fc3e0f0964eea42712653d2c2ff05160d99f29d9c35176fc34f739"
+    "storageHash": "00b73f1f528cf36de72a63ecdcc06381dd0e18804d485930075a3534fcf61950"
   },
   "execution": {
-    "executionHash": "98b4f26b22c3922ad30bede59f0527b09d9b4208d9652747247fafadc5cca057",
+    "executionHash": "abf5e474b6447ece552da6e427cb29dbb92a129f914fac0c23fa9eaf4bb53084",
     "mutations": {
       "defaults": [
         {
@@ -24306,6 +24547,17 @@
           "ref": {
             "entry": "Member",
             "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "cuid2",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "MemberNotification",
+            "field": "id",
             "namespace": "public"
           }
         },

@@ -29,15 +29,15 @@ export default async function ReservationsPage() {
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("list", { count: reservations.length })}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {reservations.length === 0 ? (
-            <EmptyState icon={Utensils} title={t("empty")} />
-          ) : (
-            reservations.map((r) => (
+      {reservations.length === 0 ? (
+        <EmptyState icon={Utensils} title={t("empty")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("list", { count: reservations.length })}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {reservations.map((r) => (
               <div key={r.id} className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">
@@ -48,10 +48,10 @@ export default async function ReservationsPage() {
                   </p>
                 </div>
               </div>
-            ))
-          )}
-        </CardContent>
-      </Card>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

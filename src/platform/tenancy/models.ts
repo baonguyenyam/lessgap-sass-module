@@ -36,6 +36,7 @@ export const MODEL_CLASSIFICATION = {
   Domain: { kind: "tenant-owned", reason: "A tenant's custom domain for its site." },
   DomainCheck: { kind: "platform-private", reason: "A daily reconcile row between the provider and Domain rows." },
   ModuleExport: { kind: "tenant-owned", reason: "A tenant's exported data, a 7-day link." },
+  MemberNotification: { kind: "tenant-owned", reason: "A member's in-app notification feed row." },
   NotificationLog: { kind: "tenant-owned", reason: "A tenant's outbound message log." },
   ModulePurge: { kind: "tenant-owned", reason: "A scheduled or finished module deletion for one tenant." },
   Page: { kind: "tenant-owned", reason: "A tenant's site pages." },

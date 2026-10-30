@@ -8,6 +8,7 @@ import { AppShell } from "@/components/layout/app-shell/app-shell"
 import { tenantPath } from "@/lib/tenant-paths"
 import { toDate } from "@/lib/timestamps"
 import { isModuleActive } from "@/platform/modules/runtime"
+import { unreadMemberNotifications } from "@/platform/notify/member"
 import { getEntitlements } from "@/platform/entitlements"
 import { TENANT_SLUG_HEADER } from "@/platform/request-context"
 import { ensureTenant, getMembership, listMemberTenants } from "@/platform/tenancy/require-member"
@@ -87,6 +88,14 @@ export default async function DashboardLayout({ children }: { children: React.Re
           permissions,
         }}
         tenant={tenant}
+        notifications={
+          current
+            ? {
+                unread: (await unreadMemberNotifications(current.id, user.id)).length,
+                href: `/t/${slug}/notifications`,
+              }
+            : undefined
+        }
         tenants={tenants.map(({ slug, name }) => ({ slug, name }))}
         breadcrumbs={{
           icon: <LayoutGrid className="h-4 w-4" />,

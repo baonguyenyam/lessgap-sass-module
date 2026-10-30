@@ -3,6 +3,7 @@
 import { headers } from "next/headers"
 import { revalidatePath } from "next/cache"
 import { db8 } from "@/lib/db8"
+import { notifyMember } from "@/platform/notify/member"
 import { AppError } from "@/platform/errors"
 import { requireModule } from "@/platform/modules/runtime"
 import { audit } from "@/platform/audit"
@@ -126,6 +127,9 @@ export async function placeOrder(input: {
       targetType: "Order",
       targetId: order.id,
       data: { totalCents: total },
+    })
+    await notifyMember(resolved.tenantId, "order.placed", `New order from ${input.name.trim()}`, {
+      href: `/t/${resolved.slug}/orders`,
     })
     return { orderId: order.id, checkoutUrl: checkout.checkoutUrl }
   } catch (error) {

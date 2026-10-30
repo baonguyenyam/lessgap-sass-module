@@ -1488,6 +1488,25 @@ trialEndsAt          TimestampString(3)?
     @@rls
   }
 
+  // In-app member notifications (phase 17.1): what happened in this
+  // workspace — an order, a booking, a waitlist join — for the feed and
+  // the header bell. `userId` addresses one member; null means everyone.
+  model MemberNotification {
+    id        String             @id(map: "MemberNotification_pkey") @onCreate(cuid(2))
+    tenantId  String
+    userId    String?
+    kind      String
+    title     String
+    body      String?
+    href      String?
+    readAt    TimestampString(3)?
+    createdAt TimestampString(3) @default(now())
+    tenant    Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "MemberNotification_tenantId_fkey")
+
+    @@index([tenantId, userId], map: "MemberNotification_tenant_user_idx")
+    @@rls
+  }
+
   // The reservations module (spec/07): a restaurant's tables, the service
   // periods and rules governing a slot, and the reservations themselves.
   // The unit is a party and a table, not a service and a staff member —

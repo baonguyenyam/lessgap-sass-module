@@ -4,6 +4,7 @@ import { PoweredBy } from "@/components/powered-by"
 import { SwitchAsBanner } from "@/components/switch-as-banner"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { NavUser } from "@/components/layout/app-shell/nav-user"
+import { NotificationBell } from "@/components/layout/app-shell/notification-bell"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/layout/app-shell/app-sidebar"
 import type { NavUserProps } from "@/components/layout/app-shell/nav-user"
@@ -24,6 +25,7 @@ export async function AppShell({
   user,
   access,
   breadcrumbs,
+  notifications,
   tenant = null,
   tenants = [],
   children,
@@ -36,6 +38,8 @@ export async function AppShell({
   tenant?: TenantOption | null
   tenants?: TenantOption[]
   breadcrumbs: React.ComponentProps<typeof HeaderBreadcrumbs>
+  /** Unread count + feed link for the header bell (dashboard area only). */
+  notifications?: { unread: number; href: string }
   children: React.ReactNode
 }) {
   const nav: NavAccess = { ...access, slug: tenant?.slug ?? "" }
@@ -56,6 +60,7 @@ export async function AppShell({
             <SearchDialog area={area} access={nav} />
             <LanguageSwitcher locales={APP_LOCALES} />
             <ThemeToggle />
+            {notifications && <NotificationBell unread={notifications.unread} href={notifications.href} />}
             <NavUser {...user} variant="header" />
           </div>
         </header>

@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [3.7.1] - 2026-10-30
+
+### Fixed
+
+- **Empty blocks no longer sit inside a card** — an empty list or section renders the standalone dashed `EmptyState` in place of its card (no surrounding box, no "0 items" heading): orders, reservations, customers, payments, quotes, chatbot, analytics, locations, products, intake, sales, reviews, waitlist, team, catalog, invoice history, platform domains, usage and backups, entitlement overrides and add-ons. Inside a frame that stays — an order-board column, a named category card — the block drops its own border instead
+
 ## [3.7.0] - 2026-10-30
 
 **The sidebar finally fills — the dashboard's module-gated items show when the tenant's modules are on, and the console noise is gone.** This is a MINOR: `git pull`, `pnpm install`.

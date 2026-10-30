@@ -473,7 +473,22 @@
         "tipsHint": "Occasional advice on getting more out of your workspace.",
         "alwaysSent": "Security and billing emails are always sent.",
         "saved": "Saved.",
-        "failed": "That could not be saved."
+        "failed": "That could not be saved.",
+        "category": "Category",
+        "categories": {
+          "appointments": "Appointments",
+          "security": "Security",
+          "workspace": "Workspace",
+          "orders": "Orders",
+          "billing": "Billing",
+          "product_updates": "Product updates",
+          "tips": "Tips"
+        },
+        "channels": {
+          "in_app": "In-app",
+          "email": "Email"
+        },
+        "toggleChannel": "{channel} notifications for {category}"
       },
       "groups": {
         "account": "Konto",
@@ -637,7 +652,8 @@
       "paymentsSettings": "Payment settings",
       "platformConsole": "Platform console",
       "reservations": "Reservations",
-      "usage": "Usage"
+      "usage": "Usage",
+      "notifications": "Notifications"
     },
     "members": {
       "title": "Members",
@@ -808,7 +824,8 @@
         "add": "Add service",
         "addCategory": "Add category",
         "remove": "Remove"
-      }
+      },
+      "empty": "No catalog items yet."
     },
     "team": {
       "title": "Team",
@@ -1004,6 +1021,15 @@
         "notified": "Notified",
         "booked": "Booked",
         "canceled": "Canceled"
+      }
+    },
+    "notifications": {
+      "title": "Notifications",
+      "markRead": "Mark read",
+      "markAll": "Mark all read",
+      "empty": {
+        "title": "No notifications",
+        "description": "Orders, bookings and waitlist joins show up here."
       }
     }
   },
@@ -1258,6 +1284,7 @@
       "drift": "Latest reconcile — {count} drifts",
       "no_drift": "No drift — provider and rows match.",
       "rows": "{count} domain rows",
+      "rows_empty": "No domain rows yet.",
       "primary": "primary",
       "kind": {
         "missing_provider": "row exists, provider lost it",
@@ -1272,6 +1299,7 @@
       "nightly_never": "Nightly snapshot job hasn't run yet.",
       "request": "Request a snapshot",
       "request_button": "Snapshot now",
+      "request_empty": "No active tenants.",
       "snapshots": "{count} snapshots",
       "empty": "No snapshots yet.",
       "rows": "rows",
@@ -1292,7 +1320,8 @@
       "errors_24h": "Errors (24h)",
       "counters": "{count} usage counters",
       "counters_empty": "No counters yet — limits consume them as tenants use features.",
-      "job_kinds": "Jobs by kind (24h)"
+      "job_kinds": "Jobs by kind (24h)",
+      "job_kinds_empty": "No jobs in the last 24 hours."
     }
   },
   "admin": {

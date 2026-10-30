@@ -6,6 +6,8 @@ import { toDate } from "@/lib/timestamps"
 import { describeDiscount, getEntitlement, trialDaysFor, type DiscountSummary } from "@/lib/billing"
 import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { EmptyState } from "@/components/layout/empty-state"
+import { Receipt } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { InvoicesTable, INVOICE_STATUSES, type InvoiceRow } from "@/components/billing/invoices-table"
 import { offsetOf, parseTableQuery, type TableQuerySpec } from "@/lib/table-query"
@@ -262,25 +264,33 @@ export default async function BillingPage({
         </div>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("invoiceHistory")}</CardTitle>
-          <CardDescription>{t("invoiceHistoryHint")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <InvoicesTable
-            rows={invoiceRows}
-            total={matchingInvoices.length}
-            query={invoiceQuery}
-            defaults={{
-              sort: invoiceSpec.sortable[0],
-              dir: invoiceSpec.defaultDir,
-              pageSize: invoiceSpec.defaultPageSize,
-            }}
-            emptyDescription={process.env.STRIPE_SECRET_KEY ? t("noInvoices") : t("noInvoicesStripe")}
-          />
-        </CardContent>
-      </Card>
+      {invoices.length === 0 ? (
+        <EmptyState
+          icon={Receipt}
+          title={t("noInvoicesTitle")}
+          description={process.env.STRIPE_SECRET_KEY ? t("noInvoices") : t("noInvoicesStripe")}
+        />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("invoiceHistory")}</CardTitle>
+            <CardDescription>{t("invoiceHistoryHint")}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <InvoicesTable
+              rows={invoiceRows}
+              total={matchingInvoices.length}
+              query={invoiceQuery}
+              defaults={{
+                sort: invoiceSpec.sortable[0],
+                dir: invoiceSpec.defaultDir,
+                pageSize: invoiceSpec.defaultPageSize,
+              }}
+              emptyDescription={process.env.STRIPE_SECRET_KEY ? t("noInvoices") : t("noInvoicesStripe")}
+            />
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

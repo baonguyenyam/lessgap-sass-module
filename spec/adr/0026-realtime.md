@@ -1,6 +1,6 @@
 # 0026. Realtime pushes come from Pusher Channels
 
-**Status:** proposed
+**Status:** accepted (implemented — see phase briefs 13–15)
 **Date:** 2026-10-29
 
 ## Context

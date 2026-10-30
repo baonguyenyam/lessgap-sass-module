@@ -60,23 +60,23 @@ export default async function AnalyticsPage() {
           </CardContent>
         </Card>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("top_paths", { count: top.length })}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-1">
-          {top.length === 0 ? (
-            <EmptyState icon={BarChart3} title={t("empty")} />
-          ) : (
-            top.map(([path, count]) => (
+      {top.length === 0 ? (
+        <EmptyState icon={BarChart3} title={t("empty")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("top_paths", { count: top.length })}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-1">
+            {top.map(([path, count]) => (
               <div key={path} className="flex items-center justify-between text-sm">
                 <span>{path}</span>
                 <span className="text-muted-foreground">{count}</span>
               </div>
-            ))
-          )}
-        </CardContent>
-      </Card>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

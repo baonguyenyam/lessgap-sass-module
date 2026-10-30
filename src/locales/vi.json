@@ -473,7 +473,22 @@
         "tipsHint": "Thỉnh thoảng gợi ý cách dùng workspace hiệu quả hơn.",
         "alwaysSent": "Email về bảo mật và thanh toán luôn được gửi.",
         "saved": "Đã lưu.",
-        "failed": "Không lưu được."
+        "failed": "Không lưu được.",
+        "category": "Danh mục",
+        "categories": {
+          "appointments": "Lịch hẹn",
+          "security": "Bảo mật",
+          "workspace": "Không gian làm việc",
+          "orders": "Đơn hàng",
+          "billing": "Thanh toán",
+          "product_updates": "Cập nhật sản phẩm",
+          "tips": "Mẹo"
+        },
+        "channels": {
+          "in_app": "Trong ứng dụng",
+          "email": "Email"
+        },
+        "toggleChannel": "Thông báo {channel} cho {category}"
       },
       "groups": {
         "account": "Tài khoản",
@@ -637,7 +652,8 @@
       "paymentsSettings": "Cài đặt thanh toán",
       "platformConsole": "Bảng điều khiển nền tảng",
       "reservations": "Đặt bàn",
-      "usage": "Mức sử dụng"
+      "usage": "Mức sử dụng",
+      "notifications": "Thông báo"
     },
     "members": {
       "title": "Thành viên",
@@ -808,7 +824,8 @@
         "add": "Thêm dịch vụ",
         "addCategory": "Thêm danh mục",
         "remove": "Xóa"
-      }
+      },
+      "empty": "Chưa có mục danh mục nào."
     },
     "team": {
       "title": "Nhân viên",
@@ -1004,6 +1021,15 @@
         "notified": "Đã báo",
         "booked": "Đã đặt",
         "canceled": "Đã huỷ"
+      }
+    },
+    "notifications": {
+      "title": "Thông báo",
+      "markRead": "Đánh dấu đã đọc",
+      "markAll": "Đọc tất cả",
+      "empty": {
+        "title": "Chưa có thông báo",
+        "description": "Đơn hàng, lịch hẹn và waitlist sẽ hiện ở đây."
       }
     }
   },
@@ -1258,6 +1284,7 @@
       "drift": "Đối chiếu gần nhất — {count} lệch",
       "no_drift": "Không lệch — provider và dòng khớp.",
       "rows": "{count} dòng domain",
+      "rows_empty": "Chưa có dòng domain nào.",
       "primary": "chính",
       "kind": {
         "missing_provider": "dòng tồn tại, provider mất",
@@ -1272,6 +1299,7 @@
       "nightly_never": "Job snapshot hàng đêm chưa chạy.",
       "request": "Yêu cầu snapshot",
       "request_button": "Snapshot ngay",
+      "request_empty": "Không có tenant nào đang hoạt động.",
       "snapshots": "{count} snapshots",
       "empty": "Chưa có snapshot.",
       "rows": "dòng",
@@ -1292,7 +1320,8 @@
       "errors_24h": "Lỗi (24h)",
       "counters": "{count} counters",
       "counters_empty": "Chưa có counter — limit consume khi tenant dùng tính năng.",
-      "job_kinds": "Jobs theo loại (24h)"
+      "job_kinds": "Jobs theo loại (24h)",
+      "job_kinds_empty": "Không có job nào trong 24 giờ qua."
     }
   },
   "admin": {

@@ -36,15 +36,15 @@ export default async function QuotesPage() {
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground">{t("subtitle")}</p>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("requests", { count: requests.length })}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          {requests.length === 0 ? (
-            <EmptyState icon={FileText} title={t("empty")} />
-          ) : (
-            requests.map((r) => (
+      {requests.length === 0 ? (
+        <EmptyState icon={FileText} title={t("empty")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("requests", { count: requests.length })}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {requests.map((r) => (
               <div key={r.id} className="flex items-center justify-between text-sm">
                 <span>
                   {r.customerName} · {r.customerEmail}
@@ -53,19 +53,19 @@ export default async function QuotesPage() {
                   {r.status} · {toDate(r.createdAt).toUTCString().slice(0, 16)}
                 </span>
               </div>
-            ))
-          )}
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("quotes", { count: quotes.length })}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {quotes.length === 0 ? (
-            <EmptyState icon={FileText} title={t("empty")} />
-          ) : (
-            quotes.map((q) => (
+            ))}
+          </CardContent>
+        </Card>
+      )}
+      {quotes.length === 0 ? (
+        <EmptyState icon={FileText} title={t("empty")} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("quotes", { count: quotes.length })}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {quotes.map((q) => (
               <div key={q.id} className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">{q.customerName}</p>
@@ -75,10 +75,10 @@ export default async function QuotesPage() {
                 </div>
                 {q.status === "accepted" && <ConvertButton quoteId={q.id} />}
               </div>
-            ))
-          )}
-        </CardContent>
-      </Card>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

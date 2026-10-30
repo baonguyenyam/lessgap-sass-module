@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { and } from "@prisma/orm-postgres/orm-client"
 import { db8 } from "@/lib/db8"
+import { notifyMember } from "@/platform/notify/member"
 import { AppError } from "@/platform/errors"
 import { getEntitlements } from "@/platform/entitlements"
 import { requireModule } from "@/platform/modules/runtime"
@@ -163,6 +164,9 @@ export async function bookAppointment(input: {
         cancelUrl: `${site.origin}/sites/${site.slug}/book`,
         customerEmail: input.email,
         appointmentId: appointment.id,
+      })
+      await notifyMember(site.tenantId, "booking.created", `New booking from ${input.name.trim()}`, {
+        href: `/t/${site.slug}/calendar`,
       })
       return { id: appointment.id, checkoutUrl: checkout.checkoutUrl }
     }
@@ -354,6 +358,10 @@ export async function joinWaitlist(input: { email?: string; phone?: string; serv
       wantedDate: parsed.data.wantedDate,
     })
     await audit(c, { action: "booking.waitlist_joined", targetType: "WaitlistEntry", targetId: entry.id })
+    const tenant = await db8.orm.public.Tenant.select("slug").where({ id: c.tenantId }).first()
+    await notifyMember(c.tenantId, "waitlist.joined", `Waitlist joined for ${parsed.data.wantedDate}`, {
+      href: tenant ? `/t/${tenant.slug}/waitlist` : undefined,
+    })
     return { id: entry.id }
   } catch (error) {
     if (error instanceof AppError) return { error: error.code }
