@@ -23,7 +23,7 @@ group needs them (`payments` next to the customers' money, `quotes` next
 to the bookings the tenant quotes for).
 
 **Done when:** the two items render under the right group.
-- [ ] done
+- [x] done (`payments` and `quotes` nav items in `operations` — `payments` next to the customers' money, `quotes` next to the bookings.)
 
 ### 16.2 `/t/<slug>/locations` — a tenant's branches
 

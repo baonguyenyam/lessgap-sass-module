@@ -113,6 +113,12 @@ export function navGroups(
         ...(enabledModules && !enabledModules.has("shop")
           ? []
           : [{ key: "orders", href: t("orders"), icon: Boxes } satisfies NavItem]),
+        ...(enabledModules && !enabledModules.has("quotes")
+          ? []
+          : [{ key: "quotes", href: t("quotes"), icon: ListChecks } satisfies NavItem]),
+        ...(enabledModules && !enabledModules.has("payments")
+          ? []
+          : [{ key: "payments", href: t("payments"), icon: CreditCard } satisfies NavItem]),
       ],
     },
     {

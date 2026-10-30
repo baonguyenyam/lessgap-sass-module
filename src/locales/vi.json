@@ -543,7 +543,9 @@
       "catalog": "Danh mục",
       "team": "Nhân viên",
       "reviews": "Đánh giá",
-      "sales": "Bán hàng"
+      "sales": "Bán hàng",
+      "payments": "Thanh toán",
+      "quotes": "Báo giá"
     },
     "members": {
       "title": "Thành viên",

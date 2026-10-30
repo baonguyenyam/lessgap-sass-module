@@ -543,7 +543,9 @@
       "catalog": "Catalog",
       "team": "Team",
       "reviews": "Reviews",
-      "sales": "Sales"
+      "sales": "Sales",
+      "payments": "Payments",
+      "quotes": "Quotes"
     },
     "members": {
       "title": "Members",
