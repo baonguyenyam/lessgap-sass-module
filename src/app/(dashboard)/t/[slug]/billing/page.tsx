@@ -1,10 +1,10 @@
-import { requireUser } from "@/lib/auth"
+import { redirect } from "next/navigation"
 import { getFormatter, getTranslations } from "next-intl/server"
 import { and } from "@prisma/orm-postgres/orm-client"
 import { db8 } from "@/lib/db8"
 import { toDate } from "@/lib/timestamps"
 import { describeDiscount, getEntitlement, trialDaysFor, type DiscountSummary } from "@/lib/billing"
-import { ensureTenant } from "@/platform/tenancy/require-member"
+import { requireTenantContext } from "@/platform/tenancy/require-member"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { InvoicesTable, INVOICE_STATUSES, type InvoiceRow } from "@/components/billing/invoices-table"
@@ -60,9 +60,15 @@ export default async function BillingPage({
 }) {
   const t = await getTranslations("dashboard.billing")
   const format = await getFormatter()
-  const currentUser = await requireUser()
-
-  const { tenantId } = await ensureTenant(currentUser)
+  // The tenant's plan, invoices and add-ons: `billing.manage` only (the owner
+  // by default), like every other page that checks its permission.
+  let ctx
+  try {
+    ctx = await requireTenantContext("billing", "manage")
+  } catch {
+    redirect("/dashboard")
+  }
+  const { tenantId, user: currentUser } = ctx
   const [user, subscriptionRow] = await Promise.all([
     db8.orm.public.User.select("stripeCustomerId").where({ id: currentUser.id }).first(),
     db8.orm.public.Subscription.select("id").where({ tenantId }).first(),

@@ -8,6 +8,7 @@ import {
   groupedCatalog,
   PERMISSION_GROUPS,
   TENANT_PERMISSIONS,
+  grantedPermissions,
   memberCan,
   permissionsAreDeclared,
   roleGrants,
@@ -121,5 +122,21 @@ describe("permission groups (task 1.8b)", () => {
   it("lists each group's resources with the verbs the catalog declares", () => {
     const workspace = groupedCatalog().find((g) => g.group === "workspace")!
     expect(workspace.resources[0]).toEqual({ resource: "members", verbs: ["view", "invite", "manage"] })
+  })
+})
+
+describe("grantedPermissions (the menu's view of a role)", () => {
+  it("answers a built-in role from the table, without a read", async () => {
+    expect(await grantedPermissions("t1", "staff")).toEqual(roleGrants("staff"))
+  })
+
+  it("reads a custom role once and keeps only declared permissions", async () => {
+    const db = (await import("@/lib/db8")) as unknown as import("@tests/helpers/db8-mock").Db8Mock
+    db.fn("OrganizationRole.first").mockResolvedValueOnce({
+      permission: { bookings: ["view"], invitation: ["create"], spaceships: ["launch"] },
+    })
+    expect(await grantedPermissions("t1", "front-desk")).toEqual(["bookings.view"])
+    db.fn("OrganizationRole.first").mockResolvedValueOnce(null)
+    expect(await grantedPermissions("t1", "gone")).toEqual([])
   })
 })
