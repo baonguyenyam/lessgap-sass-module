@@ -11,11 +11,7 @@ export const instant = false
 /** Where a feature the plan lacks sends a member (phase 16, requirements):
  * names the feature and lists the plans that include it, with the upgrade
  * CTA — never a bare 403. */
-export default async function UpgradeRequiredPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ feature?: string }>
-}) {
+export default async function UpgradeRequiredPage({ searchParams }: { searchParams: Promise<{ feature?: string }> }) {
   const { feature } = await searchParams
   const ctx = await requireTenantContext()
   const t = await getTranslations("dashboard.upgrade")
@@ -32,7 +28,9 @@ export default async function UpgradeRequiredPage({
       {featureKey && (
         <Card>
           <CardContent className="pt-6 text-center">
-            <Badge variant="outline" className="font-mono">{featureKey}</Badge>
+            <Badge variant="outline" className="font-mono">
+              {featureKey}
+            </Badge>
             <p className="mt-2 text-sm text-muted-foreground">{t("featureNeeded")}</p>
           </CardContent>
         </Card>
@@ -56,9 +54,7 @@ export default async function UpgradeRequiredPage({
         </div>
       ) : (
         <Card>
-          <CardContent className="pt-6 text-center text-sm text-muted-foreground">
-            {t("noPlans")}
-          </CardContent>
+          <CardContent className="pt-6 text-center text-sm text-muted-foreground">{t("noPlans")}</CardContent>
         </Card>
       )}
     </div>

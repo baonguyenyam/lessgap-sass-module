@@ -39,7 +39,7 @@ export async function AppShell({
   tenants?: TenantOption[]
   breadcrumbs: React.ComponentProps<typeof HeaderBreadcrumbs>
   /** Unread count + feed link for the header bell (dashboard area only). */
-  notifications?: { unread: number; href: string }
+  notifications?: { unread: number; href: string; items?: { id: string; title: string; href: string | null }[] }
   children: React.ReactNode
 }) {
   const nav: NavAccess = { ...access, slug: tenant?.slug ?? "" }
@@ -60,7 +60,9 @@ export async function AppShell({
             <SearchDialog area={area} access={nav} />
             <LanguageSwitcher locales={APP_LOCALES} />
             <ThemeToggle />
-            {notifications && <NotificationBell unread={notifications.unread} href={notifications.href} />}
+            {notifications && (
+              <NotificationBell unread={notifications.unread} href={notifications.href} items={notifications.items} />
+            )}
             <NavUser {...user} variant="header" />
           </div>
         </header>

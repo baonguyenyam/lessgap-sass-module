@@ -90,10 +90,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
         tenant={tenant}
         notifications={
           current
-            ? {
-                unread: (await unreadMemberNotifications(current.id, user.id)).length,
+            ? await unreadMemberNotifications(current.id, user.id).then((list) => ({
+                unread: list.length,
                 href: `/t/${slug}/notifications`,
-              }
+                items: list.slice(0, 5).map((n) => ({ id: n.id, title: n.title, href: n.href })),
+              }))
             : undefined
         }
         tenants={tenants.map(({ slug, name }) => ({ slug, name }))}
