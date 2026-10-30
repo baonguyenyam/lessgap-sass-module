@@ -415,6 +415,82 @@ export async function seedDemoData(): Promise<DemoSeedResult> {
     }
   }
 
+  // The demo tenant's business data — booking + phases 11-15's features so
+  // the site and dashboard have something to show.
+  const demoTenant = await db8.orm.public.Tenant.where({ slug: "demo-user" }).first()
+  if (demoTenant) {
+    const tId = demoTenant.id
+    await db8.orm.public.TenantModule.upsert({
+      conflictOn: { tenantId_moduleKey: { tenantId: tId, moduleKey: "booking" } } as never,
+      create: { tenantId: tId, moduleKey: "booking", enabled: true },
+      update: { enabled: true },
+    })
+    await db8.orm.public.TenantModule.upsert({
+      conflictOn: { tenantId_moduleKey: { tenantId: tId, moduleKey: "catalog" } } as never,
+      create: { tenantId: tId, moduleKey: "catalog", enabled: true },
+      update: { enabled: true },
+    })
+    const staff = await db8.orm.public.StaffMember.create({ tenantId: tId, name: "Demo Stylist" })
+    const loc = await db8.orm.public.Location.create({ tenantId: tId, name: "Downtown" })
+    const service = await db8.orm.public.Service.create({
+      tenantId: tId,
+      name: "Haircut",
+      durationMinutes: 60,
+      priceCents: 5000,
+      currency: "usd",
+    })
+    const customer = await db8.orm.public.Customer.create({
+      tenantId: tId,
+      name: "Demo Customer",
+      email: "demo-customer@example.com",
+    })
+    const appt = await db8.orm.public.Appointment.create({
+      tenantId: tId,
+      staffId: staff.id,
+      customerId: customer.id,
+      locationId: loc.id,
+      serviceId: service.id,
+      startTs: daysFromNow(1),
+      endTs: daysFromNow(1),
+      status: "confirmed",
+    })
+    // Phase 11: waitlist + a published review.
+    await db8.orm.public.WaitlistEntry.create({
+      tenantId: tId,
+      email: "wait@example.com",
+      wantedDate: daysFromNow(3).slice(0, 10),
+    })
+    await db8.orm.public.Review.create({
+      tenantId: tId,
+      appointmentId: appt.id,
+      customerId: customer.id,
+      rating: 5,
+      body: "Best haircut in the demo.",
+      status: "published",
+    })
+    // Phase 12: gift card + package + membership.
+    const card = await db8.orm.public.GiftCard.create({ tenantId: tId, code: "DEMO-GC", balanceCents: 5000 })
+    await db8.orm.public.GiftCardLedger.create({ tenantId: tId, cardId: card.id, deltaCents: 5000, reason: "sold" })
+    const pkg = await db8.orm.public.Package.create({ tenantId: tId, name: "5 cuts", sessions: 5, priceCents: 20000 })
+    await db8.orm.public.CustomerPackage.create({
+      tenantId: tId,
+      packageId: pkg.id,
+      customerId: customer.id,
+      sessionsLeft: 3,
+    })
+    const mem = await db8.orm.public.Membership.create({ tenantId: tId, name: "Monthly member", priceCents: 3000 })
+    await db8.orm.public.CustomerMembership.create({ tenantId: tId, membershipId: mem.id, customerId: customer.id })
+    // Phase 15: a contact-only intake form.
+    await db8.orm.public.IntakeForm.create({
+      tenantId: tId,
+      name: "Visit preferences",
+      fields: [
+        { label: "Preferred pronouns", kind: "text", required: false },
+        { label: "First visit?", kind: "checkbox", required: true },
+      ],
+    })
+  }
+
   const [users, subscriptions, purchases] = await Promise.all([
     User.aggregate((a) => ({ n: a.count() })),
     Subscription.aggregate((a) => ({ n: a.count() })),
