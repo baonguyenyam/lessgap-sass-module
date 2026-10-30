@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ---
 
+## [3.6.0] - 2026-10-30
+
+**The dashboard's sidebar covers the whole surface — every page a phase built has its item, every model has its page.** This is a MINOR: `git pull`, `pnpm install`.
+
+### Added
+
+- **`payments`/`quotes` nav items** — the pages existed under `operations` with no sidebar entry (16.1)
+- **`/t/<slug>/locations`** — a tenant's branches, list + create (`createLocation`) (16.2)
+- **`/t/<slug>/intake`** — the contact-only forms a tenant asks + the responses that landed (16.3)
+- **`/t/<slug>/products`** — the sellable catalog (`Package`/`Membership`) `buyPackage`/`activateMembership` need something to sell from (16.4)
+- **`/t/<slug>/waitlist`** — the waitlist's own page: the day's waiters by `wantedDate` plus `booked`/`canceled` actions (16.5)
+- **Dashboard nav regroup** — `operations` (the day-to-day work) / `content` (the site's own pieces) / `workspace` (the tenant's people) / `account`, matching how multi-tenant dashboards group
+
 ## [3.5.0] - 2026-10-30
 
 **A tenant can ask a contact-only intake form before a visit — contact and preferences, never clinical data.** This is a MINOR: `git pull`, `pnpm install`, `pnpm db:migrate`.

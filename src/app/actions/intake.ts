@@ -15,9 +15,9 @@ export async function createIntakeForm(input: { name: string; fields: IntakeFiel
     const parsed = z
       .object({
         name: z.string().min(1),
-        fields: z.array(
-          z.object({ label: z.string().min(1), kind: z.string().min(1), required: z.boolean().optional() })
-        ).min(1),
+        fields: z
+          .array(z.object({ label: z.string().min(1), kind: z.string().min(1), required: z.boolean().optional() }))
+          .min(1),
       })
       .safeParse(input)
     if (!parsed.success) throw new AppError("invalid_input")

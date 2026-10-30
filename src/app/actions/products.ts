@@ -11,7 +11,13 @@ import { requireTenantContext } from "@/platform/tenancy/require-member"
 export async function createPackage(input: { name: string; sessions: number; priceCents: number }) {
   try {
     const m = await requireTenantContext("bookings", "manage")
-    const parsed = z.object({ name: z.string().min(1), sessions: z.number().int().positive(), priceCents: z.number().int().nonnegative() }).safeParse(input)
+    const parsed = z
+      .object({
+        name: z.string().min(1),
+        sessions: z.number().int().positive(),
+        priceCents: z.number().int().nonnegative(),
+      })
+      .safeParse(input)
     if (!parsed.success) throw new AppError("invalid_input")
     const pkg = await db8.orm.public.Package.create({
       tenantId: m.tenantId,

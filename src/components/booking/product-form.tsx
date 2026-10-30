@@ -38,12 +38,27 @@ export function ProductForm({ kind }: { kind: "package" | "membership" }) {
       {kind === "package" && (
         <div className="w-24 space-y-1.5">
           <Label htmlFor="pkg-sessions">{t("sessions")}</Label>
-          <Input id="pkg-sessions" type="number" required min={1} value={sessions} onChange={(e) => setSessions(e.target.value)} />
+          <Input
+            id="pkg-sessions"
+            type="number"
+            required
+            min={1}
+            value={sessions}
+            onChange={(e) => setSessions(e.target.value)}
+          />
         </div>
       )}
       <div className="w-24 space-y-1.5">
         <Label htmlFor={`${kind}-price`}>{t("price")}</Label>
-        <Input id={`${kind}-price`} type="number" required min={0} step="0.01" value={price} onChange={(e) => setPrice(e.target.value)} />
+        <Input
+          id={`${kind}-price`}
+          type="number"
+          required
+          min={0}
+          step="0.01"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+        />
       </div>
       <div className="self-end">
         <Button type="submit" disabled={pending || !name.trim() || !price}>
