@@ -115,6 +115,19 @@ only — never copy their code, and keep the kit neutral (owner's rule,
   switcher, a settings or config button, then the account dropdown: avatar initials open a menu with
   the user's name + email, Profile, Billing, Settings, "New team", and a red
   Sign out — each with its keyboard shortcut shown right-aligned.
+- **Account and settings pages share one layout** (platform.madelab.io's
+  `/profile` and settings): `SectionLayout` + `SectionNav` from
+  `src/components/layout/section-nav.tsx`. On the left, the section menu
+  grouped under small uppercase headings (Account / Security / Data;
+  Workspace / Features / Preferences), an icon per item, the active item
+  filled. Account pages open with the identity card (`ProfileHero`: photo,
+  name, address, "Member since", status badges) instead of a title;
+  settings pages open with title + description. The menu lists only the
+  pages that open for the viewer (permission and module, as in the
+  sidebar), and every page under the layout has an entry (tested in
+  `tests/unit/lib/settings-pages.test.ts`). A page's content is a card per
+  topic: header with title + description, then the fields, then the
+  actions right-aligned (secondary, then primary).
 - **A list page's heading carries its actions on the right** — "Import" and a
   primary "Create" sit at the heading's top-right, not under it.
 - **A table's toolbar carries filter pills + a view toggle** — a free-text

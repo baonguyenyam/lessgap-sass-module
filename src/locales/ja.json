@@ -255,7 +255,11 @@
         "label": "Settings sections",
         "general": "General",
         "localization": "Localization",
-        "display": "Display"
+        "display": "Display",
+        "site": "サイト",
+        "domains": "ドメイン",
+        "modules": "モジュール",
+        "payments": "支払い"
       },
       "backup": {
         "title": "Back up your data",
@@ -402,6 +406,11 @@
         "payouts": "payouts",
         "yes": "yes",
         "no": "no"
+      },
+      "groups": {
+        "workspace": "ワークスペース",
+        "features": "機能",
+        "preferences": "環境設定"
       }
     },
     "account": {
@@ -426,6 +435,18 @@
         "alwaysSent": "Security and billing emails are always sent.",
         "saved": "Saved.",
         "failed": "That could not be saved."
+      },
+      "groups": {
+        "account": "アカウント",
+        "security": "セキュリティ",
+        "data": "データ"
+      },
+      "hero": {
+        "memberSince": "<strong>{date}</strong> から利用",
+        "twoFactorOn": "二要素認証オン",
+        "twoFactorOff": "二要素認証オフ",
+        "root": "Root",
+        "platformStaff": "プラットフォームスタッフ"
       }
     },
     "billing": {

@@ -255,7 +255,11 @@
         "label": "Settings sections",
         "general": "General",
         "localization": "Localization",
-        "display": "Display"
+        "display": "Display",
+        "site": "Site",
+        "domains": "Domains",
+        "modules": "Modules",
+        "payments": "Payments"
       },
       "backup": {
         "title": "Back up your data",
@@ -402,6 +406,11 @@
         "payouts": "payouts",
         "yes": "yes",
         "no": "no"
+      },
+      "groups": {
+        "workspace": "Workspace",
+        "features": "Features",
+        "preferences": "Preferences"
       }
     },
     "account": {
@@ -426,6 +435,18 @@
         "alwaysSent": "Security and billing emails are always sent.",
         "saved": "Saved.",
         "failed": "That could not be saved."
+      },
+      "groups": {
+        "account": "Account",
+        "security": "Security",
+        "data": "Data"
+      },
+      "hero": {
+        "memberSince": "Member since <strong>{date}</strong>",
+        "twoFactorOn": "Two-factor on",
+        "twoFactorOff": "Two-factor off",
+        "root": "Root",
+        "platformStaff": "Platform staff"
       }
     },
     "billing": {

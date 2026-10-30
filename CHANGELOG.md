@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 
 ### Changed
 
+- **Account and Settings pages take platform.madelab.io's profile layout**: Account opens with an identity card (photo, name, address, member since, two-factor and staff badges), and both sections group their menu under headings (Account / Security / Data; Workspace / Features / Preferences) with an icon per page and the current page filled. Settings now lists Site, Domains, Modules and Payments, which lived in the section without a tab, and shows only the pages the member may open. On a phone the section content no longer runs off the right edge
 - **The sidebar follows the member's permissions.** Each item names the module that owns its page and the permission that page checks, so a member sees only what would let them in: staff no longer sees Members, Roles, Billing, Catalog or the admin settings pages; a custom role sees exactly its grants. The search dialog offers the same list
 - Orders gains its board (module `ordering`) as a sub-item; Settings lists General, Site, Domains, Modules, Payment settings, Localization and Display
 - Platform staff get a link to the platform console from the dashboard, and the console menu now lists Overview, Usage, Domains, Email templates and Backups

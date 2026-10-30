@@ -8,13 +8,17 @@ import { tenantPath } from "@/lib/tenant-paths"
  */
 export const ACCOUNT_BASE = "/dashboard/account"
 
+/**
+ * In menu order, each under its group heading (the section menu draws one
+ * heading per group, platform.madelab.io's profile layout).
+ */
 export const ACCOUNT_PAGES = [
-  { key: "profile", href: ACCOUNT_BASE },
-  { key: "security", href: `${ACCOUNT_BASE}/security` },
-  { key: "backup", href: `${ACCOUNT_BASE}/backup` },
-  { key: "preferences", href: `${ACCOUNT_BASE}/preferences` },
-  { key: "notifications", href: `${ACCOUNT_BASE}/notifications` },
-  { key: "activity", href: `${ACCOUNT_BASE}/activity` },
+  { key: "profile", href: ACCOUNT_BASE, group: "account" },
+  { key: "preferences", href: `${ACCOUNT_BASE}/preferences`, group: "account" },
+  { key: "notifications", href: `${ACCOUNT_BASE}/notifications`, group: "account" },
+  { key: "security", href: `${ACCOUNT_BASE}/security`, group: "security" },
+  { key: "activity", href: `${ACCOUNT_BASE}/activity`, group: "security" },
+  { key: "backup", href: `${ACCOUNT_BASE}/backup`, group: "data" },
 ] as const
 
 export type AccountPageKey = (typeof ACCOUNT_PAGES)[number]["key"]
@@ -25,11 +29,37 @@ export function accountHref(key: AccountPageKey): AccountHref {
   return ACCOUNT_PAGES.find((page) => page.key === key)!.href
 }
 
-/** The tenant's settings pages, under its dashboard (task 1.7); `segment` is the part after `settings/`. */
+const SETTINGS_PAGES = [
+  { key: "general", group: "workspace" },
+  { key: "site", group: "workspace", permission: "settings.manage" },
+  { key: "domains", group: "workspace", permission: "settings.manage" },
+  { key: "modules", group: "features", permission: "settings.manage" },
+  { key: "payments", group: "features", permission: "settings.manage", module: "payments" },
+  { key: "localization", group: "preferences" },
+  { key: "display", group: "preferences" },
+] as const
+
+/**
+ * The tenant's settings pages, under its dashboard (task 1.7), in menu order
+ * and grouped. `segment` is the part after `settings/`; `permission` and
+ * `module` repeat what each page checks, so the menu offers only pages that
+ * open for the viewer.
+ */
 export function settingsPages(slug: string) {
-  return (["general", "localization", "display"] as const).map((key) => {
-    const segment = key === "general" ? null : key
-    return { key, segment, href: tenantPath(slug, segment ? `settings/${segment}` : "settings") }
+  return SETTINGS_PAGES.map((page) => {
+    const segment = page.key === "general" ? null : page.key
+    return {
+      ...page,
+      segment,
+      href: tenantPath(slug, segment ? `settings/${segment}` : "settings"),
+    } as {
+      key: (typeof page)["key"]
+      group: string
+      segment: string | null
+      href: ReturnType<typeof tenantPath>
+      permission?: string
+      module?: string
+    }
   })
 }
 

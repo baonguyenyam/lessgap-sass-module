@@ -255,7 +255,11 @@
         "label": "Settings sections",
         "general": "General",
         "localization": "Localization",
-        "display": "Display"
+        "display": "Display",
+        "site": "站点",
+        "domains": "域名",
+        "modules": "模块",
+        "payments": "支付"
       },
       "backup": {
         "title": "Back up your data",
@@ -402,6 +406,11 @@
         "payouts": "payouts",
         "yes": "yes",
         "no": "no"
+      },
+      "groups": {
+        "workspace": "工作区",
+        "features": "功能",
+        "preferences": "偏好设置"
       }
     },
     "account": {
@@ -426,6 +435,18 @@
         "alwaysSent": "Security and billing emails are always sent.",
         "saved": "Saved.",
         "failed": "That could not be saved."
+      },
+      "groups": {
+        "account": "账户",
+        "security": "安全",
+        "data": "数据"
+      },
+      "hero": {
+        "memberSince": "自 <strong>{date}</strong> 起成为会员",
+        "twoFactorOn": "已开启双重验证",
+        "twoFactorOff": "未开启双重验证",
+        "root": "Root",
+        "platformStaff": "平台人员"
       }
     },
     "billing": {

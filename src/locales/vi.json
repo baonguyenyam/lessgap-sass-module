@@ -255,7 +255,11 @@
         "label": "Các mục cài đặt",
         "general": "Chung",
         "localization": "Ngôn ngữ & giờ",
-        "display": "Hiển thị"
+        "display": "Hiển thị",
+        "site": "Trang web",
+        "domains": "Tên miền",
+        "modules": "Module",
+        "payments": "Thanh toán"
       },
       "backup": {
         "title": "Sao lưu dữ liệu",
@@ -402,6 +406,11 @@
         "payouts": "rút tiền",
         "yes": "có",
         "no": "không"
+      },
+      "groups": {
+        "workspace": "Không gian làm việc",
+        "features": "Tính năng",
+        "preferences": "Tuỳ chọn"
       }
     },
     "account": {
@@ -426,6 +435,18 @@
         "alwaysSent": "Email về bảo mật và thanh toán luôn được gửi.",
         "saved": "Đã lưu.",
         "failed": "Không lưu được."
+      },
+      "groups": {
+        "account": "Tài khoản",
+        "security": "Bảo mật",
+        "data": "Dữ liệu"
+      },
+      "hero": {
+        "memberSince": "Thành viên từ <strong>{date}</strong>",
+        "twoFactorOn": "Đã bật xác thực hai bước",
+        "twoFactorOff": "Chưa bật xác thực hai bước",
+        "root": "Root",
+        "platformStaff": "Nhân viên nền tảng"
       }
     },
     "billing": {
