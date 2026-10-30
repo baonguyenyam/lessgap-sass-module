@@ -902,10 +902,15 @@
     "reservations": {
       "title": "Reservations",
       "subtitle": "Every table booking",
-      "list": "{count} reservations",
       "empty": "No reservations yet",
       "party": "party of {size}",
-      "empty_hint": "Bookings made on your site's reservation page appear here."
+      "empty_hint": "Bookings made on your site's reservation page appear here.",
+      "search": "Search reservations…",
+      "colName": "Guest",
+      "colParty": "Party",
+      "colWhen": "When",
+      "colTable": "Table",
+      "colStatus": "Status"
     },
     "orders": {
       "title": "Orders",
@@ -1100,7 +1105,6 @@
     },
     "waitlist": {
       "title": "Waitlist",
-      "list": "Waiting customers",
       "none": "No one is waiting",
       "mark_booked": "Mark booked",
       "mark_canceled": "Cancel",
@@ -1111,7 +1115,12 @@
         "canceled": "Canceled"
       },
       "none_hint": "Customers who join the waitlist for a full day appear here.",
-      "subtitle": "Customers waiting for a fully booked day"
+      "subtitle": "Customers waiting for a fully booked day",
+      "search": "Search the waitlist…",
+      "colDate": "Wanted date",
+      "colContact": "Contact",
+      "colStatus": "Status",
+      "colActions": "Actions"
     },
     "notifications": {
       "title": "Notifications",

@@ -902,10 +902,15 @@
     "reservations": {
       "title": "Đặt bàn",
       "subtitle": "Mọi đặt bàn",
-      "list": "{count} đặt bàn",
       "empty": "Chưa có đặt bàn",
       "party": "{size} người",
-      "empty_hint": "Lượt đặt bàn trên trang đặt bàn của website sẽ hiện ở đây."
+      "empty_hint": "Lượt đặt bàn trên trang đặt bàn của website sẽ hiện ở đây.",
+      "search": "Tìm đặt bàn…",
+      "colName": "Khách",
+      "colParty": "Số người",
+      "colWhen": "Thời điểm",
+      "colTable": "Bàn",
+      "colStatus": "Trạng thái"
     },
     "orders": {
       "title": "Đơn hàng",
@@ -1100,7 +1105,6 @@
     },
     "waitlist": {
       "title": "Danh sách chờ",
-      "list": "Khách đang chờ",
       "none": "Chưa có ai chờ",
       "mark_booked": "Đã đặt",
       "mark_canceled": "Huỷ",
@@ -1111,7 +1115,12 @@
         "canceled": "Đã huỷ"
       },
       "none_hint": "Khách đăng ký chờ cho ngày đã kín lịch sẽ hiện ở đây.",
-      "subtitle": "Khách chờ cho ngày đã kín lịch"
+      "subtitle": "Khách chờ cho ngày đã kín lịch",
+      "search": "Tìm trong danh sách chờ…",
+      "colDate": "Ngày muốn",
+      "colContact": "Liên hệ",
+      "colStatus": "Trạng thái",
+      "colActions": "Thao tác"
     },
     "notifications": {
       "title": "Thông báo",
