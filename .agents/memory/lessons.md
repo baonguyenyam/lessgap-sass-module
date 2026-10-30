@@ -2,6 +2,12 @@
 
 Read before every task. Format and rules: [README.md](./README.md). Newest first.
 
+### 2026-10-30 · next · A running `pnpm dev` keeps a route's old segment config
+- **Symptom:** after `export const instant = false` was added to `/t/[slug]/settings/site`, the owner still saw "uncached data accessed outside of `<Suspense>`" for that route, while every page load and click on the same server came back clean, and a fresh dev server showed nothing.
+- **Cause:** the dev server had been running since before the change and kept reporting from the route's earlier compile.
+- **Fix:** restarting `pnpm dev` cleared it.
+- **Rule:** after changing route segment config (`instant`, `dynamic`, `revalidate`) or adding `loading.tsx`, ask for a dev server restart before chasing an error that does not reproduce on a fresh server.
+
 ### 2026-10-30 · next · Console errors only the dev server shows
 - **Symptom:** the owner saw many console errors in `pnpm dev`: `MISSING_MESSAGE dashboard.roles.resources.team` on the roles page, "unstable value `new Date()` while prerendering" on /login, /signup and /forgot-password, and "uncached data accessed outside of `<Suspense>`" on 19 module pages. `pnpm build` and the tests showed none of them.
 - **Cause:** a `team` resource joined the permission catalog without its label; `src/i18n/request.ts` read the clock before the sign-in pages had read the request; the module pages had no `instant = false` and no `loading.tsx`, and the consistency test only scanned `(dashboard)/dashboard` and `(admin)`, so the `/t/[slug]` and `(platform)` pages were never checked.
