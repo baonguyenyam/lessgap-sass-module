@@ -6,6 +6,7 @@ import {
   Star,
   Gift,
   MapPin,
+  ClipboardList,
   Globe,
   List,
   Globe2,
@@ -123,6 +124,9 @@ export function navGroups(
         ...(enabledModules && !enabledModules.has("booking")
           ? []
           : [{ key: "locations", href: t("locations"), icon: MapPin } satisfies NavItem]),
+        ...(enabledModules && !enabledModules.has("booking")
+          ? []
+          : [{ key: "intake", href: t("intake"), icon: ClipboardList } satisfies NavItem]),
       ],
     },
     {

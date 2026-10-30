@@ -40,7 +40,7 @@ the answers — a page lists the forms, lets the tenant add one (name +
 fields JSON), and shows the responses per form.
 
 **Done when:** the form's fields define and the answers land.
-- [ ] done
+- [x] done (`/t/<slug>/intake` lists forms + responses and adds a form via `createIntakeForm` — `intake` nav item in `operations`.)
 
 ### 16.4 `/t/<slug>/products` — the sellable catalog
 

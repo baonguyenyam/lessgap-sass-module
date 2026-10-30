@@ -546,7 +546,8 @@
       "sales": "Sales",
       "payments": "Payments",
       "quotes": "Quotes",
-      "locations": "Locations"
+      "locations": "Locations",
+      "intake": "Intake"
     },
     "members": {
       "title": "Members",
@@ -874,6 +875,19 @@
       "address": "Address",
       "add_button": "Add",
       "adding": "Adding…"
+    },
+    "intake": {
+      "title": "Intake forms",
+      "add": "Add a form",
+      "form_name": "Form name",
+      "fields": "Fields (comma-separated)",
+      "fields_placeholder": "Preferred pronouns, First visit?",
+      "add_button": "Add",
+      "adding": "Adding…",
+      "forms": "Your forms",
+      "none": "No forms yet.",
+      "responses": "Responses",
+      "no_responses": "No responses yet."
     }
   },
   "platform": {

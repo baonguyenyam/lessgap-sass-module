@@ -546,7 +546,8 @@
       "sales": "Bán hàng",
       "payments": "Thanh toán",
       "quotes": "Báo giá",
-      "locations": "Địa điểm"
+      "locations": "Địa điểm",
+      "intake": "Biểu mẫu"
     },
     "members": {
       "title": "Thành viên",
@@ -874,6 +875,19 @@
       "address": "Địa chỉ",
       "add_button": "Thêm",
       "adding": "Đang thêm…"
+    },
+    "intake": {
+      "title": "Biểu mẫu tiếp đón",
+      "add": "Thêm biểu mẫu",
+      "form_name": "Tên biểu mẫu",
+      "fields": "Các trường (cách nhau bởi dấu phẩy)",
+      "fields_placeholder": "Đại từ ưa thích, Lần đầu đến?",
+      "add_button": "Thêm",
+      "adding": "Đang thêm…",
+      "forms": "Các biểu mẫu",
+      "none": "Chưa có biểu mẫu.",
+      "responses": "Phản hồi",
+      "no_responses": "Chưa có phản hồi."
     }
   },
   "platform": {
