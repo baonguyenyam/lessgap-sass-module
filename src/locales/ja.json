@@ -442,6 +442,16 @@
         "workspace": "ワークスペース",
         "features": "機能",
         "preferences": "環境設定"
+      },
+      "emails": {
+        "title": "Email templates",
+        "customized": "customized",
+        "subject": "Subject",
+        "body": "Body (HTML)",
+        "save": "Save",
+        "saving": "Saving…",
+        "reset": "Reset to default",
+        "resetting": "Resetting…"
       }
     },
     "account": {

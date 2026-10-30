@@ -30,7 +30,9 @@ function walk(dir) {
     if (!/\.(tsx?|ts)$/.test(f)) continue
     const s = readFileSync(p, "utf8")
     const aliases = {}
-    for (const m of s.matchAll(/const\s+(\w+)\s*=\s*(?:await\s+)?(?:useTranslations|getTranslations)\(["']([^"']+)["']\)/g)) {
+    for (const m of s.matchAll(
+      /const\s+(\w+)\s*=\s*(?:await\s+)?(?:useTranslations|getTranslations)\(["']([^"']+)["']\)/g
+    )) {
       aliases[m[1]] = m[2]
     }
     for (const [alias, ns] of Object.entries(aliases)) {

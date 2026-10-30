@@ -442,6 +442,16 @@
         "workspace": "Không gian làm việc",
         "features": "Tính năng",
         "preferences": "Tuỳ chọn"
+      },
+      "emails": {
+        "title": "Biểu mẫu email",
+        "customized": "đã tuỳ chỉnh",
+        "subject": "Tiêu đề",
+        "body": "Nội dung (HTML)",
+        "save": "Lưu",
+        "saving": "Đang lưu…",
+        "reset": "Về mặc định",
+        "resetting": "Đang đặt lại…"
       }
     },
     "account": {
