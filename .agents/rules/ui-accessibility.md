@@ -187,3 +187,11 @@ only — never copy their code, and keep the kit neutral (owner's rule,
   "View"; the pager uses `pageItems` from `src/lib/pagination.ts`. A page
   without a table uses `PageHeader` (`src/components/layout/page-header.tsx`)
   for the same heading.
+
+## Locales: en + vi only (owner, 2026-10-30)
+
+- **Two locales ship — `en` and `vi`.** `src/locales/` holds only those two
+  files and `routing.locales` lists only them; more languages come later,
+  deliberately, not seeded.
+- A user-facing string still enters `en.json` first and `vi.json` beside it;
+  `pnpm check:messages` + `messages.test.ts` keep the pair honest.
