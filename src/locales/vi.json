@@ -882,7 +882,6 @@
     "customers": {
       "title": "Khách hàng",
       "subtitle": "Mọi người đã đặt lịch, trong một danh sách",
-      "list": "{count} khách hàng",
       "empty": "Chưa có khách hàng",
       "no_contact": "không có thông tin liên hệ",
       "consent_marketing": "marketing ✓",
@@ -894,7 +893,11 @@
         "exported": "đã xuất",
         "deleted": "đã xoá"
       },
-      "empty_hint": "Lịch hẹn, đơn hàng và báo giá trên website sẽ tạo khách hàng."
+      "empty_hint": "Lịch hẹn, đơn hàng và báo giá trên website sẽ tạo khách hàng.",
+      "search": "Tìm khách…",
+      "colName": "Khách",
+      "colContact": "Liên hệ",
+      "colActions": "Thao tác"
     },
     "reservations": {
       "title": "Đặt bàn",
@@ -940,13 +943,17 @@
     "payments": {
       "title": "Thanh toán",
       "subtitle": "Tiền vào và ra trên tài khoản Stripe",
-      "money_in": "{count} khoản",
       "empty": "Chưa có thanh toán",
       "fee": "phí",
       "refund": "Hoàn tiền",
       "refunded": "đã hoàn",
       "refunded_done": "đã hoàn",
-      "empty_hint": "Tiền cọc, đơn hàng và báo giá đã thanh toán sẽ hiện ở đây."
+      "empty_hint": "Tiền cọc, đơn hàng và báo giá đã thanh toán sẽ hiện ở đây.",
+      "search": "Tìm thanh toán…",
+      "colKind": "Loại",
+      "colAmount": "Số tiền",
+      "colStatus": "Trạng thái",
+      "colWhen": "Thời điểm"
     },
     "chatbot": {
       "title": "Chatbot",

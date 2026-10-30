@@ -882,7 +882,6 @@
     "customers": {
       "title": "Customers",
       "subtitle": "Everyone who booked, in one list",
-      "list": "{count} customers",
       "empty": "No customers yet",
       "no_contact": "no contact info",
       "consent_marketing": "marketing ✓",
@@ -894,7 +893,11 @@
         "exported": "exported",
         "deleted": "deleted"
       },
-      "empty_hint": "Bookings, orders and quotes on your site create them."
+      "empty_hint": "Bookings, orders and quotes on your site create them.",
+      "search": "Search customers…",
+      "colName": "Customer",
+      "colContact": "Contact",
+      "colActions": "Actions"
     },
     "reservations": {
       "title": "Reservations",
@@ -940,13 +943,17 @@
     "payments": {
       "title": "Payments",
       "subtitle": "Money in and out on your Stripe account",
-      "money_in": "{count} payments",
       "empty": "No payments yet",
       "fee": "fee",
       "refund": "Refund",
       "refunded": "refunded",
       "refunded_done": "refunded",
-      "empty_hint": "Deposits, orders and paid quotes land here."
+      "empty_hint": "Deposits, orders and paid quotes land here.",
+      "search": "Search payments…",
+      "colKind": "Kind",
+      "colAmount": "Amount",
+      "colStatus": "Status",
+      "colWhen": "When"
     },
     "chatbot": {
       "title": "Chatbot",
